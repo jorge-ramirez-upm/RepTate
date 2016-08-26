@@ -24,6 +24,14 @@
   <ItemGroup>
     <Compile Include="RepTate.py" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="applications\" />
+    <Folder Include="console\" />
+    <Folder Include="core\" />
+    <Folder Include="gui\" />
+    <Folder Include="theories\" />
+    <Folder Include="visual\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
