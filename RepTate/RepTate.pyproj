@@ -22,6 +22,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="applications\ApplicationTest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="core\Application.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="core\ApplicationManager.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RepTate.py" />
   </ItemGroup>
   <ItemGroup>
