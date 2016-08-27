@@ -31,8 +31,26 @@
     <Compile Include="core\ApplicationManager.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="core\Filetype.py" />
+    <Compile Include="core\DataSet.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="core\File.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="core\FileType.py" />
+    <Compile Include="core\Parameter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="core\Theory.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="core\View.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RepTate.py" />
+    <Compile Include="theories\TheoryTest.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="applications\" />

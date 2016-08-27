@@ -2,7 +2,7 @@ import numpy as np
 import logging
 #from Table import *
 
-class TXTColumnFile:
+class TXTColumnFile(object):
 	
     """Basic class for text-column based data files
     
