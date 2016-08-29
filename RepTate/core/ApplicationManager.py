@@ -4,8 +4,14 @@ import sys
 import logging
 import logging.handlers
 import readline
+import glob
 
 from ApplicationTest import *
+from ApplicationReact import *
+from ApplicationMWD import *
+from ApplicationTTS import *
+from ApplicationLVE import *
+from ApplicationNLVE import *
 from ApplicationGt import *
 
 class ApplicationManager(cmd.Cmd):
@@ -36,6 +42,11 @@ class ApplicationManager(cmd.Cmd):
         self.applications=[]
         self.available_applications={}
         self.available_applications[ApplicationTest.name]=ApplicationTest
+        self.available_applications[ApplicationReact.name]=ApplicationReact
+        self.available_applications[ApplicationMWD.name]=ApplicationMWD
+        self.available_applications[ApplicationTTS.name]=ApplicationTTS
+        self.available_applications[ApplicationLVE.name]=ApplicationLVE
+        self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
         self.available_applications[ApplicationGt.name]=ApplicationGt
         self.current_application=None
 
@@ -311,8 +322,41 @@ class ApplicationManager(cmd.Cmd):
         return completions
 
     def do_file_open(self, line):
-        """Open a file from the current folder"""
-        pass
+        """Open file(s) from the current folder
+           Arguments: FILENAMES (pattern expansion characters -- *, ? -- allowed
+        """
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        f_names = glob.glob(line)
+        if (line=="" or len(f_names)==0): 
+            print("No valid file names provided")
+            return        
+        f_ext = [os.path.splitext(x)[1].split('.')[-1] for x in f_names]
+        if (f_ext.count(f_ext[0])!=len(f_ext)):
+            print ("File extensions of files must be equal!")
+            print (f_names)
+            return
+        if (f_ext[0] in self.current_application.filetypes):  
+            for f in f_names:
+                self.current_application.current_dataset.open_file(self.current_application.filetypes[f_ext[0]], f)
+        else:
+            print("File type \"%s\" does not exists"%f_ext[0])
+
+    def complete_file_open(self, text, line, begidx, endidx):
+        """Complete the file_open command"""
+        if (not self.check_application_exist()): return [""]
+        if (not self.check_datasets_exist()): return [""]
+        f_names=[]
+        for f in list(self.current_application.filetypes.keys()):
+            f_names += glob.glob('*.%s'%f)
+        if not text:
+            completions = f_names[:]
+        else:
+            completions = [ f
+                            for f in f_names
+                            if f.startswith(text)
+                            ]
+        return completions
 
     def do_file_switch(self, line):
         """Change active file in the current dataset"""

@@ -1,0 +1,5 @@
+Mw=2.4;T=-30;PDI=1.09;chem=PI;
+Freq	G'	G"	Temp	Strain	PhaseAngle	Eta*	Torque	PhaseAngle	Eta"	Eta'	Temp	tan_delta	NormalStress
+rad/s	Pa	Pa	°C	%	°	Pa-s	N-m	°	Pa-s	Pa-s	°C	 	Pa
+            100         1549.8          66141        -29.991        0.98655         88.658         661.59     0.00012816         88.658         15.498         661.41
+         63.096         596.83          41630         -29.99         0.9947         89.179         659.86      8.1315E-5         89.179         9.4591         659.79

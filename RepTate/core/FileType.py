@@ -1,6 +1,7 @@
 import numpy as np
 import logging
 #from Table import *
+from DataTable import *
 
 class TXTColumnFile(object):
 	

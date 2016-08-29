@@ -1,6 +1,7 @@
 from Theory import *
 from FileType import *
 from File import *
+#from DataTable import *
 
 class DataSet(object):
     """Abstract class to describe a data set"""
@@ -25,6 +26,10 @@ class DataSet(object):
         self.files.append(f)
         self.current_file=f
         
+    def open_file(self, ftype, name):
+        dt=ftype.read_file(name)
+        print(dt)
+
     def new_theory(self, theory):
         self.num_theories+=1
         self.theories.append(theory)
