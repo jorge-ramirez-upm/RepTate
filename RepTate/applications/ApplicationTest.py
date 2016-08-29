@@ -15,7 +15,7 @@ class ApplicationTest(Application):
         self.current_view=self.views[0]
 
         # FILES
-        ftype=TXTColumnFile("G(t) files", "gt", "Relaxation modulus", 0, 2, ['t','Gt'], [0], ['Mw','ncontri'], [])
+        ftype=TXTColumnFile("Test files", "test", "Test files x y", 0, 2, ['x','y'], [0], ['testparam1','testparam2'], [])
         self.filetypes[ftype.extension]=ftype
         #self.logger.debug(self.filetypes)
 

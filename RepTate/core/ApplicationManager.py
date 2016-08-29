@@ -4,7 +4,9 @@ import sys
 import logging
 import logging.handlers
 import readline
+
 from ApplicationTest import *
+from ApplicationGt import *
 
 class ApplicationManager(cmd.Cmd):
     """Main Reptate container of applications"""
@@ -32,14 +34,15 @@ class ApplicationManager(cmd.Cmd):
         # SETUP APPLICATIONS
         self.application_counter=0
         self.applications=[]
-        self.available_applications=[]
-        self.available_applications.append(ApplicationTest)
+        self.available_applications={}
+        self.available_applications[ApplicationTest.name]=ApplicationTest
+        self.available_applications[ApplicationGt.name]=ApplicationGt
         self.current_application=None
 
 # APPLICATION STUFF
     def do_application_available(self, line):
         """List available applications"""
-        for app in self.available_applications:
+        for app in list(self.available_applications.values()):
             print("%s: %s"%(app.name,app.description))
 
     def do_application_delete(self, name):
@@ -81,9 +84,9 @@ class ApplicationManager(cmd.Cmd):
 
     def do_application_new(self, name):
         """ Create new application"""
-        if (name==ApplicationTest.name):
+        if (name in self.available_applications):
             self.application_counter+=1
-            newapp=ApplicationTest()
+            newapp=self.available_applications[name]()
             newapp.name=newapp.name+str(self.application_counter)
             self.applications.append(newapp)
             self.current_application=newapp
@@ -92,9 +95,7 @@ class ApplicationManager(cmd.Cmd):
     
     def complete_application_new(self, text, line, begidx, endidx):
         """Complete command"""
-        app_names=[]
-        for app in self.available_applications:
-            app_names.append(app.name)
+        app_names=list(self.available_applications.keys())
         if not text:
             completions = app_names[:]
         else:
@@ -166,9 +167,9 @@ class ApplicationManager(cmd.Cmd):
                 print("*%s:\t%s"%(ds.name, ds.description))
                 for i, f in enumerate(ds.files):
                     if (f==ds.current_file):
-                        print("  *File%02d: %s"%(i,f.file_name_short))
+                        print("  *File%02d: %s"%(i+1,f.file_name_short))
                     else:
-                        print("   File%02d: %s"%(i,f.file_name_short))
+                        print("   File%02d: %s"%(i+1,f.file_name_short))
                 for i, t in enumerate(ds.theories):
                     if (t==ds.current_theory):
                         print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
@@ -286,7 +287,7 @@ class ApplicationManager(cmd.Cmd):
             print("Missing file type")
             return
         ftypes=list(self.current_application.filetypes.values())
-        items=line.split()
+        items=line.split(',')
         if (items[0] in self.current_application.filetypes):  
             if (len(items)>1):
                 self.current_application.current_dataset.new_file(self.current_application.filetypes[items[0]],items[1])

@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="applications\ApplicationGt.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="applications\ApplicationTest.py">
       <SubType>Code</SubType>
     </Compile>
@@ -51,6 +54,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RepTate.py" />
+    <Compile Include="theories\TheoryMaxwellModes.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="theories\TheoryTest.py">
       <SubType>Code</SubType>
     </Compile>
