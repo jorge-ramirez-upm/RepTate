@@ -14,14 +14,14 @@ class Application(object):
         self.logger = logging.getLogger('ReptateLogger')
         self.views=[]
         self.filetypes={}
-        self.theories=[]
+        self.theories={}
         self.datasets=[]
         self.current_view=0
         self.current_theory=0
         self.current_dataset=0
         self.num_datasets=0
 
-    def add_empty_dataset(self, name="DataSet", description=""):
+    def new_dataset(self, name="DataSet", description=""):
         """Creates an empty dataset and adds it to the current application"""
         ds = DataSet(name, description)
         self.datasets.append(ds)

@@ -12,11 +12,21 @@ class DataSet(object):
         self.files=[]
         self.current_file=None
         self.num_files=0
+        self.theories=[]
+        self.current_theory=None
+        self.num_theories=0
 
-
-    def add_empty_file(self, ftype):
+    def new_file(self, ftype, name):
         self.num_files+=1
-        f = File("DummyFile%d"%self.num_files)
+        if (name==""):
+            f = File("DummyFile%02d"%self.num_files)
+        else:
+            f = File(name)
         self.files.append(f)
         self.current_file=f
         
+    def new_theory(self, theory):
+        self.num_theories+=1
+        self.theories.append(theory)
+        self.current_theory=theory
+

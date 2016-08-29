@@ -36,34 +36,13 @@ class ApplicationManager(cmd.Cmd):
         self.available_applications.append(ApplicationTest)
         self.current_application=None
 
-    def do_list_available_applications(self, line):
+# APPLICATION STUFF
+    def do_application_available(self, line):
         """List available applications"""
         for app in self.available_applications:
             print("%s: %s"%(app.name,app.description))
 
-    def do_list_applications(self, line):
-        """List open applications"""
-        for app in self.applications:
-            if (app==self.current_application):
-                print("*%s: %s"%(app.name,app.description))
-            else:
-                print("%s: %s"%(app.name,app.description))
-
-    def do_switch_application(self, name):
-        """Change to another open application"""
-        done=False
-        for app in self.applications:
-            if (app.name==name):
-                self.current_application=app    
-                done=True
-        if (not done):
-            print("Application \"%s\" not found"%name)                        
-
-    def complete_switch_application(self, text, line, begidx, endidx):
-        completions = self.complete_delete_application(text, line, begidx, endidx)
-        return completions
-
-    def do_delete_application(self, name):
+    def do_application_delete(self, name):
         """Delete an open application"""
         done=False
         for index, app in enumerate(self.applications):
@@ -78,7 +57,7 @@ class ApplicationManager(cmd.Cmd):
         if (not done):
             print("Application \"%s\" not found"%name)            
 
-    def complete_delete_application(self, text, line, begidx, endidx):
+    def complete_application_delete(self, text, line, begidx, endidx):
         """Complete delete application command"""
         app_names=[]
         for app in self.applications:
@@ -92,17 +71,15 @@ class ApplicationManager(cmd.Cmd):
                             ]
         return completions
 
-    def do_quit(self, line):
-        """Exit RepTate"""        
-        self.do_EOF(line)
+    def do_application_list(self, line):
+        """List open applications"""
+        for app in self.applications:
+            if (app==self.current_application):
+                print("*%s: %s"%(app.name,app.description))
+            else:
+                print("%s: %s"%(app.name,app.description))
 
-    def do_EOF(self, line):
-        """Exit RepTate"""
-        self.reptatelogger.debug("Exiting RepTate...")
-        readline.write_history_file()
-        return True
-
-    def do_new_application(self, name):
+    def do_application_new(self, name):
         """ Create new application"""
         if (name==ApplicationTest.name):
             self.application_counter+=1
@@ -113,7 +90,7 @@ class ApplicationManager(cmd.Cmd):
         else:
             print("Application \"%s\" is not available"%name)            
     
-    def complete_new_application(self, text, line, begidx, endidx):
+    def complete_application_new(self, text, line, begidx, endidx):
         """Complete command"""
         app_names=[]
         for app in self.available_applications:
@@ -127,7 +104,21 @@ class ApplicationManager(cmd.Cmd):
                             ]
         return completions
 
-    def check_applications_exist(self):
+    def do_application_switch(self, name):
+        """Change to another open application"""
+        done=False
+        for app in self.applications:
+            if (app.name==name):
+                self.current_application=app    
+                done=True
+        if (not done):
+            print("Application \"%s\" not found"%name)                        
+
+    def complete_application_switch(self, text, line, begidx, endidx):
+        completions = self.complete_delete_application(text, line, begidx, endidx)
+        return completions
+
+    def check_application_exist(self):
         """Check if there is any open application"""
         if (len(self.applications)==0):
             print("No open applications available")
@@ -135,95 +126,10 @@ class ApplicationManager(cmd.Cmd):
         else:
             return True
 
-    def check_datasets_exist(self):
-        """Check if there is any open dataset"""
-        if (len(self.current_application.datasets)==0):
-            print("No open datasets available")
-            return False
-        else:
-            return True
-
-
-    def do_list_available_views(self, line):
-        """List available views in the current application"""
-        if (not self.check_applications_exist()):
-            return
-        for view in self.current_application.views:
-            if (view==self.current_application.current_view):
-                print("*%s:\t%s"%(view.name,view.description))
-            else:
-                print("%s:\t%s"%(view.name,view.description))
-
-    def do_switch_view(self, name):
-        """Change to another view from open application"""
-        done=False
-        if (not self.check_applications_exist()):
-            return
-        for view in self.current_application.views:
-            if (view.name==name):
-                self.current_application.current_view=view
-                done=True
-        if (not done):
-            print("View \"%s\" not found"%name)                        
-
-    def complete_switch_view(self, text, line, begidx, endidx):
-        """Complete switch view command"""
-        if (not self.check_applications_exist()):
-            return [""]
-        view_names=[]
-        for view in self.current_application.views:
-            view_names.append(view.name)
-        if not text:
-            completions = view_names[:]
-        else:
-            completions = [ f
-                            for f in view_names
-                            if f.startswith(text)
-                            ]
-        return completions
-
-    def do_list_available_filetypes(self, line):
-        """List available file types in the current application"""
-        if (not self.check_applications_exist()):
-            return
-        ftypes=list(self.current_application.filetypes.values())
-        for ftype in ftypes:
-            print("%s:\t%s\t*.%s"%(ftype.name,ftype.description,ftype.extension))
-
-    def do_add_empty_dataset(self, line):
-        """If there is an active application, create a new empty dataset in it.
-           The argument may contain the name, description (separated by a comma)"""
-        if (not self.check_applications_exist()):
-            return
-        if (line==""):
-            num_ds=self.current_application.num_datasets+1
-            self.current_application.add_empty_dataset("DataSet%d"%num_ds, "")
-        else:
-            items=line.split(',')
-            if (len(items)>1):
-                self.current_application.add_empty_dataset(items[0],items[1])
-            else:
-                self.current_application.add_empty_dataset(items[0],"")
-
-    def do_list_datasets(self, line):
-        """List the datasets of the current application"""
-        if (not self.check_applications_exist()):
-            return
-        for ds in self.current_application.datasets:
-            if (ds==self.current_application.current_dataset):
-                print("*%s:\t%s"%(ds.name, ds.description))
-            else:
-                print("%s:\t%s"%(ds.name, ds.description))
-            for f in ds.files:
-                if (f==ds.current_file):
-                    print("\t*%s"%f.file_name_short)
-                else:
-                    print("\t%s"%f.file_name_short)
-
-    def do_delete_dataset(self, name):
+# DATASET STUFF
+    def do_dataset_delete(self, name):
         """Delete a dataset from the current application"""
-        if (not self.check_applications_exist()):
-            return
+        if (not self.check_application_exist()): return
         done=False
         for index, ds in enumerate(self.current_application.datasets):
             if (ds.name==name):
@@ -237,10 +143,9 @@ class ApplicationManager(cmd.Cmd):
         if (not done):
             print("Data Set \"%s\" not found"%name)            
 
-    def complete_delete_dataset(self, text, line, begidx, endidx):
+    def complete_dataset_delete(self, text, line, begidx, endidx):
         """Complete delete dataset command"""
-        if (not self.check_applications_exist()):
-            return [""]
+        if (not self.check_application_exist()): return [""]
         dataset_names=[]
         for ds in self.current_application.datasets:
             dataset_names.append(ds.name)
@@ -253,27 +158,67 @@ class ApplicationManager(cmd.Cmd):
                             ]
         return completions
 
-    def do_add_empty_file(self, line):
-        """Add an empty file of the given type to the current Data Set"""
-        if (not self.check_applications_exist()):
-            return
-        if (not self.check_datasets_exist()):
-            return
-        ftypes=list(self.current_application.filetypes.values())
-        if (line==""):
-            self.current_application.current_dataset.add_empty_file(ftypes[0])
-        else:
-            if (line in self.current_application.filetypes):  
-                self.current_application.current_dataset.add_empty_file(self.current_application.filetypes[line])
+    def do_dataset_list(self, line):
+        """List the datasets of the current application"""
+        if (not self.check_application_exist()): return
+        for ds in self.current_application.datasets:
+            if (ds==self.current_application.current_dataset):
+                print("*%s:\t%s"%(ds.name, ds.description))
+                for i, f in enumerate(ds.files):
+                    if (f==ds.current_file):
+                        print("  *File%02d: %s"%(i,f.file_name_short))
+                    else:
+                        print("   File%02d: %s"%(i,f.file_name_short))
+                for i, t in enumerate(ds.theories):
+                    if (t==ds.current_theory):
+                        print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
+                    else:
+                        print("   %s: %s\t %s"%(t.name, t.thname, t.description))
+
             else:
-                print("File type \"%s\" does not exists"%line)
-    
-    def do_list_files(self, line):
+                print("%s:\t%s"%(ds.name, ds.description))
+
+    def do_dataset_new(self, line):
+        """If there is an active application, create a new empty dataset in it.
+        Arguments: [NAME [, Description]]
+                NAME: of the new dataset (optional)
+                DESCRIPTION: of the dataset (optional)"""
+        if (not self.check_application_exist()): return
+        if (line==""):
+            num_ds=self.current_application.num_datasets+1
+            self.current_application.new_dataset("DataSet%02d"%num_ds, "")
+        else:
+            items=line.split(',')
+            if (len(items)>1):
+                self.current_application.new_dataset(items[0],items[1])
+            else:
+                self.current_application.new_dataset(items[0],"")
+            
+    def do_dataset_switch(self, name):
+        """ Switch the current dataset"""
+        pass
+
+    def complete_dataset_switch(self, text, line, begidx, endidx):
+        """ Complete the switch dataset command"""
+        return [""]
+
+    def check_datasets_exist(self):
+        """Check if there is any open dataset"""
+        if (len(self.current_application.datasets)==0):
+            print("No open datasets available")
+            return False
+        else:
+            return True
+
+# FILE STUFF
+    def do_file_delete(self, line):
+        """Delete file from the current data set"""
+        pass
+
+    def do_file_list(self, line):
         """List the files in the current dataset"""
-        if (not self.check_applications_exist()):
-            return
-        if (not self.check_datasets_exist()):
-            return
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
         ds=self.current_application.current_dataset
         for f in ds.files:
             if (f==ds.current_file):
@@ -281,27 +226,185 @@ class ApplicationManager(cmd.Cmd):
             else:
                 print("%s"%f.file_name_short)
 
-    def do_open_file(self, line):
+    def do_file_new(self, line):
+        """Add an empty file of the given type to the current Data Set
+        Arguments: TYPE [, NAME]
+                TYPE: extension of file
+                NAME: Name (optional)
+        TODO: if no app and no data set are open, create the right ones!
+        """
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        ftypes=list(self.current_application.filetypes.values())
+        items=line.split()
+        if (items[0] in self.current_application.filetypes):  
+            if (len(items)>1):
+                self.current_application.current_dataset.new_file(self.current_application.filetypes[items[0]],items[1])
+            else:
+                self.current_application.current_dataset.new_file(self.current_application.filetypes[line])
+        else:
+            print("File type \"%s\" does not exists"%line)
+    
+    def complete_file_new(self, text, line, begidx, endidx):
+        """Complete new file command"""
+        if (not self.check_application_exist()): return [""]
+        if (not self.check_datasets_exist()): return [""]
+        file_types=list(self.current_application.filetypes.keys())
+        if not text:
+            completions = file_types[:]
+        else:
+            completions = [ f
+                            for f in file_types
+                            if f.startswith(text)
+                            ]
+        return completions
+
+    def do_file_open(self, line):
         """Open a file from the current folder"""
         pass
 
-    def do_switch_file(self, line):
+    def do_file_switch(self, line):
         """Change active file in the current dataset"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        for f in self.current_application.current_dataset.files:
+            if (f.file_name_short==line):
+                self.current_application.current_dataset.current_file=f    
+                done=True
+        if (not done):
+            print("File \"%s\" not found"%line)                        
         pass
 
-    def complete_switch_file(self, line):
+    def complete_file_switch(self, text, line, begidx, endidx):
         """Select names among the files in the current dataset"""
-        pass
+        return [""]
 
-    def delete_file(self, line):
-        """Delete file from the current data set"""
-        pass
-
-    def complete_delete_file(self, line):
+    def complete_file_delete(self, text, line, begidx, endidx):
         self.complete_switch_file(line)
+
+# FILE TYPE STUFF
+    def do_filetype_available(self, line):
+        """List available file types in the current application"""
+        if (not self.check_application_exist()): return
+        ftypes=list(self.current_application.filetypes.values())
+        for ftype in ftypes:
+            print("%s:\t%s\t*.%s"%(ftype.name,ftype.description,ftype.extension))
+
+# THEORY STUFF
+    def do_theory_available(self, line):
+        """List available theories in the current application"""
+        if (not self.check_application_exist()): return
+        for t in list(self.current_application.theories.values()):
+            print("%s:\t%s"%(t.thname,t.description))
+ 
+    def do_theory_delete(self, name):
+        """Delete a theory from the current dataset"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        done=False
+        for index, th in enumerate(self.current_application.current_dataset.theories):
+            if (th.name==name):
+                if (self.current_application.current_dataset.current_theory==th):
+                    if (index<len(self.current_application.current_dataset.theories)-1):
+                        self.current_application.current_dataset.current_theory=self.current_application.current_dataset.theories[index+1]
+                    else:
+                        self.current_application.current_dataset.current_theory=self.current_application.current_dataset.theories[0]
+                self.current_application.current_dataset.theories.remove(th)
+                done=True
+        if (not done):
+            print("Theory \"%s\" not found"%name)            
+
+    def complete_theory_delete(self, text, line, begidx, endidx):
+        """Complete delete theory command"""
+        if (not self.check_application_exist()): return [""]
+        if (not self.check_datasets_exist()): return [""]
+        th_names=[]
+        for th in self.current_application.current_dataset.theories:
+            th_names.append(th.name)
+        if not text:
+            completions = th_names[:]
+        else:
+            completions = [ f
+                            for f in th_names
+                            if f.startswith(text)
+                            ]
+        return completions
+
+    def do_theory_list(self, line):
+        """List open theories in current dataset"""
+        pass
+
+    def do_theory_new(self, line):
+        """Add a new theory of the type specified to the current Data Set"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        thtypes=list(self.current_application.theories.keys())
+        if (line in thtypes):
+            num_th=self.current_application.current_dataset.num_theories+1
+            self.current_application.current_dataset.new_theory(self.current_application.theories[line]("Theory%02d"%num_th))
+        else:
+            print("Theory \"%s\" does not exists"%line)
     
+    def complete_theory_new(self, text, line, begidx, endidx):
+        """Complete new theory command"""
+        if (not self.check_application_exist()): return [""]
+        if (not self.check_datasets_exist()): return [""]
+        
+        theory_names=list(self.current_application.theories.keys())
+        if not text:
+            completions = theory_names[:]
+        else:
+            completions = [ f
+                            for f in theory_names
+                            if f.startswith(text)
+                            ]
+        return completions
 
+    def do_theory_switch(self, line):
+        """Change the active theory"""
+        pass
 
+    def complete_theory_switch(self, text, line, begidx, endidx):
+        """Complete the theory switch command"""
+        return [""]
+
+# VIEW STUFF
+    def do_view_available(self, line):
+        """List available views in the current application"""
+        if (not self.check_application_exist()): return
+        for view in self.current_application.views:
+            if (view==self.current_application.current_view):
+                print("*%s:\t%s"%(view.name,view.description))
+            else:
+                print("%s:\t%s"%(view.name,view.description))
+
+    def do_view_switch(self, name):
+        """Change to another view from open application"""
+        done=False
+        if (not self.check_application_exist()): return
+        for view in self.current_application.views:
+            if (view.name==name):
+                self.current_application.current_view=view
+                done=True
+        if (not done):
+            print("View \"%s\" not found"%name)                        
+
+    def complete_view_switch(self, text, line, begidx, endidx):
+        """Complete switch view command"""
+        if (not self.check_application_exist()): return [""]
+        view_names=[]
+        for view in self.current_application.views:
+            view_names.append(view.name)
+        if not text:
+            completions = view_names[:]
+        else:
+            completions = [ f
+                            for f in view_names
+                            if f.startswith(text)
+                            ]
+        return completions
+    
+# OTHER STUFF
     def do_shell(self, line):
         """Run a shell command"""
         print("running shell command:", line)
@@ -345,27 +448,30 @@ class ApplicationManager(cmd.Cmd):
 
     def do_info(self, line):
         """Show info about the current RepTate session"""
-        print("AVAILABLE APPLICATIONS:")
-        print("#######################")
-        self.do_list_available_applications(line)
+        print("##AVAILABLE APPLICATIONS:")
+        self.do_application_available(line)
 
-        print("\nOPEN APPLICATIONS (*=current):")
-        print("##############################")
-        self.do_list_applications(line)
+        print("\n##OPEN APPLICATIONS (*=current):")
+        self.do_application_list(line)
 
-        print("\nVIEWS IN CURRENT APPLICATION:")
-        print("#############################")
-        self.do_list_available_views(line)
+        print("\n##CURRENT APPLICATION:")
+        print("-->FILE TYPES AVAILABLE:")
+        self.do_filetype_available(line)
 
-        print("\nFILE TYPES IN CURRENT APPLICATION:")
-        print("##################################")
-        self.do_list_available_filetypes(line)
+        print("-->VIEWS AVAILABLE (*=current):")
+        self.do_view_available(line)
 
-        print("\nDATA SETS IN CURRENT APPLICATION:")
-        print("##################################")
-        self.do_list_datasets(line)
+        print("-->THEORIES AVAILABLE:")
+        self.do_theory_available(line)
 
-        print("\nFILES IN CURRENT DATA SET:")
-        print("##########################")
-        self.do_list_files(line)
+        print("\n##DATA SETS IN CURRENT APPLICATION:")
+        self.do_dataset_list(line)
         
+    def do_quit(self, line):
+        self.do_EOF(line)
+
+    def do_EOF(self, line):
+        """Exit RepTate"""
+        self.reptatelogger.debug("Exiting RepTate...")
+        readline.write_history_file()
+        return True

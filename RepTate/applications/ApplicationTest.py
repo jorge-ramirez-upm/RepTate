@@ -20,7 +20,8 @@ class ApplicationTest(Application):
         #self.logger.debug(self.filetypes)
 
         # THEORIES
-        self.theories.append(TheoryTest)
+        self.theories[TheoryTest.thname]=TheoryTest
+        self.theories[TheoryTest2.thname]=TheoryTest2
 
     def view1(self, vec, x, y, file_parameters):
         x[0]=vec[0]

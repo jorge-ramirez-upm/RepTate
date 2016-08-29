@@ -17,13 +17,17 @@ class TheoryPointDistributionType(enum.Enum):
 
 
 class Theory(object):
-    """Abstract class to describe a theory"""
+    """Abstract class to describe a theory
+            thname            (str): Theory name
+            description     (str): Description of theory
+    """
+    thname=""
+    description=""
 
-    def __init__(self, name="", description="", type=TheoryType.point):
+    def __init__(self, name="Theory", type=TheoryType.point):
         """Constructor:
         Args:
-            name            (str): Theory name
-            description     (str): Description of theory
+            name            (str): Name used internally by the dataset
             type           (enum): Type of theory (point, line, user)
             parameters     (dict): Parameters of the theory
             point_function (func): Calculation for point theory
@@ -41,8 +45,7 @@ class Theory(object):
             integration_method   : Euler, RungeKutta5, AdaptiveDt
             stop_steady    (bool): Stop calculation if steady state of component 0 is attained
         """
-        self.name=name 
-        self.description = description 
+        self.name=name
         self.type=type
         self.parameters={}
         self.point_function=None
