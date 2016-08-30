@@ -18,20 +18,24 @@ class ApplicationLVE(Application):
         self.current_view=self.views[0]
 
         # FILES
-        ftype=TXTColumnFile("LVE files", "tts", "LVE files", 0, 2, ['w','G1','G2'], [0], ['Mw','T'], [])
+        ftype=TXTColumnFile("LVE files", "tts", "LVE files", 0, -1, ['w','G\'','G\'\''], [0, 1, 2], ['Mw','T'], ['rad/s','Pa','Pa'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
-    def viewLogG1G2(self, vec, x, y, file_parameters):
+    def viewLogG1G2(self, vec, file_parameters):
+        x=np.zeros((1,1))
+        y=np.zeros((1,2))
         x[0]=np.log10(vec[0])
-        y[0]=np.log10(vec[1])
-        y[1]=np.log10(vec[2])
-        return True
+        y[0,0]=np.log10(vec[1])
+        y[0,1]=np.log10(vec[2])
+        return x, y, True
 
-    def viewG1G2(self, vec, x, y, file_parameters):
+    def viewG1G2(self, vec, file_parameters):
+        x=np.zeros((1,1))
+        y=np.zeros((1,2))
         x[0]=vec[0]
-        y[0]=vec[1]
-        y[1]=vec[2]
-        return True
+        y[0,0]=vec[1]
+        y[0,1]=vec[2]
+        return x, y, True

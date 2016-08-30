@@ -1,6 +1,7 @@
 import numpy as np
 import logging
 #from Table import *
+from File import *
 from DataTable import *
 
 class TXTColumnFile(object):
@@ -26,24 +27,25 @@ class TXTColumnFile(object):
         self.logger = logging.getLogger('ReptateLogger')
 
     def read_file(self, filename):
-        dt=Table(filename)
-        dt.data_file_type = self
+        file=File(filename)
+        file.data_table = DataTable()
+        #dt.data_file_type = self
         f = open(filename, "r")
         line=f.readline()
         items=line.split(';')
-        dt.file_parameters={}
+        file.file_parameters={}
         # Get Parameters
         for i in range(len(items)):
             par=items[i].split('=')
             if len(par)>1:
-                dt.file_parameters[par[0]]=par[1]
-        self.logger.debug(dt.file_parameters)
+                file.file_parameters[par[0]]=par[1]
+        #self.logger.debug(file.file_parameters)
     
         # Get Columns
         if (self.col_names_line>0):
-            self.logger.debug(self.col_names_line)
+            #self.logger.debug(self.col_names_line)
             for i in range(2,self.col_names_line):
-                dt.header_lines.append(f.readline())
+                file.header_lines.append(f.readline())
             line=f.readline()
             items=line.split()
             self.col_index=[]
@@ -54,10 +56,10 @@ class TXTColumnFile(object):
                         break
         else:
             for i in range(self.num_header_lines):
-               dt.header_lines.append(f.readline())
-        self.logger.debug(dt.header_lines)
-        self.logger.debug(self.col_index)
-        dt.num_columns=len(self.col_index)
+               file.header_lines.append(f.readline())
+        #self.logger.debug(file.header_lines)
+        #self.logger.debug(self.col_index)
+        file.data_table.num_columns=len(self.col_index)
 
         rawdata=[]
         while(True):
@@ -66,10 +68,10 @@ class TXTColumnFile(object):
             items=line.split()
             for j in self.col_index:
                 rawdata.append(float(items[j]))
-        dt.num_lines=int(len(rawdata)/dt.num_columns)
-        dt.data=np.reshape(rawdata,newshape=(dt.num_lines, dt.num_columns))
-        self.logger.debug(dt.data)
-        return dt
+        file.data_table.num_rows=int(len(rawdata)/file.data_table.num_columns)
+        file.data_table.data=np.reshape(rawdata,newshape=(file.data_table.num_rows, file.data_table.num_columns))
+        #self.logger.debug(file.data_table.data)
+        return file
 
 if __name__ == '__main__':
     t = TXTColumnFile()

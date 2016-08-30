@@ -5,6 +5,7 @@ import logging
 import logging.handlers
 import readline
 import glob
+import matplotlib.pyplot as plt
 
 from ApplicationTest import *
 from ApplicationReact import *
@@ -206,6 +207,28 @@ class ApplicationManager(cmd.Cmd):
             else:
                 self.current_application.new_dataset(items[0],"")
             
+    def do_dataset_plot(self, line):
+        """Plot the current dataset using the current view"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        view = self.current_application.current_view
+        fig=plt.figure()
+        ax = fig.add_subplot(111)
+        for file in self.current_application.current_dataset.files:
+            x=np.zeros((file.data_table.num_rows,1))
+            y=np.zeros((file.data_table.num_rows,view.n))
+            for i in range(file.data_table.num_rows):
+                vec=file.data_table.data[i,:]
+                x[i], y[i], success = view.view_proc(vec, file.file_parameters)
+            for i in range(view.n):
+                plt.plot(x, y[:,i])
+        if (view.log_x): ax.set_xscale("log")
+        if (view.log_y): ax.set_yscale("log")
+        ax.set_xlabel(view.x_label)
+        ax.set_ylabel(view.y_label)
+        fig.show()
+
+
     def do_dataset_switch(self, name):
         """ Switch the current dataset"""
         if (not self.check_application_exist()): return
@@ -338,7 +361,9 @@ class ApplicationManager(cmd.Cmd):
             return
         if (f_ext[0] in self.current_application.filetypes):  
             for f in f_names:
-                self.current_application.current_dataset.open_file(self.current_application.filetypes[f_ext[0]], f)
+                df = self.current_application.filetypes[f_ext[0]].read_file(f)
+                self.current_application.current_dataset.files.append(df)
+                self.current_application.current_dataset.current_file=df
         else:
             print("File type \"%s\" does not exists"%f_ext[0])
 
@@ -373,6 +398,41 @@ class ApplicationManager(cmd.Cmd):
         """Select names among the files in the current dataset"""
         completions=self.complete_file_delete(text, line, begidx, endidx)
         return completions
+
+    def do_file_print(self, line):
+        """Show the contents of the current file on the screen"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        file = self.current_application.current_dataset.current_file
+        print("Path: %s"%file.file_full_path)
+        print(file.file_parameters)
+        print(file.header_lines)
+        print(file.data_table.data)
+
+    def do_file_plot(self, line):
+        """Plot the current file using the current view"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        file = self.current_application.current_dataset.current_file
+        view = self.current_application.current_view
+        fig=plt.figure()
+        series=[]
+        for i in range(view.n):
+            s = plt.plot()
+            series.append(s)
+        x=np.zeros((file.data_table.num_rows,1))
+        y=np.zeros((file.data_table.num_rows,view.n))
+        for i in range(file.data_table.num_rows):
+            vec=file.data_table.data[i,:]
+            x[i], y[i], success = view.view_proc(vec, file.file_parameters)
+        for i in range(view.n):
+            plt.plot(x, y[:,i])
+        ax = fig.add_subplot(111)
+        if (view.log_x): ax.set_xscale("log")
+        if (view.log_y): ax.set_yscale("log")
+        ax.set_xlabel(view.x_label)
+        ax.set_ylabel(view.y_label)
+        fig.show()
 
 # FILE TYPE STUFF
     def do_filetype_available(self, line):
