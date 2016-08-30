@@ -15,6 +15,8 @@ class ApplicationLVE(Application):
         # VIEWS
         self.views.append(View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log(w)", "Log(G'(w),G''(w))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"]))
         self.views.append(View("G',G''(w)", "Storage,Loss moduli", "w", "G'(w),G''(w)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"]))
+        self.views.append(View("delta", "delta", "$\omega$", "$\delta(\omega)$", True, False, self.viewDelta, 1, ["delta(w)"]))
+        self.views.append(View("tan(delta)", "tan(delta)", "w", "tan($\delta$)", True, True, self.viewTanDelta, 1, ["tan(delta((w))"]))
         self.current_view=self.views[0]
 
         # FILES
@@ -38,4 +40,18 @@ class ApplicationLVE(Application):
         x[0]=vec[0]
         y[0,0]=vec[1]
         y[0,1]=vec[2]
+        return x, y, True
+
+    def viewDelta(self, vec, file_parameters):
+        x=np.zeros((1,1))
+        y=np.zeros((1,1))
+        x[0]=vec[0]
+        y[0,0]=np.arctan2(vec[2],vec[1])*180/np.pi
+        return x, y, True
+    
+    def viewTanDelta(self, vec, file_parameters):
+        x=np.zeros((1,1))
+        y=np.zeros((1,1))
+        x[0]=vec[0]
+        y[0,0]=log10(vec[1]/vec[0])
         return x, y, True

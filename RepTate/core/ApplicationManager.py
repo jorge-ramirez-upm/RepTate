@@ -18,7 +18,7 @@ from ApplicationGt import *
 class ApplicationManager(cmd.Cmd):
     """Main Reptate container of applications"""
 
-    version = '0.1'
+    version = '0.2'
     prompt = 'reptate> '
     intro = 'Reptate Version %s command processor'%version
     
