@@ -1,0 +1,6 @@
+application_new LVE
+dataset_new
+cd data
+cd PI_LINEAR
+file_open PI*
+dataset_plot

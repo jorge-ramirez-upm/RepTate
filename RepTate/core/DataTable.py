@@ -1,10 +1,11 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class DataTable(object):
     """Class that stores data and series"""
     MAX_NUM_SERIES=3
 
-    def __init__(self, ):
+    def __init__(self, ax=None):
         """Constructor:
 
         Args:
@@ -19,3 +20,7 @@ class DataTable(object):
         self.column_names=[]
         self.column_units=[]
         self.data=np.zeros((self.num_rows,self.num_columns))
+        self.series=[]
+        for i in range(self.MAX_NUM_SERIES): 
+            ss = ax.plot([], [], label='')
+            self.series.append(ss[0])

@@ -17,12 +17,12 @@ class DataSet(object):
         self.current_theory=None
         self.num_theories=0
 
-    def new_file(self, ftype, name=""):
+    def new_file(self, ftype, ax, name=""):
         self.num_files+=1
         if (name==""):
-            f = File("DummyFile%02d"%self.num_files)
+            f = File("DummyFile%02d"%self.num_files, ax)
         else:
-            f = File(name)
+            f = File(name, ax)
         self.files.append(f)
         self.current_file=f
         

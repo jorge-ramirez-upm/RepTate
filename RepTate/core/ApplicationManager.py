@@ -211,23 +211,50 @@ class ApplicationManager(cmd.Cmd):
         """Plot the current dataset using the current view"""
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
-        view = self.current_application.current_view
-        fig=plt.figure()
-        ax = fig.add_subplot(111)
-        for file in self.current_application.current_dataset.files:
-            x=np.zeros((file.data_table.num_rows,1))
-            y=np.zeros((file.data_table.num_rows,view.n))
-            for i in range(file.data_table.num_rows):
-                vec=file.data_table.data[i,:]
-                x[i], y[i], success = view.view_proc(vec, file.file_parameters)
-            for i in range(view.n):
-                plt.plot(x, y[:,i])
-        if (view.log_x): ax.set_xscale("log")
-        if (view.log_y): ax.set_yscale("log")
-        ax.set_xlabel(view.x_label)
-        ax.set_ylabel(view.y_label)
-        fig.show()
-
+        self.current_application.plot_current_dataset()
+        #view = self.current_application.current_view
+        ##fig=plt.figure()
+        ##ax = fig.add_subplot(111)
+        #for file in self.current_application.current_dataset.files:
+        #    x=np.zeros((file.data_table.num_rows,1))
+        #    y=np.zeros((file.data_table.num_rows,view.n))
+        #    for i in range(file.data_table.num_rows):
+        #        vec=file.data_table.data[i,:]
+        #        x[i], y[i], success = view.view_proc(vec, file.file_parameters)
+        #    for i in range(file.data_table.MAX_NUM_SERIES):
+        #    #for i in range(view.n):
+        #        if (i<view.n):
+        #            file.data_table.series[i].set_data(x, y[:,i])
+        #            file.data_table.series[i].set_visible(True)
+        #            if (file.active and i==0):
+        #                file.data_table.series[i].set_label(file.file_name_short)
+        #            else:
+        #                file.data_table.series[i].set_label('')
+        #        else:
+        #            file.data_table.series[i].set_visible(False)
+        #            file.data_table.series[i].set_label('')
+        #        #plt.plot(x, y[:,i])
+        #if (view.log_x): 
+        #    self.current_application.ax.set_xscale("log")
+        #    self.current_application.ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
+        #else:
+        #    self.current_application.ax.set_xscale("linear")
+        #    self.current_application.ax.xaxis.set_minor_locator(AutoMinorLocator())
+        #if (view.log_y): 
+        #    self.current_application.ax.set_yscale("log")
+        #    self.current_application.ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
+        #else:
+        #    self.current_application.ax.set_yscale("linear")
+        #    self.current_application.ax.yaxis.set_minor_locator(AutoMinorLocator())
+        
+        #self.current_application.ax.set_xlabel(view.x_label)
+        #self.current_application.ax.set_ylabel(view.y_label)
+        #self.current_application.ax.relim(True)
+        #self.current_application.ax.autoscale_view()
+        #leg=self.current_application.ax.legend(frameon=True, ncol=2)
+        #leg.draggable()
+        
+        #self.current_application.figure.canvas.draw()
 
     def do_dataset_switch(self, name):
         """ Switch the current dataset"""
@@ -324,9 +351,13 @@ class ApplicationManager(cmd.Cmd):
         items=line.split(',')
         if (items[0] in self.current_application.filetypes):  
             if (len(items)>1):
-                self.current_application.current_dataset.new_file(self.current_application.filetypes[items[0]],items[1])
+                self.current_application.current_dataset.new_file(self.current_application.filetypes[items[0]],self.current_application.ax,items[1])
             else:
-                self.current_application.current_dataset.new_file(self.current_application.filetypes[line])
+                self.current_application.current_dataset.new_file(self.current_application.filetypes[line],self.current_application.ax)
+            leg=self.current_application.ax.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
+            if leg:
+                leg.draggable()
+            self.current_application.figure.canvas.draw()
         else:
             print("File type \"%s\" does not exists"%line)
     
@@ -347,6 +378,7 @@ class ApplicationManager(cmd.Cmd):
     def do_file_open(self, line):
         """Open file(s) from the current folder
            Arguments: FILENAMES (pattern expansion characters -- *, ? -- allowed
+           TODO: ALLOW OPENING FILES INSIDE SUBFOLDERS
         """
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
@@ -361,14 +393,18 @@ class ApplicationManager(cmd.Cmd):
             return
         if (f_ext[0] in self.current_application.filetypes):  
             for f in f_names:
-                df = self.current_application.filetypes[f_ext[0]].read_file(f)
+                df = self.current_application.filetypes[f_ext[0]].read_file(f, self.current_application.ax)
                 self.current_application.current_dataset.files.append(df)
                 self.current_application.current_dataset.current_file=df
         else:
             print("File type \"%s\" does not exists"%f_ext[0])
 
     def complete_file_open(self, text, line, begidx, endidx):
-        """Complete the file_open command"""
+        """Complete the file_open command
+           TODO: ALLOW COMPLETING FILES INSIDE SUBFOLDERS
+           TODO: IF NO DATASET, CREATE EMPTY ONE
+           TODO: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION
+        """
         if (not self.check_application_exist()): return [""]
         if (not self.check_datasets_exist()): return [""]
         f_names=[]
@@ -404,6 +440,7 @@ class ApplicationManager(cmd.Cmd):
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
         file = self.current_application.current_dataset.current_file
+        print(file)
         print("Path: %s"%file.file_full_path)
         print(file.file_parameters)
         print(file.header_lines)
@@ -416,6 +453,7 @@ class ApplicationManager(cmd.Cmd):
         file = self.current_application.current_dataset.current_file
         view = self.current_application.current_view
         fig=plt.figure()
+        self.current_application.figure.set_visible(True)
         series=[]
         for i in range(view.n):
             s = plt.plot()
@@ -441,6 +479,12 @@ class ApplicationManager(cmd.Cmd):
         ftypes=list(self.current_application.filetypes.values())
         for ftype in ftypes:
             print("%s:\t%s\t*.%s"%(ftype.name,ftype.description,ftype.extension))
+
+# LEGEND STUFF
+    def do_legend_switch(self, line):
+        self.current_application.legend_visible = not self.current_application.legend_visible 
+        self.current_application.set_legend_properties()
+        self.current_application.figure.canvas.draw()
 
 # THEORY STUFF
     def do_theory_available(self, line):
@@ -586,7 +630,8 @@ class ApplicationManager(cmd.Cmd):
             print("Folder %s does not exist"%line)
 
     def complete_cd(self, text, line, begidx, endidx):
-        """Complete cd command"""
+        """Complete cd command
+           TODO: COMPLETE SUBFOLDERS TOO"""
         test_directory=''
         dirs=[]
         for child in os.listdir():
@@ -603,7 +648,9 @@ class ApplicationManager(cmd.Cmd):
         return completions
 
     def do_ls(self, line):
-        """List contents of current folder"""
+        """List contents of current folder
+           TODO: CONSIDER SUBFOLDERS TOO
+        """
         dirs=os.listdir()
         for d in dirs:
             print("%s"%d)
