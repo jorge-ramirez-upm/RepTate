@@ -177,11 +177,17 @@ class ApplicationManager(cmd.Cmd):
         for ds in self.current_application.datasets:
             if (ds==self.current_application.current_dataset):
                 print("*%s:\t%s"%(ds.name, ds.description))
+                if (self.check_files_exist()): 
+                    keylist=list(ds.current_file.file_parameters.keys())
+                    print("File\t",'\t'.join(keylist))
                 for i, f in enumerate(ds.files):
+                    vallist=[]
+                    for k in keylist:
+                        vallist.append(f.file_parameters[k])
                     if (f==ds.current_file):
-                        print("  *File%02d: %s"%(i+1,f.file_name_short))
+                        print("*%s\t%s"%(f.file_name_short,'\t'.join(vallist)))
                     else:
-                        print("   File%02d: %s"%(i+1,f.file_name_short))
+                        print(" %s\t%s"%(f.file_name_short,'\t'.join(vallist)))
                 for i, t in enumerate(ds.theories):
                     if (t==ds.current_theory):
                         print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
@@ -212,50 +218,41 @@ class ApplicationManager(cmd.Cmd):
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
         self.current_application.plot_current_dataset()
-        #view = self.current_application.current_view
-        ##fig=plt.figure()
-        ##ax = fig.add_subplot(111)
-        #for file in self.current_application.current_dataset.files:
-        #    x=np.zeros((file.data_table.num_rows,1))
-        #    y=np.zeros((file.data_table.num_rows,view.n))
-        #    for i in range(file.data_table.num_rows):
-        #        vec=file.data_table.data[i,:]
-        #        x[i], y[i], success = view.view_proc(vec, file.file_parameters)
-        #    for i in range(file.data_table.MAX_NUM_SERIES):
-        #    #for i in range(view.n):
-        #        if (i<view.n):
-        #            file.data_table.series[i].set_data(x, y[:,i])
-        #            file.data_table.series[i].set_visible(True)
-        #            if (file.active and i==0):
-        #                file.data_table.series[i].set_label(file.file_name_short)
-        #            else:
-        #                file.data_table.series[i].set_label('')
-        #        else:
-        #            file.data_table.series[i].set_visible(False)
-        #            file.data_table.series[i].set_label('')
-        #        #plt.plot(x, y[:,i])
-        #if (view.log_x): 
-        #    self.current_application.ax.set_xscale("log")
-        #    self.current_application.ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
-        #else:
-        #    self.current_application.ax.set_xscale("linear")
-        #    self.current_application.ax.xaxis.set_minor_locator(AutoMinorLocator())
-        #if (view.log_y): 
-        #    self.current_application.ax.set_yscale("log")
-        #    self.current_application.ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
-        #else:
-        #    self.current_application.ax.set_yscale("linear")
-        #    self.current_application.ax.yaxis.set_minor_locator(AutoMinorLocator())
-        
-        #self.current_application.ax.set_xlabel(view.x_label)
-        #self.current_application.ax.set_ylabel(view.y_label)
-        #self.current_application.ax.relim(True)
-        #self.current_application.ax.autoscale_view()
-        #leg=self.current_application.ax.legend(frameon=True, ncol=2)
-        #leg.draggable()
-        
-        #self.current_application.figure.canvas.draw()
 
+    def do_dataset_sort(self, line):
+        """Sort the files in the current dataset as a function of some file parameter"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        if (not self.check_files_exist()): return 
+        self.current_application.current_dataset.sort(line)
+
+    def do_dataset_sortreverse(self, line):
+        """Sort the files in the current dataset as a function of some file parameter, in reverse order"""
+        if (not self.check_application_exist()): return
+        if (not self.check_datasets_exist()): return
+        if (not self.check_files_exist()): return 
+        self.current_application.current_dataset.sort(line, True)
+
+    def complete_dataset_sortreverse(self, text, line, begidx, endidx):
+        """Complete with the list of file parameters of the current file in the current dataset"""
+        completions = complete_dataset_sort(text, line, begidx, endidx)
+        return completions
+
+    def complete_dataset_sort(self, text, line, begidx, endidx):
+        """Complete with the list of file parameters of the current file in the current dataset"""
+        if (not self.check_application_exist()): return [""]
+        if (not self.check_datasets_exist()): return [""]
+        if (not self.check_files_exist()): return [""]
+        fp_names=list(self.current_application.current_dataset.current_file.file_parameters.keys())
+        if not text:
+            completions = fp_names[:]
+        else:
+            completions = [ f
+                            for f in fp_names
+                            if f.startswith(text)
+                            ]
+        return completions
+        
     def do_dataset_switch(self, name):
         """ Switch the current dataset"""
         if (not self.check_application_exist()): return
@@ -292,10 +289,20 @@ class ApplicationManager(cmd.Cmd):
             return True
 
 # FILE STUFF
+    def check_files_exist(self):
+        """Check if there are any files in the current dataset"""
+        if (len(self.current_application.current_dataset.files)==0):
+            print("No files available in the current dataset")
+            return False
+        else:
+            return True
+
+
     def do_file_delete(self, line):
         """Delete file from the current data set"""
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
+        if (not self.check_files_exist()): return 
         done=False
         for index, f in enumerate(self.current_application.current_dataset.files):
             if (f.file_name_short==line):
@@ -312,6 +319,7 @@ class ApplicationManager(cmd.Cmd):
     def complete_file_delete(self, text, line, begidx, endidx):
         if (not self.check_application_exist()): return [""]
         if (not self.check_datasets_exist()): return [""]
+        if (not self.check_files_exist()): return [""]
         f_names=[]
         for fl in self.current_application.current_dataset.files:
             f_names.append(fl.file_name_short)
@@ -328,6 +336,7 @@ class ApplicationManager(cmd.Cmd):
         """List the files in the current dataset"""
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
+        if (not self.check_files_exist()): return 
         ds=self.current_application.current_dataset
         for f in ds.files:
             if (f==ds.current_file):
@@ -423,6 +432,7 @@ class ApplicationManager(cmd.Cmd):
         """Change active file in the current dataset"""
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
+        if (not self.check_files_exist()): return 
         for f in self.current_application.current_dataset.files:
             if (f.file_name_short==line):
                 self.current_application.current_dataset.current_file=f    
@@ -439,6 +449,7 @@ class ApplicationManager(cmd.Cmd):
         """Show the contents of the current file on the screen"""
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
+        if (not self.check_files_exist()): return 
         file = self.current_application.current_dataset.current_file
         print(file)
         print("Path: %s"%file.file_full_path)
@@ -450,6 +461,7 @@ class ApplicationManager(cmd.Cmd):
         """Plot the current file using the current view"""
         if (not self.check_application_exist()): return
         if (not self.check_datasets_exist()): return
+        if (not self.check_files_exist()): return 
         file = self.current_application.current_dataset.current_file
         view = self.current_application.current_view
         fig=plt.figure()

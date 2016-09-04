@@ -31,3 +31,8 @@ class DataSet(object):
         self.theories.append(theory)
         self.current_theory=theory
 
+    def sort(self, line, rev=False):
+        if line in self.current_file.file_parameters:
+            self.files.sort(key = lambda x: float(x.file_parameters[line]), reverse=rev)
+        else:
+            print("Parameter %s not found in files"%line)
