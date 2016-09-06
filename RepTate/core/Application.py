@@ -1,3 +1,4 @@
+import cmd
 import logging
 import itertools
 import seaborn as sns   
@@ -9,13 +10,15 @@ from View import *
 from Theory import *
 from DataSet import *
 
-class Application(object):
+class Application(cmd.Cmd):
     """Main abstract class that represents an application"""    
     name="Template"
     description="Abstract class that defines basic functionality"
 
     def __init__(self,):
         """Constructor of Application"""
+        cmd.Cmd.__init__(self)        
+    
         self.logger = logging.getLogger('ReptateLogger')
         self.views=[]
         self.filetypes={}
@@ -40,6 +43,28 @@ class Application(object):
         #    leg.draggable()
         self.figure.show() # TO SEE THE RESULTS
         #self.figure.set_visible(True) #??? DOES IT DO ANYTHING?
+
+    def do_dataset_new(self, line):
+        """Create a new empty dataset in this application.
+        Arguments: [NAME [, Description]]
+                NAME: of the new dataset (optional)
+                DESCRIPTION: of the dataset (optional)"""
+        self.num_datasets+=1
+        if (line==""):
+            dsname="DataSet%02d"%self.num_datasets
+            dsdescription=""
+        else:
+            items=line.split(',')
+            dsname=items[0]
+            if (len(items)>1):
+                dsdescription=items[1]
+            else:
+                dsdescription=""
+        ds = DataSet(dsname, dsdescription)
+        self.datasets.append(ds)
+        self.current_dataset=ds
+        ds.prompt = self.prompt[:-2]+'/'+ds.name+'> '
+        ds.cmdloop()
 
     def new_dataset(self, name="DataSet", description=""):
         """Creates an empty dataset and adds it to the current application"""
@@ -109,3 +134,11 @@ class Application(object):
         else:
             leg.remove()
  
+    def emptyline(self):
+        pass
+
+    def do_quit(self, args):
+        """Return to application_manager"""
+        print("")
+        return True
+    do_EOF = do_quit

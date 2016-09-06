@@ -18,10 +18,17 @@ from ApplicationGt import *
 class ApplicationManager(cmd.Cmd):
     """Main Reptate container of applications"""
 
-    version = '0.2'
+    version = '0.3'
     prompt = 'reptate> '
     intro = 'Reptate Version %s command processor'%version
     
+    def preloop(self):
+        print("Starting Reptate...")
+        super(ApplicationManager,self).preloop()
+
+    def postloop(self):
+        print ("Exiting RepTate...")
+
     def __init__ (self, parent=None):
         """Constructor """
         cmd.Cmd.__init__(self)        
@@ -102,6 +109,9 @@ class ApplicationManager(cmd.Cmd):
             newapp.name=newapp.name+str(self.application_counter)
             self.applications.append(newapp)
             self.current_application=newapp
+            newapp.prompt = self.prompt[:-2]+'/'+newapp.name+'> '
+            newapp.cmdloop()
+
         else:
             print("Application \"%s\" is not available"%name)            
     
@@ -118,17 +128,18 @@ class ApplicationManager(cmd.Cmd):
         return completions
 
     def do_application_switch(self, name):
-        """Change to another open application"""
+        """Set focus to an open application"""
         done=False
         for app in self.applications:
             if (app.name==name):
-                self.current_application=app    
+                #self.current_application=app    
+                app.cmdloop()
                 done=True
         if (not done):
             print("Application \"%s\" not found"%name)                        
 
     def complete_application_switch(self, text, line, begidx, endidx):
-        completions = self.complete_delete_application(text, line, begidx, endidx)
+        completions = self.complete_application_delete(text, line, begidx, endidx)
         return completions
 
     def check_application_exist(self):
@@ -691,12 +702,13 @@ class ApplicationManager(cmd.Cmd):
 
         print("\n##DATA SETS IN CURRENT APPLICATION:")
         self.do_dataset_list(line)
-        
-    def do_quit(self, line):
-        self.do_EOF(line)
 
-    def do_EOF(self, line):
+    def emptyline(self):
+        pass
+
+    def do_quit(self, args):
         """Exit RepTate"""
-        self.reptatelogger.debug("Exiting RepTate...")
+        print("\n")
         readline.write_history_file()
         return True
+    do_EOF = do_quit

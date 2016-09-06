@@ -1,13 +1,16 @@
+import cmd
 from Theory import *
 from FileType import *
 from File import *
 #from DataTable import *
 
-class DataSet(object):
+class DataSet(cmd.Cmd):
     """Abstract class to describe a data set"""
 
     def __init__(self, name="DataSet", description=""):
         "Constructor"
+        cmd.Cmd.__init__(self)        
+
         self.name=name
         self.description=description
         self.files=[]
@@ -36,3 +39,12 @@ class DataSet(object):
             self.files.sort(key = lambda x: float(x.file_parameters[line]), reverse=rev)
         else:
             print("Parameter %s not found in files"%line)
+
+    def emptyline(self):
+        pass
+
+    def do_quit(self, args):
+        """Return to parent application"""
+        print("")
+        return True
+    do_EOF = do_quit
