@@ -6,8 +6,8 @@ class ApplicationTest(Application):
     name="Test"
     description="Playground Application"
 
-    def __init__(self, parent = None):
-        super(ApplicationTest, self).__init__()
+    def __init__(self, name="Test", parent = None):
+        super(ApplicationTest, self).__init__(name, parent)
 
         # VIEWS
         self.views.append(View("TestView1", "y vs x", "t", "r", False, False, self.view1, 1, ["lolo"]))

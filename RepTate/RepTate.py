@@ -17,4 +17,5 @@ def start_RepTate(gui):
         ApplicationManager().cmdloop()
 
 if __name__ == '__main__':
-    sys.exit(start_RepTate())
+    #sys.exit(start_RepTate())
+    start_RepTate()

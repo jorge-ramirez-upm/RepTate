@@ -39,6 +39,9 @@
     <Compile Include="core\ApplicationManager.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="core\CmdBase.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="core\DataSet.py">
       <SubType>Code</SubType>
     </Compile>

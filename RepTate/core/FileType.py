@@ -26,8 +26,8 @@ class TXTColumnFile(object):
         self.col_units=col_units
         self.logger = logging.getLogger('ReptateLogger')
 
-    def read_file(self, filename, ax):
-        file=File(filename, ax)
+    def read_file(self, filename, parent_dataset, ax):
+        file=File(filename, self, parent_dataset, ax)
         f = open(filename, "r")
         line=f.readline()
         items=line.split(';')

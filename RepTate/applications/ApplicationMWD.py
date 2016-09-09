@@ -8,8 +8,8 @@ class ApplicationMWD(Application):
     name="MWD"
     description="Experimental Molecular weight distributions"
     
-    def __init__(self, parent = None):
-        super(ApplicationMWD, self).__init__()
+    def __init__(self, name="MWD", parent = None):
+        super(ApplicationMWD, self).__init__(name, parent)
 
         # VIEWS
         self.views.append(View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"]))

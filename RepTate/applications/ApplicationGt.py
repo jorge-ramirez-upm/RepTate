@@ -6,8 +6,8 @@ class ApplicationGt(Application):
     name="Gt"
     description="Relaxation modulus"
     
-    def __init__(self, parent = None):
-        super(ApplicationGt, self).__init__()
+    def __init__(self, name = "Gt", parent = None):
+        super(ApplicationGt, self).__init__(name, parent)
 
         # VIEWS
         self.views.append(View("G(t)", "Relaxation modulus", "t", "G(t)", True, True, self.viewGt, 1, ["G(t)"]))

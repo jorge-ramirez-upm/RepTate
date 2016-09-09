@@ -1,4 +1,5 @@
 import enum
+from CmdBase import *
 
 class TheoryType(enum.Enum):
     point = 0
@@ -16,7 +17,7 @@ class TheoryPointDistributionType(enum.Enum):
     log = 2
 
 
-class Theory(object):
+class Theory(CmdBase):
     """Abstract class to describe a theory
             thname            (str): Theory name
             description     (str): Description of theory

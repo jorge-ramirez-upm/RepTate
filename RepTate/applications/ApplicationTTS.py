@@ -9,8 +9,8 @@ class ApplicationTTS(Application):
     name="TTS"
     description="Time-Temperature Superposition Shift"
     
-    def __init__(self, parent = None):
-        super(ApplicationTTS, self).__init__()
+    def __init__(self, name = "TTS", parent = None):
+        super(ApplicationTTS, self).__init__(name, parent)
 
         # VIEWS
         self.views.append(View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log(w)", "Log(G'(w),G''(w))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"]))

@@ -26,7 +26,7 @@ class DataTable(object):
             ss = ax.plot([], [], label='')
             self.series.append(ss[0])
 
-class DataTable(pd.core.frame.DataFrame):
+class DataTable(object):
     """Class that stores data and series"""
     MAX_NUM_SERIES=3
 

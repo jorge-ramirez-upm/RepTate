@@ -9,14 +9,14 @@ class ApplicationLVE(Application):
     name="LVE"
     description="Linear Viscoelasticity"
     
-    def __init__(self, parent = None):
-        super(ApplicationLVE, self).__init__()
+    def __init__(self, name="LVE", parent = None):
+        super(ApplicationLVE, self).__init__(name, parent)
 
         # VIEWS
-        self.views.append(View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log(w)", "Log(G'(w),G''(w))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"]))
-        self.views.append(View("G',G''(w)", "Storage,Loss moduli", "w", "G'(w),G''(w)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"]))
+        self.views.append(View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"]))
+        self.views.append(View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"]))
         self.views.append(View("delta", "delta", "$\omega$", "$\delta(\omega)$", True, False, self.viewDelta, 1, ["delta(w)"]))
-        self.views.append(View("tan(delta)", "tan(delta)", "w", "tan($\delta$)", True, True, self.viewTanDelta, 1, ["tan(delta((w))"]))
+        self.views.append(View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", True, True, self.viewTanDelta, 1, ["tan(delta((w))"]))
         self.current_view=self.views[0]
 
         # FILES
@@ -53,5 +53,5 @@ class ApplicationLVE(Application):
         x=np.zeros((1,1))
         y=np.zeros((1,1))
         x[0]=vec[0]
-        y[0,0]=log10(vec[1]/vec[0])
+        y[0,0]=np.log10(vec[1]/vec[0])
         return x, y, True

@@ -6,8 +6,8 @@ class ApplicationReact(Application):
     name="React"
     description="Experimental GPC-light scattering data"
     
-    def __init__(self, parent = None):
-        super(ApplicationReact, self).__init__()
+    def __init__(self, name="React", parent = None):
+        super(ApplicationReact, self).__init__(name, parent)
 
         # VIEWS
         self.views.append(View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"]))

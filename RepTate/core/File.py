@@ -5,7 +5,7 @@ from DataTable import *
 class File(object):
     """Basic class that describes elements of a DataSet"""
 
-    def __init__(self, file_name="", ax=None):
+    def __init__(self, file_name="", file_type=None, parent_dataset=None, ax=None):
         """ Constructor:
             file_name: Full path
             file_name_short: Just the file name
@@ -17,7 +17,10 @@ class File(object):
         lst = tmpname.split('.')
         short = '.'.join(lst[:-1])      
         self.file_name_short=short
-        #self.file_type = TXTColumnFile #None # Not sure if this is necessary
+        self.file_type = file_type
+        self.parent_dataset = parent_dataset
+        self.ax = ax
+
         self.header_lines=[]
         self.file_parameters={}
         self.active = True

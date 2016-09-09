@@ -1,24 +1,26 @@
-import cmd
 import logging
 import itertools
 import seaborn as sns   
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator
 
+from CmdBase import *
 from FileType import *
 from View import *
 from Theory import *
 from DataSet import *
 
-class Application(cmd.Cmd):
+class Application(CmdBase):
     """Main abstract class that represents an application"""    
     name="Template"
     description="Abstract class that defines basic functionality"
 
-    def __init__(self,):
+    def __init__(self, name="ApplicationTemplate", parent=None):
         """Constructor of Application"""
-        cmd.Cmd.__init__(self)        
+        super(Application, self).__init__() 
     
+        self.name=name
+        self.parent_manager = parent
         self.logger = logging.getLogger('ReptateLogger')
         self.views=[]
         self.filetypes={}
@@ -26,7 +28,6 @@ class Application(cmd.Cmd):
         self.datasets=[]
         self.current_view=0
         self.current_theory=0
-        self.current_dataset=0
         self.num_datasets=0
         self.legend_visible = False        
             
@@ -44,7 +45,7 @@ class Application(cmd.Cmd):
         self.figure.show() # TO SEE THE RESULTS
         #self.figure.set_visible(True) #??? DOES IT DO ANYTHING?
 
-    def do_dataset_new(self, line):
+    def do_new(self, line):
         """Create a new empty dataset in this application.
         Arguments: [NAME [, Description]]
                 NAME: of the new dataset (optional)
@@ -60,53 +61,139 @@ class Application(cmd.Cmd):
                 dsdescription=items[1]
             else:
                 dsdescription=""
-        ds = DataSet(dsname, dsdescription)
+        ds = DataSet(dsname, dsdescription, self)
         self.datasets.append(ds)
-        self.current_dataset=ds
         ds.prompt = self.prompt[:-2]+'/'+ds.name+'> '
         ds.cmdloop()
+ 
+    def do_delete(self, name):
+        """Delete a dataset from the current application"""
+        done=False
+        for index, ds in enumerate(self.datasets):
+            if (ds.name==name):
+                self.datasets.remove(ds)
+                done=True
+        if (not done):
+            print("Data Set \"%s\" not found"%name)            
 
-    def new_dataset(self, name="DataSet", description=""):
-        """Creates an empty dataset and adds it to the current application"""
-        ds = DataSet(name, description)
-        self.datasets.append(ds)
-        self.current_dataset=ds
-        self.num_datasets+=1
+    def complete_delete(self, text, line, begidx, endidx):
+        """Complete delete dataset command"""
+        dataset_names=[ds.name for ds in self.datasets]
+        if not text:
+            completions = dataset_names[:]
+        else:
+            completions = [ f
+                            for f in dataset_names
+                            if f.startswith(text)
+                            ]
+        return completions
 
-    def plot_current_dataset(self):
-        palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
-        markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
-        linelst = itertools.cycle((':', '-', '-.', '--'))
-
-        for file in self.current_dataset.files:
-            x=np.zeros((file.data_table.num_rows,1))
-            y=np.zeros((file.data_table.num_rows,self.current_view.n))
-            for i in range(file.data_table.num_rows):
-                vec=file.data_table.data[i,:]
-                x[i], y[i], success = self.current_view.view_proc(vec, file.file_parameters)
-            marker=next(markerlst)
-            color=next(palette)
-            for i in range(file.data_table.MAX_NUM_SERIES):
-                if (i<self.current_view.n):
-                    file.data_table.series[i].set_data(x, y[:,i])
-                    file.data_table.series[i].set_visible(True)
-                    file.data_table.series[i].set_marker(marker)
-                    file.data_table.series[i].set_markerfacecolor('none')
-                    file.data_table.series[i].set_markeredgecolor(color)
-                    file.data_table.series[i].set_markeredgewidth(1)
-                    file.data_table.series[i].set_markersize(12)
-                    file.data_table.series[i].set_linestyle('')
-                    if (file.active and i==0):
-                        file.data_table.series[i].set_label(file.file_name_short)
-                    else:
-                        file.data_table.series[i].set_label('')
-                else:
-                    file.data_table.series[i].set_visible(False)
-                    file.data_table.series[i].set_label('')
+    def do_list(self, line):
+        """List the datasets in the current application"""
+        for ds in self.datasets:
+            print("%s:\t%s"%(ds.name, ds.description))            
+            # MORE DETAILS NEEDED?
+            #if (self.check_files_exist()): 
+            #    keylist=list(ds.file_parameters.keys())
+            #    print("File\t",'\t'.join(keylist))
+            #    for i, f in enumerate(ds.files):
+            #        vallist=[]
+            #        for k in keylist:
+            #            vallist.append(f.file_parameters[k])
+            #        if (f==ds.current_file):
+            #            print("*%s\t%s"%(f.file_name_short,'\t'.join(vallist)))
+            #        else:
+            #            print(" %s\t%s"%(f.file_name_short,'\t'.join(vallist)))
+            #    for i, t in enumerate(ds.theories):
+            #        if (t==ds.current_theory):
+            #            print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
+            #        else:
+            #            print("   %s: %s\t %s"%(t.name, t.thname, t.description))
+            
+    #def do_dataset_plot(self, line):
+    #    """Plot the current dataset using the current view"""
+    #    if (not self.check_application_exist()): return
+    #    if (not self.check_datasets_exist()): return
+    #    self.current_application.plot_current_dataset()
         
-        self.set_axes_properties()
+    def do_switch(self, name):
+        """ Switch the current dataset"""
+        done=False
+        for ds in self.datasets:
+            if (ds.name==name):
+                ds.cmdloop()
+                done=True
+        if (not done):
+            print("Dataset \"%s\" not found"%line)                        
+
+    def complete_switch(self, text, line, begidx, endidx):
+        """ Complete the switch dataset command"""
+        ds_names=[ds.name for ds in self.datasets]
+        if not text:
+            completions = ds_names[:]
+        else:
+            completions = [ f
+                            for f in ds_names
+                            if f.startswith(text)
+                            ]
+        return completions
+
+# FILE TYPE STUFF
+    def do_filetype_available(self, line):
+        """List available file types in the current application"""
+        ftypes=list(self.filetypes.values())
+        for ftype in ftypes:
+            print("%s:\t%s\t*.%s"%(ftype.name,ftype.description,ftype.extension))
+
+# VIEW STUFF
+    def do_view_available(self, line):
+        """List available views in the current application"""
+        for view in self.views:
+            if (view==self.current_view):
+                print("*%s:\t%s"%(view.name,view.description))
+            else:
+                print("%s:\t%s"%(view.name,view.description))
+
+    def do_view_switch(self, name):
+        """Change to another view from open application"""
+        done=False
+        for view in self.views:
+            if (view.name==name):
+                self.current_view=view
+                done=True
+        if (not done):
+            print("View \"%s\" not found"%name)                        
+
+    def complete_view_switch(self, text, line, begidx, endidx):
+        """Complete switch view command"""
+        view_names=[vw.name for vw in self.views]
+        if not text:
+            completions = view_names[:]
+        else:
+            completions = [ f
+                            for f in view_names
+                            if f.startswith(text)
+                            ]
+        return completions
+
+
+# THEORY STUFF
+    def do_theory_available(self, line):
+        """List available theories in the current application"""
+        for t in list(self.theories.values()):
+            print("%s:\t%s"%(t.thname,t.description))
+
+# LEGEND STUFF
+    def do_legend_switch(self, line):
+        self.legend_visible = not self.legend_visible 
         self.set_legend_properties()
         self.figure.canvas.draw()
+
+# OTHER STUFF
+    def update_plot(self):
+        self.set_axes_properties()
+        self.set_legend_properties()
+        self.figure.canvas.draw()   
 
     def set_axes_properties(self):       
         if (self.current_view.log_x): 
@@ -133,7 +220,9 @@ class Application(cmd.Cmd):
             leg.draggable()
         else:
             leg.remove()
- 
+
+
+# GENERAL STUFF
     def emptyline(self):
         pass
 

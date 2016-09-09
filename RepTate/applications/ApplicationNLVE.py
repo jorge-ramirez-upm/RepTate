@@ -8,8 +8,8 @@ class ApplicationNLVE(Application):
     name="NLVE"
     description="Non-Linear Flow"
     
-    def __init__(self, parent = None):
-        super(ApplicationNLVE, self).__init__()
+    def __init__(self, name="NLVE", parent = None):
+        super(ApplicationNLVE, self).__init__(name, parent)
 
         # VIEWS
         self.views.append(View("Log(eta(t))", "Log transient viscosity", "Log(eta)", "Log(eta(t))", False, False, self.viewLogeta, 2, ["eta(t)"]))
