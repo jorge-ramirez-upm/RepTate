@@ -151,6 +151,11 @@ class DataSet(CmdBase):
             else:
                 print("%s"%f.file_name_short)
 
+    def do_list_details(self, line):
+        """List the files in the dataset with the file parameters"""
+        for f in self.files:
+            print(f)            
+
     def do_new(self, line):
         """Add an empty file of the given type to the current Data Set
         Arguments: TYPE [, NAME]
@@ -253,7 +258,6 @@ class DataSet(CmdBase):
         """Show the contents of the current file on the screen
            TODO: Change it so the file name can be selected"""
         file = self.current_file
-        print(file)
         print("Path: %s"%file.file_full_path)
         print(file.file_parameters)
         print(file.header_lines)

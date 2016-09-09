@@ -53,14 +53,27 @@ class CmdBase(cmd.Cmd):
             print("%s"%d)
     do_dir = do_ls
 
+    def do_pwd(self, line):
+        """Print the current folder"""
+        print(os.getcwd())
+    do_cwd = do_pwd
+
     def emptyline(self):
         pass
 
-    def do_quit(self, args):
+    def do_EOF(self, args):
         """Exit Console and Return to Parent or exit"""
         print("")
         return True
-    do_EOF = do_quit
-        
+    
+    def do_quit(self, args):
+        """Exit from the application"""
+        msg = 'Do you really want to exit RepTate?'
+        shall = input("%s (y/N) " % msg).lower() == 'y'         
+        if (shall):
+            print ("Exiting RepTate...")
+            readline.write_history_file()
+            sys.exit()
+            
     
 

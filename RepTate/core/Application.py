@@ -221,13 +221,3 @@ class Application(CmdBase):
         else:
             leg.remove()
 
-
-# GENERAL STUFF
-    def emptyline(self):
-        pass
-
-    def do_quit(self, args):
-        """Return to application_manager"""
-        print("")
-        return True
-    do_EOF = do_quit

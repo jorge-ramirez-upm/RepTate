@@ -19,13 +19,6 @@ class ApplicationManager(CmdBase):
     prompt = 'reptate> '
     intro = 'Reptate Version %s command processor'%version
     
-    def preloop(self):
-        print("Starting Reptate...")
-        super(ApplicationManager,self).preloop()
-
-    def postloop(self):
-        print ("Exiting RepTate...")
-
     def __init__ (self, parent=None):
         """Constructor """
         super(ApplicationManager, self).__init__() 
@@ -150,8 +143,11 @@ class ApplicationManager(CmdBase):
         #self.do_dataset_list(line)
 
     def do_quit(self, args):
-        """Exit RepTate"""
-        print("\n")
-        readline.write_history_file()
-        return True
+        """Exit from the application"""
+        msg = 'Do you really want to exit RepTate?'
+        shall = input("\n%s (y/N) " % msg).lower() == 'y'         
+        if (shall):
+            print ("Exiting RepTate...")
+            readline.write_history_file()
+            sys.exit()
     do_EOF = do_quit
