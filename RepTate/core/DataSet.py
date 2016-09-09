@@ -28,13 +28,24 @@ class DataSet(CmdBase):
         self.num_theories=0
 
 # DATASET STUFF ##########################################################################################################
-    def sort(self, line):
-        items=line.split()
-
-        if line in self.current_file.file_parameters:
-            self.files.sort(key = lambda x: float(x.file_parameters[line]), reverse=rev)
-        else:
-            print("Parameter %s not found in files"%line)
+    def do_list(self, line):
+        """List the files in the current dataset"""
+        keylist=list(ds.file_parameters.keys()) 
+        print("File\t",'\t'.join(keylist))
+        for f in self.files:
+            for i, f in enumerate(ds.files):
+                vallist=[]
+                for k in keylist:
+                    vallist.append(f.file_parameters[k])
+                if (f==ds.current_file):
+                    print("*%s\t%s"%(f.file_name_short,'\t'.join(vallist)))
+                else:
+                    print(" %s\t%s"%(f.file_name_short,'\t'.join(vallist)))
+            for i, t in enumerate(ds.theories):
+                if (t==ds.current_theory):
+                    print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
+                else:
+                    print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
     def do_plot(self, line):
         """Plot the current dataset using the current view of the parent application"""
@@ -71,41 +82,34 @@ class DataSet(CmdBase):
         
         self.parent_application.update_plot()
 
-    def do_list(self, line):
-        """List the files in the current dataset"""
-        keylist=list(ds.file_parameters.keys()) 
-        print("File\t",'\t'.join(keylist))
-        for f in self.files:
-            for i, f in enumerate(ds.files):
-                vallist=[]
-                for k in keylist:
-                    vallist.append(f.file_parameters[k])
-                if (f==ds.current_file):
-                    print("*%s\t%s"%(f.file_name_short,'\t'.join(vallist)))
-                else:
-                    print(" %s\t%s"%(f.file_name_short,'\t'.join(vallist)))
-            for i, t in enumerate(ds.theories):
-                if (t==ds.current_theory):
-                    print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
-                else:
-                    print("   %s: %s\t %s"%(t.name, t.thname, t.description))
-
     def do_sort(self, line):
-        """Sort the files in the current dataset as a function of some file parameter"""
-        self.current_application.current_dataset.sort(line)
+        """Sort files in dataset according to the value of a file parameter
+           sort Mw [,reverse]
+           
+           """
+        items=line.split(',')
+        if (len(items)==0):
+            print ("Wrong number of arguments")
+        elif (len(items)==1):
+            fp=items[0]
+            rev=False
+        elif (len(items)==2):
+            fp=items[0]
+            rev=(items[1]=="reverse")
+        else:
+            print("Wrong number of arguments")
 
-    def do_sortreverse(self, line):
-        """Sort the files in the current dataset as a function of some file parameter, in reverse order"""
-        self.current_application.current_dataset.sort(line, True)
-
-    def complete_sortreverse(self, text, line, begidx, endidx):
-        """Complete with the list of file parameters of the current file in the current dataset"""
-        completions = complete_sort(text, line, begidx, endidx)
-        return completions
+        if fp in self.current_file.file_parameters:
+            self.files.sort(key = lambda x: float(x.file_parameters[fp]), reverse=rev)
+        else:
+            print("Parameter %s not found in files"%line)
 
     def complete_sort(self, text, line, begidx, endidx):
         """Complete with the list of file parameters of the current file in the current dataset"""
-        fp_names=list(self.current_application.current_dataset.current_file.file_parameters.keys())
+        if (self.current_file==None):
+            print ("A file must be selected first")
+            return
+        fp_names=list(self.current_file.file_parameters.keys())
         if not text:
             completions = fp_names[:]
         else:
