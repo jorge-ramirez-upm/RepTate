@@ -64,3 +64,13 @@ class Theory(CmdBase):
         self.eps=1e-4
         self.integration_method=LineTheoryIntegrationMethod.AdaptiveDt
         self.stop_steady=False
+
+    def precmd(self, line):
+        """ This method is called after the line has been input but before
+            it has been interpreted. If you want to modifdy the input line
+            before execution (for example, variable substitution) do it here.
+            TODO: Substitute parameter values if symbol {param} is used
+        """
+        self._hist += [ line.strip() ]
+        return line
+        

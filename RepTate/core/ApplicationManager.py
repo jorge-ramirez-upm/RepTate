@@ -121,6 +121,10 @@ class ApplicationManager(CmdBase):
         return completions        
     
 # OTHER STUFF
+    def help_tutorial(self):
+        print ('introduction')
+        print ('a good place for a tutorial')
+
     def do_info(self, line):
         """Show info about the current RepTate session"""
         print("##AVAILABLE APPLICATIONS:")

@@ -36,14 +36,20 @@ class Application(CmdBase):
         sns.set_style("ticks")
         plt.style.use('seaborn-poster')
         self.figure = plt.figure(self.name)
+        self.figure.canvas.mpl_connect('close_event', self.handle_close_window)
         self.ax = self.figure.add_subplot(111)
         sns.despine() # Remove up and right side of plot box
         # LEGEND STUFF
         #leg=plt.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
         #if leg:
         #    leg.draggable()
-        self.figure.show() # TO SEE THE RESULTS
+        self.figure.show() 
+        #self.figure.draw() # DOESN'T WORK!
         #self.figure.set_visible(True) #??? DOES IT DO ANYTHING?
+
+    def handle_close_window(self, evt):
+        print("\nApplication window %s has been closed\n"%self.name)
+        print("Please, return to the RepTate prompt and delete de application")
 
     def do_new(self, line):
         """Create a new empty dataset in this application.

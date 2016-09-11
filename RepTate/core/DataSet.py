@@ -225,23 +225,65 @@ class DataSet(CmdBase):
         else:
             print("File type \"%s\" does not exists"%f_ext[0])
 
+    def __listdir(self, root):
+        "List directory 'root' appending the path separator to subdirs."
+        res = []
+        for name in os.listdir(root):
+            path = os.path.join(root, name)
+            if os.path.isdir(path):
+                name += os.sep
+                #name += '/'
+            res.append(name)
+        return res
+
+
+    def __complete_path(self, path=None):
+        "Perform completion of filesystem path."
+        if not path:
+            return self.__listdir('.')
+        
+        dirname, rest = os.path.split(path)
+        tmp = dirname if dirname else '.'
+        res = [os.path.join(dirname, p)
+                for p in self.__listdir(tmp) if p.startswith(rest)]
+                
+        # more than one match, or single match which does not exist (typo)
+        if len(res) > 1 or not os.path.exists(path):
+            return res
+        # resolved to a single directory, so return list of files below it
+        if os.path.isdir(path):
+            return [os.path.join(path, p) for p in self.__listdir(path)]
+        # exact file match terminates this completion
+        return [path + ' ']
+
     def complete_open(self, text, line, begidx, endidx):
         """Complete the file_open command
            TODO: ALLOW COMPLETING FILES INSIDE SUBFOLDERS
            TODO: IF NO DATASET, CREATE EMPTY ONE
            TODO: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION
         """
-        f_names=[]
-        for f in list(self.parent_application.filetypes.keys()):
-            f_names += glob.glob('*.%s'%f)
-        if not text:
-            completions = f_names[:]
+        "Completions for the cd command."
+        test=line.split()
+        if (len(test)>1):
+            result=self.__complete_path(test[1])
         else:
-            completions = [ f
-                            for f in f_names
-                            if f.startswith(text)
-                            ]
-        return completions
+            result=self.__complete_path()
+        
+        return result
+
+        #f_names=[]
+        #for f in list(self.parent_application.filetypes.keys()):
+        #    pattern='%s**.%s'%(text,f)
+        #    #f_names += glob.glob('data/**/*.%s'%f, recursive=True)
+        #    f_names += glob.glob(pattern, recursive=True)
+        #if not text:
+        #    completions = f_names[:]
+        #else:
+        #    completions = [ f
+        #                    for f in f_names
+        #                    if f.startswith(text)
+        #                    ]
+        #return completions
 
     def do_switch(self, line):
         """Change active file in the current dataset"""

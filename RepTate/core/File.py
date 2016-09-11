@@ -26,5 +26,5 @@ class File(object):
         self.active = True
         self.data_table = DataTable(ax)
         
-    def __repr__(self):
+    def __str__(self):
         return '%s: %s' % (self.file_full_path, self.file_parameters)
