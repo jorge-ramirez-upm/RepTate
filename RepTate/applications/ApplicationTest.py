@@ -15,7 +15,7 @@ class ApplicationTest(Application):
         self.current_view=self.views[0]
 
         # FILES
-        ftype=TXTColumnFile("Test files", "test", "Test files x y", 0, 2, ['x','y'], [0], ['testparam1','testparam2'], [])
+        ftype=TXTColumnFile("Test files", "test", "Test files x y", 0, -1, ['x','y'], [0, 1], ['testparam1','testparam2'], [])
         self.filetypes[ftype.extension]=ftype
         #self.logger.debug(self.filetypes)
 
@@ -23,13 +23,17 @@ class ApplicationTest(Application):
         self.theories[TheoryTest.thname]=TheoryTest
         self.theories[TheoryTest2.thname]=TheoryTest2
 
-    def view1(self, vec, x, y, file_parameters):
+    def view1(self, vec, file_parameters):
+        x=np.zeros((1,1))
+        y=np.zeros((1,1))
         x[0]=vec[0]
         y[0]=vec[1]
-        return True
+        return x, y, True
 
-    def view2(self, vec, x, y, file_parameters):
+    def view2(self, vec, file_parameters):
+        x=np.zeros((1,1))
+        y=np.zeros((1,1))
         x[0]=vec[0]
         y[0]=vec[1]**2
-        return True
+        return x, y, True
     

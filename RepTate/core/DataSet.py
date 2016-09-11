@@ -337,32 +337,29 @@ class DataSet(CmdBase):
 
     def do_theory_list(self, line):
         """List open theories in current dataset"""
-        for t in self.current_application.current_dataset.theories:
-            if (t==self.current_application.current_dataset.current_theory):
+        for t in self.theories:
+            if (t==self.current_theory):
                 print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
             else:
                 print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
-    def new_theory(self, theory):
-        self.num_theories+=1
-        self.theories.append(theory)
-        self.current_theory=theory
-
     def do_theory_new(self, line):
         """Add a new theory of the type specified to the current Data Set"""
-        thtypes=list(self.current_application.theories.keys())
+        thtypes=list(self.parent_application.theories.keys())
         if (line in thtypes):
-            num_th=self.current_application.current_dataset.num_theories+1
-            self.current_application.current_dataset.new_theory(self.current_application.theories[line]("Theory%02d"%num_th))
+            self.num_theories+=1
+            
+            th=self.parent_application.theories[line]("%s%02d"%(line,self.num_theories), self, self.parent_application.ax)
+            self.theories.append(th)
+            self.current_theory=th
+            th.prompt = self.prompt[:-2]+'/'+th.name+'> '
+            th.cmdloop()
         else:
             print("Theory \"%s\" does not exists"%line)
     
     def complete_theory_new(self, text, line, begidx, endidx):
-        """Complete new theory command"""
-        if (not self.check_application_exist()): return [""]
-        if (not self.check_datasets_exist()): return [""]
-        
-        theory_names=list(self.current_application.theories.keys())
+        """Complete new theory command"""        
+        theory_names=list(self.parent_application.theories.keys())
         if not text:
             completions = theory_names[:]
         else:

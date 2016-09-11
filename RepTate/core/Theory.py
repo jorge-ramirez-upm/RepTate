@@ -1,5 +1,6 @@
 import enum
 from CmdBase import *
+from DataTable import *
 
 class TheoryType(enum.Enum):
     point = 0
@@ -25,7 +26,7 @@ class Theory(CmdBase):
     thname=""
     description=""
 
-    def __init__(self, name="Theory", type=TheoryType.point):
+    def __init__(self, name="Theory", parent_dataset=None, ax=None):
         """Constructor:
         Args:
             name            (str): Name used internally by the dataset
@@ -46,9 +47,13 @@ class Theory(CmdBase):
             integration_method   : Euler, RungeKutta5, AdaptiveDt
             stop_steady    (bool): Stop calculation if steady state of component 0 is attained
         """
+        super(Theory, self).__init__() 
         self.name=name
-        self.type=type
+        self.parent_dataset = parent_dataset
+        self.ax = ax
+        self.thtype=TheoryType.point
         self.parameters={}
+        self.tables={}
         self.point_function=None
         self.line_function=None
         self.user_function=None
@@ -65,12 +70,64 @@ class Theory(CmdBase):
         self.integration_method=LineTheoryIntegrationMethod.AdaptiveDt
         self.stop_steady=False
 
+        # Pre-create as many tables as files in the dataset
+        for f in parent_dataset.files:
+            self.tables[f.file_name_short]=DataTable(ax)
+
     def precmd(self, line):
         """ This method is called after the line has been input but before
             it has been interpreted. If you want to modifdy the input line
             before execution (for example, variable substitution) do it here.
             TODO: Substitute parameter values if symbol {param} is used
         """
-        self._hist += [ line.strip() ]
+        super(Theory,self).precmd(line)
         return line
         
+    def do_calculate(self, line):
+        for f in self.parent_dataset.files:
+            if self.thtype==TheoryType.point:
+                self.point_function(f)
+            elif self.thtype==TheoryType.line:
+                self.line_function(f)
+            elif self.thtype==TheoryType.user:
+                self.user_function(f)
+            else:
+                print("Theory type must be set!")
+    
+    def do_print(self, line):
+        if line in self.tables:
+            print(self.tables[line].data)
+        else:
+            print("Theory table for \"%s\" not found"%line)
+
+    def complete_print(self, text, line, begidx, endidx):
+        file_names=list(self.tables.keys())
+        if not text:
+            completions = file_names[:]
+        else:
+            completions = [ f
+                            for f in file_names
+                            if f.startswith(text)
+                            ]
+        return completions
+        
+    def do_parameters(self, line):
+        if (line==""):
+            print(self.parameters)
+        else:
+            args={}
+            for s in line.split():
+                par=s.split("=")
+                args[par[0]]=float(par[1])
+            self.parameters.update(args)
+
+    def complete_parameters(self, text, line, begidx, endidx):
+        parameter_names=list(self.parameters.keys())
+        if not text:
+            completions = parameter_names[:]
+        else:
+            completions = [ f
+                            for f in parameter_names
+                            if f.startswith(text)
+                            ]
+        return completions

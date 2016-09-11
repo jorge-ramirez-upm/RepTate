@@ -17,3 +17,7 @@ class DataTable(object):
         for i in range(self.MAX_NUM_SERIES): 
             ss = ax.plot([], [], label='')
             self.series.append(ss[0])
+
+    def __str__(self):
+        """TODO: Refine this. It doesn't work"""
+        return self.data
