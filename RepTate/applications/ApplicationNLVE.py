@@ -12,8 +12,8 @@ class ApplicationNLVE(Application):
         super(ApplicationNLVE, self).__init__(name, parent)
 
         # VIEWS
-        self.views.append(View("Log(eta(t))", "Log transient viscosity", "Log(t)", "Log($\eta$(t))", False, False, self.viewLogeta, 2, ["$\eta$(t)"]))
-        self.views.append(View("Log(sigma(t))", "Log transient shear stress", "Log(t)", "Log($\sigma_{xy}$(t))", False, False, self.viewLogSigma, 2, ["$\sigma_{xy}$(t)"]))
+        self.views.append(View("Log(eta(t))", "Log transient viscosity", "Log(t)", "Log($\eta$(t))", False, False, self.viewLogeta, 1, ["$\eta$(t)"]))
+        self.views.append(View("Log(sigma(t))", "Log transient shear stress", "Log($\gamma$)", "Log($\sigma_{xy}$($\gamma$))", False, False, self.viewLogSigma, 1, ["$\sigma_{xy}$($\gamma$)"]))
         self.current_view=self.views[0]
 
         # FILES
@@ -23,16 +23,16 @@ class ApplicationNLVE(Application):
         # THEORIES
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
-    def viewLogeta(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,1))
-        x[0]=np.log10(vec[0])
-        y[0]=np.log10(vec[1]/float(file_parameters["gdot"]))
+    def viewLogeta(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 1]/float(file_parameters["gdot"]))
         return x, y, True
 
-    def viewLogSigma(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,1))
-        x[0]=np.log10(vec[0])
-        y[0]=np.log10(vec[1])*float(file_parameters["gdot"])
+    def viewLogSigma(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0]*float(file_parameters["gdot"]))
+        y[: ,0] = np.log10(dt.data[:, 1])
         return x, y, True

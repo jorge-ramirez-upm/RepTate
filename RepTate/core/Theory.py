@@ -84,6 +84,7 @@ class Theory(CmdBase):
         return line
         
     def do_calculate(self, line):
+        """Calculate the theory"""
         for f in self.parent_dataset.files:
             if self.thtype==TheoryType.point:
                 self.point_function(f)
@@ -94,7 +95,23 @@ class Theory(CmdBase):
             else:
                 print("Theory type must be set!")
     
+    def do_error(self, line):
+        """Report the error of the current theory on the given filename
+           The error is calculated with least-squares
+        """
+        f = self.parent_dataset.current_file
+        if self.thtype == TheoryType.point:
+            view = self.parent_dataset.parent_application.current_view
+            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
+            xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+            print(yexp)
+            print(yth)
+            print(np.mean((yth-yexp)**2))
+        else:
+            print("Not implemented yet")
+
     def do_print(self, line):
+        """Print the theory table associated with the given file name"""
         if line in self.tables:
             print(self.tables[line].data)
         else:
@@ -112,6 +129,10 @@ class Theory(CmdBase):
         return completions
         
     def do_parameters(self, line):
+        """View and/or change the values of the theory parameters
+           parameters A=0.4 B=0.3
+           With no arguments, show the current values
+        """
         if (line==""):
             print(self.parameters)
         else:

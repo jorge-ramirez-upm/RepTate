@@ -26,12 +26,12 @@ class ApplicationLVE(Application):
         # THEORIES
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
-    def viewLogG1G2(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,2))
-        x[0]=np.log10(vec[0])
-        y[0,0]=np.log10(vec[1])
-        y[0,1]=np.log10(vec[2])
+    def viewLogG1G2(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 1])
+        y[: ,1] = np.log10(dt.data[:, 2])
         return x, y, True
 
     def viewG1G2(self, vec, file_parameters):

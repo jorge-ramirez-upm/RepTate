@@ -17,7 +17,7 @@ class ApplicationManager(CmdBase):
 
     version = '0.4'
     prompt = 'reptate> '
-    intro = 'Reptate Version %s command processor'%version
+    intro = 'Reptate Version %s command processor\nhelp [command] for instructions\nTAB for completions'%version
     
     def __init__ (self, parent=None):
         """Constructor """

@@ -1,5 +1,6 @@
 from Application import *
 from TheoryTest import *
+from DataTable import *
 
 class ApplicationTest(Application):
     """Application to play with the different functionalities of Reptate"""
@@ -23,17 +24,17 @@ class ApplicationTest(Application):
         self.theories[TheoryTest.thname]=TheoryTest
         self.theories[TheoryTest2.thname]=TheoryTest2
 
-    def view1(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,1))
-        x[0]=vec[0]
-        y[0]=vec[1]
+    def view1(self, dt, file_parameters):
+        x=np.zeros((dt.num_rows, 1))
+        y=np.zeros((dt.num_rows, 1))
+        x[:, 0] =dt.data[:,0]
+        y[:, 0] =dt.data[:,1]
         return x, y, True
 
-    def view2(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,1))
-        x[0]=vec[0]
-        y[0]=vec[1]**2
+    def view2(self, dt, file_parameters):
+        x=np.zeros((dt.num_rows, 1))
+        y=np.zeros((dt.num_rows, 1))
+        x[:, 0] =dt.data[:,0]
+        y[:, 0] =dt.data[:,1]**2
         return x, y, True
     

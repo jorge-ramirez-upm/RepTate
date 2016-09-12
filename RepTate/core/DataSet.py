@@ -55,16 +55,12 @@ class DataSet(CmdBase):
 
         view = self.parent_application.current_view
         for file in self.files:
-            x=np.zeros((file.data_table.num_rows,1))
-            y=np.zeros((file.data_table.num_rows,view.n))
-            for i in range(file.data_table.num_rows):
-                vec=file.data_table.data[i,:]
-                x[i], y[i], success = view.view_proc(vec, file.file_parameters)
+            x, y, success = view.view_proc(file.data_table, file.file_parameters)
             marker=next(markerlst)
             color=next(palette)
             for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n):
-                    file.data_table.series[i].set_data(x, y[:,i])
+                    file.data_table.series[i].set_data(x[:,i], y[:,i])
                     file.data_table.series[i].set_visible(True)
                     file.data_table.series[i].set_marker(marker)
                     file.data_table.series[i].set_markerfacecolor('none')
@@ -80,6 +76,22 @@ class DataSet(CmdBase):
                     file.data_table.series[i].set_visible(False)
                     file.data_table.series[i].set_label('')
         
+            if self.current_theory!=None:
+                tt = self.current_theory.tables[file.file_name_short]
+                x, y, success = view.view_proc(tt, file.file_parameters)
+                for i in range(tt.MAX_NUM_SERIES):
+                    if (i<view.n):
+                        tt.series[i].set_data(x[:,i], y[:,i])
+                        tt.series[i].set_visible(True)
+                        tt.series[i].set_marker('')
+                        tt.series[i].set_linestyle('-')
+                        tt.series[i].set_color(color)
+                        tt.series[i].set_label('')
+                    else:
+                        tt.series[i].set_visible(False)
+                        tt.series[i].set_label('')
+
+
         self.parent_application.update_plot()
 
     def do_sort(self, line):
@@ -324,7 +336,7 @@ class DataSet(CmdBase):
     def complete_theory_delete(self, text, line, begidx, endidx):
         """Complete delete theory command"""
         th_names=[]
-        for th in self.current_application.current_dataset.theories:
+        for th in self.theories:
             th_names.append(th.name)
         if not text:
             completions = th_names[:]
@@ -371,11 +383,10 @@ class DataSet(CmdBase):
 
     def do_theory_switch(self, line):
         """Change the active theory"""
-        if (not self.check_application_exist()): return
-        if (not self.check_datasets_exist()): return
-        for th in self.current_application.current_dataset.theories:
+        for th in self.theories:
             if (th.name==line):
-                self.current_application.current_dataset.current_theory=th
+                self.current_theory=th
+                th.cmdloop()
                 done=True
         if (not done):
             print("Theory \"%s\" not found"%line)                        
