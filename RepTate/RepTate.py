@@ -1,6 +1,5 @@
 import sys
 import getopt
-#import click
 sys.path.append('core')
 sys.path.append('gui')
 sys.path.append('console')
@@ -9,14 +8,6 @@ sys.path.append('theories')
 sys.path.append('visual')
 from ApplicationManager import *
 from QApplicationManager import *
-
-#@click.command()
-#@click.option('--gui', default=0, help='Start RepTate using GUI')
-#def start_RepTate(gui):
-    #if (gui):
-    #    click.echo('Not implemented yet!')
-    #else:
-        #ApplicationManager().cmdloop()
 
 def start_RepTate(argv):
     GUI=False
@@ -27,7 +18,7 @@ def start_RepTate(argv):
         sys.exit(2)
     for opt, arg in opts:
         if opt in ("-h","--help"):
-            print ('RepTate.py -i <inputfile> -o <outputfile>')
+            print ('RepTate.py [-g] \n\t-g\tRun the Graphic User Interface')
             sys.exit()
         elif opt == '-g':
             GUI=True
@@ -40,8 +31,6 @@ def start_RepTate(argv):
     else:
         app = ApplicationManager()
         sys.exit(app.cmdloop())
-        #ApplicationManager().cmdloop()
 
 if __name__ == '__main__':
-    #sys.exit(start_RepTate())
     start_RepTate(sys.argv[1:])
