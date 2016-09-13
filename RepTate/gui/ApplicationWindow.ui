@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1009</width>
+    <height>712</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_4">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="mplwidget" native="true">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <layout class="QVBoxLayout" name="mplvl"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QDockWidget" name="DataInspectordockWidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Data Inspector</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="LayoutDataInspector">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QTableWidget" name="tableWidget"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="ViewDataTheorydockWidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="features">
+    <set>QDockWidget::NoDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Views/Data/Theory</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_4">
+    <layout class="QVBoxLayout" name="ViewDataTheoryLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QComboBox" name="viewComboBox"/>
+     </item>
+     <item>
+      <widget class="QTabWidget" name="DataSettabWidget">
+       <property name="tabShape">
+        <enum>QTabWidget::Triangular</enum>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <property name="tabsClosable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="actionSelect_All">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/printer.ico</normaloff>:/Images/Images/printer.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+   <property name="toolTip">
+    <string>Print Plot</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionShiftVertically">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/UpDown.ico</normaloff>:/Images/Images/UpDown.ico</iconset>
+   </property>
+   <property name="text">
+    <string>ShiftVertically</string>
+   </property>
+   <property name="toolTip">
+    <string>Shift the selected plot vertically</string>
+   </property>
+  </action>
+  <action name="actionShiftHorizontally">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/LeftRight.ico</normaloff>:/Images/Images/LeftRight.ico</iconset>
+   </property>
+   <property name="text">
+    <string>ShiftHorizontally</string>
+   </property>
+   <property name="toolTip">
+    <string>Shift selected plot horizontally</string>
+   </property>
+  </action>
+  <action name="actionNew_Empty_Dataset">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/DataTable3D.ico</normaloff>:/Images/Images/DataTable3D.ico</iconset>
+   </property>
+   <property name="text">
+    <string>New Empty Dataset</string>
+   </property>
+   <property name="toolTip">
+    <string>Create an empty Data set</string>
+   </property>
+  </action>
+  <action name="actionView_All_Sets">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/World.ico</normaloff>:/Images/Images/World.ico</iconset>
+   </property>
+   <property name="text">
+    <string>View All Sets</string>
+   </property>
+   <property name="toolTip">
+    <string>View all sets simultaneously</string>
+   </property>
+  </action>
+  <action name="actionData_Representation">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/StarSmall.ico</normaloff>:/Images/Images/StarSmall.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Data Representation</string>
+   </property>
+   <property name="toolTip">
+    <string>Choose Representation Mode</string>
+   </property>
+  </action>
+  <action name="actionReload_Data">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Refresh.ico</normaloff>:/Images/Images/Refresh.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Reload Data</string>
+   </property>
+   <property name="toolTip">
+    <string>Re-read data files</string>
+   </property>
+  </action>
+  <action name="actionShow_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Show Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Change limits for fit</string>
+   </property>
+  </action>
+  <action name="actionInspect_Data">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/AllFiles.ico</normaloff>:/Images/Images/AllFiles.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Inspect Data</string>
+   </property>
+   <property name="toolTip">
+    <string>Inspect contents of data files</string>
+   </property>
+  </action>
+  <action name="actionNew_Theory">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Physics.ico</normaloff>:/Images/Images/Physics.ico</iconset>
+   </property>
+   <property name="text">
+    <string>New Theory</string>
+   </property>
+   <property name="toolTip">
+    <string>Create New Selected Theory</string>
+   </property>
+  </action>
+  <action name="actionCalculate_Theory">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Bubble.ico</normaloff>:/Images/Images/Bubble.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Calculate Theory</string>
+   </property>
+   <property name="toolTip">
+    <string>Calculate result from theory</string>
+   </property>
+  </action>
+  <action name="actionMinimize_error">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Minimize.ico</normaloff>:/Images/Images/Minimize.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Minimize error</string>
+   </property>
+   <property name="toolTip">
+    <string>Minimize the error between theory/data</string>
+   </property>
+  </action>
+  <action name="actionTheory_Options">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Settings.ico</normaloff>:/Images/Images/Settings.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Theory Options</string>
+   </property>
+   <property name="toolTip">
+    <string>View Change Options of Theory</string>
+   </property>
+  </action>
+  <action name="actionShow_Small_Symbols">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/StarSmall.ico</normaloff>:/Images/Images/StarSmall.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Small Symbols</string>
+   </property>
+   <property name="toolTip">
+    <string>Show small symbols</string>
+   </property>
+  </action>
+  <action name="actionShow_Large_Symbols">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Star.ico</normaloff>:/Images/Images/Star.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Show Large Symbols</string>
+   </property>
+   <property name="toolTip">
+    <string>Large Symbols</string>
+   </property>
+  </action>
+  <action name="actionNo_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
+   </property>
+   <property name="text">
+    <string>No Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Limits</string>
+   </property>
+  </action>
+  <action name="actionVertical_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart Vertical Limits.ico</normaloff>:/Images/Images/Line Chart Vertical Limits.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Vertical Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Vertical Limits</string>
+   </property>
+  </action>
+  <action name="actionHorizontal_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Horizontal Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Horizontal Limits</string>
+   </property>
+  </action>
+  <action name="actionBoth_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart Both Limits.ico</normaloff>:/Images/Images/Line Chart Both Limits.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Both Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Both Limits</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="Reptate.qrc"/>
+  <include location="Symbols.qrc"/>
+ </resources>
+ <connections/>
+</ui>

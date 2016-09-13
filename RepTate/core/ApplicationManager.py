@@ -125,6 +125,10 @@ class ApplicationManager(CmdBase):
         print ('introduction')
         print ('a good place for a tutorial')
 
+    def do_about(self, line):
+        """Show about info"""
+        pass
+
     def do_info(self, line):
         """Show info about the current RepTate session"""
         print("##AVAILABLE APPLICATIONS:")

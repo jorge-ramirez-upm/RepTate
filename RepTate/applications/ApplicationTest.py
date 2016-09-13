@@ -25,16 +25,16 @@ class ApplicationTest(Application):
         self.theories[TheoryTest2.thname]=TheoryTest2
 
     def view1(self, dt, file_parameters):
-        x=np.zeros((dt.num_rows, 1))
-        y=np.zeros((dt.num_rows, 1))
-        x[:, 0] =dt.data[:,0]
-        y[:, 0] =dt.data[:,1]
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 1]
         return x, y, True
 
     def view2(self, dt, file_parameters):
-        x=np.zeros((dt.num_rows, 1))
-        y=np.zeros((dt.num_rows, 1))
-        x[:, 0] =dt.data[:,0]
-        y[:, 0] =dt.data[:,1]**2
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 1]**2
         return x, y, True
     

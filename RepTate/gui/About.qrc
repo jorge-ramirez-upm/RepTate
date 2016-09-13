@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/Images">
+    <file>Images/logo.jpg</file>
+    <file>Images/Reptate64.ico</file>
+  </qresource>
+</RCC>

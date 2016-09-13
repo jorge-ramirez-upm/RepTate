@@ -1,0 +1,74 @@
+<RCC>
+  <qresource prefix="/Images">
+    <file>Images/printer.ico</file>
+    <file>Images/Gnome-Application-Exit-48.ico</file>
+    <file>Images/AllFiles.ico</file>
+    <file>Images/Angel.ico</file>
+    <file>Images/Angry.ico</file>
+    <file>Images/Area.ico</file>
+    <file>Images/bobpars.ico</file>
+    <file>Images/bobsave.ico</file>
+    <file>Images/Bubble.ico</file>
+    <file>Images/Calculator.ico</file>
+    <file>Images/Cascade.ico</file>
+    <file>Images/Clip.ico</file>
+    <file>Images/Confused.ico</file>
+    <file>Images/Copy.ico</file>
+    <file>Images/Creep.ico</file>
+    <file>Images/DataSet.ico</file>
+    <file>Images/DataTable3D.ico</file>
+    <file>Images/DD.bmp</file>
+    <file>Images/Delete.ico</file>
+    <file>Images/DominoHorizontal.ico</file>
+    <file>Images/DominoVertical.ico</file>
+    <file>Images/Dumbbell.ico</file>
+    <file>Images/Dumbbell3.ico</file>
+    <file>Images/Globe.ico</file>
+    <file>Images/Gt.bmp</file>
+    <file>Images/Gt.ico</file>
+    <file>Images/Happy.ico</file>
+    <file>Images/Help.ico</file>
+    <file>Images/ImportData.ico</file>
+    <file>Images/ImportTheory.ico</file>
+    <file>Images/LeftRight.ico</file>
+    <file>Images/Library.ico</file>
+    <file>Images/Line Chart Both Limits.ico</file>
+    <file>Images/Line Chart Horizontal Limits.ico</file>
+    <file>Images/Line Chart Vertical Limits.ico</file>
+    <file>Images/Line Chart.ico</file>
+    <file>Images/Lines.ico</file>
+    <file>Images/logo.jpg</file>
+    <file>Images/LVE.ico</file>
+    <file>Images/MatDB.ico</file>
+    <file>Images/Minimize.ico</file>
+    <file>Images/MRT.bmp</file>
+    <file>Images/MRT.ico</file>
+    <file>Images/mut.ico</file>
+    <file>Images/Mw.bmp</file>
+    <file>Images/Mw.ico</file>
+    <file>Images/NLVE.ico</file>
+    <file>Images/Palette.ico</file>
+    <file>Images/Paste.ico</file>
+    <file>Images/phit.ico</file>
+    <file>Images/Physics.ico</file>
+    <file>Images/react.ico</file>
+    <file>Images/Refresh.ico</file>
+    <file>Images/Remove.ico</file>
+    <file>Images/Rept.ico</file>
+    <file>Images/Reptate.bmp</file>
+    <file>Images/Reptate.ico</file>
+    <file>Images/Reptate64.ico</file>
+    <file>Images/Reptate128.bmp</file>
+    <file>Images/Reptate128.png</file>
+    <file>Images/SANS.ico</file>
+    <file>Images/Settings.ico</file>
+    <file>Images/Star.ico</file>
+    <file>Images/StarSmall.ico</file>
+    <file>Images/Table.ico</file>
+    <file>Images/Test.ico</file>
+    <file>Images/TTS.bmp</file>
+    <file>Images/TTS.ico</file>
+    <file>Images/UpDown.ico</file>
+    <file>Images/World.ico</file>
+  </qresource>
+</RCC>

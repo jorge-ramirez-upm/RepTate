@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/Icons">
+    <file>Images/Bubble.ico</file>
+    <file>Images/Minimize.ico</file>
+    <file>Images/Physics.ico</file>
+    <file>Images/Settings.ico</file>
+  </qresource>
+</RCC>

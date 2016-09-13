@@ -15,6 +15,7 @@ class ApplicationLVE(Application):
         # VIEWS
         self.views.append(View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"]))
         self.views.append(View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"]))
+        self.views.append(View("etastar", "Complex Viscosity", "$\omega$", "$\eta^*(\omega)$", True, True, self.viewEtaStar, 1, ["eta*(w)"]))
         self.views.append(View("delta", "delta", "$\omega$", "$\delta(\omega)$", True, False, self.viewDelta, 1, ["delta(w)"]))
         self.views.append(View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", True, True, self.viewTanDelta, 1, ["tan(delta((w))"]))
         self.current_view=self.views[0]
@@ -27,31 +28,40 @@ class ApplicationLVE(Application):
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
     def viewLogG1G2(self, dt, file_parameters):
-        x = np.zeros((dt.num_rows, 1))
+        x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = np.log10(dt.data[:, 0])
+        x[:, 1] = np.log10(dt.data[:, 0])
         y[: ,0] = np.log10(dt.data[:, 1])
         y[: ,1] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewG1G2(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,2))
-        x[0]=vec[0]
-        y[0,0]=vec[1]
-        y[0,1]=vec[2]
+    def viewG1G2(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = dt.data[:, 0]
+        x[:, 1] = dt.data[:, 0]
+        y[: ,0] = dt.data[:, 1]
+        y[: ,1] = dt.data[:, 2]
         return x, y, True
 
-    def viewDelta(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,1))
-        x[0]=vec[0]
-        y[0,0]=np.arctan2(vec[2],vec[1])*180/np.pi
+    def viewEtaStar(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[: ,0] = np.sqrt(dt.data[:, 1]**2 + dt.data[:, 2]**2)/dt.data[:, 0]
+        return x, y, True        
+
+    def viewDelta(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[: ,0] = np.arctan2(dt.data[:, 2], dt.data[:, 1])*180/np.pi
         return x, y, True
     
-    def viewTanDelta(self, vec, file_parameters):
-        x=np.zeros((1,1))
-        y=np.zeros((1,1))
-        x[0]=vec[0]
-        y[0,0]=np.log10(vec[1]/vec[0])
+    def viewTanDelta(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[: ,0] = np.log10(dt.data[:, 2]/dt.data[:, 1])
         return x, y, True
