@@ -383,6 +383,7 @@ class DataSet(CmdBase):
 
     def do_theory_switch(self, line):
         """Change the active theory"""
+        done=False
         for th in self.theories:
             if (th.name==line):
                 self.current_theory=th

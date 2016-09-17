@@ -1,6 +1,6 @@
 from Application import *
 import numpy as np
-#from TheoryMaxwellModes import TheoryMaxwellModesTime
+from TheoryRoliePoly import TheoryRoliePoly
 
 class ApplicationNLVE(Application):
     """Application to Non-linear flow Data
@@ -21,7 +21,7 @@ class ApplicationNLVE(Application):
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
-        #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
+        self.theories[TheoryRoliePoly.thname]=TheoryRoliePoly
 
     def viewLogeta(self, dt, file_parameters):
         x = np.zeros((dt.num_rows, 1))

@@ -25,6 +25,7 @@ class Theory(CmdBase):
     """
     thname=""
     description=""
+    citations=""
 
     def __init__(self, name="Theory", parent_dataset=None, ax=None):
         """Constructor:
@@ -57,7 +58,6 @@ class Theory(CmdBase):
         self.point_function=None
         self.line_function=None
         self.user_function=None
-        self.citations=""
 
         # THEORY OPTIONS
         self.min=0
@@ -73,7 +73,9 @@ class Theory(CmdBase):
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
             self.tables[f.file_name_short]=DataTable(ax)
-
+            
+        self.do_cite("")
+            
     def precmd(self, line):
         """ This method is called after the line has been input but before
             it has been interpreted. If you want to modifdy the input line
@@ -152,3 +154,11 @@ class Theory(CmdBase):
                             if f.startswith(text)
                             ]
         return completions
+        
+    def do_cite(self, line):
+        """Print citation information"""
+        print(self.citations)
+
+    def do_plot(self, line):
+        """Call the plot from the parent Dataset"""
+        self.parent_dataset.do_plot(line)
