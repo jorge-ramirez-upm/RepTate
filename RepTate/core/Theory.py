@@ -2,22 +2,6 @@ import enum
 from CmdBase import *
 from DataTable import *
 
-class TheoryType(enum.Enum):
-    point = 0
-    line = 1
-    user = 2
-
-class LineTheoryIntegrationMethod(enum.Enum):
-    Euler = 0
-    RungeKutta5 = 1
-    AdaptiveDt = 2
-
-class TheoryPointDistributionType(enum.Enum):
-    all_points=0
-    linear=1
-    log = 2
-
-
 class Theory(CmdBase):
     """Abstract class to describe a theory
             thname            (str): Theory name
@@ -25,6 +9,7 @@ class Theory(CmdBase):
     """
     thname=""
     description=""
+    citations=""
 
     def __init__(self, name="Theory", parent_dataset=None, ax=None):
         """Constructor:
@@ -51,29 +36,25 @@ class Theory(CmdBase):
         self.name=name
         self.parent_dataset = parent_dataset
         self.ax = ax
-        self.thtype=TheoryType.point
         self.parameters={}
         self.tables={}
-        self.point_function=None
-        self.line_function=None
-        self.user_function=None
-        self.citations=""
+        self.function=None
 
         # THEORY OPTIONS
         self.min=0
         self.max=0
         self.npoints=100
-        self.point_distribution = TheoryPointDistributionType.all_points
         self.dt=0.001
         self.dt_min=1e-6 
         self.eps=1e-4
-        self.integration_method=LineTheoryIntegrationMethod.AdaptiveDt
         self.stop_steady=False
 
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
             self.tables[f.file_name_short]=DataTable(ax)
-
+            
+        self.do_cite("")
+            
     def precmd(self, line):
         """ This method is called after the line has been input but before
             it has been interpreted. If you want to modifdy the input line
@@ -86,29 +67,19 @@ class Theory(CmdBase):
     def do_calculate(self, line):
         """Calculate the theory"""
         for f in self.parent_dataset.files:
-            if self.thtype==TheoryType.point:
-                self.point_function(f)
-            elif self.thtype==TheoryType.line:
-                self.line_function(f)
-            elif self.thtype==TheoryType.user:
-                self.user_function(f)
-            else:
-                print("Theory type must be set!")
+            self.function(f)
     
     def do_error(self, line):
         """Report the error of the current theory on the given filename
            The error is calculated with least-squares
         """
         f = self.parent_dataset.current_file
-        if self.thtype == TheoryType.point:
-            view = self.parent_dataset.parent_application.current_view
-            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-            xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-            print(yexp)
-            print(yth)
-            print(np.mean((yth-yexp)**2))
-        else:
-            print("Not implemented yet")
+        view = self.parent_dataset.parent_application.current_view
+        xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
+        xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+        print(yexp)
+        print(yth)
+        print(np.mean((yth-yexp)**2))
 
     def do_print(self, line):
         """Print the theory table associated with the given file name"""
@@ -152,3 +123,11 @@ class Theory(CmdBase):
                             if f.startswith(text)
                             ]
         return completions
+        
+    def do_cite(self, line):
+        """Print citation information"""
+        print(self.citations)
+
+    def do_plot(self, line):
+        """Call the plot from the parent Dataset"""
+        self.parent_dataset.do_plot(line)

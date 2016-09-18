@@ -6,7 +6,7 @@ class TheoryMaxwellModesTime(Theory):
     description="Fit Maxwell modes to time dependent function"
 
     def __init__(self, name="ThMaxwellTime"):
-        super(TheoryMaxwellModesTime, self).__init__(name, TheoryType.point)
+        super(TheoryMaxwellModesTime, self).__init__(name)
 
 
 class TheoryMaxwellModesFrequency(Theory):
@@ -15,5 +15,5 @@ class TheoryMaxwellModesFrequency(Theory):
     description="Fit Maxwell modes to frequency dependent function"
 
     def __init__(self, name="ThMaxwellFrequency"):
-        super(TheoryMaxwellModesFrequency, self).__init__(name, TheoryType.point)
+        super(TheoryMaxwellModesFrequency, self).__init__(name)
 

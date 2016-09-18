@@ -8,8 +8,7 @@ class TheoryTest(Theory, CmdBase):
 
     def __init__(self, name="ThTest", parent_dataset=None, ax=None):
         super(TheoryTest, self).__init__(name, parent_dataset, ax)
-        self.thtype = TheoryType.point    
-        self.point_function = self.testfunction
+        self.function = self.testfunction
         self.parameters["A"]=1.0
         self.parameters["B"]=2.0
 
@@ -28,6 +27,6 @@ class TheoryTest2(Theory):
     description="Playground theory 2"
 
     def __init__(self, name="ThTest2"):
-        super(TheoryTest2, self).__init__(name, TheoryType.point)
+        super(TheoryTest2, self).__init__(name)
     
         
