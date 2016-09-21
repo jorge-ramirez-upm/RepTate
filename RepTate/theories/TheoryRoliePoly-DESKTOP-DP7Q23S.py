@@ -12,17 +12,18 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
 
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
         super(TheoryRoliePoly, self).__init__(name, parent_dataset, ax)
-        self.function = self.RoliePoly
-        self.parameters["beta"]=Parameter("beta", 4.0, "Slope of line", ParameterType.real, False)
-        self.parameters["delta"]=Parameter("deta", 1, "Slope of line", ParameterType.real, False)
-        self.parameters["lmax"]=Parameter("lmax", 10.0, "Slope of line", ParameterType.real, False)
-        self.parameters["nmodes"]=Parameter("nmodes", 2, "Slope of line", ParameterType.integer, False)
-        self.parameters["G0"]=Parameter("G0", 10.0, "Slope of line")
-        self.parameters["tauD0"]=Parameter("tauD0", 10.0, "Slope of line")
-        self.parameters["tauR0"]=Parameter("tauR0", 0.5, "Slope of line", ParameterType.real, False)
-        self.parameters["G1"]=Parameter("G1", 100.0, "Slope of line")
-        self.parameters["tauD1"]=Parameter("tauD1", 1.0, "Slope of line")
-        self.parameters["tauR1"]=Parameter("tauR1", 0.5, "Slope of line", ParameterType.real, False)
+        self.thtype = TheoryType.line
+        self.line_function = self.RoliePoly
+        self.parameters["beta"]=4.0
+        self.parameters["delta"]=1
+        self.parameters["lmax"]=10
+        self.parameters["nmodes"]=2
+        self.parameters["G0"]=10
+        self.parameters["tauD0"]=10
+        self.parameters["tauR0"]=0.5
+        self.parameters["G1"]=100
+        self.parameters["tauD1"]=1
+        self.parameters["tauR1"]=0.5
 
     def sigmadotshear(self, sigma, t, p):
         """Rolie-Poly differential equation under shear flow
@@ -42,7 +43,7 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         aux1 = 2*(1-np.sqrt(3/trace_sigma))/tauR
         aux2 = beta*(trace_sigma/3)**delta
         return [2*gammadot*sxy-(sxx-1)/tauD-aux1*(sxx+aux2*(sxx-1)), gammadot*1-sxy/tauD-aux1*(sxy+aux2*sxy)]
-
+        
         
     def RoliePoly(self, f=None):
         ft=f.data_table
@@ -55,18 +56,17 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         # ODE solver parameters
         abserr = 1.0e-8
         relerr = 1.0e-6
+        stoptime = 10.0
+        numpoints = 50
         t = ft.data[:,0]
-        t = np.concatenate([[0],t])
         sigma0=[1, 0]
-        beta=self.parameters["beta"].value
-        delta=self.parameters["delta"].value
+        beta=self.parameters["beta"]
+        delta=self.parameters["delta"]
         gammadot=float(f.file_parameters["gdot"])
-        nmodes=int(self.parameters["nmodes"].value)
+        nmodes=self.parameters["nmodes"]
         for i in range(nmodes):
-            tauD=self.parameters["tauD%d"%i].value
-            tauR=self.parameters["tauR%d"%i].value
+            tauD=self.parameters["tauD%d"%i]
+            tauR=self.parameters["tauR%d"%i]
             p = [tauD, tauR, beta, delta, gammadot]
             sig = odeint(self.sigmadotshear, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
-            tt.data[:,1]+=self.parameters["G%d"%i].value*np.delete(sig[:,1],[0])
-       
-       
+            tt.data[:,1]+=self.parameters["G%d"%i]*sig[:,1]

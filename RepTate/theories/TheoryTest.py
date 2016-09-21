@@ -9,8 +9,8 @@ class TheoryTest(Theory, CmdBase):
     def __init__(self, name="ThTest", parent_dataset=None, ax=None):
         super(TheoryTest, self).__init__(name, parent_dataset, ax)
         self.function = self.testfunction
-        self.parameters["A"]=1.0
-        self.parameters["B"]=2.0
+        self.parameters["A"]=Parameter("A", 1.0, "Slope of line")
+        self.parameters["B"]=Parameter("B", 2.0, "Value at origin")
 
     def testfunction(self, f=None):
         ft=f.data_table
@@ -19,7 +19,7 @@ class TheoryTest(Theory, CmdBase):
         tt.num_rows=ft.num_rows
         tt.data=np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:,0]=ft.data[:,0]
-        tt.data[:,1]=self.parameters["A"]*tt.data[:,0]+self.parameters["B"]
+        tt.data[:,1]=self.parameters["A"].value*tt.data[:,0]+self.parameters["B"].value
 
 class TheoryTest2(Theory):
     """Theory to play with the different functionalities of Reptate"""

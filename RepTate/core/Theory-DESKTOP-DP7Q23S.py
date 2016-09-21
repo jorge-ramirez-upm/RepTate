@@ -1,10 +1,22 @@
 import enum
-from scipy.optimize import curve_fit
-from scipy.stats.distributions import t
-
 from CmdBase import *
 from DataTable import *
-from Parameter import *
+
+class TheoryType(enum.Enum):
+    point = 0
+    line = 1
+    user = 2
+
+class LineTheoryIntegrationMethod(enum.Enum):
+    Euler = 0
+    RungeKutta5 = 1
+    AdaptiveDt = 2
+
+class TheoryPointDistributionType(enum.Enum):
+    all_points=0
+    linear=1
+    log = 2
+
 
 class Theory(CmdBase):
     """Abstract class to describe a theory
@@ -40,17 +52,22 @@ class Theory(CmdBase):
         self.name=name
         self.parent_dataset = parent_dataset
         self.ax = ax
+        self.thtype=TheoryType.point
         self.parameters={}
         self.tables={}
-        self.function=None
+        self.point_function=None
+        self.line_function=None
+        self.user_function=None
 
         # THEORY OPTIONS
         self.min=0
         self.max=0
         self.npoints=100
+        self.point_distribution = TheoryPointDistributionType.all_points
         self.dt=0.001
         self.dt_min=1e-6 
         self.eps=1e-4
+        self.integration_method=LineTheoryIntegrationMethod.AdaptiveDt
         self.stop_steady=False
 
         # Pre-create as many tables as files in the dataset
@@ -71,80 +88,29 @@ class Theory(CmdBase):
     def do_calculate(self, line):
         """Calculate the theory"""
         for f in self.parent_dataset.files:
-            self.function(f)
+            if self.thtype==TheoryType.point:
+                self.point_function(f)
+            elif self.thtype==TheoryType.line:
+                self.line_function(f)
+            elif self.thtype==TheoryType.user:
+                self.user_function(f)
+            else:
+                print("Theory type must be set!")
     
     def do_error(self, line):
         """Report the error of the current theory on the given filename
            The error is calculated with least-squares
         """
-        total_error=0
-        view = self.parent_dataset.parent_application.current_view
-        for f in self.parent_dataset.files:
+        f = self.parent_dataset.current_file
+        if self.thtype == TheoryType.point:
+            view = self.parent_dataset.parent_application.current_view
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-            f_error=np.mean((yth-yexp)**2)
-            total_error+=f_error
-            print("%s\t%g"%(f.file_name_short,f_error))
-        print("TOTAL\t%g"%total_error)
-
-    def func_fit(self, x, *param_in):
-        ind=0
-        for p in self.parameters.keys():
-            par = self.parameters[p] 
-            if par.min_flag: 
-                par.value=param_in[ind]
-                ind+=1
-        self.do_calculate("")
-        y = []
-        view = self.parent_dataset.parent_application.current_view
-        for f in self.parent_dataset.files:
-            xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-            for i in range(view.n):
-                y = np.append(y, yth[:,i])
-        return y
-
-    def do_fit(self, line):
-        """Minimize the error"""
-        view = self.parent_dataset.parent_application.current_view
-        # Vectors that contain all X and Y in the files & view
-        x = []
-        y = []
-        for f in self.parent_dataset.files:
-            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-            for i in range(view.n):
-                x = np.append(x, xexp[:,i])
-                y = np.append(y, yexp[:,i])      
-
-        # Mount the vector of parameters (Active ones only)
-        initial_guess=[]
-        for p in self.parameters.keys():
-            par = self.parameters[p] 
-            if par.min_flag: 
-                initial_guess.append(par.value)
-
-        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess)
-
-        alpha = 0.05 # 95% confidence interval = 100*(1-alpha)
-        n = len(y)    # number of data points
-        p = len(pars) # number of parameters
-        dof = max(0, n - p) # number of degrees of freedom
-        # student-t value for the dof and confidence level
-        tval = t.ppf(1.0-alpha/2., dof) 
-
-        par_error=[]
-        #for i, p, var in zip(range(p), pars, np.diag(pcov)):
-        for var in np.diag(pcov):
-            sigma = var**0.5
-            par_error.append(sigma*tval)
-            #print ('p{0}: {1} ± {2}'.format(i, p, sigma*tval))
-
-        ind=0
-        for p in self.parameters.keys():
-            par = self.parameters[p] 
-            if par.min_flag:
-                par.error=par_error[ind]
-                ind+=1
-                print('{0} = {1} ± {2}'.format(par.name, par.value, par.error))
+            print(yexp)
+            print(yth)
+            print(np.mean((yth-yexp)**2))
+        else:
+            print("Not implemented yet")
 
     def do_print(self, line):
         """Print the theory table associated with the given file name"""
@@ -170,15 +136,13 @@ class Theory(CmdBase):
            With no arguments, show the current values
         """
         if (line==""):
-            for p in self.parameters.keys():
-                print("%s=%g"%(self.parameters[p].name,self.parameters[p].value))
+            print(self.parameters)
         else:
+            args={}
             for s in line.split():
                 par=s.split("=")
-                if (par[0] in self.parameters):
-                    self.parameters[par[0]].value=float(par[1])
-                else:
-                    print("Parameter %s not found"%par[0])
+                args[par[0]]=float(par[1])
+            self.parameters.update(args)
 
     def complete_parameters(self, text, line, begidx, endidx):
         parameter_names=list(self.parameters.keys())
@@ -198,19 +162,3 @@ class Theory(CmdBase):
     def do_plot(self, line):
         """Call the plot from the parent Dataset"""
         self.parent_dataset.do_plot(line)
-
-    def default(self, line):       
-        """Called on an input line when the command prefix is not recognized.
-           In that case we execute the line as Python code.
-        """
-        if "=" in line:
-            par=line.split("=")
-            if (par[0] in self.parameters):
-                self.parameters[par[0]].value=float(par[1])
-            else:
-                print("Parameter %s not found"%par[0])
-        elif line in self.parameters.keys():
-            print(self.parameters[line])
-            print(self.parameters[line].__repr__())
-        else:
-            super(Theory, self).default(line)
