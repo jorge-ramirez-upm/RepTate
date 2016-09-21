@@ -1,4 +1,5 @@
 import enum
+import math
 
 class ShiftType(enum.Enum):
     linear=0
@@ -24,13 +25,14 @@ class Parameter(object):
             min_value      (real): Minimum allowed value for the parameter
             max_value      (real): Maximum allowed value
     """
-    def __init__(self, name="", description="", type=ParameterType.real, value=0.0, 
+    def __init__(self, name="", value=0.0, description="", type=ParameterType.real, 
                  min_flag=True, min_factor=1.0, min_shift_type=ShiftType.linear, 
-                 bracketed = False, min_value=0.0, max_value=1.0):
+                 bracketed = False, min_value=-math.inf, max_value=math.inf):
         self.name=name
         self.description=description
         self.type = type
         self.value=value
+        self.error=math.inf
         self.min_flag = min_flag
         self.min_factor = min_factor
         self.min_shift_type = min_shift_type
@@ -51,6 +53,11 @@ class Parameter(object):
         self.min_value = par2.min_value
         self.max_value= par2.max_value
         
+    def __str__(self):
+        """TODO: Refine this."""
+        return "%s=%g"%(self.name,self.value)
 
-
-
+    def __repr__(self):
+        """TODO: Refine this."""
+        return "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%s,%s,%g,%g)"%(self.name,self.value,self.description, self.type, self.min_flag,\
+                self.min_factor, self.min_shift_type, self.bracketed, self.min_value, self.max_value)
