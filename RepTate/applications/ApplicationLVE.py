@@ -1,6 +1,6 @@
 from Application import *
 import numpy as np
-#from TheoryMaxwellModes import TheoryMaxwellModesTime
+from TheoryMaxwellModes import TheoryMaxwellModesFrequency
 
 class ApplicationLVE(Application):
     """Application to Analyze Linear Viscoelastic Data
@@ -25,7 +25,7 @@ class ApplicationLVE(Application):
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
-        #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
+        self.theories[TheoryMaxwellModesFrequency.thname]=TheoryMaxwellModesFrequency
 
     def viewLogG1G2(self, dt, file_parameters):
         x = np.zeros((dt.num_rows, 2))
