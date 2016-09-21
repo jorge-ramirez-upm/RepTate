@@ -245,3 +245,6 @@ ModelManifest.xml
 .fake/
 
 *.pyc
+__pycache__/
+*.py[cod]
+
