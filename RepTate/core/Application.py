@@ -3,6 +3,7 @@ import itertools
 import seaborn as sns   
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator
+from matplotlib.widgets import Cursor
 
 from CmdBase import *
 from FileType import *
@@ -39,6 +40,8 @@ class Application(CmdBase):
         self.figure.canvas.mpl_connect('close_event', self.handle_close_window)
         self.ax = self.figure.add_subplot(111)
         sns.despine() # Remove up and right side of plot box
+        #CURSOR STUFF
+        self.cursor = Cursor(self.ax, useblit=True, color='red', linewidth=1, linestyle='--')
         # LEGEND STUFF
         #leg=plt.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
         #if leg:

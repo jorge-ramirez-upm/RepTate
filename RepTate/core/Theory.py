@@ -45,19 +45,32 @@ class Theory(CmdBase):
         self.function=None
 
         # THEORY OPTIONS
-        self.min=0.01
-        self.max=1
         self.npoints=100
         self.dt=0.001
         self.dt_min=1e-6 
         self.eps=1e-4
         self.stop_steady=False
         
-        self.xspan = ax.axvspan(self.min, self.max, facecolor='yellow', alpha=0.5)
-        self.xminline = ax.axvline(self.min, color='black', linestyle='--', marker='o')
-        self.xmaxline = ax.axvline(self.max, color='black', linestyle='--', marker='o')
-        #self.xminline.visible = False # DOESN'T WORK
+        # XRANGE for FIT
+        self.xmin=0.01
+        self.xmax=1
+        self.xspan = ax.axvspan(self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
+        self.xminline = ax.axvline(self.xmin, color='black', linestyle='--', marker='o', visible=False)
+        self.xmaxline = ax.axvline(self.xmax, color='black', linestyle='--', marker='o', visible=False)
+        #self.xspan.set_visible(False) 
+        #self.xminline.set_visible(False) 
+        #self.xmaxline.set_visible(False) 
 
+        # YRANGE for FIT
+        self.ymin=0.01
+        self.ymax=1
+        self.yspan = ax.axhspan(self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
+        self.yminline = ax.axhline(self.ymin, color='black', linestyle='--', marker='o', visible=False)
+        self.ymaxline = ax.axhline(self.ymax, color='black', linestyle='--', marker='o', visible=False)
+        #self.yspan.set_visible(False) 
+        #self.yminline.set_visible(False) 
+        #self.ymaxline.set_visible(False) 
+    
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
             self.tables[f.file_name_short]=DataTable(ax)
@@ -81,12 +94,23 @@ class Theory(CmdBase):
     def do_error(self, line):
         """Report the error of the current theory on the given filename
            The error is calculated with least-squares
+           Taking into account horizontal and vertical ranges
         """
         total_error=0
         view = self.parent_dataset.parent_application.current_view
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+            if (self.xspan.get_visible()):
+                conditionx=(xexp>self.xmin)*(xexp<self.xmax)
+            else:
+                conditionx=np.ones_like(xexp, dtype=np.bool)
+            if (self.yspan.get_visible()):
+                conditiony=(yexp>self.ymin)*(yexp<self.ymax)
+            else:
+                conditiony=np.ones_like(yexp, dtype=np.bool)
+            yexp=np.extract(conditionx*conditiony, yexp)
+            yth=np.extract(conditionx*conditiony, yth)
             f_error=np.mean((yth-yexp)**2)
             total_error+=f_error
             print("%s\t%g"%(f.file_name_short,f_error))
@@ -104,8 +128,18 @@ class Theory(CmdBase):
         view = self.parent_dataset.parent_application.current_view
         for f in self.parent_dataset.files:
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             for i in range(view.n):
-                y = np.append(y, yth[:,i])
+                if (self.xspan.get_visible()):
+                    conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
+                else:
+                    conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
+                if (self.yspan.get_visible()):
+                    conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
+                else:
+                    conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
+                ycond=np.extract(conditionx*conditiony, yth[:,i])
+                y = np.append(y, ycond)
         return y
 
     def do_fit(self, line):
@@ -116,9 +150,20 @@ class Theory(CmdBase):
         y = []
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-            for i in range(view.n):
-                x = np.append(x, xexp[:,i])
-                y = np.append(y, yexp[:,i])      
+            for i in range(view.n):   
+                if (self.xspan.get_visible()):
+                    conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
+                else:
+                    conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
+                if (self.yspan.get_visible()):
+                    conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
+                else:
+                    conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
+                xcond=np.extract(conditionx*conditiony, xexp[:,i])
+                ycond=np.extract(conditionx*conditiony, yexp[:,i])
+
+                x = np.append(x, xcond)
+                y = np.append(y, ycond)      
 
         # Mount the vector of parameters (Active ones only)
         initial_guess=[]
@@ -196,6 +241,50 @@ class Theory(CmdBase):
                             ]
         return completions
         
+    def do_xspan(self, line):
+        """Set/show xrange for fit and shows limits
+           xspan  : switches ON/OFF the horizontal span
+           xspan xmin xmax : Sets the limits of the span
+        """
+        if (line==""):
+            self.xspan.set_visible(not self.xspan.get_visible()) 
+            self.xminline.set_visible(not self.xminline.get_visible()) 
+            self.xmaxline.set_visible(not self.xmaxline.get_visible()) 
+            print("Xmin=%g Xmax=%g"%(self.xmin,self.xmax))
+        else:
+            items=line.split()
+            if len(items)<2:
+                print ("Not enough parameters")
+            else:
+                self.xmin=float(items[0])
+                self.xmax=float(items[1])
+                self.xminline.set_data([self.xmin,self.xmin],[0,1])
+                self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
+                self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+        self.do_plot(line)
+            
+    def do_yspan(self, line):
+        """Set/show yrange for fit and shows limits
+           yspan  : switches ON/OFF the vertical span
+           yspan ymin ymax : Sets the limits of the span
+        """
+        if (line==""):
+            self.yspan.set_visible(not self.yspan.get_visible()) 
+            self.yminline.set_visible(not self.yminline.get_visible()) 
+            self.ymaxline.set_visible(not self.ymaxline.get_visible()) 
+            print("Ymin=%g Ymax=%g"%(self.ymin,self.ymax))
+        else:
+            items=line.split()
+            if len(items)<2:
+                print ("Not enough parameters")
+            else:
+                self.ymin=float(items[0])
+                self.ymax=float(items[1])
+                self.yminline.set_data([0, 1], [self.ymin, self.ymin])
+                self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
+                self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
+        self.do_plot(line)
+
     def do_cite(self, line):
         """Print citation information"""
         print(self.citations)
