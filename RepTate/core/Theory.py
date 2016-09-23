@@ -45,13 +45,18 @@ class Theory(CmdBase):
         self.function=None
 
         # THEORY OPTIONS
-        self.min=0
-        self.max=0
+        self.min=0.01
+        self.max=1
         self.npoints=100
         self.dt=0.001
         self.dt_min=1e-6 
         self.eps=1e-4
         self.stop_steady=False
+        
+        self.xspan = ax.axvspan(self.min, self.max, facecolor='yellow', alpha=0.5)
+        self.xminline = ax.axvline(self.min, color='black', linestyle='--', marker='o')
+        self.xmaxline = ax.axvline(self.max, color='black', linestyle='--', marker='o')
+        #self.xminline.visible = False # DOESN'T WORK
 
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
