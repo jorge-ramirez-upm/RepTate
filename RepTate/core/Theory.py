@@ -76,6 +76,7 @@ class Theory(CmdBase):
             self.tables[f.file_name_short]=DataTable(ax)
             
         self.do_cite("")
+        self.do_calculate("")
             
     def precmd(self, line):
         """ This method is called after the line has been input but before
@@ -90,6 +91,7 @@ class Theory(CmdBase):
         """Calculate the theory"""
         for f in self.parent_dataset.files:
             self.function(f)
+        self.do_plot(line)
     
     def do_error(self, line):
         """Report the error of the current theory on the given filename
@@ -195,6 +197,7 @@ class Theory(CmdBase):
                 par.error=par_error[ind]
                 ind+=1
                 print('{0} = {1} ± {2}'.format(par.name, par.value, par.error))
+        self.do_plot(line)
 
     def do_print(self, line):
         """Print the theory table associated with the given file name"""
