@@ -10,6 +10,7 @@ from FileType import *
 from View import *
 from Theory import *
 from DataSet import *
+from TheoryBasic import *
 
 class Application(CmdBase):
     """Main abstract class that represents an application"""    
@@ -30,7 +31,11 @@ class Application(CmdBase):
         self.current_view=0
         self.current_theory=0
         self.num_datasets=0
-        self.legend_visible = False        
+        self.legend_visible = False      
+
+        # Theories available everywhere
+        self.theories[TheoryPolynomial.thname]=TheoryPolynomial
+        self.theories[TheoryPowerLaw.thname]=TheoryPowerLaw
             
         # MATPLOTLIB STUFF
         sns.set_style("white")

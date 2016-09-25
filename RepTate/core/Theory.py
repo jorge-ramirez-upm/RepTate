@@ -96,11 +96,13 @@ class Theory(CmdBase):
             self.do_error(line)
     
     def do_error(self, line):
-        """Report the error of the current theory on the given filename
-           The error is calculated with least-squares
-           Taking into account horizontal and vertical ranges
+        """Report the error of the current theory on all the files, taking into account \
+the current selected xrange and yrange.\n\
+File error is calculated as the mean square of the residual, averaged over all points in the file.\n\
+Total error is the mean square of the residual, averaged over all points in all files.
         """
         total_error=0
+        npoints=0
         view = self.parent_dataset.parent_application.current_view
         print("Error files & Total")
         print("===================")
@@ -118,9 +120,11 @@ class Theory(CmdBase):
             yexp=np.extract(conditionx*conditiony, yexp)
             yth=np.extract(conditionx*conditiony, yth)
             f_error=np.mean((yth-yexp)**2)
-            total_error+=f_error
+            npt=len(yth)
+            total_error+=f_error*npt
+            npoints+=npt
             print("%20s\t%10.5g"%(f.file_name_short,f_error))
-        print("%20s\t%10.5g"%("TOTAL",total_error))
+        print("%20s\t%10.5g"%("TOTAL",total_error/npoints))
 
     def func_fit(self, x, *param_in):
         ind=0
@@ -324,6 +328,16 @@ class Theory(CmdBase):
         """Call the plot from the parent Dataset"""
         self.parent_dataset.do_plot(line)
 
+    def set_param_value(self, name, value):
+        if (self.parameters[name].type==ParameterType.real):
+            self.parameters[name].value=float(value)
+        elif (self.parameters[name].type==ParameterType.integer):
+            self.parameters[name].value=int(value)
+        elif (self.parameters[name].type==ParameterType.discrete):
+            pass
+        else:
+            pass
+
     def default(self, line):       
         """Called on an input line when the command prefix is not recognized.
            In that case we execute the line as Python code.
@@ -331,7 +345,7 @@ class Theory(CmdBase):
         if "=" in line:
             par=line.split("=")
             if (par[0] in self.parameters):
-                self.parameters[par[0]].value=float(par[1])
+                self.set_param_value(par[0],par[1])
             else:
                 print("Parameter %s not found"%par[0])
         elif line in self.parameters.keys():

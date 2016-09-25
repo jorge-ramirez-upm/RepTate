@@ -36,16 +36,25 @@ Macromolecules 2002, 35, 6332-6343"
         Me=self.parameters["Me"].value
         cnu=self.parameters["cnu"].value
         Mw=float(f.file_parameters["Mw"])
-        
-        Z=np.round(Mw/Me) # For the time being, we don't interpolate
-        
-        indZ = (np.where(self.Zarray==Z))[0][0]
+
         indcnu = (np.where(self.cnuarray==cnu))[0][0]
+        indcnu1=1+indcnu*2
+        indcnu2=indcnu1+1
+        
+        Z=Mw/Me        
+        indZ0=(np.where(self.Zarray<Z))[0][-1]
+        indZ1=(np.where(self.Zarray>Z))[0][0]
+        table0=self.data[indZ0]
+        table1=self.data[indZ1]
 
-        table=self.data[indZ]
-        ind1=1+indcnu*2
-        ind2=ind1+1
+        vec=np.append(table0[:,0],table1[:,0])
+        vec=np.sort(vec)
+        vec=np.unique(vec)
+        table=np.zeros((len(vec),3))
+        table[:,0]=vec
+        table[:,1]=0.5*(interp(vec, table0[:,0], table0[:,indcnu1])+interp(vec, table1[:,0], table1[:,indcnu1]))
+        table[:,2]=0.5*(interp(vec, table0[:,0], table0[:,indcnu2])+interp(vec, table1[:,0], table1[:,indcnu2]))
 
-        tt.data[:,1]=interp(tt.data[:,0], table[:,0]/taue, Ge*table[:,ind1])
-        tt.data[:,2]=interp(tt.data[:,0], table[:,0]/taue, Ge*table[:,ind2])
+        tt.data[:,1]=interp(tt.data[:,0], table[:,0]/taue, Ge*table[:,1])
+        tt.data[:,2]=interp(tt.data[:,0], table[:,0]/taue, Ge*table[:,2])
                        
