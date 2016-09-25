@@ -365,6 +365,7 @@ class DataSet(CmdBase):
             self.theories.append(th)
             self.current_theory=th
             th.prompt = self.prompt[:-2]+'/'+th.name+'> '
+            th.do_calculate("")
             th.cmdloop()
         else:
             print("Theory \"%s\" does not exists"%line)

@@ -49,8 +49,8 @@ class Theory(CmdBase):
         self.dt=0.001
         self.dt_min=1e-6 
         self.eps=1e-4
-        self.stop_steady=False
-        
+        self.stop_steady=False        
+
         # XRANGE for FIT
         self.xmin=0.01
         self.xmax=1
@@ -76,7 +76,6 @@ class Theory(CmdBase):
             self.tables[f.file_name_short]=DataTable(ax)
             
         self.do_cite("")
-        self.do_calculate("")
             
     def precmd(self, line):
         """ This method is called after the line has been input but before
@@ -91,7 +90,8 @@ class Theory(CmdBase):
         """Calculate the theory"""
         for f in self.parent_dataset.files:
             self.function(f)
-        self.do_plot(line)
+        if self.not_fitting:
+            self.do_plot(line)
     
     def do_error(self, line):
         """Report the error of the current theory on the given filename
