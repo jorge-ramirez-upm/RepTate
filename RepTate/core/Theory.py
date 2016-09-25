@@ -51,6 +51,7 @@ class Theory(CmdBase):
         self.eps=1e-4
         self.stop_steady=False
         self.fitting=False
+        self.has_modes=False
         
         # XRANGE for FIT
         self.xmin=0.01
@@ -68,9 +69,6 @@ class Theory(CmdBase):
         self.yspan = ax.axhspan(self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
         self.yminline = ax.axhline(self.ymin, color='black', linestyle='--', marker='o', visible=False)
         self.ymaxline = ax.axhline(self.ymax, color='black', linestyle='--', marker='o', visible=False)
-        #self.yspan.set_visible(False) 
-        #self.yminline.set_visible(False) 
-        #self.ymaxline.set_visible(False) 
     
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
@@ -267,6 +265,8 @@ Total error is the mean square of the residual, averaged over all points in all 
                             if f.startswith(text)
                             ]
         return completions
+
+# SPAN STUFF
         
     def do_xspan(self, line):
         """Set/show xrange for fit and shows limits
@@ -319,6 +319,15 @@ Total error is the mean square of the residual, averaged over all points in all 
                     self.yminline.set_visible(True) 
                     self.ymaxline.set_visible(True) 
         self.do_plot(line)
+
+# MODES STUFF
+    def get_modes(self):
+        tau=np.ones(1)
+        G=np.ones(1)
+        return tau, G
+    
+    def set_modes(self, tau, G):
+        pass
 
     def do_cite(self, line):
         """Print citation information"""

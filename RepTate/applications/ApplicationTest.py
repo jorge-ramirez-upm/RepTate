@@ -11,9 +11,9 @@ class ApplicationTest(Application):
         super(ApplicationTest, self).__init__(name, parent)
 
         # VIEWS
-        self.views.append(View("TestView1", "y vs x", "t", "r", False, False, self.view1, 1, ["lolo"]))
-        self.views.append(View("TestView2", "y^2 vs x", "t", "r2", False, False, self.view2, 1, ["lolo2"]))
-        self.current_view=self.views[0]
+        self.views["TestView1"]=View("TestView1", "y vs x", "t", "r", False, False, self.view1, 1, ["lolo"])
+        self.views["TestView2"]=View("TestView2", "y^2 vs x", "t", "r2", False, False, self.view2, 1, ["lolo2"])
+        self.current_view=self.views["TestView1"]
 
         # FILES
         ftype=TXTColumnFile("Test files", "test", "Test files x y", 0, -1, ['x','y'], [0, 1], ['testparam1','testparam2'], [])

@@ -19,12 +19,11 @@ class DataSet(CmdBase):
         self.description=description
         self.parent_application=parent
 
-        self.files=[]
+        self.files=[] # TODO: Shall we change this list into a dict?
         self.current_file=None
         self.num_files=0
 
-        self.theories=[]
-        self.current_theory=None
+        self.theories={}
         self.num_theories=0
 
 # DATASET STUFF ##########################################################################################################
@@ -42,10 +41,7 @@ class DataSet(CmdBase):
                 else:
                     print(" %s\t%s"%(f.file_name_short,'\t'.join(vallist)))
             for i, t in enumerate(ds.theories):
-                if (t==ds.current_theory):
-                    print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
-                else:
-                    print("   %s: %s\t %s"%(t.name, t.thname, t.description))
+                print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
     def do_plot(self, line):
         """Plot the current dataset using the current view of the parent application"""
@@ -76,8 +72,8 @@ class DataSet(CmdBase):
                     file.data_table.series[i].set_visible(False)
                     file.data_table.series[i].set_label('')
         
-            if self.current_theory!=None:
-                tt = self.current_theory.tables[file.file_name_short]
+            for th in self.theories.values():
+                tt = th.tables[file.file_name_short]
                 x, y, success = view.view_proc(tt, file.file_parameters)
                 for i in range(tt.MAX_NUM_SERIES):
                     if (i<view.n):
@@ -320,24 +316,14 @@ class DataSet(CmdBase):
 # THEORY STUFF ##########################################################################################################
     def do_theory_delete(self, name):
         """Delete a theory from the current dataset"""
-        done=False
-        for index, th in enumerate(self.current_application.current_dataset.theories):
-            if (th.name==name):
-                if (self.current_application.current_dataset.current_theory==th):
-                    if (index<len(self.current_application.current_dataset.theories)-1):
-                        self.current_application.current_dataset.current_theory=self.current_application.current_dataset.theories[index+1]
-                    else:
-                        self.current_application.current_dataset.current_theory=self.current_application.current_dataset.theories[0]
-                self.current_application.current_dataset.theories.remove(th)
-                done=True
-        if (not done):
+        if name in self.theories.keys():
+            del self.theories[name]
+        else:
             print("Theory \"%s\" not found"%name)            
 
     def complete_theory_delete(self, text, line, begidx, endidx):
         """Complete delete theory command"""
-        th_names=[]
-        for th in self.theories:
-            th_names.append(th.name)
+        th_names=list(self.theories.keys())
         if not text:
             completions = th_names[:]
         else:
@@ -349,11 +335,8 @@ class DataSet(CmdBase):
 
     def do_theory_list(self, line):
         """List open theories in current dataset"""
-        for t in self.theories:
-            if (t==self.current_theory):
-                print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
-            else:
-                print("   %s: %s\t %s"%(t.name, t.thname, t.description))
+        for t in self.theories.values():
+            print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
     def do_theory_new(self, line):
         """Add a new theory of the type specified to the current Data Set"""
@@ -362,8 +345,7 @@ class DataSet(CmdBase):
             self.num_theories+=1
             
             th=self.parent_application.theories[line]("%s%02d"%(line,self.num_theories), self, self.parent_application.ax)
-            self.theories.append(th)
-            self.current_theory=th
+            self.theories[th.name]=th
             th.prompt = self.prompt[:-2]+'/'+th.name+'> '
             th.do_calculate("")
             th.cmdloop()
@@ -384,13 +366,10 @@ class DataSet(CmdBase):
 
     def do_theory_switch(self, line):
         """Change the active theory"""
-        done=False
-        for th in self.theories:
-            if (th.name==line):
-                self.current_theory=th
-                th.cmdloop()
-                done=True
-        if (not done):
+        if line in self.theories.keys():
+            th=self.theories[line]
+            th.cmdloop()
+        else:
             print("Theory \"%s\" not found"%line)                        
         
     def complete_theory_switch(self, text, line, begidx, endidx):

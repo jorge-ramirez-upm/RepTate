@@ -24,12 +24,11 @@ class Application(CmdBase):
         self.name=name
         self.parent_manager = parent
         self.logger = logging.getLogger('ReptateLogger')
-        self.views=[]
+        self.views={}
         self.filetypes={}
         self.theories={}
-        self.datasets=[]
+        self.datasets={}
         self.current_view=0
-        self.current_theory=0
         self.num_datasets=0
         self.legend_visible = False      
 
@@ -76,23 +75,20 @@ class Application(CmdBase):
             else:
                 dsdescription=""
         ds = DataSet(dsname, dsdescription, self)
-        self.datasets.append(ds)
+        self.datasets[dsname]=ds
         ds.prompt = self.prompt[:-2]+'/'+ds.name+'> '
         ds.cmdloop()
  
     def do_delete(self, name):
         """Delete a dataset from the current application"""
-        done=False
-        for index, ds in enumerate(self.datasets):
-            if (ds.name==name):
-                self.datasets.remove(ds)
-                done=True
-        if (not done):
+        if name in self.datasets.keys():
+            del self.datasets[name]
+        else:
             print("Data Set \"%s\" not found"%name)            
 
     def complete_delete(self, text, line, begidx, endidx):
         """Complete delete dataset command"""
-        dataset_names=[ds.name for ds in self.datasets]
+        dataset_names=list(self.datasets.keys())
         if not text:
             completions = dataset_names[:]
         else:
@@ -104,45 +100,21 @@ class Application(CmdBase):
 
     def do_list(self, line):
         """List the datasets in the current application"""
-        for ds in self.datasets:
+        for ds in self.datasets.values():
             print("%s:\t%s"%(ds.name, ds.description))            
-            # MORE DETAILS NEEDED?
-            #if (self.check_files_exist()): 
-            #    keylist=list(ds.file_parameters.keys())
-            #    print("File\t",'\t'.join(keylist))
-            #    for i, f in enumerate(ds.files):
-            #        vallist=[]
-            #        for k in keylist:
-            #            vallist.append(f.file_parameters[k])
-            #        if (f==ds.current_file):
-            #            print("*%s\t%s"%(f.file_name_short,'\t'.join(vallist)))
-            #        else:
-            #            print(" %s\t%s"%(f.file_name_short,'\t'.join(vallist)))
-            #    for i, t in enumerate(ds.theories):
-            #        if (t==ds.current_theory):
-            #            print("  *%s: %s\t %s"%(t.name, t.thname, t.description))
-            #        else:
-            #            print("   %s: %s\t %s"%(t.name, t.thname, t.description))
-            
-    #def do_dataset_plot(self, line):
-    #    """Plot the current dataset using the current view"""
-    #    if (not self.check_application_exist()): return
-    #    if (not self.check_datasets_exist()): return
-    #    self.current_application.plot_current_dataset()
         
     def do_switch(self, name):
         """ Switch the current dataset"""
         done=False
-        for ds in self.datasets:
-            if (ds.name==name):
-                ds.cmdloop()
-                done=True
-        if (not done):
-            print("Dataset \"%s\" not found"%line)                        
+        if name in self.datasets.keys():
+            ds=self.datasets[name]
+            ds.cmdloop()
+        else:
+            print("Dataset \"%s\" not found"%name)                        
 
     def complete_switch(self, text, line, begidx, endidx):
         """ Complete the switch dataset command"""
-        ds_names=[ds.name for ds in self.datasets]
+        ds_names=list(self.datasets.keys())
         if not text:
             completions = ds_names[:]
         else:
@@ -162,7 +134,7 @@ class Application(CmdBase):
 # VIEW STUFF
     def do_view_available(self, line):
         """List available views in the current application"""
-        for view in self.views:
+        for view in self.views.values():
             if (view==self.current_view):
                 print("*%s:\t%s"%(view.name,view.description))
             else:
@@ -171,16 +143,14 @@ class Application(CmdBase):
     def do_view_switch(self, name):
         """Change to another view from open application"""
         done=False
-        for view in self.views:
-            if (view.name==name):
-                self.current_view=view
-                done=True
-        if (not done):
+        if name in list(self.views.keys()):
+            self.current_view=self.views[name]
+        else:
             print("View \"%s\" not found"%name)                        
 
     def complete_view_switch(self, text, line, begidx, endidx):
         """Complete switch view command"""
-        view_names=[vw.name for vw in self.views]
+        view_names=list(self.views.keys())
         if not text:
             completions = view_names[:]
         else:

@@ -13,16 +13,46 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
         super(TheoryRoliePoly, self).__init__(name, parent_dataset, ax)
         self.function = self.RoliePoly
-        self.parameters["beta"]=Parameter("beta", 4.0, "Slope of line", ParameterType.real, False)
-        self.parameters["delta"]=Parameter("deta", 1, "Slope of line", ParameterType.real, False)
-        self.parameters["lmax"]=Parameter("lmax", 10.0, "Slope of line", ParameterType.real, False)
-        self.parameters["nmodes"]=Parameter("nmodes", 2, "Slope of line", ParameterType.integer, False)
-        self.parameters["G0"]=Parameter("G0", 10.0, "Slope of line")
-        self.parameters["tauD0"]=Parameter("tauD0", 10.0, "Slope of line")
-        self.parameters["tauR0"]=Parameter("tauR0", 0.5, "Slope of line", ParameterType.real, False)
-        self.parameters["G1"]=Parameter("G1", 100.0, "Slope of line")
-        self.parameters["tauD1"]=Parameter("tauD1", 1.0, "Slope of line")
-        self.parameters["tauR1"]=Parameter("tauR1", 0.5, "Slope of line", ParameterType.real, False)
+        self.has_modes = True
+        self.parameters["beta"]=Parameter("beta", 0.5, "CCR coefficient", ParameterType.real, False)
+        self.parameters["delta"]=Parameter("deta", -0.5, "CCR exponent", ParameterType.real, False)
+        self.parameters["lmax"]=Parameter("lmax", 10.0, "Maximum extensibility", ParameterType.real, False)
+        self.parameters["nmodes"]=Parameter("nmodes", 2, "Number of modes", ParameterType.integer, False)
+        for i in range(self.parameters["nmodes"].value):
+            self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False)
+            self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False)
+            self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True)
+
+    def set_param_value(self, name, value):
+        if (name=="nmodes"):
+            oldn=self.parameters["nmodes"].value
+        super(TheoryRoliePoly, self).set_param_value(name, value)
+        if (name=="nmodes"):
+            for i in range(self.parameters["nmodes"].value):
+                self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False)
+                self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False)
+                self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True)
+            if (oldn>self.parameters["nmodes"].value):
+                for i in range(self.parameters["nmodes"].value,oldn):
+                    del self.parameters["G%d"%i]
+                    del self.parameters["tauD%d"%i]
+                    del self.parameters["tauR%d"%i]
+
+    def get_modes(self):
+        nmodes=self.parameters["nmodes"].value
+        tau=np.zeros(nmodes)
+        G=np.zeros(nmodes)
+        for i in range(nmodes):
+            tau[i]=self.parameters["tauD%d"%i].value
+            G[i]=self.parameters["G%d"%i].value
+        return tau, G
+
+    def set_modes(self, tau, G):
+        nmodes=len(tau)
+        self.set_param_value("nmodes", nmodes)
+        for i in range(nmodes):
+            self.set_param_value("tauD%d"%i,tau[i])
+            self.set_param_value("G%d"%i,G[i])
 
     def sigmadotshear(self, sigma, t, p):
         """Rolie-Poly differential equation under shear flow
@@ -61,7 +91,7 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         beta=self.parameters["beta"].value
         delta=self.parameters["delta"].value
         gammadot=float(f.file_parameters["gdot"])
-        nmodes=int(self.parameters["nmodes"].value)
+        nmodes=self.parameters["nmodes"].value
         for i in range(nmodes):
             tauD=self.parameters["tauD%d"%i].value
             tauR=self.parameters["tauR%d"%i].value

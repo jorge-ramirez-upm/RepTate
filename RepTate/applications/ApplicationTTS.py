@@ -13,9 +13,9 @@ class ApplicationTTS(Application):
         super(ApplicationTTS, self).__init__(name, parent)
 
         # VIEWS
-        self.views.append(View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log(w)", "Log(G'(w),G''(w))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"]))
-        self.views.append(View("G',G''(w)", "Storage,Loss moduli", "w", "G'(w),G''(w)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"]))
-        self.current_view=self.views[0]
+        self.views["Log(G',G''(w))"]=View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log(w)", "Log(G'(w),G''(w))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
+        self.views["G',G''(w)"]=View("G',G''(w)", "Storage,Loss moduli", "w", "G'(w),G''(w)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"])
+        self.current_view=self.views["Log(G',G''(w))"]
 
         # FILES
         ftype=TXTColumnFile("Oscillatory shear files", "osc", "Oscillatory Shear Files from rheometer", 0, 2, ['w','G1','G2'], [0], ['Mw','ncontri'], [])

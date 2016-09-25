@@ -37,7 +37,7 @@ class ApplicationManager(CmdBase):
 
         # SETUP APPLICATIONS
         self.application_counter=0
-        self.applications=[]
+        self.applications={}
         self.available_applications={}
         self.available_applications[ApplicationTest.name]=ApplicationTest
         self.available_applications[ApplicationReact.name]=ApplicationReact
@@ -55,19 +55,14 @@ class ApplicationManager(CmdBase):
 
     def do_delete(self, name):
         """Delete an open application"""
-        done=False
-        for index, app in enumerate(self.applications):
-            if (app.name==name):
-                self.applications.remove(app)
-                done=True
-        if (not done):
+        if name in self.applications.keys():
+            del self.applications[name]
+        else:
             print("Application \"%s\" not found"%name)            
 
     def complete_delete(self, text, line, begidx, endidx):
         """Complete delete application command"""
-        app_names=[]
-        for app in self.applications:
-            app_names.append(app.name)
+        app_names=list(self.applications.keys())
         if not text:
             completions = app_names[:]
         else:
@@ -79,7 +74,7 @@ class ApplicationManager(CmdBase):
 
     def do_list(self, line):
         """List open applications"""
-        for app in self.applications:
+        for app in self.applications.values():
             print("%s: %s"%(app.name,app.description))
 
     def do_new(self, name):
@@ -87,7 +82,7 @@ class ApplicationManager(CmdBase):
         if (name in self.available_applications):
             self.application_counter+=1
             newapp=self.available_applications[name](name+str(self.application_counter), self)
-            self.applications.append(newapp)
+            self.applications[newapp.name]=newapp
             newapp.prompt = self.prompt[:-2]+'/'+newapp.name+'> '
             newapp.cmdloop()
 
@@ -108,18 +103,72 @@ class ApplicationManager(CmdBase):
 
     def do_switch(self, name):
         """Set focus to an open application"""
-        done=False
-        for app in self.applications:
-            if (app.name==name):
-                app.cmdloop()
-                done=True
-        if (not done):
+        if name in self.applications.keys():
+            app=self.applications[name]               
+            app.cmdloop()
+        else:
             print("Application \"%s\" not found"%name)                        
 
     def complete_switch(self, text, line, begidx, endidx):
         completions = self.complete_delete(text, line, begidx, endidx)
         return completions        
     
+# MAXWELL MODES COPY
+    def do_copymodes(self, line):
+        """Copy maxwell modes from one theory to another.
+           Both theories may live inside different applications and/or datasets
+           copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj"""
+        apps=line.split()
+        if len(apps)<2:
+            print("Not enough parameters passed")
+            return                        
+        appA=apps[0].split('.')
+        app1=appA[0]
+        if app1 in self.applications.keys():
+            app1=self.applications[app1]
+        else:
+            print("Application %s not found"%app1)
+            return
+        dataset1=appA[1]
+        if dataset1 in app1.datasets.keys():
+            dataset1=app1.datasets[dataset1]
+        else:
+            print("Dataset %s not found"%dataset1)
+            return
+        theory1=appA[2]
+        if theory1 in dataset1.theories.keys():
+            theory1 = dataset1.theories[theory1]
+        else:
+            print("Theory %s not found"%theory1)
+            return
+        if not theory1.has_modes:
+            print("Theory %s does not have modes"%theory1.name)
+            return
+        appB=apps[1].split('.')
+        app2=appB[0]
+        if app2 in self.applications.keys():
+            app2=self.applications[app2]
+        else:
+            print("Application %s not found"%app2)
+            return
+        dataset2=appB[1]
+        if dataset2 in app2.datasets.keys():
+            dataset2=app2.datasets[dataset2]
+        else:
+            print("Dataset %s not found"%dataset2)
+            return
+        theory2=appB[2]
+        if theory2 in dataset2.theories.keys():
+            theory2 = dataset2.theories[theory2]
+        else:
+            print("Theory %s not found"%theory2)
+            return
+        if not theory2.has_modes:
+            print("Theory %s does not have modes"%theory2.name)
+            return
+        tau, G = theory1.get_modes()
+        theory2.set_modes(tau, G)
+
 # OTHER STUFF
     def help_tutorial(self):
         print ('introduction')
