@@ -48,6 +48,9 @@
     <Compile Include="core\DataTable.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="core\DraggableArtists.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="core\File.py">
       <SubType>Code</SubType>
     </Compile>

@@ -45,7 +45,7 @@ class Application(CmdBase):
         self.ax = self.figure.add_subplot(111)
         sns.despine() # Remove up and right side of plot box
         #CURSOR STUFF
-        self.cursor = Cursor(self.ax, useblit=True, color='red', linewidth=1, linestyle='--')
+        #self.cursor = Cursor(self.ax, useblit=True, color='red', linewidth=1, linestyle='--')
         # LEGEND STUFF
         #leg=plt.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
         #if leg:

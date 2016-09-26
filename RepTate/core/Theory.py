@@ -5,6 +5,7 @@ from scipy.stats.distributions import t
 from CmdBase import *
 from DataTable import *
 from Parameter import *
+from DraggableArtists import *
 
 class Theory(CmdBase):
     """Abstract class to describe a theory
@@ -59,6 +60,8 @@ class Theory(CmdBase):
         self.xspan = ax.axvspan(self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
         self.xminline = ax.axvline(self.xmin, color='black', linestyle='--', marker='o', visible=False)
         self.xmaxline = ax.axvline(self.xmax, color='black', linestyle='--', marker='o', visible=False)
+        self.xminlinedrag=DraggableVLine(self.xminline, DragType.horizontal, self.change_xmin)
+        self.xmaxlinedrag=DraggableVLine(self.xmaxline, DragType.horizontal, self.change_xmax)
 
         # YRANGE for FIT
         self.ymin=0.01
@@ -66,6 +69,8 @@ class Theory(CmdBase):
         self.yspan = ax.axhspan(self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
         self.yminline = ax.axhline(self.ymin, color='black', linestyle='--', marker='o', visible=False)
         self.ymaxline = ax.axhline(self.ymax, color='black', linestyle='--', marker='o', visible=False)
+        self.yminlinedrag=DraggableHLine(self.yminline, DragType.vertical, self.change_ymin)
+        self.ymaxlinedrag=DraggableHLine(self.ymaxline, DragType.vertical, self.change_ymax)
     
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
@@ -88,6 +93,7 @@ class Theory(CmdBase):
             self.function(f)
         if not self.fitting:
             self.do_plot(line)
+            self.do_error(line)
     
     def do_error(self, line):
         """Report the error of the current theory on all the files, taking into account \
@@ -261,7 +267,26 @@ Total error is the mean square of the residual, averaged over all points in all 
         return completions
 
 # SPAN STUFF
-        
+    def change_xmin(self, dx, dy):
+        self.xmin+=dx                
+        self.xminline.set_data([self.xmin,self.xmin],[0,1])
+        self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+
+    def change_xmax(self, dx, dy):
+        self.xmax+=dx                
+        self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
+        self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+
+    def change_ymin(self, dx, dy):
+        self.ymin+=dy     
+        self.yminline.set_data([0, 1], [self.ymin, self.ymin])           
+        self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
+
+    def change_ymax(self, dx, dy):
+        self.ymax+=dy     
+        self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])           
+        self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
+
     def do_xspan(self, line):
         """Set/show xrange for fit and shows limits
            xspan  : switches ON/OFF the horizontal span
