@@ -59,9 +59,6 @@ class Theory(CmdBase):
         self.xspan = ax.axvspan(self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
         self.xminline = ax.axvline(self.xmin, color='black', linestyle='--', marker='o', visible=False)
         self.xmaxline = ax.axvline(self.xmax, color='black', linestyle='--', marker='o', visible=False)
-        #self.xspan.set_visible(False) 
-        #self.xminline.set_visible(False) 
-        #self.xmaxline.set_visible(False) 
 
         # YRANGE for FIT
         self.ymin=0.01
@@ -89,7 +86,7 @@ class Theory(CmdBase):
         """Calculate the theory"""
         for f in self.parent_dataset.files:
             self.function(f)
-        if self.not_fitting:
+        if not self.fitting:
             self.do_plot(line)
     
     def do_error(self, line):
@@ -149,6 +146,7 @@ Total error is the mean square of the residual, averaged over all points in all 
 
     def do_fit(self, line):
         """Minimize the error"""
+        self.fitting = True
         view = self.parent_dataset.parent_application.current_view
         # Vectors that contain all X and Y in the files & view
         x = []
