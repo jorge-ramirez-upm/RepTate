@@ -10,8 +10,8 @@ class ApplicationReact(Application):
         super(ApplicationReact, self).__init__(name, parent)
 
         # VIEWS
-        self.views.append(View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"]))
-        self.current_view=self.views[0]
+        self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"])
+        self.current_view=self.views["W(M)"]
 
         # FILES
         ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", 0, -1, ['M','W(logM)', 'g', 'br/1000C'], [0], [], [])

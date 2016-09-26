@@ -10,9 +10,9 @@ class ApplicationGt(Application):
         super(ApplicationGt, self).__init__(name, parent)
 
         # VIEWS
-        self.views.append(View("G(t)", "Relaxation modulus", "t", "G(t)", True, True, self.viewGt, 1, ["G(t)"]))
-        self.views.append(View("Log[G(t)]", "Log Relaxation modulus", "log(t)", "log(G(t))", False, False, self.viewLogGt, 1, ["log(G(t))"]))
-        self.current_view=self.views[0]
+        self.views["G(t)"]=View("G(t)", "Relaxation modulus", "t", "G(t)", True, True, self.viewGt, 1, ["G(t)"])
+        self.views["Log[G(t)]"]=View("Log[G(t)]", "Log Relaxation modulus", "log(t)", "log(G(t))", False, False, self.viewLogGt, 1, ["log(G(t))"])
+        self.current_view=self.views["G(t)"]
 
         # FILES
         ftype=TXTColumnFile("G(t) files", "gt", "Relaxation modulus", 0, 2, ['t','Gt'], [0], ['Mw','ncontri'], [])

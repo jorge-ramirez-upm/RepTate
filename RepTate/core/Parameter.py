@@ -31,7 +31,12 @@ class Parameter(object):
         self.name=name
         self.description=description
         self.type = type
-        self.value=value
+        if (self.type==ParameterType.real):
+            self.value=float(value)
+        elif (self.type==ParameterType.integer):
+            self.value=int(value)
+        else:
+            pass # NOT IMPLEMENTED YET
         self.error=math.inf
         self.min_flag = min_flag
         self.min_factor = min_factor

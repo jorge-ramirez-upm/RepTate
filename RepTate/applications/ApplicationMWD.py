@@ -12,8 +12,8 @@ class ApplicationMWD(Application):
         super(ApplicationMWD, self).__init__(name, parent)
 
         # VIEWS
-        self.views.append(View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"]))
-        self.current_view=self.views[0]
+        self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"])
+        self.current_view=self.views["W(M)"]
 
         # FILES
         ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", 0, -1, ['M','W(logM)'], [0], ['Mw','Mn','PDI'], [])

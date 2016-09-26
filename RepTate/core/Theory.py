@@ -49,8 +49,10 @@ class Theory(CmdBase):
         self.dt=0.001
         self.dt_min=1e-6 
         self.eps=1e-4
-        self.stop_steady=False        
-
+        self.stop_steady=False
+        self.fitting=False
+        self.has_modes=False
+        
         # XRANGE for FIT
         self.xmin=0.01
         self.xmax=1
@@ -67,9 +69,6 @@ class Theory(CmdBase):
         self.yspan = ax.axhspan(self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
         self.yminline = ax.axhline(self.ymin, color='black', linestyle='--', marker='o', visible=False)
         self.ymaxline = ax.axhline(self.ymax, color='black', linestyle='--', marker='o', visible=False)
-        #self.yspan.set_visible(False) 
-        #self.yminline.set_visible(False) 
-        #self.ymaxline.set_visible(False) 
     
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
@@ -94,11 +93,13 @@ class Theory(CmdBase):
             self.do_plot(line)
     
     def do_error(self, line):
-        """Report the error of the current theory on the given filename
-           The error is calculated with least-squares
-           Taking into account horizontal and vertical ranges
+        """Report the error of the current theory on all the files, taking into account \
+the current selected xrange and yrange.\n\
+File error is calculated as the mean square of the residual, averaged over all points in the file.\n\
+Total error is the mean square of the residual, averaged over all points in all files.
         """
         total_error=0
+        npoints=0
         view = self.parent_dataset.parent_application.current_view
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
@@ -114,9 +115,11 @@ class Theory(CmdBase):
             yexp=np.extract(conditionx*conditiony, yexp)
             yth=np.extract(conditionx*conditiony, yth)
             f_error=np.mean((yth-yexp)**2)
-            total_error+=f_error
-            print("%s\t%g"%(f.file_name_short,f_error))
-        print("TOTAL\t%g"%total_error)
+            npt=len(yth)
+            total_error+=f_error*npt
+            npoints+=npt
+            print("%20s\t%10.5g"%(f.file_name_short,f_error))
+        print("%20s\t%10.5g"%("TOTAL",total_error/npoints))
 
     def func_fit(self, x, *param_in):
         ind=0
@@ -174,7 +177,16 @@ class Theory(CmdBase):
             if par.min_flag: 
                 initial_guess.append(par.value)
 
-        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess)
+        opt = dict(return_full=True)
+        pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1)
+
+        if (ier<1 or ier>4):
+            print("Solution not found: ", errmsg)
+            return
+
+        fiterror = np.mean((infodict['fvec'])**2)
+        funcev = infodict['nfev']
+        print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
 
         alpha = 0.05 # 95% confidence interval = 100*(1-alpha)
         n = len(y)    # number of data points
@@ -188,16 +200,22 @@ class Theory(CmdBase):
         for var in np.diag(pcov):
             sigma = var**0.5
             par_error.append(sigma*tval)
-            #print ('p{0}: {1} ± {2}'.format(i, p, sigma*tval))
 
         ind=0
-        for p in self.parameters.keys():
+        k=list(self.parameters.keys())
+        k.sort()
+        print ("Optimal values of parameters (error bar for optimized values)")
+        print ("============================")
+        for p in k:
             par = self.parameters[p] 
             if par.min_flag:
                 par.error=par_error[ind]
                 ind+=1
-                print('{0} = {1} ± {2}'.format(par.name, par.value, par.error))
-        self.do_plot(line)
+                print('%10s = %10.5g +/- %10.5g'%(par.name, par.value, par.error))
+            else:
+                print('%10s = %10.5g'%(par.name, par.value))
+        self.fitting=False
+        self.do_calculate(line)
 
     def do_print(self, line):
         """Print the theory table associated with the given file name"""
@@ -243,6 +261,8 @@ class Theory(CmdBase):
                             if f.startswith(text)
                             ]
         return completions
+
+# SPAN STUFF
         
     def do_xspan(self, line):
         """Set/show xrange for fit and shows limits
@@ -264,6 +284,10 @@ class Theory(CmdBase):
                 self.xminline.set_data([self.xmin,self.xmin],[0,1])
                 self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
                 self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+                if (not self.xspan.get_visible()):
+                    self.xspan.set_visible(True) 
+                    self.xminline.set_visible(True) 
+                    self.xmaxline.set_visible(True) 
         self.do_plot(line)
             
     def do_yspan(self, line):
@@ -286,7 +310,20 @@ class Theory(CmdBase):
                 self.yminline.set_data([0, 1], [self.ymin, self.ymin])
                 self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
                 self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
+                if (not self.yspan.get_visible()):
+                    self.yspan.set_visible(True) 
+                    self.yminline.set_visible(True) 
+                    self.ymaxline.set_visible(True) 
         self.do_plot(line)
+
+# MODES STUFF
+    def get_modes(self):
+        tau=np.ones(1)
+        G=np.ones(1)
+        return tau, G
+    
+    def set_modes(self, tau, G):
+        pass
 
     def do_cite(self, line):
         """Print citation information"""
@@ -296,6 +333,16 @@ class Theory(CmdBase):
         """Call the plot from the parent Dataset"""
         self.parent_dataset.do_plot(line)
 
+    def set_param_value(self, name, value):
+        if (self.parameters[name].type==ParameterType.real):
+            self.parameters[name].value=float(value)
+        elif (self.parameters[name].type==ParameterType.integer):
+            self.parameters[name].value=int(value)
+        elif (self.parameters[name].type==ParameterType.discrete):
+            pass
+        else:
+            pass
+
     def default(self, line):       
         """Called on an input line when the command prefix is not recognized.
            In that case we execute the line as Python code.
@@ -303,7 +350,7 @@ class Theory(CmdBase):
         if "=" in line:
             par=line.split("=")
             if (par[0] in self.parameters):
-                self.parameters[par[0]].value=float(par[1])
+                self.set_param_value(par[0],par[1])
             else:
                 print("Parameter %s not found"%par[0])
         elif line in self.parameters.keys():
