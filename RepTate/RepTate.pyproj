@@ -62,6 +62,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RepTate.py" />
+    <Compile Include="theories\TheoryLikhtmanMcLeish2002.py" />
     <Compile Include="theories\TheoryMaxwellModes.py">
       <SubType>Code</SubType>
     </Compile>

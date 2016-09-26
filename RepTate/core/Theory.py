@@ -49,9 +49,8 @@ class Theory(CmdBase):
         self.dt=0.001
         self.dt_min=1e-6 
         self.eps=1e-4
-        self.stop_steady=False
-        self.fitting=False
-        
+        self.stop_steady=False        
+
         # XRANGE for FIT
         self.xmin=0.01
         self.xmax=1
@@ -91,9 +90,8 @@ class Theory(CmdBase):
         """Calculate the theory"""
         for f in self.parent_dataset.files:
             self.function(f)
-        if not self.fitting:
+        if self.not_fitting:
             self.do_plot(line)
-            self.do_error(line)
     
     def do_error(self, line):
         """Report the error of the current theory on the given filename
@@ -102,8 +100,6 @@ class Theory(CmdBase):
         """
         total_error=0
         view = self.parent_dataset.parent_application.current_view
-        print("Error files & Total")
-        print("===================")
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
@@ -119,8 +115,8 @@ class Theory(CmdBase):
             yth=np.extract(conditionx*conditiony, yth)
             f_error=np.mean((yth-yexp)**2)
             total_error+=f_error
-            print("%20s\t%10.5g"%(f.file_name_short,f_error))
-        print("%20s\t%10.5g"%("TOTAL",total_error))
+            print("%s\t%g"%(f.file_name_short,f_error))
+        print("TOTAL\t%g"%total_error)
 
     def func_fit(self, x, *param_in):
         ind=0
@@ -150,7 +146,6 @@ class Theory(CmdBase):
 
     def do_fit(self, line):
         """Minimize the error"""
-        self.fitting=True
         view = self.parent_dataset.parent_application.current_view
         # Vectors that contain all X and Y in the files & view
         x = []
@@ -179,16 +174,7 @@ class Theory(CmdBase):
             if par.min_flag: 
                 initial_guess.append(par.value)
 
-        opt = dict(return_full=True)
-        pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1)
-
-        if (ier<1 or ier>4):
-            print("Solution not found: ", errmsg)
-            return
-
-        fiterror = np.mean((infodict['fvec'])**2)
-        funcev = infodict['nfev']
-        print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
+        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess)
 
         alpha = 0.05 # 95% confidence interval = 100*(1-alpha)
         n = len(y)    # number of data points
@@ -202,22 +188,16 @@ class Theory(CmdBase):
         for var in np.diag(pcov):
             sigma = var**0.5
             par_error.append(sigma*tval)
+            #print ('p{0}: {1} ± {2}'.format(i, p, sigma*tval))
 
         ind=0
-        k=list(self.parameters.keys())
-        k.sort()
-        print ("Optimal values of parameters (error bar for optimized values)")
-        print ("============================")
-        for p in k:
+        for p in self.parameters.keys():
             par = self.parameters[p] 
             if par.min_flag:
                 par.error=par_error[ind]
                 ind+=1
-                print('%10s = %10.5g +/- %10.5g'%(par.name, par.value, par.error))
-            else:
-                print('%10s = %10.5g'%(par.name, par.value))
-        self.fitting=False
-        self.do_calculate(line)
+                print('{0} = {1} ± {2}'.format(par.name, par.value, par.error))
+        self.do_plot(line)
 
     def do_print(self, line):
         """Print the theory table associated with the given file name"""
@@ -284,10 +264,6 @@ class Theory(CmdBase):
                 self.xminline.set_data([self.xmin,self.xmin],[0,1])
                 self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
                 self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
-                if (not self.xspan.get_visible()):
-                    self.xspan.set_visible(True) 
-                    self.xminline.set_visible(True) 
-                    self.xmaxline.set_visible(True) 
         self.do_plot(line)
             
     def do_yspan(self, line):
@@ -310,10 +286,6 @@ class Theory(CmdBase):
                 self.yminline.set_data([0, 1], [self.ymin, self.ymin])
                 self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
                 self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
-                if (not self.yspan.get_visible()):
-                    self.yspan.set_visible(True) 
-                    self.yminline.set_visible(True) 
-                    self.ymaxline.set_visible(True) 
         self.do_plot(line)
 
     def do_cite(self, line):
