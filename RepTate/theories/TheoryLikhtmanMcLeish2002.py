@@ -18,7 +18,7 @@ Macromolecules 2002, 35, 6332-6343"
         self.parameters["Me"]=Parameter("Me", 5, "Entanglement molecular weight", ParameterType.real, True)
         self.parameters["cnu"]=Parameter("cnu", 0.1, "Constraint Release parameter", ParameterType.real, False)
 
-        f=np.load("theories\linlin.npz")
+        f=np.load("theories"+os.path.sep+"linlin.npz")
         self.Zarray=f['Z']
         self.cnuarray=f['cnu']
         self.data=f['data']
