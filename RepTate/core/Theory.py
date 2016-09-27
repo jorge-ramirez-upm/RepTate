@@ -57,7 +57,7 @@ class Theory(CmdBase):
         # XRANGE for FIT
         self.xmin=0.01
         self.xmax=1
-        self.xspan = ax.axvspan(self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
+        self.xrange = ax.axvspan(self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
         self.xminline = ax.axvline(self.xmin, color='black', linestyle='--', marker='o', visible=False)
         self.xmaxline = ax.axvline(self.xmax, color='black', linestyle='--', marker='o', visible=False)
         self.xminlinedrag=DraggableVLine(self.xminline, DragType.horizontal, self.change_xmin)
@@ -66,7 +66,7 @@ class Theory(CmdBase):
         # YRANGE for FIT
         self.ymin=0.01
         self.ymax=1
-        self.yspan = ax.axhspan(self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
+        self.yrange = ax.axhspan(self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
         self.yminline = ax.axhline(self.ymin, color='black', linestyle='--', marker='o', visible=False)
         self.ymaxline = ax.axhline(self.ymax, color='black', linestyle='--', marker='o', visible=False)
         self.yminlinedrag=DraggableHLine(self.yminline, DragType.vertical, self.change_ymin)
@@ -107,11 +107,11 @@ Total error is the mean square of the residual, averaged over all points in all 
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-            if (self.xspan.get_visible()):
+            if (self.xrange.get_visible()):
                 conditionx=(xexp>self.xmin)*(xexp<self.xmax)
             else:
                 conditionx=np.ones_like(xexp, dtype=np.bool)
-            if (self.yspan.get_visible()):
+            if (self.yrange.get_visible()):
                 conditiony=(yexp>self.ymin)*(yexp<self.ymax)
             else:
                 conditiony=np.ones_like(yexp, dtype=np.bool)
@@ -138,11 +138,11 @@ Total error is the mean square of the residual, averaged over all points in all 
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             for i in range(view.n):
-                if (self.xspan.get_visible()):
+                if (self.xrange.get_visible()):
                     conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
                 else:
                     conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
-                if (self.yspan.get_visible()):
+                if (self.yrange.get_visible()):
                     conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
                 else:
                     conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
@@ -160,11 +160,11 @@ Total error is the mean square of the residual, averaged over all points in all 
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             for i in range(view.n):   
-                if (self.xspan.get_visible()):
+                if (self.xrange.get_visible()):
                     conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
                 else:
                     conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
-                if (self.yspan.get_visible()):
+                if (self.yrange.get_visible()):
                     conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
                 else:
                     conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
@@ -208,8 +208,8 @@ Total error is the mean square of the residual, averaged over all points in all 
         ind=0
         k=list(self.parameters.keys())
         k.sort()
-        print ("Optimal values of parameters (error bar for optimized values)")
-        print ("============================")
+        print("%10s   %10s +/- %10s (if it was optimized)"%("Parameter","Value","Error"))
+        print("=============================================")
         for p in k:
             par = self.parameters[p] 
             if par.min_flag:
@@ -240,20 +240,26 @@ Total error is the mean square of the residual, averaged over all points in all 
         return completions
         
     def do_parameters(self, line):
-        """View and/or change the values of the theory parameters
-           parameters A=0.4 B=0.3
+        """View and switch the minimization state of the theory parameters
+           parameters A B
            With no arguments, show the current values
         """
         if (line==""):
-            for p in self.parameters.keys():
-                print("%s=%g"%(self.parameters[p].name,self.parameters[p].value))
+            plist = list(self.parameters.keys())
+            plist.sort()
+            print("%10s   %10s (with * = is optimized)"%("Parameter","Value"))
+            print("=============================================")
+            for p in plist:
+                if self.parameters[p].min_flag: 
+                    print("*%9s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
+                else: 
+                    print("%10s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
         else:
             for s in line.split():
-                par=s.split("=")
-                if (par[0] in self.parameters):
-                    self.parameters[par[0]].value=float(par[1])
+                if (s in self.parameters):
+                    self.parameters[s].min_flag=not self.parameters[s].min_flag
                 else:
-                    print("Parameter %s not found"%par[0])
+                    print("Parameter %s not found"%s)
 
     def complete_parameters(self, text, line, begidx, endidx):
         parameter_names=list(self.parameters.keys())
@@ -270,30 +276,30 @@ Total error is the mean square of the residual, averaged over all points in all 
     def change_xmin(self, dx, dy):
         self.xmin+=dx                
         self.xminline.set_data([self.xmin,self.xmin],[0,1])
-        self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+        self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
 
     def change_xmax(self, dx, dy):
         self.xmax+=dx                
         self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
-        self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+        self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
 
     def change_ymin(self, dx, dy):
         self.ymin+=dy     
         self.yminline.set_data([0, 1], [self.ymin, self.ymin])           
-        self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
+        self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
 
     def change_ymax(self, dx, dy):
         self.ymax+=dy     
         self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])           
-        self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
+        self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
 
-    def do_xspan(self, line):
+    def do_xrange(self, line):
         """Set/show xrange for fit and shows limits
-           xspan  : switches ON/OFF the horizontal span
-           xspan xmin xmax : Sets the limits of the span
+           xrange  : switches ON/OFF the horizontal span
+           xrange xmin xmax : Sets the limits of the span
         """
         if (line==""):
-            self.xspan.set_visible(not self.xspan.get_visible()) 
+            self.xrange.set_visible(not self.xrange.get_visible()) 
             self.xminline.set_visible(not self.xminline.get_visible()) 
             self.xmaxline.set_visible(not self.xmaxline.get_visible()) 
             print("Xmin=%g Xmax=%g"%(self.xmin,self.xmax))
@@ -306,20 +312,20 @@ Total error is the mean square of the residual, averaged over all points in all 
                 self.xmax=float(items[1])
                 self.xminline.set_data([self.xmin,self.xmin],[0,1])
                 self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
-                self.xspan.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
-                if (not self.xspan.get_visible()):
-                    self.xspan.set_visible(True) 
+                self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+                if (not self.xrange.get_visible()):
+                    self.xrange.set_visible(True) 
                     self.xminline.set_visible(True) 
                     self.xmaxline.set_visible(True) 
         self.do_plot(line)
             
-    def do_yspan(self, line):
+    def do_yrange(self, line):
         """Set/show yrange for fit and shows limits
-           yspan  : switches ON/OFF the vertical span
-           yspan ymin ymax : Sets the limits of the span
+           yrange  : switches ON/OFF the vertical span
+           yrange ymin ymax : Sets the limits of the span
         """
         if (line==""):
-            self.yspan.set_visible(not self.yspan.get_visible()) 
+            self.yrange.set_visible(not self.yrange.get_visible()) 
             self.yminline.set_visible(not self.yminline.get_visible()) 
             self.ymaxline.set_visible(not self.ymaxline.get_visible()) 
             print("Ymin=%g Ymax=%g"%(self.ymin,self.ymax))
@@ -332,9 +338,9 @@ Total error is the mean square of the residual, averaged over all points in all 
                 self.ymax=float(items[1])
                 self.yminline.set_data([0, 1], [self.ymin, self.ymin])
                 self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
-                self.yspan.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
-                if (not self.yspan.get_visible()):
-                    self.yspan.set_visible(True) 
+                self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
+                if (not self.yrange.get_visible()):
+                    self.yrange.set_visible(True) 
                     self.yminline.set_visible(True) 
                     self.ymaxline.set_visible(True) 
         self.do_plot(line)
@@ -368,7 +374,8 @@ Total error is the mean square of the residual, averaged over all points in all 
 
     def default(self, line):       
         """Called on an input line when the command prefix is not recognized.
-           In that case we execute the line as Python code.
+           Check if there is an = sign in the line. If so, it is a parameter change.
+           Else, we execute the line as Python code.
         """
         if "=" in line:
             par=line.split("=")
