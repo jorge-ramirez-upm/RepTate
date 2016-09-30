@@ -16,7 +16,7 @@ class ApplicationMWD(Application):
         self.current_view=self.views["W(M)"]
 
         # FILES
-        ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", 0, -1, ['M','W(logM)'], [0], ['Mw','Mn','PDI'], [])
+        ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], ['Mw','Mn','PDI'], ['kDa', '-'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES

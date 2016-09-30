@@ -14,7 +14,7 @@ class ApplicationReact(Application):
         self.current_view=self.views["W(M)"]
 
         # FILES
-        ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", 0, -1, ['M','W(logM)', 'g', 'br/1000C'], [0], [], [])
+        ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], [], [])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES

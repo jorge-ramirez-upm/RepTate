@@ -15,7 +15,7 @@ class ApplicationGt(Application):
         self.current_view=self.views["G(t)"]
 
         # FILES
-        ftype=TXTColumnFile("G(t) files", "gt", "Relaxation modulus", 0, 2, ['t','Gt'], [0], ['Mw','ncontri'], [])
+        ftype=TXTColumnFile("G(t) files", "gt", "Relaxation modulus", ['t','Gt'], ['Mw','ncontri'], ['s', 'Pa'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES

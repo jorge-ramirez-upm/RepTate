@@ -22,7 +22,7 @@ class ApplicationLVE(Application):
         self.current_view=self.views["Log(G',G''(w))"]
 
         # FILES
-        ftype=TXTColumnFile("LVE files", "tts", "LVE files", 0, -1, ['w','G\'','G\'\''], [0, 1, 2], ['Mw','T'], ['rad/s','Pa','Pa'])
+        ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES

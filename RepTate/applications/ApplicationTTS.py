@@ -18,7 +18,7 @@ class ApplicationTTS(Application):
         self.current_view=self.views["Log(G',G''(w))"]
 
         # FILES
-        ftype=TXTColumnFile("Oscillatory shear files", "osc", "Oscillatory Shear Files from rheometer", 0, 2, ['w','G1','G2'], [0], ['Mw','ncontri'], [])
+        ftype=TXTColumnFile("Oscillatory shear files", "osc", "Oscillatory Shear Files from rheometer", ['w','G1','G2'], ['Mw','ncontri'], ['rad/s','Pa','Pa'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES

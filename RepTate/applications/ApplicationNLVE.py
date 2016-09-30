@@ -17,7 +17,7 @@ class ApplicationNLVE(Application):
         self.current_view=self.views["Log(eta(t))"]
 
         # FILES
-        ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", 2, -1, ['t','eta'], [0, 1], ['gdot','T'], ['s','Pa$\cdot$s'])
+        ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
