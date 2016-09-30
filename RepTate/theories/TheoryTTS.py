@@ -47,3 +47,78 @@ class TheoryWLFShift(Theory, CmdBase):
         bT = (rho0 - T * C3 * 1E-3) * (T + 273.15) / ((rho0 - T0 * C3 * 1E-3) * (T0 + 273.15));
         tt.data[:,1] = ft.data[:,1] / bT;
         tt.data[:,2] = ft.data[:,2] / bT;
+
+    def do_error(self, line):
+        """Override the error calculation for TTS. \
+The error is calculated as the vertical distance between theory points, in the current view,\
+calculated over all possible pairs of theory tables, when the theories overlap in the horizontal direction and\
+they correspond to files with the same Mw. 1/2 of the error is added to each file.
+Report the error of the current theory on all the files.\n\
+File error is calculated as the mean square of the residual, averaged over all calculated points in the shifted tables.\n\
+Total error is the mean square of the residual, averaged over all points considered in all files.
+        """
+        total_error=0
+        npoints=0
+        view = self.parent_dataset.parent_application.current_view
+        nfiles=len(self.parent_dataset.files)
+        file_error=np.zeros(nfiles)
+        file_points=np.zeros(nfiles,dtype=np.int)
+        xth=[]
+        yth=[]
+        Mw=[]
+        xmin=np.zeros((nfiles,view.n))
+        xmax=np.zeros((nfiles,view.n))
+        for i in range(nfiles):
+            Filei=self.parent_dataset.files[i]
+            Mwi=Filei.file_parameters["Mw"]
+            xthi, ythi, success = view.view_proc(self.tables[Filei.file_name_short], Filei.file_parameters)
+            xth.append(xthi)
+            yth.append(ythi)
+            Mw.append(Mwi)
+            
+            xmin[i,:]=np.amin(xthi,0)
+            xmax[i,:]=np.amax(xthi,0)
+
+        for i in range(nfiles):
+            for j in range(i+1,nfiles):
+                if (Mw[i] != Mw[j]): continue
+                for k in range(view.n):
+                    condition=(xth[j][:,k]>xmin[i,k])*(xth[j][:,k]<xmax[i,k])
+                    x = np.extract(condition, xth[j][:,k])
+                    y = np.extract(condition, yth[j][:,k])
+                    yinterp=interp(x, xth[i][:,k], yth[i][:,k])
+                    error=np.sum((yinterp-y)**2)
+                    total_error+=error
+                    npoints+=len(y)
+                    file_error[i]+=error/2
+                    file_error[j]+=error/2
+                    file_points[i]+=len(y)/2
+                    file_points[j]+=len(y)/2
+
+        for i in range(nfiles):
+            f=self.parent_dataset.files[i]
+            print("%20s\t%10.5g"%(f.file_name_short,file_error[i]/file_points[i]))
+        print("%20s\t%10.5g"%("TOTAL",total_error/npoints))
+                
+                
+                
+
+        #for f in self.parent_dataset.files:
+        #    xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
+        #    xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+        #    if (self.xrange.get_visible()):
+        #        conditionx=(xexp>self.xmin)*(xexp<self.xmax)
+        #    else:
+        #        conditionx=np.ones_like(xexp, dtype=np.bool)
+        #    if (self.yrange.get_visible()):
+        #        conditiony=(yexp>self.ymin)*(yexp<self.ymax)
+        #    else:
+        #        conditiony=np.ones_like(yexp, dtype=np.bool)
+        #    yexp=np.extract(conditionx*conditiony, yexp)
+        #    yth=np.extract(conditionx*conditiony, yth)
+        #    f_error=np.mean((yth-yexp)**2)
+        #    npt=len(yth)
+        #    total_error+=f_error*npt
+        #    npoints+=npt
+        #    print("%20s\t%10.5g"%(f.file_name_short,f_error))
+        #print("%20s\t%10.5g"%("TOTAL",total_error/npoints))
