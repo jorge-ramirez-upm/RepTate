@@ -2,6 +2,7 @@ from Application import *
 import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesFrequency
 from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
+from TheoryTTS import TheoryWLFShift
 
 class ApplicationLVE(Application):
     """Application to Analyze Linear Viscoelastic Data
@@ -23,11 +24,13 @@ class ApplicationLVE(Application):
 
         # FILES
         ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
+        ftype=TXTColumnFile("OSC files", "osc", "Small-angle oscillatory masurements from the Rheometer", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
         self.theories[TheoryMaxwellModesFrequency.thname]=TheoryMaxwellModesFrequency
         self.theories[TheoryLikhtmanMcLeish2002.thname]=TheoryLikhtmanMcLeish2002
+        self.theories[TheoryWLFShift.thname]=TheoryWLFShift
 
     def viewLogG1G2(self, dt, file_parameters):
         x = np.zeros((dt.num_rows, 2))

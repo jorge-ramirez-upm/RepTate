@@ -76,6 +76,9 @@
     <Compile Include="theories\TheoryTest.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="theories\TheoryTTS.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="visual\QAboutReptate.py" />
     <Compile Include="visual\QApplicationManager.py">
       <SubType>Code</SubType>
