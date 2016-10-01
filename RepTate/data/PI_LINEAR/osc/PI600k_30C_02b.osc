@@ -1,6 +1,6 @@
 Mw=634.5;T=30;chem=PI;origin=LeedsDA;label=PI600k_02_PP10;PDI=1.03;
 #Dummy header line
-#w     G'     G''     Temp     g     
+w     G'     G''     Temp     g     
          46.416       4.1043E5          26037         30.003        0.98927              0
          31.623       4.0452E5          27246         30.001        0.98947              0
          21.544       3.9761E5          29184         29.996        0.98902              0

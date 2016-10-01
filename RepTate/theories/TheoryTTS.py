@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import interp
+from scipy.optimize import minimize
 from Theory import *
 
 class TheoryWLFShift(Theory, CmdBase):
@@ -13,10 +14,10 @@ class TheoryWLFShift(Theory, CmdBase):
         self.function = self.TheoryWLFShift
         self.parameters["C1"]=Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, True)
         self.parameters["C2"]=Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, True)
-        self.parameters["rho0"]=Parameter("rho0", 0.95, "Density of polymer at 0 °C", ParameterType.real, False)
-        self.parameters["C3"]=Parameter("C3", 0.69, "Density parameter TODO: Meaning of this?", ParameterType.real, False)
-        self.parameters["T0"]=Parameter("T0", -50, "Temperature to shift WLF to, in °C", ParameterType.real, False)
-        self.parameters["CTg"]=Parameter("CTg", 13, "Molecular weight dependence of Tg", ParameterType.real, False)
+        self.parameters["rho0"]=Parameter("rho0", 0.928, "Density of polymer at 0 °C", ParameterType.real, False)
+        self.parameters["C3"]=Parameter("C3", 0.61, "Density parameter TODO: Meaning of this?", ParameterType.real, False)
+        self.parameters["T0"]=Parameter("T0", 25, "Temperature to shift WLF to, in °C", ParameterType.real, False)
+        self.parameters["CTg"]=Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, False)
         self.parameters["dx12"]=Parameter("dx12", 0, "For PBd", ParameterType.real, False)
 
     def bT(self, T, T0, rho0, c3):
@@ -72,12 +73,23 @@ Total error is the mean square of the residual, averaged over all points conside
             Filei=self.parent_dataset.files[i]
             Mwi=Filei.file_parameters["Mw"]
             xthi, ythi, success = view.view_proc(self.tables[Filei.file_name_short], Filei.file_parameters)
+            # We need to sort arrays
+            for k in range(view.n):
+                x = xthi[:,k]
+                p = x.argsort()
+                xthi[:,k] = xthi[p,k]
+                ythi[:,k] = ythi[p,k]
             xth.append(xthi)
             yth.append(ythi)
             Mw.append(Mwi)
             
             xmin[i,:]=np.amin(xthi,0)
             xmax[i,:]=np.amax(xthi,0)
+
+        MwUnique={}
+        p = list(set(Mw))
+        for o in p:
+            MwUnique[o]=[0.0, 0]
 
         for i in range(nfiles):
             for j in range(i+1,nfiles):
@@ -88,37 +100,109 @@ Total error is the mean square of the residual, averaged over all points conside
                     y = np.extract(condition, yth[j][:,k])
                     yinterp=interp(x, xth[i][:,k], yth[i][:,k])
                     error=np.sum((yinterp-y)**2)
+                    npt=len(y)
                     total_error+=error
-                    npoints+=len(y)
-                    file_error[i]+=error/2
-                    file_error[j]+=error/2
-                    file_points[i]+=len(y)/2
-                    file_points[j]+=len(y)/2
+                    npoints+=npt
+                    MwUnique[Mw[i]][0]+=error
+                    MwUnique[Mw[i]][1]+=npt
+        
+        if (line==""): 
+            p = list(MwUnique.keys())
+            p.sort()
+            for o in p:
+                if (MwUnique[o][1]>0):
+                    print("%20.5gk\t%10.5g"%(o,MwUnique[o][0]/MwUnique[o][1]))
+                else:
+                    print("%20.5gk\t%10.5g"%(o,1e10))
+        if (npoints>0):
+            total_error/=npoints
+        else:
+            total_error=1e10;
+        if (line==""): print("%20s\t%10.5g"%("TOTAL",total_error))
+        return total_error
+                
+    def func_fitTTS(self, *param_in):
+        ind=0
+        for p in self.parameters.keys():
+            par = self.parameters[p] 
+            if par.min_flag:
+                par.value=param_in[0][ind]
+                ind+=1
+        self.do_calculate("")
+        error=self.do_error("none")
+        return error
 
-        for i in range(nfiles):
-            f=self.parent_dataset.files[i]
-            print("%20s\t%10.5g"%(f.file_name_short,file_error[i]/file_points[i]))
-        print("%20s\t%10.5g"%("TOTAL",total_error/npoints))
-                
-                
-                
+    def do_fit(self, line):
+        """Minimize the error"""
+        self.fitting = True
+        view = self.parent_dataset.parent_application.current_view
 
-        #for f in self.parent_dataset.files:
-        #    xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-        #    xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-        #    if (self.xrange.get_visible()):
-        #        conditionx=(xexp>self.xmin)*(xexp<self.xmax)
-        #    else:
-        #        conditionx=np.ones_like(xexp, dtype=np.bool)
-        #    if (self.yrange.get_visible()):
-        #        conditiony=(yexp>self.ymin)*(yexp<self.ymax)
-        #    else:
-        #        conditiony=np.ones_like(yexp, dtype=np.bool)
-        #    yexp=np.extract(conditionx*conditiony, yexp)
-        #    yth=np.extract(conditionx*conditiony, yth)
-        #    f_error=np.mean((yth-yexp)**2)
-        #    npt=len(yth)
-        #    total_error+=f_error*npt
-        #    npoints+=npt
-        #    print("%20s\t%10.5g"%(f.file_name_short,f_error))
-        #print("%20s\t%10.5g"%("TOTAL",total_error/npoints))
+        # Mount the vector of parameters (Active ones only)
+        initial_guess=[]
+        for p in self.parameters.keys():
+            par = self.parameters[p] 
+            if par.min_flag: 
+                initial_guess.append(par.value)
+
+        res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
+        
+        if (not res['success']):
+            print("Solution not found: ", res['message'])
+            return
+
+        print("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
+
+        ind=0
+        k=list(self.parameters.keys())
+        k.sort()
+        print("%10s   %10s"%("Parameter","Value"))
+        print("===========================")
+        for p in k:
+            par = self.parameters[p] 
+            if par.min_flag:
+                ind+=1
+                print('*%9s = %10.5g'%(par.name, par.value))
+            else:
+                print('%10s = %10.5g'%(par.name, par.value))
+        self.fitting=False
+        self.do_calculate(line)
+
+    def do_print(self, line):
+        """Print the theory table associated with the given file name"""
+        if line in self.tables:
+            print(self.tables[line].data)
+        else:
+            print("Theory table for \"%s\" not found"%line)
+
+    def complete_print(self, text, line, begidx, endidx):
+        file_names=list(self.tables.keys())
+        if not text:
+            completions = file_names[:]
+        else:
+            completions = [ f
+                            for f in file_names
+                            if f.startswith(text)
+                            ]
+        return completions
+        
+    def do_parameters(self, line):
+        """View and switch the minimization state of the theory parameters
+           parameters A B
+           With no arguments, show the current values
+        """
+        if (line==""):
+            plist = list(self.parameters.keys())
+            plist.sort()
+            print("%10s   %10s (with * = is optimized)"%("Parameter","Value"))
+            print("=============================================")
+            for p in plist:
+                if self.parameters[p].min_flag: 
+                    print("*%9s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
+                else: 
+                    print("%10s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
+        else:
+            for s in line.split():
+                if (s in self.parameters):
+                    self.parameters[s].min_flag=not self.parameters[s].min_flag
+                else:
+                    print("Parameter %s not found"%s)
