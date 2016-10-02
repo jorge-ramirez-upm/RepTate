@@ -5,7 +5,7 @@ new LVE
 # Create Dataset
 new
 # Add files to the dataset (oscillatory shear files)
-open data\PI_LINEAR\osc\PI*osc
+open data/PI_LINEAR/osc/PI*osc
 # Plot the files using the default LVE Application view
 plot
 # Create new theory

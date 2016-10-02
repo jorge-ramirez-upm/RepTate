@@ -3,7 +3,7 @@ console batch
 # First create LVE application to fit Maxwell Modes
 new LVE
 new
-open data\DOW\Linear_Rheology_TTS\DOWLDPEL150R_160C.tts
+open data/DOW/Linear_Rheology_TTS\DOWLDPEL150R_160C.tts
 theory_new MaxwellModesFrequency
 nmodes=8
 fit

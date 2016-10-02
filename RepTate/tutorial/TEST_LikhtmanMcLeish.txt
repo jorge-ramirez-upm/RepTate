@@ -5,14 +5,14 @@ new LVE
 # Create Dataset
 new
 # Add files to the dataset (master curve tts files)
-open data\PI_LINEAR\PI_13.5k_T-35.tts
-open data\PI_LINEAR\PI_23.4k_T-35.tts
-open data\PI_LINEAR\PI_33.6k_T-35.tts
-open data\PI_LINEAR\PI_94.9k_T-35.tts
-open data\PI_LINEAR\PI_225.9k_T-35.tts
-open data\PI_LINEAR\PI_483.1k_T-35.tts
-open data\PI_LINEAR\PI_634.5k_T-35.tts
-open data\PI_LINEAR\PI_1131k_T-35.tts
+open data/PI_LINEAR/PI_13.5k_T-35.tts
+open data/PI_LINEAR/PI_23.4k_T-35.tts
+open data/PI_LINEAR/PI_33.6k_T-35.tts
+open data/PI_LINEAR/PI_94.9k_T-35.tts
+open data/PI_LINEAR/PI_225.9k_T-35.tts
+open data/PI_LINEAR/PI_483.1k_T-35.tts
+open data/PI_LINEAR/PI_634.5k_T-35.tts
+open data/PI_LINEAR/PI_1131k_T-35.tts
 # Plot the files using the default LVE Application view
 plot
 # Create new theory
