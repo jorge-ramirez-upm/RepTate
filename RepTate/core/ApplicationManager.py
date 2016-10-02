@@ -4,10 +4,7 @@ import logging.handlers
 import matplotlib.pyplot as plt
 
 from CmdBase import *
-from ApplicationTest import *
-from ApplicationReact import *
 from ApplicationMWD import *
-from ApplicationTTS import *
 from ApplicationLVE import *
 from ApplicationNLVE import *
 from ApplicationGt import *
@@ -15,7 +12,7 @@ from ApplicationGt import *
 class ApplicationManager(CmdBase):
     """Main Reptate container of applications"""
 
-    version = '0.4'
+    version = '0.5'
     prompt = 'reptate> '
     intro = 'Reptate Version %s command processor\nhelp [command] for instructions\nTAB for completions'%version
     
@@ -39,10 +36,7 @@ class ApplicationManager(CmdBase):
         self.application_counter=0
         self.applications={}
         self.available_applications={}
-        self.available_applications[ApplicationTest.name]=ApplicationTest
-        self.available_applications[ApplicationReact.name]=ApplicationReact
         self.available_applications[ApplicationMWD.name]=ApplicationMWD
-        self.available_applications[ApplicationTTS.name]=ApplicationTTS
         self.available_applications[ApplicationLVE.name]=ApplicationLVE
         self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
         self.available_applications[ApplicationGt.name]=ApplicationGt
@@ -208,3 +202,4 @@ class ApplicationManager(CmdBase):
             readline.write_history_file()
             sys.exit()
     do_EOF = do_quit
+    do_up = do_quit

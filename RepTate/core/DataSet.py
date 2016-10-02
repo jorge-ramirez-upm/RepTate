@@ -6,7 +6,6 @@ from Theory import *
 from FileType import *
 from File import *
 from Application import *
-#from DataTable import *
 
 class DataSet(CmdBase):
     """Abstract class to describe a data set"""

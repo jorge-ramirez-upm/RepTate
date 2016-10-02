@@ -50,7 +50,8 @@ class Application(CmdBase):
         #leg=plt.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
         #if leg:
         #    leg.draggable()
-        self.figure.show() 
+        if (CmdBase.mode==CmdMode.cmdline):
+            self.figure.show() 
         #self.figure.draw() # DOESN'T WORK!
         #self.figure.set_visible(True) #??? DOES IT DO ANYTHING?
 

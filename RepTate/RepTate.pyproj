@@ -28,11 +28,6 @@
     <Compile Include="applications\ApplicationLVE.py" />
     <Compile Include="applications\ApplicationMWD.py" />
     <Compile Include="applications\ApplicationNLVE.py" />
-    <Compile Include="applications\ApplicationReact.py" />
-    <Compile Include="applications\ApplicationTest.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="applications\ApplicationTTS.py" />
     <Compile Include="core\Application.py">
       <SubType>Code</SubType>
     </Compile>
@@ -73,9 +68,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="theories\TheoryRoliePoly.py" />
-    <Compile Include="theories\TheoryTest.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="theories\TheoryTTS.py">
       <SubType>Code</SubType>
     </Compile>
