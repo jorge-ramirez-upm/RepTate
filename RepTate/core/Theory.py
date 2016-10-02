@@ -1,4 +1,6 @@
 import enum
+import time
+import getpass
 from scipy.optimize import curve_fit
 from scipy.stats.distributions import t
 
@@ -104,6 +106,8 @@ Total error is the mean square of the residual, averaged over all points in all 
         total_error=0
         npoints=0
         view = self.parent_dataset.parent_application.current_view
+        print("%20s %10s (%10s)"%("File","Error","# Points"))
+        print("=============================================")
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
@@ -121,8 +125,8 @@ Total error is the mean square of the residual, averaged over all points in all 
             npt=len(yth)
             total_error+=f_error*npt
             npoints+=npt
-            print("%20s\t%10.5g"%(f.file_name_short,f_error))
-        print("%20s\t%10.5g"%("TOTAL",total_error/npoints))
+            print("%20s %10.5g (%10d)"%(f.file_name_short,f_error,npt))
+        print("%20s %10.5g (%10d)"%("TOTAL",total_error/npoints,npoints))
 
     def func_fit(self, x, *param_in):
         ind=0
@@ -271,6 +275,40 @@ Total error is the mean square of the residual, averaged over all points in all 
                             if f.startswith(text)
                             ]
         return completions
+
+# SAVE THEORY STUFF
+    def do_save(self, line):
+        """Save the results from all theory predictions to file"""
+        print('Saving prediction of '+self.thname+' theory')
+        for f in self.parent_dataset.files:
+            fparam=f.file_parameters
+            ttable=self.tables[f.file_name_short]
+            ofilename=os.path.splitext(f.file_full_path)[0]+'_TH'+os.path.splitext(f.file_full_path)[1]
+            print('File: '+f.file_name_short)
+            fout=open(ofilename, 'w')
+            k = list(f.file_parameters.keys())
+            k.sort()
+            for i in k:            
+                fout.write(i + "=" + str(f.file_parameters[i])+ ";")
+            fout.write('\n')
+            fout.write('# Prediction of '+self.thname+' Theory\n')
+            fout.write('# ')
+            k = list(self.parameters.keys())
+            k.sort()
+            for i in k:
+                fout.write(i + '=' + str(self.parameters[i].value) + '; ')
+            fout.write('\n')
+            fout.write('# Date: '+ time.strftime("%Y-%m-%d %H:%M:%S") + ' - User: ' + getpass.getuser() + '\n')
+            k = f.file_type.col_names
+            for i in k: 
+                fout.write(i+'\t')
+            fout.write('\n')
+            for i in range(ttable.num_rows):
+                for j in range(ttable.num_columns):
+                    fout.write(str(ttable.data[i, j])+'\t')
+                fout.write('\n')
+            fout.close()
+
 
 # SPAN STUFF
     def change_xmin(self, dx, dy):

@@ -24,6 +24,7 @@ class ApplicationLVE(Application):
 
         # FILES
         ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
+        self.filetypes[ftype.extension]=ftype
         ftype=TXTColumnFile("OSC files", "osc", "Small-angle oscillatory masurements from the Rheometer", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
         self.filetypes[ftype.extension]=ftype
 

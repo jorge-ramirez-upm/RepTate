@@ -107,18 +107,20 @@ Total error is the mean square of the residual, averaged over all points conside
                     MwUnique[Mw[i]][1]+=npt
         
         if (line==""): 
+            print("%20s %10s (%10s)"%("Mw","Error","# Points"))
+            print("=============================================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1]>0):
-                    print("%20.5gk\t%10.5g"%(o,MwUnique[o][0]/MwUnique[o][1]))
+                    print("%20.5gk %10.5g (%10d)"%(o,MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
                 else:
-                    print("%20.5gk\t%10.5g"%(o,1e10))
+                    print("%20.5gk %10s (%10d)"%(o,"-",0))
         if (npoints>0):
             total_error/=npoints
         else:
             total_error=1e10;
-        if (line==""): print("%20s\t%10.5g"%("TOTAL",total_error))
+        if (line==""): print("%21s %10.5g (%10d)"%("TOTAL",total_error,npoints))
         return total_error
                 
     def func_fitTTS(self, *param_in):
@@ -185,24 +187,50 @@ Total error is the mean square of the residual, averaged over all points conside
                             ]
         return completions
         
-    def do_parameters(self, line):
-        """View and switch the minimization state of the theory parameters
-           parameters A B
-           With no arguments, show the current values
-        """
-        if (line==""):
-            plist = list(self.parameters.keys())
-            plist.sort()
-            print("%10s   %10s (with * = is optimized)"%("Parameter","Value"))
-            print("=============================================")
-            for p in plist:
-                if self.parameters[p].min_flag: 
-                    print("*%9s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
-                else: 
-                    print("%10s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
-        else:
-            for s in line.split():
-                if (s in self.parameters):
-                    self.parameters[s].min_flag=not self.parameters[s].min_flag
-                else:
-                    print("Parameter %s not found"%s)
+    def do_save(self, line):
+        """Save the results from WLFShift theory predictions to a TTS file"""
+        print('Saving prediction of '+self.thname+' theory')
+        Mw=[]
+        for f in self.parent_dataset.files:
+            Mwi=f.file_parameters["Mw"]
+            Mw.append(Mwi)            
+        MwUnique = list(set(Mw))
+        MwUnique.sort()
+
+        for m in MwUnique:
+            data=np.zeros(0)
+            fparam={}
+            for f in self.parent_dataset.files:
+                if (f.file_parameters["Mw"]==m):
+                    ttable=self.tables[f.file_name_short]
+                    data = np.append(data, ttable.data)
+                    data=np.reshape(data, (-1, ttable.num_columns))
+                    fparam.update(f.file_parameters)
+            data.sort(0)
+            fparam["T"]=self.parameters["T0"].value
+
+            ofilename=os.path.dirname(self.parent_dataset.files[0].file_full_path)+os.sep+fparam["chem"]+'_'+str(fparam["Mw"])+'k'+'_'+str(fparam["T"])+'.tts'
+            print('File: '+ofilename)
+            fout=open(ofilename, 'w')
+            k = list(f.file_parameters.keys())
+            k.sort()
+            for i in k:            
+                fout.write(i + "=" + str(f.file_parameters[i])+ ";")
+            fout.write('\n')
+            fout.write('# Master curve predicted with '+self.thname+' Theory\n')
+            fout.write('# ')
+            k = list(self.parameters.keys())
+            k.sort()
+            for i in k:
+                fout.write(i + '=' + str(self.parameters[i].value) + '; ')
+            fout.write('\n')
+            fout.write('# Date: '+ time.strftime("%Y-%m-%d %H:%M:%S") + ' - User: ' + getpass.getuser() + '\n')
+            k = f.file_type.col_names
+            for i in k: 
+                fout.write(i+'\t')
+            fout.write('\n')
+            for i in range(data.shape[0]):
+                for j in range(data.shape[1]):
+                    fout.write(str(data[i, j])+'\t')
+                fout.write('\n')
+            fout.close()
