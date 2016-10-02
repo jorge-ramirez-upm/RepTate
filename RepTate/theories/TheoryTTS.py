@@ -206,7 +206,7 @@ Total error is the mean square of the residual, averaged over all points conside
                     data = np.append(data, ttable.data)
                     data=np.reshape(data, (-1, ttable.num_columns))
                     fparam.update(f.file_parameters)
-            data.sort(0)
+            data=data[data[:, 0].argsort()]
             fparam["T"]=self.parameters["T0"].value
 
             ofilename=os.path.dirname(self.parent_dataset.files[0].file_full_path)+os.sep+fparam["chem"]+'_'+str(fparam["Mw"])+'k'+'_'+str(fparam["T"])+'.tts'
