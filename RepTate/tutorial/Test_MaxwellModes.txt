@@ -11,9 +11,9 @@ plot
 # Create new theory
 theory_new MaxwellModesFrequency
 # Set the xrange for the fitting (wrt the current view)
-xrange -8 -2
+xrange -8 -3
 #Change the number of Maxwell modes
-nmodes=6
+nmodes=5
 # Fit the theory to the data files (in this case, shift according to WLF)
 fit
 # Save theory predictions
