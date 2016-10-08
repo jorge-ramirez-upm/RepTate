@@ -1,4 +1,3 @@
-from 
 from PyQt4.QtCore import *
 from PyQt4.uic import loadUiType
 from PyQt4.QtGui import *
