@@ -8,6 +8,7 @@ sys.path.append('theories')
 sys.path.append('visual')
 from ApplicationManager import *
 from QApplicationManager import *
+from PyQt5.QtWidgets import QApplication
 
 def start_RepTate(argv):
     GUI=False

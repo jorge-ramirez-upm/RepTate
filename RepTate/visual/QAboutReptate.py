@@ -1,5 +1,5 @@
-from PyQt4.QtGui import *
-from PyQt4.uic import loadUiType
+from PyQt5.QtGui import *
+from PyQt5.uic import loadUiType
 
 Ui_AboutReptateWindow, QDialog = loadUiType('gui/AboutDialog.ui')
 
