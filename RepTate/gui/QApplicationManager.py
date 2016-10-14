@@ -1,3 +1,4 @@
+import os
 from PyQt5.QtCore import *
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import *
@@ -6,7 +7,8 @@ from PyQt5.QtWidgets import QApplication
 from ApplicationManager import *
 from QAboutReptate import *
 
-Ui_MainWindow, QMainWindow = loadUiType('gui/ReptateMainWindow.ui')          
+path = os.path.dirname(os.path.abspath(__file__))
+Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path,'ReptateMainWindow.ui'))
 
 class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
     """ Main Reptate window and application manager"""    
