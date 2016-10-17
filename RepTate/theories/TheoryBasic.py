@@ -2,7 +2,10 @@ from Theory import *
 import numpy as np
 
 class TheoryPolynomial(Theory, CmdBase):
-    """Fit a polynomial of degree n to the data"""
+    """
+    Fit a polynomial of degree n to the data
+    :math:`ax^2 + bx + c`   
+    """
     thname="Polynomial"
     description="Fit a polynomial of degree n"
 
@@ -25,6 +28,16 @@ class TheoryPolynomial(Theory, CmdBase):
                     del self.parameters["A%d"%i]
 
     def polynomial(self, f=None):
+        """
+        Actual polynomial function.
+        
+        .. math:: 
+        
+            (a + b)^2  &=  (a + b)(a + b) \\
+              &=  a^2 + 2ab + b^2
+        
+        """
+        
         ft=f.data_table
         tt=self.tables[f.file_name_short]
         tt.num_columns=ft.num_columns
