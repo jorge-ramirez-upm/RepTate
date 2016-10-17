@@ -77,7 +77,10 @@ class ApplicationManager(CmdBase):
             self.application_counter+=1
             newapp=self.available_applications[name](name+str(self.application_counter), self)
             self.applications[newapp.name]=newapp
-            newapp.prompt = self.prompt[:-2]+'/'+newapp.name+'> '
+            if (self.mode==CmdMode.batch):
+                newapp.prompt = ''
+            else:
+                newapp.prompt = self.prompt[:-2]+'/'+newapp.name+'> '
             newapp.cmdloop()
 
         else:

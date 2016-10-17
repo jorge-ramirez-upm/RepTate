@@ -19,5 +19,7 @@ class DataTable(object):
             self.series.append(ss[0])
 
     def __str__(self):
-        """TODO: Refine this. It doesn't work"""
+        """
+        .. todo:: Refine this. It doesn't work
+        """
         return self.data

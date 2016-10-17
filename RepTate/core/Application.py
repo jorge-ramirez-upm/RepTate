@@ -60,10 +60,13 @@ class Application(CmdBase):
         print("Please, return to the RepTate prompt and delete de application")
 
     def do_new(self, line):
-        """Create a new empty dataset in this application.
-        Arguments: [NAME [, Description]]
-                NAME: of the new dataset (optional)
-                DESCRIPTION: of the dataset (optional)"""
+        """
+        Create a new empty dataset in this application.
+
+        :param str line: [NAME [, Description]]
+        :param str NAME: Name of the new dataset (optional)
+        :param str DESCRIPTION: Description of the dataset (optional)
+        """
         self.num_datasets+=1
         if (line==""):
             dsname="DataSet%02d"%self.num_datasets
@@ -77,7 +80,10 @@ class Application(CmdBase):
                 dsdescription=""
         ds = DataSet(dsname, dsdescription, self)
         self.datasets[dsname]=ds
-        ds.prompt = self.prompt[:-2]+'/'+ds.name+'> '
+        if (self.mode==CmdMode.batch):
+            ds.prompt = ''
+        else:
+            ds.prompt = self.prompt[:-2]+'/'+ds.name+'> '
         ds.cmdloop()
  
     def do_delete(self, name):
@@ -169,7 +175,7 @@ class Application(CmdBase):
             print("%s:\t%s"%(t.thname,t.description))
 
 # LEGEND STUFF
-    def do_legend_switch(self, line):
+    def do_legend(self, line):
         self.legend_visible = not self.legend_visible 
         self.set_legend_properties()
         self.figure.canvas.draw()

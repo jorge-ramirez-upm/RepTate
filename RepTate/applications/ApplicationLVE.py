@@ -5,8 +5,10 @@ from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
 from TheoryTTS import TheoryWLFShift
 
 class ApplicationLVE(Application):
-    """Application to Analyze Linear Viscoelastic Data
-       TODO: DO WE NEED A SEPARATE APPLICATION FROM TTS???
+    """
+    Application to Analyze Linear Viscoelastic Data
+    
+    .. todo:: DO WE NEED A SEPARATE APPLICATION FROM TTS???
     """
     name="LVE"
     description="Linear Viscoelasticity"

@@ -2,8 +2,10 @@ from Application import *
 #from TheoryMaxwellModes import TheoryMaxwellModesTime
 
 class ApplicationMWD(Application):
-    """Application to analyze Molecular Weight distributions
-       TODO: IS IT NECESSARY TO KEEP TWO SEPARATE APPLICATIONS FOR REACT AND FOR MWD???
+    """
+    Application to analyze Molecular Weight distributions
+    
+    .. todo:: IS IT NECESSARY TO KEEP TWO SEPARATE APPLICATIONS FOR REACT AND FOR MWD???
     """
     name="MWD"
     description="Experimental Molecular weight distributions"

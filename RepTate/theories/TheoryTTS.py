@@ -4,10 +4,15 @@ from scipy.optimize import minimize
 from Theory import *
 
 class TheoryWLFShift(Theory, CmdBase):
-    """Basic theory for Time-Temperature Superposition, based on the WLF equation"""
+    """
+    Basic theory for Time-Temperature Superposition, based on the WLF equation
+    
+    .. todo:: Cite Dietmar Auhl paper?
+    .. todo:: Meaning of C3 parameter
+    """
     thname="WLFShift"
     description="Basic theory for Time-Temperature Superposition, based on the WLF equation"
-    cite="TODO: Cite Dietmar Auhl paper?"
+    cite=""
 
     def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
         super(TheoryWLFShift, self).__init__(name, parent_dataset, ax)
@@ -15,7 +20,7 @@ class TheoryWLFShift(Theory, CmdBase):
         self.parameters["C1"]=Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, True)
         self.parameters["C2"]=Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, True)
         self.parameters["rho0"]=Parameter("rho0", 0.928, "Density of polymer at 0 °C", ParameterType.real, False)
-        self.parameters["C3"]=Parameter("C3", 0.61, "Density parameter TODO: Meaning of this?", ParameterType.real, False)
+        self.parameters["C3"]=Parameter("C3", 0.61, "Density parameter", ParameterType.real, False)
         self.parameters["T0"]=Parameter("T0", 25, "Temperature to shift WLF to, in °C", ParameterType.real, False)
         self.parameters["CTg"]=Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, False)
         self.parameters["dx12"]=Parameter("dx12", 0, "For PBd", ParameterType.real, False)
