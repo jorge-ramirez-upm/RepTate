@@ -1,6 +1,0 @@
-digraph "packages_test" {
-charset="utf-8"
-rankdir=BT
-"0" [label="c:\Users\Jorge\OneDrive\Codes\Python\RepTate\RepTate\RepTate.py", shape="box"];
-"1" [label="c:\Users\Jorge\OneDrive\Codes\Python\RepTate\RepTate\core\ApplicationManager.py", shape="box"];
-}
