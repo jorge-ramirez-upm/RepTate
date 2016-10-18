@@ -14,6 +14,7 @@ More info:
 
 .. _UPM: http://blogs.upm.es/compsoftmatter/
 
+.. image:: RepTate/docs/source/images/FourWindowsReptate.png?raw=true
 
 COMPLEX TABLE:
 
