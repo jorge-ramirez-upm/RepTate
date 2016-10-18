@@ -59,10 +59,14 @@ class Parameter(object):
         self.max_value= par2.max_value
         
     def __str__(self):
-        """TODO: Refine this."""
+        """
+        .. todo:: Refine this.
+        """
         return "%s=%g"%(self.name,self.value)
 
     def __repr__(self):
-        """TODO: Refine this."""
+        """
+        .. todo:: Refine this.
+        """
         return "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%s,%s,%g,%g)"%(self.name,self.value,self.description, self.type, self.min_flag,\
                 self.min_factor, self.min_shift_type, self.bracketed, self.min_value, self.max_value)

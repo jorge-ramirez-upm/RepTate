@@ -12,8 +12,7 @@ Contents:
    :maxdepth: 2
 
    tutorial
-   code
-
+   developers
 
 Indices and tables
 ==================

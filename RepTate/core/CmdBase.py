@@ -84,8 +84,10 @@ class CmdBase(cmd.Cmd):
         return result
 
     def do_ls(self, line):
-        """List contents of current folder
-           TODO: CONSIDER SUBFOLDERS TOO
+        """
+        List contents of current folder
+        
+        .. todo:: CONSIDER SUBFOLDERS TOO
         """
         dirs=os.listdir()
         for d in dirs:
@@ -144,3 +146,7 @@ class CmdBase(cmd.Cmd):
             CmdBase.mode=CmdMode[line]
         else:
             print ("Console mode %s not valid"%line)
+
+        if (self.mode==CmdMode.batch):
+            self.prompt = ''
+            

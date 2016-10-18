@@ -81,10 +81,12 @@ class Theory(CmdBase):
         self.do_cite("")
             
     def precmd(self, line):
-        """ This method is called after the line has been input but before
-            it has been interpreted. If you want to modifdy the input line
-            before execution (for example, variable substitution) do it here.
-            TODO: Substitute parameter values if symbol {param} is used
+        """ 
+        This method is called after the line has been input but before
+        it has been interpreted. If you want to modifdy the input line
+        before execution (for example, variable substitution) do it here.
+        
+        .. todo:: Substitute parameter values if symbol {param} is used
         """
         super(Theory,self).precmd(line)
         return line

@@ -1,3 +1,0 @@
-pyreadline
-matplotlib
-seaborn

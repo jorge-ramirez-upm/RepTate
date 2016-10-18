@@ -55,14 +55,12 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
             self.set_param_value("G%d"%i,G[i])
 
     def sigmadotshear(self, sigma, t, p):
-        """Rolie-Poly differential equation under shear flow
+        """
+        Rolie-Poly differential equation under shear flow
     
-        Arguments:
-            sigma: vector of state variables (only xx and xy components are relevant)
-                    sigma = [sxx, sxy]
-            t : time
-            p : vector of the parameters:
-                    p = [tauD, tauR, beta, delta, gammadot]
+        :param vector sigma: vector of state variables (only xx and xy components are relevant), sigma = [sxx, sxy]
+        :param float t: time
+        :param vector p: vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """ 
         sxx, sxy = sigma
         tauD, tauR, beta, delta, gammadot = p

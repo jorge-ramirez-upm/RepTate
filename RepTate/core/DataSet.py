@@ -64,7 +64,11 @@ class DataSet(CmdBase):
                     file.data_table.series[i].set_markersize(12)
                     file.data_table.series[i].set_linestyle('')
                     if (file.active and i==0):
-                        file.data_table.series[i].set_label(file.file_name_short)
+                        label=""
+                        for pmt in file.file_type.basic_file_parameters:
+                            label+=pmt+'='+str(file.file_parameters[pmt])+' ';
+                        #file.data_table.series[i].set_label(file.file_name_short)
+                        file.data_table.series[i].set_label(label)
                     else:
                         file.data_table.series[i].set_label('')
                 else:
@@ -92,7 +96,8 @@ class DataSet(CmdBase):
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter
            sort Mw [,reverse]
-           
+
+           .. todo:: sort series in plot too
            """
         items=line.split(',')
         if (len(items)==0):
@@ -102,7 +107,7 @@ class DataSet(CmdBase):
             rev=False
         elif (len(items)==2):
             fp=items[0]
-            rev=(items[1]=="reverse")
+            rev=(items[1].strip()=="reverse")
         else:
             print("Wrong number of arguments")
 
@@ -164,10 +169,12 @@ class DataSet(CmdBase):
             print(f)            
 
     def do_new(self, line):
-        """Add an empty file of the given type to the current Data Set
-        Arguments: TYPE [, NAME]
-                TYPE: extension of file
-                NAME: Name (optional)
+        """
+        Add an empty file of the given type to the current Data Set
+
+        :param str line: Arguments: TYPE [, NAME]
+        :param str TYPE: extension of file
+        :param str NAME: Name (optional)
         """
         if (line==""): 
             print("Missing file type")
@@ -210,9 +217,12 @@ class DataSet(CmdBase):
         return completions
 
     def do_open(self, line):
-        """Open file(s) from the current folder
-           Arguments: FILENAMES (pattern expansion characters -- *, ? -- allowed
-           TODO: ALLOW OPENING FILES INSIDE SUBFOLDERS
+        """
+        Open file(s) from the current folder
+
+        :param str line: FILENAMES (pattern expansion characters -- \*, ? -- allowed
+
+        .. todo:: ALLOW OPENING FILES INSIDE SUBFOLDERS
         """
         f_names = glob.glob(line)
         if (line=="" or len(f_names)==0): 
@@ -264,10 +274,12 @@ class DataSet(CmdBase):
         return [path + ' ']
 
     def complete_open(self, text, line, begidx, endidx):
-        """Complete the file_open command
-           TODO: ALLOW COMPLETING FILES INSIDE SUBFOLDERS
-           TODO: IF NO DATASET, CREATE EMPTY ONE
-           TODO: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION
+        """
+        Complete the file_open command
+
+        .. todo:: ALLOW COMPLETING FILES INSIDE SUBFOLDERS
+        .. todo:: IF NO DATASET, CREATE EMPTY ONE
+        .. todo:: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION
         """
         "Completions for the cd command."
         test=line.split()
@@ -304,8 +316,11 @@ class DataSet(CmdBase):
     complete_switch = complete_delete
 
     def do_print(self, line):
-        """Show the contents of the current file on the screen
-           TODO: Change it so the file name can be selected"""
+        """
+        Show the contents of the current file on the screen
+        
+        .. todo:: Change it so the file name can be selected
+        """
         file = self.current_file
         print("Path: %s"%file.file_full_path)
         print(file.file_parameters)
@@ -345,7 +360,10 @@ class DataSet(CmdBase):
             
             th=self.parent_application.theories[line]("%s%02d"%(line,self.num_theories), self, self.parent_application.ax)
             self.theories[th.name]=th
-            th.prompt = self.prompt[:-2]+'/'+th.name+'> '
+            if (self.mode==CmdMode.batch):
+                th.prompt = ''
+            else:
+                th.prompt = self.prompt[:-2]+'/'+th.name+'> '
             th.do_calculate("")
             th.cmdloop()
         else:
@@ -376,3 +394,5 @@ class DataSet(CmdBase):
         completions = self.complete_theory_delete(text, line, begidx, endidx)
         return completions
 
+    def do_legend(self, line):
+        self.parent_application.do_legend(line)

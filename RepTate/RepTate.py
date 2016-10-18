@@ -11,6 +11,11 @@ from QApplicationManager import *
 from PyQt5.QtWidgets import QApplication
 
 def start_RepTate(argv):
+    """
+    Main RepTate application. 
+    
+    :param list argv: Command line parameters passed to Reptate
+    """
     GUI=False
     try:
         opts, args = getopt.getopt(argv,"hg")
