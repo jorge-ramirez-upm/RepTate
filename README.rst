@@ -6,11 +6,11 @@ RepTate with a dual user interface: text and GUI.
 
 More info: 
 
-- Documentation at Readthedocs_.
+- Documentation at Readthedocs.
 
 .. http://reptate.readthedocs.io/en/latest/index.html
 
-- Author's blog at UPM_.
+- Author's blog at UPM.
 
 .. http://blogs.upm.es/compsoftmatter/
 
