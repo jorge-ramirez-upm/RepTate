@@ -14,7 +14,7 @@ More info:
 
 .. _UPM: http://blogs.upm.es/compsoftmatter/
 
-.. image:: RepTate/docs/source/images/FourWindowsReptate.png?raw=true
+.. image:: RepTate/docs/source/images/FourWindowsReptate.png
     :width: 400pt
     :align: center
 
