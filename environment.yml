@@ -1,7 +1,4 @@
-name: root
-channels: !!python/tuple
-- glotzer
-- defaults
+name: py35
 dependencies:
 - alabaster=0.7.9=py35_0
 - babel=2.3.4=py35_0
@@ -55,5 +52,4 @@ dependencies:
 - pip:
   - ruamel-yaml-==VERSION
   - sphinx-rtd-theme==0.1.9
-prefix: C:\Miniconda3
 
