@@ -4,8 +4,6 @@ dependencies:
 - babel=2.3.4=py35_0
 - click=6.6=py35_0
 - colorama=0.3.7=py35_0
-- conda=4.2.9=py35_0
-- conda-env=2.6.0=0
 - cycler=0.10.0=py35_0
 - docutils=0.12=py35_2
 - imagesize=0.7.1=py35_0
