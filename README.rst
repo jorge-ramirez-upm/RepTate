@@ -1,6 +1,20 @@
-$project
-# RepTate
-RepTate with a dual user interface: text and GUI
+==========================================================================================
+RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment
+==========================================================================================
+
+RepTate with a dual user interface: text and GUI.
+
+More info: 
+
+- Documentation at ReadTheDocs_.
+
+.. _ReadTheDocs: http://reptate.readthedocs.io/en/latest/index.html
+
+- Author's blog at UPM_.
+
+.. _UPM: http://blogs.upm.es/compsoftmatter/
+
+
 COMPLEX TABLE:
 
 +------------+------------+-----------+
@@ -14,3 +28,4 @@ COMPLEX TABLE:
 +------------+ span rows. | - contain |
 | body row 4 |            | - blocks. |
 +------------+------------+-----------+
+
