@@ -3,6 +3,9 @@ import logging
 #from Table import *
 from File import *
 from DataTable import *
+#get info on the current OS
+from sys import platform
+
 
 class TXTColumnFile(object):
 	
@@ -101,7 +104,11 @@ class TXTColumnFile(object):
                 
     def read_file(self, filename, parent_dataset, ax):
         file=File(filename, self, parent_dataset, ax)
-        f = open(filename, "r")
+        #specify encoding to avoid crash [due to e.g. °C] on OS X or macOS
+        if platform == "darwin":
+            f = open(filename, "r", encoding="latin-1") 
+        else:
+            f = open(filename, "r")
         lines=f.readlines()
         
         self.get_parameters(lines[0], file)
