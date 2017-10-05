@@ -4,6 +4,9 @@
 #Mac dot files
 .DS_Store
 
+#VS Code dot folder
+.vscode/
+
 # User-specific files
 *.suo
 *.user
@@ -274,3 +277,4 @@ __pycache__/
 /RepTate/data/PI_LINEAR/osc/PI_1131.0k_-35.0.tts
 /RepTate/data/PI_LINEAR/osc/PI_1.9k_25.0.tts
 /RepTate/data/PI_LINEAR/osc/PI_1.9k_-35.0.tts
+
