@@ -9,6 +9,8 @@ from DataTable import *
 from Parameter import *
 from DraggableArtists import *
 
+from tabulate import tabulate
+
 class Theory(CmdBase):
     """Abstract class to describe a theory
             thname            (str): Theory name
@@ -385,7 +387,26 @@ Total error is the mean square of the residual, averaged over all points in all 
                     self.ymaxline.set_visible(True) 
         self.do_plot(line)
 
+
 # MODES STUFF
+    def copy_modes(self):
+        apmng=self.parent_dataset.parent_application.parent_manager
+        L=apmng.list_theories_Maxwell()
+        print("Found %d theories that provide modes"%len(L))
+        for i, k in enumerate(L.keys()):
+            print("%d: %s"%(i,k))
+            print(tabulate([L[k][0][0],L[k][0][1]],tablefmt="grid"))
+            print("")
+        opt=int(input("Select theory (number between 0 and %d> "%(len(L)-1)))
+        if (opt<0 or opt>=len(L)):
+            print("Invalid option!")
+        else:
+            tt=L[list(L.keys())[opt]][0]
+            self.set_modes(tt[0],tt[1])
+    
+    def do_copy_modes(self, line):
+        self.copy_modes()
+    
     def get_modes(self):
         tau=np.ones(1)
         G=np.ones(1)

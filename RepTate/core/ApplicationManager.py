@@ -8,6 +8,7 @@ from ApplicationMWD import *
 from ApplicationLVE import *
 from ApplicationNLVE import *
 from ApplicationGt import *
+#from ApplicationFRS_I import *
 
 class ApplicationManager(CmdBase):
     """Main Reptate container of applications"""
@@ -30,7 +31,12 @@ class ApplicationManager(CmdBase):
         #MainWindow.reptatelogger.addHandler(handler)
 
         # SETUP READLINE, COMMAND HISTORY FILE, ETC
-        readline.read_history_file()
+        try:
+            readline.read_history_file()
+        except Exception as e:
+            print (e.__class__, ":", e)
+            print ("History file not found. Creating a new one")
+            
 
         # SETUP APPLICATIONS
         self.application_counter=0
@@ -40,20 +46,31 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationLVE.name]=ApplicationLVE
         self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
         self.available_applications[ApplicationGt.name]=ApplicationGt
+        #self.available_applications[ApplicationFRS_I.name]=ApplicationFRS_I
 
 # APPLICATION STUFF
+    def available(self):
+        """Return list of available applications"""
+        L= ["%s: %s"%(app.name,app.description) for app in list(self.available_applications.values())]
+        return L
+        
     def do_available(self, line):
         """List available applications"""
-        for app in list(self.available_applications.values()):
-            print("%s: %s"%(app.name,app.description))
+        L=self.available()
+        for app in L: 
+            print(app)
 
-    def do_delete(self, name):
+    def delete(self, name):
         """Delete an open application"""
         if name in self.applications.keys():
             del self.applications[name]
         else:
-            print("Application \"%s\" not found"%name)            
-
+            print("Application \"%s\" not found"%name)                   
+            
+    def do_delete(self, name):
+        """Delete an open application"""
+        self.delete(name)
+        
     def complete_delete(self, text, line, begidx, endidx):
         """Complete delete application command"""
         app_names=list(self.applications.keys())
@@ -66,25 +83,38 @@ class ApplicationManager(CmdBase):
                             ]
         return completions
 
+    def list(self):
+        """List open applications"""
+        L= ["%s: %s"%(app.name,app.description) for app in self.applications.values()]
+        return L        
+        
     def do_list(self, line):
         """List open applications"""
-        for app in self.applications.values():
-            print("%s: %s"%(app.name,app.description))
+        L=self.list()
+        for app in L: 
+            print(app)
 
-    def do_new(self, name):
-        """ Create new application"""
+    def new(self, name):
+        """Create new application"""
         if (name in self.available_applications):
             self.application_counter+=1
             newapp=self.available_applications[name](name+str(self.application_counter), self)
             self.applications[newapp.name]=newapp
+            return newapp
+        else:
+            print("Application \"%s\" is not available"%name)
+            return None   
+               
+    def do_new(self, name):
+        """Create new application"""
+        newapp=self.new(name)
+        if (newapp!=None):
             if (self.mode==CmdMode.batch):
                 newapp.prompt = ''
             else:
                 newapp.prompt = self.prompt[:-2]+'/'+newapp.name+'> '
             newapp.cmdloop()
-
-        else:
-            print("Application \"%s\" is not available"%name)            
+                    
     
     def complete_new(self, text, line, begidx, endidx):
         """Complete new application command"""
@@ -111,60 +141,27 @@ class ApplicationManager(CmdBase):
         return completions        
     
 # MAXWELL MODES COPY
-    def do_copymodes(self, line):
-        """Copy maxwell modes from one theory to another.
-           Both theories may live inside different applications and/or datasets
-           copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj"""
-        apps=line.split()
-        if len(apps)<2:
-            print("Not enough parameters passed")
-            return                        
-        appA=apps[0].split('.')
-        app1=appA[0]
-        if app1 in self.applications.keys():
-            app1=self.applications[app1]
-        else:
-            print("Application %s not found"%app1)
-            return
-        dataset1=appA[1]
-        if dataset1 in app1.datasets.keys():
-            dataset1=app1.datasets[dataset1]
-        else:
-            print("Dataset %s not found"%dataset1)
-            return
-        theory1=appA[2]
-        if theory1 in dataset1.theories.keys():
-            theory1 = dataset1.theories[theory1]
-        else:
-            print("Theory %s not found"%theory1)
-            return
-        if not theory1.has_modes:
-            print("Theory %s does not have modes"%theory1.name)
-            return
-        appB=apps[1].split('.')
-        app2=appB[0]
-        if app2 in self.applications.keys():
-            app2=self.applications[app2]
-        else:
-            print("Application %s not found"%app2)
-            return
-        dataset2=appB[1]
-        if dataset2 in app2.datasets.keys():
-            dataset2=app2.datasets[dataset2]
-        else:
-            print("Dataset %s not found"%dataset2)
-            return
-        theory2=appB[2]
-        if theory2 in dataset2.theories.keys():
-            theory2 = dataset2.theories[theory2]
-        else:
-            print("Theory %s not found"%theory2)
-            return
-        if not theory2.has_modes:
-            print("Theory %s does not have modes"%theory2.name)
-            return
-        tau, G = theory1.get_modes()
-        theory2.set_modes(tau, G)
+    def list_theories_Maxwell(self):
+        """List the theories in the current RepTate instance that provide
+        Maxwell modes"""
+        L={}
+        for appname in self.applications.keys():
+            app=self.applications[appname]
+            for dsname in app.datasets.keys():
+                ds=app.datasets[dsname]
+                print ("%s %s"%(app.name, ds.name))
+                for thname in ds.theories.keys():
+                    th=ds.theories[thname]
+                    if th.has_modes:
+                        L["%s.%s.%s"%(app.name, ds.name, th.name)]=[th.get_modes()]
+        return L
+                        
+    def do_list_theories_Maxwell(self, line):
+        """List the theories in the current RepTate instance that provide
+        Maxwell modes"""
+        L=self.list_theories_Maxwell()
+        print(L)
+                        
 
 # OTHER STUFF
     def help_tutorial(self):
@@ -182,19 +179,6 @@ class ApplicationManager(CmdBase):
 
         print("\n##OPEN APPLICATIONS")
         self.do_list(line)
-
-        #print("\n##CURRENT APPLICATION:")
-        #print("-->FILE TYPES AVAILABLE:")
-        #self.do_filetype_available(line)
-
-        #print("-->VIEWS AVAILABLE (*=current):")
-        #self.do_view_available(line)
-
-        #print("-->THEORIES AVAILABLE:")
-        #self.do_theory_available(line)
-
-        #print("\n##DATA SETS IN CURRENT APPLICATION:")
-        #self.do_dataset_list(line)
 
     def do_quit(self, args):
         """Exit from the application"""

@@ -6,6 +6,7 @@ from Theory import *
 from FileType import *
 from File import *
 from Application import *
+from tabulate import tabulate
 
 class DataSet(CmdBase):
     """Abstract class to describe a data set"""
@@ -326,6 +327,7 @@ class DataSet(CmdBase):
         print(file.file_parameters)
         print(file.header_lines)
         print(file.data_table.data)
+        print(tabulate(file.data_table.data, tablefmt="grid", floatfmt=".4g", headers=file.data_table.column_names))
 
 # THEORY STUFF ##########################################################################################################
     def do_theory_delete(self, name):

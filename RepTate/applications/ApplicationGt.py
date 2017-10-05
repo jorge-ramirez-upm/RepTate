@@ -1,4 +1,4 @@
-from Application import *
+from Application import Application
 from TheoryMaxwellModes import TheoryMaxwellModesTime
 
 class ApplicationGt(Application):

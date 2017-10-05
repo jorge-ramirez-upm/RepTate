@@ -35,6 +35,8 @@ class Application(CmdBase):
         # Theories available everywhere
         self.theories[TheoryPolynomial.thname]=TheoryPolynomial
         self.theories[TheoryPowerLaw.thname]=TheoryPowerLaw
+        self.theories[TheoryExponential.thname]=TheoryExponential
+        self.theories[TheoryExponential2.thname]=TheoryExponential2
             
         # MATPLOTLIB STUFF
         sns.set_style("white")
@@ -59,14 +61,8 @@ class Application(CmdBase):
         print("\nApplication window %s has been closed\n"%self.name)
         print("Please, return to the RepTate prompt and delete de application")
 
-    def do_new(self, line):
-        """
-        Create a new empty dataset in this application.
-
-        :param str line: [NAME [, Description]]
-        :param str NAME: Name of the new dataset (optional)
-        :param str DESCRIPTION: Description of the dataset (optional)
-        """
+    def new(self, line):
+        """Create new empty dataset in the application"""
         self.num_datasets+=1
         if (line==""):
             dsname="DataSet%02d"%self.num_datasets
@@ -79,6 +75,17 @@ class Application(CmdBase):
             else:
                 dsdescription=""
         ds = DataSet(dsname, dsdescription, self)
+        return ds, dsname
+    
+    def do_new(self, line):
+        """
+        Create a new empty dataset in this application.
+
+        :param str line: [NAME [, Description]]
+        :param str NAME: Name of the new dataset (optional)
+        :param str DESCRIPTION: Description of the dataset (optional)
+        """
+        ds, dsname = self.new(line)
         self.datasets[dsname]=ds
         if (self.mode==CmdMode.batch):
             ds.prompt = ''
@@ -86,12 +93,17 @@ class Application(CmdBase):
             ds.prompt = self.prompt[:-2]+'/'+ds.name+'> '
         ds.cmdloop()
  
-    def do_delete(self, name):
+    def delete(self, name):
         """Delete a dataset from the current application"""
         if name in self.datasets.keys():
             del self.datasets[name]
         else:
             print("Data Set \"%s\" not found"%name)            
+        
+ 
+    def do_delete(self, name):
+        """Delete a dataset from the current application"""
+        self.delete(name)
 
     def complete_delete(self, text, line, begidx, endidx):
         """Complete delete dataset command"""
@@ -105,10 +117,15 @@ class Application(CmdBase):
                             ]
         return completions
 
-    def do_list(self, line):
+    def list(self):
         """List the datasets in the current application"""
         for ds in self.datasets.values():
             print("%s:\t%s"%(ds.name, ds.description))            
+        
+        
+    def do_list(self, line):
+        """List the datasets in the current application"""
+        self.list()
         
     def do_switch(self, name):
         """ Switch the current dataset"""
@@ -132,29 +149,40 @@ class Application(CmdBase):
         return completions
 
 # FILE TYPE STUFF
-    def do_filetype_available(self, line):
+    def filetype_available(self):
         """List available file types in the current application"""
         ftypes=list(self.filetypes.values())
         for ftype in ftypes:
-            print("%s:\t%s\t*.%s"%(ftype.name,ftype.description,ftype.extension))
+            print("%s:\t%s\t*.%s"%(ftype.name,ftype.description,ftype.extension))    
 
+    def do_filetype_available(self, line):
+        """List available file types in the current application"""
+        self.filetype_available()
+        
 # VIEW STUFF
-    def do_view_available(self, line):
+    def view_available(self):
         """List available views in the current application"""
         for view in self.views.values():
             if (view==self.current_view):
                 print("*%s:\t%s"%(view.name,view.description))
             else:
                 print("%s:\t%s"%(view.name,view.description))
-
-    def do_view_switch(self, name):
+    
+    def do_view_available(self, line):
+        """List available views in the current application"""
+        self.view_available()
+        
+    def view_switch(self, name):
         """Change to another view from open application"""
-        done=False
         if name in list(self.views.keys()):
             self.current_view=self.views[name]
         else:
-            print("View \"%s\" not found"%name)                        
-
+            print("View \"%s\" not found"%name)                            
+        
+    def do_view_switch(self, name):
+        """Change to another view from open application"""
+        self.view_switch(name)
+        
     def complete_view_switch(self, text, line, begidx, endidx):
         """Complete switch view command"""
         view_names=list(self.views.keys())
@@ -169,17 +197,24 @@ class Application(CmdBase):
 
 
 # THEORY STUFF
-    def do_theory_available(self, line):
+    def theory_available(self):
         """List available theories in the current application"""
         for t in list(self.theories.values()):
-            print("%s:\t%s"%(t.thname,t.description))
-
+            print("%s:\t%s"%(t.thname,t.description))    
+    
+    def do_theory_available(self, line):
+        """List available theories in the current application"""
+        self.theory_available()
+        
 # LEGEND STUFF
-    def do_legend(self, line):
+    def legend(self):
         self.legend_visible = not self.legend_visible 
         self.set_legend_properties()
         self.figure.canvas.draw()
 
+    def do_legend(self, line):
+        self.legend()
+    
 # OTHER STUFF
     def update_plot(self):
         self.set_axes_properties()

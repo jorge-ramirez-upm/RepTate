@@ -9,6 +9,8 @@ sys.path.append('visual')
 from ApplicationManager import *
 from QApplicationManager import *
 from PyQt5.QtWidgets import QApplication
+from SplashScreen import *
+from time import time, sleep
 
 def start_RepTate(argv):
     """
@@ -31,7 +33,19 @@ def start_RepTate(argv):
 
     if GUI:
         app = QApplication(sys.argv)
+        start = time() 
+        splash = SplashScreen()
+        splash.show()
+        while time() - start < 2:
+            sleep(0.001)
+            if (time()-start < 1):
+                splash.showMessage("Loading Reptate...")
+            else:
+                splash.showMessage("Final touches...")
+            app.processEvents()
+
         ex = QApplicationManager()
+        splash.finish(ex)
         ex.showMaximized()
         sys.exit(app.exec_())
     else:
