@@ -67,7 +67,10 @@ class DataSet(CmdBase):
                     if (file.active and i==0):
                         label=""
                         for pmt in file.file_type.basic_file_parameters:
-                            label+=pmt+'='+str(file.file_parameters[pmt])+' ';
+                            try:
+                                label+=pmt+'='+str(file.file_parameters[pmt])+' ';
+                            except KeyError as e: #if parameter missing from data file
+                                print("Parameter %s not found in data file"%(e))
                         #file.data_table.series[i].set_label(file.file_name_short)
                         file.data_table.series[i].set_label(label)
                     else:
