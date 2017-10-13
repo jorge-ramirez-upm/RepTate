@@ -361,6 +361,10 @@ class DataSet(CmdBase):
         """Add a new theory of the type specified to the current Data Set"""
         thtypes=list(self.parent_application.theories.keys())
         if (line in thtypes):
+            if (self.current_file is None):
+                print("Current dataset is empty\n"
+                    "%s was not created"%line)
+                return
             self.num_theories+=1
             
             th=self.parent_application.theories[line]("%s%02d"%(line,self.num_theories), self, self.parent_application.ax)
