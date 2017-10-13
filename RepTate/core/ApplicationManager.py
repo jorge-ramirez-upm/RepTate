@@ -141,26 +141,64 @@ class ApplicationManager(CmdBase):
         return completions        
     
 # MAXWELL MODES COPY
+    def do_copymodes(self, line):
+        """Copy maxwell modes from one theory to another.
+           Both theories may live inside different applications and/or datasets
+           copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj"""
+        apps = line.split()
+        if len(apps)<2:
+            print('Not enough parameters passed\n'
+            "Use 'copymodes App1.Dataset1.Theory1 App2.Dataset2.Theory2'\n"
+            "See 'list_theories_Maxwell' for a list of availiable theories")
+            return                        
+        
+        source = str(apps[0])
+        target = str(apps[1])
+        if (not len(source.split('.'))==3):
+            print("Source format should be: 'App1.Dataset1.Theory1'\n"
+                "See 'list_theories_Maxwell' for a list of availiable theories")
+            return
+        if (not len(target.split('.'))==3):
+            print("Target format should be: 'App2.Dataset2.Theory2'\n"
+                "See 'list_theories_Maxwell' for a list of availiable theories")
+            return
+
+        get_dict, set_dict = self.list_theories_Maxwell()
+        dict_keys = list(get_dict.keys()) #get_dict and set_dict have the same keys
+        if ((source in dict_keys) and (target in dict_keys)):
+            tau, G = get_dict[source]()
+            set_dict[target](tau, G)
+            print('Copied modes from %s to %s'%(source, target))
+            return
+        else:
+            print("Source or Target not found\n"
+                "or theory does not have modes.\n"
+                "No copy has been made")
+            return
+
+
     def list_theories_Maxwell(self):
         """List the theories in the current RepTate instance that provide
         Maxwell modes"""
-        L={}
+        get_dict={}
+        set_dict={}
         for appname in self.applications.keys():
             app=self.applications[appname]
             for dsname in app.datasets.keys():
                 ds=app.datasets[dsname]
-                print ("%s %s"%(app.name, ds.name))
+                #print ("%s %s"%(app.name, ds.name))
                 for thname in ds.theories.keys():
                     th=ds.theories[thname]
                     if th.has_modes:
-                        L["%s.%s.%s"%(app.name, ds.name, th.name)]=[th.get_modes()]
-        return L
+                        get_dict["%s.%s.%s"%(app.name, ds.name, th.name)] = th.get_modes
+                        set_dict["%s.%s.%s"%(app.name, ds.name, th.name)] = th.set_modes
+        return get_dict, set_dict
                         
     def do_list_theories_Maxwell(self, line):
         """List the theories in the current RepTate instance that provide
         Maxwell modes"""
-        L=self.list_theories_Maxwell()
-        print(L)
+        L, S =self.list_theories_Maxwell()
+        print(list(L.keys()))
                         
 
 # OTHER STUFF
