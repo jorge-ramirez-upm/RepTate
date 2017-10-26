@@ -69,7 +69,6 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         trace_sigma = sxx + 2*syy
         aux1 = 2*(1-np.sqrt(3/trace_sigma))/tauR
         aux2 = beta*(trace_sigma/3)**delta
-        print(sigma, aux1, aux2, p)
         return [2*gammadot*sxy - (sxx-1)/tauD - aux1*(sxx + aux2*(sxx-1)), -1.0*(syy-1)/tauD - aux1*(syy + aux2*(syy-1)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
 
         
