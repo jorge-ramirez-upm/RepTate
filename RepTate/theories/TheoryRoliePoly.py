@@ -19,9 +19,9 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         self.parameters["lmax"]=Parameter("lmax", 10.0, "Maximum extensibility", ParameterType.real, False)
         self.parameters["nmodes"]=Parameter("nmodes", 2, "Number of modes", ParameterType.integer, False)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False)
-            self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False)
-            self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True)
+            self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False, min_value=0)
+            self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False, min_value=0)
+            self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True, min_value=0)
 
     def set_param_value(self, name, value):
         if (name=="nmodes"):
@@ -29,9 +29,9 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         super(TheoryRoliePoly, self).set_param_value(name, value)
         if (name=="nmodes"):
             for i in range(self.parameters["nmodes"].value):
-                self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False)
-                self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False)
-                self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True)
+                self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False, min_value=0)
+                self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False, min_value=0)
+                self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True, min_value=0)
             if (oldn>self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value,oldn):
                     del self.parameters["G%d"%i]

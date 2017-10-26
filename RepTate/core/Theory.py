@@ -183,26 +183,34 @@ Total error is the mean square of the residual, averaged over all points in all 
                 y = np.append(y, ycond)      
 
         # Mount the vector of parameters (Active ones only)
-        initial_guess=[]
+        initial_guess = []
+        param_min = []
+        param_max = []
         for p in self.parameters.keys():
             par = self.parameters[p] 
             if par.min_flag: 
                 initial_guess.append(par.value)
+                param_min.append(par.min_value) #list of min values for fitting parameters
+                param_max.append(par.max_value) #list of max values for fitting parameters
 
         opt = dict(return_full=True)
         try:
-            pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1) 
+            #pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1) 
+            pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, method='trf', bounds=(param_min, param_max))
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
         except RuntimeError as e:
             print(e)
             return
-        if (ier<1 or ier>4):
-            print("Solution not found: ", errmsg)
-            return
 
-        fiterror = np.mean((infodict['fvec'])**2)
-        funcev = infodict['nfev']
-        print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
+        residuals = y - self.func_fit(x, *initial_guess)
+        fres0 = sum(residuals**2)
+        residuals = y - self.func_fit(x, *pars)
+        fres1 = sum(residuals**2)
+        print('Initial Error = %g --> Final Error = %g'%(fres0, fres1))
+
+        # fiterror = np.mean((infodict['fvec'])**2)
+        # funcev = infodict['nfev']
+        # print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
 
         alpha = 0.05 # 95% confidence interval = 100*(1-alpha)
         n = len(y)    # number of data points
