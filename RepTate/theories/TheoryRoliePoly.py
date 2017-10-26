@@ -58,18 +58,19 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         """
         Rolie-Poly differential equation under shear flow
     
-        :param vector sigma: vector of state variables (only xx and xy components are relevant), sigma = [sxx, sxy]
+        :param vector sigma: vector of state variables, sigma = [sxx, syy, sxy]
         :param float t: time
         :param vector p: vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """ 
-        sxx, sxy = sigma
+        sxx, syy, sxy = sigma
         tauD, tauR, beta, delta, gammadot = p
     
         # Create the vector with the time derivative of sigma
-        trace_sigma = sxx + 2
+        trace_sigma = sxx + 2*syy
         aux1 = 2*(1-np.sqrt(3/trace_sigma))/tauR
         aux2 = beta*(trace_sigma/3)**delta
-        return [2*gammadot*sxy-(sxx-1)/tauD-aux1*(sxx+aux2*(sxx-1)), gammadot*1-sxy/tauD-aux1*(sxy+aux2*sxy)]
+        print(sigma, aux1, aux2, p)
+        return [2*gammadot*sxy - (sxx-1)/tauD - aux1*(sxx + aux2*(sxx-1)), -1.0*(syy-1)/tauD - aux1*(syy + aux2*(syy-1)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
 
         
     def RoliePoly(self, f=None):
@@ -85,16 +86,19 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         relerr = 1.0e-6
         t = ft.data[:,0]
         t = np.concatenate([[0],t])
-        sigma0=[1, 0]
-        beta=self.parameters["beta"].value
-        delta=self.parameters["delta"].value
-        gammadot=float(f.file_parameters["gdot"])
-        nmodes=self.parameters["nmodes"].value
+        sigma0 = [1.0, 1.0, 0.0] # sxx, syy, sxy 
+        beta = self.parameters["beta"].value
+        delta = self.parameters["delta"].value
+        gammadot = float(f.file_parameters["gdot"])
+        nmodes = self.parameters["nmodes"].value
         for i in range(nmodes):
-            tauD=self.parameters["tauD%d"%i].value
-            tauR=self.parameters["tauR%d"%i].value
+            tauD = self.parameters["tauD%d"%i].value
+            tauR = self.parameters["tauR%d"%i].value
             p = [tauD, tauR, beta, delta, gammadot]
             sig = odeint(self.sigmadotshear, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
-            tt.data[:,1]+=self.parameters["G%d"%i].value*np.delete(sig[:,1],[0])
+            tt.data[:,1] += self.parameters["G%d"%i].value*np.delete(sig[:,2],[0]) #return sxy
+        
+        # return viscosity to agree with input data file (t, eta)
+        tt.data[:,1] = tt.data[:,1]/gammadot
        
        

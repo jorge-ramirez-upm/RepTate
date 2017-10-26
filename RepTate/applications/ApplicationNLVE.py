@@ -27,12 +27,12 @@ class ApplicationNLVE(Application):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[: ,0] = np.log10(dt.data[:, 1]/float(file_parameters["gdot"]))
+        y[: ,0] = np.log10(dt.data[:, 1]) #exp data files contain eta, so does Rolie-Poly
         return x, y, True
 
     def viewLogSigma(self, dt, file_parameters):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = np.log10(dt.data[:, 0]*float(file_parameters["gdot"]))
-        y[: ,0] = np.log10(dt.data[:, 1])
+        x[:, 0] = np.log10(dt.data[:, 0]*float(file_parameters["gdot"])) #compute strain
+        y[: ,0] = np.log10(dt.data[:, 1]*float(file_parameters["gdot"])) #compute stress
         return x, y, True

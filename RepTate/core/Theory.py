@@ -190,8 +190,12 @@ Total error is the mean square of the residual, averaged over all points in all 
                 initial_guess.append(par.value)
 
         opt = dict(return_full=True)
-        pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1)
-
+        try:
+            pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1) 
+            #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
+        except RuntimeError as e:
+            print(e)
+            return
         if (ier<1 or ier>4):
             print("Solution not found: ", errmsg)
             return
