@@ -51,7 +51,11 @@ class DataSet(CmdBase):
 
         view = self.parent_application.current_view
         for file in self.files:
-            x, y, success = view.view_proc(file.data_table, file.file_parameters)
+            try:
+                x, y, success = view.view_proc(file.data_table, file.file_parameters)
+            except TypeError as e:
+                print(e)
+                return
             marker=next(markerlst)
             color=next(palette)
             for i in range(file.data_table.MAX_NUM_SERIES):
