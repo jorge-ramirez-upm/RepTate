@@ -27,7 +27,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         #self.actionReact.triggered.connect(self.new_react_window)
         #self.actionMWD.triggered.connect(self.new_mwd_window)
         #self.actionTTS.triggered.connect(self.new_tts_window)
-        #self.actionLVE.triggered.connect(self.new_lve_window)
+        self.actionLVE.triggered.connect(self.new_lve_window)
         #self.actionNLVE.triggered.connect(self.new_nlve_window)
         #self.actionGt.triggered.connect(self.new_gt_window)
         #self.actionCreep.triggered.connect(self.new_creep_window)
@@ -88,3 +88,19 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         #self.Projecttree.removeItemWidget(self.appdict[appname],0)
         
         self.ApplicationtabWidget.removeTab(index)
+
+    def new_lve_window(self):
+        """ Open a new LVE application window"""
+        sub = QApplication(['TESTLVE'])
+        #appname = sub.name
+        appname = 'TESTLVE'
+        #+ '%d'%MainWindow.count
+        #sub.windowTitle=appname
+        
+        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':Images/LVE.ico'), appname)
+        self.ApplicationtabWidget.setCurrentIndex(ind)        
+        
+        #root = QTreeWidgetItem(self.Projecttree, [appname])
+        #root.setIcon(0, QIcon(':Icons/Images/Clip.ico'))
+        #sub.treeEntry = root
+    

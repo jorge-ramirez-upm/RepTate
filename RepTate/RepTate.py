@@ -36,9 +36,9 @@ def start_RepTate(argv):
         start = time() 
         splash = SplashScreen()
         splash.show()
-        while time() - start < 2:
+        while time() - start < 1:
             sleep(0.001)
-            if (time()-start < 1):
+            if (time()-start < 0.5):
                 splash.showMessage("Loading Reptate...")
             else:
                 splash.showMessage("Final touches...")

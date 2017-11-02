@@ -42,7 +42,7 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>400</x>
      <y>430</y>
      <width>191</width>
      <height>21</height>
@@ -50,6 +50,28 @@
    </property>
    <property name="text">
     <string>http://www.reptate.com</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::RichText</enum>
+   </property>
+   <property name="openExternalLinks">
+    <bool>true</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::TextBrowserInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>450</y>
+     <width>341</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>https://github.com/jorge-ramirez-upm/RepTate</string>
    </property>
    <property name="textFormat">
     <enum>Qt::RichText</enum>
