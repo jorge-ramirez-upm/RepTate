@@ -19,6 +19,7 @@ class Theory(CmdBase):
     thname=""
     description=""
     citations=""
+    nfev = 0
 
     def __init__(self, name="Theory", parent_dataset=None, ax=None):
         """Constructor:
@@ -156,6 +157,7 @@ Total error is the mean square of the residual, averaged over all points in all 
                     conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
                 ycond=np.extract(conditionx*conditiony, yth[:,i])
                 y = np.append(y, ycond)
+        self.nfev += 1
         return y
 
     def do_fit(self, line):
@@ -194,6 +196,7 @@ Total error is the mean square of the residual, averaged over all points in all 
                 param_max.append(par.max_value) #list of max values for fitting parameters
 
         opt = dict(return_full=True)
+        self.nfev = 0
         try:
             #pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1) 
             pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, method='trf', bounds=(param_min, param_max))
@@ -206,7 +209,7 @@ Total error is the mean square of the residual, averaged over all points in all 
         fres0 = sum(residuals**2)
         residuals = y - self.func_fit(x, *pars)
         fres1 = sum(residuals**2)
-        print('Initial Error = %g --> Final Error = %g'%(fres0, fres1))
+        print('Initial Error = %g --> Final Error = %g  with %g function evaluation'%(fres0, fres1, self.nfev))
 
         # fiterror = np.mean((infodict['fvec'])**2)
         # funcev = infodict['nfev']

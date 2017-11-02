@@ -1,4 +1,6 @@
 from Application import *
+import numpy as np
+from TheoryDiscrMWD import TheoryDiscrMWD
 #from TheoryMaxwellModes import TheoryMaxwellModesTime
 
 class ApplicationMWD(Application):
@@ -21,12 +23,17 @@ class ApplicationMWD(Application):
 
         # FILES
         ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], ['Mw','Mn','PDI'], ['kDa', '-'])
+        #ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
+        self.theories[TheoryDiscrMWD.thname] = TheoryDiscrMWD
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
-    def viewWM(self, vec, x, y, file_parameters):
-        x[0]=vec[0]
-        y[0]=vec[1]
-        return True
+    def viewWM(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        max_y = np.max(dt.data[:, 1])
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 1]/max_y
+        return x, y, True
