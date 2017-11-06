@@ -26,7 +26,10 @@ Ui_AppWindow, QMainWindow = loadUiType('gui/ApplicationWindow.ui')
 
 class ApplicationWindow(QMainWindow, Ui_AppWindow):
     def __init__(self, ):
+        print("ApplicationWindow.__init__(self, ) called")
         super(ApplicationWindow, self).__init__()
+        print("ApplicationWindow.__init__(self, ) ended")
+
         self.setupUi(self)
 
         self.logger = logging.getLogger('ReptateLogger')

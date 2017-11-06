@@ -19,7 +19,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
     reptatelogger.setLevel(logging.DEBUG)
 
     def __init__(self, parent=None):
+        print("QApplicationManager.__init__(self, parent=None) called")
         super(QApplicationManager, self).__init__(parent)
+        print("QApplicationManager.__init__(self, parent=None) ended")
         self.setupUi(self)
 
         # Hide console and project navigation

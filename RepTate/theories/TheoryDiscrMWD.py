@@ -45,7 +45,7 @@ class TheoryDiscrMWD(Theory, CmdBase):
         self.set_param_value("Mz", Mz)
         self.set_param_value("PDI", PDI)
         print(
-            "\nCharacteristics of the %s MWD:\n"
+            "Characteristics of the %s MWD:\n"
             "Mn=%0.3g kg/mol, Mw=%0.3g kg/mol, Mw/Mn=%0.3g, Mz/Mw=%0.3g\n"
             %(line, Mn/1000, Mw/1000, PDI, Mz/Mw)
             )
@@ -102,10 +102,11 @@ class TheoryDiscrMWD(Theory, CmdBase):
             phi[k] +=  wj*dlogMj/dlogMk #weight x width / bin_width
             nk[k] += 1
 
-        phi = np.choose(nk==0, (phi/nk * np.sum(nk)/nbin, phi))
-        # for k in range (nbin):
-        #     if nk[k]>0: phi[k] = phi[k]/nk[k] * np.sum(nk)/nbin
-        #     else: phi[k] = phi[k]
+        # phi = np.choose(nk==0, (phi/nk * np.sum(nk)/nbin, phi)) #throws a warning
+        sum_nk = np.sum(nk)
+        for k in range (nbin):
+            if nk[k]>0: 
+                phi[k] = phi[k]/nk[k] * sum_nk/nbin
 
         #copy weights and M into theory table
         tt.data[:, 0] = bins
