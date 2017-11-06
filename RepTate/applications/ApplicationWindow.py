@@ -37,7 +37,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         self.figure=0
         self.ax=0
         self.canvas=0
-        self.views=[]
+        #self.views={} # we use 'views' of Application.py
         self.files={}
 
         # Accept Drag and drop events
@@ -138,8 +138,9 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         #print (xaxis)
 
     def Change_View(self):
-        current_view = self.views[self.viewComboBox.currentIndex()]
-      
+        # current_view = self.views[self.viewComboBox.currentIndex()]
+        current_view = list(self.views.values())[self.viewComboBox.currentIndex()] # dict are oredered since Python 3.6 (?)    
+          
         msg = QMessageBox()
         msg.setText(current_view.name)
         msg.exec_()
@@ -161,7 +162,8 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def populateViews(self):
         for i in self.views:
-            self.viewComboBox.addItem(i.name)
+            #self.viewComboBox.addItem(i.name)
+            self.viewComboBox.addItem(self.views[i].name) # dict are oredered since Python 3.6 (?)
 
     def dragEnterEvent(self, e):      
         if e.mimeData().hasUrls():
