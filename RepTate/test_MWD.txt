@@ -1,0 +1,6 @@
+new MWD
+new
+open /Users/mmvahb/Documents/vahb/Repate/RepTate/RepTate/data/PS_Linear_Polydisperse/ps1_header.gpc
+plot
+theory_new MWDiscr
+exit()
