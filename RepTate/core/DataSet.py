@@ -8,6 +8,7 @@ from File import *
 from Application import *
 from tabulate import tabulate
 
+#######GUI
 from PyQt5.QtGui import *
 from PyQt5.uic import loadUiType
 import itertools
@@ -17,14 +18,16 @@ from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QTool
 from DataSetItem import *
 
 Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
+#######GUI
 
-
-class DataSet(QWidget, Ui_DataSet, CmdBase):
+# DataSet inherits of QWidget, Ui_DataSet only if in GUI mode
+class DataSet((QWidget, Ui_DataSet, CmdBase) if CmdBase.mode==CmdMode.GUI else CmdBase): 
     """Abstract class to describe a data set"""
-
     def __init__(self, name="DataSet", description="", parent=None):
         "Constructor"
+        print("DataSet.__init__(self, name='DataSet', description="", parent=None) called")
         super(DataSet, self).__init__() 
+        print("DataSet.__init__(self, name='DataSet', description="", parent=None) ended")
 
         self.name=name
         self.description=description

@@ -20,7 +20,6 @@ class CmdBase(cmd.Cmd):
 
     prompt = '> '
     mode = CmdMode.cmdline
-
     def __init__ (self, parent=None):
         """Constructor """
         print("CmdBase.__init__(self, parent=None) called")

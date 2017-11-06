@@ -17,8 +17,8 @@ class ApplicationLVE(Application, ApplicationWindow):
     def __init__(self, name="LVE", parent = None):
         print("ApplicationLVE.__init__(self) called")
         super(ApplicationLVE, self).__init__(name, parent)
-        #problem with cmd.Cmd that is not using super(): no call to ApplicationWindow __init__  
-        if CmdBase.mode==2: #if GUI mode
+        #problem with cmd.Cmd not using super(): no call to ApplicationWindow.__init__
+        if CmdBase.mode==CmdMode.GUI: #if GUI mode
             ApplicationWindow.__init__(self)
        
         print("ApplicationLVE.__init__(self) ended")
