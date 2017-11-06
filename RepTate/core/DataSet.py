@@ -8,7 +8,18 @@ from File import *
 from Application import *
 from tabulate import tabulate
 
-class DataSet(CmdBase):
+from PyQt5.QtGui import *
+from PyQt5.uic import loadUiType
+import itertools
+import Symbols_rc
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox
+from DataSetItem import *
+
+Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
+
+
+class DataSet(QWidget, Ui_DataSet, CmdBase):
     """Abstract class to describe a data set"""
 
     def __init__(self, name="DataSet", description="", parent=None):

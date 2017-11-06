@@ -22,6 +22,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         print("QApplicationManager.__init__(self, parent=None) called")
         super(QApplicationManager, self).__init__(parent)
         print("QApplicationManager.__init__(self, parent=None) ended")
+        CmdBase.mode = 2 #set GUI mode
         self.setupUi(self)
 
         # Hide console and project navigation

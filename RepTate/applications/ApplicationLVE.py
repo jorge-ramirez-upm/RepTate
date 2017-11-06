@@ -17,6 +17,10 @@ class ApplicationLVE(Application, ApplicationWindow):
     def __init__(self, name="LVE", parent = None):
         print("ApplicationLVE.__init__(self) called")
         super(ApplicationLVE, self).__init__(name, parent)
+        #problem with cmd.Cmd that is not using super(): no call to ApplicationWindow __init__  
+        if CmdBase.mode==2: #if GUI mode
+            ApplicationWindow.__init__(self)
+       
         print("ApplicationLVE.__init__(self) ended")
         # VIEWS
         self.views["Log(G',G''(w))"]=View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
