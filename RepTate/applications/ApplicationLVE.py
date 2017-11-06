@@ -34,6 +34,7 @@ class ApplicationLVE(Application):
         self.theories[TheoryMaxwellModesFrequency.thname]=TheoryMaxwellModesFrequency
         self.theories[TheoryLikhtmanMcLeish2002.thname]=TheoryLikhtmanMcLeish2002
         self.theories[TheoryWLFShift.thname]=TheoryWLFShift
+        #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
 
     def viewLogG1G2(self, dt, file_parameters):
         x = np.zeros((dt.num_rows, 2))
