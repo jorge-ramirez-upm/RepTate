@@ -1,10 +1,11 @@
 from Application import *
+from ApplicationWindow import *
 import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesFrequency
 from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
 from TheoryTTS import TheoryWLFShift
 
-class ApplicationLVE(Application):
+class ApplicationLVE(Application, ApplicationWindow):
     """
     Application to Analyze Linear Viscoelastic Data
     

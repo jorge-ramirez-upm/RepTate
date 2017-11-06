@@ -3,7 +3,10 @@ import numpy as np
 from TheoryDiscrMWD import TheoryDiscrMWD
 #from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-class ApplicationMWD(Application):
+from ApplicationWindow import *
+
+
+class ApplicationMWD(Application, ApplicationWindow):
     """
     Application to analyze Molecular Weight distributions
     

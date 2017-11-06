@@ -7,12 +7,17 @@ from PyQt5.QtWidgets import QApplication
 from ApplicationManager import *
 from QAboutReptate import *
 
+from ApplicationLVE import *
+
 path = os.path.dirname(os.path.abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path,'ReptateMainWindow.ui'))
 
 class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
     """ Main Reptate window and application manager"""    
-    
+    count = 0
+    reptatelogger = logging.getLogger('ReptateLogger')
+    reptatelogger.setLevel(logging.DEBUG)
+
     def __init__(self, parent=None):
         super(QApplicationManager, self).__init__(parent)
         self.setupUi(self)
@@ -20,6 +25,13 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         # Hide console and project navigation
         self.ConsoledockWidget.hide()
         self.ProjectdockWidget.hide()
+
+        # log file
+        log_file_name = 'Qreptate.log'
+        handler = logging.handlers.RotatingFileHandler(
+            log_file_name, maxBytes=20000, backupCount=2)
+        self.reptatelogger.addHandler(handler)
+        
 
         # Connect actions
         # Generate action buttons from dict of available applications
@@ -91,16 +103,27 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
 
     def new_lve_window(self):
         """ Open a new LVE application window"""
-        sub = QApplication(['TESTLVE'])
-        #appname = sub.name
-        appname = 'TESTLVE'
-        #+ '%d'%MainWindow.count
-        #sub.windowTitle=appname
+        self.reptatelogger.debug("NEW LVE Window")
+        self.count = QApplicationManager.count+1
+        sub = ApplicationLVE()
+
+        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), sub.name)
+        self.ApplicationtabWidget.setCurrentIndex(ind)
+
+        root = QTreeWidgetItem(self.Projecttree, [sub.name])
+        root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
+
+        # """ Open a new LVE application window"""
+        # sub = ApplicationLVE()
+        # #appname = sub.name
+        # appname = 'TESTLVE'
+        # #+ '%d'%MainWindow.count
+        # #sub.windowTitle=appname
         
-        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':Images/LVE.ico'), appname)
-        self.ApplicationtabWidget.setCurrentIndex(ind)        
+        # ind = self.ApplicationtabWidget.addTab(sub, QIcon(':Images/LVE.ico'), appname)
+        # self.ApplicationtabWidget.setCurrentIndex(ind)        
         
-        #root = QTreeWidgetItem(self.Projecttree, [appname])
-        #root.setIcon(0, QIcon(':Icons/Images/Clip.ico'))
-        #sub.treeEntry = root
+        # #root = QTreeWidgetItem(self.Projecttree, [appname])
+        # #root.setIcon(0, QIcon(':Icons/Images/Clip.ico'))
+        # #sub.treeEntry = root
     
