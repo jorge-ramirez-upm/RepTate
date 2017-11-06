@@ -38,8 +38,6 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         self.ax=0
         self.canvas=0
         #self.views={} # we use 'views' of Application.py
-        self.files={}
-
         # Accept Drag and drop events
         self.setAcceptDrops(True)
 
@@ -178,11 +176,11 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
             if os.path.isfile(path):
                 split_file=path.split('.')
                 file_ext=split_file[len(split_file)-1]
-                if file_ext in self.files.keys():
+                if file_ext in self.filetypes.keys():
                     if (self.DataSettabWidget.count()==0):
                         self.createNew_Empty_Dataset()
                     # ADD FILE TO CURRENT DATASET
-                    dt = self.files[file_ext].read_file(path)
+                    dt = self.filetypes[file_ext].read_file(path)
                     self.addTableToCurrentDataSet(dt)
                     #msg = QMessageBox()
                     #msg.setText(path)
@@ -300,7 +298,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         #Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind-1)
        
-        dfile=list(self.files.values())[0] 
+        dfile=list(self.filetypes.values())[0] 
         dataset_header=dfile.basic_file_parameters[:]
         dataset_header.insert(0, "File")
         ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))   
@@ -323,10 +321,10 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         for f in filesToOpen:
             split_file=f.split('.')
             file_ext=split_file[len(split_file)-1]
-            if file_ext in self.files.keys():
+            if file_ext in self.filetypes.keys():
                 if (self.DataSettabWidget.count()==0):
                     self.createNew_Empty_Dataset()
-                dt = self.files[file_ext].read_file(f)
+                dt = self.filetypes[file_ext].read_file(f)
                 self.addTableToCurrentDataSet(dt)
                 # file_ext='gt'
                 # dt = self.files[file_ext].read_file(f)
@@ -339,8 +337,8 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         # file browser window  
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self,"Open Data File","data/","All Files (*);;Text files (*.txt)", options=options)
-        return files
+        filetypes, _ = QFileDialog.getOpenFileNames(self,"Open Data File","data/","All Files (*);;Text files (*.txt)", options=options)
+        return filetypes
     # def warningMessageBox(self, message):
     #     msg = QMessageBox.warning(self, "bal", "bil")
     #     self.logger.debug("ouiuoiu")

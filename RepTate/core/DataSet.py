@@ -40,6 +40,40 @@ class DataSet((QWidget, Ui_DataSet, CmdBase) if CmdBase.mode==CmdMode.GUI else C
         self.theories={}
         self.num_theories=0
 
+    # GUI stuff
+        if CmdBase.mode==CmdMode.GUI:
+            print("in DataSet init GUI stuff")
+            self.setupUi(self)
+            self.DataSettreeWidget.setIndentation(0)
+            self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
+            hd=self.DataSettreeWidget.header()
+            hd.setSectionsMovable(False)
+            w=self.DataSettreeWidget.width()
+            w/=hd.count()
+            for i in range(hd.count()):
+                hd.resizeSection(0, w)
+            
+            # Theory Toolbar
+            tb = QToolBar()
+            tb.setIconSize(QSize(24,24))
+            self.numtheories=0
+            self.cbtheory = QComboBox()
+            self.cbtheory.setToolTip("Hello")
+            self.cbtheory.addItem("ThA")
+            self.cbtheory.addItem("ThB")
+            self.cbtheory.addItem("ThC")
+            tb.addWidget(self.cbtheory)
+            tb.addAction(self.actionNew_Theory)
+            tb.addAction(self.actionCalculate_Theory)
+            tb.addAction(self.actionMinimize_Error)
+            tb.addAction(self.actionTheory_Options)
+            self.TheoryLayout.insertWidget(0, tb)
+
+            connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
+            connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_item_changed)
+        # End GUI stuff
+
+
 # DATASET STUFF ##########################################################################################################
     def do_list(self, line):
         """List the files in the current dataset"""
