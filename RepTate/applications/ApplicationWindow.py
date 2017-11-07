@@ -25,7 +25,7 @@ except AttributeError:
 Ui_AppWindow, QMainWindow = loadUiType('gui/ApplicationWindow.ui')
 
 class ApplicationWindow(QMainWindow, Ui_AppWindow):
-    def __init__(self):
+    def __init__(self, parent=None):
         print("ApplicationWindow.__init__(self) called")
         super(ApplicationWindow, self).__init__()
         print("ApplicationWindow.__init__(self) ended")
@@ -34,6 +34,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
 
         self.logger = logging.getLogger('ReptateLogger')
         self.name='Application Template'
+        self.parent_application = parent
         self.figure=0
         self.ax=0
         self.canvas=0
@@ -190,13 +191,16 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         ds=self.DataSettabWidget.currentWidget()
         lnew = list(dt.file_parameters.values())
         lnew.insert(0, dt.file_name_short)
+        lnew = [format(x) for x in lnew]
+        print("lnew: ", lnew)
+        print("ds.DataSettreeWidget: ", ds.DataSettreeWidget)
         newitem = DataSetItem(ds.DataSettreeWidget, lnew, )
         newitem.setCheckState(0, 2)
         #root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
         # x=np.arange(100)
         # y=np.cumsum(np.random.randn(100))
-        x = dt.data[:,0]
-        y = dt.data[:,1]
+        x = dt.data_table.data[:,0]
+        y = dt.data_table.data[:,1]
         # self.logger.debug(x)
         # self.logger.debug(y)
 
@@ -293,7 +297,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
     def createNew_Empty_Dataset(self):
         # Add New empty tab to DataSettabWidget
         ind=self.DataSettabWidget.count()+1
-        ds = DataSet()
+        ds = DataSet(parent=self)
         self.DataSettabWidget.addTab(ds, 'DataSet'+'%d'%ind)
         #Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind-1)
@@ -314,17 +318,19 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
     # VB: browse and select file to open
     def openDataset(self):
         self.logger.debug("in openDataset")
-        filesToOpen= self.openFileNamesDialog()
-        if not filesToOpen:
+        paths_to_open = self.openFileNamesDialog()
+        if not paths_to_open:
             return
-        self.logger.debug(filesToOpen)
-        for f in filesToOpen:
-            split_file=f.split('.')
-            file_ext=split_file[len(split_file)-1]
+        self.logger.debug(paths_to_open)
+        for path in paths_to_open:
+            split_file = path.split('.')
+            file_ext = split_file[len(split_file)-1]
             if file_ext in self.filetypes.keys():
                 if (self.DataSettabWidget.count()==0):
                     self.createNew_Empty_Dataset()
-                dt = self.filetypes[file_ext].read_file(f)
+                dt = self.filetypes[file_ext].read_file(path, self, self.ax)
+                #self.files.append(df)
+                self.current_file = dt
                 self.addTableToCurrentDataSet(dt)
                 # file_ext='gt'
                 # dt = self.files[file_ext].read_file(f)
