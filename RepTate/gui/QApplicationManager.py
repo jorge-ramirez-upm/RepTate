@@ -43,7 +43,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         self.actionMWD.triggered.connect(self.new_mwd_window)
         #self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
-        #self.actionNLVE.triggered.connect(self.new_nlve_window)
+        self.actionNLVE.triggered.connect(self.new_nlve_window)
         #self.actionGt.triggered.connect(self.new_gt_window)
         #self.actionCreep.triggered.connect(self.new_creep_window)
         #self.actionSANS.triggered.connect(self.new_sans_window)
@@ -106,10 +106,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
 
     def new_lve_window(self):
         """ Open a new LVE application window"""
-        self.reptatelogger.debug("NEW LVE Window")
         self.count = self.count + 1
-        appname = 'LVE' + str(self.count)
-        sub = ApplicationLVE(appname, self)
+        sub = ApplicationLVE(parent=self)
+        appname = sub.name + str(self.count)
         sub.windowTitle = appname
         ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), appname)
         self.ApplicationtabWidget.setCurrentIndex(ind)
@@ -119,17 +118,30 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
 
 
     def new_mwd_window(self):
-        """ Open a new LVE application window"""
-        self.reptatelogger.debug("NEW MWD Window")
+        """ Open a new MWD application window"""
+        app_id = 'MWD'
         self.count = self.count + 1
-        appname = 'MWD' + str(self.count)
-        sub = ApplicationMWD(appname, self)
+        sub = ApplicationMWD(parent=self)
+        appname = sub.name + str(self.count)
         sub.windowTitle = appname
-        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), appname)
+        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/MWD.ico'), appname)
         self.ApplicationtabWidget.setCurrentIndex(ind)
 
         root = QTreeWidgetItem(self.Projecttree, [appname])
-        root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
+        root.setIcon(0, QIcon(':/Icons/Images/MWD.ico'))
+
+    def new_nlve_window(self):
+        """ Open a new NLVE application window"""
+        app_id = 'NLVE'
+        self.count = self.count + 1
+        sub = ApplicationNLVE(parent=self)
+        appname = sub.name + str(self.count)
+        sub.windowTitle = appname
+        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/NLVE.ico'), appname)
+        self.ApplicationtabWidget.setCurrentIndex(ind)
+
+        root = QTreeWidgetItem(self.Projecttree, [appname])
+        root.setIcon(0, QIcon(':/Icons/Images/NLVE.ico'))
 
         # """ Open a new LVE application window"""
         # sub = ApplicationLVE()

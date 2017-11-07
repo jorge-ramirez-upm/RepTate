@@ -177,15 +177,15 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
             if os.path.isfile(path):
                 split_file=path.split('.')
                 file_ext=split_file[len(split_file)-1]
-                if file_ext in self.parent_application.filetypes.keys():
+                if file_ext in self.filetypes.keys():
                     if (self.DataSettabWidget.count()==0):
                         self.createNew_Empty_Dataset()
                     # ADD FILE TO CURRENT DATASET
-                    dt = self.parent_application.filetypes[file_ext].read_file(path)
+                    dt = self.filetypes[file_ext].read_file(path, self, self.ax)
                     self.addTableToCurrentDataSet(dt)
-                    #msg = QMessageBox()
-                    #msg.setText(path)
-                    #msg.exec_()
+                else:
+                    QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
+
 
     def addTableToCurrentDataSet(self, dt):
         ds=self.DataSettabWidget.currentWidget()
@@ -322,10 +322,10 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         for path in paths_to_open:
             split_file = path.split('.')
             file_ext = split_file[len(split_file)-1]
-            if file_ext in self.parent_application.filetypes.keys():
+            if file_ext in self.filetypes.keys():
                 if (self.DataSettabWidget.count()==0):
                     self.createNew_Empty_Dataset()
-                dt = self.parent_application.filetypes[file_ext].read_file(path, self, self.ax)
+                dt = self.filetypes[file_ext].read_file(path, self, self.ax)
                 #self.files.append(df)
                 self.current_file = dt
                 self.addTableToCurrentDataSet(dt)
@@ -335,7 +335,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
                 # self.addTableToCurrentDataSet(dt)
             else:
                 #QMessageBox.about(self, "Title", "Message")
-                QMessageBox.warning(self, 'Open Data File', 'Incorect File Format')
+                QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
     def openFileNamesDialog(self):  
         # file browser window  
         options = QFileDialog.Options()

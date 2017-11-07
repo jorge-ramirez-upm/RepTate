@@ -1,26 +1,27 @@
 <RCC>
-  <qresource prefix="/Icons">
-    <file>Images/Clip.ico</file>
-    <file>Images/Exit.ico</file>
-    <file>Images/Help.ico</file>
-    <file>Images/qt.ico</file>
-    <file>Images/console.ico</file>
-    <file>Images/Calculator.ico</file>
-    <file>Images/MatDB.ico</file>
-    <file>Images/Library.ico</file>
-    <file>Images/Creep.ico</file>
-    <file>Images/Gt.ico</file>
-    <file>Images/LVE.ico</file>
-    <file>Images/mut.ico</file>
-    <file>Images/Mw.ico</file>
-    <file>Images/NLVE.ico</file>
-    <file>Images/phit.ico</file>
-    <file>Images/react.ico</file>
-    <file>Images/Rept.ico</file>
-    <file>Images/Reptate.ico</file>
-    <file>Images/Reptate64.ico</file>
-    <file>Images/SANS.ico</file>
-    <file>Images/Test.ico</file>
-    <file>Images/TTS.ico</file>
-  </qresource>
+    <qresource prefix="/Icons">
+        <file>Images/Clip.ico</file>
+        <file>Images/Exit.ico</file>
+        <file>Images/Help.ico</file>
+        <file>Images/qt.ico</file>
+        <file>Images/console.ico</file>
+        <file>Images/Calculator.ico</file>
+        <file>Images/MatDB.ico</file>
+        <file>Images/Library.ico</file>
+        <file>Images/Creep.ico</file>
+        <file>Images/Gt.ico</file>
+        <file>Images/LVE.ico</file>
+        <file>Images/mut.ico</file>
+        <file>Images/Mw.ico</file>
+        <file>Images/NLVE.ico</file>
+        <file>Images/phit.ico</file>
+        <file>Images/react.ico</file>
+        <file>Images/Rept.ico</file>
+        <file>Images/Reptate.ico</file>
+        <file>Images/Reptate64.ico</file>
+        <file>Images/SANS.ico</file>
+        <file>Images/Test.ico</file>
+        <file>Images/TTS.ico</file>
+        <file>Images/MWD.ico</file>
+    </qresource>
 </RCC>
