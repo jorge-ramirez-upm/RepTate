@@ -29,7 +29,7 @@ class DataSet(CmdBase, QWidget, Ui_DataSet): # CmdBase not using super() is OK f
         "Constructor"
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) called")
         super(DataSet, self).__init__() 
-        if CmdBase.mode==CmdMode.GUI: #manual call to constructor as CmdBase do not use super()
+        if CmdBase.mode==CmdMode.GUI: # manual call to constructor as CmdBase do not super()
             print("QWidget/Ui_DataSet.__init__(self) started")
             QWidget.__init__(self)
             Ui_DataSet.__init__(self)
@@ -49,11 +49,6 @@ class DataSet(CmdBase, QWidget, Ui_DataSet): # CmdBase not using super() is OK f
 
     # GUI stuff
         if CmdBase.mode==CmdMode.GUI:
-            print("in DataSet init GUI stuff")
-            print("is DataSet subcls of Ui_DataSet: ",  issubclass(DataSet, Ui_DataSet))
-            print("is DataSet subcls of QWidget: ",  issubclass(DataSet, QWidget))
-            print("is DataSet subcls of CmdBase: ",  issubclass(DataSet, CmdBase))
-
             self.setupUi(self)
             self.DataSettreeWidget.setIndentation(0)
             self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
@@ -468,3 +463,47 @@ class DataSet(CmdBase, QWidget, Ui_DataSet): # CmdBase not using super() is OK f
 
     def do_legend(self, line):
         self.parent_application.do_legend(line)
+
+# Theory GUI stuff ###############################
+    def handle_item_changed(self, item, column):
+        if (item.series):
+            item.series.set_visible(item.checkState(0)==Qt.Checked)
+            item.series.figure.canvas.draw()
+
+    def resizeEvent(self, evt=None):
+        hd=self.DataSettreeWidget.header()
+        w=self.DataSettreeWidget.width()
+        w/=hd.count()
+        for i in range(hd.count()):
+            hd.resizeSection(i, w)        
+            #hd.setTextAlignment(i, Qt.AlignHCenter)
+
+    def NewTheory(self):
+        self.numtheories+=1
+        thname = self.cbtheory.currentText()
+        obj=QTreeWidget()
+        obj.setIndentation(0)
+        obj.setHeaderItem(QTreeWidgetItem(["Parameter","Value"]))
+        obj.setAlternatingRowColors(True)
+        obj.setFrameShape(QFrame.NoFrame)
+        obj.setFrameShadow(QFrame.Plain)
+        #obj.setEditTriggers(QAbstractItemView.NoEditTriggers) 
+        obj.setEditTriggers(obj.NoEditTriggers) 
+        connection_id = obj.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
+        self.actionNew_Theory.triggered.connect(self.NewTheory)
+        #obj.setStyleSheet(QStyle("QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}"))
+        ##obj.styleSheet="QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}\n"
+        self.TheorytabWidget.addTab(obj, thname+'%d'%self.numtheories)
+        self.TheorytabWidget.setCurrentIndex(self.numtheories-1)
+        item = QTreeWidgetItem(obj, ['Param1', "%g"%4.345])
+        item.setCheckState(0,2)
+        item.setFlags(item.flags() | Qt.ItemIsEditable)
+        item = QTreeWidgetItem(obj, ['Param2', "%g"%2.365])
+        item.setCheckState(0,2)
+        item.setFlags(item.flags() | Qt.ItemIsEditable)
+
+    def onTreeWidgetItemDoubleClicked(self, item, column):
+        if (column==1):
+            thcurrent = self.TheorytabWidget.currentWidget()
+            thcurrent.editItem(item, column)
+            
