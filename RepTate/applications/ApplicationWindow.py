@@ -38,6 +38,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         self.figure=0
         self.ax=0
         self.canvas=0
+        self.files={}
         #self.views={} # we use 'views' of Application.py
         # Accept Drag and drop events
         self.setAcceptDrops(True)
@@ -169,10 +170,10 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
                         self.createNew_Empty_Dataset()
                     # ADD FILE TO CURRENT DATASET
                     dt = self.filetypes[file_ext].read_file(path, self, self.ax)
+                    self.files[dt.file_name_short] = dt
                     self.addTableToCurrentDataSet(dt)
                 else:
                     QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
-
 
     def addTableToCurrentDataSet(self, dt):
         ds=self.DataSettabWidget.currentWidget()
@@ -185,10 +186,19 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         #root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
         # x=np.arange(100)
         # y=np.cumsum(np.random.randn(100))
-        x = dt.data_table.data[:, 0]
-        for i in range(self.current_view.n): # for multiple quantities to plot
-            y = dt.data_table.data[:, i + 1]
-            newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
+
+
+        # view = self.parent_application.current_view
+        # for dt in self.ds.dataset...:
+        #     try:
+        #         x, y, success = view.view_proc(dt, file.file_parameters)
+
+        #     except TypeError as e:
+        #         print(e)
+        #         return
+        view = self.parent_application.current_view
+        x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
+        newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
         self.canvas.draw()
 
 
@@ -313,7 +323,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
                 if (self.DataSettabWidget.count()==0):
                     self.createNew_Empty_Dataset()
                 dt = self.filetypes[file_ext].read_file(path, self, self.ax)
-                #self.files.append(df)
+                self.files[dt.file_name_short] = dt
                 self.current_file = dt
                 self.addTableToCurrentDataSet(dt)
                 # file_ext='gt'
