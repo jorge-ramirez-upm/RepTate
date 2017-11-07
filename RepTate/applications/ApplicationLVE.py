@@ -20,8 +20,8 @@ class ApplicationLVE(Application, ApplicationWindow):
         #problem with cmd.Cmd not using super(): no call to ApplicationWindow.__init__
         if CmdBase.mode==CmdMode.GUI: #if GUI mode
             ApplicationWindow.__init__(self, name, self)
-       
         print("ApplicationLVE.__init__(self) ended")
+        
         # VIEWS
         self.views["Log(G',G''(w))"]=View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", True, True, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
         self.views["G',G''(w)"]=View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"])

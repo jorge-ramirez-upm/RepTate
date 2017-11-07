@@ -17,14 +17,16 @@ class ApplicationMWD(Application, ApplicationWindow):
     
     def __init__(self, name="MWD", parent = None):
         super(ApplicationMWD, self).__init__(name, parent)
+        if CmdBase.mode==CmdMode.GUI: #if GUI mode
+            ApplicationWindow.__init__(self, name, self)
 
         # VIEWS
         self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"])
         self.current_view=self.views["W(M)"]
+        
+        # FILES
         ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], [], [])
         self.filetypes[ftype.extension]=ftype
-
-        # FILES
         ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], ['Mw','Mn','PDI'], ['kDa', '-'])
         #ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
         self.filetypes[ftype.extension]=ftype

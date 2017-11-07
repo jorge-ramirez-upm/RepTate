@@ -177,11 +177,11 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
             if os.path.isfile(path):
                 split_file=path.split('.')
                 file_ext=split_file[len(split_file)-1]
-                if file_ext in self.filetypes.keys():
+                if file_ext in self.parent_application.filetypes.keys():
                     if (self.DataSettabWidget.count()==0):
                         self.createNew_Empty_Dataset()
                     # ADD FILE TO CURRENT DATASET
-                    dt = self.filetypes[file_ext].read_file(path)
+                    dt = self.parent_application.filetypes[file_ext].read_file(path)
                     self.addTableToCurrentDataSet(dt)
                     #msg = QMessageBox()
                     #msg.setText(path)
@@ -322,10 +322,10 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         for path in paths_to_open:
             split_file = path.split('.')
             file_ext = split_file[len(split_file)-1]
-            if file_ext in self.filetypes.keys():
+            if file_ext in self.parent_application.filetypes.keys():
                 if (self.DataSettabWidget.count()==0):
                     self.createNew_Empty_Dataset()
-                dt = self.filetypes[file_ext].read_file(path, self, self.ax)
+                dt = self.parent_application.filetypes[file_ext].read_file(path, self, self.ax)
                 #self.files.append(df)
                 self.current_file = dt
                 self.addTableToCurrentDataSet(dt)

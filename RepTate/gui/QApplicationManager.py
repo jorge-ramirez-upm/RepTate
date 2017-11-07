@@ -40,7 +40,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         # Generate action buttons from dict of available applications
         #self.actionTest.triggered.connect(self.new_test_window)
         #self.actionReact.triggered.connect(self.new_react_window)
-        #self.actionMWD.triggered.connect(self.new_mwd_window)
+        self.actionMWD.triggered.connect(self.new_mwd_window)
         #self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
         #self.actionNLVE.triggered.connect(self.new_nlve_window)
@@ -108,8 +108,22 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         """ Open a new LVE application window"""
         self.reptatelogger.debug("NEW LVE Window")
         self.count = self.count + 1
-        appname = 'LVE'+str(self.count)
+        appname = 'LVE' + str(self.count)
         sub = ApplicationLVE(appname, self)
+        sub.windowTitle = appname
+        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), appname)
+        self.ApplicationtabWidget.setCurrentIndex(ind)
+
+        root = QTreeWidgetItem(self.Projecttree, [appname])
+        root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
+
+
+    def new_mwd_window(self):
+        """ Open a new LVE application window"""
+        self.reptatelogger.debug("NEW MWD Window")
+        self.count = self.count + 1
+        appname = 'MWD' + str(self.count)
+        sub = ApplicationMWD(appname, self)
         sub.windowTitle = appname
         ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), appname)
         self.ApplicationtabWidget.setCurrentIndex(ind)
