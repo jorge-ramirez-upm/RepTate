@@ -191,20 +191,17 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         ds=self.DataSettabWidget.currentWidget()
         lnew = list(dt.file_parameters.values())
         lnew.insert(0, dt.file_name_short)
+        #must convert 'lnew' floats etc. to strings for DataSetItem
         lnew = [format(x) for x in lnew]
-        print("lnew: ", lnew)
-        print("ds.DataSettreeWidget: ", ds.DataSettreeWidget)
         newitem = DataSetItem(ds.DataSettreeWidget, lnew, )
         newitem.setCheckState(0, 2)
         #root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
         # x=np.arange(100)
         # y=np.cumsum(np.random.randn(100))
-        x = dt.data_table.data[:,0]
-        y = dt.data_table.data[:,1]
-        # self.logger.debug(x)
-        # self.logger.debug(y)
-
-        newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
+        x = dt.data_table.data[:, 0]
+        for i in range(self.current_view.n): # for multiple quantities to plot
+            y = dt.data_table.data[:, i + 1]
+            newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
         self.canvas.draw()
 
 
