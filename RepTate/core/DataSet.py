@@ -20,13 +20,20 @@ from DataSetItem import *
 Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
 #######GUI
 
+#class DataSet((QWidget, Ui_DataSet, CmdBase) if CmdBase.mode==CmdMode.GUI else CmdBase): #do not work
+
 # DataSet inherits of QWidget, Ui_DataSet only if in GUI mode
-class DataSet((QWidget, Ui_DataSet, CmdBase) if CmdBase.mode==CmdMode.GUI else CmdBase): 
+class DataSet(CmdBase, QWidget, Ui_DataSet): # CmdBase not using super() is OK for CL mode.
     """Abstract class to describe a data set"""
     def __init__(self, name="DataSet", description="", parent=None):
         "Constructor"
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) called")
         super(DataSet, self).__init__() 
+        if CmdBase.mode==CmdMode.GUI: #manual call to constructor as CmdBase do not use super()
+            print("QWidget/Ui_DataSet.__init__(self) started")
+            QWidget.__init__(self)
+            Ui_DataSet.__init__(self)
+            print("QWidget/Ui_DataSet.__init__(self) ended")
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) ended")
 
         self.name=name
@@ -43,6 +50,10 @@ class DataSet((QWidget, Ui_DataSet, CmdBase) if CmdBase.mode==CmdMode.GUI else C
     # GUI stuff
         if CmdBase.mode==CmdMode.GUI:
             print("in DataSet init GUI stuff")
+            print("is DataSet subcls of Ui_DataSet: ",  issubclass(DataSet, Ui_DataSet))
+            print("is DataSet subcls of QWidget: ",  issubclass(DataSet, QWidget))
+            print("is DataSet subcls of CmdBase: ",  issubclass(DataSet, CmdBase))
+
             self.setupUi(self)
             self.DataSettreeWidget.setIndentation(0)
             self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
