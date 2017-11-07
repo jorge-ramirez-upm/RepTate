@@ -18,7 +18,7 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    GUI = False
+    GUI = True
     try:
         opts, args = getopt.getopt(argv,"hg")
     except getopt.GetoptError:

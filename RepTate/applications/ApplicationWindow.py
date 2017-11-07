@@ -25,7 +25,7 @@ except AttributeError:
 Ui_AppWindow, QMainWindow = loadUiType('gui/ApplicationWindow.ui')
 
 class ApplicationWindow(QMainWindow, Ui_AppWindow):
-    def __init__(self, parent=None):
+    def __init__(self, name='Application Template', parent=None):
         print("ApplicationWindow.__init__(self) called")
         super(ApplicationWindow, self).__init__()
         print("ApplicationWindow.__init__(self) ended")
@@ -33,7 +33,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         self.setupUi(self)
 
         self.logger = logging.getLogger('ReptateLogger')
-        self.name='Application Template'
+        self.name = name
         self.parent_application = parent
         self.figure=0
         self.ax=0

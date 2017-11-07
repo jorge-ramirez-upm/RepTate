@@ -107,13 +107,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
     def new_lve_window(self):
         """ Open a new LVE application window"""
         self.reptatelogger.debug("NEW LVE Window")
-        self.count = QApplicationManager.count+1
-        sub = ApplicationLVE()
-
-        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), sub.name)
+        self.count = self.count + 1
+        appname = 'LVE'+str(self.count)
+        sub = ApplicationLVE(appname, self)
+        sub.windowTitle = appname
+        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), appname)
         self.ApplicationtabWidget.setCurrentIndex(ind)
 
-        root = QTreeWidgetItem(self.Projecttree, [sub.name])
+        root = QTreeWidgetItem(self.Projecttree, [appname])
         root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
 
         # """ Open a new LVE application window"""

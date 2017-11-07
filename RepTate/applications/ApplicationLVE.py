@@ -19,7 +19,7 @@ class ApplicationLVE(Application, ApplicationWindow):
         super(ApplicationLVE, self).__init__(name, parent)
         #problem with cmd.Cmd not using super(): no call to ApplicationWindow.__init__
         if CmdBase.mode==CmdMode.GUI: #if GUI mode
-            ApplicationWindow.__init__(self)
+            ApplicationWindow.__init__(self, name, self)
        
         print("ApplicationLVE.__init__(self) ended")
         # VIEWS
