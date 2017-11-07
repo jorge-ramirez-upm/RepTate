@@ -139,13 +139,19 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def Change_View(self):
         # current_view = self.views[self.viewComboBox.currentIndex()]
-        current_view = list(self.views.values())[self.viewComboBox.currentIndex()] # dict are oredered since Python 3.6 (?)    
+        view = list(self.views.values())[self.viewComboBox.currentIndex()] # dict are oredered since Python 3.6 (?)    
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
             return
+
         nitems = current_dataset.DataSettreeWidget.topLevelItemCount()
         for i in range(nitems):
             item = current_dataset.DataSettreeWidget.topLevelItem(i)
+
+        for dt in self.files.values():
+            x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
+            current_dataset.series=self.ax.scatter(x, y, label=dt.file_name_short)
+            self.canvas.draw()
 
     def populateViews(self):
         for i in self.views:
@@ -187,15 +193,6 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         # x=np.arange(100)
         # y=np.cumsum(np.random.randn(100))
 
-
-        # view = self.parent_application.current_view
-        # for dt in self.ds.dataset...:
-        #     try:
-        #         x, y, success = view.view_proc(dt, file.file_parameters)
-
-        #     except TypeError as e:
-        #         print(e)
-        #         return
         view = self.parent_application.current_view
         x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
         newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
