@@ -23,6 +23,8 @@ class ApplicationMWD(Application, ApplicationWindow):
         # VIEWS
         self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"])
         self.current_view=self.views["W(M)"]
+        if CmdBase.mode==CmdMode.GUI: #if GUI mode
+            self.populateViews()
         
         # FILES
         ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], [], [])

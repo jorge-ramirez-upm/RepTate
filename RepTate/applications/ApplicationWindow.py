@@ -139,25 +139,12 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
     def Change_View(self):
         # current_view = self.views[self.viewComboBox.currentIndex()]
         current_view = list(self.views.values())[self.viewComboBox.currentIndex()] # dict are oredered since Python 3.6 (?)    
-          
-        msg = QMessageBox()
-        msg.setText(current_view.name)
-        msg.exec_()
-
-        
-
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
             return
         nitems = current_dataset.DataSettreeWidget.topLevelItemCount()
         for i in range(nitems):
             item = current_dataset.DataSettreeWidget.topLevelItem(i)
-            # item.series.figure.canvas.draw()#
-            # msg = QMessageBox()
-            # msg.setText(item.text(0))
-            # msg.exec_()
-            
-
 
     def populateViews(self):
         for i in self.views:

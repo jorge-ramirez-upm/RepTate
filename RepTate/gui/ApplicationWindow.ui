@@ -226,6 +226,9 @@
    <property name="toolTip">
     <string>Create an empty Data set</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionNew_Dataset_From_File">
    <property name="icon">
@@ -237,6 +240,9 @@
    </property>
    <property name="toolTip">
     <string>Open Data File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionView_All_Sets">

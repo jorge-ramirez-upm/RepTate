@@ -19,6 +19,8 @@ class ApplicationNLVE(Application, ApplicationWindow):
         self.views["Log(eta(t))"]=View("Log(eta(t))", "Log transient viscosity", "Log(t)", "Log($\eta$(t))", False, False, self.viewLogeta, 1, ["$\eta$(t)"])
         self.views["Log(sigma(t))"]=View("Log(sigma(t))", "Log transient shear stress", "Log($\gamma$)", "Log($\sigma_{xy}$($\gamma$))", False, False, self.viewLogSigma, 1, ["$\sigma_{xy}$($\gamma$)"])
         self.current_view=self.views["Log(eta(t))"]
+        if CmdBase.mode==CmdMode.GUI: #if GUI mode
+            self.populateViews()
 
         # FILES
         ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])

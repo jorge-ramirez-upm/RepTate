@@ -29,6 +29,8 @@ class ApplicationLVE(Application, ApplicationWindow):
         self.views["delta"]=View("delta", "delta", "$\omega$", "$\delta(\omega)$", True, False, self.viewDelta, 1, ["delta(w)"])
         self.views["tan(delta)"]=View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", True, True, self.viewTanDelta, 1, ["tan(delta((w))"])
         self.current_view=self.views["Log(G',G''(w))"]
+        if CmdBase.mode==CmdMode.GUI: #if GUI mode
+            self.populateViews()
 
         # FILES
         ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
