@@ -18,7 +18,7 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    GUI = False
+    GUI = True
     try:
         opts, args = getopt.getopt(argv,"hg")
     except getopt.GetoptError:
@@ -32,7 +32,10 @@ def start_RepTate(argv):
             GUI=True
 
     if GUI:
+        QApplication.setStyle("Fusion") #comment for native look
+        #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
         app = QApplication(sys.argv)
+        #app.setStyle("Fusion")
         start = time() 
         splash = SplashScreen()
         splash.show()

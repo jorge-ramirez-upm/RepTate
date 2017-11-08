@@ -25,6 +25,11 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         CmdBase.mode = CmdMode.GUI #set GUI mode
         self.setupUi(self)
 
+        # App tabs behaviour
+        self.ApplicationtabWidget.setMovable(True)
+        self.ApplicationtabWidget.setTabsClosable(True)
+        self.ApplicationtabWidget.setUsesScrollButtons(True)
+
         # Hide console and project navigation
         self.ConsoledockWidget.hide()
         self.ProjectdockWidget.hide()

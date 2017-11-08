@@ -43,6 +43,11 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         # Accept Drag and drop events
         self.setAcceptDrops(True)
 
+        # DataSet Tabs behaviour ##########
+        self.DataSettabWidget.setTabsClosable(True)
+        self.DataSettabWidget.setUsesScrollButtons(True)
+        self.DataSettabWidget.setMovable(True)
+        
         ################
         # SETUP TOOLBARS
         # Data Inspector Toolbar
@@ -91,7 +96,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         self.tableWidget.setRowCount(30)
         self.tableWidget.setColumnCount(10)
         self.tableWidget.setHorizontalHeaderLabels(['x','y','z','a','b','c','d','e','f','g'])
-                
+
         # Hide Data Inspector
         self.DataInspectordockWidget.hide()
 
@@ -132,31 +137,37 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         connection_id = self.actionBoth_Limits.triggered.connect(self.Both_Limits)
             
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.Change_View)
+        connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_tab_handler)
 
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
+    
+    def close_tab_handler(self, index):
+        print("tab %s is closing"%index)
+        self.DataSettabWidget.removeTab(index)
 
     def Change_View(self):
         # current_view = self.views[self.viewComboBox.currentIndex()]
-        view = list(self.views.values())[self.viewComboBox.currentIndex()] # dict are oredered since Python 3.6 (?)    
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
             return
 
+        #what does that do? Nothing it seems.
         nitems = current_dataset.DataSettreeWidget.topLevelItemCount()
         for i in range(nitems):
             item = current_dataset.DataSettreeWidget.topLevelItem(i)
 
+        view = self.views[self.viewComboBox.currentText()] 
         for dt in self.files.values():
             x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
-            current_dataset.series=self.ax.scatter(x, y, label=dt.file_name_short)
+            current_dataset.series = self.ax.scatter(x, y, label=dt.file_name_short)
             self.canvas.draw()
 
     def populateViews(self):
         for i in self.views:
-            #self.viewComboBox.addItem(i.name)
-            self.viewComboBox.addItem(self.views[i].name) # dict are oredered since Python 3.6 (?)
+            #add keys of 'views' dict to the list of views avaliable 
+            self.viewComboBox.addItem(i) 
 
     def dragEnterEvent(self, e):      
         if e.mimeData().hasUrls():
@@ -190,8 +201,6 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         newitem = DataSetItem(ds.DataSettreeWidget, lnew, )
         newitem.setCheckState(0, 2)
         #root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
-        # x=np.arange(100)
-        # y=np.cumsum(np.random.randn(100))
 
         view = self.parent_application.current_view
         x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
@@ -289,7 +298,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         # Add New empty tab to DataSettabWidget
         ind=self.DataSettabWidget.count()+1
         ds = DataSet(parent=self)
-        self.DataSettabWidget.addTab(ds, 'DataSet'+'%d'%ind)
+        self.DataSettabWidget.addTab(ds, '%d'%ind +'.DataSet') #number first makes it clearer when many tabs
         #Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind-1)
        
@@ -316,7 +325,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         for path in paths_to_open:
             split_file = path.split('.')
             file_ext = split_file[len(split_file)-1]
-            if file_ext in self.filetypes.keys():
+            if file_ext in self.filetypes:
                 if (self.DataSettabWidget.count()==0):
                     self.createNew_Empty_Dataset()
                 dt = self.filetypes[file_ext].read_file(path, self, self.ax)
