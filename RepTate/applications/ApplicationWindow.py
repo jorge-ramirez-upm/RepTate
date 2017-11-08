@@ -14,7 +14,7 @@ import Symbols_rc
 import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox
-from DataSet import *
+from QDataSet import *
 from DataFiles import *
 from DataSetItem import *
 try:
@@ -303,7 +303,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
     def createNew_Empty_Dataset(self):
         # Add New empty tab to DataSettabWidget
         ind=self.DataSettabWidget.count()+1
-        ds = DataSet(parent=self)
+        ds = QDataSet(parent=self)
         self.DataSettabWidget.addTab(ds, '%d'%ind +'.DataSet') #number first makes it clearer when many tabs
         #Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind-1)

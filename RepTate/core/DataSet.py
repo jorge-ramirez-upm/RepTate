@@ -8,32 +8,13 @@ from File import *
 from Application import *
 from tabulate import tabulate
 
-#######GUI
-from PyQt5.QtGui import *
-from PyQt5.uic import loadUiType
-import itertools
-import Symbols_rc
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox
-from DataSetItem import *
 
-Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
-#######GUI
-
-#class DataSet((QWidget, Ui_DataSet, CmdBase) if CmdBase.mode==CmdMode.GUI else CmdBase): #do not work
-
-# DataSet inherits of QWidget, Ui_DataSet only if in GUI mode
-class DataSet(CmdBase, QWidget, Ui_DataSet): # cmd.Cmd not using super() is OK for CL mode.
+class DataSet(CmdBase):
     """Abstract class to describe a data set"""
     def __init__(self, name="DataSet", description="", parent=None):
         "Constructor"
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) called")
         super(DataSet, self).__init__() 
-        if CmdBase.mode==CmdMode.GUI: # manual call to constructor as cmd.Cmd do not super()
-            print("QWidget/Ui_DataSet.__init__(self) started")
-            QWidget.__init__(self)
-            Ui_DataSet.__init__(self)
-            print("QWidget/Ui_DataSet.__init__(self) ended")
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) ended")
 
         self.name=name
@@ -46,39 +27,6 @@ class DataSet(CmdBase, QWidget, Ui_DataSet): # cmd.Cmd not using super() is OK f
 
         self.theories={}
         self.num_theories=0
-
-    # GUI stuff
-        if CmdBase.mode==CmdMode.GUI:
-            self.setupUi(self)
-            self.DataSettreeWidget.setIndentation(0)
-            self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
-            hd=self.DataSettreeWidget.header()
-            hd.setSectionsMovable(False)
-            w=self.DataSettreeWidget.width()
-            w/=hd.count()
-            for i in range(hd.count()):
-                hd.resizeSection(0, w)
-            
-            # Theory Toolbar
-            tb = QToolBar()
-            tb.setIconSize(QSize(24,24))
-            self.numtheories=0
-            self.cbtheory = QComboBox()
-            self.cbtheory.setToolTip("Hello")
-            self.cbtheory.addItem("ThA")
-            self.cbtheory.addItem("ThB")
-            self.cbtheory.addItem("ThC")
-            tb.addWidget(self.cbtheory)
-            tb.addAction(self.actionNew_Theory)
-            tb.addAction(self.actionCalculate_Theory)
-            tb.addAction(self.actionMinimize_Error)
-            tb.addAction(self.actionTheory_Options)
-            self.TheoryLayout.insertWidget(0, tb)
-
-            connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
-            connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_item_changed)
-        # End GUI stuff
-
 
 # DATASET STUFF ##########################################################################################################
     def do_list(self, line):
