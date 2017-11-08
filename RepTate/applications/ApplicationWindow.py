@@ -152,7 +152,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
             return
-
+        self.ax.cla()
         #what does that do? Nothing it seems.
         nitems = current_dataset.DataSettreeWidget.topLevelItemCount()
         for i in range(nitems):

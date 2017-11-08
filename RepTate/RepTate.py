@@ -32,10 +32,10 @@ def start_RepTate(argv):
             GUI=True
 
     if GUI:
-        QApplication.setStyle("Fusion") #comment for native look
+        QApplication.setStyle("Fusion") #comment that line for a native look
         #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+        
         app = QApplication(sys.argv)
-        #app.setStyle("Fusion")
         start = time() 
         splash = SplashScreen()
         splash.show()
