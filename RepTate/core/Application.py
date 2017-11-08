@@ -179,7 +179,9 @@ class Application(CmdBase):
         if name in list(self.views.keys()):
             self.current_view=self.views[name]
         else:
-            print("View \"%s\" not found"%name)                            
+            print("View \"%s\" not found"%name)
+        # Update the plots!
+        # Loop over datasets and call do_plot()
         
     def do_view_switch(self, name):
         """Change to another view from open application"""
