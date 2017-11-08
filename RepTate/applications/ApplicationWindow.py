@@ -137,6 +137,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         connection_id = self.actionBoth_Limits.triggered.connect(self.Both_Limits)
             
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.Change_View)
+
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_tab_handler)
 
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
@@ -145,18 +146,25 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
     
     def close_tab_handler(self, index):
         print("tab %s is closing"%index)
+        self.ax.cla()
         self.DataSettabWidget.removeTab(index)
+        
 
     def Change_View(self):
-        # current_view = self.views[self.viewComboBox.currentIndex()]
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
             return
+        
+        #clear plot window before replotting in new view
         self.ax.cla()
-        #what does that do? Nothing it seems.
+        ds = self.DataSettabWidget.currentWidget()
+        #ds.DataSettreeWidget.clear()
+        
+        # what does that do? Nothing it seems.
         nitems = current_dataset.DataSettreeWidget.topLevelItemCount()
         for i in range(nitems):
             item = current_dataset.DataSettreeWidget.topLevelItem(i)
+        ####
 
         view = self.views[self.viewComboBox.currentText()] 
         for dt in self.files.values():
@@ -180,8 +188,8 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         for url in e.mimeData().urls():
             path = url.toLocalFile()
             if os.path.isfile(path):
-                split_file=path.split('.')
-                file_ext=split_file[len(split_file)-1]
+                split_file = path.split('.')
+                file_ext = split_file[len(split_file)-1]
                 if file_ext in self.filetypes.keys():
                     if (self.DataSettabWidget.count()==0):
                         self.createNew_Empty_Dataset()
@@ -193,7 +201,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
                     QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
 
     def addTableToCurrentDataSet(self, dt):
-        ds=self.DataSettabWidget.currentWidget()
+        ds = self.DataSettabWidget.currentWidget()
         lnew = list(dt.file_parameters.values())
         lnew.insert(0, dt.file_name_short)
         #must convert 'lnew' floats etc. to strings for DataSetItem
