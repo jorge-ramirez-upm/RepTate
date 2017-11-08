@@ -4,7 +4,7 @@ from TheoryRoliePoly import TheoryRoliePoly
 from ApplicationWindow import *
 
 
-class ApplicationNLVE(Application, ApplicationWindow):
+class ApplicationNLVE(ApplicationWindow):
     """Application to Non-linear flow Data
     """
     name="NLVE"
@@ -12,15 +12,15 @@ class ApplicationNLVE(Application, ApplicationWindow):
     
     def __init__(self, name="NLVE", parent = None):
         super(ApplicationNLVE, self).__init__(name, parent)
-        if CmdBase.mode==CmdMode.GUI: #if GUI mode
-            ApplicationWindow.__init__(self, name, self)
+        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
+        #     ApplicationWindow.__init__(self, name, self)
 
         # VIEWS
         self.views["Log(eta(t))"]=View("Log(eta(t))", "Log transient viscosity", "Log(t)", "Log($\eta$(t))", False, False, self.viewLogeta, 1, ["$\eta$(t)"])
         self.views["Log(sigma(t))"]=View("Log(sigma(t))", "Log transient shear stress", "Log($\gamma$)", "Log($\sigma_{xy}$($\gamma$))", False, False, self.viewLogSigma, 1, ["$\sigma_{xy}$($\gamma$)"])
         self.current_view=self.views["Log(eta(t))"]
-        if CmdBase.mode==CmdMode.GUI: #if GUI mode
-            self.populateViews()
+        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
+        #     self.populateViews()
 
         # FILES
         ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])

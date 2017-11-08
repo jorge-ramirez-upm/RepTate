@@ -14,9 +14,11 @@ import Symbols_rc
 import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox
+#from DataSet import *
 from QDataSet import *
 from DataFiles import *
 from DataSetItem import *
+from Application import *
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -24,14 +26,19 @@ except AttributeError:
     
 Ui_AppWindow, QMainWindow = loadUiType('gui/ApplicationWindow.ui')
 
-class ApplicationWindow(QMainWindow, Ui_AppWindow):
+class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def __init__(self, name='Application Template', parent=None):
         print("ApplicationWindow.__init__(self) called")
-        super(ApplicationWindow, self).__init__()
+        super(ApplicationWindow, self).__init__(name, parent)
         print("ApplicationWindow.__init__(self) ended")
 
-        self.setupUi(self)
+        if CmdBase.mode!=CmdMode.GUI:
+            return
+        
+        QMainWindow.__init__(self)
+        Ui_AppWindow.__init__(self)
 
+        self.setupUi(self)
         self.logger = logging.getLogger('ReptateLogger')
         self.name = name
         self.parent_application = parent
@@ -208,7 +215,7 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         newitem.setCheckState(0, 2)
         #root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
 
-        view = self.parent_application.current_view
+        view = self.current_view
         x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
         newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
         self.canvas.draw()

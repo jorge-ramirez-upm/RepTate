@@ -4,23 +4,25 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QApplication
 
+from ApplicationWindow import *
 from ApplicationManager import *
 from QAboutReptate import *
 
-from ApplicationLVE import *
 
 path = os.path.dirname(os.path.abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path,'ReptateMainWindow.ui'))
 
-class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
+class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     """ Main Reptate window and application manager"""    
-    count = 0
+    # count = 0
     reptatelogger = logging.getLogger('ReptateLogger')
     reptatelogger.setLevel(logging.DEBUG)
 
     def __init__(self, parent=None):
         print("QApplicationManager.__init__(self, parent=None) called")
-        super(QApplicationManager, self).__init__(parent)
+        super(QApplicationManager, self).__init__()
+        QMainWindow.__init__(self)
+        Ui_MainWindow.__init__(self)
         print("QApplicationManager.__init__(self, parent=None) ended")
         CmdBase.mode = CmdMode.GUI #set GUI mode
         self.setupUi(self)
@@ -45,10 +47,10 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
         # Generate action buttons from dict of available applications
         #self.actionTest.triggered.connect(self.new_test_window)
         #self.actionReact.triggered.connect(self.new_react_window)
-        self.actionMWD.triggered.connect(self.new_mwd_window)
+        #self.actionMWD.triggered.connect(self.new_mwd_window)
         #self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
-        self.actionNLVE.triggered.connect(self.new_nlve_window)
+        #self.actionNLVE.triggered.connect(self.new_nlve_window)
         #self.actionGt.triggered.connect(self.new_gt_window)
         #self.actionCreep.triggered.connect(self.new_creep_window)
         #self.actionSANS.triggered.connect(self.new_sans_window)
@@ -111,14 +113,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow, ApplicationManager):
 
     def new_lve_window(self):
         """ Open a new LVE application window"""
-        self.count = self.count + 1
-        sub = ApplicationLVE(parent=self)
-        appname = sub.name + str(self.count)
-        sub.windowTitle = appname
-        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), appname)
+        app_name = "LVE"
+        # self.application_counter = self.application_counter + 1
+        sub = self.new(app_name)
+        app_id = app_name + str(self.application_counter)
+        ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/LVE.ico'), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
 
-        root = QTreeWidgetItem(self.Projecttree, [appname])
+        root = QTreeWidgetItem(self.Projecttree, [app_name])
         root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
 
 

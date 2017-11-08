@@ -9,8 +9,9 @@ from CmdBase import *
 from FileType import *
 from View import *
 from Theory import *
-from DataSet import *
+from DataSet import DataSet
 from TheoryBasic import *
+
 
 class Application(CmdBase):
     """Main abstract class that represents an application"""    
@@ -22,6 +23,9 @@ class Application(CmdBase):
         print("Application.__init__(self, name='ApplicationTemplate', parent=None) called")
         super(Application, self).__init__() 
         print("Application.__init__(self, name='ApplicationTemplate', parent=None) ended")
+
+        # if CmdBase.mode==CmdMode.GUI:
+        #     ApplicationWindow(name=name, parent=self)
 
         self.name=name
         self.parent_manager = parent

@@ -5,7 +5,7 @@ from TheoryMaxwellModes import TheoryMaxwellModesFrequency
 from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
 from TheoryTTS import TheoryWLFShift
 
-class ApplicationLVE(Application, ApplicationWindow):
+class ApplicationLVE(ApplicationWindow):
     """
     Application to Analyze Linear Viscoelastic Data
     
@@ -18,9 +18,9 @@ class ApplicationLVE(Application, ApplicationWindow):
         print("ApplicationLVE.__init__(self) called")
         super(ApplicationLVE, self).__init__(name, parent)
         #problem with cmd.Cmd not using super(): no call to ApplicationWindow.__init__
-        if CmdBase.mode==CmdMode.GUI: #if GUI mode
-            ApplicationWindow.__init__(self, name, self)
-        print("ApplicationLVE.__init__(self) ended")
+        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
+        #     ApplicationWindow.__init__(self, name, self)
+        # print("ApplicationLVE.__init__(self) ended")
         
         # VIEWS
         self.views["Log(G',G''(w))"]=View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", True, True, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
