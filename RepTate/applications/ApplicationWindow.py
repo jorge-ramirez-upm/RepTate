@@ -157,8 +157,6 @@ class ApplicationWindow(QMainWindow, Ui_AppWindow):
         
         #clear plot window before replotting in new view
         self.ax.cla()
-        ds = self.DataSettabWidget.currentWidget()
-        #ds.DataSettreeWidget.clear()
         
         # what does that do? Nothing it seems.
         nitems = current_dataset.DataSettreeWidget.topLevelItemCount()
