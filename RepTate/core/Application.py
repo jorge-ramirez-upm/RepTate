@@ -58,8 +58,11 @@ class Application(CmdBase):
         #leg=plt.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
         #if leg:
         #    leg.draggable()
+        
         if (CmdBase.mode==CmdMode.cmdline):
             self.figure.show() 
+        
+        
         #self.figure.draw() # DOESN'T WORK!
         #self.figure.set_visible(True) #??? DOES IT DO ANYTHING?
 
@@ -186,7 +189,12 @@ class Application(CmdBase):
             print("View \"%s\" not found"%name)
         # Update the plots!
         # Loop over datasets and call do_plot()
-        
+        self.update_all_ds_plots()
+    
+    def update_all_ds_plots(self):
+        for ds in self.datasets.values():
+            ds.do_plot()
+
     def do_view_switch(self, name):
         """Change to another view from open application"""
         self.view_switch(name)

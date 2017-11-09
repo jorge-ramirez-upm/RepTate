@@ -101,8 +101,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         tt.series[i].set_visible(False)
                         tt.series[i].set_label('')
         
-        if CmdBase.mode!=CmdMode.GUI: 
-            self.parent_application.update_plot()
+        # if CmdBase.mode!=CmdMode.GUI: 
+        self.parent_application.update_plot()
 
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter

@@ -117,13 +117,15 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.ax = self.figure.add_subplot(111)
         self.canvas = FigureCanvas(self.figure)
         self.mplvl.addWidget(self.canvas)
-        self.canvas.draw()
+        # self.canvas.draw()
+        self.update_Qplot()
         # sns.despine() # Remove up and right side of plot box
         # LEGEND STUFF
-        leg=plt.legend(loc='upper left', frameon=True, ncol=2)
-        if leg:
-            leg.draggable()
+        # leg=plt.legend(loc='upper left', frameon=True, ncol=2)
+        # if leg:
+        #     leg.draggable()
                 
+
         # EVENT HANDLING
         #connection_id = self.figure.canvas.mpl_connect('button_press_event', self.onclick)
         connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
@@ -161,8 +163,13 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 QLineEdit.Normal,
                 old_name)
         if (success and new_tab_name!=""):
+            if new_tab_name in self.datasets:
+                message = "\"%s\" already used"%new_tab_name
+                QMessageBox.warning(self, 'Rename', message)
+                return
             self.DataSettabWidget.setTabText(index, new_tab_name)
             self.DataSettabWidget.currentWidget().name = new_tab_name
+            #change dict key
             self.datasets[new_tab_name] = self.datasets[old_name]
             self.datasets.pop(old_name)
 
@@ -176,21 +183,9 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
             return
-        
-        #clear plot window before replotting in new view
-        self.ax.cla()
-        
-        # what does that do? Nothing it seems.
-        nitems = current_dataset.DataSettreeWidget.topLevelItemCount()
-        for i in range(nitems):
-            item = current_dataset.DataSettreeWidget.topLevelItem(i)
-        ####
-
-        view = self.views[self.viewComboBox.currentText()] 
-        # for dt in self.files.values():
-        #     x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
-        #     current_dataset.series = self.ax.scatter(x, y, label=dt.file_name_short)
-        #     self.canvas.draw()
+        selected_view_name = self.viewComboBox.currentText()
+        self.view_switch(selected_view_name)
+        self.update_Qplot()
 
     def populateViews(self):
         for i in self.views:
@@ -210,19 +205,14 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             path = url.toLocalFile()
             if os.path.isfile(path):
                 paths_to_open.append(path)
+        self.new_tabs_from_files(paths_to_open)
 
-        if (self.DataSettabWidget.count()==0):
-            self.createNew_Empty_Dataset()
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
-        print("paths_to_open: ", paths_to_open)
-        success, newtabs, ext = ds.do_open(paths_to_open)
-        print("Success: ", success, success==True)
-        if success==True:
-            for df in newtabs:
-                self.addTableToCurrentDataSet(df, ext)
-        else:
-            QMessageBox.about(self, "Open", success)
+    def update_Qplot(self):
+        plt.tight_layout(pad=1.2)
+        # self.canvas = FigureCanvas(self.figure)
+        # self.mplvl.addWidget(self.canvas)
+        self.canvas.draw()
+
 
     def addTableToCurrentDataSet(self, dt, ext):
         ds = self.DataSettabWidget.currentWidget()
@@ -239,12 +229,6 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         newitem = DataSetItem(ds.DataSettreeWidget, lnew, )
         newitem.setCheckState(0, 2)
         
-        #root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
-        ds.do_plot()
-        # view = self.current_view
-        # x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
-        # newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
-        self.canvas.draw()
 
 
     def No_Limits(self):
@@ -360,54 +344,32 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     # VB: browse and select file to open
     def openDataset(self):
         self.logger.debug("in openDataset")
-        if (self.DataSettabWidget.count()==0):
-            self.createNew_Empty_Dataset()
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
-
         if self.filetypes!={}:
+            # 'allowed_ext' defines the allowed file extensions
             # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
-            allowed_ext = self.name.rstrip("0123456789") + " ("        
+            allowed_ext = self.name.rstrip("0123456789") + " ("   #remove numbers from app name   
             for ext in self.filetypes:
                 allowed_ext = allowed_ext + "*.%s "%ext
             allowed_ext = allowed_ext + ")"
         paths_to_open = self.openFileNamesDialog(allowed_ext)
         if not paths_to_open:
             return
+        self.new_tabs_from_files(paths_to_open)
         
-        self.logger.debug(paths_to_open)
+    def new_tabs_from_files(self, paths_to_open):
+        if (self.DataSettabWidget.count()==0):
+                self.createNew_Empty_Dataset()
+        ds_name = self.DataSettabWidget.currentWidget().name
+        ds = self.datasets[ds_name]
         success, newtabs, ext = ds.do_open(paths_to_open)
-        if success:
+        if success==True:
             for df in newtabs:
                 self.addTableToCurrentDataSet(df, ext)
+            self.update_all_ds_plots()
+            self.update_Qplot()
         else:
             QMessageBox.about(self, "Open", success)
 
-        # for path in paths_to_open:
-        #     split_file = path.split('.')
-        #     file_ext = split_file[len(split_file)-1]
-        #     if not file_ext in self.filetypes:
-        #         QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
-        #         return
-
-
-                # if (self.DataSettabWidget.count()==0):
-                #     self.createNew_Empty_Dataset()
-                # ds_name = self.DataSettabWidget.TabText()
-                # ds = self.datasets[ds_name]
-                # ft = self.filetypes[file_ext]
-                # ds.open_files(path, ft)
-                # dt = .read_file(path, self, self.ax)
-                # # self.files[dt.file_name_short] = dt
-                # self.current_file = dt
-                # self.addTableToCurrentDataSet(dt)
-                # # file_ext='gt'
-                # # dt = self.files[file_ext].read_file(f)
-                # # self.logger.debug("set dt = ...")
-                # # self.addTableToCurrentDataSet(dt)
-            # else:
-            #     #QMessageBox.about(self, "Title", "Message")
-   
     def openFileNamesDialog(self, ext_filter="All Files (*)"):  
         # file browser window  
         options = QFileDialog.Options()
@@ -416,36 +378,8 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         dilogue_name = "Open"
         selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
         return selected_files
-    # def warningMessageBox(self, message):
-    #     msg = QMessageBox.warning(self, "bal", "bil")
-    #     self.logger.debug("ouiuoiu")
-    #     #msg.setText(message)
-    #     #msg.exec_()
-
-
 
     #####################################   
-            
-            
-
-    # def createNew_Dataset_From_File(self):
-    #     # Add New empty tab to DataSettabWidget
-    #     ind=self.DataSettabWidget.count()+1
-    #     ds = DataSet()
-    #     self.DataSettabWidget.addTab(ds, 'DataSet'+'%d'%ind)
-    #     #Set the new tab the active tab
-    #     self.DataSettabWidget.setCurrentIndex(ind-1)
-        
-    #     dfile=list(self.files.values())[0] 
-    #     dataset_header=dfile.basic_file_parameters[:]
-    #     dataset_header.insert(0, "File")
-    #     ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))   
-    #     hd=ds.DataSettreeWidget.header()
-    #     w=ds.DataSettreeWidget.width()
-    #     w/=hd.count()
-    #     for i in range(hd.count()):
-    #         hd.resizeSection(i, w)
-    #         #hd.setTextAlignment(i, Qt.AlignHCenter)
 
     def showDataInspector(self):
         if self.DataInspectordockWidget.isHidden():
@@ -468,6 +402,6 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             print(event)
             print(pickedtick)
 
-    def resizeplot(self, event):
+    def resizeplot(self, event=""):
         # TIGHT LAYOUT in order to view axes and everything
         plt.tight_layout(pad=1.2)
