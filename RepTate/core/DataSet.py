@@ -15,11 +15,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         "Constructor"
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) called")
         super(DataSet, self).__init__() 
-        if CmdBase.mode==CmdMode.GUI: # manual call to constructor as cmd.Cmd do not super()
-            print("QWidget/Ui_DataSet.__init__(self) started")
-            QWidget.__init__(self)
-            Ui_DataSet.__init__(self)
-            print("QWidget/Ui_DataSet.__init__(self) ended")
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) ended")
 
         self.name=name
@@ -50,7 +45,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             for i, t in enumerate(ds.theories):
                 print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
-    def do_plot(self, line):
+    def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
         palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
         markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
@@ -81,7 +76,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                             try:
                                 label+=pmt+'='+str(file.file_parameters[pmt])+' ';
                             except KeyError as e: #if parameter missing from data file
-                                print("Parameter %s not found in data file"%(e))
+                                if CmdBase.mode!=CmdMode.GUI:
+                                    print("Parameter %s not found in data file"%(e))
                         #file.data_table.series[i].set_label(file.file_name_short)
                         file.data_table.series[i].set_label(label)
                     else:
@@ -104,9 +100,9 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     else:
                         tt.series[i].set_visible(False)
                         tt.series[i].set_label('')
-
-
-        self.parent_application.update_plot()
+        
+        if CmdBase.mode!=CmdMode.GUI: 
+            self.parent_application.update_plot()
 
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter
@@ -239,23 +235,42 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
         .. todo:: ALLOW OPENING FILES INSIDE SUBFOLDERS
         """
-        f_names = glob.glob(line)
+        if CmdBase.mode!=CmdMode.GUI:
+            f_names = glob.glob(line)
+        else:
+            f_names = line
+        
+        newtabs=[]
         if (line=="" or len(f_names)==0): 
-            print("No valid file names provided")
-            return        
+            message = "No valid file names provided"
+            if CmdBase.mode!=CmdMode.GUI:
+                print(message)
+                return
+            return (message, None, None)
         f_ext = [os.path.splitext(x)[1].split('.')[-1] for x in f_names]
         if (f_ext.count(f_ext[0])!=len(f_ext)):
-            print ("File extensions of files must be equal!")
-            print (f_names)
-            return
+            message = "File extensions of files must be equal!"
+            if CmdBase.mode!=CmdMode.GUI:
+                print (message)
+                print (f_names)
+                return
+            return (message, None, None)
+
         if (f_ext[0] in self.parent_application.filetypes): 
             ft = self.parent_application.filetypes[f_ext[0]] 
             for f in f_names:
                 df = ft.read_file(f, self, self.parent_application.ax)
                 self.files.append(df)
                 self.current_file=df
+                newtabs.append(df)
+            if CmdBase.mode==CmdMode.GUI:
+                return (True, newtabs, f_ext[0])
         else:
-            print("File type \"%s\" does not exists"%f_ext[0])
+            message = "File type \"%s\" does not exists"%f_ext[0]
+            if CmdBase.mode!=CmdMode.GUI:
+                print (message)
+                return
+            return (message, None, None)
 
     def __listdir(self, root):
         "List directory 'root' appending the path separator to subdirs."

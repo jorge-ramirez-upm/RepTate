@@ -92,7 +92,7 @@ class Application(CmdBase):
         :param str DESCRIPTION: Description of the dataset (optional)
         """
         ds, dsname = self.new(line)
-        self.datasets[dsname]=ds
+        self.datasets[dsname] = ds
         if (self.mode==CmdMode.batch):
             ds.prompt = ''
         else:

@@ -9,11 +9,11 @@ from DataSet import *
 
 Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
 
-class QDataSet(QWidget, Ui_DataSet, DataSet): 
-    def __init__(self, parent=None):
+class QDataSet(DataSet, QWidget, Ui_DataSet): 
+    def __init__(self, name="QDataSet", parent=None):
         "Constructor"
         print("QDataSet.__init__(self) called")
-        super(QDataSet, self).__init__(parent=parent)
+        super(QDataSet, self).__init__(name=name, parent=parent)
         QWidget.__init__(self)
         Ui_DataSet.__init__(self)
         print("QDataSet.__init__(self) ended")

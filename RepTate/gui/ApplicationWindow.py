@@ -42,11 +42,10 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.logger = logging.getLogger('ReptateLogger')
         self.name = name
         self.parent_application = parent
-        self.figure=0
-        self.ax=0
         self.canvas=0
         self.files={}
         #self.views={} # we use 'views' of Application.py
+       
         # Accept Drag and drop events
         self.setAcceptDrops(True)
 
@@ -108,17 +107,17 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.DataInspectordockWidget.hide()
 
         # PLOT Style
-        sns.set_style("white")
-        sns.set_style("ticks")
-        #plt.style.use('seaborn-talk')
-        #plt.style.use('seaborn-paper')
-        plt.style.use('seaborn-poster')
-        self.figure=plt.figure()
-        self.ax = self.figure.add_subplot(111)
+        # sns.set_style("white")
+        # sns.set_style("ticks")
+        # #plt.style.use('seaborn-talk')
+        # #plt.style.use('seaborn-paper')
+        # plt.style.use('seaborn-poster')
+        # self.figure=plt.figure()
+        # self.ax = self.figure.add_subplot(111)
         self.canvas = FigureCanvas(self.figure)
         self.mplvl.addWidget(self.canvas)
         self.canvas.draw()
-        sns.despine() # Remove up and right side of plot box
+        # sns.despine() # Remove up and right side of plot box
         # LEGEND STUFF
         leg=plt.legend(loc='upper left', frameon=True, ncol=2)
         if leg:
@@ -172,10 +171,10 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ####
 
         view = self.views[self.viewComboBox.currentText()] 
-        for dt in self.files.values():
-            x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
-            current_dataset.series = self.ax.scatter(x, y, label=dt.file_name_short)
-            self.canvas.draw()
+        # for dt in self.files.values():
+        #     x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
+        #     current_dataset.series = self.ax.scatter(x, y, label=dt.file_name_short)
+        #     self.canvas.draw()
 
     def populateViews(self):
         for i in self.views:
@@ -190,34 +189,45 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def dropEvent(self, e):
         reptatelogger = logging.getLogger('ReptateLogger')
+        paths_to_open = []
         for url in e.mimeData().urls():
             path = url.toLocalFile()
             if os.path.isfile(path):
-                split_file = path.split('.')
-                file_ext = split_file[len(split_file)-1]
-                if file_ext in self.filetypes.keys():
-                    if (self.DataSettabWidget.count()==0):
-                        self.createNew_Empty_Dataset()
-                    # ADD FILE TO CURRENT DATASET
-                    dt = self.filetypes[file_ext].read_file(path, self, self.ax)
-                    self.files[dt.file_name_short] = dt
-                    self.addTableToCurrentDataSet(dt)
-                else:
-                    QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
+                paths_to_open.append(path)
 
-    def addTableToCurrentDataSet(self, dt):
+        if (self.DataSettabWidget.count()==0):
+            self.createNew_Empty_Dataset()
+        ds_name = self.DataSettabWidget.currentWidget().name
+        ds = self.datasets[ds_name]
+        print("paths_to_open: ", paths_to_open)
+        success, newtabs, ext = ds.do_open(paths_to_open)
+        print("Success: ", success, success==True)
+        if success==True:
+            for df in newtabs:
+                self.addTableToCurrentDataSet(df, ext)
+        else:
+            QMessageBox.about(self, "Open", success)
+
+    def addTableToCurrentDataSet(self, dt, ext):
         ds = self.DataSettabWidget.currentWidget()
-        lnew = list(dt.file_parameters.values())
+        lnew = []
+        for param in self.filetypes[ext].basic_file_parameters[:]:
+            try:
+                lnew.append(str(dt.file_parameters[param]))
+            except KeyError as e:
+                message = "Parameter %s not found in file\n '%s'.\nValue set to 0"%(e, dt.file_name_short)
+                QMessageBox.warning(self, 'Header', message)
+                lnew.append(str(0))
+
         lnew.insert(0, dt.file_name_short)
-        #must convert 'lnew' floats etc. to strings for DataSetItem
-        lnew = [format(x) for x in lnew]
         newitem = DataSetItem(ds.DataSettreeWidget, lnew, )
         newitem.setCheckState(0, 2)
+        
         #root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
-
-        view = self.current_view
-        x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
-        newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
+        ds.do_plot()
+        # view = self.current_view
+        # x, y, success = view.view_proc(dt.data_table, dt.file_parameters)
+        # newitem.series=self.ax.scatter(x, y, label=dt.file_name_short)
         self.canvas.draw()
 
 
@@ -309,11 +319,13 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
     def createNew_Empty_Dataset(self):
         # Add New empty tab to DataSettabWidget
-        ind=self.DataSettabWidget.count()+1
-        ds = QDataSet(parent=self)
-        self.DataSettabWidget.addTab(ds, '%d'%ind +'.DataSet') #number first makes it clearer when many tabs
+        ind = self.DataSettabWidget.count() + 1
+        ds_name = 'DataSet' + '%d'%ind
+        ds = QDataSet(name=ds_name, parent=self)
+        self.datasets[ds_name] = ds
+        self.DataSettabWidget.addTab(ds, ds_name) 
         #Set the new tab the active tab
-        self.DataSettabWidget.setCurrentIndex(ind-1)
+        self.DataSettabWidget.setCurrentIndex(ind - 1)
        
         dfile=list(self.filetypes.values())[0] 
         dataset_header=dfile.basic_file_parameters[:]
@@ -331,33 +343,62 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     # VB: browse and select file to open
     def openDataset(self):
         self.logger.debug("in openDataset")
-        paths_to_open = self.openFileNamesDialog()
+        if (self.DataSettabWidget.count()==0):
+            self.createNew_Empty_Dataset()
+        ds_name = self.DataSettabWidget.currentWidget().name
+        ds = self.datasets[ds_name]
+
+        if self.filetypes!={}:
+            # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
+            allowed_ext = self.name.rstrip("0123456789") + " ("        
+            for ext in self.filetypes:
+                allowed_ext = allowed_ext + "*.%s "%ext
+            allowed_ext = allowed_ext + ")"
+        paths_to_open = self.openFileNamesDialog(allowed_ext)
         if not paths_to_open:
             return
+        
         self.logger.debug(paths_to_open)
-        for path in paths_to_open:
-            split_file = path.split('.')
-            file_ext = split_file[len(split_file)-1]
-            if file_ext in self.filetypes:
-                if (self.DataSettabWidget.count()==0):
-                    self.createNew_Empty_Dataset()
-                dt = self.filetypes[file_ext].read_file(path, self, self.ax)
-                self.files[dt.file_name_short] = dt
-                self.current_file = dt
-                self.addTableToCurrentDataSet(dt)
-                # file_ext='gt'
-                # dt = self.files[file_ext].read_file(f)
-                # self.logger.debug("set dt = ...")
+        success, newtabs, ext = ds.do_open(paths_to_open)
+        if success:
+            for df in newtabs:
+                self.addTableToCurrentDataSet(df, ext)
+        else:
+            QMessageBox.about(self, "Open", success)
+
+        # for path in paths_to_open:
+        #     split_file = path.split('.')
+        #     file_ext = split_file[len(split_file)-1]
+        #     if not file_ext in self.filetypes:
+        #         QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
+        #         return
+
+
+                # if (self.DataSettabWidget.count()==0):
+                #     self.createNew_Empty_Dataset()
+                # ds_name = self.DataSettabWidget.TabText()
+                # ds = self.datasets[ds_name]
+                # ft = self.filetypes[file_ext]
+                # ds.open_files(path, ft)
+                # dt = .read_file(path, self, self.ax)
+                # # self.files[dt.file_name_short] = dt
+                # self.current_file = dt
                 # self.addTableToCurrentDataSet(dt)
-            else:
-                #QMessageBox.about(self, "Title", "Message")
-                QMessageBox.warning(self, 'Open Data File', 'Incorect File Extension\nExpected: %s'%(" or ".join(self.filetypes.keys())))
-    def openFileNamesDialog(self):  
+                # # file_ext='gt'
+                # # dt = self.files[file_ext].read_file(f)
+                # # self.logger.debug("set dt = ...")
+                # # self.addTableToCurrentDataSet(dt)
+            # else:
+            #     #QMessageBox.about(self, "Title", "Message")
+   
+    def openFileNamesDialog(self, ext_filter="All Files (*)"):  
         # file browser window  
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        filetypes, _ = QFileDialog.getOpenFileNames(self,"Open Data File","data/","All Files (*);;Text files (*.txt)", options=options)
-        return filetypes
+        dir_start = "data/"
+        dilogue_name = "Open"
+        selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
+        return selected_files
     # def warningMessageBox(self, message):
     #     msg = QMessageBox.warning(self, "bal", "bil")
     #     self.logger.debug("ouiuoiu")
