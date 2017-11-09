@@ -13,7 +13,7 @@ import itertools
 import Symbols_rc
 import numpy as np
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit
 #from DataSet import *
 from QDataSet import *
 from DataFiles import *
@@ -42,8 +42,9 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.logger = logging.getLogger('ReptateLogger')
         self.name = name
         self.parent_application = parent
-        self.canvas=0
-        self.files={}
+        self.canvas = 0
+        self.files = {}
+        self.tab_count = 0
         #self.views={} # we use 'views' of Application.py
        
         # Accept Drag and drop events
@@ -145,17 +146,32 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.Change_View)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_tab_handler)
+        connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.mouse_Double_Click_Event)
 
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
+    
+    def mouse_Double_Click_Event(self, index):
+        print("double click")
+        old_name = self.DataSettabWidget.currentWidget().name
+        new_tab_name, success = QInputDialog.getText (
+                self, "Change Name",
+                "Insert New Tab Name",
+                QLineEdit.Normal,
+                old_name)
+        if (success and new_tab_name!=""):
+            self.DataSettabWidget.setTabText(index, new_tab_name)
+            self.DataSettabWidget.currentWidget().name = new_tab_name
+            self.datasets[new_tab_name] = self.datasets[old_name]
+            self.datasets.pop(old_name)
+
     
     def close_tab_handler(self, index):
         print("tab %s is closing"%index)
         self.ax.cla()
         self.DataSettabWidget.removeTab(index)
         
-
     def Change_View(self):
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
@@ -319,7 +335,8 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
     def createNew_Empty_Dataset(self):
         # Add New empty tab to DataSettabWidget
-        ind = self.DataSettabWidget.count() + 1
+        ind = self.tab_count + 1
+        self.tab_count += 1
         ds_name = 'DataSet' + '%d'%ind
         ds = QDataSet(name=ds_name, parent=self)
         self.datasets[ds_name] = ds
