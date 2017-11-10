@@ -1,10 +1,10 @@
 from Application import *
 import numpy as np
 from TheoryRoliePoly import TheoryRoliePoly
-from ApplicationWindow import *
+from QApplicationWindow import *
 
 
-class ApplicationNLVE(ApplicationWindow):
+class ApplicationNLVE(QApplicationWindow):
     """Application to Non-linear flow Data
     """
     name="NLVE"
@@ -13,7 +13,7 @@ class ApplicationNLVE(ApplicationWindow):
     def __init__(self, name="NLVE", parent = None):
         super(ApplicationNLVE, self).__init__(name, parent)
         # if CmdBase.mode==CmdMode.GUI: #if GUI mode
-        #     ApplicationWindow.__init__(self, name, self)
+        #     QApplication.__init__(self, name, self)
 
         # VIEWS
         self.views["Log(eta(t))"]=View("Log(eta(t))", "Log transient viscosity", "Log(t)", "Log($\eta$(t))", False, False, self.viewLogeta, 1, ["$\eta$(t)"])

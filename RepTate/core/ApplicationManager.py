@@ -4,10 +4,10 @@ import logging.handlers
 import matplotlib.pyplot as plt
 
 from CmdBase import *
-from ApplicationMWD import *
+# from ApplicationMWD import *
 from ApplicationLVE import *
-from ApplicationNLVE import *
-from ApplicationGt import *
+# from ApplicationNLVE import *
+# from ApplicationGt import *
 #from ApplicationFRS_I import *
 
 class ApplicationManager(CmdBase):
@@ -44,10 +44,10 @@ class ApplicationManager(CmdBase):
         self.application_counter=0
         self.applications={}
         self.available_applications={}
-        self.available_applications[ApplicationMWD.name]=ApplicationMWD
+        # self.available_applications[ApplicationMWD.name]=ApplicationMWD
         self.available_applications[ApplicationLVE.name]=ApplicationLVE
-        self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
-        self.available_applications[ApplicationGt.name]=ApplicationGt
+        # self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
+        # self.available_applications[ApplicationGt.name]=ApplicationGt
         #self.available_applications[ApplicationFRS_I.name]=ApplicationFRS_I
 
 # APPLICATION STUFF

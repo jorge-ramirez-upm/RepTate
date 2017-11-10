@@ -3,10 +3,10 @@ import numpy as np
 from TheoryDiscrMWD import TheoryDiscrMWD
 #from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-from ApplicationWindow import *
+from QApplicationWindow import *
 
 
-class ApplicationMWD(ApplicationWindow):
+class ApplicationMWD(QApplicationWindow):
     """
     Application to analyze Molecular Weight distributions
     
@@ -18,7 +18,7 @@ class ApplicationMWD(ApplicationWindow):
     def __init__(self, name="MWD", parent = None):
         super(ApplicationMWD, self).__init__(name, parent)
         # if CmdBase.mode==CmdMode.GUI: #if GUI mode
-        #     ApplicationWindow.__init__(self, name, self)
+        #     QApplication.__init__(self, name, self)
 
         # VIEWS
         self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"])

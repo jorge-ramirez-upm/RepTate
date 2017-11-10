@@ -14,7 +14,6 @@ import Symbols_rc
 import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit
-#from DataSet import *
 from QDataSet import *
 from DataFiles import *
 from DataSetItem import *
@@ -24,16 +23,16 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
     
-Ui_AppWindow, QMainWindow = loadUiType('gui/ApplicationWindow.ui')
+Ui_AppWindow, QMainWindow = loadUiType('gui/QApplicationWindow.ui')
 
-class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
+class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def __init__(self, name='Application Template', parent=None):
-        print("ApplicationWindow.__init__(self) called")
-        super(ApplicationWindow, self).__init__(name, parent)
-        print("ApplicationWindow.__init__(self) ended")
+        print("QApplicationWindow.__init__(self) called")
+        super(QApplicationWindow, self).__init__(name, parent)
+        print("QApplicationWindow.__init__(self) ended")
 
         if CmdBase.mode!=CmdMode.GUI:
-            return
+            return None
         
         QMainWindow.__init__(self)
         Ui_AppWindow.__init__(self)

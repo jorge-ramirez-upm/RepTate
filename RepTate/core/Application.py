@@ -24,9 +24,6 @@ class Application(CmdBase):
         super(Application, self).__init__() 
         print("Application.__init__(self, name='ApplicationTemplate', parent=None) ended")
 
-        # if CmdBase.mode==CmdMode.GUI:
-        #     ApplicationWindow(name=name, parent=self)
-
         self.name=name
         self.parent_manager = parent
         self.logger = logging.getLogger('ReptateLogger')
@@ -266,5 +263,8 @@ class Application(CmdBase):
         if (self.legend_visible):
             leg.draggable()
         else:
-            leg.remove()
+            try:
+                leg.remove()
+            except AttributeError as e:
+                print("legend: %s"%e)
 

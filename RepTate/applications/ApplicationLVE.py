@@ -1,27 +1,30 @@
-from ApplicationWindow import *
+from Application import *
+from QApplicationWindow import *
 import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesFrequency
 from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
 from TheoryTTS import TheoryWLFShift
 
-class ApplicationLVE(ApplicationWindow):
+
+class ApplicationLVE(CmdBase):
     """
     Application to Analyze Linear Viscoelastic Data
     
     .. todo:: DO WE NEED A SEPARATE APPLICATION FROM TTS???
     """
-    name="LVE"
-    description="Linear Viscoelasticity"
-    
+    name = "LVE"
+    description = "Linear Viscoelasticity"
+
+    def __new__(cls, name="LVE", parent = None):
+        if CmdBase.mode == CmdMode.GUI:   
+            return GUIApplicationLVE(name, parent)
+        else:
+            return CLApplicationLVE(name, parent)
+
+class LVEstuff:
     def __init__(self, name="LVE", parent = None):
-        print("ApplicationLVE.__init__(self) called")
-        #ApplicationWindow.__init__(self, name, self)
-        super(ApplicationLVE, self).__init__(name, parent)
-        #problem with cmd.Cmd not using super(): no call to ApplicationWindow.__init__
-        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
-        #     ApplicationWindow.__init__(self, name, self)
-        print("ApplicationLVE.__init__(self) ended")
-        
+        super(LVEstuff, self).__init__(name, parent)
+
         # VIEWS
         self.views["Log(G',G''(w))"]=View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
         self.views["G',G''(w)"]=View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", False, False, self.viewG1G2, 2, ["G'(w)","G''(w)"])
@@ -29,8 +32,6 @@ class ApplicationLVE(ApplicationWindow):
         self.views["delta"]=View("delta", "delta", "$\omega$", "$\delta(\omega)$", True, True, self.viewDelta, 1, ["delta(w)"])
         self.views["tan(delta)"]=View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", True, True, self.viewTanDelta, 1, ["tan(delta((w))"])
         self.current_view=self.views["Log(G',G''(w))"]
-        if CmdBase.mode==CmdMode.GUI: #if GUI mode
-            self.populateViews()
 
         # FILES
         ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
@@ -82,3 +83,18 @@ class ApplicationLVE(ApplicationWindow):
         x[:, 0] = dt.data[:, 0]
         y[: ,0] = dt.data[:, 2]/dt.data[:, 1]
         return x, y, True
+
+class CLApplicationLVE(LVEstuff, Application):
+    def __init__(self, name="LVE", parent = None):
+        print("CLApplicationLVE.__init__(self) called")
+        super(CLApplicationLVE, self).__init__(name, parent)
+        print("CLApplicationLVE.__init__(self) ended")
+        
+
+class GUIApplicationLVE(LVEstuff, QApplicationWindow):
+    def __init__(self, name="LVE", parent = None):
+        print("GUIApplicationLVE.__init__(self) called")
+        super(GUIApplicationLVE, self).__init__(name, parent)
+        print("GUIApplicationLVE.__init__(self) ended")
+
+        self.populateViews()
