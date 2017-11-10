@@ -118,7 +118,7 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.canvas = FigureCanvas(self.figure)
         self.mplvl.addWidget(self.canvas)
         # self.canvas.draw()
-        self.update_Qplot()
+        # self.update_Qplot()
         # sns.despine() # Remove up and right side of plot box
         # LEGEND STUFF
         # leg=plt.legend(loc='upper left', frameon=True, ncol=2)
@@ -156,7 +156,7 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     
     def mouse_Double_Click_Event(self, index):
         print("double click")
-        old_name = self.DataSettabWidget.currentWidget().name
+        old_name = self.DataSettabWidget.widget(index).name
         new_tab_name, success = QInputDialog.getText (
                 self, "Change Name",
                 "Insert New Tab Name",
@@ -167,17 +167,25 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 message = "\"%s\" already used"%new_tab_name
                 QMessageBox.warning(self, 'Rename', message)
                 return
+            #change TabWidget label
             self.DataSettabWidget.setTabText(index, new_tab_name)
-            self.DataSettabWidget.currentWidget().name = new_tab_name
-            #change dict key
+            #change TabWidget name attribute
+            self.DataSettabWidget.widget(index).name = new_tab_name
+            #change DataSet.name
+            self.datasets[old_name].name = new_tab_name
+            #copy dict value to new key
             self.datasets[new_tab_name] = self.datasets[old_name]
-            self.datasets.pop(old_name)
+            #delete old key (also deletes the DataSet object)
+            self.delete(old_name) #call Application.delete
 
-    
     def close_tab_handler(self, index):
         print("tab %s is closing"%index)
-        self.ax.cla()
+        name = self.DataSettabWidget.widget(index).name
+        self.delete(name) #call Application.delete
         self.DataSettabWidget.removeTab(index)
+        self.update_Qplot()
+
+
         
     def Change_View(self):
         current_dataset = self.DataSettabWidget.currentWidget()
@@ -208,7 +216,7 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.new_tabs_from_files(paths_to_open)
 
     def update_Qplot(self):
-        plt.tight_layout(pad=1.2)
+        # plt.tight_layout(pad=1.2)
         # self.canvas = FigureCanvas(self.figure)
         # self.mplvl.addWidget(self.canvas)
         self.canvas.draw()
@@ -339,9 +347,6 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             hd.resizeSection(i, w)
             #hd.setTextAlignment(i, Qt.AlignHCenter)
     
-    
-    #################################
-    # VB: browse and select file to open
     def openDataset(self):
         self.logger.debug("in openDataset")
         if self.filetypes!={}:
@@ -378,8 +383,6 @@ class ApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         dilogue_name = "Open"
         selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
         return selected_files
-
-    #####################################   
 
     def showDataInspector(self):
         if self.DataInspectordockWidget.isHidden():

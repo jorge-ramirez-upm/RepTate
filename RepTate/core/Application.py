@@ -9,7 +9,7 @@ from CmdBase import *
 from FileType import *
 from View import *
 from Theory import *
-from DataSet import DataSet
+from DataSet import *
 from TheoryBasic import *
 
 
@@ -105,7 +105,11 @@ class Application(CmdBase):
     def delete(self, name):
         """Delete a dataset from the current application"""
         if name in self.datasets.keys():
+            replot = True if len(self.datasets[name].files)>0 else False
             del self.datasets[name]
+            if replot: # only replot if deleted tab was not empty
+                print("replot: update_all_ds_plots")
+                self.update_all_ds_plots()
         else:
             print("Data Set \"%s\" not found"%name)            
         
@@ -193,6 +197,7 @@ class Application(CmdBase):
     
     def update_all_ds_plots(self):
         for ds in self.datasets.values():
+            print("do_plot of DataSet %s"%ds.name)
             ds.do_plot()
 
     def do_view_switch(self, name):

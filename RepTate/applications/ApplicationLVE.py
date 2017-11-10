@@ -1,4 +1,3 @@
-from Application import *
 from ApplicationWindow import *
 import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesFrequency
@@ -16,11 +15,12 @@ class ApplicationLVE(ApplicationWindow):
     
     def __init__(self, name="LVE", parent = None):
         print("ApplicationLVE.__init__(self) called")
+        #ApplicationWindow.__init__(self, name, self)
         super(ApplicationLVE, self).__init__(name, parent)
         #problem with cmd.Cmd not using super(): no call to ApplicationWindow.__init__
         # if CmdBase.mode==CmdMode.GUI: #if GUI mode
         #     ApplicationWindow.__init__(self, name, self)
-        # print("ApplicationLVE.__init__(self) ended")
+        print("ApplicationLVE.__init__(self) ended")
         
         # VIEWS
         self.views["Log(G',G''(w))"]=View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
