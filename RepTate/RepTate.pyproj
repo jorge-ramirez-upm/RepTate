@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
+    <InterpreterId>Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -88,7 +88,7 @@
     <Folder Include="theories\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
+    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

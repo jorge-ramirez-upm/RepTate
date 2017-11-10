@@ -27,7 +27,7 @@ class LVEstuff:
 
         # VIEWS
         self.views["Log(G',G''(w))"]=View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
-        self.views["G',G''(w)"]=View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", False, False, self.viewG1G2, 2, ["G'(w)","G''(w)"])
+        self.views["G',G''(w)"]=View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"])
         self.views["etastar"]=View("etastar", "Complex Viscosity", "$\omega$", "$\eta^*(\omega)$", True, True, self.viewEtaStar, 1, ["eta*(w)"])
         self.views["delta"]=View("delta", "delta", "$\omega$", "$\delta(\omega)$", True, True, self.viewDelta, 1, ["delta(w)"])
         self.views["tan(delta)"]=View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", True, True, self.viewTanDelta, 1, ["tan(delta((w))"])
