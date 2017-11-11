@@ -103,7 +103,9 @@ class Application(CmdBase):
         """Delete a dataset from the current application"""
         if name in self.datasets.keys():
             replot = True if len(self.datasets[name].files)>0 else False
-            del self.datasets[name]
+            for file in self.datasets[name].files: # remove data files
+                self.datasets[name].do_delete(file.file_name_short)
+            del self.datasets[name] #delete object
             if replot: # only replot if deleted tab was not empty
                 print("replot: update_all_ds_plots")
                 self.update_all_ds_plots()
@@ -194,7 +196,6 @@ class Application(CmdBase):
     
     def update_all_ds_plots(self):
         for ds in self.datasets.values():
-            print("do_plot of DataSet %s"%ds.name)
             ds.do_plot()
 
     def do_view_switch(self, name):

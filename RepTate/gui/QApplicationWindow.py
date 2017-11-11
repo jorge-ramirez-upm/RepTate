@@ -155,9 +155,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     
     def mouse_Double_Click_Event(self, index):
         """Edit DataSet tab name"""
-        print("double click")
         old_name = self.DataSettabWidget.tabText(index)
-        print(old_name)
         new_tab_name, success = QInputDialog.getText (
                 self, "Change Name",
                 "Insert New Tab Name",
@@ -181,7 +179,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def close_data_tab_handler(self, index):
         """Delete a dataset tab from the current application"""
-        print("tab %s is closing"%index)
         name = self.DataSettabWidget.tabText(index)
         self.delete(name) #call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
@@ -218,9 +215,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.new_tables_from_files(paths_to_open)
 
     def update_Qplot(self):
-        # plt.tight_layout(pad=1.2)
+        plt.tight_layout(pad=1.2)
         # self.canvas = FigureCanvas(self.figure)
-        # self.mplvl.addWidget(self.canvas)
+        #self.mplvl.addWidget(self.canvas)
         self.canvas.draw()
 
     def addTableToCurrentDataSet(self, dt, ext):

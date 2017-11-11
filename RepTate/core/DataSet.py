@@ -51,17 +51,16 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             if file.file_name_short == file_name_short:
                 file_matching.append(file)
         if len(file_matching)==0:
-            raise ValueError ('Could not match file %s'%file_name_short)
+            raise ValueError ('Could not match file \"%s\"'%file_name_short)
             return
         if len(file_matching)>1:
-            raise ValueError ('Too many match for file %s'%file_name_short)
+            raise ValueError ('Too many match for file \"%s\"'%file_name_short)
             return
         
         current_view = self.parent_application.current_view
         for i in range(current_view.n):
             file_matching[0].data_table.series[i].set_visible(check_state)
 
-        print(file_matching, check_state)
         self.do_plot()
 
         
@@ -282,9 +281,15 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             ft = self.parent_application.filetypes[f_ext[0]] 
             for f in f_names:
                 df = ft.read_file(f, self, self.parent_application.ax)
-                self.files.append(df)
-                self.current_file=df
-                newtabs.append(df)
+                unique = True
+                for file in self.files:
+                    if df.file_name_short == file.file_name_short: #check if file already exists
+                        unique = False
+                if unique:
+                    self.files.append(df)
+                    self.current_file=df
+                    newtabs.append(df)
+
             if CmdBase.mode==CmdMode.GUI:
                 return (True, newtabs, f_ext[0])
         else:
