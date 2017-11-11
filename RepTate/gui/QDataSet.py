@@ -21,10 +21,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.setupUi(self)
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
-        hd=self.DataSettreeWidget.header()
+        hd = self.DataSettreeWidget.header()
         hd.setSectionsMovable(False)
-        w=self.DataSettreeWidget.width()
-        w/=hd.count()
+        w = self.DataSettreeWidget.width()
+        w /= hd.count()
         for i in range(hd.count()):
             hd.resizeSection(0, w)
         
@@ -47,11 +47,16 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_item_changed)
 
-    # Theory GUI stuff ###############################
     def handle_item_changed(self, item, column):
-        if (item.series):
-            item.series.set_visible(item.checkState(0)==Qt.Checked)
-            item.series.figure.canvas.draw()
+        print("item column %s changed"%column)
+        print(item.file_name_short)
+        #find file index correponding to "item.filename"
+        self.change_file_visibility(item.file_name_short, item.checkState(column)==Qt.Checked)
+        self.parent_application.update_Qplot() 
+        # if (item.series):
+        #     item.series.set_visible(item.checkState(0)==Qt.Checked)
+        #     item.series.figure.canvas.draw()
+
 
     def resizeEvent(self, evt=None):
         hd=self.DataSettreeWidget.header()

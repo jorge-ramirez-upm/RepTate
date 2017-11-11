@@ -144,9 +144,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionHorizontal_Limits.triggered.connect(self.Horizontal_Limits)
         connection_id = self.actionBoth_Limits.triggered.connect(self.Both_Limits)
             
-        connection_id = self.viewComboBox.currentIndexChanged.connect(self.Change_View)
+        connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
 
-        connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_tab_handler)
+        connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
         connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.mouse_Double_Click_Event)
 
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
@@ -154,8 +154,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #print (xaxis)
     
     def mouse_Double_Click_Event(self, index):
+        """Edit DataSet tab name"""
         print("double click")
-        old_name = self.DataSettabWidget.widget(index).name
+        old_name = self.DataSettabWidget.tabText(index)
+        print(old_name)
         new_tab_name, success = QInputDialog.getText (
                 self, "Change Name",
                 "Insert New Tab Name",
@@ -168,8 +170,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 return
             #change TabWidget label
             self.DataSettabWidget.setTabText(index, new_tab_name)
-            #change TabWidget name attribute
-            self.DataSettabWidget.widget(index).name = new_tab_name
+            # #change TabWidget name attribute
+            # self.DataSettabWidget.widget(index).name = new_tab_name
             #change DataSet.name
             self.datasets[old_name].name = new_tab_name
             #copy dict value to new key
@@ -177,16 +179,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             #delete old key (also deletes the DataSet object)
             self.delete(old_name) #call Application.delete
 
-    def close_tab_handler(self, index):
+    def close_data_tab_handler(self, index):
+        """Delete a dataset tab from the current application"""
         print("tab %s is closing"%index)
-        name = self.DataSettabWidget.widget(index).name
-        self.delete(name) #call Application.delete
+        name = self.DataSettabWidget.tabText(index)
+        self.delete(name) #call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
         self.update_Qplot()
-
-
         
-    def Change_View(self):
+    def change_view(self):
+        """Change plot view"""
         current_dataset = self.DataSettabWidget.currentWidget()
         if (current_dataset==None):
             return
@@ -194,7 +196,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.view_switch(selected_view_name)
         self.update_Qplot()
 
-    def populateViews(self):
+    def populate_views(self):
+        """Assign availiable view labels to ComboBox"""
         for i in self.views:
             #add keys of 'views' dict to the list of views avaliable 
             self.viewComboBox.addItem(i) 
@@ -212,14 +215,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             path = url.toLocalFile()
             if os.path.isfile(path):
                 paths_to_open.append(path)
-        self.new_tabs_from_files(paths_to_open)
+        self.new_tables_from_files(paths_to_open)
 
     def update_Qplot(self):
         # plt.tight_layout(pad=1.2)
         # self.canvas = FigureCanvas(self.figure)
         # self.mplvl.addWidget(self.canvas)
         self.canvas.draw()
-
 
     def addTableToCurrentDataSet(self, dt, ext):
         ds = self.DataSettabWidget.currentWidget()
@@ -230,12 +232,96 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             except KeyError as e:
                 message = "Parameter %s not found in file\n '%s'.\nValue set to 0"%(e, dt.file_name_short)
                 QMessageBox.warning(self, 'Header', message)
-                lnew.append(str(0))
+                lnew.append("0")
 
-        lnew.insert(0, dt.file_name_short)
-        newitem = DataSetItem(ds.DataSettreeWidget, lnew, )
+        file_name_short = dt.file_name_short
+        lnew.insert(0, file_name_short)
+        newitem = DataSetItem(ds.DataSettreeWidget, lnew, file_name_short=file_name_short)
         newitem.setCheckState(0, 2)
         
+    def createNew_Empty_Dataset(self):
+        # Add New empty tab to DataSettabWidget
+        self.tab_count += 1
+        ds_name = 'DataSet' + '%d'%self.tab_count
+        ds = QDataSet(name=ds_name, parent=self)
+        self.datasets[ds_name] = ds
+        ind = self.DataSettabWidget.addTab(ds, ds_name) 
+        #Set the new tab the active tab
+        self.DataSettabWidget.setCurrentIndex(ind)
+       
+        dfile=list(self.filetypes.values())[0] 
+        dataset_header=dfile.basic_file_parameters[:]
+        dataset_header.insert(0, "File")
+        ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))   
+        hd=ds.DataSettreeWidget.header()
+        w=ds.DataSettreeWidget.width()
+        w/=hd.count()
+        for i in range(hd.count()):
+            hd.resizeSection(i, w)
+            #hd.setTextAlignment(i, Qt.AlignHCenter)
+    
+    def openDataset(self):
+        self.logger.debug("in openDataset")
+        if self.filetypes!={}:
+            # 'allowed_ext' defines the allowed file extensions
+            # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
+            allowed_ext = self.name.rstrip("0123456789") + " ("   #remove numbers from app name   
+            for ext in self.filetypes:
+                allowed_ext = allowed_ext + "*.%s "%ext
+            allowed_ext = allowed_ext + ")"
+        paths_to_open = self.openFileNamesDialog(allowed_ext)
+        if not paths_to_open:
+            return
+        self.new_tables_from_files(paths_to_open)
+        
+    def new_tables_from_files(self, paths_to_open):
+        if (self.DataSettabWidget.count()==0):
+                self.createNew_Empty_Dataset()
+        ind = self.DataSettabWidget.currentIndex()
+        ds_name = self.DataSettabWidget.tabText(ind)
+        ds = self.datasets[ds_name]
+        success, newtabs, ext = ds.do_open(paths_to_open)
+        if success==True:
+            for dt in newtabs:
+                self.addTableToCurrentDataSet(dt, ext)
+            self.update_all_ds_plots()
+            self.update_Qplot()
+        else:
+            QMessageBox.about(self, "Open", success)
+
+    def openFileNamesDialog(self, ext_filter="All Files (*)"):  
+        # file browser window  
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        dir_start = "data/"
+        dilogue_name = "Open"
+        selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
+        return selected_files
+
+    def showDataInspector(self):
+        if self.DataInspectordockWidget.isHidden():
+            self.DataInspectordockWidget.show()
+        else:
+            self.DataInspectordockWidget.hide()
+        
+    def printPlot(self):
+        fileName = QFileDialog.getSaveFileName(self,
+            "Export plot", "", "Image (*.png);;PDF (*.pdf);; Postscript (*.ps);; EPS (*.eps);; Vector graphics (*.svg)");
+        # TODO: Set DPI, FILETYPE, etc
+        plt.savefig(fileName[0])
+        
+    def on_plot_hover(self, event):
+        pass
+        
+    def onclick(self, event):
+        if event.dblclick:
+            pickedtick = event.artist
+            print(event)
+            print(pickedtick)
+
+    def resizeplot(self, event=""):
+        # TIGHT LAYOUT in order to view axes and everything
+        plt.tight_layout(pad=1.2)
 
 
     def No_Limits(self):
@@ -323,87 +409,3 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     
         plt.tight_layout(pad=1.2)
         self.canvas.draw()
-        
-    def createNew_Empty_Dataset(self):
-        # Add New empty tab to DataSettabWidget
-        ind = self.tab_count + 1
-        self.tab_count += 1
-        ds_name = 'DataSet' + '%d'%ind
-        ds = QDataSet(name=ds_name, parent=self)
-        self.datasets[ds_name] = ds
-        self.DataSettabWidget.addTab(ds, ds_name) 
-        #Set the new tab the active tab
-        self.DataSettabWidget.setCurrentIndex(ind - 1)
-       
-        dfile=list(self.filetypes.values())[0] 
-        dataset_header=dfile.basic_file_parameters[:]
-        dataset_header.insert(0, "File")
-        ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))   
-        hd=ds.DataSettreeWidget.header()
-        w=ds.DataSettreeWidget.width()
-        w/=hd.count()
-        for i in range(hd.count()):
-            hd.resizeSection(i, w)
-            #hd.setTextAlignment(i, Qt.AlignHCenter)
-    
-    def openDataset(self):
-        self.logger.debug("in openDataset")
-        if self.filetypes!={}:
-            # 'allowed_ext' defines the allowed file extensions
-            # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
-            allowed_ext = self.name.rstrip("0123456789") + " ("   #remove numbers from app name   
-            for ext in self.filetypes:
-                allowed_ext = allowed_ext + "*.%s "%ext
-            allowed_ext = allowed_ext + ")"
-        paths_to_open = self.openFileNamesDialog(allowed_ext)
-        if not paths_to_open:
-            return
-        self.new_tabs_from_files(paths_to_open)
-        
-    def new_tabs_from_files(self, paths_to_open):
-        if (self.DataSettabWidget.count()==0):
-                self.createNew_Empty_Dataset()
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
-        success, newtabs, ext = ds.do_open(paths_to_open)
-        if success==True:
-            for df in newtabs:
-                self.addTableToCurrentDataSet(df, ext)
-            self.update_all_ds_plots()
-            self.update_Qplot()
-        else:
-            QMessageBox.about(self, "Open", success)
-
-    def openFileNamesDialog(self, ext_filter="All Files (*)"):  
-        # file browser window  
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        dir_start = "data/"
-        dilogue_name = "Open"
-        selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
-        return selected_files
-
-    def showDataInspector(self):
-        if self.DataInspectordockWidget.isHidden():
-            self.DataInspectordockWidget.show()
-        else:
-            self.DataInspectordockWidget.hide()
-        
-    def printPlot(self):
-        fileName = QFileDialog.getSaveFileName(self,
-            "Export plot", "", "Image (*.png);;PDF (*.pdf);; Postscript (*.ps);; EPS (*.eps);; Vector graphics (*.svg)");
-        # TODO: Set DPI, FILETYPE, etc
-        plt.savefig(fileName[0])
-        
-    def on_plot_hover(self, event):
-        pass
-        
-    def onclick(self, event):
-        if event.dblclick:
-            pickedtick = event.artist
-            print(event)
-            print(pickedtick)
-
-    def resizeplot(self, event=""):
-        # TIGHT LAYOUT in order to view axes and everything
-        plt.tight_layout(pad=1.2)

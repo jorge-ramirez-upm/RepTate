@@ -56,7 +56,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.actionSANS.triggered.connect(self.new_sans_window)
         self.actionProject.triggered.connect(self.switch_project_view_hide)
         self.actionConsole.triggered.connect(self.switch_console_view_hide)
-        self.ApplicationtabWidget.tabCloseRequested.connect(self.close_tab)        
+        self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)        
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)
         #self.Projecttree.itemSelectionChanged.connect(self.treeChanged)
         
@@ -103,12 +103,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #print(index, appname)
         pass
 
-    def close_tab(self, index):
-        #appname = self.ApplicationtabWidget.widget(index).windowTitle
-        #print(appname)
-        #print(self.appdict[appname])
-        #self.Projecttree.removeItemWidget(self.appdict[appname],0)
+    def close_app_tab(self, index):
+        app_name = self.ApplicationtabWidget.tabText(index)
         self.ApplicationtabWidget.removeTab(index)
+        self.delete(app_name)
 
     def new_lve_window(self):
         """ Open a new LVE application window"""
@@ -120,8 +118,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_id = app_name + str(self.application_counter)
         ind = self.ApplicationtabWidget.addTab(page, QIcon(':/Icons/Images/LVE.ico'), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
-        root = QTreeWidgetItem(self.Projecttree, [app_name])
-        root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
+        # root = QTreeWidgetItem(self.Projecttree, [app_name])
+        # root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
 
 
     def new_mwd_window(self):

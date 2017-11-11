@@ -45,6 +45,28 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             for i, t in enumerate(ds.theories):
                 print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
+    def change_file_visibility(self, file_name_short, check_state=True):
+        file_matching = []
+        for file in self.files:
+            if file.file_name_short == file_name_short:
+                file_matching.append(file)
+        if len(file_matching)==0:
+            raise ValueError ('Could not match file %s'%file_name_short)
+            return
+        if len(file_matching)>1:
+            raise ValueError ('Too many match for file %s'%file_name_short)
+            return
+        
+        current_view = self.parent_application.current_view
+        for i in range(current_view.n):
+            file_matching[0].data_table.series[i].set_visible(check_state)
+
+        print(file_matching, check_state)
+        self.do_plot()
+
+        
+            
+
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
         palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
@@ -63,7 +85,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n):
                     file.data_table.series[i].set_data(x[:,i], y[:,i])
-                    file.data_table.series[i].set_visible(True)
+                    # file.data_table.series[i].set_visible(True)
                     file.data_table.series[i].set_marker(marker)
                     file.data_table.series[i].set_markerfacecolor('none')
                     file.data_table.series[i].set_markeredgecolor(color)

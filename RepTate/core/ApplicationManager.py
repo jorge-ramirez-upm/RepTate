@@ -4,8 +4,8 @@ import logging.handlers
 import matplotlib.pyplot as plt
 
 from CmdBase import *
-# from ApplicationMWD import *
 from ApplicationLVE import *
+# from ApplicationMWD import *
 # from ApplicationNLVE import *
 # from ApplicationGt import *
 #from ApplicationFRS_I import *
