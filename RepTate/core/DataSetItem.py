@@ -16,7 +16,7 @@ class DataSetItem(QTreeWidgetItem):
 
     def __init__(self, parent=None, itemlist=[], type=0, file_name_short="dummy", file_type=None):
         QTreeWidgetItem.__init__(self, parent, itemlist, type)
-        self.file_name_short = file_name_short
+        # self.file_name_short = file_name_short
         #Table.__init__(self, file_name_short, file_type)
 
     def __lt__(self, otherItem):

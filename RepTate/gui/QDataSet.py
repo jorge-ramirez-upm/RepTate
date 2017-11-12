@@ -3,7 +3,7 @@ from PyQt5.uic import loadUiType
 import itertools
 import Symbols_rc
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog
 from DataSetItem import *
 from DataSet import *
 
@@ -45,11 +45,36 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.TheoryLayout.insertWidget(0, tb)
 
         connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
-        connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_item_changed)
+        connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
+        connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
+        connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
+        connection_id = self.DataSettreeWidget.header().sectionClicked.connect(self.handle_headerSectionClicked)
+        
 
-    def handle_item_changed(self, item, column):
-        self.change_file_visibility(item.file_name_short, item.checkState(column)==Qt.Checked)
-        self.parent_application.update_Qplot() 
+    def handle_itemChanged(self, item, column):
+        self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
+        # self.parent_application.update_Qplot() 
+
+    def handle_itemClicked(self, item, column):
+        pass
+        # if item == self.DataSettreeWidget.headerItem():
+        #     self.sort_item(column)
+            
+    def handle_headerSectionClicked(self, column):
+        if column == 0:
+            return
+        sort_param = self.DataSettreeWidget.headerItem().text(column)
+        nitem = self.DataSettreeWidget.topLevelItemCount()
+        try:
+            value_up = float(self.DataSettreeWidget.topLevelItem(0).text(column))
+            value_down = float(self.DataSettreeWidget.topLevelItem(nitem - 1).text(column))
+        except ValueError: # e.g. in case of string
+            return
+        ascending = True if value_up < value_down else False
+        if not ascending:
+            sort_param = sort_param + ",reverse"
+        self.do_sort(sort_param)
+        self.do_plot()
 
     def resizeEvent(self, evt=None):
         hd=self.DataSettreeWidget.header()
@@ -58,6 +83,26 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         for i in range(hd.count()):
             hd.resizeSection(i, w)        
             #hd.setTextAlignment(i, Qt.AlignHCenter)
+
+    def handle_itemDoubleClicked(self, item, column):
+        if column>0:
+            param = self.DataSettreeWidget.headerItem().text(column) #retrive parameter name
+            file_name_short = item.text(0) #retrive file name
+            header = "Edit Parameter"
+            message = "Do you want to edit %s of \"%s\"?"%(param, file_name_short)
+            answer = QMessageBox.question(self, header, message)
+            if answer == QMessageBox.Yes:
+                old_value = item.text(column) #old parameter value       
+                message = "New value of %s"%param
+                new_value, success = QInputDialog.getDouble(self, header, message, float(old_value))
+                if success:
+                    for file in self.files:
+                        if file.file_name_short == file_name_short:
+                            file.file_parameters[param] = new_value #change value in DataSet
+                    self.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a false checkbox change
+                    item.setText(column, str(new_value)) #change table label
+                    self.DataSettreeWidget.blockSignals(False)
+
 
     def NewTheory(self):
         self.numtheories+=1
@@ -87,4 +132,4 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if (column==1):
             thcurrent = self.TheorytabWidget.currentWidget()
             thcurrent.editItem(item, column)
-            
+

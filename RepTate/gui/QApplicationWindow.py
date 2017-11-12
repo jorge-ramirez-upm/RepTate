@@ -13,7 +13,7 @@ import itertools
 import Symbols_rc
 import numpy as np
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView
 from QDataSet import *
 from DataFiles import *
 from DataSetItem import *
@@ -42,7 +42,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.name = name
         self.parent_application = parent
         self.canvas = 0
-        self.files = {}
         self.tab_count = 0
         #self.views={} # we use 'views' of Application.py
        
@@ -190,7 +189,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if (current_dataset==None):
             return
         selected_view_name = self.viewComboBox.currentText()
-        self.view_switch(selected_view_name)
+        self.view_switch(selected_view_name) #view_switch of Application
         self.update_Qplot()
 
     def populate_views(self):
@@ -227,19 +226,19 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             try:
                 lnew.append(str(dt.file_parameters[param]))
             except KeyError as e:
-                message = "Parameter %s not found in file\n '%s'.\nValue set to 0"%(e, dt.file_name_short)
-                QMessageBox.warning(self, 'Header', message)
-                lnew.append("0")
-
+                header = "Missing Parameter"
+                message = "Parameter %s not found in file '%s'."%(e, dt.file_name_short)
+                QMessageBox.warning(self, header, message)
+                
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
-        newitem = DataSetItem(ds.DataSettreeWidget, lnew, file_name_short=file_name_short)
+        newitem = DataSetItem(ds.DataSettreeWidget, lnew)
         newitem.setCheckState(0, 2)
         
     def createNew_Empty_Dataset(self):
-        # Add New empty tab to DataSettabWidget
-        self.tab_count += 1
-        ds_name = 'DataSet' + '%d'%self.tab_count
+        """Add New empty tab to DataSettabWidget"""
+        self.num_datasets += 1 #increment counter of Application
+        ds_name = 'Set' + '%d'%(self.num_datasets) 
         ds = QDataSet(name=ds_name, parent=self)
         self.datasets[ds_name] = ds
         ind = self.DataSettabWidget.addTab(ds, ds_name) 
@@ -251,6 +250,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         dataset_header.insert(0, "File")
         ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))   
         hd=ds.DataSettreeWidget.header()
+        hd.setSectionsClickable(True)
         w=ds.DataSettreeWidget.width()
         w/=hd.count()
         for i in range(hd.count()):
@@ -278,6 +278,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds_name = self.DataSettabWidget.tabText(ind)
         ds = self.datasets[ds_name]
         success, newtabs, ext = ds.do_open(paths_to_open)
+        self.check_no_param_missing(newtabs, ext)
         if success==True:
             for dt in newtabs:
                 self.addTableToCurrentDataSet(dt, ext)
@@ -285,6 +286,21 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.update_Qplot()
         else:
             QMessageBox.about(self, "Open", success)
+    
+    def check_no_param_missing(self, newtabs, ext):
+        for dt in newtabs:
+            e_list = []
+            for param in self.filetypes[ext].basic_file_parameters[:]:
+                try:
+                    temp = dt.file_parameters[param]
+                except KeyError:
+                    e_list.append(param)
+            if len(e_list)>0:
+                message = "Parameter(s) {%s} not found in file '%s'\n Value(s) set to 0"%(", ".join(e_list), dt.file_name_short)
+                header = "Missing Parameter"
+                QMessageBox.warning(self, header, message)
+                for e_param in e_list:
+                    dt.file_parameters[e_param] = "0"
 
     def openFileNamesDialog(self, ext_filter="All Files (*)"):  
         # file browser window  

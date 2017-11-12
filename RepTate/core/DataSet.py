@@ -48,7 +48,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     def change_file_visibility(self, file_name_short, check_state=True):
         file_matching = []
         for file in self.files:
-            if file.file_name_short == file_name_short:
+            if file.file_name_short == file_name_short: #find changed file
                 file_matching.append(file)
         if len(file_matching)==0:
             raise ValueError ('Could not match file \"%s\"'%file_name_short)
@@ -283,7 +283,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 df = ft.read_file(f, self, self.parent_application.ax)
                 unique = True
                 for file in self.files:
-                    if df.file_name_short == file.file_name_short: #check if file already exists
+                    if df.file_name_short == file.file_name_short: #check if file already exists in current ds
                         unique = False
                 if unique:
                     self.files.append(df)

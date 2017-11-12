@@ -107,7 +107,6 @@ class Application(CmdBase):
                 self.datasets[name].do_delete(file.file_name_short)
             del self.datasets[name] #delete object
             if replot: # only replot if deleted tab was not empty
-                print("replot: update_all_ds_plots")
                 self.update_all_ds_plots()
         else:
             print("Data Set \"%s\" not found"%name)            
