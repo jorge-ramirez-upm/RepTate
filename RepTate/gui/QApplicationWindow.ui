@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1009</width>
-    <height>712</height>
+    <width>1280</width>
+    <height>726</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -113,7 +113,37 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QComboBox" name="viewComboBox"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="minimumSize">
+          <size>
+           <width>38</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>38</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>View:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="viewComboBox">
+         <property name="currentText">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QTabWidget" name="DataSettabWidget">
@@ -218,7 +248,7 @@
   <action name="actionNew_Empty_Dataset">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/DataTable3D.ico</normaloff>:/Images/Images/DataTable3D.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-insert-table.png</normaloff>:/Images/Images/new_icons/icons8-insert-table.png</iconset>
    </property>
    <property name="text">
     <string>New Empty Dataset</string>
@@ -233,7 +263,7 @@
   <action name="actionNew_Dataset_From_File">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/ImportData.ico</normaloff>:/Images/Images/ImportData.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-add-file.png</normaloff>:/Images/Images/new_icons/icons8-add-file.png</iconset>
    </property>
    <property name="text">
     <string>New Dataset From File</string>
@@ -251,7 +281,7 @@
    </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/World.ico</normaloff>:/Images/Images/World.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-binoculars.png</normaloff>:/Images/Images/new_icons/icons8-binoculars.png</iconset>
    </property>
    <property name="text">
     <string>View All Sets</string>
@@ -263,7 +293,7 @@
   <action name="actionData_Representation">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/StarSmall.ico</normaloff>:/Images/Images/StarSmall.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-star-filled_setting.png</normaloff>:/Images/Images/new_icons/icons8-star-filled_setting.png</iconset>
    </property>
    <property name="text">
     <string>Data Representation</string>
@@ -275,7 +305,7 @@
   <action name="actionReload_Data">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Refresh.ico</normaloff>:/Images/Images/Refresh.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-reset.png</normaloff>:/Images/Images/new_icons/icons8-reset.png</iconset>
    </property>
    <property name="text">
     <string>Reload Data</string>
@@ -311,7 +341,7 @@
   <action name="actionNew_Theory">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Physics.ico</normaloff>:/Images/Images/Physics.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-einstein.png</normaloff>:/Images/Images/new_icons/icons8-einstein.png</iconset>
    </property>
    <property name="text">
     <string>New Theory</string>
@@ -323,7 +353,7 @@
   <action name="actionCalculate_Theory">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Bubble.ico</normaloff>:/Images/Images/Bubble.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-abacus.png</normaloff>:/Images/Images/new_icons/icons8-abacus.png</iconset>
    </property>
    <property name="text">
     <string>Calculate Theory</string>
@@ -335,7 +365,7 @@
   <action name="actionMinimize_error">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Minimize.ico</normaloff>:/Images/Images/Minimize.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-minimum-value.png</normaloff>:/Images/Images/new_icons/icons8-minimum-value.png</iconset>
    </property>
    <property name="text">
     <string>Minimize error</string>
@@ -347,7 +377,7 @@
   <action name="actionTheory_Options">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Settings.ico</normaloff>:/Images/Images/Settings.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-administrative-tools.png</normaloff>:/Images/Images/new_icons/icons8-administrative-tools.png</iconset>
    </property>
    <property name="text">
     <string>Theory Options</string>

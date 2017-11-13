@@ -5,4 +5,11 @@
     <file>Images/Physics.ico</file>
     <file>Images/Settings.ico</file>
   </qresource>
+  <qresource prefix="Icon8">
+    <file>Images/new_icons/icons8-abacus.png</file>
+    <file>Images/new_icons/icons8-administrative-tools.png</file>
+    <file>Images/new_icons/icons8-einstein.png</file>
+    <file>Images/new_icons/icons8-minimum-value.png</file>
+    <file>Images/new_icons/icons8-physics.png</file>
+  </qresource>
 </RCC>

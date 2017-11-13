@@ -23,5 +23,6 @@
         <file>Images/Test.ico</file>
         <file>Images/TTS.ico</file>
         <file>Images/MWD.ico</file>
+        <file>Images/new_icons/icons8-binoculars.png</file>
     </qresource>
 </RCC>
