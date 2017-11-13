@@ -9,4 +9,4 @@ class AboutWindow(QDialog, Ui_AboutReptateWindow):
         def __init__(self, parent):
             super(AboutWindow, self).__init__(parent)
             self.setupUi(self)
-
+    
