@@ -60,9 +60,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             raise ValueError ('Too many match for file \"%s\"'%file_name_short)
             return
 
+        file_matching[0].active = check_state
         for i in range(file_matching[0].data_table.MAX_NUM_SERIES):
             file_matching[0].data_table.series[i].set_visible(check_state)
-        
+
         #save the check_state to recover it upon change of tab or 'view all' events
         if check_state==False:
             self.inactive_files[file_matching[0].file_name_short] = file_matching[0]
@@ -76,11 +77,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     def do_show_all(self):
         for file in self.files:
             if file.file_name_short not in self.inactive_files:
+                file.active = True
                 for i in range(file.data_table.MAX_NUM_SERIES):
                     file.data_table.series[i].set_visible(True)
         
     def do_hide_all(self):
         for file in self.files:
+            file.active = False
             for i in range(file.data_table.MAX_NUM_SERIES):
                 file.data_table.series[i].set_visible(False)
 
@@ -129,7 +132,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 tt = th.tables[file.file_name_short]
                 x, y, success = view.view_proc(tt, file.file_parameters)
                 for i in range(tt.MAX_NUM_SERIES):
-                    if (i<view.n):
+                    if (i<view.n and file.active):
                         tt.series[i].set_data(x[:,i], y[:,i])
                         tt.series[i].set_visible(True)
                         tt.series[i].set_marker('')
