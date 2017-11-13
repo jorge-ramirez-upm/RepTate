@@ -24,7 +24,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.files=[] # TODO: Shall we change this list into a dict?
         self.current_file=None
         self.num_files=0
-
+        self.marker_size = 12
         self.theories={}
         self.num_theories=0
 
@@ -110,7 +110,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     file.data_table.series[i].set_markerfacecolor('none')
                     file.data_table.series[i].set_markeredgecolor(color)
                     file.data_table.series[i].set_markeredgewidth(1)
-                    file.data_table.series[i].set_markersize(12)
+                    file.data_table.series[i].set_markersize(self.marker_size)
                     file.data_table.series[i].set_linestyle('')
                     if (file.active and i==0):
                         label=""

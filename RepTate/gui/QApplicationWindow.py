@@ -74,8 +74,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionData_Representation)
         menu=QMenu()
-        menu.addAction(self.actionShow_Small_Symbols)
-        menu.addAction(self.actionShow_Large_Symbols)
+        menu.addAction(self.actionShow_Smaller_Symbols)
+        menu.addAction(self.actionResetSymbolsSize)
+        menu.addAction(self.actionShow_Larger_Symbols)
+        menu.setMaximumWidth(80)
+        menu.setToolTipsVisible(True)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         #
@@ -135,8 +138,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
        # connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.createNew_Dataset_From_File)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
 
-        connection_id = self.actionShow_Small_Symbols.triggered.connect(self.Small_Symbols)
-        connection_id = self.actionShow_Large_Symbols.triggered.connect(self.Large_Symbols)
+        connection_id = self.actionShow_Smaller_Symbols.triggered.connect(self.Smaller_Symbols)
+        connection_id = self.actionResetSymbolsSize.triggered.connect(self.ResetSymbolsSize)
+        connection_id = self.actionShow_Larger_Symbols.triggered.connect(self.Larger_Symbols)
 
         connection_id = self.actionNo_Limits.triggered.connect(self.No_Limits)
         connection_id = self.actionVertical_Limits.triggered.connect(self.Vertical_Limits)
@@ -401,11 +405,29 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def Both_Limits(self):
         self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
         
-    def Small_Symbols(self):
-        self.actionData_Representation.setIcon(self.actionShow_Small_Symbols.icon())
-    
-    def Large_Symbols(self):
-        self.actionData_Representation.setIcon(self.actionShow_Large_Symbols.icon())
+    def Smaller_Symbols(self):
+        ds_name = self.DataSettabWidget.currentWidget().name
+        ds = self.datasets[ds_name]
+        msize = ds.marker_size - 5
+        ds.marker_size = msize if msize>0 else 2
+        ds.do_plot()
+        # self.actionData_Representation.setIcon(self.actionShow_Smaller_Symbols.icon())
+
+    def ResetSymbolsSize(self):
+        ds_name = self.DataSettabWidget.currentWidget().name
+        ds = self.datasets[ds_name]
+        ds.marker_size = 12
+        ds.do_plot()
+        # self.actionData_Representation.setIcon(self.actionResetSymbolsSize.icon()) 
+   
+    def Larger_Symbols(self):
+        ds_name = self.DataSettabWidget.currentWidget().name
+        ds = self.datasets[ds_name]
+        msize = ds.marker_size + 5
+        ds.marker_size = msize if msize<26 else 26
+        ds.do_plot()
+
+        # self.actionData_Representation.setIcon(self.actionShow_Larger_Symbols.icon())
     
     def DEBUG_populate_current_Dataset_with_random_data(self):
         # Plot some random walks

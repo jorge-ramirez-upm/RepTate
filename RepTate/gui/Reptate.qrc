@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/Images">
+    <file>Images/new_icons/icons8-equal-sign.png</file>
+    <file>Images/new_icons/icons8-minus.png</file>
+    <file>Images/new_icons/icons8-plus.png</file>
     <file>Images/new_icons/icons8-microscope.png</file>
     <file>Images/new_icons/icons8-open-view-in-new-tab.png</file>
     <file>Images/new_icons/icons8-abacus.png</file>

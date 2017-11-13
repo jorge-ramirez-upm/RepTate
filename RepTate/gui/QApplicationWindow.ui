@@ -299,7 +299,7 @@
     <string>Data Representation</string>
    </property>
    <property name="toolTip">
-    <string>Choose Representation Mode</string>
+    <string>Change Symbol Size</string>
    </property>
   </action>
   <action name="actionReload_Data">
@@ -386,28 +386,34 @@
     <string>View Change Options of Theory</string>
    </property>
   </action>
-  <action name="actionShow_Small_Symbols">
+  <action name="actionShow_Smaller_Symbols">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/StarSmall.ico</normaloff>:/Images/Images/StarSmall.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-minus.png</normaloff>:/Images/Images/new_icons/icons8-minus.png</iconset>
    </property>
    <property name="text">
-    <string>Small Symbols</string>
+    <string>Smaller</string>
    </property>
    <property name="toolTip">
-    <string>Show small symbols</string>
+    <string>Use smaller symbols</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
    </property>
   </action>
-  <action name="actionShow_Large_Symbols">
+  <action name="actionShow_Larger_Symbols">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Star.ico</normaloff>:/Images/Images/Star.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-plus.png</normaloff>:/Images/Images/new_icons/icons8-plus.png</iconset>
    </property>
    <property name="text">
-    <string>Show Large Symbols</string>
+    <string>Larger</string>
    </property>
    <property name="toolTip">
-    <string>Large Symbols</string>
+    <string>Use Larger Symbols</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
    </property>
   </action>
   <action name="actionNo_Limits">
@@ -456,6 +462,18 @@
    </property>
    <property name="toolTip">
     <string>Both Limits</string>
+   </property>
+  </action>
+  <action name="actionResetSymbolsSize">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-equal-sign.png</normaloff>:/Images/Images/new_icons/icons8-equal-sign.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+   <property name="toolTip">
+    <string>Reset Symbols Size</string>
    </property>
   </action>
  </widget>
