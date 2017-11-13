@@ -3,7 +3,7 @@ from PyQt5.uic import loadUiType
 import itertools
 import Symbols_rc
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction
 from QFile import *
 from DataSet import *
 
@@ -35,11 +35,16 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         
         self.cbtheory = QComboBox()
         self.cbtheory.setToolTip("Choose a Theory")
-        for th in self.theories:
+        self.cbtheory.addItem("Select Theory")
+        self.cbtheory.model().item(0).setEnabled(False)
+        for th in self.parent_application.theories:
             self.cbtheory.addItem(th)
+        self.cbtheory.setMaximumWidth(115)
+        self.cbtheory.setMinimumWidth(50)
         tb.addWidget(self.cbtheory)
-
+        
         tb.addAction(self.actionNew_Theory)
+   
         tb.addAction(self.actionCalculate_Theory)
         tb.addAction(self.actionMinimize_Error)
         tb.addAction(self.actionTheory_Options)
@@ -51,8 +56,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
         #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
-        
-
+    
 
     def handle_itemChanged(self, item, column):
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
@@ -108,12 +112,14 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
 
     def NewTheory(self):
-        
-        self.num_theory_tab += 1
+        if self.cbtheory.currentIndex() == 0:
+            return
         thname = self.cbtheory.currentText()
+        self.cbtheory.setCurrentIndex(0)
+        
         obj=QTreeWidget()
         obj.setIndentation(0)
-        obj.setHeaderItem(QTreeWidgetItem(["Parameter","Value"]))
+        obj.setHeaderItem(QTreeWidgetItem(["Parameter", "Value"]))
         obj.setAlternatingRowColors(True)
         obj.setFrameShape(QFrame.NoFrame)
         obj.setFrameShadow(QFrame.Plain)
@@ -123,8 +129,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         #self.actionNew_Theory.triggered.connect(self.NewTheory)
         #obj.setStyleSheet(QStyle("QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}"))
         ##obj.styleSheet="QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}\n"
-        self.TheorytabWidget.addTab(obj, thname+'%d'%self.numtheories)
-        self.TheorytabWidget.setCurrentIndex(self.numtheories-1)
+        
+        self.num_theory_tab += 1
+        index = self.TheorytabWidget.addTab(obj, thname+'%d'%self.num_theory_tab)
+        self.TheorytabWidget.setCurrentIndex(index)
         item = QTreeWidgetItem(obj, ['Param1', "%g"%4.345])
         item.setCheckState(0,2)
         item.setFlags(item.flags() | Qt.ItemIsEditable)

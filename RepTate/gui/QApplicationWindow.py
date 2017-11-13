@@ -133,7 +133,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
        # connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.createNew_Dataset_From_File)
-        connection_id = self.actionReload_Data.triggered.connect(self.DEBUG_populate_current_Dataset_with_random_data)
+        connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
 
         connection_id = self.actionShow_Small_Symbols.triggered.connect(self.Small_Symbols)
         connection_id = self.actionShow_Large_Symbols.triggered.connect(self.Large_Symbols)
@@ -153,6 +153,29 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
+
+    def handle_actionReload_Data(self):
+        #loop over the tables in the current tab
+        ds_name = self.DataSettabWidget.currentWidget().name
+        ds = self.datasets[ds_name]
+        paths_to_reopen = self.clear_files_from_dataset(ds)
+        self.new_tables_from_files(paths_to_reopen)
+
+    def clear_files_from_dataset(self, ds):
+        """Remove all files from dataset and widget
+        return a list with the full path of deleted files"""
+        file_paths_cleaned = []
+        for file in ds.files:
+            file_paths_cleaned.append(file.file_full_path)
+            for i in range(file.data_table.MAX_NUM_SERIES):
+                # f.data_table.series[i].set_visible(False)
+                self.ax.lines.remove(file.data_table.series[i])
+        del ds.files[:]
+        ntable = ds.DataSettreeWidget.topLevelItemCount()
+        for i in range(ntable):
+            ds.DataSettreeWidget.takeTopLevelItem(0)
+        return file_paths_cleaned
+
 
     def handle_actionView_All_Sets(self, checked):
         """Show all datasets simultaneously"""

@@ -281,7 +281,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         else:
             f_names = line
         
-        newtabs=[]
+        newtables = []
         if (line=="" or len(f_names)==0): 
             message = "No valid file names provided"
             if CmdBase.mode!=CmdMode.GUI:
@@ -308,16 +308,31 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 if unique:
                     self.files.append(df)
                     self.current_file=df
-                    newtabs.append(df)
+                    newtables.append(df)
 
             if CmdBase.mode==CmdMode.GUI:
-                return (True, newtabs, f_ext[0])
+                return (True, newtables, f_ext[0])
         else:
             message = "File type \"%s\" does not exists"%f_ext[0]
             if CmdBase.mode!=CmdMode.GUI:
                 print (message)
                 return
             return (message, None, None)
+    
+    # def reload_data(self):
+    #     paths_to_open = []
+    #     for file in self.files:
+    #         paths_to_open.append([file.file_full_path, file.file_type])
+    #     del self.files[:]
+
+    #     for i in len(paths_to_open):
+    #         path, ft = paths_to_open[i]
+    #         df = ft.read_file(path, self, self.parent_application.ax)
+            
+        
+        
+            
+        
 
     def __listdir(self, root):
         "List directory 'root' appending the path separator to subdirs."
