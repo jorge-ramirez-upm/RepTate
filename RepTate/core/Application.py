@@ -2,7 +2,7 @@ import logging
 import itertools
 import seaborn as sns   
 import matplotlib.pyplot as plt
-from matplotlib.ticker import AutoMinorLocator, LogLocator
+from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
 from matplotlib.widgets import Cursor
 
 from CmdBase import *
@@ -241,13 +241,23 @@ class Application(CmdBase):
     def set_axes_properties(self):       
         if (self.current_view.log_x): 
             self.ax.set_xscale("log")
-            self.ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
+            #self.ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
+            locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+            self.ax.xaxis.set_major_locator(locmaj)
+            locmin = LogLocator(base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+            self.ax.xaxis.set_minor_locator(locmin)
+            self.ax.xaxis.set_minor_formatter(NullFormatter())
         else:
             self.ax.set_xscale("linear")
             self.ax.xaxis.set_minor_locator(AutoMinorLocator())
         if (self.current_view.log_y): 
             self.ax.set_yscale("log")
-            self.ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
+            #self.ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
+            locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+            self.ax.yaxis.set_major_locator(locmaj)
+            locmin = LogLocator(base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+            self.ax.yaxis.set_minor_locator(locmin)
+            self.ax.yaxis.set_minor_formatter(NullFormatter())
         else:
             self.ax.set_yscale("linear")
             self.ax.yaxis.set_minor_locator(AutoMinorLocator())
