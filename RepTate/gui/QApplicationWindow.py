@@ -170,6 +170,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if index == -1: #There is no tab
             self.update_Qplot()
             return
+        self.actionView_All_Sets.setChecked(False)
         ds_name = self.DataSettabWidget.widget(index).name
         ds = self.datasets[ds_name]
         ds.Qshow_all() #show all data of current dataset, except previously unticked files
