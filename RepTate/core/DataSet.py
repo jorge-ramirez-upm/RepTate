@@ -28,6 +28,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.theories={}
         self.num_theories=0
 
+        self.inactive_files = {}
+
 # DATASET STUFF ##########################################################################################################
     def do_list(self, line):
         """List the files in the current dataset"""
@@ -46,6 +48,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
     def change_file_visibility(self, file_name_short, check_state=True):
+        """Hide/Show file in the figure"""
         file_matching = []
         for file in self.files:
             if file.file_name_short == file_name_short: #find changed file
@@ -56,15 +59,30 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         if len(file_matching)>1:
             raise ValueError ('Too many match for file \"%s\"'%file_name_short)
             return
-        
-        current_view = self.parent_application.current_view
-        for i in range(current_view.n):
-            file_matching[0].data_table.series[i].set_visible(check_state)
 
+        for i in range(file_matching[0].data_table.MAX_NUM_SERIES):
+            file_matching[0].data_table.series[i].set_visible(check_state)
+        
+        #save the check_state to recover it upon change of tab or 'view all' events
+        if check_state==False:
+            self.inactive_files[file_matching[0].file_name_short] = file_matching[0]
+        else:
+            try:
+                del self.inactive_files[file_matching[0].file_name_short]
+            except KeyError:
+                pass
         self.do_plot()
 
+    def do_show_all(self):
+        for file in self.files:
+            if file.file_name_short not in self.inactive_files:
+                for i in range(file.data_table.MAX_NUM_SERIES):
+                    file.data_table.series[i].set_visible(True)
         
-            
+    def do_hide_all(self):
+        for file in self.files:
+            for i in range(file.data_table.MAX_NUM_SERIES):
+                file.data_table.series[i].set_visible(False)
 
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
@@ -82,7 +100,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             marker=next(markerlst)
             color=next(palette)
             for i in range(file.data_table.MAX_NUM_SERIES):
-                if (i<view.n):
+                if (i<view.n and file.active):
                     file.data_table.series[i].set_data(x[:,i], y[:,i])
                     # file.data_table.series[i].set_visible(True)
                     file.data_table.series[i].set_marker(marker)
@@ -145,6 +163,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
         if fp in self.current_file.file_parameters:
             self.files.sort(key = lambda x: float(x.file_parameters[fp]), reverse=rev)
+        elif fp=="File":
+            self.files.sort(key = lambda x: x.file_name_short, reverse=rev)
         else:
             print("Parameter %s not found in files"%line)
 
@@ -166,13 +186,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 # FILE STUFF ##########################################################################################################
     def do_delete(self, line):
         """Delete file from the data set"""
-        done=False
+        done = False
         for index, f in enumerate(self.files):
             if (f.file_name_short==line):
                 if (self.current_file==f):
-                    self.current_file=None
+                    self.current_file = None
                 self.files.remove(f)
-                done=True
+                done = True
         if (not done):
             print("File \"%s\" not found"%line)
 

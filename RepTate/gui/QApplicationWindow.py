@@ -16,7 +16,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView
 from QDataSet import *
 from DataFiles import *
-from DataSetItem import *
+from QFile import *
 from Application import *
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -147,47 +147,66 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
         connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.mouse_Double_Click_Event)
+        connection_id = self.DataSettabWidget.currentChanged.connect(self.handle_currentChanged)
+        connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
 
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
-    
+
+    def handle_actionView_All_Sets(self, checked):
+        """Show all datasets simultaneously"""
+        if checked:
+            for ds in self.datasets.values():
+                ds.Qshow_all()
+                ds.do_plot()
+        else:
+            #trigger a false change of tab to hide other dataset files from figure
+            self.handle_currentChanged(self.DataSettabWidget.currentIndex())
+        self.update_Qplot()
+
+    def handle_currentChanged(self, index):
+        """Change figure when the active DataSet tab is changed"""
+        if index == -1: #There is no tab
+            self.update_Qplot()
+            return
+        ds_name = self.DataSettabWidget.widget(index).name
+        ds = self.datasets[ds_name]
+        ds.Qshow_all() #show all data of current dataset, except previously unticked files
+
+        #hide files of all datasets except current one
+        ntab = self.DataSettabWidget.count()
+        if ntab > 1:
+            for i in range(ntab): 
+                if i!=index:
+                    ds_name_to_hide = self.DataSettabWidget.widget(i).name
+                    self.datasets[ds_name_to_hide].do_hide_all()
+        ds.do_plot()
+        self.update_Qplot()
+
     def mouse_Double_Click_Event(self, index):
-        """Edit DataSet tab name"""
+        """Edit tabWidget (DataSet tab) name"""
         old_name = self.DataSettabWidget.tabText(index)
         new_tab_name, success = QInputDialog.getText (
                 self, "Change Name",
                 "Insert New Tab Name",
                 QLineEdit.Normal,
                 old_name)
-        if (success and new_tab_name!=""):
-            if new_tab_name in self.datasets:
-                message = "\"%s\" already used"%new_tab_name
-                QMessageBox.warning(self, 'Rename', message)
-                return
-            #change TabWidget label
+        if (success and new_tab_name!=""):    
             self.DataSettabWidget.setTabText(index, new_tab_name)
-            # #change TabWidget name attribute
-            # self.DataSettabWidget.widget(index).name = new_tab_name
-            #change DataSet.name
-            self.datasets[old_name].name = new_tab_name
-            #copy dict value to new key
-            self.datasets[new_tab_name] = self.datasets[old_name]
-            #delete old key (also deletes the DataSet object)
-            self.delete(old_name) #call Application.delete
 
     def close_data_tab_handler(self, index):
         """Delete a dataset tab from the current application"""
-        name = self.DataSettabWidget.tabText(index)
-        self.delete(name) #call Application.delete to delete DataSet
+        ds_name = self.DataSettabWidget.widget(index).name
+        self.delete(ds_name) #call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
-        self.update_Qplot()
         
+        #if not current tab, need to update plot
+        current_index = self.DataSettabWidget.currentIndex()
+        self.handle_currentChanged(current_index) #trigger a false tab change to current tab
+           
     def change_view(self):
         """Change plot view"""
-        current_dataset = self.DataSettabWidget.currentWidget()
-        if (current_dataset==None):
-            return
         selected_view_name = self.viewComboBox.currentText()
         self.view_switch(selected_view_name) #view_switch of Application
         self.update_Qplot()
@@ -220,6 +239,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.canvas.draw()
 
     def addTableToCurrentDataSet(self, dt, ext):
+        """Add file table to curent dataset tab"""
         ds = self.DataSettabWidget.currentWidget()
         lnew = []
         for param in self.filetypes[ext].basic_file_parameters[:]:
@@ -232,16 +252,24 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
-        newitem = DataSetItem(ds.DataSettreeWidget, lnew)
+        newitem = QFile(ds.DataSettreeWidget, lnew)
         newitem.setCheckState(0, 2)
         
     def createNew_Empty_Dataset(self):
         """Add New empty tab to DataSettabWidget"""
         self.num_datasets += 1 #increment counter of Application
-        ds_name = 'Set' + '%d'%(self.num_datasets) 
+        num = self.num_datasets
+        while True:
+            ds_name = 'Set' + '%d'%(num)
+            if ds_name not in self.datasets: #see whether the DataSet name is already used
+                break
+            num += 1
         ds = QDataSet(name=ds_name, parent=self)
         self.datasets[ds_name] = ds
-        ind = self.DataSettabWidget.addTab(ds, ds_name) 
+        ind = self.DataSettabWidget.addTab(ds, ds_name)
+        #access DataSet corresponding to the tabWidget via
+        #self.DataSettabWidget.currentWidget().name
+
         #Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind)
        
@@ -274,8 +302,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def new_tables_from_files(self, paths_to_open):
         if (self.DataSettabWidget.count()==0):
                 self.createNew_Empty_Dataset()
-        ind = self.DataSettabWidget.currentIndex()
-        ds_name = self.DataSettabWidget.tabText(ind)
+        ds_name = self.DataSettabWidget.currentWidget().name
         ds = self.datasets[ds_name]
         success, newtabs, ext = ds.do_open(paths_to_open)
         self.check_no_param_missing(newtabs, ext)
@@ -377,7 +404,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             edgecolors=next(palette)
 
         for i in range(num_lines):
-            root = DataSetItem(ds.DataSettreeWidget, ['Line %02d'%(i+nold), "%g"%np.sin(i), "%g"%(1-1/(i+1))])
+            root = QFile(ds.DataSettreeWidget, ['Line %02d'%(i+nold), "%g"%np.sin(i), "%g"%(1-1/(i+1))])
             root.setCheckState(0, 2)
             root.setIcon(0, QIcon(':/Icons/Images/symbols/'+pname+str(i+1)+'.ico'))
             

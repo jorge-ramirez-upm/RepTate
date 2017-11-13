@@ -12,7 +12,7 @@ class DataTable(object):
         self.num_rows=0
         self.column_names=[]
         self.column_units=[]
-        self.data=np.zeros((self.num_rows,self.num_columns))
+        self.data=np.zeros((self.num_rows, self.num_columns))
         self.series=[]
         for i in range(self.MAX_NUM_SERIES): 
             ss = ax.plot([], [], label='')

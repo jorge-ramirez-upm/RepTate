@@ -16,7 +16,7 @@ class File(object):
         tmpname = tmpname[len(tmpname)-1]
         lst = tmpname.split('.')
         short = '.'.join(lst[:-1])      
-        self.file_name_short=short
+        self.file_name_short = short
         self.file_type = file_type
         self.parent_dataset = parent_dataset
         self.ax = ax

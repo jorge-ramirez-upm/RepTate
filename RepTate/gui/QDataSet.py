@@ -4,7 +4,7 @@ import itertools
 import Symbols_rc
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog
-from DataSetItem import *
+from QFile import *
 from DataSet import *
 
 Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
@@ -47,34 +47,34 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
-        connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
-        connection_id = self.DataSettreeWidget.header().sectionClicked.connect(self.handle_headerSectionClicked)
+        #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
+        connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         
+
 
     def handle_itemChanged(self, item, column):
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
-        # self.parent_application.update_Qplot() 
-
-    def handle_itemClicked(self, item, column):
-        pass
-        # if item == self.DataSettreeWidget.headerItem():
-        #     self.sort_item(column)
             
-    def handle_headerSectionClicked(self, column):
-        if column == 0:
-            return
+    def handle_sortIndicatorChanged(self, column, order):
+        """Sort files according to the selected parameter (column) and replot"""
+        # if column == 0: #do not sort file name
+        #     return
         sort_param = self.DataSettreeWidget.headerItem().text(column)
-        nitem = self.DataSettreeWidget.topLevelItemCount()
-        try:
-            value_up = float(self.DataSettreeWidget.topLevelItem(0).text(column))
-            value_down = float(self.DataSettreeWidget.topLevelItem(nitem - 1).text(column))
-        except ValueError: # e.g. in case of string
-            return
-        ascending = True if value_up < value_down else False
-        if not ascending:
+        rev = True if order==Qt.AscendingOrder else False
+        if rev:
             sort_param = sort_param + ",reverse"
         self.do_sort(sort_param)
         self.do_plot()
+
+    def Qshow_all(self):
+        """Show all the files in this dataset, except those previously hiden"""
+        self.do_show_all()
+        for i in range(self.DataSettreeWidget.topLevelItemCount()):
+            file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
+            if file_name in self.inactive_files:
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 0)
+            else:
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 2)
 
     def resizeEvent(self, evt=None):
         hd=self.DataSettreeWidget.header()
@@ -85,6 +85,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             #hd.setTextAlignment(i, Qt.AlignHCenter)
 
     def handle_itemDoubleClicked(self, item, column):
+        """Edit item entry upon double click"""
         if column>0:
             param = self.DataSettreeWidget.headerItem().text(column) #retrive parameter name
             file_name_short = item.text(0) #retrive file name

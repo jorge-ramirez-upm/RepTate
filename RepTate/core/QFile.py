@@ -2,7 +2,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QTreeWidgetItem
 #from Table import *
 
-class DataSetItem(QTreeWidgetItem):
+class QFile(QTreeWidgetItem):
     """ Each item of a dataset is a wrapper of the QTreeWidgetItem
         It contains the necessary tables and types
     """

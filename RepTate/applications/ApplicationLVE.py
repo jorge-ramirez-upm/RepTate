@@ -16,14 +16,11 @@ class ApplicationLVE(CmdBase):
     description = "Linear Viscoelasticity"
 
     def __new__(cls, name="LVE", parent = None):
-        if CmdBase.mode == CmdMode.GUI:   
-            return GUIApplicationLVE(name, parent)
-        else:
-            return CLApplicationLVE(name, parent)
+        return GUIApplicationLVE(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationLVE(name, parent)
 
-class LVEstuff:
+class BaseApplicationLVE:
     def __init__(self, name="LVE", parent = None):
-        super(LVEstuff, self).__init__(name, parent)
+        super(BaseApplicationLVE, self).__init__(name, parent)
 
         # VIEWS
         self.views["Log(G',G''(w))"] = View("Log(G',G''(w))", "Log Storage,Loss moduli", "Log($\omega$)", "Log(G'($\omega$),G''($\omega$))", False, False, self.viewLogG1G2, 2, ["G'(w)","G''(w)"])
@@ -84,17 +81,17 @@ class LVEstuff:
         y[: ,0] = dt.data[:, 2]/dt.data[:, 1]
         return x, y, True
 
-class CLApplicationLVE(LVEstuff, Application):
+class CLApplicationLVE(BaseApplicationLVE, Application):
     def __init__(self, name="LVE", parent = None):
         print("CLApplicationLVE.__init__(self) called")
         super(CLApplicationLVE, self).__init__(name, parent)
         print("CLApplicationLVE.__init__(self) ended")
         
 
-class GUIApplicationLVE(LVEstuff, QApplicationWindow):
+class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
     def __init__(self, name="LVE", parent = None):
         print("GUIApplicationLVE.__init__(self) called")
         super(GUIApplicationLVE, self).__init__(name, parent)
         print("GUIApplicationLVE.__init__(self) ended")
 
-        self.populate_views()
+        self.populate_views() #populate the view ComboBox

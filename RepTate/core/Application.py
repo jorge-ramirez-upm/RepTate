@@ -102,12 +102,11 @@ class Application(CmdBase):
     def delete(self, name):
         """Delete a dataset from the current application"""
         if name in self.datasets.keys():
-            replot = True if len(self.datasets[name].files)>0 else False
-            for file in self.datasets[name].files: # remove data files
-                self.datasets[name].do_delete(file.file_name_short)
+            for file in self.datasets[name].files: # remove matplotlib artist from ax
+                for i in range(file.data_table.MAX_NUM_SERIES):
+                    # f.data_table.series[i].set_visible(False)
+                    self.ax.lines.remove(file.data_table.series[i])
             del self.datasets[name] #delete object
-            if replot: # only replot if deleted tab was not empty
-                self.update_all_ds_plots()
         else:
             print("Data Set \"%s\" not found"%name)            
         
