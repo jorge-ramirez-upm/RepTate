@@ -20,7 +20,7 @@ def start_RepTate(argv):
     """
     GUI = True
     try:
-        opts, args = getopt.getopt(argv,"hg")
+        opts, args = getopt.getopt(argv,"hc")
     except getopt.GetoptError:
         print ('test.py -i <inputfile> -o <outputfile>')
         sys.exit(2)
@@ -28,8 +28,8 @@ def start_RepTate(argv):
         if opt in ("-h","--help"):
             print ('RepTate.py [-g] \n\t-g\tRun the Graphic User Interface')
             sys.exit()
-        elif opt == '-g':
-            GUI=True
+        elif opt == '-c':
+            GUI=False
 
     if GUI:
         QApplication.setStyle("Fusion") #comment that line for a native look

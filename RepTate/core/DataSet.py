@@ -102,7 +102,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
                     file.data_table.series[i].set_data(x[:,i], y[:,i])
-                    # file.data_table.series[i].set_visible(True)
+                    file.data_table.series[i].set_visible(True)
                     file.data_table.series[i].set_marker(marker)
                     file.data_table.series[i].set_markerfacecolor('none')
                     file.data_table.series[i].set_markeredgecolor(color)
