@@ -194,7 +194,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.update_Qplot()
             return
         if self.actionView_All_Sets.isChecked():
-            print("actionView_All_Sets: True")
             return
         ds_name = self.DataSettabWidget.widget(index).name
         ds = self.datasets[ds_name]

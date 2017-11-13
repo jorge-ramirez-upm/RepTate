@@ -103,7 +103,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #print(index, appname)
         pass
 
-    def close_app_tab(self, index):
+    def close_app_tab(self, index):    
         app_name = self.ApplicationtabWidget.tabText(index)
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app_name)
