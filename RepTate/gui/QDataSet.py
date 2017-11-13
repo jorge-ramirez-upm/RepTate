@@ -3,7 +3,7 @@ from PyQt5.uic import loadUiType
 import itertools
 import Symbols_rc
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame
 from QFile import *
 from DataSet import *
 
@@ -19,6 +19,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         print("QDataSet.__init__(self) ended")
 
         self.setupUi(self)
+        self.num_theory_tab = 0
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
         hd = self.DataSettreeWidget.header()
@@ -31,18 +32,19 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         # Theory Toolbar
         tb = QToolBar()
         tb.setIconSize(QSize(24,24))
-        self.numtheories=0
+        
         self.cbtheory = QComboBox()
-        self.cbtheory.setToolTip("Hello")
-        self.cbtheory.addItem("ThA")
-        self.cbtheory.addItem("ThB")
-        self.cbtheory.addItem("ThC")
+        self.cbtheory.setToolTip("Choose a Theory")
+        for th in self.theories:
+            self.cbtheory.addItem(th)
         tb.addWidget(self.cbtheory)
+
         tb.addAction(self.actionNew_Theory)
         tb.addAction(self.actionCalculate_Theory)
         tb.addAction(self.actionMinimize_Error)
         tb.addAction(self.actionTheory_Options)
         self.TheoryLayout.insertWidget(0, tb)
+
 
         connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
@@ -106,7 +108,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
 
     def NewTheory(self):
-        self.numtheories+=1
+        
+        self.num_theory_tab += 1
         thname = self.cbtheory.currentText()
         obj=QTreeWidget()
         obj.setIndentation(0)
@@ -117,7 +120,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         #obj.setEditTriggers(QAbstractItemView.NoEditTriggers) 
         obj.setEditTriggers(obj.NoEditTriggers) 
         connection_id = obj.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
-        self.actionNew_Theory.triggered.connect(self.NewTheory)
+        #self.actionNew_Theory.triggered.connect(self.NewTheory)
         #obj.setStyleSheet(QStyle("QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}"))
         ##obj.styleSheet="QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}\n"
         self.TheorytabWidget.addTab(obj, thname+'%d'%self.numtheories)

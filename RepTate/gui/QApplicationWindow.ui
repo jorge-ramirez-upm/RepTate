@@ -209,7 +209,7 @@
   <action name="actionPrint">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/printer.ico</normaloff>:/Images/Images/printer.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-slr-back-side.png</normaloff>:/Images/Images/new_icons/icons8-slr-back-side.png</iconset>
    </property>
    <property name="text">
     <string>Print</string>
@@ -248,7 +248,7 @@
   <action name="actionNew_Empty_Dataset">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-insert-table.png</normaloff>:/Images/Images/new_icons/icons8-insert-table.png</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-add-row.png</normaloff>:/Images/Images/new_icons/icons8-add-row.png</iconset>
    </property>
    <property name="text">
     <string>New Empty Dataset</string>
@@ -263,7 +263,7 @@
   <action name="actionNew_Dataset_From_File">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-add-file.png</normaloff>:/Images/Images/new_icons/icons8-add-file.png</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-open-view-in-new-tab.png</normaloff>:/Images/Images/new_icons/icons8-open-view-in-new-tab.png</iconset>
    </property>
    <property name="text">
     <string>New Dataset From File</string>
@@ -329,7 +329,7 @@
   <action name="actionInspect_Data">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/AllFiles.ico</normaloff>:/Images/Images/AllFiles.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-microscope.png</normaloff>:/Images/Images/new_icons/icons8-microscope.png</iconset>
    </property>
    <property name="text">
     <string>Inspect Data</string>
