@@ -113,10 +113,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_name = "LVE"
         self.Qopen_app(app_name)
 
+
     def Qopen_app(self, app_name):
-        page = self.new(app_name)
+        newapp = self.new(app_name)
+        newapp.createNew_Empty_Dataset() #populate with empty dataset at app opening
         app_id = app_name + str(self.application_counter)
-        ind = self.ApplicationtabWidget.addTab(page, QIcon(':/Icons/Images/LVE.ico'), app_id)
+        ind = self.ApplicationtabWidget.addTab(newapp, QIcon(':/Icons/Images/LVE.ico'), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
         # root = QTreeWidgetItem(self.Projecttree, [app_name])
         # root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
