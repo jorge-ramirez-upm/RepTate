@@ -58,6 +58,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
+        connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemSelectionChanged)
     
 
     def handle_itemSelectionChanged(self):
@@ -82,6 +83,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.parent_application.update_plot()
 
     def populate_inspector(self, file):
+        print("populate_inspector")
         if self.parent_application.DataInspectordockWidget.isHidden():
             return
         dt = file.data_table
@@ -92,8 +94,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         inspec_tab.setColumnCount(ncol)
         for i in range(nrow):
             for j in range(ncol):
-                x = str(dt.data[i, j])
+                x = "%.3e" %dt.data[i, j]
                 inspec_tab.setItem(i, j, QTableWidgetItem(x)) # dt.setItem(row, column, item)
+        ds_index = self.parent_application.DataSettabWidget.currentIndex()
+        self.parent_application.DataInspectordockWidget.setWindowTitle(
+            "File: \"%s\" in %s"%(file.file_name_short, self.parent_application.DataSettabWidget.tabText(ds_index)))
 
     def handle_itemChanged(self, item, column):
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)

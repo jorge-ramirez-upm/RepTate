@@ -321,7 +321,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for i in range(hd.count()):
             hd.resizeSection(i, w)
             #hd.setTextAlignment(i, Qt.AlignHCenter)
-    
+        
+        #Define the inspector column names (header)
+        if num == 1:
+            inspect_header = dfile.col_names[:]
+            inspec_tab = self.tableWidget.setHorizontalHeaderLabels(inspect_header)
+
+
     def openDataset(self):
         self.logger.debug("in openDataset")
         if self.filetypes!={}:
