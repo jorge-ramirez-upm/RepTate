@@ -69,29 +69,27 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         for f in self.files:
             if f.file_name_short==selection[0].text(0):    
                 self.highlight_series(f)
-
-            
+                self.populate_inspector(f)
 
     def highlight_series(self, file):
         view = self.parent_application.current_view
-        inspect = False
-        if not self.parent_application.DataInspectordockWidget.isHidden():
-            inspect = True
-            j = 0
-            dt = self.parent_application.tableWidget
         for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
                     file.data_table.series[i].set_marker("X")
                     # file.data_table.series[i].set_linestyle(":")
                     file.data_table.series[i].set_markerfacecolor("black")
                     file.data_table.series[i].set_markeredgecolor("black")
-                if inspect and i<view.n:                    
-                    x, y, success = view.view_proc(file.data_table, file.file_parameters)                        
-                    for k in range(len(x)):
-                        dt.setItem(k, j, QTableWidgetItem(str(x[k,i]))) # dt.setItem(row, column, item)
-                        dt.setItem(k, j+1, QTableWidgetItem(str(y[k,i])))
-                    j += 2
         self.parent_application.update_plot()
+
+    def populate_inspector(self, file):
+        if self.parent_application.DataInspectordockWidget.isHidden():
+            return
+        dt = file.data_table
+        inspec_tab = self.parent_application.tableWidget
+        for i in range(dt.num_rows):
+            for j in range(dt.num_columns):
+                x = str(dt.data[i, j])
+                inspec_tab.setItem(i, j, QTableWidgetItem(x)) # dt.setItem(row, column, item)
 
     def handle_itemChanged(self, item, column):
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
