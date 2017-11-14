@@ -67,6 +67,9 @@
     <Compile Include="core\View.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gui\QApplicationWindow.py" />
+    <Compile Include="gui\QDataSet.py" />
+    <Compile Include="gui\SplashScreen.py" />
     <Compile Include="RepTate.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>

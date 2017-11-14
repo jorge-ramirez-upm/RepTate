@@ -18,16 +18,7 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -61,16 +52,7 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
@@ -100,16 +82,7 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
@@ -131,6 +104,12 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>View:</string>
          </property>
@@ -138,7 +117,7 @@
        </item>
        <item>
         <widget class="QComboBox" name="viewComboBox">
-         <property name="currentText">
+         <property name="currentText" stdset="0">
           <string/>
          </property>
         </widget>
@@ -388,7 +367,7 @@
   </action>
   <action name="actionShow_Smaller_Symbols">
    <property name="icon">
-    <iconset resource="Reptate.qrc">
+    <iconset>
      <normaloff>:/Images/Images/new_icons/icons8-minus.png</normaloff>:/Images/Images/new_icons/icons8-minus.png</iconset>
    </property>
    <property name="text">
@@ -403,7 +382,7 @@
   </action>
   <action name="actionShow_Larger_Symbols">
    <property name="icon">
-    <iconset resource="Reptate.qrc">
+    <iconset>
      <normaloff>:/Images/Images/new_icons/icons8-plus.png</normaloff>:/Images/Images/new_icons/icons8-plus.png</iconset>
    </property>
    <property name="text">
@@ -466,7 +445,7 @@
   </action>
   <action name="actionResetSymbolsSize">
    <property name="icon">
-    <iconset resource="Reptate.qrc">
+    <iconset>
      <normaloff>:/Images/Images/new_icons/icons8-equal-sign.png</normaloff>:/Images/Images/new_icons/icons8-equal-sign.png</iconset>
    </property>
    <property name="text">
