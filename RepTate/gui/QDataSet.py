@@ -3,7 +3,7 @@ from PyQt5.uic import loadUiType
 import itertools
 import Symbols_rc
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
 from QFile import *
 from DataSet import *
 
@@ -22,6 +22,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.num_theory_tab = 0
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
+        self.DataSettreeWidget.setSelectionMode(1) #QAbstractItemView::SingleSelection
         hd = self.DataSettreeWidget.header()
         hd.setSectionsMovable(False)
         w = self.DataSettreeWidget.width()
@@ -56,7 +57,39 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
         #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
+        connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
     
+
+    def handle_itemSelectionChanged(self):
+        self.do_plot()
+        selection = self.DataSettreeWidget.selectedItems()
+        for f in self.files:
+            if f.file_name_short==selection[0].text(0):
+                file = f
+        self.highlight_series(file)
+
+            
+
+    def highlight_series(self, file):
+        view = self.parent_application.current_view
+        inspect = False
+        if not self.parent_application.DataInspectordockWidget.isHidden():
+            inspect = True
+            j = 0
+            dt = self.parent_application.tableWidget
+        for i in range(file.data_table.MAX_NUM_SERIES):
+                if (i<view.n and file.active):
+                    file.data_table.series[i].set_marker("X")
+                    file.data_table.series[i].set_linestyle(":")
+                    file.data_table.series[i].set_markerfacecolor("black")
+                    file.data_table.series[i].set_markeredgecolor("black")
+                if inspect and i<view.n:                    
+                    x, y, success = view.view_proc(file.data_table, file.file_parameters)                        
+                    for k in range(len(x)):
+                        dt.setItem(k, j, QTableWidgetItem(str(x[k,i]))) # dt.setItem(row, column, item)
+                        dt.setItem(k, j+1, QTableWidgetItem(str(y[k,i])))
+                    j += 2
+        self.parent_application.update_plot()
 
     def handle_itemChanged(self, item, column):
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
