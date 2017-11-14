@@ -158,6 +158,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
 
+
+    def actionShiftVertically(self):
+        inspec_tab = self.tableWidget
+            
+
     def handle_actionReload_Data(self):
         """Reload the data files: remove and reopen the current files"""
         tab = self.DataSettabWidget.currentWidget()

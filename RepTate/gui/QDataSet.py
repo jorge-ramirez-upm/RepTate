@@ -85,9 +85,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if self.parent_application.DataInspectordockWidget.isHidden():
             return
         dt = file.data_table
+        nrow = dt.num_rows
+        ncol = dt.num_columns
         inspec_tab = self.parent_application.tableWidget
-        for i in range(dt.num_rows):
-            for j in range(dt.num_columns):
+        inspec_tab.setRowCount(nrow)
+        inspec_tab.setColumnCount(ncol)
+        for i in range(nrow):
+            for j in range(ncol):
                 x = str(dt.data[i, j])
                 inspec_tab.setItem(i, j, QTableWidgetItem(x)) # dt.setItem(row, column, item)
 
