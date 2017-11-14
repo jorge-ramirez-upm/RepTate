@@ -159,30 +159,35 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #print (xaxis)
 
     def handle_actionReload_Data(self):
-        #loop over the tables in the current tab
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
+        """Reload the data files: remove and reopen the current files"""
+        tab = self.DataSettabWidget.currentWidget()
+        if tab == None:
+            return
+        ds = self.datasets[tab.name]
         paths_to_reopen = self.clear_files_from_dataset(ds)
-        self.new_tables_from_files(paths_to_reopen)
+        if paths_to_reopen:
+            self.new_tables_from_files(paths_to_reopen)
 
     def clear_files_from_dataset(self, ds):
-        """Remove all files from dataset and widget
+        """Remove all files from dataset and widgetTree,
         return a list with the full path of deleted files"""
         file_paths_cleaned = []
+        #remove files from dataset
         for file in ds.files:
             file_paths_cleaned.append(file.file_full_path)
             for i in range(file.data_table.MAX_NUM_SERIES):
-                # f.data_table.series[i].set_visible(False)
                 self.ax.lines.remove(file.data_table.series[i])
         del ds.files[:]
+        #remove tables from widget
         ntable = ds.DataSettreeWidget.topLevelItemCount()
         for i in range(ntable):
             ds.DataSettreeWidget.takeTopLevelItem(0)
         return file_paths_cleaned
 
-
     def handle_actionView_All_Sets(self, checked):
         """Show all datasets simultaneously"""
+        if len(self.datasets) < 2:
+            return
         if checked:
             for ds in self.datasets.values():
                 ds.Qshow_all()
@@ -214,7 +219,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.update_Qplot()
 
     def mouse_Double_Click_Event(self, index):
-        """Edit tabWidget (DataSet tab) name"""
+        """Edit DataSet-tab name"""
         old_name = self.DataSettabWidget.tabText(index)
         new_tab_name, success = QInputDialog.getText (
                 self, "Change Name",
@@ -296,13 +301,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = QDataSet(name=ds_name, parent=self)
         self.datasets[ds_name] = ds
         ind = self.DataSettabWidget.addTab(ds, ds_name)
-        #access DataSet corresponding to the tabWidget via
-        #self.DataSettabWidget.currentWidget().name
 
         #Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind)
-       
-        dfile=list(self.filetypes.values())[0] 
+        #Define the tab column names (header)
+        dfile = list(self.filetypes.values())[0] 
         dataset_header=dfile.basic_file_parameters[:]
         dataset_header.insert(0, "File")
         ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))   
@@ -331,20 +334,20 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def new_tables_from_files(self, paths_to_open):
         if (self.DataSettabWidget.count()==0):
                 self.createNew_Empty_Dataset()
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
-        success, newtabs, ext = ds.do_open(paths_to_open)
-        self.check_no_param_missing(newtabs, ext)
+        tab = self.DataSettabWidget.currentWidget()
+        ds = self.datasets[tab.name]
+        success, newtables, ext = ds.do_open(paths_to_open)
+        self.check_no_param_missing(newtables, ext)
         if success==True:
-            for dt in newtabs:
+            for dt in newtables:
                 self.addTableToCurrentDataSet(dt, ext)
-            self.update_all_ds_plots()
+            ds.do_plot()
             self.update_Qplot()
         else:
             QMessageBox.about(self, "Open", success)
     
-    def check_no_param_missing(self, newtabs, ext):
-        for dt in newtabs:
+    def check_no_param_missing(self, newtables, ext):
+        for dt in newtables:
             e_list = []
             for param in self.filetypes[ext].basic_file_parameters[:]:
                 try:
@@ -406,23 +409,29 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
         
     def Smaller_Symbols(self):
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
+        tab = self.DataSettabWidget.currentWidget()
+        if tab == None:
+            return
+        ds = self.datasets[tab.name]
         msize = ds.marker_size - 5
         ds.marker_size = msize if msize>0 else 2
         ds.do_plot()
         # self.actionData_Representation.setIcon(self.actionShow_Smaller_Symbols.icon())
 
     def ResetSymbolsSize(self):
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
+        tab = self.DataSettabWidget.currentWidget()
+        if tab == None:
+            return        
+        ds = self.datasets[tab.name]
         ds.marker_size = 12
         ds.do_plot()
         # self.actionData_Representation.setIcon(self.actionResetSymbolsSize.icon()) 
    
     def Larger_Symbols(self):
-        ds_name = self.DataSettabWidget.currentWidget().name
-        ds = self.datasets[ds_name]
+        tab = self.DataSettabWidget.currentWidget()
+        if tab == None:
+            return
+        ds = self.datasets[tab.name]
         msize = ds.marker_size + 5
         ds.marker_size = msize if msize<26 else 26
         ds.do_plot()

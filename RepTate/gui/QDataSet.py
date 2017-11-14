@@ -61,13 +61,16 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
     
 
     def handle_itemSelectionChanged(self):
+        """Define actions for when a file table is selected"""
         self.do_plot()
         selection = self.DataSettreeWidget.selectedItems()
-        if selection=[]:
+        if selection==[]:
             return
         for f in self.files:
-            if f.file_name_short==selection[0].text(0):
+            if f.file_name_short==selection[0].text(0):    
                 self.highlight_series(f)
+
+            
 
     def highlight_series(self, file):
         view = self.parent_application.current_view
