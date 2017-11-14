@@ -426,7 +426,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         msize = ds.marker_size + 5
         ds.marker_size = msize if msize<26 else 26
         ds.do_plot()
-
         # self.actionData_Representation.setIcon(self.actionShow_Larger_Symbols.icon())
     
     def DEBUG_populate_current_Dataset_with_random_data(self):
