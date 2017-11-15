@@ -46,10 +46,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.canvas = 0
         self.tab_count = 0
         self.highlighed_file = 0
-        self.seriesA = []
-        self.seriesB = []
-        self.seriesA_drag = []
-        self.seriesB_drag = []
+        self.curves = []
         #self.views={} # we use 'views' of Application.py
        
         # Accept Drag and drop events
@@ -160,75 +157,37 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.mouse_Double_Click_Event)
         connection_id = self.DataSettabWidget.currentChanged.connect(self.handle_currentChanged)
         connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
-        connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftVertically)
-        connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftHorizontally)
+        connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
+        connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
 
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
 
-
-    def handle_actionShiftHorizontally(self):
+    def handle_actionShiftTriggered(self):
         if not self.highlighed_file:
             return
-        if not self.actionShiftHorizontally.isChecked():
-            self.seriesA_drag = DraggableSeries(self.seriesA, DragType.none, self.change_series)
-            self.seriesB_drag = DraggableSeries(self.seriesA, DragType.none, self.change_series)
+        moveH = self.actionShiftHorizontally.isChecked()
+        moveV = self.actionShiftVertically.isChecked()
+        if moveH and moveV:
+            mode = DragType.both
+        elif moveH:
+            mode = DragType.horizontal
+        elif moveV:
+            mode = DragType.vertical
+        else:
             return
-        self.seriesA = self.highlighed_file.data_table.series[0]
-        self.seriesB = self.highlighed_file.data_table.series[1]
+        self.curves = []
+        for curve in self.highlighed_file.data_table.series:
+            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y)
+            self.curves.append(cur)
 
-        self.seriesA.set_visible(True)
-        self.seriesB.set_visible(True)
-        print("self.current_view.log_x,", self.current_view.log_x)
-
-        self.seriesA_drag = DraggableSeries(self.seriesA, DragType.horizontal, self.change_series, self.current_view.log_x, self.current_view.log_y)
-        self.seriesB_drag = DraggableSeries(self.seriesB, DragType.horizontal, self.change_series, self.current_view.log_x, self.current_view.log_y)
-
-    def handle_actionShiftVertically(self):
+    def disconnect_curve_drag(self):
+        for curve in self.curves:
+            curve.disconnect()
+        self.actionShiftHorizontally.setChecked(False)
+        self.actionShiftVertically.setChecked(False)
         
-        if not self.highlighed_file:
-            return
-        if not self.actionShiftVertically.isChecked():
-            self.seriesA_drag = DraggableSeries(self.seriesA, DragType.none, self.change_series)
-            self.seriesB_drag = DraggableSeries(self.seriesA, DragType.none, self.change_series)
-            return
-        self.seriesA = self.highlighed_file.data_table.series[0]
-        self.seriesB = self.highlighed_file.data_table.series[1]
-
-        self.seriesA.set_visible(True)
-        self.seriesB.set_visible(True)
-
-        self.seriesA_drag = DraggableSeries(self.seriesA, DragType.vertical, self.change_series, self.current_view.log_x, self.current_view.log_y)
-        self.seriesB_drag = DraggableSeries(self.seriesB, DragType.vertical, self.change_series, self.current_view.log_x, self.current_view.log_y)
-
-    def change_series(self, dx, dy):
-        pass
-
-        # if not self.highlighed_file:
-        #     return
-        # if not self.actionShiftVertically.isChecked():
-        #     return
-        # self.series = self.highlighed_file.data_table.series
-        # self.series[0].set_visible(True)
-        # self.series_drag = DraggableSeries(self.series[0], DragType.vertical, self.change_series)
-
-
-    # def change_seriesA(self, dx, dy):
-    #     print("change_series", dx, dy)
-    #     if self.current_view.log_x:
-    #         newx = [x + dx for x in self.seriesA.get_xdata()]
-    #     else:
-    #         newx = [x*np.log10(dx) for x in self.seriesA.get_xdata()]
-
-    #         newy = [y + dy for y in self.seriesA.get_ydata()]
-    #     self.seriesB.set_data(newx, newy)
-
-    # def change_seriesB(self, dx, dy):
-    #     print("change_series", dx, dy)
-    #     newx = [x + dx for x in self.seriesB.get_xdata()]
-    #     newy = [y + dy for y in self.seriesB.get_ydata()]
-    #     self.seriesB.set_data(newx, newy)    
 
     def handle_actionReload_Data(self):
         """Reload the data files: remove and reopen the current files"""
@@ -239,6 +198,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         paths_to_reopen = self.clear_files_from_dataset(ds)
         if paths_to_reopen:
             self.new_tables_from_files(paths_to_reopen)
+        self.disconnect_curve_drag()
 
     def clear_files_from_dataset(self, ds):
         """Remove all files from dataset and widgetTree,
@@ -316,6 +276,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         selected_view_name = self.viewComboBox.currentText()
         self.view_switch(selected_view_name) #view_switch of Application
         self.update_Qplot()
+        self.actionShiftHorizontally.setChecked(False)
+        self.actionShiftVertically.setChecked(False)
+        self.disconnect_curve_drag()
 
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""
