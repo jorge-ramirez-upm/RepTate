@@ -122,6 +122,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.ax = self.figure.add_subplot(111)
         self.canvas = FigureCanvas(self.figure)
         self.mplvl.addWidget(self.canvas)
+
+
         # self.canvas.draw()
         # self.update_Qplot()
         # sns.despine() # Remove up and right side of plot box

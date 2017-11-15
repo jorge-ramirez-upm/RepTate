@@ -36,15 +36,12 @@ class DraggableArtist(object):
         self.press = event.xdata, event.ydata
         self.get_data()
         DraggableArtist.lock = self
-        # draw everything but the selected curve and store in 'background'
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
         self.artist.set_animated(True)
         canvas.draw()
         self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
-        # redraw just the curve
         axes.draw_artist(self.artist)
-        # blit just the redrawn area
         canvas.blit(axes.bbox)
 
     def on_motion(self, event):
@@ -106,13 +103,28 @@ class DraggableSeries(DraggableArtist):
         super(DraggableSeries, self).__init__(artist, mode, function=None)
         self.logx = logx
         self.logy = logy
-        self.textvar = self.artist.axes.text(0.95, 0.01, '',
-            verticalalignment='bottom', horizontalalignment='right',
-            transform=self.artist.axes.transAxes,
-            color='red', fontsize=15)
 
     def get_data(self):
         self.data = self.artist.get_data()
+    
+    def on_press(self, event):
+        if event.inaxes != self.artist.axes: return
+        if DraggableArtist.lock is not None: return
+        contains, attrd = self.artist.contains(event)
+        if not contains: return
+        self.press = event.xdata, event.ydata
+        self.get_data()
+        DraggableArtist.lock = self
+        # draw everything but the selected curve and store in 'background'
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        self.artist.set_animated(True)
+        canvas.draw()
+        
+        self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
+        # redraw just the curve
+        axes.draw_artist(self.artist)
+        #canvas.blit(axes.bbox)
 
     def on_motion(self, event):
         if DraggableArtist.lock is not self:
@@ -136,17 +148,14 @@ class DraggableSeries(DraggableArtist):
             self.modify_artist(0, dy)
         elif (self.mode==DragType.both):
             self.modify_artist(dx, dy)        
-            
-        # self.artist.axes.set_title('axes title')
-        # self.textvar.set_text('$Factor \Delta x$=%.2e $\Delta y=10^%.2e'%(dx, dy))
+        
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
         # restore the background
         canvas.restore_region(self.background)
         # draw the curve only
         axes.draw_artist(self.artist)
-        #join
-        canvas.blit(axes.bbox)
+        canvas.update()
 
     def modify_artist(self, dx, dy):
         if self.logx:
@@ -162,11 +171,19 @@ class DraggableSeries(DraggableArtist):
     def on_release(self, event):
         if DraggableArtist.lock is not self: return
         self.press = None
-        self.artist.figure.canvas.draw()
         DraggableArtist.lock = None
         self.artist.set_animated(False)
+        # restore the background
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        canvas.restore_region(self.background)
+        # draw the curve only
+        axes.draw_artist(self.artist)
+        #update
+        # canvas.update()
+        # canvas.blit(axes.bbox)
         self.background = None
-        self.artist.figure.canvas.draw()
+        # self.artist.figure.canvas.draw()
 
 class DraggablePatch(DraggableArtist):
     def __init__(self, artist, mode=DragType.none, function=None):
