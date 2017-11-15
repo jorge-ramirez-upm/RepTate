@@ -120,7 +120,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_id = app_name + str(self.application_counter)
         ind = self.ApplicationtabWidget.addTab(newapp, QIcon(':/Icons/Images/LVE.ico'), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
-        newapp.new_tables_from_files(["/Users/mmvahb/Documents/vahb/Repate/RepTate/RepTate/data/PI_LINEAR/PI_94.9k_T-35.tts"])
+        # newapp.new_tables_from_files(["/Users/mmvahb/Documents/vahb/Repate/RepTate/RepTate/data/PI_LINEAR/PI_94.9k_T-35.tts"])
         # root = QTreeWidgetItem(self.Projecttree, [app_name])
         # root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
 
