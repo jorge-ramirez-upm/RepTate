@@ -73,6 +73,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 self.populate_inspector(f)
 
     def highlight_series(self, file):
+        """Highligh the data series of the selected file"""
         view = self.parent_application.current_view
         for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
@@ -81,6 +82,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     file.data_table.series[i].set_markerfacecolor("black")
                     file.data_table.series[i].set_markeredgecolor("black")
         self.parent_application.update_plot()
+        self.parent_application.highlighed_file = file
 
     def populate_inspector(self, file):
         print("populate_inspector")
@@ -99,7 +101,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         ds_index = self.parent_application.DataSettabWidget.currentIndex()
         self.parent_application.DataInspectordockWidget.setWindowTitle(
             "File: \"%s\" in %s"%(file.file_name_short, self.parent_application.DataSettabWidget.tabText(ds_index)))
-
+        
     def handle_itemChanged(self, item, column):
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
             

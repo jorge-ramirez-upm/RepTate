@@ -244,6 +244,9 @@
    </property>
   </action>
   <action name="actionShiftVertically">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
      <normaloff>:/Images/Images/UpDown.ico</normaloff>:/Images/Images/UpDown.ico</iconset>
@@ -256,6 +259,9 @@
    </property>
   </action>
   <action name="actionShiftHorizontally">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
      <normaloff>:/Images/Images/LeftRight.ico</normaloff>:/Images/Images/LeftRight.ico</iconset>

@@ -22,7 +22,7 @@ class DraggableArtist(object):
         self.function=function
         self.data = None
         self.connect()
-        
+
     def connect(self):
         self.cidpress = self.artist.figure.canvas.mpl_connect('button_press_event', self.on_press)
         self.cidrelease = self.artist.figure.canvas.mpl_connect('button_release_event', self.on_release)
@@ -59,6 +59,7 @@ class DraggableArtist(object):
             self.modify_artist(0, dy)
         elif (self.mode==DragType.both):
             self.modify_artist(dx, dy)
+
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
         canvas.restore_region(self.background)
@@ -98,14 +99,78 @@ class DraggableArtist(object):
         
 
 class DraggableSeries(DraggableArtist):
-    def __init__(self, artist, mode=DragType.none, function=None):
+    def __init__(self, artist, mode=DragType.none, function=None, logx=False, logy=False):
         super(DraggableSeries, self).__init__(artist, mode, function)
+
+        self.logx = logx
+        self.logy = logy
+        self.textvar = self.artist.axes.text(0.95, 0.01, '',
+            verticalalignment='bottom', horizontalalignment='right',
+            transform=self.artist.axes.transAxes,
+            color='green', fontsize=15)
 
     def get_data(self):
         self.data=self.artist.get_data()
 
     def modify_artist(self, dx, dy):
-        self.artist.set_data(self.data[0]+dx, self.data[1]+dy)
+        if self.logx:
+            newx = [x*np.power(10, dx) for x in self.data[0]]
+        else:
+            newx = [x + dx for x in self.data[0]]
+        if self.logy:
+            newy = [y*np.power(10, dy) for y in self.data[1]]
+        else:
+            newy = [y + dy for y in self.data[1]]
+        self.artist.set_data(newx, newy)
+
+    def on_release(self, event):
+            if DraggableArtist.lock is not self: return
+            xpress, ypress = self.press
+            if self.logx:
+                dx = np.log10(event.xdata) - np.log10(xpress)
+            else:
+                dx = event.xdata - xpress
+            if self.logy:
+                dy = np.log10(event.ydata) - np.log10(ypress)
+            else:
+                dy = event.ydata - ypress
+            print("release, ", dx, dy)
+            self.press = None
+            DraggableArtist.lock = None
+            self.artist.set_animated(False)
+            self.background = None
+            self.artist.figure.canvas.draw()
+
+    def on_motion(self, event):
+        if DraggableArtist.lock is not self:
+            return
+        if event.inaxes != self.artist.axes: return
+        xpress, ypress = self.press
+        if self.logx:
+            dx = np.log10(event.xdata) - np.log10(xpress)
+        else:
+            dx = event.xdata - xpress
+        if self.logy:
+            dy = np.log10(event.ydata) - np.log10(ypress)
+        else:
+            dy = event.ydata - ypress
+
+        if (self.mode==DragType.none):   
+            self.modify_artist(0, 0)
+        elif (self.mode==DragType.horizontal):
+            self.modify_artist(dx, 0)
+        elif (self.mode==DragType.vertical):
+            self.modify_artist(0, dy)
+        elif (self.mode==DragType.both):
+            self.modify_artist(dx, dy)        
+            
+        # self.artist.axes.set_title('axes title')
+        self.textvar.set_text('$Factor \Delta x$=%.2e $\Delta y=10^%.2e'%(dx, dy))
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        canvas.restore_region(self.background)
+        axes.draw_artist(self.artist)
+        canvas.blit(axes.bbox)
 
 class DraggablePatch(DraggableArtist):
     def __init__(self, artist, mode=DragType.none, function=None):
