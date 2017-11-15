@@ -159,16 +159,21 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
         connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
         connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
+        connection_id = self.DataInspectordockWidget.visibilityChanged.connect(self.handle_inspectorVisibilityChanged)
 
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
-
+    def handle_inspectorVisibilityChanged(self, visible):
+        if not visible:
+            self.disconnect_curve_drag()
+        
     def handle_actionShiftTriggered(self):
         if not self.highlighed_file:
             return
         moveH = self.actionShiftHorizontally.isChecked()
         moveV = self.actionShiftVertically.isChecked()
+        self.curves.clear()
         if moveH and moveV:
             mode = DragType.both
         elif moveH:
@@ -176,8 +181,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         elif moveV:
             mode = DragType.vertical
         else:
+            self.disconnect_curve_drag()
             return
-        self.curves = []
         for curve in self.highlighed_file.data_table.series:
             cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y)
             self.curves.append(cur)
@@ -276,9 +281,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         selected_view_name = self.viewComboBox.currentText()
         self.view_switch(selected_view_name) #view_switch of Application
         self.update_Qplot()
-        self.actionShiftHorizontally.setChecked(False)
-        self.actionShiftVertically.setChecked(False)
         self.disconnect_curve_drag()
+        ds = self.DataSettabWidget.currentWidget()
+        if ds:
+            ds.highlight_series(self.highlighed_file)
 
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""

@@ -68,12 +68,15 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if selection==[]:
             return
         for f in self.files:
-            if f.file_name_short==selection[0].text(0):    
+            if f.file_name_short==selection[0].text(0):  
+                self.parent_application.disconnect_curve_drag()  
                 self.highlight_series(f)
                 self.populate_inspector(f)
 
     def highlight_series(self, file):
         """Highligh the data series of the selected file"""
+        if not file:
+            return
         view = self.parent_application.current_view
         for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
@@ -85,7 +88,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.parent_application.highlighed_file = file
 
     def populate_inspector(self, file):
-        print("populate_inspector")
         if self.parent_application.DataInspectordockWidget.isHidden():
             return
         dt = file.data_table

@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/Images">
+    <file>Images/new_icons/icons8-height.png</file>
+    <file>Images/new_icons/icons8-timeline-slider.png</file>
+    <file>Images/new_icons/icons8-vertical-timeline-slider.png</file>
     <file>Images/new_icons/icons8-equal-sign.png</file>
     <file>Images/new_icons/icons8-minus.png</file>
     <file>Images/new_icons/icons8-plus.png</file>

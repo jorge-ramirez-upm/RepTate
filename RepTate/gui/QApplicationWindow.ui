@@ -249,7 +249,7 @@
    </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/UpDown.ico</normaloff>:/Images/Images/UpDown.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-vertical-timeline-slider.png</normaloff>:/Images/Images/new_icons/icons8-vertical-timeline-slider.png</iconset>
    </property>
    <property name="text">
     <string>ShiftVertically</string>
@@ -264,7 +264,7 @@
    </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/LeftRight.ico</normaloff>:/Images/Images/LeftRight.ico</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-timeline-slider.png</normaloff>:/Images/Images/new_icons/icons8-timeline-slider.png</iconset>
    </property>
    <property name="text">
     <string>ShiftHorizontally</string>
