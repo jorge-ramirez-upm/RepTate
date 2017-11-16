@@ -2,7 +2,7 @@ import os
 from PyQt5.QtCore import *
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QInputDialog
 
 from QApplicationWindow import *
 from ApplicationManager import *
@@ -63,11 +63,25 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionAbout_Qt.triggered.connect(QApplication.aboutQt)
         self.actionAbout.triggered.connect(self.show_about)
         
+
+        connection_id = self.ApplicationtabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
+
         # CONSOLE WINDOW (need to integrate it with cmd commands)
         #self.text_edit = Console(self)
         #this is how you pass in locals to the interpreter
         #self.text_edit.initInterpreter(locals()) 
         #self.verticalLayout.addWidget(self.text_edit)
+
+    def handle_doubleClickTab(self, index):
+        """Edit DataSet-tab name"""
+        old_name = self.ApplicationtabWidget.tabText(index)
+        new_tab_name, success = QInputDialog.getText (
+            self, "Change Name",
+            "Insert New Tab Name",
+            QLineEdit.Normal,
+            old_name)
+        if (success and new_tab_name!=""):    
+            self.ApplicationtabWidget.setTabText(index, new_tab_name)
 
     def show_about(self):
         """ Show about window"""
@@ -104,7 +118,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         pass
 
     def close_app_tab(self, index):    
-        app_name = self.ApplicationtabWidget.tabText(index)
+        app_name = self.ApplicationtabWidget.widget(index).name
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app_name)
 
@@ -120,6 +134,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_id = app_name + str(self.application_counter)
         ind = self.ApplicationtabWidget.addTab(newapp, QIcon(':/Icons/Images/LVE.ico'), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
+        # self.ApplicationtabWidget.currentItem().appname = app_name
         # newapp.new_tables_from_files(["/Users/mmvahb/Documents/vahb/Repate/RepTate/RepTate/data/PI_LINEAR/PI_94.9k_T-35.tts"])
         # root = QTreeWidgetItem(self.Projecttree, [app_name])
         # root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))

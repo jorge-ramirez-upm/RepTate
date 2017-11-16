@@ -156,7 +156,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
-        connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.mouse_Double_Click_Event)
+        connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
         connection_id = self.DataSettabWidget.currentChanged.connect(self.handle_currentChanged)
         connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
         connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
@@ -257,7 +257,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds.do_plot()
         self.update_Qplot()
 
-    def mouse_Double_Click_Event(self, index):
+    def handle_doubleClickTab(self, index):
         """Edit DataSet-tab name"""
         old_name = self.DataSettabWidget.tabText(index)
         new_tab_name, success = QInputDialog.getText (
@@ -336,11 +336,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """Add New empty tab to DataSettabWidget"""
         self.num_datasets += 1 #increment counter of Application
         num = self.num_datasets
-        while True:
-            ds_name = 'Set' + '%d'%(num)
-            if ds_name not in self.datasets: #see whether the DataSet name is already used
-                break
-            num += 1
+        ds_name = 'Set%d'%num
         ds = QDataSet(name=ds_name, parent=self)
         self.datasets[ds_name] = ds
         ind = self.DataSettabWidget.addTab(ds, ds_name)
@@ -374,7 +370,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             allowed_ext += "%s (*%s);;" %(ftype.name, ftype.extension)
         allowed_ext = allowed_ext.rstrip(";")
         paths_to_open = self.openFileNamesDialog(allowed_ext)
-        print(paths_to_open)
         if not paths_to_open:
             return
         self.new_tables_from_files(paths_to_open)
