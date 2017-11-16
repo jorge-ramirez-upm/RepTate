@@ -167,20 +167,20 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)
     def handle_inspectorVisibilityChanged(self, visible):
-        if not visible:
-            self.disconnect_curve_drag()
-        else:
+        self.actionInspect_Data.setChecked(visible)
+        if visible:
             ds = self.DataSettabWidget.currentWidget()
             if ds:
-                ds.populate_inspector()
-        
+                ds.populate_inspector()           
+        else:
+            self.disconnect_curve_drag()
+    
     def handle_actionShiftTriggered(self):
         ds = self.DataSettabWidget.currentWidget()
         if not ds.highlighed_file:
             return
         moveH = self.actionShiftHorizontally.isChecked()
         moveV = self.actionShiftVertically.isChecked()
-        self.curves.clear()
         if moveH and moveV:
             mode = DragType.both
         elif moveH:
@@ -190,6 +190,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             self.disconnect_curve_drag()
             return
+        for curve in self.curves:
+            curve.disconnect()
+        self.curves.clear()
         for curve in ds.highlighed_file.data_table.series:
             cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y)
             self.curves.append(cur)
@@ -197,20 +200,20 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def disconnect_curve_drag(self):
         for curve in self.curves:
             curve.disconnect()
+        self.curves.clear()
         self.actionShiftHorizontally.setChecked(False)
         self.actionShiftVertically.setChecked(False)
         
 
     def handle_actionReload_Data(self):
         """Reload the data files: remove and reopen the current files"""
-        tab = self.DataSettabWidget.currentWidget()
-        if tab == None:
+        ds = self.DataSettabWidget.currentWidget()
+        if not ds:
             return
-        ds = self.datasets[tab.name]
+        self.disconnect_curve_drag()
         paths_to_reopen = self.clear_files_from_dataset(ds)
         if paths_to_reopen:
             self.new_tables_from_files(paths_to_reopen)
-        self.disconnect_curve_drag()
 
     def clear_files_from_dataset(self, ds):
         """Remove all files from dataset and widgetTree,
@@ -256,6 +259,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     ds_to_hide.do_hide_all()
             ds.highlight_series()
             ds.populate_inspector()
+        else: # handle case where no dataset is left
+            self.tableWidget.setRowCount(0) #empty the inspector
+            self.DataInspectordockWidget.setWindowTitle("File:")
         self.update_Qplot()
 
     def handle_doubleClickTab(self, index):
@@ -272,15 +278,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def close_data_tab_handler(self, index):
         """Delete a dataset tab from the current application"""
         if index == self.DataSettabWidget.currentIndex():
-            self.disconnect_curve_drag()
+            self.disconnect_curve_drag() 
         ds_name = self.DataSettabWidget.widget(index).name
         self.delete(ds_name) #call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
-        
-        #if not current tab, need to update plot
-        current_index = self.DataSettabWidget.currentIndex()
-        self.handle_currentChanged(current_index) #trigger a false tab change to current tab
-           
+
     def change_view(self):
         """Change plot view"""
         selected_view_name = self.viewComboBox.currentText()
@@ -416,8 +418,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
         return selected_files
 
-    def showDataInspector(self):
-        if self.DataInspectordockWidget.isHidden():
+    def showDataInspector(self, checked):
+        if checked:
             self.DataInspectordockWidget.show()
         else:
             self.DataInspectordockWidget.hide()

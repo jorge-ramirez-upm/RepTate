@@ -355,6 +355,9 @@
    </property>
   </action>
   <action name="actionInspect_Data">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
      <normaloff>:/Images/Images/new_icons/icons8-microscope.png</normaloff>:/Images/Images/new_icons/icons8-microscope.png</iconset>

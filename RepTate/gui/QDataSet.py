@@ -100,6 +100,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         file = self.selected_file
         if not file: 
             self.parent_application.tableWidget.setRowCount(0)
+            self.parent_application.DataInspectordockWidget.setWindowTitle("File:")
             return
         if self.parent_application.DataInspectordockWidget.isHidden():
             return
