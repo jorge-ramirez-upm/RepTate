@@ -18,7 +18,7 @@ TODO list:
 
 *remove console and project explorer
 
-*update Inspector when changing dataset tab
+*(done)update Inspector when changing dataset tab
 
 *show the shift factors when dragging series
 
