@@ -45,8 +45,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.parent_application = parent
         self.canvas = 0
         self.tab_count = 0
-        self.highlighed_file = 0
         self.curves = []
+        self.zorder = 100
         #self.views={} # we use 'views' of Application.py
        
         # Accept Drag and drop events
@@ -169,6 +169,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def handle_inspectorVisibilityChanged(self, visible):
         if not visible:
             self.disconnect_curve_drag()
+        else:
+            ds = self.DataSettabWidget.currentWidget()
+            if ds:
+                ds.populate_inspector(ds.highlighed_file)
         
     def handle_actionShiftTriggered(self):
         if not self.highlighed_file:

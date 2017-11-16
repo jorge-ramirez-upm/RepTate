@@ -20,6 +20,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.setupUi(self)
         self.num_theory_tab = 0
+        self.highlighed_file = 0
+
+
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
         self.DataSettreeWidget.setSelectionMode(1) #QAbstractItemView::SingleSelection
@@ -30,7 +33,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         for i in range(hd.count()):
             hd.resizeSection(0, w)
         
-        self.zorder = 100
+
 
         # Theory Toolbar
         tb = QToolBar()
@@ -86,12 +89,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     # file.data_table.series[i].set_linestyle(":")
                     file.data_table.series[i].set_markerfacecolor("black")
                     file.data_table.series[i].set_markeredgecolor("black")
-                    file.data_table.series[i].set_zorder(self.zorder) #put series on top
-        self.zorder += 1
+                    file.data_table.series[i].set_zorder(self.parent_application.zorder) #put series on top
+        self.parent_application.zorder += 1
         self.parent_application.update_plot()
-        self.parent_application.highlighed_file = file
+        self.highlighed_file = file
 
     def populate_inspector(self, file):
+        if not file: return
         if self.parent_application.DataInspectordockWidget.isHidden():
             return
         dt = file.data_table
