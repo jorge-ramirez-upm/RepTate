@@ -28,3 +28,8 @@ TODO list:
 
 *move the limit buttons to the theory widget
 
+*implement Materials Database (Me, Tg, tau_e, etc knowing the chemistry, see old delphi version of Reptate)
+
+*table and plot operations (integral, arithmetic operations with columns, add two tables, etc.)
+
+*should we care about applications that have more than one view simultaneously? Like React in the old Reptate.
