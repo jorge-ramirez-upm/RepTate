@@ -1,0 +1,30 @@
+**********
+TODO list:
+**********
+
+*fix full path at open
+
+*copy/pasting of data tables to/from memory in Inspector
+
+*save/load a Reptate project session
+
+*order the views comboBox
+
+*matplotlib icons next to the file name in dataset table
+
+*value of data points on hoover 
+
+*change style of highlighted series
+
+*remove console and project explorer
+
+*update Inspector when changing dataset tab
+
+*show the shift factors when dragging series
+
+*menu to define the dataset style of symbols: empty/full, colour palette, shape, and size
+
+*handle the file units and reflect it on the figure x,y-labels
+
+*move the limit buttons to the theory widget
+
