@@ -30,6 +30,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         for i in range(hd.count()):
             hd.resizeSection(0, w)
         
+        self.zorder = 100
+
         # Theory Toolbar
         tb = QToolBar()
         tb.setIconSize(QSize(24,24))
@@ -84,6 +86,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     # file.data_table.series[i].set_linestyle(":")
                     file.data_table.series[i].set_markerfacecolor("black")
                     file.data_table.series[i].set_markeredgecolor("black")
+                    file.data_table.series[i].set_zorder(self.zorder) #put series on top
+        self.zorder += 1
         self.parent_application.update_plot()
         self.parent_application.highlighed_file = file
 
