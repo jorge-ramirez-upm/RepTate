@@ -175,7 +175,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 ds.populate_inspector(ds.highlighed_file)
         
     def handle_actionShiftTriggered(self):
-        if not self.highlighed_file:
+        ds = self.DataSettabWidget.currentWidget()
+        if not ds.highlighed_file:
             return
         moveH = self.actionShiftHorizontally.isChecked()
         moveV = self.actionShiftVertically.isChecked()
@@ -189,7 +190,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             self.disconnect_curve_drag()
             return
-        for curve in self.highlighed_file.data_table.series:
+        for curve in ds.highlighed_file.data_table.series:
             cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y)
             self.curves.append(cur)
 
@@ -290,7 +291,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.disconnect_curve_drag()
         ds = self.DataSettabWidget.currentWidget()
         if ds:
-            ds.highlight_series(self.highlighed_file)
+            ds.highlight_series(ds.highlighed_file)
 
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""
