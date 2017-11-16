@@ -172,7 +172,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             ds = self.DataSettabWidget.currentWidget()
             if ds:
-                ds.populate_inspector(ds.highlighed_file)
+                ds.populate_inspector()
         
     def handle_actionShiftTriggered(self):
         ds = self.DataSettabWidget.currentWidget()
@@ -235,7 +235,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if checked:
             for ds in self.datasets.values():
                 ds.Qshow_all()
-                ds.do_plot()
+                ds.highlight_series()
         else:
             #trigger a false change of tab to hide other dataset files from figure
             self.handle_currentChanged(self.DataSettabWidget.currentIndex())
@@ -243,23 +243,19 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def handle_currentChanged(self, index):
         """Change figure when the active DataSet tab is changed"""
-        if index == -1: #There is no tab
-            self.update_Qplot()
-            return
         if self.actionView_All_Sets.isChecked():
             return
-        ds_name = self.DataSettabWidget.widget(index).name
-        ds = self.datasets[ds_name]
-        ds.Qshow_all() #show all data of current dataset, except previously unticked files
-
-        #hide files of all datasets except current one
-        ntab = self.DataSettabWidget.count()
-        if ntab > 1:
+        ds = self.DataSettabWidget.widget(index)
+        if ds:
+            ds.Qshow_all() #show all data of current dataset, except previously unticked files
+            #hide files of all datasets except current one
+            ntab = self.DataSettabWidget.count()
             for i in range(ntab): 
                 if i!=index:
-                    ds_name_to_hide = self.DataSettabWidget.widget(i).name
-                    self.datasets[ds_name_to_hide].do_hide_all()
-        ds.do_plot()
+                    ds_to_hide = self.DataSettabWidget.widget(i)
+                    ds_to_hide.do_hide_all()
+            ds.highlight_series()
+            ds.populate_inspector()
         self.update_Qplot()
 
     def handle_doubleClickTab(self, index):
@@ -275,6 +271,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def close_data_tab_handler(self, index):
         """Delete a dataset tab from the current application"""
+        if index == self.DataSettabWidget.currentIndex():
+            self.disconnect_curve_drag()
         ds_name = self.DataSettabWidget.widget(index).name
         self.delete(ds_name) #call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
@@ -291,7 +289,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.disconnect_curve_drag()
         ds = self.DataSettabWidget.currentWidget()
         if ds:
-            ds.highlight_series(ds.highlighed_file)
+            ds.highlight_series()
 
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""

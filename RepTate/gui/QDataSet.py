@@ -20,7 +20,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.setupUi(self)
         self.num_theory_tab = 0
-        self.highlighed_file = 0
+        self.selected_file = None
 
 
         self.DataSettreeWidget.setIndentation(0)
@@ -68,18 +68,21 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_itemSelectionChanged(self):
         """Define actions for when a file table is selected"""
-        self.do_plot()
         selection = self.DataSettreeWidget.selectedItems()
         if selection==[]:
             return
         for f in self.files:
             if f.file_name_short==selection[0].text(0):  
                 self.parent_application.disconnect_curve_drag()  
-                self.highlight_series(f)
-                self.populate_inspector(f)
+                self.selected_file = f
+                self.highlight_series()
+                self.populate_inspector()
 
-    def highlight_series(self, file):
+
+    def highlight_series(self):
         """Highligh the data series of the selected file"""
+        self.do_plot() #remove current series highlight
+        file = self.selected_file
         if not file:
             return
         view = self.parent_application.current_view
@@ -92,10 +95,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     file.data_table.series[i].set_zorder(self.parent_application.zorder) #put series on top
         self.parent_application.zorder += 1
         self.parent_application.update_plot()
-        self.highlighed_file = file
 
-    def populate_inspector(self, file):
-        if not file: return
+    def populate_inspector(self):
+        file = self.selected_file
+        if not file: 
+            self.parent_application.tableWidget.setRowCount(0)
+            return
         if self.parent_application.DataInspectordockWidget.isHidden():
             return
         dt = file.data_table
