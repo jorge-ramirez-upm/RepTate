@@ -50,6 +50,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     def change_file_visibility(self, file_name_short, check_state=True):
         """Hide/Show file in the figure"""
         file_matching = []
+        print("change viz", file_name_short)
         for file in self.files:
             if file.file_name_short == file_name_short: #find changed file
                 file_matching.append(file)
@@ -92,7 +93,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
         markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
         linelst = itertools.cycle((':', '-', '-.', '--'))
-
         view = self.parent_application.current_view
         for file in self.files:
             try:
@@ -100,17 +100,23 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             except TypeError as e:
                 print(e)
                 return
-            marker=next(markerlst)
-            color=next(palette)
+            
+            marker = next(markerlst) if file.marker is None else file.marker 
+            face =  'none' if file.filled is None else file.filled 
+            color =  next(palette) if file.color is None else file.color
+            size =  self.marker_size if file.size is None else file.size
+
+            # print(marker, face, color, size )
+
             for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
                     file.data_table.series[i].set_data(x[:,i], y[:,i])
                     file.data_table.series[i].set_visible(True)
                     file.data_table.series[i].set_marker(marker)
-                    file.data_table.series[i].set_markerfacecolor('none')
+                    file.data_table.series[i].set_markerfacecolor(face)
                     file.data_table.series[i].set_markeredgecolor(color)
                     file.data_table.series[i].set_markeredgewidth(1)
-                    file.data_table.series[i].set_markersize(self.marker_size)
+                    file.data_table.series[i].set_markersize(size)
                     file.data_table.series[i].set_linestyle('')
                     if (file.active and i==0):
                         label=""

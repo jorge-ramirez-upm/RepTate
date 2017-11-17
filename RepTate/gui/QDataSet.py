@@ -64,7 +64,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemSelectionChanged)
-    
 
     def handle_itemSelectionChanged(self):
         """Define actions for when a file table is selected"""

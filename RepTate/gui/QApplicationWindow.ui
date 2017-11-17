@@ -507,6 +507,18 @@
     <string>Reset Symbols Size</string>
    </property>
   </action>
+  <action name="actionMarkerSettings">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-large-icons.png</normaloff>:/Images/Images/new_icons/icons8-large-icons.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select Symbols Color</string>
+   </property>
+   <property name="toolTip">
+    <string>Select Symbols Color</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>

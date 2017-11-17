@@ -21,6 +21,12 @@ class File(object):
         self.parent_dataset = parent_dataset
         self.ax = ax
 
+        #plot attributes
+        self.marker = None
+        self.color = None
+        self.filled = None
+        self.size = None
+
         self.header_lines=[]
         self.file_parameters={}
         self.active = True

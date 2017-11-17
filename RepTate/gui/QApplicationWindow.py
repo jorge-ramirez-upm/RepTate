@@ -13,12 +13,14 @@ import itertools
 import Symbols_rc
 import numpy as np
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog
 from QDataSet import *
 from DataFiles import *
 from QFile import *
 from Application import *
 from DraggableArtists import *
+# from Color import *
+from markerSettings import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -26,6 +28,7 @@ except AttributeError:
     _fromUtf8 = lambda s: s
     
 Ui_AppWindow, QMainWindow = loadUiType('gui/QApplicationWindow.ui')
+
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def __init__(self, name='Application Template', parent=None):
@@ -38,7 +41,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         QMainWindow.__init__(self)
         Ui_AppWindow.__init__(self)
-
+        
         self.setupUi(self)
         self.logger = logging.getLogger('ReptateLogger')
         self.name = name
@@ -78,13 +81,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionData_Representation)
         menu=QMenu()
-        menu.addAction(self.actionShow_Smaller_Symbols)
-        menu.addAction(self.actionResetSymbolsSize)
-        menu.addAction(self.actionShow_Larger_Symbols)
-        menu.setMaximumWidth(80)
-        menu.setToolTipsVisible(True)
-        tbut.setMenu(menu)
-        tb.addWidget(tbut)
+        # menu.addAction(self.actionShow_Smaller_Symbols)
+        # menu.addAction(self.actionResetSymbolsSize)
+        # menu.addAction(self.actionShow_Larger_Symbols)
+        # menu.addAction(self.actionSelectSymbolColor)
+        # menu.setMaximumWidth(80)
+        # menu.setToolTipsVisible(True)
+        # tbut.setMenu(menu)
+        # tb.addWidget(tbut)
+        tb.addAction(self.actionMarkerSettings)
         #
         tb.addAction(self.actionReload_Data)
         tbut = QToolButton()
@@ -111,6 +116,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         # Hide Data Inspector
         self.DataInspectordockWidget.hide()
+
+
+
 
         # PLOT Style
         # sns.set_style("white")
@@ -162,10 +170,92 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
         connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
         connection_id = self.DataInspectordockWidget.visibilityChanged.connect(self.handle_inspectorVisibilityChanged)
+        
+        connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
 
+        self.dialog = QtWidgets.QDialog()
+        self.dialog.ui = Ui_markerSettings()
+        self.dialog.ui.setupUi(self.dialog)
+        connection_id = self.dialog.ui.pickColor.clicked.connect(self.handle_showColorDialog)
+        connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
+
+        self.color = None
+        self.marker_dic = {'square': 's', 'plus (filled)': 'P', 'point': '.', 'triangle_right': '>', 'hline': '_', 'vline': '|', 'pentagon': 'p', 'tri_left': '3', 'tri_up': '2', 'circle': 'o', 'pixel': ',', 'diamond': 'D', 'star': '*', 'hexagon1': 'h', 'octagon': '8', 'hexagon2': 'H', 'tri_right': '4', 'x (filled)': 'X', 'thin_diamond': 'd', 'tri_down': '1', 'triangle_left': '<', 'plus': '+', 'triangle_down': 'v', 'triangle_up': '^', 'x': 'x'}
+        self.populate_markers()
+        self.file_backup = []
+
+        # connection_id = self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
-        #print (xaxis)
+        #print (xaxis)  
+
+    def populate_markers(self):
+        for m in self.marker_dic:
+            self.dialog.ui.comboBox.addItem(m)
+        
+    def handle_showColorDialog(self):
+        ds = self.DataSettabWidget.currentWidget()
+        if ds:
+            wtitle = "Select color for %s"%ds.name
+            self.color = QColorDialog.getColor(title=wtitle, 
+                options=QColorDialog.DontUseNativeDialog)
+            if self.color.isValid():
+                self.dialog.ui.labelPickedColor.setStyleSheet("background: %s"%self.color.name());
+            else:
+                self.color = None
+
+    def handle_actionMarkerSettings(self):
+        ds = self.DataSettabWidget.currentWidget()
+        if not ds:
+            return
+        self.file_backup = []
+        for file in ds.files:
+            self.file_backup.append([file.color, file.marker, file.size, file.filled])
+        done = self.dialog.exec_() #this blocks the rest of the app
+        if done == 1:
+            self.handle_apply_button_pressed()
+        elif done == 0:
+            #restore the file attributes to previous values
+            for i, file in enumerate(ds.files):
+                file.color, file.marker, file.size, file.filled = self.file_backup[i]
+            ds.do_plot()
+
+    def handle_apply_button_pressed(self):
+        # print("color: ", self.dialog.ui.checkBoxColor.isChecked(), self.color.name())
+        # print("size: ", self.dialog.ui.checkBoxSize.isChecked(), self.dialog.ui.spinBox.value() )
+        # print("Type: ", self.dialog.ui.checkBoxType.isChecked(), self.dialog.ui.comboBox.currentText() )
+        ds = self.DataSettabWidget.currentWidget()
+        if ds:
+            #restore the file attributes to previous values before making changes
+            for i, file in enumerate(ds.files):
+                file.color, file.marker, file.size, file.filled = self.file_backup[i]
+            
+            if self.color and not self.dialog.ui.checkBoxColor.isChecked():
+                if self.color.isValid():
+                    for file in ds.files:
+                        file.color = self.color.name() 
+            
+            if not self.dialog.ui.checkBoxSize.isChecked():
+                for file in ds.files:
+                    file.size = self.dialog.ui.spinBox.value()
+            
+            if not self.dialog.ui.checkBoxType.isChecked():
+                for file in ds.files:
+                    file.marker = self.marker_dic[self.dialog.ui.comboBox.currentText()]
+            
+            if self.dialog.ui.checkBoxFilled.checkState()==2:
+                for file in ds.files:
+                    file.filled = file.color
+
+            if self.dialog.ui.checkBoxFilled.checkState()==0:
+                for file in ds.files:
+                    file.filled = 'none'
+
+            # if not self.dialog.ui.checkFilled.isChecked():
+                # file.marker = self.marker_dic[self.dialog.ui.comboBox.currentText()]
+            print("do_plot")
+            ds.do_plot()
+
     def handle_inspectorVisibilityChanged(self, visible):
         self.actionInspect_Data.setChecked(visible)
         if visible:
@@ -382,13 +472,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def new_tables_from_files(self, paths_to_open):
         if (self.DataSettabWidget.count()==0):
                 self.createNew_Empty_Dataset()
-        tab = self.DataSettabWidget.currentWidget()
-        ds = self.datasets[tab.name]
+        ds = self.DataSettabWidget.currentWidget()
         success, newtables, ext = ds.do_open(paths_to_open)
         self.check_no_param_missing(newtables, ext)
         if success==True:
             for dt in newtables:
                 self.addTableToCurrentDataSet(dt, ext)
+                dt.color = 'black'
             ds.do_plot()
             self.update_Qplot()
         else:
