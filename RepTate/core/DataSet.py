@@ -101,9 +101,14 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 return
             
             marker = next(markerlst) if file.marker is None else file.marker 
-            face =  'none' if file.filled is None else file.filled 
             color =  next(palette) if file.color is None else file.color
             size =  self.def_marker_size if file.size is None else file.size
+            if file.filled is None:
+                face = 'none'  
+            elif file.filled == "as variable color":
+                face = color
+            else:
+                face = file.filled
 
             # print(marker, face, color, size )
 

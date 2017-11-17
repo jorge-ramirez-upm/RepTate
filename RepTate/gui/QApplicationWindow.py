@@ -256,8 +256,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             if self.dialog.ui.checkBoxFilled.checkState()==0:
                 new_fill = 'none'
             else:
-                new_fill = new_color
-            
+                new_fill = "as variable color" if new_color is None else new_color 
+                
             for file in ds.files:   
                 file.color = new_color
                 file.size = new_size
@@ -516,7 +516,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def openFileNamesDialog(self, ext_filter="All Files (*)"):  
         # file browser window  
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
+        #options |= QFileDialog.DontUseNativeDialog
         dir_start = "data/"
         dilogue_name = "Open"
         selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
