@@ -147,4 +147,31 @@
     <file>Images/MWD.ico</file>
     <file>Images/new_icons/icons8-binoculars.png</file>
   </qresource>
+  <qresource prefix="Markers">
+    <file>Images/Matplotlib_markers/marker_hline.png</file>
+    <file>Images/Matplotlib_markers/marker_vline.png</file>
+    <file>Images/Matplotlib_markers/marker_thin_diamond.png</file>
+    <file>Images/Matplotlib_markers/marker_diamond.png</file>
+    <file>Images/Matplotlib_markers/marker_x (filled).png</file>
+    <file>Images/Matplotlib_markers/marker_x.png</file>
+    <file>Images/Matplotlib_markers/marker_plus.png</file>
+    <file>Images/Matplotlib_markers/marker_hexagon2.png</file>
+    <file>Images/Matplotlib_markers/marker_hexagon1.png</file>
+    <file>Images/Matplotlib_markers/marker_star.png</file>
+    <file>Images/Matplotlib_markers/marker_plus (filled).png</file>
+    <file>Images/Matplotlib_markers/marker_pentagon.png</file>
+    <file>Images/Matplotlib_markers/marker_square.png</file>
+    <file>Images/Matplotlib_markers/marker_octagon.png</file>
+    <file>Images/Matplotlib_markers/marker_tri_right.png</file>
+    <file>Images/Matplotlib_markers/marker_tri_left.png</file>
+    <file>Images/Matplotlib_markers/marker_tri_up.png</file>
+    <file>Images/Matplotlib_markers/marker_tri_down.png</file>
+    <file>Images/Matplotlib_markers/marker_triangle_right.png</file>
+    <file>Images/Matplotlib_markers/marker_triangle_left.png</file>
+    <file>Images/Matplotlib_markers/marker_triangle_up.png</file>
+    <file>Images/Matplotlib_markers/marker_triangle_down.png</file>
+    <file>Images/Matplotlib_markers/marker_circle.png</file>
+    <file>Images/Matplotlib_markers/marker_pixel.png</file>
+    <file>Images/Matplotlib_markers/marker_point.png</file>
+  </qresource>
 </RCC>

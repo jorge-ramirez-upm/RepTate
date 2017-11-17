@@ -182,7 +182,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.color = None
         self.marker_dic = {'square': 's', 'plus (filled)': 'P', 'point': '.', 'triangle_right': '>', 'hline': '_', 'vline': '|', 'pentagon': 'p', 'tri_left': '3', 'tri_up': '2', 'circle': 'o', 'pixel': ',', 'diamond': 'D', 'star': '*', 'hexagon1': 'h', 'octagon': '8', 'hexagon2': 'H', 'tri_right': '4', 'x (filled)': 'X', 'thin_diamond': 'd', 'tri_down': '1', 'triangle_left': '<', 'plus': '+', 'triangle_down': 'v', 'triangle_up': '^', 'x': 'x'}
         self.populate_markers()
-        self.file_backup = []
+        self.fparam_backup = []
 
         # connection_id = self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
@@ -191,7 +191,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def populate_markers(self):
         for m in self.marker_dic:
-            self.dialog.ui.comboBox.addItem(m)
+            ipath = ':/Markers/Images/Matplotlib_markers/marker_%s.png'%m
+            print(m, ipath)
+            self.dialog.ui.comboBox.addItem(QIcon(ipath), m)
         
     def handle_showColorDialog(self):
         ds = self.DataSettabWidget.currentWidget()
@@ -208,16 +210,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
             return
-        self.file_backup = []
+        self.fparam_backup = []
         for file in ds.files:
-            self.file_backup.append([file.color, file.marker, file.size, file.filled])
+            self.fparam_backup.append([file.color, file.marker, file.size, file.filled])
         done = self.dialog.exec_() #this blocks the rest of the app
         if done == 1:
             self.handle_apply_button_pressed()
         elif done == 0:
             #restore the file attributes to previous values
             for i, file in enumerate(ds.files):
-                file.color, file.marker, file.size, file.filled = self.file_backup[i]
+                file.color, file.marker, file.size, file.filled = self.fparam_backup[i]
             ds.do_plot()
 
     def handle_apply_button_pressed(self):
@@ -228,7 +230,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if ds:
             #restore the file attributes to previous values before making changes
             for i, file in enumerate(ds.files):
-                file.color, file.marker, file.size, file.filled = self.file_backup[i]
+                file.color, file.marker, file.size, file.filled = self.fparam_backup[i]
             
             if self.color and not self.dialog.ui.checkBoxColor.isChecked():
                 if self.color.isValid():
