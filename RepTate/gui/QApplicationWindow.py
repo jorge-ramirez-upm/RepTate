@@ -181,8 +181,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         self.color = None
         self.marker_dic = {'square': 's', 'plus (filled)': 'P', 'point': '.', 'triangle_right': '>', 'hline': '_', 'vline': '|', 'pentagon': 'p', 'tri_left': '3', 'tri_up': '2', 'circle': 'o', 'pixel': ',', 'diamond': 'D', 'star': '*', 'hexagon1': 'h', 'octagon': '8', 'hexagon2': 'H', 'tri_right': '4', 'x (filled)': 'X', 'thin_diamond': 'd', 'tri_down': '1', 'triangle_left': '<', 'plus': '+', 'triangle_down': 'v', 'triangle_up': '^', 'x': 'x'}
-        self.populate_markers()
-        self.fparam_backup = []
+        self.populate_markers() 
+        self.fparam_backup = [] #temporary storage of the file parameters
+        self.dialog.ui.spinBox.setSingleStep(5) #increment in the marker size dialog
 
         # connection_id = self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
@@ -190,12 +191,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #print (xaxis)  
 
     def populate_markers(self):
+        """populate the marker shape combobox"""
         for m in self.marker_dic:
             ipath = ':/Markers/Images/Matplotlib_markers/marker_%s.png'%m
-            print(m, ipath)
             self.dialog.ui.comboBox.addItem(QIcon(ipath), m)
         
     def handle_showColorDialog(self):
+        """Show the color picker"""
         ds = self.DataSettabWidget.currentWidget()
         if ds:
             wtitle = "Select color for %s"%ds.name
@@ -207,6 +209,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 self.color = None
 
     def handle_actionMarkerSettings(self):
+        """Show the dialog box where the user can change
+          the marker properties: size, shape, color, fill"""
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
             return
@@ -223,6 +227,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.do_plot()
 
     def handle_apply_button_pressed(self):
+        """Apply the selected marker properties to all the files in the current dataset"""
         # print("color: ", self.dialog.ui.checkBoxColor.isChecked(), self.color.name())
         # print("size: ", self.dialog.ui.checkBoxSize.isChecked(), self.dialog.ui.spinBox.value() )
         # print("Type: ", self.dialog.ui.checkBoxType.isChecked(), self.dialog.ui.comboBox.currentText() )
@@ -255,10 +260,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
             # if not self.dialog.ui.checkFilled.isChecked():
                 # file.marker = self.marker_dic[self.dialog.ui.comboBox.currentText()]
-            print("do_plot")
             ds.do_plot()
 
     def handle_inspectorVisibilityChanged(self, visible):
+        """Handle the hide/show event of the data inspector"""
         self.actionInspect_Data.setChecked(visible)
         if visible:
             ds = self.DataSettabWidget.currentWidget()
@@ -268,8 +273,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.disconnect_curve_drag()
     
     def handle_actionShiftTriggered(self):
+        """Allow the current 'selected_file' to be dragged"""
         ds = self.DataSettabWidget.currentWidget()
-        if not ds.highlighed_file:
+        if not ds.selected_file:
             return
         moveH = self.actionShiftHorizontally.isChecked()
         moveV = self.actionShiftVertically.isChecked()
@@ -285,11 +291,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for curve in self.curves:
             curve.disconnect()
         self.curves.clear()
-        for curve in ds.highlighed_file.data_table.series:
+        for curve in ds.selected_file.data_table.series:
             cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y)
             self.curves.append(cur)
 
     def disconnect_curve_drag(self):
+        """Remove the Matplotlib drag connections
+        and reset the shift buttons in the data inspector"""
         for curve in self.curves:
             curve.disconnect()
         self.curves.clear()
@@ -480,7 +488,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if success==True:
             for dt in newtables:
                 self.addTableToCurrentDataSet(dt, ext)
-                dt.color = 'black'
             ds.do_plot()
             self.update_Qplot()
         else:

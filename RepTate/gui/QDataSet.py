@@ -87,7 +87,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         view = self.parent_application.current_view
         for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
-                    file.data_table.series[i].set_marker("X")
+                    file.data_table.series[i].set_marker('.')
                     # file.data_table.series[i].set_linestyle(":")
                     file.data_table.series[i].set_markerfacecolor("black")
                     file.data_table.series[i].set_markeredgecolor("black")

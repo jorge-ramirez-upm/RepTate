@@ -50,7 +50,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     def change_file_visibility(self, file_name_short, check_state=True):
         """Hide/Show file in the figure"""
         file_matching = []
-        print("change viz", file_name_short)
         for file in self.files:
             if file.file_name_short == file_name_short: #find changed file
                 file_matching.append(file)
