@@ -24,7 +24,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.files=[] # TODO: Shall we change this list into a dict?
         self.current_file=None
         self.num_files=0
-        self.marker_size = 12
+        self.def_marker_size = 12
         self.theories={}
         self.num_theories=0
 
@@ -103,7 +103,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             marker = next(markerlst) if file.marker is None else file.marker 
             face =  'none' if file.filled is None else file.filled 
             color =  next(palette) if file.color is None else file.color
-            size =  self.marker_size if file.size is None else file.size
+            size =  self.def_marker_size if file.size is None else file.size
 
             # print(marker, face, color, size )
 

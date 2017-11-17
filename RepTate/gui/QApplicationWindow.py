@@ -239,26 +239,31 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             
             if self.color and not self.dialog.ui.checkBoxColor.isChecked():
                 if self.color.isValid():
-                    for file in ds.files:
-                        file.color = self.color.name() 
-            
-            if not self.dialog.ui.checkBoxSize.isChecked():
-                for file in ds.files:
-                    file.size = self.dialog.ui.spinBox.value()
-            
-            if not self.dialog.ui.checkBoxType.isChecked():
-                for file in ds.files:
-                    file.marker = self.marker_dic[self.dialog.ui.comboBox.currentText()]
-            
-            if self.dialog.ui.checkBoxFilled.checkState()==2:
-                for file in ds.files:
-                    file.filled = file.color
+                    new_color = self.color.name()
+            else:
+                new_color = None
+          
+            if self.dialog.ui.checkBoxSize.isChecked():
+                new_size = None
+            else:
+                new_size = self.dialog.ui.spinBox.value()
+         
+            if self.dialog.ui.checkBoxType.isChecked():
+                new_shape = None
+            else:
+                new_shape = self.marker_dic[self.dialog.ui.comboBox.currentText()]
 
             if self.dialog.ui.checkBoxFilled.checkState()==0:
-                for file in ds.files:
-                    file.filled = 'none'
+                new_fill = 'none'
+            else:
+                new_fill = new_color
+            
+            for file in ds.files:   
+                file.color = new_color
+                file.size = new_size
+                file.marker = new_shape
+                file.filled = new_fill
 
-            # if not self.dialog.ui.checkFilled.isChecked():
                 # file.marker = self.marker_dic[self.dialog.ui.comboBox.currentText()]
             ds.do_plot()
 
