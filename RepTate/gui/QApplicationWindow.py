@@ -400,9 +400,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""
-        for i in self.views:
+        selectedview = self.current_view.name
+        for i in sorted(self.views):
             #add keys of 'views' dict to the list of views avaliable 
             self.viewComboBox.addItem(i) 
+        index = self.viewComboBox.findText(selectedview, QtCore.Qt.MatchFixedString)
+        self.viewComboBox.setCurrentIndex(index)
 
     def dragEnterEvent(self, e):      
         if e.mimeData().hasUrls():

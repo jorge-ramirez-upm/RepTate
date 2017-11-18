@@ -8,8 +8,6 @@ TODO list:
 
 *save/load a Reptate project session
 
-*order the views comboBox
-
 *matplotlib icons next to the file name in dataset table
 
 *value of data points on hoover 
@@ -38,3 +36,9 @@ TODO list:
 *zoom in and out of the plot
 
 *write Help section
+
+* allow to select nothing in the DataSet by clicking in the white area of the DataSet
+
+*legend: by default, don't create it. Only if the user wants to save the plot, allow him to show the legend 
+and populate it with the right labels (from the file parameters in the dataset).
+
