@@ -2,7 +2,7 @@
 TODO list:
 **********
 
-*fix full path at open
+*(done)fix full path at open
 
 *copy/pasting of data tables to/from memory in Inspector
 
@@ -14,7 +14,7 @@ TODO list:
 
 *value of data points on hoover 
 
-*change style of highlighted series
+*(OK)change style of highlighted series
 
 *remove console and project explorer
 
@@ -22,9 +22,10 @@ TODO list:
 
 *show the shift factors when dragging series
 
-*menu to define the dataset style of symbols: empty/full, colour palette, shape, and size
+*(OK)menu to define the dataset style of symbols: empty/full, colour palette, shape, and size
+->add possibility of colour gradient or seaborn colour palette
 
-*handle the file units and reflect it on the figure x,y-labels
+*handle the file units and reflect it on the figure x,y-labels. Use LaTex font?
 
 *move the limit buttons to the theory widget
 
@@ -33,3 +34,7 @@ TODO list:
 *table and plot operations (integral, arithmetic operations with columns, add two tables, etc.)
 
 *should we care about applications that have more than one view simultaneously? Like React in the old Reptate.
+
+*zoom in and out of the plot
+
+*write Help section

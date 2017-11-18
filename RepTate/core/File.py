@@ -12,7 +12,7 @@ class File(object):
             header_lines: 
         """
         self.file_full_path = os.path.abspath(file_name)
-        tmpname = file_name.split(os.sep)
+        tmpname = self.file_full_path.split(os.sep)
         tmpname = tmpname[len(tmpname)-1]
         lst = tmpname.split('.')
         short = '.'.join(lst[:-1])      
