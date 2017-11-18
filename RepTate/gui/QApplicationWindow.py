@@ -471,7 +471,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         #Define the inspector column names (header)
         if num == 1:
-            inspect_header = dfile.col_names[:]
+            #inspect_header = dfile.col_names[:]
+            inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
             inspec_tab = self.tableWidget.setHorizontalHeaderLabels(inspect_header)
 
 
