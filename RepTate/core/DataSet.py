@@ -17,18 +17,17 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         super(DataSet, self).__init__() 
         print("DataSet.__init__(self, name='DataSet', description="", parent=None) ended")
 
-        self.name=name
-        self.description=description
-        self.parent_application=parent
-
-        self.files=[] # TODO: Shall we change this list into a dict?
-        self.current_file=None
-        self.num_files=0
+        self.name = name
+        self.description = description
+        self.parent_application = parent
+        self.files = [] # TODO: Shall we change this list into a dict?
+        self.current_file = None
+        self.num_files = 0
         self.def_marker_size = 12
-        self.theories={}
-        self.num_theories=0
-
+        self.theories = {}
+        self.num_theories = 0
         self.inactive_files = {}
+        self.current_theory = None
 
 # DATASET STUFF ##########################################################################################################
     def do_list(self, line):
@@ -80,12 +79,16 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 file.active = True
                 for i in range(file.data_table.MAX_NUM_SERIES):
                     file.data_table.series[i].set_visible(True)
-        
+        if self.current_theory:
+            self.theories[self.current_theory].do_show()
+
     def do_hide_all(self):
         for file in self.files:
             file.active = False
             for i in range(file.data_table.MAX_NUM_SERIES):
                 file.data_table.series[i].set_visible(False)
+        for th in self.theories.values():
+            th.do_hide()
 
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
@@ -142,7 +145,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 tt = th.tables[file.file_name_short]
                 x, y, success = view.view_proc(tt, file.file_parameters)
                 for i in range(tt.MAX_NUM_SERIES):
-                    if (i<view.n and file.active):
+                    if (i<view.n and file.active and th.active):
                         tt.series[i].set_data(x[:,i], y[:,i])
                         tt.series[i].set_visible(True)
                         tt.series[i].set_marker('')
@@ -322,7 +325,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     self.files.append(df)
                     self.current_file=df
                     newtables.append(df)
-
+                    for th_name in self.theories:
+                        #add a theory table
+                        self.theories[th_name].tables[df.file_name_short]=DataTable(self.parent_application.ax)
+                        self.theories[th_name].function(df)
             if CmdBase.mode==CmdMode.GUI:
                 return (True, newtables, f_ext[0])
         else:
@@ -437,6 +443,9 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     def do_theory_delete(self, name):
         """Delete a theory from the current dataset"""
         if name in self.theories.keys():
+            for table in self.theories[name].tables.values(): # remove matplotlib artist from ax
+                for i in range(table.MAX_NUM_SERIES):
+                    self.parent_application.ax.lines.remove(table.series[i])
             del self.theories[name]
         else:
             print("Theory \"%s\" not found"%name)            
@@ -460,22 +469,24 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
     def do_theory_new(self, line):
         """Add a new theory of the type specified to the current Data Set"""
-        thtypes=list(self.parent_application.theories.keys())
+        thtypes = list(self.parent_application.theories.keys())
         if (line in thtypes):
             if (self.current_file is None):
                 print("Current dataset is empty\n"
                     "%s was not created"%line)
                 return
-            self.num_theories+=1
-            
-            th=self.parent_application.theories[line]("%s%02d"%(line,self.num_theories), self, self.parent_application.ax)
+            self.num_theories += 1
+            th_id = "%s%02d"%(line,self.num_theories)
+            th = self.parent_application.theories[line](th_id, self, self.parent_application.ax)
             self.theories[th.name]=th
-            if (self.mode==CmdMode.batch):
-                th.prompt = ''
-            else:
-                th.prompt = self.prompt[:-2]+'/'+th.name+'> '
+            if (self.mode!=CmdMode.GUI): 
+                if (self.mode==CmdMode.batch):
+                    th.prompt = ''
+                else:
+                    th.prompt = self.prompt[:-2]+'/'+th.name+'> '
+                th.cmdloop()
             th.do_calculate("")
-            th.cmdloop()
+            return th
         else:
             print("Theory \"%s\" does not exists"%line)
     

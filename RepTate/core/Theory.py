@@ -49,6 +49,7 @@ class Theory(CmdBase):
         self.parameters={}
         self.tables={}
         self.function=None
+        self.active = True #defines if the theorie is plotted
 
         # THEORY OPTIONS
         self.npoints=100
@@ -190,11 +191,13 @@ Total error is the mean square of the residual, averaged over all points in all 
         param_max = []
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag: 
+            if par.min_flag:
                 initial_guess.append(par.value)
                 param_min.append(par.min_value) #list of min values for fitting parameters
                 param_max.append(par.max_value) #list of max values for fitting parameters
-
+        if (not param_min) or (not param_max):
+            print("No parameter to minimize")
+            return
         opt = dict(return_full=True)
         self.nfev = 0
         try:
@@ -243,6 +246,8 @@ Total error is the mean square of the residual, averaged over all points in all 
                 print('%10s = %10.5g'%(par.name, par.value))
         self.fitting=False
         self.do_calculate(line)
+        if CmdBase.mode == CmdMode.GUI:
+            self.update_parameter_table()
 
     def do_print(self, line):
         """Print the theory table associated with the given file name"""
@@ -464,3 +469,15 @@ Total error is the mean square of the residual, averaged over all points in all 
             print(self.parameters[line].__repr__())
         else:
             super(Theory, self).default(line)
+    
+    def do_hide(self):
+        self.active = False
+        for table in self.tables.values():
+            for i in range(table.MAX_NUM_SERIES):
+                    table.series[i].set_visible(False)
+    
+    def do_show(self):
+        self.active = True
+        for table in self.tables.values():
+            for i in range(table.MAX_NUM_SERIES):
+                    table.series[i].set_visible(True)

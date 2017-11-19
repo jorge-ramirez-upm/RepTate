@@ -48,6 +48,7 @@ def start_RepTate(argv):
             app.processEvents()
 
         ex = QApplicationManager()
+        ex.new_lve_window()
         splash.finish(ex)
         ex.showMaximized()
         sys.exit(app.exec_())

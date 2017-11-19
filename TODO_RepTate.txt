@@ -12,7 +12,7 @@ TODO list:
 
 *matplotlib icons next to the file name in dataset table
 
-*value of data points on hoover 
+*value of data points on hover 
 
 *(OK)change style of highlighted series
 

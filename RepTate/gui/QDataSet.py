@@ -6,6 +6,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
 from QFile import *
 from DataSet import *
+from QTheory import *
 
 Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
 
@@ -19,7 +20,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         print("QDataSet.__init__(self) ended")
 
         self.setupUi(self)
-        self.num_theory_tab = 0
         self.selected_file = None
 
 
@@ -43,8 +43,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.cbtheory.setToolTip("Choose a Theory")
         self.cbtheory.addItem("Select Theory")
         self.cbtheory.model().item(0).setEnabled(False)
-        for th in self.parent_application.theories:
-            self.cbtheory.addItem(th)
+
+        # for th_name in self.parent_application.theories:
+        #     self.cbtheory.addItem(th_name)
+        self.cbtheory.addItem("MaxwellModesFrequency") #only MMF is working so far
+        ###
+
         self.cbtheory.setMaximumWidth(115)
         self.cbtheory.setMinimumWidth(50)
         tb.addWidget(self.cbtheory)
@@ -56,6 +60,35 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tb.addAction(self.actionTheory_Options)
         self.TheoryLayout.insertWidget(0, tb)
 
+        # Theory Tabs behaviour ##########
+        self.TheorytabWidget.setTabsClosable(True)
+        self.TheorytabWidget.setUsesScrollButtons(True)
+        self.TheorytabWidget.setMovable(True)    
+
+        # Theory text display
+        self.ThText.setReadOnly(True)
+        self.ThText.setHtml("""
+        <head>
+            <title>Some HTML text</title>
+        </head>
+            
+        <body>
+         <center>
+            <p> <b>Hello</b> <i>Qt!</i></p>
+         </center>
+            <hr />
+            <p>This is some HTML text</p>
+              <p>An image: <img src="gui/Images/logo.jpg"> </p>
+        </body>
+            
+        </html>
+        """)
+
+        # self.ThText.setText("Hello, I display text")
+        # self.ThText.append("But also numbers 123456789")
+        # for i in range(15):
+        #     self.ThText.append("%g"%i)
+
 
         connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
@@ -64,6 +97,55 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemSelectionChanged)
+
+        connection_id = self.TheorytabWidget.tabCloseRequested.connect(self.handle_thTabCloseRequested)
+        connection_id = self.TheorytabWidget.tabBarDoubleClicked.connect(self.handle_thTabBarDoubleClicked)
+        connection_id = self.TheorytabWidget.currentChanged.connect(self.handle_thCurrentChanged)
+        connection_id = self.actionMinimize_Error.triggered.connect(self.handle_actionMinimize_Error)
+
+
+    def handle_actionMinimize_Error(self):
+        """fit the theory"""
+        if self.current_theory:
+            self.theories[self.current_theory].do_fit("")
+
+    def handle_thCurrentChanged(self, index):
+        """Change figure when the active theory tab is changed"""
+        th = self.TheorytabWidget.widget(index)
+        if th:
+            th.do_show()
+            self.current_theory = th.name
+            ntab = self.TheorytabWidget.count()
+            #hide all theory curves
+            for i in range(ntab):   
+                if i != index:
+                    th = self.TheorytabWidget.widget(i)
+                    th.do_hide()
+        else:
+            self.current_theory = None
+        self.parent_application.update_Qplot()
+
+    def Qshow_all(self):
+        """Show all the files in this dataset, except those previously hiden"""
+        self.do_show_all()
+        for i in range(self.DataSettreeWidget.topLevelItemCount()):
+            file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
+            if file_name in self.inactive_files:
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 0)
+            else:
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 2)
+
+
+    def handle_thTabBarDoubleClicked(self, index):
+        """Edit theory tab name"""
+        pass
+
+    def handle_thTabCloseRequested(self, index):
+        """Delete a theory tab from the current dataset"""
+        th_name = self.TheorytabWidget.widget(index).name
+        self.do_theory_delete(th_name) #call DataSet.do_theory_delete 
+        self.TheorytabWidget.removeTab(index)
+
 
     def handle_itemSelectionChanged(self):
         """Define actions for when a file table is selected"""
@@ -76,7 +158,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 self.selected_file = f
                 self.highlight_series()
                 self.populate_inspector()
-
 
     def highlight_series(self):
         """Highligh the data series of the selected file"""
@@ -118,6 +199,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             "File: \"%s\" in %s"%(file.file_name_short, self.parent_application.DataSettabWidget.tabText(ds_index)))
         
     def handle_itemChanged(self, item, column):
+        print("item changed")
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
             
     def handle_sortIndicatorChanged(self, column, order):
@@ -171,36 +253,18 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
 
     def NewTheory(self):
+        """Create new theory and do fit"""
         if self.cbtheory.currentIndex() == 0:
             return
-        thname = self.cbtheory.currentText()
-        self.cbtheory.setCurrentIndex(0)
-        
-        obj=QTreeWidget()
-        obj.setIndentation(0)
-        obj.setHeaderItem(QTreeWidgetItem(["Parameter", "Value"]))
-        obj.setAlternatingRowColors(True)
-        obj.setFrameShape(QFrame.NoFrame)
-        obj.setFrameShadow(QFrame.Plain)
-        #obj.setEditTriggers(QAbstractItemView.NoEditTriggers) 
-        obj.setEditTriggers(obj.NoEditTriggers) 
-        connection_id = obj.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
-        #self.actionNew_Theory.triggered.connect(self.NewTheory)
-        #obj.setStyleSheet(QStyle("QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}"))
-        ##obj.styleSheet="QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ;}\n"
-        
-        self.num_theory_tab += 1
-        index = self.TheorytabWidget.addTab(obj, thname+'%d'%self.num_theory_tab)
-        self.TheorytabWidget.setCurrentIndex(index)
-        item = QTreeWidgetItem(obj, ['Param1', "%g"%4.345])
-        item.setCheckState(0,2)
-        item.setFlags(item.flags() | Qt.ItemIsEditable)
-        item = QTreeWidgetItem(obj, ['Param2', "%g"%2.365])
-        item.setCheckState(0,2)
-        item.setFlags(item.flags() | Qt.ItemIsEditable)
+        th_name = self.cbtheory.currentText()
+        self.cbtheory.setCurrentIndex(0) # reset the combobox selection
+        newth = self.do_theory_new(th_name)
+        # newth.do_fit("") #fit theory when first opened
 
-    def onTreeWidgetItemDoubleClicked(self, item, column):
-        if (column==1):
-            thcurrent = self.TheorytabWidget.currentWidget()
-            thcurrent.editItem(item, column)
-
+        # add new theory tab
+        th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
+        th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
+        index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
+        self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
+        
+        newth.update_parameter_table()

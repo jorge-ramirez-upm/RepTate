@@ -1,26 +1,18 @@
 from Theory import *
+from QTheory import *
+from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox
 
-class TheoryMaxwellModesTime(Theory, CmdBase):
-    """Fit Maxwell modes to a time depenendent relaxation function"""
-    thname="MaxwellModesTime"
-    description="Fit Maxwell modes to time dependent function"
-    citations=""
-
-    def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
-        super(TheoryMaxwellModesTime, self).__init__(name, parent_dataset, ax)
-        self.function = self.MaxwellModesTime
-
-
-    def MaxwellModesTime(self, f=None):
-        pass       
-
-class TheoryMaxwellModesFrequency(Theory, CmdBase):
+class TheoryMaxwellModesFrequency(CmdBase):
     """Fit Maxwell modes to a frequency dependent relaxation function"""
     thname="MaxwellModesFrequency"
     description="Fit Maxwell modes to frequency dependent function"
-
+    def __new__(cls, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryMaxwellModesFrequency(name, parent_dataset, ax)
+ 
+class BaseTheoryMaxwellModesFrequency:
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
-        super(TheoryMaxwellModesFrequency, self).__init__(name, parent_dataset, ax)
+        super(BaseTheoryMaxwellModesFrequency, self).__init__(name, parent_dataset, ax)
+        print("BaseTheoryMaxwellModesFrequency ended")
         self.function = self.MaxwellModesFrequency
         self.has_modes = True
         self.parameters["logwmin"]=Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, True)
@@ -32,13 +24,14 @@ class TheoryMaxwellModesFrequency(Theory, CmdBase):
     def set_param_value(self, name, value):
         if (name=="nmodes"):
             oldn=self.parameters["nmodes"].value
-        super(TheoryMaxwellModesFrequency, self).set_param_value(name, value)
+        super(BaseTheoryMaxwellModesFrequency, self).set_param_value(name, value) #what does that do?
         if (name=="nmodes"):
             for i in range(self.parameters["nmodes"].value):
                 self.parameters["logG%d"%i]=Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
             if (oldn>self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value,oldn):
                     del self.parameters["logG%d"%i]
+        self.update_parameter_table()
 
     def get_modes(self):
         nmodes=self.parameters["nmodes"].value
@@ -70,4 +63,62 @@ class TheoryMaxwellModesFrequency(Theory, CmdBase):
             G=np.power(10, self.parameters["logG%d"%i].value)
             tt.data[:,1]+=G*wTsq/(1+wTsq)
             tt.data[:,2]+=G*wT/(1+wTsq)
-               
+
+class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
+    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        super(CLTheoryMaxwellModesFrequency, self).__init__(name, parent_dataset, ax)
+        
+class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
+    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        super(GUITheoryMaxwellModesFrequency, self).__init__(name, parent_dataset, ax)
+        print("GUITheoryMaxwellModesFrequency")
+        
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24,24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, 20) # min and max number of modes
+        self.spinbox.setSuffix(" modes")
+        self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
+        tb.addWidget(self.spinbox)
+        self.parent_dataset.hThLayout.insertWidget(0, tb)
+        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nmode'"""
+        self.set_param_value("nmodes", value)
+        item = self.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
+        print(item)
+        item[0].setText(1, "%g"%value)
+        #self.do_fit("")
+
+
+
+########################################
+########################################
+
+class TheoryMaxwellModesTime(CmdBase):
+    """Fit Maxwell modes to a time depenendent relaxation function"""
+    thname="MaxwellModesTime"
+    description="Fit Maxwell modes to time dependent function"
+    citations=""
+    def __new__(cls, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        return GUITheoryMaxwellModesTime(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryMaxwellModesTime(name, parent_dataset, ax)
+      
+class BaseTheoryMaxwellModesTime(CmdBase):
+    def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        super(BaseTheoryMaxwellModesTime, self).__init__(name, parent_dataset, ax)
+        self.function = self.MaxwellModesTime
+
+    def MaxwellModesTime(self, f=None):
+        pass   
+
+class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
+    def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        super(CLTheoryMaxwellModesTime, self).__init__(name, parent_dataset, ax)
+        
+class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
+    def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        super(GUITheoryMaxwellModesTime, self).__init__(name, parent_dataset, ax)
+

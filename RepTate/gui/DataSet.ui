@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
-    <height>726</height>
+    <width>402</width>
+    <height>460</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -117,20 +117,30 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTabWidget" name="TheorytabWidget">
-         <property name="styleSheet">
-          <string notr="true">QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ; selection-color: rgb(0, 0, 0); }</string>
-         </property>
-         <property name="tabShape">
-          <enum>QTabWidget::Triangular</enum>
-         </property>
-         <property name="currentIndex">
-          <number>-1</number>
-         </property>
-         <property name="tabsClosable">
-          <bool>true</bool>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <layout class="QHBoxLayout" name="hThLayout"/>
+         </item>
+         <item>
+          <widget class="QTabWidget" name="TheorytabWidget">
+           <property name="styleSheet">
+            <string notr="true">QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ; selection-color: rgb(0, 0, 0); }</string>
+           </property>
+           <property name="tabShape">
+            <enum>QTabWidget::Triangular</enum>
+           </property>
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+           <property name="tabsClosable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextBrowser" name="ThText"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
