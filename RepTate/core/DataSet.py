@@ -475,6 +475,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 print("Current dataset is empty\n"
                     "%s was not created"%line)
                 return
+            if line == "MaxwellModesFrequency" and len(self.files)>1:
+                print("Theory %s can be applied to one file only"%line)
             self.num_theories += 1
             th_id = "%s%02d"%(line,self.num_theories)
             th = self.parent_application.theories[line](th_id, self, self.parent_application.ax)

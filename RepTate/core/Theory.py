@@ -484,6 +484,6 @@ Total error is the mean square of the residual, averaged over all points in all 
 
     def Qprint(self, msg):
         if CmdBase.mode == CmdMode.GUI:
-            self.parent_dataset.ThText.append(msg)
+            self.thTextBox.append(msg)
         else:
             print(msg)

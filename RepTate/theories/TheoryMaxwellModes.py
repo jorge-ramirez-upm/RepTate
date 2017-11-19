@@ -81,16 +81,20 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
         tb.addWidget(self.spinbox)
-        self.parent_dataset.hThLayout.insertWidget(0, tb)
+        self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
+    # def nmode_non_editable(self):
+    #     item = self.thParamTable.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
+    #     item.setDisabled(True)
 
     def handle_spinboxValueChanged(self, value):
         """Handle a change of the parameter 'nmode'"""
         self.set_param_value("nmodes", value)
-        item = self.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
+        item = self.thParamTable.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
         item[0].setText(1, "%g"%value)
         #self.do_fit("")
+
 
 
 

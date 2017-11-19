@@ -275,5 +275,6 @@ class Application(CmdBase):
             try:
                 leg.remove()
             except AttributeError as e:
-                print("legend: %s"%e)
+                pass
+                #print("legend: %s"%e)
 
