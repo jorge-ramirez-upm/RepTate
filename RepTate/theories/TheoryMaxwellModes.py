@@ -89,7 +89,6 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         """Handle a change of the parameter 'nmode'"""
         self.set_param_value("nmodes", value)
         item = self.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
-        print(item)
         item[0].setText(1, "%g"%value)
         #self.do_fit("")
 

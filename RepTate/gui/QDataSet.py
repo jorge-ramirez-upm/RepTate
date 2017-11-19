@@ -199,7 +199,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             "File: \"%s\" in %s"%(file.file_name_short, self.parent_application.DataSettabWidget.tabText(ds_index)))
         
     def handle_itemChanged(self, item, column):
-        print("item changed")
         self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
             
     def handle_sortIndicatorChanged(self, column, order):
@@ -268,3 +267,4 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
         
         newth.update_parameter_table()
+        self.ThText.clear()

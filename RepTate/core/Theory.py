@@ -81,7 +81,7 @@ class Theory(CmdBase):
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
             self.tables[f.file_name_short]=DataTable(ax)
-            
+
         self.do_cite("")
             
     def precmd(self, line):
@@ -112,8 +112,8 @@ Total error is the mean square of the residual, averaged over all points in all 
         total_error=0
         npoints=0
         view = self.parent_dataset.parent_application.current_view
-        print("%20s %10s (%10s)"%("File","Error","# Points"))
-        print("=============================================")
+        self.Qprint("%20s %10s (%10s)"%("File","Error","# Points"))
+        self.Qprint("=============================================")
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
@@ -131,8 +131,8 @@ Total error is the mean square of the residual, averaged over all points in all 
             npt=len(yth)
             total_error+=f_error*npt
             npoints+=npt
-            print("%20s %10.5g (%10d)"%(f.file_name_short,f_error,npt))
-        print("%20s %10.5g (%10d)"%("TOTAL",total_error/npoints,npoints))
+            self.Qprint("%20s %10.5g (%10d)"%(f.file_name_short,f_error,npt))
+        self.Qprint("%20s %10.5g (%10d)"%("TOTAL",total_error/npoints,npoints))
 
     def func_fit(self, x, *param_in):
         ind=0
@@ -196,7 +196,7 @@ Total error is the mean square of the residual, averaged over all points in all 
                 param_min.append(par.min_value) #list of min values for fitting parameters
                 param_max.append(par.max_value) #list of max values for fitting parameters
         if (not param_min) or (not param_max):
-            print("No parameter to minimize")
+            self.Qprint("No parameter to minimize")
             return
         opt = dict(return_full=True)
         self.nfev = 0
@@ -212,7 +212,7 @@ Total error is the mean square of the residual, averaged over all points in all 
         fres0 = sum(residuals**2)
         residuals = y - self.func_fit(x, *pars)
         fres1 = sum(residuals**2)
-        print('Initial Error = %g --> Final Error = %g  with %g function evaluation'%(fres0, fres1, self.nfev))
+        self.Qprint('Initial Error = %g --> Final Error = %g  with %g function evaluation'%(fres0, fres1, self.nfev))
 
         # fiterror = np.mean((infodict['fvec'])**2)
         # funcev = infodict['nfev']
@@ -234,16 +234,16 @@ Total error is the mean square of the residual, averaged over all points in all 
         ind=0
         k=list(self.parameters.keys())
         k.sort()
-        print("%10s   %10s +/- %10s (if it was optimized)"%("Parameter","Value","Error"))
-        print("=============================================")
+        self.Qprint("%10s   %10s +/- %10s (if it was optimized)"%("Parameter","Value","Error"))
+        self.Qprint("=============================================")
         for p in k:
             par = self.parameters[p] 
             if par.min_flag:
                 par.error=par_error[ind]
                 ind+=1
-                print('%10s = %10.5g +/- %10.5g'%(par.name, par.value, par.error))
+                self.Qprint('%10s = %10.5g +/- %10.5g'%(par.name, par.value, par.error))
             else:
-                print('%10s = %10.5g'%(par.name, par.value))
+                self.Qprint('%10s = %10.5g'%(par.name, par.value))
         self.fitting=False
         self.do_calculate(line)
         if CmdBase.mode == CmdMode.GUI:
@@ -481,3 +481,9 @@ Total error is the mean square of the residual, averaged over all points in all 
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
                     table.series[i].set_visible(True)
+
+    def Qprint(self, msg):
+        if CmdBase.mode == CmdMode.GUI:
+            self.parent_dataset.ThText.append(msg)
+        else:
+            print(msg)
