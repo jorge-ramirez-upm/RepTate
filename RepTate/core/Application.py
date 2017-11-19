@@ -262,8 +262,8 @@ class Application(CmdBase):
             self.ax.set_yscale("linear")
             self.ax.yaxis.set_minor_locator(AutoMinorLocator())
         
-        self.ax.set_xlabel(self.current_view.x_label)
-        self.ax.set_ylabel(self.current_view.y_label)
+        self.ax.set_xlabel(self.current_view.x_label + ' [' + self.current_view.x_units + ']')
+        self.ax.set_ylabel(self.current_view.y_label + ' [' + self.current_view.y_units + ']')
         self.ax.relim(True)
         self.ax.autoscale_view()
 

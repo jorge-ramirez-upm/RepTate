@@ -400,9 +400,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""
-        for i in self.views:
+        selectedview = self.current_view.name
+        for i in sorted(self.views):
             #add keys of 'views' dict to the list of views avaliable 
             self.viewComboBox.addItem(i) 
+        index = self.viewComboBox.findText(selectedview, QtCore.Qt.MatchFixedString)
+        self.viewComboBox.setCurrentIndex(index)
 
     def dragEnterEvent(self, e):      
         if e.mimeData().hasUrls():
@@ -468,7 +471,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         #Define the inspector column names (header)
         if num == 1:
-            inspect_header = dfile.col_names[:]
+            #inspect_header = dfile.col_names[:]
+            inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
             inspec_tab = self.tableWidget.setHorizontalHeaderLabels(inspect_header)
 
 
