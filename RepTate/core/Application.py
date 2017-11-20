@@ -47,6 +47,7 @@ class Application(CmdBase):
         plt.style.use('seaborn-poster')
         self.figure = plt.figure(self.name)
         self.figure.canvas.mpl_connect('close_event', self.handle_close_window)
+        self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
         self.ax = self.figure.add_subplot(111)
         sns.despine() # Remove up and right side of plot box
         #CURSOR STUFF
@@ -66,6 +67,38 @@ class Application(CmdBase):
     def handle_close_window(self, evt):
         print("\nApplication window %s has been closed\n"%self.name)
         print("Please, return to the RepTate prompt and delete de application")
+
+    def zoom_wheel(self, event):
+        # get the current x and y limits
+        base_scale = 1.1
+        cur_xlim = self.ax.get_xlim()
+        cur_ylim = self.ax.get_ylim()
+        # set the range
+        #cur_xrange = (cur_xlim[1] - cur_xlim[0])*.5
+        #cur_yrange = (cur_ylim[1] - cur_ylim[0])*.5
+        xdata = event.xdata # get event x location
+        ydata = event.ydata # get event y location
+        if event.button == 'up':
+            # deal with zoom in
+            scale_factor = 1/base_scale
+        elif event.button == 'down':
+            # deal with zoom out
+            scale_factor = base_scale
+        else:
+            # deal with something that should never happen
+            scale_factor = 1
+            #print event.button
+        # Get distance from the cursor to the edge of the figure frame
+        x_left = xdata - cur_xlim[0]
+        x_right = cur_xlim[1] - xdata
+        y_top = ydata - cur_ylim[0]
+        y_bottom = cur_ylim[1] - ydata
+        # set new limits
+        self.ax.set_xlim([xdata - x_left*scale_factor,
+                    xdata + x_right*scale_factor])
+        self.ax.set_ylim([ydata - y_top*scale_factor,
+                    ydata + y_bottom*scale_factor])
+        self.ax.figure.canvas.draw() # force re-draw
 
     def new(self, line):
         """Create new empty dataset in the application"""

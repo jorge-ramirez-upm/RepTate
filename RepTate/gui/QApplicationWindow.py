@@ -58,7 +58,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # DataSet Tabs behaviour ##########
         self.DataSettabWidget.setTabsClosable(True)
         self.DataSettabWidget.setUsesScrollButtons(True)
-        self.DataSettabWidget.setMovable(True)    
+        self.DataSettabWidget.setMovable(True)
         
         ################
         # SETUP TOOLBARS
@@ -129,8 +129,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.figure=plt.figure()
         # self.ax = self.figure.add_subplot(111)
         self.canvas = FigureCanvas(self.figure)
+        self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
+        self.canvas.setFocus()
         self.mplvl.addWidget(self.canvas)
-
 
         # self.canvas.draw()
         # self.update_Qplot()
