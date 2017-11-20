@@ -36,10 +36,10 @@ class Application(CmdBase):
         self.legend_visible = False      
 
         # Theories available everywhere
-        self.theories[TheoryPolynomial.thname]=TheoryPolynomial
-        self.theories[TheoryPowerLaw.thname]=TheoryPowerLaw
-        self.theories[TheoryExponential.thname]=TheoryExponential
-        self.theories[TheoryExponential2.thname]=TheoryExponential2
+        # self.theories[TheoryPolynomial.thname]=TheoryPolynomial
+        # self.theories[TheoryPowerLaw.thname]=TheoryPowerLaw
+        # self.theories[TheoryExponential.thname]=TheoryExponential
+        # self.theories[TheoryExponential2.thname]=TheoryExponential2
             
         # MATPLOTLIB STUFF
         sns.set_style("white")

@@ -47,7 +47,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         # Generate action buttons from dict of available applications
         #self.actionTest.triggered.connect(self.new_test_window)
         #self.actionReact.triggered.connect(self.new_react_window)
-        #self.actionMWD.triggered.connect(self.new_mwd_window)
+        self.actionMWD.triggered.connect(self.new_mwd_window)
         #self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
         #self.actionNLVE.triggered.connect(self.new_nlve_window)

@@ -11,7 +11,7 @@ class TheoryMaxwellModesFrequency(CmdBase):
  
 class BaseTheoryMaxwellModesFrequency:
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
-        super(BaseTheoryMaxwellModesFrequency, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         print("BaseTheoryMaxwellModesFrequency ended")
         self.function = self.MaxwellModesFrequency
         self.has_modes = True
@@ -66,11 +66,11 @@ class BaseTheoryMaxwellModesFrequency:
 
 class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
-        super(CLTheoryMaxwellModesFrequency, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         
 class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
-        super(GUITheoryMaxwellModesFrequency, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         print("GUITheoryMaxwellModesFrequency")
         
         # add widgets specific to the theory
@@ -111,7 +111,7 @@ class TheoryMaxwellModesTime(CmdBase):
       
 class BaseTheoryMaxwellModesTime(CmdBase):
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
-        super(BaseTheoryMaxwellModesTime, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesTime
 
     def MaxwellModesTime(self, f=None):
@@ -119,9 +119,9 @@ class BaseTheoryMaxwellModesTime(CmdBase):
 
 class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
-        super(CLTheoryMaxwellModesTime, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         
 class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
-        super(GUITheoryMaxwellModesTime, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
 

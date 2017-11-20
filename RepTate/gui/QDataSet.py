@@ -44,9 +44,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.cbtheory.addItem("Select Theory")
         self.cbtheory.model().item(0).setEnabled(False)
 
-        # for th_name in self.parent_application.theories:
-        #     self.cbtheory.addItem(th_name)
-        self.cbtheory.addItem("MaxwellModesFrequency") #only MMF is working so far
+        for th_name in self.parent_application.theories:
+             self.cbtheory.addItem(th_name)
+        # self.cbtheory.addItem("MaxwellModesFrequency") 
+        # self.cbtheory.addItem("MWDiscr") 
+        
         ###
 
         self.cbtheory.setMaximumWidth(115)

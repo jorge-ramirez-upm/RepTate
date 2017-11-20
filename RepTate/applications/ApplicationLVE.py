@@ -38,8 +38,8 @@ class BaseApplicationLVE:
 
         # THEORIES
         self.theories[TheoryMaxwellModesFrequency.thname]=TheoryMaxwellModesFrequency
-        self.theories[TheoryLikhtmanMcLeish2002.thname]=TheoryLikhtmanMcLeish2002
-        self.theories[TheoryWLFShift.thname]=TheoryWLFShift
+        #self.theories[TheoryLikhtmanMcLeish2002.thname]=TheoryLikhtmanMcLeish2002
+        #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
 
     def viewLogG1G2(self, dt, file_parameters):
@@ -95,3 +95,4 @@ class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
         print("GUIApplicationLVE.__init__(self) ended")
 
         self.populate_views() #populate the view ComboBox
+        

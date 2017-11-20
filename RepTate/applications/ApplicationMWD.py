@@ -1,12 +1,11 @@
 from Application import *
+from QApplicationWindow import *
 import numpy as np
 from TheoryDiscrMWD import TheoryDiscrMWD
 #from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-from QApplicationWindow import *
 
-
-class ApplicationMWD(QApplicationWindow):
+class ApplicationMWD(CmdBase):
     """
     Application to analyze Molecular Weight distributions
     
@@ -14,18 +13,17 @@ class ApplicationMWD(QApplicationWindow):
     """
     name="MWD"
     description="Experimental Molecular weight distributions"
-    
+    def __new__(cls, name="LVE", parent = None):
+        return GUIApplicationMWD(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationMWD(name, parent)
+
+class BaseApplicationMWD:    
     def __init__(self, name="MWD", parent = None):
-        super(ApplicationMWD, self).__init__(name, parent)
-        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
-        #     QApplication.__init__(self, name, self)
+        super().__init__(name, parent)
 
         # VIEWS
-        self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", True, False, self.viewWM, 1, ["W(M)"])
+        self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", "g/mol", "-", True, False, self.viewWM, 1, ["W(M)"])
         self.current_view=self.views["W(M)"]
-        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
-        #     self.populateViews()
-        
+
         # FILES
         ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], [], [])
         self.filetypes[ftype.extension]=ftype
@@ -44,3 +42,12 @@ class ApplicationMWD(QApplicationWindow):
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]/max_y
         return x, y, True
+
+class CLApplicationMWD(BaseApplicationMWD, Application):    
+    def __init__(self, name="MWD", parent = None):
+        super().__init__(name, parent)
+
+class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):    
+    def __init__(self, name="MWD", parent = None):
+        super().__init__(name, parent)
+        self.populate_views() #populate the view ComboBox

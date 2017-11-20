@@ -1,15 +1,21 @@
 from Theory import *
+from QTheory import *
 import numpy as np
 from scipy import interp
+from PyQt5.QtWidgets import QToolBar, QSpinBox
 
-class TheoryDiscrMWD(Theory, CmdBase):
+
+class TheoryDiscrMWD(CmdBase):
     """Discretize a Molecular Weight Distribution"""
     thname = "MWDiscr"
     description = "Discretize a Molecular Weight Distribution"
     citations = ""
+    def __new__(cls, name="MWDiscr", parent_dataset=None, ax=None):
+        return GUITheoryDiscrMWD(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryDiscrMWD(name, parent_dataset, ax)
 
+class BaseTheoryDiscrMWD:
     def __init__(self, name="ThDiscrMWD", parent_dataset=None, ax=None):
-        super(TheoryDiscrMWD, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.DiscretiseMWD
         self.has_modes = False
         self.parameters["bpd"] = Parameter(
@@ -62,8 +68,8 @@ class TheoryDiscrMWD(Theory, CmdBase):
         self.calculate_moments(ft, "input")
 
         #molar mass min and max 
-        mmin = 0.5*np.min(ft[:, 0])
-        mmax = 2*np.max(ft[:, 0])
+        mmin = 0.1*np.min(ft[:, 0])
+        mmax = 10*np.max(ft[:, 0])
 
         #create theory table (tt) and temp table
         nbin = int(np.ceil((np.log10(mmax/mmin))*self.parameters["bpd"].value))
@@ -113,3 +119,34 @@ class TheoryDiscrMWD(Theory, CmdBase):
         tt.data[:, 1] = phi/np.sum(phi)
 
         self.calculate_moments(tt.data, "discretized")
+
+class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
+    def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
+        super().__init__(name, parent_dataset, ax)
+        
+class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
+    def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
+        super().__init__(name, parent_dataset, ax)
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24,24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(3, 30) # min and max number of modes
+        self.spinbox.setSuffix(" modes per decade")
+        self.spinbox.setValue(self.parameters["bpd"].value) #initial value
+        tb.addWidget(self.spinbox)
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+
+    # def nmode_non_editable(self):
+    #     item = self.thParamTable.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
+    #     item.setDisabled(True)
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'bpd'"""
+        self.set_param_value("bpd", value)
+        item = self.thParamTable.findItems("bpd", Qt.MatchCaseSensitive, column=0)
+        item[0].setText(1, "%g"%value)
+        #self.do_fit("")
+
