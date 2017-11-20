@@ -92,16 +92,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionMarkerSettings)
         #
         tb.addAction(self.actionReload_Data)
-        tbut = QToolButton()
-        tbut.setPopupMode(QToolButton.MenuButtonPopup)
-        tbut.setDefaultAction(self.actionShow_Limits)
-        menu=QMenu()
-        menu.addAction(self.actionNo_Limits)
-        menu.addAction(self.actionVertical_Limits)
-        menu.addAction(self.actionHorizontal_Limits)
-        menu.addAction(self.actionBoth_Limits)
-        tbut.setMenu(menu)
-        tb.addWidget(tbut)
+        # tbut = QToolButton()
+        # tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        # tbut.setDefaultAction(self.actionShow_Limits)
+        # menu=QMenu()
+        # menu.addAction(self.actionNo_Limits)
+        # menu.addAction(self.actionVertical_Limits)
+        # menu.addAction(self.actionHorizontal_Limits)
+        # menu.addAction(self.actionBoth_Limits)
+        # tbut.setMenu(menu)
+        # tb.addWidget(tbut)
         #
         tb.addAction(self.actionInspect_Data)
         tb.addAction(self.actionPrint)
@@ -149,18 +149,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
-       # connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.createNew_Dataset_From_File)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
 
         connection_id = self.actionShow_Smaller_Symbols.triggered.connect(self.Smaller_Symbols)
         connection_id = self.actionResetSymbolsSize.triggered.connect(self.ResetSymbolsSize)
         connection_id = self.actionShow_Larger_Symbols.triggered.connect(self.Larger_Symbols)
 
-        connection_id = self.actionNo_Limits.triggered.connect(self.No_Limits)
-        connection_id = self.actionVertical_Limits.triggered.connect(self.Vertical_Limits)
-        connection_id = self.actionHorizontal_Limits.triggered.connect(self.Horizontal_Limits)
-        connection_id = self.actionBoth_Limits.triggered.connect(self.Both_Limits)
-            
+
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
@@ -552,17 +547,17 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         plt.tight_layout(pad=1.2)
 
 
-    def No_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionNo_Limits.icon())
+    # def No_Limits(self):
+    #     self.actionShow_Limits.setIcon(self.actionNo_Limits.icon())
 
-    def Vertical_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionVertical_Limits.icon())
+    # def Vertical_Limits(self):
+    #     self.actionShow_Limits.setIcon(self.actionVertical_Limits.icon())
 
-    def Horizontal_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionHorizontal_Limits.icon())
+    # def Horizontal_Limits(self):
+    #     self.actionShow_Limits.setIcon(self.actionHorizontal_Limits.icon())
 
-    def Both_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
+    # def Both_Limits(self):
+    #     self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
         
     def Smaller_Symbols(self):
         tab = self.DataSettabWidget.currentWidget()

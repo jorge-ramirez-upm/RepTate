@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>369</height>
+    <width>556</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -209,6 +209,10 @@
    </property>
   </action>
   <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-copy.png</normaloff>:/Images/Images/new_icons/icons8-copy.png</iconset>
+   </property>
    <property name="text">
     <string>Copy</string>
    </property>
@@ -219,6 +223,10 @@
    </property>
   </action>
   <action name="actionPaste">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-paste.png</normaloff>:/Images/Images/new_icons/icons8-paste.png</iconset>
+   </property>
    <property name="text">
     <string>Paste</string>
    </property>
@@ -255,7 +263,7 @@
     <string>ShiftVertically</string>
    </property>
    <property name="toolTip">
-    <string>Shift the selected plot vertically</string>
+    <string>Shift the selected curve vertically</string>
    </property>
   </action>
   <action name="actionShiftHorizontally">
@@ -270,7 +278,7 @@
     <string>ShiftHorizontally</string>
    </property>
    <property name="toolTip">
-    <string>Shift selected plot horizontally</string>
+    <string>Shift selected curve horizontally</string>
    </property>
   </action>
   <action name="actionNew_Empty_Dataset">
@@ -342,18 +350,6 @@
     <string>Re-read data files</string>
    </property>
   </action>
-  <action name="actionShow_Limits">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Show Limits</string>
-   </property>
-   <property name="toolTip">
-    <string>Change limits for fit</string>
-   </property>
-  </action>
   <action name="actionInspect_Data">
    <property name="checkable">
     <bool>true</bool>
@@ -367,54 +363,6 @@
    </property>
    <property name="toolTip">
     <string>Inspect contents of data files</string>
-   </property>
-  </action>
-  <action name="actionNew_Theory">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-einstein.png</normaloff>:/Images/Images/new_icons/icons8-einstein.png</iconset>
-   </property>
-   <property name="text">
-    <string>New Theory</string>
-   </property>
-   <property name="toolTip">
-    <string>Create New Selected Theory</string>
-   </property>
-  </action>
-  <action name="actionCalculate_Theory">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-abacus.png</normaloff>:/Images/Images/new_icons/icons8-abacus.png</iconset>
-   </property>
-   <property name="text">
-    <string>Calculate Theory</string>
-   </property>
-   <property name="toolTip">
-    <string>Calculate result from theory</string>
-   </property>
-  </action>
-  <action name="actionMinimize_error">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-minimum-value.png</normaloff>:/Images/Images/new_icons/icons8-minimum-value.png</iconset>
-   </property>
-   <property name="text">
-    <string>Minimize error</string>
-   </property>
-   <property name="toolTip">
-    <string>Minimize the error between theory/data</string>
-   </property>
-  </action>
-  <action name="actionTheory_Options">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-administrative-tools.png</normaloff>:/Images/Images/new_icons/icons8-administrative-tools.png</iconset>
-   </property>
-   <property name="text">
-    <string>Theory Options</string>
-   </property>
-   <property name="toolTip">
-    <string>View Change Options of Theory</string>
    </property>
   </action>
   <action name="actionShow_Smaller_Symbols">
@@ -445,54 +393,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+=</string>
-   </property>
-  </action>
-  <action name="actionNo_Limits">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
-   </property>
-   <property name="text">
-    <string>No Limits</string>
-   </property>
-   <property name="toolTip">
-    <string>Remove Limits</string>
-   </property>
-  </action>
-  <action name="actionVertical_Limits">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart Vertical Limits.ico</normaloff>:/Images/Images/Line Chart Vertical Limits.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Vertical Limits</string>
-   </property>
-   <property name="toolTip">
-    <string>Vertical Limits</string>
-   </property>
-  </action>
-  <action name="actionHorizontal_Limits">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Horizontal Limits</string>
-   </property>
-   <property name="toolTip">
-    <string>Horizontal Limits</string>
-   </property>
-  </action>
-  <action name="actionBoth_Limits">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart Both Limits.ico</normaloff>:/Images/Images/Line Chart Both Limits.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Both Limits</string>
-   </property>
-   <property name="toolTip">
-    <string>Both Limits</string>
    </property>
   </action>
   <action name="actionResetSymbolsSize">

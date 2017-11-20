@@ -38,7 +38,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         # Theory Toolbar
         tb = QToolBar()
         tb.setIconSize(QSize(24,24))
-        
+        tb.addAction(self.actionNew_Theory)
         self.cbtheory = QComboBox()
         self.cbtheory.setToolTip("Choose a Theory")
         self.cbtheory.addItem("Select Theory")
@@ -53,13 +53,29 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.cbtheory.setMinimumWidth(50)
         tb.addWidget(self.cbtheory)
         
-        tb.addAction(self.actionNew_Theory)
+        
    
         tb.addAction(self.actionCalculate_Theory)
         tb.addAction(self.actionMinimize_Error)
         tb.addAction(self.actionTheory_Options)
+
+        tbut = QToolButton()
+        tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut.setDefaultAction(self.actionShow_Limits)
+        menu=QMenu()
+        menu.addAction(self.actionNo_Limits)
+        menu.addAction(self.actionVertical_Limits)
+        menu.addAction(self.actionHorizontal_Limits)
+        menu.addAction(self.actionBoth_Limits)
+        tbut.setMenu(menu)
+        
+        tb.addWidget(tbut)
+
         self.TheoryLayout.insertWidget(0, tb)
 
+        #Buttons not wired yet
+        self.actionShow_Limits.setDisabled(True)
+        self.actionTheory_Options.setDisabled(True)
 
         # # Theory text display
         # self.ThText.setReadOnly(True)
@@ -85,15 +101,38 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
-        
+
         connection_id = self.TheorytabWidget.tabCloseRequested.connect(self.handle_thTabCloseRequested)
         connection_id = self.TheorytabWidget.tabBarDoubleClicked.connect(self.handle_thTabBarDoubleClicked)
         connection_id = self.TheorytabWidget.currentChanged.connect(self.handle_thCurrentChanged)
         connection_id = self.actionMinimize_Error.triggered.connect(self.handle_actionMinimize_Error)
+        connection_id = self.actionCalculate_Theory.triggered.connect(self.handle_actionCalculate_Theory)
+
+        connection_id = self.actionNo_Limits.triggered.connect(self.No_Limits)
+        connection_id = self.actionVertical_Limits.triggered.connect(self.Vertical_Limits)
+        connection_id = self.actionHorizontal_Limits.triggered.connect(self.Horizontal_Limits)
+        connection_id = self.actionBoth_Limits.triggered.connect(self.Both_Limits)
 
 
+    def No_Limits(self):
+        self.actionShow_Limits.setIcon(self.actionNo_Limits.icon())
+
+    def Vertical_Limits(self):
+        self.actionShow_Limits.setIcon(self.actionVertical_Limits.icon())
+
+    def Horizontal_Limits(self):
+        self.actionShow_Limits.setIcon(self.actionHorizontal_Limits.icon())
+
+    def Both_Limits(self):
+        self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
+        
+    def handle_actionCalculate_Theory(self):
+        """Calculate the theory"""
+        if self.current_theory:
+            self.theories[self.current_theory].do_calculate("")
+            
     def handle_actionMinimize_Error(self):
-        """fit the theory"""
+        """Minimize the error"""
         if self.current_theory:
             self.theories[self.current_theory].do_fit("")
 

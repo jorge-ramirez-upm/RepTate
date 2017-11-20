@@ -176,10 +176,71 @@
     <string>Theory Options</string>
    </property>
   </action>
+  <action name="actionNo_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
+   </property>
+   <property name="text">
+    <string>No Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Limits</string>
+   </property>
+  </action>
+  <action name="actionVertical_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart Vertical Limits.ico</normaloff>:/Images/Images/Line Chart Vertical Limits.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Vertical Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Vertical Limits</string>
+   </property>
+  </action>
+  <action name="actionHorizontal_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Horizontal Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Horizontal Limits</string>
+   </property>
+  </action>
+  <action name="actionBoth_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart Both Limits.ico</normaloff>:/Images/Images/Line Chart Both Limits.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Both Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Both Limits</string>
+   </property>
+  </action>
+  <action name="actionShow_Limits">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Show Limits</string>
+   </property>
+   <property name="toolTip">
+    <string>Change limits for fit</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Symbols.qrc"/>
   <include location="Theory.qrc"/>
+  <include location="Reptate.qrc"/>
  </resources>
  <connections/>
 </ui>
