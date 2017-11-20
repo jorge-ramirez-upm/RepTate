@@ -60,44 +60,32 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tb.addAction(self.actionTheory_Options)
         self.TheoryLayout.insertWidget(0, tb)
 
-        # Theory Tabs behaviour ##########
-        self.TheorytabWidget.setTabsClosable(True)
-        self.TheorytabWidget.setUsesScrollButtons(True)
-        self.TheorytabWidget.setMovable(True)    
 
-        # Theory text display
-        self.ThText.setReadOnly(True)
-        self.ThText.setHtml("""
-        <head>
-            <title>Some HTML text</title>
-        </head>
+        # # Theory text display
+        # self.ThText.setReadOnly(True)
+        # self.ThText.setHtml("""
+        # <head>
+        #     <title>Some HTML text</title>
+        # </head>
             
-        <body>
-         <center>
-            <p> <b>Hello</b> <i>Qt!</i></p>
-         </center>
-            <hr />
-            <p>This is some HTML text</p>
-              <p>An image: <img src="gui/Images/logo.jpg"> </p>
-        </body>
+        # <body>
+        #  <center>
+        #     <p> <b>Hello</b> <i>Qt!</i></p>
+        #  </center>
+        #     <hr />
+        #     <p>This is some HTML text</p>
+        #       <p>An image: <img src="gui/Images/logo.jpg"> </p>
+        # </body>
             
-        </html>
-        """)
-
-        # self.ThText.setText("Hello, I display text")
-        # self.ThText.append("But also numbers 123456789")
-        # for i in range(15):
-        #     self.ThText.append("%g"%i)
-
-
+        # </html>
+        # """)
         connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
         #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
-        connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemSelectionChanged)
-
+        
         connection_id = self.TheorytabWidget.tabCloseRequested.connect(self.handle_thTabCloseRequested)
         connection_id = self.TheorytabWidget.tabBarDoubleClicked.connect(self.handle_thTabBarDoubleClicked)
         connection_id = self.TheorytabWidget.currentChanged.connect(self.handle_thCurrentChanged)
@@ -250,13 +238,19 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     item.setText(column, str(new_value)) #change table label
                     self.DataSettreeWidget.blockSignals(False)
 
-
     def NewTheory(self):
         """Create new theory and do fit"""
         if self.cbtheory.currentIndex() == 0:
             return
         th_name = self.cbtheory.currentText()
         self.cbtheory.setCurrentIndex(0) # reset the combobox selection
+        if not self.files:
+            return
+        if th_name == "MaxwellModesFrequency" and len(self.files)>1: 
+            header = "New Theory"
+            message = "Theory \"%s\" can be applied to one data file only"%th_name
+            QMessageBox.warning(self, header, message)
+            return
         newth = self.do_theory_new(th_name)
         # newth.do_fit("") #fit theory when first opened
 
@@ -265,6 +259,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
-        
+
         newth.update_parameter_table()
-        self.ThText.clear()
+        # self.ThText.clear()
