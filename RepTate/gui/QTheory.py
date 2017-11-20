@@ -37,10 +37,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             # item.setWhatsThis(2, param.description)
             if p.min_flag:
                 item.setCheckState(0,2)
-            else:
-                item.setCheckState(0,0)
             item.setFlags(item.flags() | Qt.ItemIsEditable)
-  
+
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked"""
         if (column==1):

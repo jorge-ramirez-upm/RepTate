@@ -19,7 +19,7 @@ class BaseTheoryMaxwellModesFrequency:
         self.parameters["logwmax"]=Parameter("logwmax", 4, "Log of frequency range maximum", ParameterType.real, True)
         self.parameters["nmodes"]=Parameter("nmodes", 5, "Number of Maxwell modes", ParameterType.integer, False)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%d"%i]=Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
 
     def set_param_value(self, name, value):
         if (name=="nmodes"):
@@ -27,10 +27,10 @@ class BaseTheoryMaxwellModesFrequency:
         super(BaseTheoryMaxwellModesFrequency, self).set_param_value(name, value) #what does that do?
         if (name=="nmodes"):
             for i in range(self.parameters["nmodes"].value):
-                self.parameters["logG%d"%i]=Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+                self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
             if (oldn>self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value,oldn):
-                    del self.parameters["logG%d"%i]
+                    del self.parameters["logG%02d"%i]
         self.update_parameter_table()
 
     def get_modes(self):
@@ -39,7 +39,7 @@ class BaseTheoryMaxwellModesFrequency:
         tau=1.0/freq
         G=np.zeros(nmodes)
         for i in range(nmodes):
-            G[i]=np.power(10, self.parameters["logG%d"%i].value)
+            G[i]=np.power(10, self.parameters["logG02%d"%i].value)
         return tau, G
 
     def set_modes(self, tau, G):
@@ -60,7 +60,7 @@ class BaseTheoryMaxwellModesFrequency:
         for i in range(nmodes):
             wT=tt.data[:,0]*tau[i]
             wTsq=wT**2
-            G=np.power(10, self.parameters["logG%d"%i].value)
+            G=np.power(10, self.parameters["logG%02d"%i].value)
             tt.data[:,1]+=G*wTsq/(1+wTsq)
             tt.data[:,2]+=G*wT/(1+wTsq)
 
