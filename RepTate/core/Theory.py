@@ -50,7 +50,7 @@ class Theory(CmdBase):
         self.tables={}
         self.function=None
         self.active = True #defines if the theorie is plotted
-
+        
         # THEORY OPTIONS
         self.npoints=100
         self.dt=0.001

@@ -1,17 +1,24 @@
 import numpy as np
 from scipy import interp
 from Theory import *
+from QTheory import *
 
-class TheoryLikhtmanMcLeish2002(Theory, CmdBase):
+
+class TheoryLikhtmanMcLeish2002(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers"""
     thname="Likhtman-McLeish"
     description="Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers"
     cite="Likhtman A.E. and McLeish T.C.B.\n\
 Quantitative Theory for Linear Dynamics of Linear Entangled Polymers\n\
 Macromolecules 2002, 35, 6332-6343"
+    single_file = False
     
+    def __new__(cls, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
+        return GUITheoryLikhtmanMcLeish2002(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryLikhtmanMcLeish2002(name, parent_dataset, ax)
+    
+class BaseTheoryLikhtmanMcLeish2002:      
     def __init__(self, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
-        super(TheoryLikhtmanMcLeish2002, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002
         self.parameters["taue"]=Parameter("taue", 2e-6, "Rouse time of one Entanglement", ParameterType.real, True)
         self.parameters["Ge"]=Parameter("Ge", 1e6, "Entanglement moduluas", ParameterType.real, True)
@@ -58,3 +65,12 @@ Macromolecules 2002, 35, 6332-6343"
         tt.data[:,1]=interp(tt.data[:,0], table[:,0]/taue, Ge*table[:,1])
         tt.data[:,2]=interp(tt.data[:,0], table[:,0]/taue, Ge*table[:,2])
                        
+class CLTheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, Theory):
+    def __init__(self, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
+        super().__init__(name, parent_dataset, ax)
+        
+class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
+    def __init__(self, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
+        super().__init__(name, parent_dataset, ax)
+        print("GUITheoryLikhtmanMcLeish2002")        
+      
