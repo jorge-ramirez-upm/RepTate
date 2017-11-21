@@ -132,11 +132,14 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """Calculate the theory"""
         if self.current_theory:
             self.theories[self.current_theory].do_calculate("")
+            self.theories[self.current_theory].update_parameter_table()
+
             
     def handle_actionMinimize_Error(self):
         """Minimize the error"""
         if self.current_theory:
             self.theories[self.current_theory].do_fit("")
+            self.theories[self.current_theory].update_parameter_table()
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed"""
@@ -287,13 +290,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.cbtheory.setCurrentIndex(0) # reset the combobox selection
         if not self.files:
             return
-        if th_name == "MaxwellModesFrequency" and len(self.files)>1: 
+        if self.parent_application.theories[th_name].single_file and len(self.files)>1: 
             header = "New Theory"
-            message = "Theory \"%s\" can be applied to one data file only"%th_name
+            message = "Theory \"%s\" cannot be applied to multiple data files"%th_name
             QMessageBox.warning(self, header, message)
             return
         newth = self.do_theory_new(th_name)
-        # newth.do_fit("") #fit theory when first opened
 
         # add new theory tab
         th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
@@ -302,4 +304,3 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
 
         newth.update_parameter_table()
-        # self.ThText.clear()

@@ -132,16 +132,20 @@ class Application(CmdBase):
             ds.prompt = self.prompt[:-2]+'/'+ds.name+'> '
         ds.cmdloop()
  
-    def delete(self, name):
+    def delete(self, ds_name):
         """Delete a dataset from the current application"""
-        if name in self.datasets.keys():
-            for file in self.datasets[name].files: # remove matplotlib artist from ax
+        if ds_name in self.datasets.keys():
+            for th in self.datasets[ds_name].theories.values(): #loop over the DataSet theories
+                for table in th.tables.values(): 
+                    for i in range(table.MAX_NUM_SERIES):
+                        self.ax.lines.remove(table.series[i]) #remove theory matplotlib artist from ax
+            del self.datasets[ds_name].theories
+            for file in self.datasets[ds_name].files: 
                 for i in range(file.data_table.MAX_NUM_SERIES):
-                    # f.data_table.series[i].set_visible(False)
-                    self.ax.lines.remove(file.data_table.series[i])
-            del self.datasets[name] #delete object
+                    self.ax.lines.remove(file.data_table.series[i]) #remove data matplotlib artist from ax
+            del self.datasets[ds_name] #delete object
         else:
-            print("Data Set \"%s\" not found"%name)            
+            print("Data Set \"%s\" not found"%ds_name)            
         
  
     def do_delete(self, name):

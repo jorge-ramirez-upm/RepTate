@@ -10,6 +10,8 @@ class TheoryDiscrMWD(CmdBase):
     thname = "MWDiscr"
     description = "Discretize a Molecular Weight Distribution"
     citations = ""
+    single_file = True
+
     def __new__(cls, name="MWDiscr", parent_dataset=None, ax=None):
         return GUITheoryDiscrMWD(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryDiscrMWD(name, parent_dataset, ax)
 
@@ -46,11 +48,21 @@ class BaseTheoryDiscrMWD:
         Mz = tempMz/Mw
         PDI = Mw/Mn
 
-        self.set_param_value("Mn", Mn)
-        self.set_param_value("Mw", Mw)
-        self.set_param_value("Mz", Mz)
-        self.set_param_value("PDI", PDI)
-        print(
+        if line=="input":
+            file_table = self.parent_dataset.DataSettreeWidget.currentItem()
+            print(file_table.text(0),file_table.text(1),file_table.text(2),file_table.text(3))
+            self.parent_dataset.DataSettreeWidget.blockSignals(True)
+            file_table.setText(1, "%0.3g"%Mn)
+            file_table.setText(2, "%0.3g"%Mw)
+            file_table.setText(3, "%0.3g"%PDI)
+            self.parent_dataset.DataSettreeWidget.blockSignals(False)
+
+        if line=="discretized":
+            self.set_param_value("Mn", Mn)
+            self.set_param_value("Mw", Mw)
+            self.set_param_value("Mz", Mz)
+            self.set_param_value("PDI", PDI)
+        self.Qprint(
             "Characteristics of the %s MWD:\n"
             "Mn=%0.3g kg/mol, Mw=%0.3g kg/mol, Mw/Mn=%0.3g, Mz/Mw=%0.3g\n"
             %(line, Mn/1000, Mw/1000, PDI, Mz/Mw)
@@ -71,14 +83,8 @@ class BaseTheoryDiscrMWD:
         mmin = 0.1*np.min(ft[:, 0])
         mmax = 10*np.max(ft[:, 0])
 
-        #create theory table (tt) and temp table
-        nbin = int(np.ceil((np.log10(mmax/mmin))*self.parameters["bpd"].value))
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = 2
-        tt.num_rows = nbin
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-
         #bins equally spaced on logarithmic scale
+        nbin = int(np.ceil((np.log10(mmax/mmin))*self.parameters["bpd"].value))
         bins = np.zeros(nbin)
         for k in range(nbin):  
             bins[k] = mmin*np.power(10, k/nbin * np.log10(mmax/mmin))
@@ -108,17 +114,36 @@ class BaseTheoryDiscrMWD:
             phi[k] +=  wj*dlogMj/dlogMk #weight x width / bin_width
             nk[k] += 1
 
-        # phi = np.choose(nk==0, (phi/nk * np.sum(nk)/nbin, phi)) #throws a warning
-        sum_nk = np.sum(nk)
-        for k in range (nbin):
+        sum_nk = np.sum(nk)        
+        for k in range(nbin):
             if nk[k]>0: 
                 phi[k] = phi[k]/nk[k] * sum_nk/nbin
-
+                
         #copy weights and M into theory table
+        bins, phi = self.clean_zeros(bins, phi)
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = 2
+        tt.num_rows = len(phi)
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = bins
         tt.data[:, 1] = phi/np.sum(phi)
 
         self.calculate_moments(tt.data, "discretized")
+
+    def clean_zeros(self, bins, phi):
+        a=0
+        for i in range(len(phi)):
+            if phi[i] != 0: break
+            a += 1
+        b = len(phi) 
+        for i in range(len(phi)-1, 0, -1):
+            if phi[i] != 0: break
+            b -= 1
+        zeros = []
+        for i in range(a, b):
+            if phi[i] == 0:
+                zeros.append(i)
+        return np.delete(bins, zeros), np.delete(phi, zeros)
 
 class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
     def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):

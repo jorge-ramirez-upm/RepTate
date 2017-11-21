@@ -246,8 +246,6 @@ Total error is the mean square of the residual, averaged over all points in all 
                 self.Qprint('%10s = %10.5g'%(par.name, par.value))
         self.fitting=False
         self.do_calculate(line)
-        if CmdBase.mode == CmdMode.GUI:
-            self.update_parameter_table()
 
     def do_print(self, line):
         """Print the theory table associated with the given file name"""

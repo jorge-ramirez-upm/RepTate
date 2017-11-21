@@ -6,6 +6,8 @@ class TheoryMaxwellModesFrequency(CmdBase):
     """Fit Maxwell modes to a frequency dependent relaxation function"""
     thname="MaxwellModesFrequency"
     description="Fit Maxwell modes to frequency dependent function"
+    single_file = True 
+
     def __new__(cls, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
         return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryMaxwellModesFrequency(name, parent_dataset, ax)
  
@@ -31,7 +33,6 @@ class BaseTheoryMaxwellModesFrequency:
             if (oldn>self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value,oldn):
                     del self.parameters["logG%02d"%i]
-        self.update_parameter_table()
 
     def get_modes(self):
         nmodes=self.parameters["nmodes"].value

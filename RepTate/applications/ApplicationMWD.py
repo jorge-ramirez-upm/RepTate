@@ -25,9 +25,9 @@ class BaseApplicationMWD:
         self.current_view=self.views["W(M)"]
 
         # FILES
-        ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], [], [])
+        ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], ['Mn','Mw','PDI'], ["g/mol", '-'])
         self.filetypes[ftype.extension]=ftype
-        ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], ['Mw','Mn','PDI'], ['kDa', '-'])
+        ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], ['Mn','Mw','PDI'], ["g/mol", '-'])
         #ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
         self.filetypes[ftype.extension]=ftype
 
