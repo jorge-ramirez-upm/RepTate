@@ -422,6 +422,21 @@
     <string>Select Symbols Color</string>
    </property>
   </action>
+  <action name="actionTrack_data">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-physics.png</normaloff>:/Images/Images/new_icons/icons8-physics.png</iconset>
+   </property>
+   <property name="text">
+    <string>Track data</string>
+   </property>
+   <property name="toolTip">
+    <string>Track data</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>

@@ -132,6 +132,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.mpl_toolbar = NavigationToolbar(self.canvas, self)
         self.mpl_toolbar.setIconSize(QSize(16, 16))
         self.mpl_toolbar.setFixedHeight(36)
+        self.mpl_toolbar.layout().setSpacing(0)
+        self.mpl_toolbar.addAction(self.actionTrack_data)
         self.mpl_toolbar.setVisible(False)
         self.mplvl.addWidget(self.mpl_toolbar)
 
@@ -173,6 +175,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
 
+        # Annotation stuff
+        connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
+        plt.connect('motion_notify_event', self.mpl_motion_event)
+
         self.dialog = QtWidgets.QDialog()
         self.dialog.ui = Ui_markerSettings()
         self.dialog.ui.setupUi(self.dialog)
@@ -189,7 +195,28 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)  
+
+    def mpl_motion_event(self, event):
+        if not self.handle_annotation.checked:
+            return
+        # Code to draw annotation. It doesn't work!
         
+    def handle_annotation(self, checked):
+        if (checked):
+            """Draw and hide the annotation box."""
+            self.annotation = self.ax.annotate(
+                '', xy=(0, 0), ha = 'left',
+                xytext = (-40, 40), textcoords = 'offset points', va = 'center',
+                bbox = dict(
+                    boxstyle='roundtooth,pad=0.3', fc='yellow', alpha=0.20),
+                arrowprops = dict(
+                    arrowstyle="-|>", connectionstyle="arc3,rad=-0.2")
+                )
+            self.canvas.draw()
+        else:
+            self.annotation.remove()
+            self.canvas.draw()
+
     def populate_markers(self):
         """populate the marker shape combobox"""
         for m in self.marker_dic:
