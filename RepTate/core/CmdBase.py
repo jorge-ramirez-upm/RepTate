@@ -25,9 +25,7 @@ class CmdBase(cmd.Cmd):
 
     def __init__ (self, parent=None):
         """Constructor """
-        print("CmdBase.__init__(self, parent=None) called")
-        super(CmdBase, self).__init__()
-        print("CmdBase.__init__(self, parent=None) ended")
+        super().__init__()
 
         delims = readline.get_completer_delims()
         delims = delims.replace(os.sep, '')

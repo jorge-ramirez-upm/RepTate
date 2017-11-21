@@ -14,7 +14,6 @@ class TheoryMaxwellModesFrequency(CmdBase):
 class BaseTheoryMaxwellModesFrequency:
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
         super().__init__(name, parent_dataset, ax)
-        print("BaseTheoryMaxwellModesFrequency ended")
         self.function = self.MaxwellModesFrequency
         self.has_modes = True
         self.parameters["logwmin"]=Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, True)
@@ -72,7 +71,6 @@ class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
 class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
         super().__init__(name, parent_dataset, ax)
-        print("GUITheoryMaxwellModesFrequency")
         
         # add widgets specific to the theory
         tb = QToolBar()

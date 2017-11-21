@@ -19,9 +19,7 @@ class ApplicationManager(CmdBase):
     
     def __init__ (self, parent=None):
         """Constructor """
-        print("ApplicationManager.__init__(self, parent=None) called")
-        super(ApplicationManager, self).__init__() 
-        print("ApplicationManager.__init__(self, parent=None) ended")
+        super().__init__() 
 
         # SETUP LOG
         self.reptatelogger = logging.getLogger('ReptateLogger')

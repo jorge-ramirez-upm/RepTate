@@ -31,9 +31,7 @@ Ui_AppWindow, QMainWindow = loadUiType('gui/QApplicationWindow.ui')
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def __init__(self, name='Application Template', parent=None):
-        print("QApplicationWindow.__init__(self) called")
-        super(QApplicationWindow, self).__init__(name, parent)
-        print("QApplicationWindow.__init__(self) ended")
+        super().__init__(name, parent)
 
         if CmdBase.mode!=CmdMode.GUI:
             return None
@@ -335,7 +333,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.actionShiftHorizontally.setChecked(False)
         self.actionShiftVertically.setChecked(False)
         
-
     def handle_actionReload_Data(self):
         """Reload the data files: remove and reopen the current files"""
         ds = self.DataSettabWidget.currentWidget()
@@ -358,6 +355,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             file_paths_cleaned.append(file.file_full_path)
         #remove lines from figure
         self.remove_ds_ax_lines(ds.name) 
+        ds.set_no_limits(ds.current_theory) 
         #remove tables from ds
         ntable = ds.DataSettreeWidget.topLevelItemCount()
         for i in range(ntable):
@@ -400,6 +398,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 if i!=index:
                     ds_to_hide = self.DataSettabWidget.widget(i)
                     ds_to_hide.do_hide_all()
+                    ds_to_hide.set_no_limits(ds_to_hide.current_theory) 
             ds.highlight_series()
             ds.populate_inspector()
         else: # handle case where no dataset is left
@@ -420,10 +419,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def close_data_tab_handler(self, index):
         """Delete a dataset tab from the current application"""
+        ds = self.DataSettabWidget.widget(index)
         if index == self.DataSettabWidget.currentIndex():
-            self.disconnect_curve_drag() 
-        ds_name = self.DataSettabWidget.widget(index).name
-        self.delete(ds_name) #call Application.delete to delete DataSet
+            self.disconnect_curve_drag()
+            ds.set_no_limits(ds.current_theory) 
+        self.delete(ds.name) #call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
 
     def change_view(self):
@@ -435,6 +435,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = self.DataSettabWidget.currentWidget()
         if ds:
             ds.highlight_series()
+            ds.set_no_limits(ds.current_theory) 
 
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""

@@ -20,7 +20,7 @@ class ApplicationLVE(CmdBase):
 
 class BaseApplicationLVE:
     def __init__(self, name="LVE", parent = None):
-        super(BaseApplicationLVE, self).__init__(name, parent)
+        super().__init__(name, parent)
 
         # VIEWS
         self.views["log(G',G''(w))"] = View(name="log(G',G''(w))", description="log Storage,Loss moduli", x_label="log($\omega$)", y_label="log(G'($\omega$),G''($\omega$))", x_units="rad/s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogG1G2, n=2, snames=["G'(w)","G''(w)"])
@@ -83,16 +83,12 @@ class BaseApplicationLVE:
 
 class CLApplicationLVE(BaseApplicationLVE, Application):
     def __init__(self, name="LVE", parent = None):
-        print("CLApplicationLVE.__init__(self) called")
-        super(CLApplicationLVE, self).__init__(name, parent)
-        print("CLApplicationLVE.__init__(self) ended")
+        super().__init__(name, parent)
         
 
 class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
     def __init__(self, name="LVE", parent = None):
-        print("GUIApplicationLVE.__init__(self) called")
-        super(GUIApplicationLVE, self).__init__(name, parent)
-        print("GUIApplicationLVE.__init__(self) ended")
+        super().__init__(name, parent)
 
         self.populate_views() #populate the view ComboBox
         

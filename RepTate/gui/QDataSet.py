@@ -13,15 +13,12 @@ Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
 class QDataSet(DataSet, QWidget, Ui_DataSet): 
     def __init__(self, name="QDataSet", parent=None):
         "Constructor"
-        print("QDataSet.__init__(self) called")
-        super(QDataSet, self).__init__(name=name, parent=parent)
+        super().__init__(name=name, parent=parent)
         QWidget.__init__(self)
         Ui_DataSet.__init__(self)
-        print("QDataSet.__init__(self) ended")
 
         self.setupUi(self)
         self.selected_file = None
-
 
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
@@ -54,49 +51,24 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.cbtheory.setMaximumWidth(115)
         self.cbtheory.setMinimumWidth(50)
         tb.addWidget(self.cbtheory)
-        
-        
-   
         tb.addAction(self.actionCalculate_Theory)
         tb.addAction(self.actionMinimize_Error)
-        tb.addAction(self.actionTheory_Options)
-
+        #Buttons not wired yet
+        # tb.addAction(self.actionTheory_Options)
+        # self.actionTheory_Options.setDisabled(True)
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionShow_Limits)
-        menu=QMenu()
-        menu.addAction(self.actionNo_Limits)
+        menu = QMenu()
         menu.addAction(self.actionVertical_Limits)
         menu.addAction(self.actionHorizontal_Limits)
-        menu.addAction(self.actionBoth_Limits)
         tbut.setMenu(menu)
-        
         tb.addWidget(tbut)
-
         self.TheoryLayout.insertWidget(0, tb)
 
-        #Buttons not wired yet
-        self.actionShow_Limits.setDisabled(True)
-        self.actionTheory_Options.setDisabled(True)
+        #desactive buttons when no theory tab
+        self.theory_actions_disabled(True)
 
-        # # Theory text display
-        # self.ThText.setReadOnly(True)
-        # self.ThText.setHtml("""
-        # <head>
-        #     <title>Some HTML text</title>
-        # </head>
-            
-        # <body>
-        #  <center>
-        #     <p> <b>Hello</b> <i>Qt!</i></p>
-        #  </center>
-        #     <hr />
-        #     <p>This is some HTML text</p>
-        #       <p>An image: <img src="gui/Images/logo.jpg"> </p>
-        # </body>
-            
-        # </html>
-        # """)
         connection_id = self.actionNew_Theory.triggered.connect(self.handle_actionNew_Theory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
@@ -110,31 +82,66 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionMinimize_Error.triggered.connect(self.handle_actionMinimize_Error)
         connection_id = self.actionCalculate_Theory.triggered.connect(self.handle_actionCalculate_Theory)
 
-        connection_id = self.actionNo_Limits.triggered.connect(self.No_Limits)
-        connection_id = self.actionVertical_Limits.triggered.connect(self.Vertical_Limits)
-        connection_id = self.actionHorizontal_Limits.triggered.connect(self.Horizontal_Limits)
-        connection_id = self.actionBoth_Limits.triggered.connect(self.Both_Limits)
+        connection_id = self.actionVertical_Limits.triggered.connect(self.toggle_vertical_limits)
+        connection_id = self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)
 
 
-    def No_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionNo_Limits.icon())
 
-    def Vertical_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionVertical_Limits.icon())
+    def theory_actions_disabled(self, state):
+        self.actionCalculate_Theory.setDisabled(state)
+        self.actionMinimize_Error.setDisabled(state)
+        # self.actionTheory_Options.setDisabled(state)
+        self.actionShow_Limits.setDisabled(state)
+        self.actionVertical_Limits.setDisabled(state)
+        self.actionHorizontal_Limits.setDisabled(state)
 
-    def Horizontal_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionHorizontal_Limits.icon())
+    def set_limit_icon(self):
+        hlim = self.actionHorizontal_Limits.isChecked()
+        vlim = self.actionVertical_Limits.isChecked()
+        if hlim and vlim:
+            img = "Line Chart Both Limits"
+        elif vlim:
+            img = "Line Chart Vertical Limits"
+        elif hlim:
+            img = "Line Chart Horizontal Limits"
+        else:
+            img = "Line Chart"
+        self.actionShow_Limits.setIcon(QIcon(':/Images/Images/%s'%img))
 
-    def Both_Limits(self):
-        self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
-        
+    def set_no_limits(self, th_name):
+        """Turn the x and yrange selectors off"""
+        if th_name in self.theories:
+            th = self.theories[self.current_theory]
+            th.xrange.set_visible(False) 
+            th.xminline.set_visible(False) 
+            th.xmaxline.set_visible(False) 
+
+            th.yrange.set_visible(False) 
+            th.yminline.set_visible(False) 
+            th.ymaxline.set_visible(False) 
+
+            self.actionHorizontal_Limits.setChecked(False)
+            self.actionVertical_Limits.setChecked(False)
+            self.set_limit_icon()
+
+    def toggle_vertical_limits(self):
+        """Show/Hide the xrange selector for fit"""
+        if self.current_theory:
+            self.theories[self.current_theory].do_xrange("")
+            self.set_limit_icon()
+ 
+    def toggle_horizontal_limits(self):
+        """Show/Hide the yrange selector for fit"""
+        if self.current_theory:        
+            self.theories[self.current_theory].do_yrange("")
+            self.set_limit_icon()
+
     def handle_actionCalculate_Theory(self):
         """Calculate the theory"""
         if self.current_theory:
             self.theories[self.current_theory].do_calculate("")
             self.theories[self.current_theory].update_parameter_table()
 
-            
     def handle_actionMinimize_Error(self):
         """Minimize the error"""
         if self.current_theory:
@@ -151,10 +158,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             #hide all theory curves
             for i in range(ntab):   
                 if i != index:
-                    th = self.TheorytabWidget.widget(i)
-                    th.do_hide()
+                    th_to_hide = self.TheorytabWidget.widget(i)
+                    th_to_hide.do_hide()
         else:
             self.current_theory = None
+            self.theory_actions_disabled(True)
+        self.parent_application.update_plot()
         self.parent_application.update_Qplot()
 
     def Qshow_all(self):
@@ -175,6 +184,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
     def handle_thTabCloseRequested(self, index):
         """Delete a theory tab from the current dataset"""
         th_name = self.TheorytabWidget.widget(index).name
+        self.set_no_limits(th_name)
         self.do_theory_delete(th_name) #call DataSet.do_theory_delete 
         self.TheorytabWidget.removeTab(index)
 
@@ -298,6 +308,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             message = "Theory \"%s\" cannot be applied to multiple data files"%th_name
             QMessageBox.warning(self, header, message)
             return
+        if self.current_theory:
+            self.set_no_limits(self.current_theory) #remove the xy-range limits
         newth = self.do_theory_new(th_name)
 
         # add new theory tab
@@ -306,5 +318,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
-
+        #self.handle_thCurrentChanged(index)
         newth.update_parameter_table()
+        self.theory_actions_disabled(False)

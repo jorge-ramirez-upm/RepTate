@@ -20,9 +20,7 @@ class Application(CmdBase):
 
     def __init__(self, name="ApplicationTemplate", parent=None):
         """Constructor of Application"""
-        print("Application.__init__(self, name='ApplicationTemplate', parent=None) called")
-        super(Application, self).__init__() 
-        print("Application.__init__(self, name='ApplicationTemplate', parent=None) ended")
+        super().__init__() 
 
         self.name=name
         self.parent_manager = parent

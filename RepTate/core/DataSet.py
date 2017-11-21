@@ -13,9 +13,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     """Abstract class to describe a data set"""
     def __init__(self, name="DataSet", description="", parent=None):
         "Constructor"
-        print("DataSet.__init__(self, name='DataSet', description="", parent=None) called")
-        super(DataSet, self).__init__() 
-        print("DataSet.__init__(self, name='DataSet', description="", parent=None) ended")
+        super().__init__() 
 
         self.name = name
         self.description = description

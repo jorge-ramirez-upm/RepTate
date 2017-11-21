@@ -189,24 +189,30 @@
    </property>
   </action>
   <action name="actionVertical_Limits">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
      <normaloff>:/Images/Images/Line Chart Vertical Limits.ico</normaloff>:/Images/Images/Line Chart Vertical Limits.ico</iconset>
    </property>
    <property name="text">
-    <string>Vertical Limits</string>
+    <string>xrange</string>
    </property>
    <property name="toolTip">
     <string>Vertical Limits</string>
    </property>
   </action>
   <action name="actionHorizontal_Limits">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
      <normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</iconset>
    </property>
    <property name="text">
-    <string>Horizontal Limits</string>
+    <string>yrange</string>
    </property>
    <property name="toolTip">
     <string>Horizontal Limits</string>

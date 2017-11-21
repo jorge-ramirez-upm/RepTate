@@ -165,9 +165,26 @@ Total error is the mean square of the residual, averaged over all points in all 
         """Minimize the error"""
         self.fitting = True
         view = self.parent_dataset.parent_application.current_view
+        self.Qprint("\n\n------------------\nMinimize the error\n------------------")
         # Vectors that contain all X and Y in the files & view
         x = []
         y = []
+
+        if self.xrange.get_visible():
+            if self.xmin < self.xmax:
+                self.Qprint("xrange=[%0.3g, %0.3g]"%(self.xmin, self.xmax))
+            else:
+                temp = self.xmin
+                self.xmin = self.xmax
+                self.xmax = xmin
+        if self.yrange.get_visible():
+            if self.ymin < self.ymax:
+                self.Qprint("yrange=[%.03g, %0.3g]"%(self.ymin, self.ymax))
+            else:
+                temp = self.ymin
+                self.ymin = self.ymax
+                self.ymax = temp
+                
         for f in self.parent_dataset.files:
             xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
             for i in range(view.n):   

@@ -42,7 +42,8 @@ class DraggableArtist(object):
         canvas.draw()
         self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
         axes.draw_artist(self.artist)
-        canvas.blit(axes.bbox)
+        canvas.update()
+        #canvas.blit(axes.bbox)
 
     def on_motion(self, event):
         if DraggableArtist.lock is not self:
@@ -64,7 +65,9 @@ class DraggableArtist(object):
         axes = self.artist.axes
         canvas.restore_region(self.background)
         axes.draw_artist(self.artist)
-        canvas.blit(axes.bbox)
+        # canvas.blit(axes.bbox)
+        canvas.update()
+
 
     def modify_artist(self, dx, dy):
         pass
