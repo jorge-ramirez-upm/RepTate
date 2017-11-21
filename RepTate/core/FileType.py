@@ -133,6 +133,7 @@ class TXTColumnFile(object):
                 rawdata.append(float(items[j]))
         file.data_table.num_rows=int(len(rawdata)/file.data_table.num_columns)
         file.data_table.data = np.reshape(rawdata,newshape=(file.data_table.num_rows, file.data_table.num_columns))        
+        file.data_table.data = file.data_table.data[file.data_table.data[:,0].argsort()]
 
         return file
 

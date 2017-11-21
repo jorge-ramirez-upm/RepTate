@@ -15,7 +15,6 @@ import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog
 from QDataSet import *
-from DataFiles import *
 from QFile import *
 from Application import *
 from DraggableArtists import *
