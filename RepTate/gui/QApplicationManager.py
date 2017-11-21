@@ -32,10 +32,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.setTabsClosable(True)
         self.ApplicationtabWidget.setUsesScrollButtons(True)
 
-        # Hide console and project navigation
-        self.ConsoledockWidget.hide()
-        self.ProjectdockWidget.hide()
-
         # log file
         log_file_name = 'Qreptate.log'
         handler = logging.handlers.RotatingFileHandler(
@@ -54,8 +50,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.actionGt.triggered.connect(self.new_gt_window)
         #self.actionCreep.triggered.connect(self.new_creep_window)
         #self.actionSANS.triggered.connect(self.new_sans_window)
-        self.actionProject.triggered.connect(self.switch_project_view_hide)
-        self.actionConsole.triggered.connect(self.switch_console_view_hide)
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)        
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)
         #self.Projecttree.itemSelectionChanged.connect(self.treeChanged)
@@ -87,21 +81,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """ Show about window"""
         dlg = AboutWindow(self)
         dlg.show()        
-
-    def switch_project_view_hide(self):
-        """View or hide the project navigation window """
-        if (self.ProjectdockWidget.isHidden()):
-            self.ProjectdockWidget.show()
-        else:
-            self.ProjectdockWidget.hide()
-
-    def switch_console_view_hide(self):
-       """Show or hide the console window"""
-       if (self.ConsoledockWidget.isHidden()):
-            self.ConsoledockWidget.show()
-            #self.text_edit.setFocus()
-       else:
-            self.ConsoledockWidget.hide()
 
     def tab_changed(self, index):
         """Capture when the active application has changed"""

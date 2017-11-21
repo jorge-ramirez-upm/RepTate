@@ -117,9 +117,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # Hide Data Inspector
         self.DataInspectordockWidget.hide()
 
-
-
-
         # PLOT Style
         # sns.set_style("white")
         # sns.set_style("ticks")
@@ -132,7 +129,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
         self.canvas.setFocus()
         self.mplvl.addWidget(self.canvas)
+        self.mpl_toolbar = NavigationToolbar(self.canvas, self)
+        self.mpl_toolbar.setIconSize(QSize(16, 16))
+        self.mpl_toolbar.setFixedHeight(36)
+        self.mpl_toolbar.setVisible(False)
+        self.mplvl.addWidget(self.mpl_toolbar)
 
+                
         # self.canvas.draw()
         # self.update_Qplot()
         # sns.despine() # Remove up and right side of plot box
@@ -146,7 +149,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #connection_id = self.figure.canvas.mpl_connect('button_press_event', self.onclick)
         connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
         #connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_plot_hover)   
-        connection_id = self.actionPrint.triggered.connect(self.printPlot)
+        #connection_id = self.actionPrint.triggered.connect(self.printPlot)
+        connection_id = self.actionPrint.triggered.connect(self.viewMPLToolbar)
         connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
@@ -185,7 +189,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)  
-
+        
     def populate_markers(self):
         """populate the marker shape combobox"""
         for m in self.marker_dic:
@@ -527,6 +531,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.DataInspectordockWidget.show()
         else:
             self.DataInspectordockWidget.hide()
+
+    def viewMPLToolbar(self, checked):
+        if checked:
+            self.mpl_toolbar.show()
+        else:
+            self.mpl_toolbar.hide()
         
     def printPlot(self):
         fileName = QFileDialog.getSaveFileName(self,

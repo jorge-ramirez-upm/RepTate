@@ -302,6 +302,7 @@ class Application(CmdBase):
         self.ax.set_xlabel(self.current_view.x_label + ' [' + self.current_view.x_units + ']')
         self.ax.set_ylabel(self.current_view.y_label + ' [' + self.current_view.y_units + ']')
         self.ax.relim(True)
+        self.ax.autoscale(True)
         self.ax.autoscale_view()
 
     def set_legend_properties(self):

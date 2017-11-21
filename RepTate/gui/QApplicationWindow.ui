@@ -237,6 +237,9 @@
    </property>
   </action>
   <action name="actionPrint">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
      <normaloff>:/Images/Images/new_icons/icons8-slr-back-side.png</normaloff>:/Images/Images/new_icons/icons8-slr-back-side.png</iconset>
