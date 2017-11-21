@@ -177,7 +177,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
         
-        # connection_id = self.actionCopy.triggered.connect(self.tableWidget.copy)
+        connection_id = self.actionCopy.triggered.connect(self.tableWidget.copy)
 
 
         # Annotation stuff
