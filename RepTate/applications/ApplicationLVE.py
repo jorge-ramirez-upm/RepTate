@@ -38,7 +38,7 @@ class BaseApplicationLVE:
 
         # THEORIES
         self.theories[TheoryMaxwellModesFrequency.thname]=TheoryMaxwellModesFrequency
-        #self.theories[TheoryLikhtmanMcLeish2002.thname]=TheoryLikhtmanMcLeish2002
+        self.theories[TheoryLikhtmanMcLeish2002.thname]=TheoryLikhtmanMcLeish2002
         #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
 
