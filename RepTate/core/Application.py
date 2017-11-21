@@ -135,19 +135,28 @@ class Application(CmdBase):
     def delete(self, ds_name):
         """Delete a dataset from the current application"""
         if ds_name in self.datasets.keys():
-            for th in self.datasets[ds_name].theories.values(): #loop over the DataSet theories
-                for table in th.tables.values(): 
-                    for i in range(table.MAX_NUM_SERIES):
-                        self.ax.lines.remove(table.series[i]) #remove theory matplotlib artist from ax
-            del self.datasets[ds_name].theories
-            for file in self.datasets[ds_name].files: 
-                for i in range(file.data_table.MAX_NUM_SERIES):
-                    self.ax.lines.remove(file.data_table.series[i]) #remove data matplotlib artist from ax
-            del self.datasets[ds_name] #delete object
+            self.remove_ds_ax_lines(ds_name)
+            self.datasets[ds_name].theories.clear()
+            self.datasets[ds_name].files.clear()
+            del self.datasets[ds_name] 
         else:
             print("Data Set \"%s\" not found"%ds_name)            
-        
- 
+
+    def remove_ds_ax_lines(self, ds_name):
+        """Remove all dataset file artists from ax
+        including theory ones"""
+        try:
+            ds = self.datasets[ds_name]
+        except KeyError:
+            return
+        for th in ds.theories.values():
+            for table in th.tables.values(): 
+                for i in range(table.MAX_NUM_SERIES):
+                    self.ax.lines.remove(table.series[i]) 
+        for file in ds.files: 
+            for i in range(file.data_table.MAX_NUM_SERIES):
+                self.ax.lines.remove(file.data_table.series[i]) 
+
     def do_delete(self, name):
         """Delete a dataset from the current application"""
         self.delete(name)

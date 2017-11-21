@@ -97,7 +97,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             
         # </html>
         # """)
-        connection_id = self.actionNew_Theory.triggered.connect(self.NewTheory)
+        connection_id = self.actionNew_Theory.triggered.connect(self.handle_actionNew_Theory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
         #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
@@ -282,12 +282,15 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     item.setText(column, str(new_value)) #change table label
                     self.DataSettreeWidget.blockSignals(False)
 
-    def NewTheory(self):
+    def handle_actionNew_Theory(self):
         """Create new theory and do fit"""
         if self.cbtheory.currentIndex() == 0:
             return
         th_name = self.cbtheory.currentText()
         self.cbtheory.setCurrentIndex(0) # reset the combobox selection
+        self.new_theory(th_name)
+
+    def new_theory(self, th_name, th_tab_id=""):    
         if not self.files:
             return
         if self.parent_application.theories[th_name].single_file and len(self.files)>1: 
@@ -298,8 +301,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         newth = self.do_theory_new(th_name)
 
         # add new theory tab
-        th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
-        th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
+        if th_tab_id == "": 
+            th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
+            th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
 

@@ -316,25 +316,37 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not ds:
             return
         self.disconnect_curve_drag()
-        paths_to_reopen = self.clear_files_from_dataset(ds)
+        paths_to_reopen, th_to_reopen= self.clear_files_and_th_from_dataset(ds)
         if paths_to_reopen:
             self.new_tables_from_files(paths_to_reopen)
+        for th_name, tab_name in th_to_reopen:
+            ds.new_theory(th_name, tab_name)
 
-    def clear_files_from_dataset(self, ds):
+    def clear_files_and_th_from_dataset(self, ds):
         """Remove all files from dataset and widgetTree,
         return a list with the full path of deleted files"""
         file_paths_cleaned = []
-        #remove files from dataset
+        th_cleaned = []
+        #save file names
         for file in ds.files:
             file_paths_cleaned.append(file.file_full_path)
-            for i in range(file.data_table.MAX_NUM_SERIES):
-                self.ax.lines.remove(file.data_table.series[i])
-        del ds.files[:]
-        #remove tables from widget
+        #remove lines from figure
+        self.remove_ds_ax_lines(ds.name) 
+        #remove tables from ds
         ntable = ds.DataSettreeWidget.topLevelItemCount()
         for i in range(ntable):
             ds.DataSettreeWidget.takeTopLevelItem(0)
-        return file_paths_cleaned
+        #save theory tabs of ds
+        ntabs = ds.TheorytabWidget.count()
+        for i in range(ntabs):
+            thname = ds.TheorytabWidget.widget(0).name.rstrip("0123456789")
+            thtabname = ds.TheorytabWidget.tabText(0)
+            th_cleaned.append((thname, thtabname))
+            ds.TheorytabWidget.removeTab(0)
+        
+        ds.files.clear()
+        ds.theories.clear()
+        return file_paths_cleaned, th_cleaned
 
     def handle_actionView_All_Sets(self, checked):
         """Show all datasets simultaneously"""
