@@ -92,11 +92,6 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
     def handle_spinboxValueChanged(self, value):
         """Handle a change of the parameter 'nmode'"""
         self.set_param_value("nmodes", value)
-        item = self.thParamTable.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
-        item[0].setText(1, "%g"%value)
-        #self.do_fit("")
-
-
 
 
 ########################################
