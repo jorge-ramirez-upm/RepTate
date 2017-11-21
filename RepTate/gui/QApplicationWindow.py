@@ -20,6 +20,7 @@ from Application import *
 from DraggableArtists import *
 # from Color import *
 from markerSettings import *
+from CustomQTableWidget import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -60,6 +61,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ################
         # SETUP TOOLBARS
         # Data Inspector Toolbar
+
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionCopy)
@@ -67,7 +69,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionShiftVertically)
         tb.addAction(self.actionShiftHorizontally)
         self.LayoutDataInspector.insertWidget(0, tb)
-        
+        #custom QTable to have the copy/Ctrl-c feature
+        self.tableWidget = CustomQTableWidget(self)
+        self.LayoutDataInspector.insertWidget(-1, self.tableWidget)
+
         # Dataset Toolbar
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
@@ -171,6 +176,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.DataInspectordockWidget.visibilityChanged.connect(self.handle_inspectorVisibilityChanged)
         
         connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
+        
+        # connection_id = self.actionCopy.triggered.connect(self.tableWidget.copy)
+
 
         # Annotation stuff
         connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
