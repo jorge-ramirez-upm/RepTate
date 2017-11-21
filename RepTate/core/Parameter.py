@@ -44,6 +44,7 @@ class Parameter(object):
         self.bracketed = bracketed
         self.min_value = min_value
         self.max_value= max_value
+        self.min_allowed = min_flag
 
     def copy(self, par2):
         """ Copy the contents of another paramter"""
