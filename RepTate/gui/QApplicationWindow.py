@@ -429,14 +429,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def change_view(self):
         """Change plot view"""
         selected_view_name = self.viewComboBox.currentText()
+        ds = self.DataSettabWidget.currentWidget()
+        if ds:
+            ds.set_no_limits(ds.current_theory) 
         self.view_switch(selected_view_name) #view_switch of Application
         self.update_Qplot()
         self.disconnect_curve_drag()
-        ds = self.DataSettabWidget.currentWidget()
         if ds:
             ds.highlight_series()
-            ds.set_no_limits(ds.current_theory) 
-
+            
     def populate_views(self):
         """Assign availiable view labels to ComboBox"""
         selectedview = self.current_view.name
