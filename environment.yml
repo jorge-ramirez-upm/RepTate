@@ -28,7 +28,7 @@ dependencies:
 - requests=2.10.0=py35_0
 - ruamel_yaml=0.11.14=py35_0
 - scipy=0.18.0=np111py35_0
-- seaborn=0.7.1=py35_0
+#- seaborn=0.7.1=py35_0
 - setuptools=23.0.0=py35_0
 - sip=4.18=py35_0
 - six=1.10.0=py35_0
