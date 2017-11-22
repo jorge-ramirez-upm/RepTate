@@ -83,7 +83,6 @@
    <addaction name="separator"/>
    <addaction name="actionMaterials_Database"/>
    <addaction name="separator"/>
-   <addaction name="actionHelp"/>
    <addaction name="actionAbout_Qt"/>
    <addaction name="actionAbout"/>
    <addaction name="separator"/>

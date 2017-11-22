@@ -39,15 +39,15 @@ def start_RepTate(argv):
         start = time() 
         splash = SplashScreen()
         splash.show()
+        ex = QApplicationManager()
         while time() - start < 1:
             sleep(0.001)
             if (time()-start < 0.5):
                 splash.showMessage("Loading Reptate...")
             else:
-                splash.showMessage("Final touches...")
+                splash.showMessage("Version "+ ex.version)
             app.processEvents()
-
-        ex = QApplicationManager()
+        
         # ex.new_lve_window()
         splash.finish(ex)
         ex.showMaximized()

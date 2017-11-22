@@ -13,7 +13,7 @@ from ApplicationMWD import *
 class ApplicationManager(CmdBase):
     """Main Reptate container of applications"""
 
-    version = '0.5'
+    version = '20171122'
     prompt = 'reptate> '
     intro = 'Reptate Version %s command processor\nhelp [command] for instructions\nTAB for completions'%version
     
