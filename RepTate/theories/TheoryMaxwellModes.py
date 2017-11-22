@@ -1,6 +1,6 @@
 from Theory import *
 from QTheory import *
-from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox
+from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction
 
 class TheoryMaxwellModesFrequency(CmdBase):
     """Fit Maxwell modes to a frequency dependent relaxation function"""
@@ -16,11 +16,22 @@ class BaseTheoryMaxwellModesFrequency:
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesFrequency
         self.has_modes = True
+        self.MAX_MODES = 40
+        self.view_modes = False
         self.parameters["logwmin"]=Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, True)
         self.parameters["logwmax"]=Parameter("logwmax", 4, "Log of frequency range maximum", ParameterType.real, True)
         self.parameters["nmodes"]=Parameter("nmodes", 5, "Number of Maxwell modes", ParameterType.integer, False)
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+        self.modesseries = ax.plot([], [], label='')
+        self.modesseries[0].set_marker('D')
+        self.modesseries[0].set_linestyle('')
+        self.modesseries[0].set_visible(self.view_modes)
+        self.modesseries[0].set_markerfacecolor('green')
+        self.modesseries[0].set_markeredgecolor('black')
+        self.modesseries[0].set_markeredgewidth(3)
+        self.modesseries[0].set_markersize(8)
+        self.modesseries[0].set_alpha(0.5)
 
     def set_param_value(self, name, value):
         if (name=="nmodes"):
@@ -39,7 +50,7 @@ class BaseTheoryMaxwellModesFrequency:
         tau=1.0/freq
         G=np.zeros(nmodes)
         for i in range(nmodes):
-            G[i]=np.power(10, self.parameters["logG02%d"%i].value)
+            G[i]=np.power(10, self.parameters["logG%02d"%i].value)
         return tau, G
 
     def set_modes(self, tau, G):
@@ -64,6 +75,26 @@ class BaseTheoryMaxwellModesFrequency:
             tt.data[:,1]+=G*wTsq/(1+wTsq)
             tt.data[:,2]+=G*wT/(1+wTsq)
 
+    def plot_theory_stuff(self):
+        data_table_tmp = DataTable(self.ax)
+        data_table_tmp.num_columns = 3
+        nmodes = self.parameters["nmodes"].value
+        data_table_tmp.num_rows = nmodes
+        data_table_tmp.data=np.zeros((nmodes, 3))
+        freq=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
+        data_table_tmp.data[:,0] = freq
+        for i in range(nmodes):
+            data_table_tmp.data[i,1] = data_table_tmp.data[i,2] = np.power(10, self.parameters["logG%02d"%i].value)
+        view = self.parent_dataset.parent_application.current_view
+        try:
+            x, y, success = view.view_proc(data_table_tmp, None)
+        except TypeError as e:
+            print(e)
+            return
+        self.modesseries[0].set_data(x[:,0], y[:,0])      
+
+
+
 class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
         super().__init__(name, parent_dataset, ax)
@@ -76,16 +107,26 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24,24))
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, 20) # min and max number of modes
+        self.spinbox.setRange(1, self.MAX_MODES) # min and max number of modes
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
         tb.addWidget(self.spinbox)
+        self.modesaction = tb.addAction('View modes')
+        self.modesaction.setCheckable(True)
+        self.modesaction.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+        
 
     # def nmode_non_editable(self):
     #     item = self.thParamTable.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
     #     item.setDisabled(True)
+
+    def modesaction_change(self):
+        self.view_modes = self.modesaction.isChecked()
+        self.modesseries[0].set_visible(self.view_modes)
+        self.parent_dataset.parent_application.update_plot()
 
     def handle_spinboxValueChanged(self, value):
         """Handle a change of the parameter 'nmode'"""

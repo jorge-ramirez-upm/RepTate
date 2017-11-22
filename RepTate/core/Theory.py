@@ -315,6 +315,9 @@ Total error is the mean square of the residual, averaged over all points in all 
                             ]
         return completions
 
+    def plot_theory_stuff(self):
+        pass
+
 # SAVE THEORY STUFF
     def do_save(self, line):
         """Save the results from all theory predictions to file"""
