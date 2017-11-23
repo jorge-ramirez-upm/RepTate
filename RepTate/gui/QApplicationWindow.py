@@ -20,7 +20,7 @@ from Application import *
 from DraggableArtists import *
 # from Color import *
 from markerSettings import *
-from CustomQTableWidget import *
+from SubQTableWidget import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -70,7 +70,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionShiftHorizontally)
         self.LayoutDataInspector.insertWidget(0, tb)
         #custom QTable to have the copy/Ctrl-c feature
-        self.tableWidget = CustomQTableWidget(self)
+        self.tableWidget = SubQTableWidget(self)
         self.LayoutDataInspector.insertWidget(-1, self.tableWidget)
 
         # Dataset Toolbar

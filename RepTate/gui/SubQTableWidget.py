@@ -3,7 +3,9 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QTableWidget, QApplication
 
-class CustomQTableWidget(QTableWidget):
+class SubQTableWidget(QTableWidget):
+    """Subclass of QTableWidget that enables (i) to copy selected QTableWidget items to the clipboard
+    in a tab-separated format and (ii) to paste the content of the clipboard into the QTableWidget"""
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -41,4 +43,7 @@ class CustomQTableWidget(QTableWidget):
         for i in range(len(rows)):
             cols = rows[i].split("\t")
             for j in range(len(cols)):
-                self.item(i, j).setText(cols[j])
+                try:
+                    self.item(i, j).setText(cols[j])
+                except AttributeError:
+                    pass #index out of range

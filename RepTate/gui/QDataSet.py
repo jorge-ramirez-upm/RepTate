@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QTool
 from QFile import *
 from DataSet import *
 from QTheory import *
+from SubQTreeWidget import *
 
 Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
 
@@ -19,6 +20,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.setupUi(self)
         self.selected_file = None
+
+        self.DataSettreeWidget = SubQTreeWidget(self)
+        self.splitter.insertWidget(0, self.DataSettreeWidget)
+        
 
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
@@ -138,13 +143,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_actionCalculate_Theory(self):
         """Calculate the theory"""
-        if self.current_theory:
+        if self.current_theory and self.files!=[]:
             self.theories[self.current_theory].do_calculate("")
             self.theories[self.current_theory].update_parameter_table()
 
     def handle_actionMinimize_Error(self):
         """Minimize the error"""
-        if self.current_theory:
+        if self.current_theory and self.files!=[]:
             self.theories[self.current_theory].do_fit("")
             self.theories[self.current_theory].update_parameter_table()
 
@@ -193,6 +198,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """Define actions for when a file table is selected"""
         selection = self.DataSettreeWidget.selectedItems()
         if selection==[]:
+            self.selected_file = None
+            self.highlight_series()
             return
         for f in self.files:
             if f.file_name_short==selection[0].text(0):  
@@ -205,17 +212,16 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """Highligh the data series of the selected file"""
         self.do_plot() #remove current series highlight
         file = self.selected_file
-        if not file:
-            return
-        view = self.parent_application.current_view
-        for i in range(file.data_table.MAX_NUM_SERIES):
-                if (i<view.n and file.active):
-                    file.data_table.series[i].set_marker('.')
-                    # file.data_table.series[i].set_linestyle(":")
-                    file.data_table.series[i].set_markerfacecolor("black")
-                    file.data_table.series[i].set_markeredgecolor("black")
-                    file.data_table.series[i].set_zorder(self.parent_application.zorder) #put series on top
-        self.parent_application.zorder += 1
+        if file is not None:
+            view = self.parent_application.current_view
+            for i in range(file.data_table.MAX_NUM_SERIES):
+                    if (i<view.n and file.active):
+                        file.data_table.series[i].set_marker('.')
+                        # file.data_table.series[i].set_linestyle(":")
+                        file.data_table.series[i].set_markerfacecolor("black")
+                        file.data_table.series[i].set_markeredgecolor("black")
+                        file.data_table.series[i].set_zorder(self.parent_application.zorder) #put series on top
+            self.parent_application.zorder += 1
         self.parent_application.update_plot()
 
     def populate_inspector(self):
