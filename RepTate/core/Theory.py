@@ -97,6 +97,8 @@ class Theory(CmdBase):
         
     def do_calculate(self, line):
         """Calculate the theory"""
+        if not self.tables:
+            return
         for f in self.parent_dataset.files:
             self.function(f)
         if not self.fitting:
@@ -163,6 +165,8 @@ Total error is the mean square of the residual, averaged over all points in all 
 
     def do_fit(self, line):
         """Minimize the error"""
+        if not self.tables:
+            return
         self.fitting = True
         view = self.parent_dataset.parent_application.current_view
         self.Qprint("\n\n------------------\nMinimize the error\n------------------")

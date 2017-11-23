@@ -25,59 +25,6 @@
      <property name="childrenCollapsible">
       <bool>false</bool>
      </property>
-     <widget class="QTreeWidget" name="DataSettreeWidget">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ; selection-color: rgb(0, 0, 0); }
-
-
-
-</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="lineWidth">
-       <number>3</number>
-      </property>
-      <property name="midLineWidth">
-       <number>1</number>
-      </property>
-      <property name="tabKeyNavigation">
-       <bool>false</bool>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="indentation">
-       <number>0</number>
-      </property>
-      <property name="rootIsDecorated">
-       <bool>false</bool>
-      </property>
-      <property name="uniformRowHeights">
-       <bool>true</bool>
-      </property>
-      <property name="itemsExpandable">
-       <bool>false</bool>
-      </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="allColumnsShowFocus">
-       <bool>true</bool>
-      </property>
-      <column>
-       <property name="text">
-        <string>Header</string>
-       </property>
-      </column>
-     </widget>
      <widget class="QFrame" name="frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -242,6 +189,10 @@
     <string>Change limits for fit</string>
    </property>
   </action>
+  <zorder>splitter</zorder>
+  <zorder>TheorytabWidget</zorder>
+  <zorder>TheorytabWidget</zorder>
+  <zorder>TheorytabWidget</zorder>
  </widget>
  <resources>
   <include location="Symbols.qrc"/>
