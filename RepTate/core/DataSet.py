@@ -1,6 +1,7 @@
 import os
 import glob
 
+from enum import Enum
 from CmdBase import *
 from Theory import *
 from FileType import *
@@ -8,6 +9,27 @@ from File import *
 # from Application import *
 from tabulate import tabulate
 import itertools
+
+class ColourMode(Enum):
+    fixed = 0
+    variable = 1
+    gradient = 2
+    modes = ["Fixed colour", "Variable colour (from palette)", "Colour gradient"]
+    color1 = 'black'
+    color2 = 'red'
+    colorpalettes = ["Rainbow"]
+    rainbowpalette = [(0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)]
+
+class SymbolMode(Enum):
+    fixed = 0
+    variable = 1
+    variablefilled = 2
+    modes = ["Fixed colour", "Variable colour (from palette)", "Colour gradient"]
+    symbol1 = 'o'
+    allmarkers = ['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_']
+    allmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'tri_down', 'tri_up', 'tri_left','tri_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'plus', 'x', 'x (filled)','diamond', 'thin_diamond', 'vline', 'hline']
+    filledmarkers = ['.','o','v','^','<','>','8','s','p','P','*','h','H','X','D','d']
+    filledmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'x (filled)','diamond', 'thin_diamond']
 
 class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     """Abstract class to describe a data set"""
@@ -22,6 +44,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.current_file = None
         self.num_files = 0
         self.def_marker_size = 12
+        self.symbolmode = SymbolMode.variable
+        self.colourmode = ColourMode.variable
         self.theories = {}
         self.num_theories = 0
         self.inactive_files = {}
@@ -91,7 +115,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
         palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
-        markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
+        #markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
+        markerlst = itertools.cycle(['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_'])
         linelst = itertools.cycle((':', '-', '-.', '--'))
         view = self.parent_application.current_view
         for file in self.files:

@@ -195,7 +195,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.marker_dic = {'square': 's', 'plus (filled)': 'P', 'point': '.', 'triangle_right': '>', 'hline': '_', 'vline': '|', 'pentagon': 'p', 'tri_left': '3', 'tri_up': '2', 'circle': 'o', 'diamond': 'D', 'star': '*', 'hexagon1': 'h', 'octagon': '8', 'hexagon2': 'H', 'tri_right': '4', 'x (filled)': 'X', 'thin_diamond': 'd', 'tri_down': '1', 'triangle_left': '<', 'plus': '+', 'triangle_down': 'v', 'triangle_up': '^', 'x': 'x'}
         self.populate_markers() 
         self.fparam_backup = [] #temporary storage of the file parameters
-        self.dialog.ui.spinBox.setSingleStep(5) #increment in the marker size dialog
+        self.dialog.ui.spinBox.setSingleStep(3) #increment in the marker size dialog
 
         # connection_id = self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS

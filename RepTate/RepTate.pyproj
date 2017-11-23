@@ -67,6 +67,7 @@
     <Compile Include="core\View.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gui\markerSettings.py" />
     <Compile Include="gui\QApplicationWindow.py" />
     <Compile Include="gui\QDataSet.py" />
     <Compile Include="gui\QTheory.py" />
