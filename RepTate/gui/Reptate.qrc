@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="/Images">
+    <file>Images/new_icons/icons8-sine-100.png</file>
+    <file>Images/new_icons/icons8-krita-squared.png</file>
+    <file>Images/new_icons/icons8-color-wheel-2.png</file>
+    <file>Images/new_icons/icons8-broom.png</file>
     <file>Images/new_icons/icons8-copy.png</file>
     <file>Images/new_icons/icons8-paste.png</file>
     <file>Images/new_icons/icons8-height.png</file>

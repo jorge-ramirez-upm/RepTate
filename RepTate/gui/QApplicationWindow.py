@@ -78,10 +78,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionNew_Empty_Dataset)
         tb.addAction(self.actionNew_Dataset_From_File)
         tb.addAction(self.actionView_All_Sets)
-        tbut = QToolButton()
-        tbut.setPopupMode(QToolButton.MenuButtonPopup)
-        tbut.setDefaultAction(self.actionData_Representation)
-        menu=QMenu()
+        # tbut = QToolButton()
+        # tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        # tbut.setDefaultAction(self.actionData_Representation)
+        # menu=QMenu()
         # menu.addAction(self.actionShow_Smaller_Symbols)
         # menu.addAction(self.actionResetSymbolsSize)
         # menu.addAction(self.actionShow_Larger_Symbols)
@@ -105,7 +105,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # tb.addWidget(tbut)
         #
         tb.addAction(self.actionInspect_Data)
-        tb.addAction(self.actionPrint)
+        tb.addAction(self.actionShowFigureTools)
         self.ViewDataTheoryLayout.insertWidget(1, tb)
         self.ViewDataTheorydockWidget.Width=500
         self.ViewDataTheorydockWidget.setTitleBarWidget(QWidget())                
@@ -152,8 +152,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #connection_id = self.figure.canvas.mpl_connect('button_press_event', self.onclick)
         connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
         #connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_plot_hover)   
-        #connection_id = self.actionPrint.triggered.connect(self.printPlot)
-        connection_id = self.actionPrint.triggered.connect(self.viewMPLToolbar)
+        connection_id = self.actionShowFigureTools.triggered.connect(self.viewMPLToolbar)
         connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
@@ -204,7 +203,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.viewComboBox.setDisabled(state)
         self.actionReload_Data.setDisabled(state)
         self.actionInspect_Data.setDisabled(state)
-        self.actionPrint.setDisabled(state)
+        self.actionShowFigureTools.setDisabled(state)
         self.actionView_All_Sets.setDisabled(state)
 
         ds = self.DataSettabWidget.currentWidget()
@@ -526,6 +525,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         dataset_header=dfile.basic_file_parameters[:]
         dataset_header.insert(0, "File")
         ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))   
+
         hd=ds.DataSettreeWidget.header()
         hd.setSectionsClickable(True)
         w=ds.DataSettreeWidget.width()

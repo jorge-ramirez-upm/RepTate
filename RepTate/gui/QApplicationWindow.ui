@@ -229,19 +229,19 @@
     <string>Select All</string>
    </property>
   </action>
-  <action name="actionPrint">
+  <action name="actionShowFigureTools">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-slr-back-side.png</normaloff>:/Images/Images/new_icons/icons8-slr-back-side.png</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-sine-100.png</normaloff>:/Images/Images/new_icons/icons8-sine-100.png</iconset>
    </property>
    <property name="text">
     <string>Print</string>
    </property>
    <property name="toolTip">
-    <string>Print Plot</string>
+    <string>Show/Hide Figure Toolbar</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
@@ -322,18 +322,6 @@
     <string>View all sets simultaneously</string>
    </property>
   </action>
-  <action name="actionData_Representation">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-star-filled_setting.png</normaloff>:/Images/Images/new_icons/icons8-star-filled_setting.png</iconset>
-   </property>
-   <property name="text">
-    <string>Data Representation</string>
-   </property>
-   <property name="toolTip">
-    <string>Change Symbol Size</string>
-   </property>
-  </action>
   <action name="actionReload_Data">
    <property name="icon">
     <iconset resource="Reptate.qrc">
@@ -361,58 +349,16 @@
     <string>Inspect contents of data files</string>
    </property>
   </action>
-  <action name="actionShow_Smaller_Symbols">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-minus.png</normaloff>:/Images/Images/new_icons/icons8-minus.png</iconset>
-   </property>
-   <property name="text">
-    <string>Smaller</string>
-   </property>
-   <property name="toolTip">
-    <string>Use smaller symbols</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+-</string>
-   </property>
-  </action>
-  <action name="actionShow_Larger_Symbols">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-plus.png</normaloff>:/Images/Images/new_icons/icons8-plus.png</iconset>
-   </property>
-   <property name="text">
-    <string>Larger</string>
-   </property>
-   <property name="toolTip">
-    <string>Use Larger Symbols</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+=</string>
-   </property>
-  </action>
-  <action name="actionResetSymbolsSize">
-   <property name="icon">
-    <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-equal-sign.png</normaloff>:/Images/Images/new_icons/icons8-equal-sign.png</iconset>
-   </property>
-   <property name="text">
-    <string>Reset</string>
-   </property>
-   <property name="toolTip">
-    <string>Reset Symbols Size</string>
-   </property>
-  </action>
   <action name="actionMarkerSettings">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-large-icons.png</normaloff>:/Images/Images/new_icons/icons8-large-icons.png</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-color-wheel-2.png</normaloff>:/Images/Images/new_icons/icons8-color-wheel-2.png</iconset>
    </property>
    <property name="text">
     <string>Select Symbols Color</string>
    </property>
    <property name="toolTip">
-    <string>Select Symbols Color</string>
+    <string>Select Dataset Plot Style</string>
    </property>
   </action>
   <action name="actionTrack_data">
