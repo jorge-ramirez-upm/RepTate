@@ -2,20 +2,22 @@ import numpy as np
 from scipy import interp
 from scipy.optimize import minimize
 from Theory import *
+from QTheory import *
+from PyQt5.QtWidgets import QWidget, QToolBar, QAction
 
-class TheoryWLFShift(Theory, CmdBase):
-    """
-    Basic theory for Time-Temperature Superposition, based on the WLF equation
-    
-    .. todo:: Cite Dietmar Auhl paper?
-    .. todo:: Meaning of C3 parameter
-    """
+class TheoryWLFShift(CmdBase):
+    """Basic theory for Time-Temperature Superposition, based on the WLF equation"""
     thname="WLFShift"
     description="Basic theory for Time-Temperature Superposition, based on the WLF equation"
     cite=""
+    single_file = False 
 
+    def __new__(cls, name="ThWLFShift", parent_dataset=None, ax=None):
+        return GUITheoryWLFShift(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryWLFShift(name, parent_dataset, ax)
+
+class BaseTheoryWLFShift:
     def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
-        super(TheoryWLFShift, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShift
         self.parameters["C1"]=Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, True)
         self.parameters["C2"]=Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, True)
@@ -239,3 +241,18 @@ Total error is the mean square of the residual, averaged over all points conside
                     fout.write(str(data[i, j])+'\t')
                 fout.write('\n')
             fout.close()
+
+class CLTheoryWLFShift(BaseTheoryWLFShift, Theory):
+    def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+        super().__init__(name, parent_dataset, ax)
+        
+class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
+    def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+        super().__init__(name, parent_dataset, ax)
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24,24))
+        self.savemaster = tb.addAction('Save Master')
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.savemaster.triggered.connect(self.do_save)

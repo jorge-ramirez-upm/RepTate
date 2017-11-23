@@ -42,7 +42,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.actionTest.triggered.connect(self.new_test_window)
         #self.actionReact.triggered.connect(self.new_react_window)
         self.actionMWD.triggered.connect(self.new_mwd_window)
-        #self.actionTTS.triggered.connect(self.new_tts_window)
+        self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
         #self.actionNLVE.triggered.connect(self.new_nlve_window)
         self.actionGt.triggered.connect(self.new_gt_window)
@@ -98,6 +98,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_name = self.ApplicationtabWidget.widget(index).name
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app_name)
+
+    def new_tts_window(self):
+        """ Open a new TTS application window"""
+        app_name = "TTS"
+        self.Qopen_app(app_name)
 
     def new_lve_window(self):
         """ Open a new LVE application window"""

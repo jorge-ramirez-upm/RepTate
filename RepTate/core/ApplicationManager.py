@@ -4,6 +4,7 @@ import logging.handlers
 import matplotlib.pyplot as plt
 
 from CmdBase import *
+from ApplicationTTS import *
 from ApplicationLVE import *
 from ApplicationMWD import *
 # from ApplicationNLVE import *
@@ -45,6 +46,7 @@ class ApplicationManager(CmdBase):
         self.applications={}
         self.available_applications={}
         self.available_applications[ApplicationMWD.name]=ApplicationMWD
+        self.available_applications[ApplicationTTS.name]=ApplicationTTS
         self.available_applications[ApplicationLVE.name]=ApplicationLVE
         # self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
         self.available_applications[ApplicationGt.name]=ApplicationGt
