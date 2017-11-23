@@ -10,7 +10,6 @@ dependencies:
 - astroid=1.5.3=py35_0
 - beautifulsoup4=4.5.3=py35_0
 - bleach=1.5.0=py35_0
-- bzip2=1.0.6=vc14_1
 - ca-certificates=2017.7.27.1=0
 - certifi=2017.4.17=py35_0
 - cffi=1.10.0=py35_0
@@ -136,5 +135,4 @@ dependencies:
 - wrapt=1.10.6=py35_0
 - qt5=5.5.1=1
 - tinydb=2.4=py35_0
-prefix: C:\Miniconda3
 
