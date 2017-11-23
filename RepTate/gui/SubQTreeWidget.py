@@ -9,7 +9,6 @@ class SubQTreeWidget(QTreeWidget):
         super().__init__(parent)
         self.parent_dataset = parent
 
-    """Allow to select nothing in the DataSet by clicking in the white area of the DataSet"""
     def mousePressEvent(self, event):
         self.clearSelection()
         QTreeWidget.mousePressEvent(self, event)
