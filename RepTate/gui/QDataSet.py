@@ -4,7 +4,6 @@ import itertools
 import Symbols_rc
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
-from QFile import *
 from DataSet import *
 from QTheory import *
 from SubQTreeWidget import *
@@ -91,8 +90,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)
 
 
-
     def theory_actions_disabled(self, state):
+        """Disable theory buttons if no theory tab is open"""
         self.actionCalculate_Theory.setDisabled(state)
         self.actionMinimize_Error.setDisabled(state)
         # self.actionTheory_Options.setDisabled(state)

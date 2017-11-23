@@ -15,7 +15,6 @@ import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog
 from QDataSet import *
-from QFile import *
 from Application import *
 from DraggableArtists import *
 # from Color import *
@@ -160,11 +159,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
 
-        connection_id = self.actionShow_Smaller_Symbols.triggered.connect(self.Smaller_Symbols)
-        connection_id = self.actionResetSymbolsSize.triggered.connect(self.ResetSymbolsSize)
-        connection_id = self.actionShow_Larger_Symbols.triggered.connect(self.Larger_Symbols)
-
-
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
@@ -197,10 +191,26 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.fparam_backup = [] #temporary storage of the file parameters
         self.dialog.ui.spinBox.setSingleStep(3) #increment in the marker size dialog
 
+        self.dataset_actions_disabled(True)
+
         # connection_id = self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)  
+
+    def dataset_actions_disabled(self, state):
+        """Disable buttons when there is no file in the dataset"""
+        self.actionMarkerSettings.setDisabled(state)
+        self.viewComboBox.setDisabled(state)
+        self.actionReload_Data.setDisabled(state)
+        self.actionInspect_Data.setDisabled(state)
+        self.actionPrint.setDisabled(state)
+        self.actionView_All_Sets.setDisabled(state)
+
+        ds = self.DataSettabWidget.currentWidget()
+        if ds:
+            ds.actionNew_Theory.setDisabled(state)
+            ds.cbtheory.setDisabled(state)
 
     def mpl_motion_event(self, event):
         if not self.handle_annotation.checked:
@@ -395,22 +405,25 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.update_Qplot()
 
     def handle_currentChanged(self, index):
-        """Change figure when the active DataSet tab is changed"""
+        """Change figure when the active DataSet tab is changed
+        and empty the dataInspector"""
         if self.actionView_All_Sets.isChecked():
             return
         ds = self.DataSettabWidget.widget(index)
         if ds:
+            disable_buttons = True if not ds.files else False
+            self.dataset_actions_disabled(disable_buttons) # disable/activate buttons buttons
             ds.Qshow_all() #show all data of current dataset, except previously unticked files
-            #hide files of all datasets except current one
             ntab = self.DataSettabWidget.count()
             for i in range(ntab): 
                 if i!=index:
-                    ds_to_hide = self.DataSettabWidget.widget(i)
+                    ds_to_hide = self.DataSettabWidget.widget(i) #hide files of all datasets except current one
                     ds_to_hide.do_hide_all()
                     ds_to_hide.set_no_limits(ds_to_hide.current_theory) 
             ds.highlight_series()
             ds.populate_inspector()
         else: # handle case where no dataset is left
+            self.dataset_actions_disabled(True)
             self.tableWidget.setRowCount(0) #empty the inspector
             self.DataInspectordockWidget.setWindowTitle("File:")
         self.update_Qplot()
@@ -491,8 +504,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
-        newitem = QFile(ds.DataSettreeWidget, lnew)
+        newitem = QTreeWidgetItem(ds.DataSettreeWidget, lnew)
         newitem.setCheckState(0, 2)
+        
+        self.dataset_actions_disabled(False) #activate buttons
+        
         
     def createNew_Empty_Dataset(self):
         """Add New empty tab to DataSettabWidget"""

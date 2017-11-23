@@ -23,6 +23,6 @@ for m,d in zip(markers,descriptions):
     # lim = 0.05
     # ax.set_xlim([-lim,lim])
     # ax.set_ylim([-lim,lim])
-    plt.savefig("marker_%s.png"%d, dpi=600, pad_inches = 0, bbox_inches='tight')
+    plt.savefig("marker_%s.png"%d, dpi=1000, pad_inches = 0, bbox_inches='tight', transparent=True)
 
 print(dic)

@@ -45,5 +45,9 @@ class SubQTreeWidget(QTreeWidget):
                     del th.tables[file_name_short]
                 except KeyError:
                     pass
-        for ind in index_to_rm: #remove the table widget
-            self.takeTopLevelItem(ind)
+        for ind in index_to_rm: 
+            self.takeTopLevelItem(ind) #remove the table widget
+        
+        if self.topLevelItemCount() == 0:   
+            self.parent_dataset.parent_application.dataset_actions_disabled(True) #desactivate buttons
+
