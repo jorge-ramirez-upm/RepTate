@@ -77,7 +77,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
     def show_about(self):
         """ Show about window"""
-        dlg = AboutWindow(self, self.version)
+        dlg = AboutWindow(self, self.version + ' ' + self.date)
         dlg.show()        
 
     def tab_changed(self, index):

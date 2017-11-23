@@ -45,7 +45,7 @@ def start_RepTate(argv):
             if (time()-start < 0.5):
                 splash.showMessage("Loading Reptate...")
             else:
-                splash.showMessage("Version "+ ex.version)
+                splash.showMessage("Version "+ ex.version + ' ' + ex.date)
             app.processEvents()
         
         # ex.new_lve_window()

@@ -9,13 +9,15 @@ from ApplicationMWD import *
 # from ApplicationNLVE import *
 from ApplicationGt import *
 #from ApplicationFRS_I import *
+import Version
 
 class ApplicationManager(CmdBase):
     """Main Reptate container of applications"""
 
-    version = '20171122'
+    version = Version.version
+    date = Version.date
     prompt = 'reptate> '
-    intro = 'Reptate Version %s command processor\nhelp [command] for instructions\nTAB for completions'%version
+    intro = 'Reptate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions'%(version,date)
     
     def __init__ (self, parent=None):
         """Constructor """
