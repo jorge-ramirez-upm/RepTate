@@ -45,7 +45,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
         #self.actionNLVE.triggered.connect(self.new_nlve_window)
-        #self.actionGt.triggered.connect(self.new_gt_window)
+        self.actionGt.triggered.connect(self.new_gt_window)
         #self.actionCreep.triggered.connect(self.new_creep_window)
         #self.actionSANS.triggered.connect(self.new_sans_window)
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)        
@@ -104,6 +104,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_name = "LVE"
         self.Qopen_app(app_name)
 
+    def new_gt_window(self):
+        """ Open a new Gt application window"""
+        app_name = "Gt"
+        self.Qopen_app(app_name)
 
     def Qopen_app(self, app_name):
         newapp = self.new(app_name)

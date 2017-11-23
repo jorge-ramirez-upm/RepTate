@@ -7,7 +7,7 @@ from CmdBase import *
 from ApplicationLVE import *
 from ApplicationMWD import *
 # from ApplicationNLVE import *
-# from ApplicationGt import *
+from ApplicationGt import *
 #from ApplicationFRS_I import *
 
 class ApplicationManager(CmdBase):
@@ -45,7 +45,7 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationMWD.name]=ApplicationMWD
         self.available_applications[ApplicationLVE.name]=ApplicationLVE
         # self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
-        # self.available_applications[ApplicationGt.name]=ApplicationGt
+        self.available_applications[ApplicationGt.name]=ApplicationGt
         #self.available_applications[ApplicationFRS_I.name]=ApplicationFRS_I
 
 # APPLICATION STUFF
