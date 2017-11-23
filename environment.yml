@@ -19,7 +19,6 @@ dependencies:
 - cryptography=1.9=py35_0
 - decorator=4.0.11=py35_0
 - entrypoints=0.2.2=py35_1
-- freetype=2.7=vc14_1
 - future=0.16.0=py35_0
 - graphviz=2.38.0=4
 - html5lib=0.999=py35_0
