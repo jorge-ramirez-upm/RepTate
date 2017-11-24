@@ -11,8 +11,8 @@ Main Application
     :inherited-members:
     :show-inheritance:
 
-Core classes
-============
+Core classes (COMMAND LINE)
+===========================
 
 Application
 ------------------
@@ -62,6 +62,98 @@ DraggableArtists
     :undoc-members:
     :show-inheritance:
     
+File
+----
+    
+.. automodule:: File
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+FileType
+--------
+    
+.. automodule:: FileType
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Parameter
+---------
+    
+.. automodule:: Parameter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Table
+-----
+    
+.. automodule:: Table
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Theory
+------
+    
+.. automodule:: Theory
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    
+Version
+-------
+    
+.. automodule:: Version
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+View
+----
+    
+.. automodule:: View
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Core classes (GRAPHICAL USER INTERFACE)
+=======================================
+
+QApplicationManager
+-------------------
+    
+.. automodule:: QApplicationManager
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+QApplicationWindow
+-------------------
+    
+.. automodule:: QApplicationWindow
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+QDataSet
+-------------------
+    
+.. automodule:: QDataSet
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    
+QTheory
+-------------------
+    
+.. automodule:: QTheory
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
     
 Applications
 ============
@@ -98,6 +190,14 @@ ApplicationNLVE
     :undoc-members:
     :show-inheritance:
     
+ApplicationTTS
+--------------
+    
+.. automodule:: ApplicationTTS
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Theories
 ========
 
@@ -109,6 +209,15 @@ TheoryBasic
     :undoc-members:
     :show-inheritance:
 
+TheoryDiscrMWD
+--------------
+
+.. automodule:: TheoryDiscrMWD
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+    
 TheoryLikhtmanMcLeish2002
 -------------------------
 
@@ -130,6 +239,14 @@ TheoryRoliePoly
 ---------------
 
 .. automodule:: TheoryRoliePoly
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    
+TheoryRouse
+-----------
+
+.. automodule:: TheoryRouse
     :members:
     :undoc-members:
     :show-inheritance:
