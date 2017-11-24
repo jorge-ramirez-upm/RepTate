@@ -85,13 +85,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.Projecttree.setCurrentItem(items[0])
         pass
 
-    def tree_changed(self):
-        """Capture when the active application has changed in the application navigator"""
-        #print("HELLO")
-        #appname = self.Projecttree.currentItem.text(0)
-        #print(index, appname)
-        pass
-
     def close_app_tab(self, index):    
         app_name = self.ApplicationtabWidget.widget(index).name
         self.ApplicationtabWidget.removeTab(index)
@@ -140,4 +133,4 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """ Open a new SANS application window"""
         app_name = "SANS"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-SANS.png')
-        
+            

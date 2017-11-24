@@ -156,7 +156,7 @@ class BaseTheoryMaxwellModesTime:
         self.parameters["logtmax"]=Parameter("logtmax", 4, "Log of time range maximum", ParameterType.real, True)
         self.parameters["nmodes"]=Parameter("nmodes", 5, "Number of Maxwell modes", ParameterType.integer, False)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True, 1.0, ShiftType.linear, True, -1, math.inf)
         self.modesseries = ax.plot([], [], label='')
         self.modesseries[0].set_marker('D')
         self.modesseries[0].set_linestyle('')

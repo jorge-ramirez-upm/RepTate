@@ -31,5 +31,7 @@
         <file>Images/new_icons/icons8-NLVE.png</file>
         <file>Images/new_icons/icons8-Creep.png</file>
         <file>Images/new_icons/icons8-SANS.png</file>
+        <file>Images/new_icons/icons8-library.png</file>
+        <file>Images/new_icons/icons8-exit-sign.png</file>
     </qresource>
 </RCC>

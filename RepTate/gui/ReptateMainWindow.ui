@@ -80,7 +80,7 @@
   <action name="actionQuit">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Exit.ico</normaloff>:/Icons/Images/Exit.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-exit-sign.png</normaloff>:/Icons/Images/new_icons/icons8-exit-sign.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -155,7 +155,7 @@
   <action name="actionMaterials_Database">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Library.ico</normaloff>:/Icons/Images/Library.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-library.png</normaloff>:/Icons/Images/new_icons/icons8-library.png</iconset>
    </property>
    <property name="text">
     <string>Materials Database</string>

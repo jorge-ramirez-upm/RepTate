@@ -78,6 +78,8 @@ class DraggableArtist(object):
     def on_release(self, event):
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
+        if event.xdata is None: return
+        if event.ydata is None: return
         dx = event.xdata - xpress
         dy = event.ydata - ypress
         if (self.mode==DragType.none):   
