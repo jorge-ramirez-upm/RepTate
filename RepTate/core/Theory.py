@@ -127,8 +127,9 @@ Total error is the mean square of the residual, averaged over all points in all 
                 conditiony=(yexp>self.ymin)*(yexp<self.ymax)
             else:
                 conditiony=np.ones_like(yexp, dtype=np.bool)
-            yexp=np.extract(conditionx*conditiony, yexp)
-            yth=np.extract(conditionx*conditiony, yth)
+            conditionnaninf=(~np.isnan(xexp))*(~np.isnan(yexp))*(~np.isnan(xth))*(~np.isnan(yth))*(~np.isinf(xexp))*(~np.isinf(yexp))*(~np.isinf(xth))*(~np.isinf(yth))
+            yexp=np.extract(conditionx*conditiony*conditionnaninf, yexp)
+            yth=np.extract(conditionx*conditiony*conditionnaninf, yth)
             f_error=np.mean((yth-yexp)**2)
             npt=len(yth)
             total_error+=f_error*npt
@@ -158,7 +159,8 @@ Total error is the mean square of the residual, averaged over all points in all 
                     conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
                 else:
                     conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
-                ycond=np.extract(conditionx*conditiony, yth[:,i])
+                conditionnaninf=(~np.isnan(xexp)[:,0])*(~np.isnan(yexp)[:,0])*(~np.isinf(xexp)[:,0])*(~np.isinf(yexp)[:,0])
+                ycond=np.extract(conditionx*conditiony*conditionnaninf, yth[:,i])
                 y = np.append(y, ycond)
         self.nfev += 1
         return y
@@ -200,8 +202,9 @@ Total error is the mean square of the residual, averaged over all points in all 
                     conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
                 else:
                     conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
-                xcond=np.extract(conditionx*conditiony, xexp[:,i])
-                ycond=np.extract(conditionx*conditiony, yexp[:,i])
+                conditionnaninf=(~np.isnan(xexp)[:,0])*(~np.isnan(yexp)[:,0])*(~np.isinf(xexp)[:,0])*(~np.isinf(yexp)[:,0])
+                xcond=np.extract(conditionx*conditiony*conditionnaninf, xexp[:,i])
+                ycond=np.extract(conditionx*conditiony*conditionnaninf, yexp[:,i])
 
                 x = np.append(x, xcond)
                 y = np.append(y, ycond)      

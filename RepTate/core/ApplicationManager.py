@@ -104,8 +104,8 @@ class ApplicationManager(CmdBase):
             self.application_counter+=1
             newapp=self.available_applications[name](name+str(self.application_counter), self)
             self.applications[newapp.name]=newapp
-            if CmdBase.mode != CmdMode.GUI:
-                newapp.do_new("")
+            #if CmdBase.mode != CmdMode.GUI:
+            #    newapp.do_new("")
             return newapp
         else:
             print("Application \"%s\" is not available"%name)
@@ -119,6 +119,8 @@ class ApplicationManager(CmdBase):
                 newapp.prompt = ''
             else:
                 newapp.prompt = self.prompt[:-2]+'/'+newapp.name+'> '
+            if CmdBase.mode != CmdMode.GUI:
+                newapp.do_new("")
             newapp.cmdloop()
                     
     

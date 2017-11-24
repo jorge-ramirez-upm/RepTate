@@ -35,11 +35,15 @@ class BaseApplicationGt:
         return x, y, True
 
     def viewLogGt(self, dt, file_parameters):
-        validindex = np.logical_and(dt.data[:, 0]>0, dt.data[:, 1]>0)
-        x = np.zeros((np.sum(validindex), 1))
-        y = np.zeros((np.sum(validindex), 1))
-        x[:, 0] = np.log10(dt.data[validindex, 0])
-        y[:, 0] = np.log10(dt.data[validindex, 1])
+        #validindex = np.logical_and(dt.data[:, 0]>0, dt.data[:, 1]>0)
+        #x = np.zeros((np.sum(validindex), 1))
+        #y = np.zeros((np.sum(validindex), 1))
+        #x[:, 0] = np.log10(dt.data[validindex, 0])
+        #y[:, 0] = np.log10(dt.data[validindex, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 1])
         return x, y, True
 
 class CLApplicationGt(BaseApplicationGt, Application):

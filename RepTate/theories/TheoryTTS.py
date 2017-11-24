@@ -114,20 +114,20 @@ Total error is the mean square of the residual, averaged over all points conside
                     MwUnique[Mw[i]][1]+=npt
         
         if (line==""): 
-            print("%20s %10s (%10s)"%("Mw","Error","# Points"))
-            print("=============================================")
+            self.Qprint("%20s %10s (%10s)"%("Mw","Error","# Points"))
+            self.Qprint("=============================================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1]>0):
-                    print("%20.5gk %10.5g (%10d)"%(o,MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
+                    self.Qprint("%20.5gk %10.5g (%10d)"%(o,MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
                 else:
-                    print("%20.5gk %10s (%10d)"%(o,"-",0))
+                    self.Qprint("%20.5gk %10s (%10d)"%(o,"-",0))
         if (npoints>0):
             total_error/=npoints
         else:
             total_error=1e10;
-        if (line==""): print("%21s %10.5g (%10d)"%("TOTAL",total_error,npoints))
+        if (line==""): self.Qprint("%21s %10.5g (%10d)"%("TOTAL",total_error,npoints))
         return total_error
                 
     def func_fitTTS(self, *param_in):
@@ -156,23 +156,23 @@ Total error is the mean square of the residual, averaged over all points conside
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
         
         if (not res['success']):
-            print("Solution not found: ", res['message'])
+            self.Qprint("Solution not found: ", res['message'])
             return
 
-        print("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
+        self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
 
         ind=0
         k=list(self.parameters.keys())
         k.sort()
-        print("%10s   %10s"%("Parameter","Value"))
-        print("===========================")
+        self.Qprint("%10s   %10s"%("Parameter","Value"))
+        self.Qprint("===========================")
         for p in k:
             par = self.parameters[p] 
             if par.min_flag:
                 ind+=1
-                print('*%9s = %10.5g'%(par.name, par.value))
+                self.Qprint('*%9s = %10.5g'%(par.name, par.value))
             else:
-                print('%10s = %10.5g'%(par.name, par.value))
+                self.Qprint('%10s = %10.5g'%(par.name, par.value))
         self.fitting=False
         self.do_calculate(line)
 
