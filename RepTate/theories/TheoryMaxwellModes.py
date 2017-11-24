@@ -23,15 +23,81 @@ class BaseTheoryMaxwellModesFrequency:
         self.parameters["nmodes"]=Parameter("nmodes", 5, "Number of Maxwell modes", ParameterType.integer, False)
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
-        self.modesseries = ax.plot([], [], label='')
-        self.modesseries[0].set_marker('D')
-        self.modesseries[0].set_linestyle('')
-        self.modesseries[0].set_visible(self.view_modes)
-        self.modesseries[0].set_markerfacecolor('green')
-        self.modesseries[0].set_markeredgecolor('black')
-        self.modesseries[0].set_markeredgewidth(3)
-        self.modesseries[0].set_markersize(8)
-        self.modesseries[0].set_alpha(0.5)
+        
+        # GRAPHIC MODES
+        self.graphicmodes = []
+        self.artistmodes = []
+        self.setup_graphic_modes()
+
+    def drag_first_mode(self, dx, dy):
+        self.set_param_value("logwmin", self.parameters["logwmin"].value + dx)
+        self.set_param_value("logG00", self.parameters["logG00"].value + dy)
+
+    def drag_mode(self, dx, dy):
+        pass
+
+    def drag_last_mode(self, dx, dy):
+        self.set_param_value("logwmax", self.parameters["logwmax"].value + dx)
+        nmodes=self.parameters["nmodes"].value
+        self.set_param_value("logG%02d"%(nmodes-1), self.parameters["logG%02d"%(nmodes-1)].value + dy)
+        pass
+
+    def update_modes(self):
+        pass
+
+    def setup_graphic_modes(self):
+        nmodes=self.parameters["nmodes"].value
+        freq=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
+        G=np.zeros(nmodes)
+        for i in range(nmodes):
+            G[i]=np.power(10, self.parameters["logG%02d"%i].value)
+
+        self.graphicmodes.clear()
+        self.artistmodes.clear()
+
+        # First mode
+        auxseries = self.ax.plot([], [], label='')
+        auxseries = auxseries[0]        
+        auxseries.set_marker('D')
+        auxseries.set_linestyle('')
+        auxseries.set_visible(self.view_modes)
+        auxseries.set_markerfacecolor('yellow')
+        auxseries.set_markeredgecolor('black')
+        auxseries.set_markeredgewidth(3)
+        auxseries.set_markersize(8)
+        auxseries.set_alpha(0.5)
+        self.graphicmodes.append(auxseries)
+        auxartist = DraggableModes(auxseries, DragType.both, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_first_mode)
+        self.artistmodes.append(auxartist)
+        for i in range(1,nmodes-1):
+            auxseries = self.ax.plot([], [], label='')
+            auxseries = auxseries[0]        
+            auxseries.set_marker('D')
+            auxseries.set_linestyle('')
+            auxseries.set_visible(self.view_modes)
+            auxseries.set_markerfacecolor('green')
+            auxseries.set_markeredgecolor('black')
+            auxseries.set_markeredgewidth(3)
+            auxseries.set_markersize(8)
+            auxseries.set_alpha(0.5)
+            self.graphicmodes.append(auxseries)
+            auxartist = DraggableModes(auxseries, DragType.vertical, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_mode)
+            self.artistmodes.append(auxartist)
+        # LAST MODE
+        if (nmodes > 1):
+            auxseries = self.ax.plot([], [], label='')
+            auxseries = auxseries[0]        
+            auxseries.set_marker('D')
+            auxseries.set_linestyle('')
+            auxseries.set_visible(self.view_modes)
+            auxseries.set_markerfacecolor('red')
+            auxseries.set_markeredgecolor('black')
+            auxseries.set_markeredgewidth(3)
+            auxseries.set_markersize(8)
+            auxseries.set_alpha(0.5)
+            self.graphicmodes.append(auxseries)
+            auxartist = DraggableModes(auxseries, DragType.both, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_last_mode)
+            self.artistmodes.append(auxartist)
 
     def set_param_value(self, name, value):
         if (name=="nmodes"):
@@ -91,7 +157,9 @@ class BaseTheoryMaxwellModesFrequency:
         except TypeError as e:
             print(e)
             return
-        self.modesseries[0].set_data(x[:,0], y[:,0])      
+        for i in range(nmodes):
+            self.graphicmodes[i].set_data(x[i,0], y[i,0])            
+        #self.modesseries.set_data(x[:,0], y[:,0])      
 
 
 
@@ -125,7 +193,8 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
 
     def modesaction_change(self):
         self.view_modes = self.modesaction.isChecked()
-        self.modesseries[0].set_visible(self.view_modes)
+        #self.modesseries.set_visible(self.view_modes)
+        self.setup_graphic_modes()
         self.parent_dataset.parent_application.update_plot()
 
     def handle_spinboxValueChanged(self, value):
@@ -157,15 +226,16 @@ class BaseTheoryMaxwellModesTime:
         self.parameters["nmodes"]=Parameter("nmodes", 5, "Number of Maxwell modes", ParameterType.integer, False)
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True, 1.0, ShiftType.linear, True, -1, math.inf)
-        self.modesseries = ax.plot([], [], label='')
-        self.modesseries[0].set_marker('D')
-        self.modesseries[0].set_linestyle('')
-        self.modesseries[0].set_visible(self.view_modes)
-        self.modesseries[0].set_markerfacecolor('green')
-        self.modesseries[0].set_markeredgecolor('black')
-        self.modesseries[0].set_markeredgewidth(3)
-        self.modesseries[0].set_markersize(8)
-        self.modesseries[0].set_alpha(0.5)
+        auxseries = ax.plot([], [], label='')
+        self.modesseries = auxseries[0]
+        self.modesseries.set_marker('D')
+        self.modesseries.set_linestyle('')
+        self.modesseries.set_visible(self.view_modes)
+        self.modesseries.set_markerfacecolor('green')
+        self.modesseries.set_markeredgecolor('black')
+        self.modesseries.set_markeredgewidth(3)
+        self.modesseries.set_markersize(8)
+        self.modesseries.set_alpha(0.5)
 
     def set_param_value(self, name, value):
         if (name=="nmodes"):
@@ -221,7 +291,7 @@ class BaseTheoryMaxwellModesTime:
         except TypeError as e:
             print(e)
             return
-        self.modesseries[0].set_data(x[:,0], y[:,0])      
+        self.modesseries.set_data(x[:,0], y[:,0])      
 
 
 class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
@@ -254,7 +324,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
 
     def modesaction_change(self):
         self.view_modes = self.modesaction.isChecked()
-        self.modesseries[0].set_visible(self.view_modes)
+        self.modesseries.set_visible(self.view_modes)
         self.parent_dataset.parent_application.update_plot()
 
     def handle_spinboxValueChanged(self, value):
