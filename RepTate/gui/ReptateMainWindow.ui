@@ -22,16 +22,7 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -71,8 +62,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionTest"/>
-   <addaction name="actionReact"/>
    <addaction name="actionMWD"/>
    <addaction name="actionTTS"/>
    <addaction name="actionLVE"/>
@@ -103,25 +92,16 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionReact">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/react.ico</normaloff>:/Icons/Images/react.ico</iconset>
-   </property>
-   <property name="text">
-    <string>React</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+1</string>
-   </property>
-  </action>
   <action name="actionTTS">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/TTS.ico</normaloff>:/Icons/Images/TTS.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-TTS.png</normaloff>:/Icons/Images/new_icons/icons8-TTS.png</iconset>
    </property>
    <property name="text">
     <string>TTS</string>
+   </property>
+   <property name="toolTip">
+    <string>Time-Temperature Superposition</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+3</string>
@@ -130,10 +110,13 @@
   <action name="actionLVE">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/LVE.ico</normaloff>:/Icons/Images/LVE.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-LVE.png</normaloff>:/Icons/Images/new_icons/icons8-LVE.png</iconset>
    </property>
    <property name="text">
     <string>LVE</string>
+   </property>
+   <property name="toolTip">
+    <string>Linear Viscoelasticity</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+4</string>
@@ -142,10 +125,13 @@
   <action name="actionNLVE">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/NLVE.ico</normaloff>:/Icons/Images/NLVE.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-NLVE.png</normaloff>:/Icons/Images/new_icons/icons8-NLVE.png</iconset>
    </property>
    <property name="text">
     <string>NLVE</string>
+   </property>
+   <property name="toolTip">
+    <string>Start up of shear/extension</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+5</string>
@@ -154,10 +140,13 @@
   <action name="actionGt">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Gt.ico</normaloff>:/Icons/Images/Gt.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-Gt.png</normaloff>:/Icons/Images/new_icons/icons8-Gt.png</iconset>
    </property>
    <property name="text">
     <string>Gt</string>
+   </property>
+   <property name="toolTip">
+    <string>Stress relaxation</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+6</string>
@@ -172,24 +161,6 @@
     <string>Materials Database</string>
    </property>
   </action>
-  <action name="actionPocket_Calculator">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Calculator.ico</normaloff>:/Icons/Images/Calculator.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Pocket Calculator</string>
-   </property>
-  </action>
-  <action name="actionHeader_Converter">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/MatDB.ico</normaloff>:/Icons/Images/MatDB.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Header Converter</string>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
@@ -202,10 +173,13 @@
   <action name="actionMWD">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Mw.ico</normaloff>:/Icons/Images/Mw.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-MWD.png</normaloff>:/Icons/Images/new_icons/icons8-MWD.png</iconset>
    </property>
    <property name="text">
     <string>MWD</string>
+   </property>
+   <property name="toolTip">
+    <string>Molecular Weight Distribution</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+2</string>
@@ -214,10 +188,13 @@
   <action name="actionCreep">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Creep.ico</normaloff>:/Icons/Images/Creep.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-Creep.png</normaloff>:/Icons/Images/new_icons/icons8-Creep.png</iconset>
    </property>
    <property name="text">
     <string>Creep</string>
+   </property>
+   <property name="toolTip">
+    <string>Creep experiments</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+7</string>
@@ -226,67 +203,16 @@
   <action name="actionSANS">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/SANS.ico</normaloff>:/Icons/Images/SANS.ico</iconset>
+     <normaloff>:/Icons/Images/new_icons/icons8-SANS.png</normaloff>:/Icons/Images/new_icons/icons8-SANS.png</iconset>
    </property>
    <property name="text">
     <string>SANS</string>
    </property>
+   <property name="toolTip">
+    <string>Small Angle Neutron Scattering</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+8</string>
-   </property>
-  </action>
-  <action name="actionProject">
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Reptate.ico</normaloff>:/Icons/Images/Reptate.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Project</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/Hide Project Explorer</string>
-   </property>
-   <property name="statusTip">
-    <string>Show/Hide Project Explorer</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+F4</string>
-   </property>
-  </action>
-  <action name="actionConsole">
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/console.ico</normaloff>:/Icons/Images/console.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Console</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/Hide Console</string>
-   </property>
-   <property name="statusTip">
-    <string>Show/Hide Console</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+F5</string>
-   </property>
-  </action>
-  <action name="actionTest">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Test.ico</normaloff>:/Icons/Images/Test.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Test</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="actionAbout_Qt">

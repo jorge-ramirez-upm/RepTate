@@ -24,5 +24,12 @@
         <file>Images/TTS.ico</file>
         <file>Images/MWD.ico</file>
         <file>Images/new_icons/icons8-binoculars.png</file>
+        <file>Images/new_icons/icons8-TTS.png</file>
+        <file>Images/new_icons/icons8-MWD.png</file>
+        <file>Images/new_icons/icons8-LVE.png</file>
+        <file>Images/new_icons/icons8-Gt.png</file>
+        <file>Images/new_icons/icons8-NLVE.png</file>
+        <file>Images/new_icons/icons8-Creep.png</file>
+        <file>Images/new_icons/icons8-SANS.png</file>
     </qresource>
 </RCC>

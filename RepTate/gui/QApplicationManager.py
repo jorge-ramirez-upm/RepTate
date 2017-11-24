@@ -39,8 +39,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
         # Connect actions
         # Generate action buttons from dict of available applications
-        #self.actionTest.triggered.connect(self.new_test_window)
-        #self.actionReact.triggered.connect(self.new_react_window)
         self.actionMWD.triggered.connect(self.new_mwd_window)
         self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
@@ -99,74 +97,47 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app_name)
 
-    def new_tts_window(self):
-        """ Open a new TTS application window"""
-        app_name = "TTS"
-        self.Qopen_app(app_name)
-
-    def new_lve_window(self):
-        """ Open a new LVE application window"""
-        app_name = "LVE"
-        self.Qopen_app(app_name)
-
-    def new_gt_window(self):
-        """ Open a new Gt application window"""
-        app_name = "Gt"
-        self.Qopen_app(app_name)
-
-    def Qopen_app(self, app_name):
+    def Qopen_app(self, app_name, icon):
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset() #populate with empty dataset at app opening
         app_id = "%s%d"%(app_name, self.application_counter)
-        ind = self.ApplicationtabWidget.addTab(newapp, QIcon(':/Icons/Images/LVE.ico'), app_id)
+        ind = self.ApplicationtabWidget.addTab(newapp, QIcon(icon), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
-        #self.ApplicationtabWidget.currentItem().appname = app_name
-        # newapp.new_tables_from_files(["data/PI_LINEAR/PI_94.9k_T-35.tts"])
-        # root = QTreeWidgetItem(self.Projecttree, [app_name])
-        # root.setIcon(0, QIcon(':/Icons/Images/LVE.ico'))
 
 
     def new_mwd_window(self):
         """ Open a new MWD application window"""
         app_name = 'MWD'
-        self.Qopen_app(app_name)
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-MWD.png')
 
-        # self.count = self.count + 1
-        # sub = ApplicationMWD(parent=self)
-        # appname = sub.name + str(self.count)
-        # sub.windowTitle = appname
-        # ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/MWD.ico'), appname)
-        # self.ApplicationtabWidget.setCurrentIndex(ind)
 
-        # root = QTreeWidgetItem(self.Projecttree, [appname])
-        # root.setIcon(0, QIcon(':/Icons/Images/MWD.ico'))
+    def new_tts_window(self):
+        """ Open a new TTS application window"""
+        app_name = "TTS"
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-TTS.png')
+
+    def new_lve_window(self):
+        """ Open a new LVE application window"""
+        app_name = "LVE"
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-LVE.png')
+
+    def new_gt_window(self):
+        """ Open a new Gt application window"""
+        app_name = "Gt"
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-Gt.png')
 
     def new_nlve_window(self):
         """ Open a new NLVE application window"""
         app_name = "NLVE"
-        self.Qopen_app(app_name)
-        # app_id = 'NLVE'
-        # self.count = self.count + 1
-        # sub = ApplicationNLVE(parent=self)
-        # appname = sub.name + str(self.count)
-        # sub.windowTitle = appname
-        # ind = self.ApplicationtabWidget.addTab(sub, QIcon(':/Icons/Images/NLVE.ico'), appname)
-        # self.ApplicationtabWidget.setCurrentIndex(ind)
-
-        # root = QTreeWidgetItem(self.Projecttree, [appname])
-        # root.setIcon(0, QIcon(':/Icons/Images/NLVE.ico'))
-
-        # """ Open a new LVE application window"""
-        # sub = ApplicationLVE()
-        # #appname = sub.name
-        # appname = 'TESTLVE'
-        # #+ '%d'%MainWindow.count
-        # #sub.windowTitle=appname
-        
-        # ind = self.ApplicationtabWidget.addTab(sub, QIcon(':Images/LVE.ico'), appname)
-        # self.ApplicationtabWidget.setCurrentIndex(ind)        
-        
-        # #root = QTreeWidgetItem(self.Projecttree, [appname])
-        # #root.setIcon(0, QIcon(':Icons/Images/Clip.ico'))
-        # #sub.treeEntry = root
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-NLVE.png')
     
+    def new_creep_window(self):
+        """ Open a new Creep application window"""
+        app_name = "Creep"
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-Creep.png')
+
+    def new_sans_window(self):
+        """ Open a new SANS application window"""
+        app_name = "SANS"
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-SANS.png')
+        
