@@ -89,10 +89,10 @@
     <Compile Include="gui\QApplicationManager.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Version.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="applications\" />
-    <Folder Include="console\" />
     <Folder Include="core\" />
     <Folder Include="gui\" />
     <Folder Include="theories\" />

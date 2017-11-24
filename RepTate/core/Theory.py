@@ -358,14 +358,20 @@ Total error is the mean square of the residual, averaged over all points in all 
 
 # SPAN STUFF
     def change_xmin(self, dx, dy):
-        self.xmin+=dx                
-        self.xminline.set_data([self.xmin,self.xmin],[0,1])
-        self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+        try:
+            self.xmin+=dx                
+            self.xminline.set_data([self.xmin,self.xmin],[0,1])
+            self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+        except:
+            pass
 
     def change_xmax(self, dx, dy):
-        self.xmax+=dx                
-        self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
-        self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+        try:
+            self.xmax+=dx                
+            self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
+            self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
+        except:
+            pass
 
     def change_ymin(self, dx, dy):
         self.ymin+=dy     
@@ -383,6 +389,11 @@ Total error is the mean square of the residual, averaged over all points in all 
            xrange xmin xmax : Sets the limits of the span
         """
         if (line==""):
+            # TODO: Set range to current view limits
+            self.xmin, self.xmax = self.ax.get_xlim()
+            self.xminline.set_data([self.xmin,self.xmin],[0,1])
+            self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
+            self.xrange.set_xy([[self.xmin,0],[self.xmin,1],[self.xmax,1],[self.xmax,0],[self.xmin,0]])
             self.xrange.set_visible(not self.xrange.get_visible()) 
             self.xminline.set_visible(not self.xminline.get_visible()) 
             self.xmaxline.set_visible(not self.xmaxline.get_visible()) 

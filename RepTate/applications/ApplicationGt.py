@@ -39,7 +39,7 @@ class BaseApplicationGt:
         x = np.zeros((np.sum(validindex), 1))
         y = np.zeros((np.sum(validindex), 1))
         x[:, 0] = np.log10(dt.data[validindex, 0])
-        y[: ,0] = np.log10(dt.data[validindex, 1])
+        y[:, 0] = np.log10(dt.data[validindex, 1])
         return x, y, True
 
 class CLApplicationGt(BaseApplicationGt, Application):
