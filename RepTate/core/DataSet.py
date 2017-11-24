@@ -10,22 +10,24 @@ from File import *
 from tabulate import tabulate
 import itertools
 
-class ColourMode(Enum):
+class ColorMode(Enum):
     fixed = 0
     variable = 1
     gradient = 2
-    modes = ["Fixed colour", "Variable colour (from palette)", "Colour gradient"]
-    color1 = 'black'
-    color2 = 'red'
-    colorpalettes = ["Rainbow"]
-    rainbowpalette = [(0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)]
+    modes = ["Fixed color", "Variable color (from palette)", "Color gradient"]
+    color1 = (0, 0, 0, 1) #black RGB
+    color2 =(1, 0, 0, 1) #red RGB
+    colorpalettes = {
+        "Rainbow": [(0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)]
+    }
 
 class SymbolMode(Enum):
     fixed = 0
-    variable = 1
-    variablefilled = 2
-    modes = ["Fixed colour", "Variable colour (from palette)", "Colour gradient"]
-    symbol1 = 'o'
+    fixedfilled = 1
+    variable = 2
+    variablefilled = 3
+    modes = ["Fixed empty symbol","Fixed filled symbol", "Variable empty symbols", "Variable filled symbols"]
+    symbol1 = '.'
     allmarkers = ['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_']
     allmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'tri_down', 'tri_up', 'tri_left','tri_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'plus', 'x', 'x (filled)','diamond', 'thin_diamond', 'vline', 'hline']
     filledmarkers = ['.','o','v','^','<','>','8','s','p','P','*','h','H','X','D','d']
@@ -43,9 +45,14 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.files = [] # TODO: Shall we change this list into a dict?
         self.current_file = None
         self.num_files = 0
-        self.def_marker_size = 12
-        self.symbolmode = SymbolMode.variable
-        self.colourmode = ColourMode.variable
+        self.marker_size = 12
+        self.line_width = 1
+        self.colormode = ColorMode.variable
+        self.color1 = ColorMode.color1.value
+        self.color2 = ColorMode.color2.value
+        self.palette = ColorMode.colorpalettes.value["Rainbow"]
+        self.symbolmode = SymbolMode.fixed
+        self.symbol1 = SymbolMode.symbol1.value
         self.theories = {}
         self.num_theories = 0
         self.inactive_files = {}
@@ -114,29 +121,57 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
-        palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
+        # palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
         #markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
-        markerlst = itertools.cycle(['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_'])
-        linelst = itertools.cycle((':', '-', '-.', '--'))
+        # markerlst = itertools.cycle(['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_'])
         view = self.parent_application.current_view
+        
+        filled = False
+        if self.symbolmode == SymbolMode.fixed: #single symbol, empty?
+            markers = [self.symbol1]
+        elif self.symbolmode == SymbolMode.fixedfilled: #single symbol, filled?
+            markers = [self.symbol1]
+            filled = True
+        elif self.symbolmode == SymbolMode.variable: #variable symbols, empty
+            markers = SymbolMode.allmarkers.value
+        else: #
+            markers = SymbolMode.filledmarkers.value #variable symbols, filled
+            filled = True
+
+        if self.colormode == ColorMode.fixed: #single color?
+            colors = [self.color1]
+        elif self.colormode == ColorMode.variable: #variable colors from palette
+            colors = self.palette
+        else:
+            n = len(self.files) - len(self.inactive_files) #number of files to plot
+            if n < 2:
+                colors = [self.color1] # only one color needed
+            else: #interpolate the color1 and color2 
+                r1, g1, b1, a1 = self.color1
+                r2, g2, b2, a2 =  self.color2
+                dr = (r2 - r1)/(n - 1)
+                dg = (g2 - g1)/(n - 1) 
+                db = (b2 - b1)/(n - 1)
+                da = (a2 - a1)/(n - 1) 
+                colors = []
+                for i in range(n): #create a color palette
+                    colors.append((r1 + i*dr, g1 + i*dg, b1 + i*db, a1 + i*da))
+
+        linelst = itertools.cycle((':', '-', '-.', '--'))
+        palette = itertools.cycle((colors))
+        markerlst = itertools.cycle((markers))
+        size =  self.marker_size #if file.size is None else file.size
+        width = self.line_width
         for file in self.files:
             try:
                 x, y, success = view.view_proc(file.data_table, file.file_parameters)
             except TypeError as e:
                 print(e)
                 return
-            
-            marker = next(markerlst) if file.marker is None else file.marker 
-            color =  next(palette) if file.color is None else file.color
-            size =  self.def_marker_size if file.size is None else file.size
-            if file.filled is None:
-                face = 'none'  
-            elif file.filled == "as variable color":
-                face = color
-            else:
-                face = file.filled
 
-            # print(marker, face, color, size )
+            marker = next(markerlst) #if file.marker is None else file.marker 
+            color =  next(palette) #if file.color is None else file.color
+            face = color if filled else 'none'
 
             for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
@@ -145,7 +180,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     file.data_table.series[i].set_marker(marker)
                     file.data_table.series[i].set_markerfacecolor(face)
                     file.data_table.series[i].set_markeredgecolor(color)
-                    file.data_table.series[i].set_markeredgewidth(1)
+                    file.data_table.series[i].set_markeredgewidth(width)
                     file.data_table.series[i].set_markersize(size)
                     file.data_table.series[i].set_linestyle('')
                     if (file.active and i==0):
