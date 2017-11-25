@@ -17,12 +17,12 @@ for m,d in zip(markers,descriptions):
     ax = plt.Axes(fig, [0, 0, .24, .24])
     ax.set_axis_off()
     fig.add_axes(ax) 
-    plt.plot([0], [0],color='black', marker=m, markersize=markersize, markerfacecolor='black')
+    plt.plot([0], [0],color='black', marker=m, markersize=markersize, markerfacecolor='none')
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     # lim = 0.05
     # ax.set_xlim([-lim,lim])
     # ax.set_ylim([-lim,lim])
-    plt.savefig("marker_filled_%s.png"%d, dpi=1000, pad_inches = 0, bbox_inches='tight', transparent=True)
+    plt.savefig("marker_%s.png"%d, dpi=1000, pad_inches = 0, bbox_inches='tight', transparent=True)
 
 print(dic)
