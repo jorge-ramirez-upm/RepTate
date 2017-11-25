@@ -283,3 +283,4 @@ __pycache__/
 /RepTate/data/PI_LINEAR/osc/PI_1.9k_-35.0.tts
 
 dist
+/RepTate/*.spec
