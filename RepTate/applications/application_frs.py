@@ -1,6 +1,17 @@
-"""
-    Module for handling FRS experiments and simulations.
-"""
+"""Module Application_frs
+
+RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+http://blogs.upm.es/compsoftmatter/software/reptate/
+https://github.com/jorge-ramirez-upm/RepTate
+http://reptate.readthedocs.io
+Jorge Ramirez, jorge.ramirez@upm.es
+Victor Boudara, mmvahb@leeds.ac.uk
+
+Module for handling FRS experiments and simulations.
+
+Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
+This software is distributed under the GNU General Public License. 
+""" 
 from Application import Application
 
 class ApplicationFRS_I(Application):

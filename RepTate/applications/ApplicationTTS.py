@@ -1,3 +1,18 @@
+"""Module ApplicationTTS
+
+RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+http://blogs.upm.es/compsoftmatter/software/reptate/
+https://github.com/jorge-ramirez-upm/RepTate
+http://reptate.readthedocs.io
+Jorge Ramirez, jorge.ramirez@upm.es
+Victor Boudara, mmvahb@leeds.ac.uk
+
+Module for handling small angle oscillatory shear experiments and applying the 
+time-temperature superposition principle.
+
+Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
+This software is distributed under the GNU General Public License. 
+""" 
 from Application import *
 from QApplicationWindow import *
 import numpy as np
@@ -13,8 +28,11 @@ class ApplicationTTS(CmdBase):
     name = "TTS"
     description = "Linear Viscoelasticity"
 
-    def __new__(cls, name="TTS", parent = None):
-        return GUIApplicationTTS(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationTTS(name, parent)
+    def __new__(cls, name="TTS", parent=None):
+        if (CmdBase.mode == CmdMode.GUI):
+            return GUIApplicationTTS(name, parent)  
+        else: 
+            return CLApplicationTTS(name, parent)
 
 class BaseApplicationTTS:
     def __init__(self, name="TTS", parent = None):
