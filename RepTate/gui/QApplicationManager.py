@@ -8,7 +8,6 @@ from QApplicationWindow import *
 from ApplicationManager import *
 from QAboutReptate import *
 
-
 path = os.path.dirname(os.path.abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path,'ReptateMainWindow.ui'))
 

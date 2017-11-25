@@ -15,6 +15,7 @@ import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog
 from QDataSet import *
+from SubQTreeWidgetItem import *
 from DataSet import ColorMode, SymbolMode
 from Application import *
 from DraggableArtists import *
@@ -349,6 +350,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.line_width = self.dialog.ui.spinBoxLineW.value()
 
             ds.do_plot()
+            # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
+            ds.set_table_icons(ds.table_icon_list)
+            # ds.DataSettreeWidget.blockSignals(False) 
 
     def handle_inspectorVisibilityChanged(self, visible):
         """Handle the hide/show event of the data inspector"""
@@ -544,7 +548,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
-        newitem = QTreeWidgetItem(ds.DataSettreeWidget, lnew)
+        newitem = SubQTreeWidgetItem(ds.DataSettreeWidget, lnew)
         newitem.setCheckState(0, 2)
         
         self.dataset_actions_disabled(False) #activate buttons
@@ -606,6 +610,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 self.addTableToCurrentDataSet(dt, ext)
             ds.do_plot()
             self.update_Qplot()
+            # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
+            ds.set_table_icons(ds.table_icon_list)
+            # ds.DataSettreeWidget.blockSignals(False) 
+
         else:
             QMessageBox.about(self, "Open", success)
     

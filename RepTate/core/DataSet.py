@@ -28,6 +28,7 @@ class SymbolMode(Enum):
     variablefilled = 3
     modes = ["Fixed empty symbol","Fixed filled symbol", "Variable empty symbols", "Variable filled symbols"]
     symbol1 = '.'
+    symbol1_name = 'point'
     allmarkers = ['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_']
     allmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'tri_down', 'tri_up', 'tri_left','tri_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'plus', 'x', 'x (filled)','diamond', 'thin_diamond', 'vline', 'hline']
     filledmarkers = ['.','o','v','^','<','>','8','s','p','P','*','h','H','X','D','d']
@@ -53,11 +54,12 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.palette = ColorMode.colorpalettes.value["Rainbow"]
         self.symbolmode = SymbolMode.fixed
         self.symbol1 = SymbolMode.symbol1.value
+        self.symbol1_name = SymbolMode.symbol1_name.value
         self.theories = {}
         self.num_theories = 0
         self.inactive_files = {}
         self.current_theory = None
-
+        
 # DATASET STUFF ##########################################################################################################
     def do_list(self, line):
         """List the files in the current dataset"""
@@ -100,7 +102,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 del self.inactive_files[file_matching[0].file_name_short]
             except KeyError:
                 pass
-        self.do_plot()
+        self.parent_application.update_plot()
 
     def do_show_all(self):
         for file in self.files:
@@ -121,21 +123,22 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
-        # palette = itertools.cycle(((0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)))
-        #markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
-        # markerlst = itertools.cycle(['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_'])
         view = self.parent_application.current_view
-        
+        self.table_icon_list.clear()
         filled = False
         if self.symbolmode == SymbolMode.fixed: #single symbol, empty?
             markers = [self.symbol1]
+            marker_names = [self.symbol1_name]
         elif self.symbolmode == SymbolMode.fixedfilled: #single symbol, filled?
             markers = [self.symbol1]
+            marker_names = [self.symbol1_name]
             filled = True
         elif self.symbolmode == SymbolMode.variable: #variable symbols, empty
             markers = SymbolMode.allmarkers.value
+            marker_names = SymbolMode.allmarkernames.value
         else: #
             markers = SymbolMode.filledmarkers.value #variable symbols, filled
+            marker_names = SymbolMode.filledmarkernames.value
             filled = True
 
         if self.colormode == ColorMode.fixed: #single color?
@@ -160,9 +163,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         linelst = itertools.cycle((':', '-', '-.', '--'))
         palette = itertools.cycle((colors))
         markerlst = itertools.cycle((markers))
+        marker_name_lst = itertools.cycle((marker_names))
         size =  self.marker_size #if file.size is None else file.size
         width = self.line_width
-        for file in self.files:
+        for j, file in enumerate(self.files):
             try:
                 x, y, success = view.view_proc(file.data_table, file.file_parameters)
             except TypeError as e:
@@ -170,8 +174,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 return
 
             marker = next(markerlst) #if file.marker is None else file.marker 
+            marker_name = next(marker_name_lst) #if file.marker is None else file.marker 
             color =  next(palette) #if file.color is None else file.color
             face = color if filled else 'none'
+            if CmdBase.mode == CmdMode.GUI:
+                if file.active:
+                    #save file name with associated marker shape, fillm and color
+                    self.table_icon_list.append((file.file_name_short, marker_name, face, color))
 
             for i in range(file.data_table.MAX_NUM_SERIES):
                 if (i<view.n and file.active):
@@ -215,7 +224,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         tt.series[i].set_label('')
                 th.plot_theory_stuff()
         
-        # if CmdBase.mode!=CmdMode.GUI: 
         self.parent_application.update_plot()
 
     def do_sort(self, line):

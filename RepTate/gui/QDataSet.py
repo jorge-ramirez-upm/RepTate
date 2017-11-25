@@ -19,6 +19,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.setupUi(self)
         self.selected_file = None
+        self.table_icon_list = [] #save the file's marker shape, fill and color there
+
 
         self.DataSettreeWidget = SubQTreeWidget(self)
         self.splitter.insertWidget(0, self.DataSettreeWidget)
@@ -75,10 +77,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         connection_id = self.actionNew_Theory.triggered.connect(self.handle_actionNew_Theory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
+        # connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
-        #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
+        # connection_id = self.DataSettreeWidget.currentItemChanged.connect(self.handle_currentItemChanged)
 
         connection_id = self.TheorytabWidget.tabCloseRequested.connect(self.handle_thTabCloseRequested)
         connection_id = self.TheorytabWidget.tabBarDoubleClicked.connect(self.handle_thTabBarDoubleClicked)
@@ -89,6 +92,29 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionVertical_Limits.triggered.connect(self.toggle_vertical_limits)
         connection_id = self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)
 
+    def set_table_icons(self, table_icon_list):
+        """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color) """
+        self.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
+        
+        for fname, marker_name, face, color in table_icon_list:
+            item = self.DataSettreeWidget.findItems(fname, Qt.MatchCaseSensitive, column=0) #returns list of items matching file name
+            if item:
+                #paint icon
+                folder = ':/Markers/Images/Matplotlib_markers/'
+                if face == 'none': #empty symbol
+                    marker_path = folder + 'marker_%s'%marker_name
+                else: #filled symbol
+                    marker_path = folder + 'marker_filled_%s'%marker_name
+                qp = QPixmap(marker_path)
+                mask = qp.createMaskFromColor(QColor(0, 0, 0), Qt.MaskOutColor)
+                qpainter = QPainter()
+                qpainter.begin(qp)
+                qpainter.setPen(QColor(int(255*color[0]),int(255*color[1]),int(255*color[2]),255))
+                qpainter.drawPixmap(qp.rect(),mask,qp.rect())
+                qpainter.end()
+                item[0].setIcon(0, QIcon(qp))
+            
+        self.DataSettreeWidget.blockSignals(False)
 
     def theory_actions_disabled(self, state):
         """Disable theory buttons if no theory tab is open"""
@@ -246,8 +272,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             "File: \"%s\" in %s"%(file.file_name_short, self.parent_application.DataSettabWidget.tabText(ds_index)))
         
     def handle_itemChanged(self, item, column):
-        self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
-            
+        if column == 0:
+            self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
+ 
     def handle_sortIndicatorChanged(self, column, order):
         """Sort files according to the selected parameter (column) and replot"""
         # if column == 0: #do not sort file name
@@ -258,6 +285,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             sort_param = sort_param + ",reverse"
         self.do_sort(sort_param)
         self.do_plot()
+        self.set_table_icons(self.table_icon_list)
 
     def Qshow_all(self):
         """Show all the files in this dataset, except those previously hiden"""
