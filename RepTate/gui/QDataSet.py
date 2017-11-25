@@ -1,7 +1,6 @@
 from PyQt5.QtGui import *
 from PyQt5.uic import loadUiType
 import itertools
-import Symbols_rc
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
 from DataSet import *

@@ -4,8 +4,8 @@ block_cipher = None
 
 
 a = Analysis(['RepTate.py'],
-             pathex=['applications', 'core', 'theories', 'tools', 'gui', 'c:\\Users\\Jorge\\OneDrive\\Codes\\Python\\RepTate\\RepTate'],
-             binaries=[('c:\\Miniconda3\\pkgs\\mkl-2017.0.3-0\\Library\\bin\\mkl_def.dll', 'BINARY')],
+             pathex=['applications', 'core', 'theories', 'tools', 'gui', 'c:\\Users\\Jorge\\OneDrive - Universidad Politécnica de Madrid\\Codes\\Python\\RepTate\\RepTate'],
+             binaries=None,
              datas=None,
              hiddenimports=['packaging', 'packaging.version', 'packaging.specifiers', 'packaging.requirements'],
              hookspath=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True )
+          console=False , icon='gui\\Images\\Reptate64.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

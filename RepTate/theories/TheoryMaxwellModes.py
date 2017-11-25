@@ -32,6 +32,7 @@ class BaseTheoryMaxwellModesFrequency:
     def drag_first_mode(self, dx, dy):
         self.set_param_value("logwmin", self.parameters["logwmin"].value + dx)
         self.set_param_value("logG00", self.parameters["logG00"].value + dy)
+        self.do_calculate("")
 
     def drag_mode(self, dx, dy):
         pass
