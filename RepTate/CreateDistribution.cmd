@@ -24,6 +24,7 @@ rmdir /s /q build\RepTateCL
 rmdir /s /q dist\RepTateCL
 pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTateCL.py
 copy dist\RepTateCL\RepTateCL.exe dist\RepTate
+xcopy tests dist\RepTate\tests /E
 
 rem Clean up build folders
 rmdir /s /q build\RepTate
