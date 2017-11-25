@@ -1,3 +1,18 @@
+"""Module QApplicationWindow
+
+RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+http://blogs.upm.es/compsoftmatter/software/reptate/
+https://github.com/jorge-ramirez-upm/RepTate
+http://reptate.readthedocs.io
+Jorge Ramirez, jorge.ramirez@upm.es
+Victor Boudara, mmvahb@leeds.ac.uk
+
+Module that defines the basic GUI class from which all GUI applications are derived.
+It is the GUI counterpart of Application.
+
+Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
+This software is distributed under the GNU General Public License. 
+""" 
 import sys
 import os
 import logging
@@ -10,7 +25,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backends.backend_pdf import PdfPages
 import itertools
-import Symbols_rc
 import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog

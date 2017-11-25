@@ -1,3 +1,17 @@
+"""Module ApplicationNLVE
+
+RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+http://blogs.upm.es/compsoftmatter/software/reptate/
+https://github.com/jorge-ramirez-upm/RepTate
+http://reptate.readthedocs.io
+Jorge Ramirez, jorge.ramirez@upm.es
+Victor Boudara, mmvahb@leeds.ac.uk
+
+Module for handling data from start up of shear and extensional flow experiments.
+
+Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
+This software is distributed under the GNU General Public License. 
+""" 
 from Application import *
 import numpy as np
 from TheoryRoliePoly import TheoryRoliePoly

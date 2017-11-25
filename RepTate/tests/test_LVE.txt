@@ -1,0 +1,8 @@
+new LVE
+new
+open /Users/mmvahb/Documents/vahb/Repate/RepTate/RepTate/data/PI_LINEAR/osc/PI223k*
+plot
+theory_new WLFShift
+fit
+save
+exit()

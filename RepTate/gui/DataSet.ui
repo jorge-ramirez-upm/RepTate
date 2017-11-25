@@ -36,16 +36,7 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -189,13 +180,8 @@
     <string>Change limits for fit</string>
    </property>
   </action>
-  <zorder>splitter</zorder>
-  <zorder>TheorytabWidget</zorder>
-  <zorder>TheorytabWidget</zorder>
-  <zorder>TheorytabWidget</zorder>
  </widget>
  <resources>
-  <include location="Symbols.qrc"/>
   <include location="Theory.qrc"/>
   <include location="Reptate.qrc"/>
  </resources>
