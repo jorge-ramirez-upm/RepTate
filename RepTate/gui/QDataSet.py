@@ -32,7 +32,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.setupUi(self)
         self.selected_file = None
-        self.table_icon_list = [] #save the file's marker shape, fill and color there
 
 
         self.DataSettreeWidget = SubQTreeWidget(self)

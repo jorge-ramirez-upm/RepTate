@@ -75,7 +75,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.num_theories = 0
         self.inactive_files = {}
         self.current_theory = None
-        
+        self.table_icon_list = [] #save the file's marker shape, fill and color there
+
 # DATASET STUFF ##########################################################################################################
     def do_list(self, line):
         """List the files in the current dataset"""

@@ -354,9 +354,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 if self.dialog.ui.rbFilled.isChecked(): #filled?
                     ds.symbolmode = SymbolMode.fixedfilled
                     ds.symbol1 = SymbolMode.filledmarkers.value[ind]
+                    ds.symbol1_name = self.dialog.ui.cbSymbolType.currentText()
                 else: #empty
                     ds.symbolmode = SymbolMode.fixed
                     ds.symbol1 = SymbolMode.allmarkers.value[ind]
+                    ds.symbol1_name = self.dialog.ui.cbSymbolType.currentText()
+
 
             #get the marker size    
             ds.marker_size = self.dialog.ui.spinBox.value()
