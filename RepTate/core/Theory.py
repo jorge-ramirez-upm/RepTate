@@ -2,10 +2,13 @@
 
 RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
 http://blogs.upm.es/compsoftmatter/software/reptate/
+
 https://github.com/jorge-ramirez-upm/RepTate
+
 http://reptate.readthedocs.io
-Jorge Ramirez, jorge.ramirez@upm.es
-Victor Boudara, mmvahb@leeds.ac.uk
+
+.. moduleauthor:: Jorge Ramirez <jorge.ramirez@upm.es>
+.. moduleauthor:: Victor Boudara <mmvahb@leeds.ac.uk>
 
 Module that defines the basic structure and properties of a theory.
 
