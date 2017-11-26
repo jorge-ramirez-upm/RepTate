@@ -19,17 +19,45 @@ from QTheory import *
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction
 
 class TheoryWLFShift(CmdBase):
-    """Basic theory for Time-Temperature Superposition, based on the WLF equation"""
+    """Basic theory for Time-Temperature Superposition, based on the WLF equation
+    
+    [description]
+    """
     thname="WLFShift"
     description="Basic theory for Time-Temperature Superposition, based on the WLF equation"
     cite=""
     single_file = False 
 
     def __new__(cls, name="ThWLFShift", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThWLFShift"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUITheoryWLFShift(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryWLFShift(name, parent_dataset, ax)
 
 class BaseTheoryWLFShift:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThWLFShift"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShift
         self.parameters["C1"]=Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, True)
@@ -41,9 +69,26 @@ class BaseTheoryWLFShift:
         self.parameters["dx12"]=Parameter("dx12", 0, "For PBd", ParameterType.real, False)
 
     def bT(self, T, T0, rho0, c3):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            T {[type]} -- [description]
+            T0 {[type]} -- [description]
+            rho0 {[type]} -- [description]
+            c3 {[type]} -- [description]
+        """
         return 
 
     def TheoryWLFShift(self, f=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        """
         ft=f.data_table
         tt=self.tables[f.file_name_short]
         tt.num_columns=ft.num_columns
@@ -65,18 +110,22 @@ class BaseTheoryWLFShift:
         T0corrected = T0 - CTg / Mw + 68.7 * dx12
         tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2)))
 
-        bT = (rho0 - T * C3 * 1E-3) * (T + 273.15) / ((rho0 - T0 * C3 * 1E-3) * (T0 + 273.15));
-        tt.data[:,1] = ft.data[:,1] / bT;
-        tt.data[:,2] = ft.data[:,2] / bT;
+        bT = (rho0 - T * C3 * 1E-3) * (T + 273.15) / ((rho0 - T0 * C3 * 1E-3) * (T0 + 273.15))
+        tt.data[:,1] = ft.data[:,1] / bT
+        tt.data[:,2] = ft.data[:,2] / bT
 
     def do_error(self, line):
-        """Override the error calculation for TTS. \
-The error is calculated as the vertical distance between theory points, in the current view,\
-calculated over all possible pairs of theory tables, when the theories overlap in the horizontal direction and\
-they correspond to files with the same Mw. 1/2 of the error is added to each file.
-Report the error of the current theory on all the files.\n\
-File error is calculated as the mean square of the residual, averaged over all calculated points in the shifted tables.\n\
-Total error is the mean square of the residual, averaged over all points considered in all files.
+        """Override the error calculation for TTS
+        
+        The error is calculated as the vertical distance between theory points, in the current view,\
+        calculated over all possible pairs of theory tables, when the theories overlap in the horizontal direction and\
+        they correspond to files with the same Mw. 1/2 of the error is added to each file.
+        Report the error of the current theory on all the files.\n\
+        File error is calculated as the mean square of the residual, averaged over all calculated points in the shifted tables.\n\
+        Total error is the mean square of the residual, averaged over all points considered in all files.
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         total_error=0
         npoints=0
@@ -144,6 +193,16 @@ Total error is the mean square of the residual, averaged over all points conside
         return total_error
                 
     def func_fitTTS(self, *param_in):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            *param_in {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         ind=0
         for p in self.parameters.keys():
             par = self.parameters[p] 
@@ -155,7 +214,13 @@ Total error is the mean square of the residual, averaged over all points conside
         return error
 
     def do_fit(self, line):
-        """Minimize the error"""
+        """Minimize the error
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         self.fitting = True
         view = self.parent_dataset.parent_application.current_view
 
@@ -190,13 +255,32 @@ Total error is the mean square of the residual, averaged over all points conside
         self.do_calculate(line)
 
     def do_print(self, line):
-        """Print the theory table associated with the given file name"""
+        """Print the theory table associated with the given file name
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         if line in self.tables:
             print(self.tables[line].data)
         else:
             print("Theory table for \"%s\" not found"%line)
 
     def complete_print(self, text, line, begidx, endidx):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         file_names=list(self.tables.keys())
         if not text:
             completions = file_names[:]
@@ -208,7 +292,13 @@ Total error is the mean square of the residual, averaged over all points conside
         return completions
         
     def do_save(self, line):
-        """Save the results from WLFShift theory predictions to a TTS file"""
+        """Save the results from WLFShift theory predictions to a TTS file
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         print('Saving prediction of '+self.thname+' theory')
         Mw=[]
         for f in self.parent_dataset.files:
@@ -256,11 +346,37 @@ Total error is the mean square of the residual, averaged over all points conside
             fout.close()
 
 class CLTheoryWLFShift(BaseTheoryWLFShift, Theory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThWLFShift"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         
 class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThWLFShift"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory

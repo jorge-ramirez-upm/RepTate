@@ -24,9 +24,20 @@ from SubQTreeWidget import *
 path = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(os.path.join(path,'DataSet.ui'))
 
-class QDataSet(DataSet, QWidget, Ui_DataSet): 
+class QDataSet(DataSet, QWidget, Ui_DataSet):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="QDataSet", parent=None):
-        "Constructor"
+        """Constructor
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"QDataSet"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name=name, parent=parent)
         QWidget.__init__(self)
         Ui_DataSet.__init__(self)
@@ -48,8 +59,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         w /= hd.count()
         for i in range(hd.count()):
             hd.resizeSection(0, w)
-        
-
 
         # Theory Toolbar
         tb = QToolBar()
@@ -106,7 +115,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)
 
     def set_table_icons(self, table_icon_list):
-        """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color) """
+        """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)
+        
+        [description]
+        
+        Arguments:
+            table_icon_list {[type]} -- [description]
+        """
         self.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
         
         for fname, marker_name, face, color in table_icon_list:
@@ -130,7 +145,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.DataSettreeWidget.blockSignals(False)
 
     def theory_actions_disabled(self, state):
-        """Disable theory buttons if no theory tab is open"""
+        """Disable theory buttons if no theory tab is open
+        
+        [description]
+        
+        Arguments:
+            state {[type]} -- [description]
+        """
         self.actionCalculate_Theory.setDisabled(state)
         self.actionMinimize_Error.setDisabled(state)
         # self.actionTheory_Options.setDisabled(state)
@@ -139,6 +160,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.actionHorizontal_Limits.setDisabled(state)
 
     def set_limit_icon(self):
+        """[summary]
+        
+        [description]
+        """
         hlim = self.actionHorizontal_Limits.isChecked()
         vlim = self.actionVertical_Limits.isChecked()
         if hlim and vlim:
@@ -152,7 +177,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.actionShow_Limits.setIcon(QIcon(':/Images/Images/%s'%img))
 
     def set_no_limits(self, th_name):
-        """Turn the x and yrange selectors off"""
+        """Turn the x and yrange selectors off
+        
+        [description]
+        
+        Arguments:
+            th_name {[type]} -- [description]
+        """
         if th_name in self.theories:
             th = self.theories[self.current_theory]
             th.xrange.set_visible(False) 
@@ -168,31 +199,49 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.set_limit_icon()
 
     def toggle_vertical_limits(self):
-        """Show/Hide the xrange selector for fit"""
+        """Show/Hide the xrange selector for fit
+        
+        [description]
+        """
         if self.current_theory:
             self.theories[self.current_theory].do_xrange("")
             self.set_limit_icon()
  
     def toggle_horizontal_limits(self):
-        """Show/Hide the yrange selector for fit"""
+        """Show/Hide the yrange selector for fit
+        
+        [description]
+        """
         if self.current_theory:        
             self.theories[self.current_theory].do_yrange("")
             self.set_limit_icon()
 
     def handle_actionCalculate_Theory(self):
-        """Calculate the theory"""
+        """Calculate the theory
+        
+        [description]
+        """
         if self.current_theory and self.files!=[]:
             self.theories[self.current_theory].do_calculate("")
             self.theories[self.current_theory].update_parameter_table()
 
     def handle_actionMinimize_Error(self):
-        """Minimize the error"""
+        """Minimize the error
+        
+        [description]
+        """
         if self.current_theory and self.files!=[]:
             self.theories[self.current_theory].do_fit("")
             self.theories[self.current_theory].update_parameter_table()
 
     def handle_thCurrentChanged(self, index):
-        """Change figure when the active theory tab is changed"""
+        """Change figure when the active theory tab is changed
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         th = self.TheorytabWidget.widget(index)
         if th:
             th.do_show()
@@ -210,7 +259,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.parent_application.update_Qplot()
 
     def Qshow_all(self):
-        """Show all the files in this dataset, except those previously hiden"""
+        """Show all the files in this dataset, except those previously hiden
+        
+        [description]
+        """
         self.do_show_all()
         for i in range(self.DataSettreeWidget.topLevelItemCount()):
             file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
@@ -221,11 +273,23 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
 
     def handle_thTabBarDoubleClicked(self, index):
-        """Edit theory tab name"""
+        """Edit theory tab name
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         pass
 
     def handle_thTabCloseRequested(self, index):
-        """Delete a theory tab from the current dataset"""
+        """Delete a theory tab from the current dataset
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         th_name = self.TheorytabWidget.widget(index).name
         self.set_no_limits(th_name)
         self.do_theory_delete(th_name) #call DataSet.do_theory_delete 
@@ -233,7 +297,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
 
     def handle_itemSelectionChanged(self):
-        """Define actions for when a file table is selected"""
+        """Define actions for when a file table is selected
+        
+        [description]
+        """
         selection = self.DataSettreeWidget.selectedItems()
         if selection==[]:
             self.selected_file = None
@@ -247,7 +314,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 self.populate_inspector()
 
     def highlight_series(self):
-        """Highligh the data series of the selected file"""
+        """Highligh the data series of the selected file
+        
+        [description]
+        """
         self.do_plot() #remove current series highlight
         file = self.selected_file
         if file is not None:
@@ -263,6 +333,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.parent_application.update_plot()
 
     def populate_inspector(self):
+        """[summary]
+        
+        [description]
+        """
         file = self.selected_file
         if not file: 
             self.parent_application.tableWidget.setRowCount(0)
@@ -285,11 +359,26 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             "File: \"%s\" in %s"%(file.file_name_short, self.parent_application.DataSettabWidget.tabText(ds_index)))
         
     def handle_itemChanged(self, item, column):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            item {[type]} -- [description]
+            column {[type]} -- [description]
+        """
         if column == 0:
             self.change_file_visibility(item.text(0), item.checkState(column)==Qt.Checked)
  
     def handle_sortIndicatorChanged(self, column, order):
-        """Sort files according to the selected parameter (column) and replot"""
+        """Sort files according to the selected parameter (column) and replot
+        
+        [description]
+        
+        Arguments:
+            column {[type]} -- [description]
+            order {[type]} -- [description]
+        """
         # if column == 0: #do not sort file name
         #     return
         sort_param = self.DataSettreeWidget.headerItem().text(column)
@@ -301,7 +390,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.set_table_icons(self.table_icon_list)
 
     def Qshow_all(self):
-        """Show all the files in this dataset, except those previously hiden"""
+        """Show all the files in this dataset, except those previously hiden
+        
+        [description]
+        """
         self.do_show_all()
         for i in range(self.DataSettreeWidget.topLevelItemCount()):
             file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
@@ -311,6 +403,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 2)
 
     def resizeEvent(self, evt=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            evt {[type]} -- [description] (default: {None})
+        """
         hd=self.DataSettreeWidget.header()
         w=self.DataSettreeWidget.width()
         w/=hd.count()
@@ -319,7 +418,14 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             #hd.setTextAlignment(i, Qt.AlignHCenter)
 
     def handle_itemDoubleClicked(self, item, column):
-        """Edit item entry upon double click"""
+        """Edit item entry upon double click
+        
+        [description]
+        
+        Arguments:
+            item {[type]} -- [description]
+            column {[type]} -- [description]
+        """
         if column>0:
             param = self.DataSettreeWidget.headerItem().text(column) #retrive parameter name
             file_name_short = item.text(0) #retrive file name
@@ -339,14 +445,24 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     self.DataSettreeWidget.blockSignals(False)
 
     def handle_actionNew_Theory(self):
-        """Create new theory and do fit"""
+        """Create new theory and do fit
+        
+        [description]
+        """
         if self.cbtheory.currentIndex() == 0:
             return
         th_name = self.cbtheory.currentText()
         self.cbtheory.setCurrentIndex(0) # reset the combobox selection
         self.new_theory(th_name)
 
-    def new_theory(self, th_name, th_tab_id=""):    
+    def new_theory(self, th_name, th_tab_id=""):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            th_name {[type]} -- [description]
+        """
         if not self.files:
             return
         if self.parent_application.theories[th_name].single_file and len(self.files)>1: 

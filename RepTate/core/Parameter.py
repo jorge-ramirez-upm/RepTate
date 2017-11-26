@@ -15,32 +15,46 @@ import enum
 import math
 
 class ShiftType(enum.Enum):
+    """[summary]
+    
+    [description]
+    """
     linear=0
     log=1
 
 class ParameterType(enum.Enum):
+    """[summary]
+    
+    [description]
+    """
     real = 0
     integer = 1
     discrete = 2
 
 class Parameter(object):
     """Abstract class to describe theory parameters
-
-        Args:
-            name            (str): Parameter name
-            description     (str): Meaning of parameter
-            type           (enum): Type of parameter (real, integer, discrete)
-            value          (real): Value of parameter
-            min_flag       (bool): Is this parameter optimized?
-            min_factor     (real): Factor to scale this parameter during minimization
-            min_shift_type (user): How do we shift this parameter during minimization
-            bracketed      (bool): Is the parameter bracketed?
-            min_value      (real): Minimum allowed value for the parameter
-            max_value      (real): Maximum allowed value
+    
+    [description]
     """
     def __init__(self, name="", value=0.0, description="", type=ParameterType.real, 
                  min_flag=True, min_factor=1.0, min_shift_type=ShiftType.linear, 
                  bracketed = False, min_value=-math.inf, max_value=math.inf):
+        """Constructor
+        
+        [description]
+
+        Arguments:
+            name {str} -- Parameter name
+            description {str} -- Meaning of parameter
+            type {enum} -- Type of parameter (real, integer, discrete)
+            value {real} -- Value of parameter
+            min_flag {bool} -- Is this parameter optimized?
+            min_factor {real} -- Factor to scale this parameter during minimization
+            min_shift_type {user} -- How do we shift this parameter during minimization
+            bracketed {bool} -- Is the parameter bracketed?
+            min_value {real} -- Minimum allowed value for the parameter
+            max_value {real} -- Maximum allowed value        
+        """
         self.name=name
         self.description=description
         self.type = type
@@ -60,7 +74,13 @@ class Parameter(object):
         self.min_allowed = min_flag
 
     def copy(self, par2):
-        """ Copy the contents of another paramter"""
+        """Copy the contents of another parameter
+        
+        [description]
+        
+        Arguments:
+            par2 {[type]} -- [description]
+        """
         self.name=par2.name
         self.description=par2.description
         self.type = par2.type
@@ -73,13 +93,25 @@ class Parameter(object):
         self.max_value= par2.max_value
         
     def __str__(self):
-        """
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+
         .. todo:: Refine this.
         """
         return "%s=%g"%(self.name,self.value)
 
     def __repr__(self):
-        """
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+
         .. todo:: Refine this.
         """
         return "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%s,%s,%g,%g)"%(self.name,self.value,self.description, self.type, self.min_flag,\

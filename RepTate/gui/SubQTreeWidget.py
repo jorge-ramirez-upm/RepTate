@@ -16,24 +16,51 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QTreeWidget, QMessageBox
 
 class SubQTreeWidget(QTreeWidget):
-    """Subclass of QTreeWidget that allows to select nothing in the DataSet 
-    by clicking in the white area of the DataSet, and allows to delete a data table item"""
+    """Subclass of QTreeWidget
+    
+    Subclass of QTreeWidget that allows to select nothing in the DataSet 
+    by clicking in the white area of the DataSet, and allows to delete a data table item
+    """
     def __init__(self, parent=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(parent)
         self.parent_dataset = parent
 
     def mousePressEvent(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
         self.clearSelection()
         QTreeWidget.mousePressEvent(self, event)
     
     def keyPressEvent(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
         if event.key() == Qt.Key_Backspace:
             self.delete()
         else:
             QTreeWidget.keyPressEvent(self, event)
 
     def delete(self):
-        """Delete the currently selected items"""
+        """Delete the currently selected items
+        
+        [description]
+        """
         selection = self.selectedItems()
         if selection == []:
             return

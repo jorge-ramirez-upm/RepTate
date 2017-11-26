@@ -37,7 +37,6 @@ from DraggableArtists import *
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
 from markerSettings import *
 
-
 from SubQTableWidget import *
 
 try:
@@ -49,7 +48,21 @@ path = os.path.dirname(os.path.abspath(__file__))
 Ui_AppWindow, QMainWindow = loadUiType(os.path.join(path,'QApplicationWindow.ui'))
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name='Application Template', parent=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            parent {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         super().__init__(name, parent)
 
         if CmdBase.mode!=CmdMode.GUI:
@@ -200,7 +213,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
 
     def dataset_actions_disabled(self, state):
-        """Disable buttons when there is no file in the dataset"""
+        """Disable buttons when there is no file in the dataset
+        
+        [description]
+        
+        Arguments:
+            state {[type]} -- [description]
+        """
         self.actionMarkerSettings.setDisabled(state)
         self.viewComboBox.setDisabled(state)
         self.actionReload_Data.setDisabled(state)
@@ -214,13 +233,26 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.cbtheory.setDisabled(state)
 
     def mpl_motion_event(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
         if not self.handle_annotation.checked:
             return
-        # Code to draw annotation. It doesn't work!
+        """.. todo:: Code to draw annotation. It doesn't work!"""
         
     def handle_annotation(self, checked):
+        """Draw and hide the annotation box.
+        
+        [description]
+        
+        Arguments:
+            checked {[type]} -- [description]
+        """
         if (checked):
-            """Draw and hide the annotation box."""
             self.annotation = self.ax.annotate(
                 '', xy=(0, 0), ha = 'left',
                 xytext = (-40, 40), textcoords = 'offset points', va = 'center',
@@ -235,13 +267,19 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.canvas.draw()
 
     def populate_cbPalette(self):
-        """Populate the list color palettes of the marker-settings dialog"""
+        """Populate the list color palettes of the marker-settings dialog
+        
+        [description]
+        """
         for palette in sorted(ColorMode.colorpalettes.value):
             self.dialog.ui.cbPalette.addItem(palette)
 
     def populate_cbSymbolType(self):
         """Populate the list of the markers of the marker-settings dialog
-        with filled or empty markers, depending on the user's choice"""
+        
+        Populate the list of the markers of the marker-settings dialog
+        with filled or empty markers, depending on the user's choice
+        """
         self.dialog.ui.cbSymbolType.clear()
         if self.dialog.ui.rbFilled.isChecked(): #combobox with fillable symbols only
             for m in SymbolMode.filledmarkernames.value:
@@ -253,7 +291,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 self.dialog.ui.cbSymbolType.addItem(QIcon(ipath), m)
     
     def handle_pickColor1(self):
-        """Call the colocr picker and save the selected color to `color1` in RGB format"""
+        """Call the colocr picker and save the selected color to `color1` in RGB format
+        
+        [description]
+        """
         color = self.showColorDialog()
         if color: #check for none
             self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s"%color.name())
@@ -262,14 +303,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def handle_pickColor2(self):
         """Call the colocr picker and save the selected color to `color2` in 
-        RGB format used for gradient color type"""
+        RGB format used for gradient color type
+        
+        [description]
+        """
         color = self.showColorDialog()
         if color:
             self.dialog.ui.labelPickedColor2.setStyleSheet("background: %s"%color.name())
             self.color2 = color.getRgbF()
 
     def showColorDialog(self):
-        """Show the color picker and return the picked QtColor or `None`"""
+        """Show the color picker and return the picked QtColor or `None`
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         ds = self.DataSettabWidget.currentWidget()
         if ds:
             wtitle = "Select color for %s"%ds.name
@@ -281,7 +331,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def handle_actionMarkerSettings(self):
         """Show the dialog box where the user can change
-          the marker properties: size, shape, color, fill"""
+          the marker properties: size, shape, color, fill
+        
+        [description]
+        """
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
             return
@@ -322,7 +375,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.do_plot()
 
     def handle_apply_button_pressed(self):
-        """Apply the selected marker properties to all the files in the current dataset"""
+        """Apply the selected marker properties to all the files in the current dataset
+        
+        [description]
+        """
         ds = self.DataSettabWidget.currentWidget()
         if ds:
             # #restore the file attributes to previous values before making changes
@@ -371,7 +427,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             # ds.DataSettreeWidget.blockSignals(False) 
 
     def handle_inspectorVisibilityChanged(self, visible):
-        """Handle the hide/show event of the data inspector"""
+        """Handle the hide/show event of the data inspector
+        
+        [description]
+        
+        Arguments:
+            visible {[type]} -- [description]
+        """
         self.actionInspect_Data.setChecked(visible)
         if visible:
             ds = self.DataSettabWidget.currentWidget()
@@ -381,7 +443,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.disconnect_curve_drag()
     
     def handle_actionShiftTriggered(self):
-        """Allow the current 'selected_file' to be dragged"""
+        """Allow the current 'selected_file' to be dragged
+        
+        [description]
+        """
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return
@@ -405,7 +470,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def disconnect_curve_drag(self):
         """Remove the Matplotlib drag connections
-        and reset the shift buttons in the data inspector"""
+        and reset the shift buttons in the data inspector
+        
+        [description]
+        """
         for curve in self.curves:
             curve.disconnect()
         self.curves.clear()
@@ -413,7 +481,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.actionShiftVertically.setChecked(False)
         
     def handle_actionReload_Data(self):
-        """Reload the data files: remove and reopen the current files"""
+        """Reload the data files: remove and reopen the current files
+        
+        [description]
+        """
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
             return
@@ -426,7 +497,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def clear_files_and_th_from_dataset(self, ds):
         """Remove all files from dataset and widgetTree,
-        return a list with the full path of deleted files"""
+        return a list with the full path of deleted files
+        
+        [description]
+        
+        Arguments:
+            ds {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         file_paths_cleaned = []
         th_cleaned = []
         #save file names
@@ -452,7 +532,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         return file_paths_cleaned, th_cleaned
 
     def handle_actionView_All_Sets(self, checked):
-        """Show all datasets simultaneously"""
+        """Show all datasets simultaneously
+        
+        [description]
+        
+        Arguments:
+            checked {[type]} -- [description]
+        """
         if len(self.datasets) < 2:
             return
         if checked:
@@ -466,7 +552,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def handle_currentChanged(self, index):
         """Change figure when the active DataSet tab is changed
-        and empty the dataInspector"""
+        and empty the dataInspector
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         if self.actionView_All_Sets.isChecked():
             return
         ds = self.DataSettabWidget.widget(index)
@@ -489,7 +581,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.update_Qplot()
 
     def handle_doubleClickTab(self, index):
-        """Edit DataSet-tab name"""
+        """Edit DataSet-tab name
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         old_name = self.DataSettabWidget.tabText(index)
         new_tab_name, success = QInputDialog.getText (
                 self, "Change Name",
@@ -500,7 +598,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.DataSettabWidget.setTabText(index, new_tab_name)
 
     def close_data_tab_handler(self, index):
-        """Delete a dataset tab from the current application"""
+        """Delete a dataset tab from the current application
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         ds = self.DataSettabWidget.widget(index)
         if index == self.DataSettabWidget.currentIndex():
             self.disconnect_curve_drag()
@@ -509,7 +613,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.DataSettabWidget.removeTab(index)
 
     def change_view(self):
-        """Change plot view"""
+        """Change plot view
+        
+        [description]
+        """
         selected_view_name = self.viewComboBox.currentText()
         ds = self.DataSettabWidget.currentWidget()
         if ds:
@@ -521,7 +628,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.highlight_series()
             
     def populate_views(self):
-        """Assign availiable view labels to ComboBox"""
+        """Assign availiable view labels to ComboBox
+        
+        [description]
+        """
         selectedview = self.current_view.name
         for i in sorted(self.views):
             #add keys of 'views' dict to the list of views avaliable 
@@ -529,13 +639,27 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         index = self.viewComboBox.findText(selectedview, QtCore.Qt.MatchFixedString)
         self.viewComboBox.setCurrentIndex(index)
 
-    def dragEnterEvent(self, e):      
+    def dragEnterEvent(self, e):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            e {[type]} -- [description]
+        """
         if e.mimeData().hasUrls():
             e.accept()
         else:
             e.ignore() 
 
     def dropEvent(self, e):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            e {[type]} -- [description]
+        """
         reptatelogger = logging.getLogger('ReptateLogger')
         paths_to_open = []
         for url in e.mimeData().urls():
@@ -545,13 +669,24 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.new_tables_from_files(paths_to_open)
 
     def update_Qplot(self):
+        """[summary]
+        
+        [description]
+        """
         plt.tight_layout(pad=1.2)
         # self.canvas = FigureCanvas(self.figure)
         #self.mplvl.addWidget(self.canvas)
         self.canvas.draw()
 
     def addTableToCurrentDataSet(self, dt, ext):
-        """Add file table to curent dataset tab"""
+        """Add file table to curent dataset tab
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            ext {[type]} -- [description]
+        """
         ds = self.DataSettabWidget.currentWidget()
         lnew = []
         for param in self.filetypes[ext].basic_file_parameters[:]:
@@ -571,7 +706,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         
     def createNew_Empty_Dataset(self):
-        """Add New empty tab to DataSettabWidget"""
+        """Add New empty tab to DataSettabWidget
+        
+        [description]
+        """
         self.num_datasets += 1 #increment counter of Application
         num = self.num_datasets
         ds_name = 'Set%d'%num
@@ -604,6 +742,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
 
     def openDataset(self):
+        """[summary]
+        
+        [description]
+        """
         # 'allowed_ext' defines the allowed file extensions
         # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
         allowed_ext = ""
@@ -616,6 +758,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.new_tables_from_files(paths_to_open)
         
     def new_tables_from_files(self, paths_to_open):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            paths_to_open {[type]} -- [description]
+        """
         if (self.DataSettabWidget.count()==0):
                 self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
@@ -634,6 +783,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             QMessageBox.about(self, "Open", success)
     
     def check_no_param_missing(self, newtables, ext):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            newtables {[type]} -- [description]
+            ext {[type]} -- [description]
+        """
         for dt in newtables:
             e_list = []
             for param in self.filetypes[ext].basic_file_parameters[:]:
@@ -648,7 +805,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 for e_param in e_list:
                     dt.file_parameters[e_param] = "0"
 
-    def openFileNamesDialog(self, ext_filter="All Files (*)"):  
+    def openFileNamesDialog(self, ext_filter="All Files (*)"):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         # file browser window  
         options = QFileDialog.Options()
         #options |= QFileDialog.DontUseNativeDialog
@@ -658,33 +822,69 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         return selected_files
 
     def showDataInspector(self, checked):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            checked {[type]} -- [description]
+        """
         if checked:
             self.DataInspectordockWidget.show()
         else:
             self.DataInspectordockWidget.hide()
 
     def viewMPLToolbar(self, checked):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            checked {[type]} -- [description]
+        """
         if checked:
             self.mpl_toolbar.show()
         else:
             self.mpl_toolbar.hide()
         
     def printPlot(self):
+        """[summary]
+        
+        [description]
+        """
         fileName = QFileDialog.getSaveFileName(self,
             "Export plot", "", "Image (*.png);;PDF (*.pdf);; Postscript (*.ps);; EPS (*.eps);; Vector graphics (*.svg)");
         # TODO: Set DPI, FILETYPE, etc
         plt.savefig(fileName[0])
         
     def on_plot_hover(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
         pass
         
     def onclick(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
         if event.dblclick:
             pickedtick = event.artist
             print(event)
             print(pickedtick)
 
     def resizeplot(self, event=""):
+        """[summary]
+        
+        [description]
+        """
         # TIGHT LAYOUT in order to view axes and everything
         plt.tight_layout(pad=1.2)
 
@@ -702,6 +902,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     #     self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
         
     def Smaller_Symbols(self):
+        """[summary]
+        
+        [description]
+        """
         tab = self.DataSettabWidget.currentWidget()
         if tab == None:
             return
@@ -712,6 +916,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.actionData_Representation.setIcon(self.actionShow_Smaller_Symbols.icon())
 
     def ResetSymbolsSize(self):
+        """[summary]
+        
+        [description]
+        """
         tab = self.DataSettabWidget.currentWidget()
         if tab == None:
             return        
@@ -721,6 +929,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.actionData_Representation.setIcon(self.actionResetSymbolsSize.icon()) 
    
     def Larger_Symbols(self):
+        """[summary]
+        
+        [description]
+        """
         tab = self.DataSettabWidget.currentWidget()
         if tab == None:
             return

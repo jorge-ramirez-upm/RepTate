@@ -19,25 +19,42 @@ from enum import Enum
 from pint import UnitRegistry
 
 class CmdMode(Enum):
+    """[summary]
+    
+    [description]
+    """
     cmdline = 0
     batch = 1
     GUI = 2
     modes=["Command Line Interpreter", "Batch processing", "Graphical User Interface"]
 
     def print(self):
+        """[summary]
+        
+        [description]
+        """
         print("cmdline: ", self.modes.value[0])
         print("batch: ", self.modes.value[1])
         print("GUI: ", self.modes.value[2])
 
 class CmdBase(cmd.Cmd):
-    """Basic Cmd Console that is inherited by most Reptate objects"""
+    """Basic Cmd Console that is inherited by most Reptate objects
+    
+    [description]
+    """
 
     prompt = '> '
     mode = CmdMode.cmdline
     ureg = UnitRegistry()
 
     def __init__ (self, parent=None):
-        """Constructor """
+        """Constructor
+        
+        [description]
+        
+        Keyword Arguments:
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__()
 
         delims = readline.get_completer_delims()
@@ -45,21 +62,42 @@ class CmdBase(cmd.Cmd):
         readline.set_completer_delims(delims)
         
     def do_shell(self, line):
-        """Run a shell command"""
+        """Run a shell command
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         print("running shell command:", line)
         output = os.popen(line).read()
         print(output)
         self.last_output = output
 
     def do_cd(self, line):
-        """Change folder"""
+        """Change folder
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         if os.path.isdir(line):
             os.chdir(line)
         else:
             print("Folder %s does not exist"%line)
 
     def __listdir(self, root):
-        "List directory 'root' appending the path separator to subdirs."
+        """List directory 'root' appending the path separator to subdirs.
+        
+        [description]
+        
+        Arguments:
+            root {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         res = []
         for name in os.listdir(root):
             path = os.path.join(root, name)
@@ -71,7 +109,16 @@ class CmdBase(cmd.Cmd):
 
 
     def __complete_path(self, path=None):
-        "Perform completion of filesystem path."
+        """Perform completion of filesystem path.
+        
+        [description]
+        
+        Keyword Arguments:
+            path {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         if not path:
             return self.__listdir('.')
         
@@ -90,7 +137,19 @@ class CmdBase(cmd.Cmd):
         return [path + ' ']
         
     def complete_cd(self, text, line, begidx, endidx):
-        "Completions for the cd command."
+        """Completions for the cd command.
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         test=line.split()
         if (len(test)>1):
             result=self.__complete_path(test[1])
@@ -100,10 +159,12 @@ class CmdBase(cmd.Cmd):
         return result
 
     def do_ls(self, line):
-        """
-        List contents of current folder
+        """List contents of current folder
         
-        .. todo:: CONSIDER SUBFOLDERS TOO
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         dirs=os.listdir()
         for d in dirs:
@@ -111,21 +172,46 @@ class CmdBase(cmd.Cmd):
     do_dir = do_ls
 
     def do_pwd(self, line):
-        """Print the current folder"""
+        """Print the current folder
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         print(os.getcwd())
     do_cwd = do_pwd
 
     def emptyline(self):
+        """[summary]
+        
+        [description]
+        """
         pass
 
     def do_EOF(self, args):
-        """Exit Console and Return to Parent or exit"""
+        """Exit Console and Return to Parent or exit
+        
+        [description]
+        
+        Arguments:
+            args {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         print("")
         return True
     do_up = do_EOF
     
     def do_quit(self, args):
-        """Exit from the application"""
+        """Exit from the application
+        
+        [description]
+        
+        Arguments:
+            args {[type]} -- [description]
+        """
         if (CmdBase.mode==CmdMode.batch):
             print ("Exiting RepTate...")
             readline.write_history_file()
@@ -138,9 +224,14 @@ class CmdBase(cmd.Cmd):
             sys.exit()
             
     
-    def default(self, line):       
+    def default(self, line):
         """Called on an input line when the command prefix is not recognized.
            In that case we execute the line as Python code.
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         try:
             exec(line) #in self._locals, self._globals
@@ -149,9 +240,13 @@ class CmdBase(cmd.Cmd):
 
     def do_console(self, line):
         """Print/Set current & available Console modes
+        
            console --> print current mode
            console available --> print available modes
            console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         if (line==""):
             print("Current console mode: %s"%CmdMode.modes.value[CmdBase.mode.value])

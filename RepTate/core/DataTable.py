@@ -16,11 +16,20 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 class DataTable(object):
-    """Class that stores data and series"""
+    """Class that stores data and series
+    
+    [description]
+    """
     MAX_NUM_SERIES=3
 
     def __init__(self, ax=None):
-        """Constructor"""
+        """Constructor
+        
+        [description]
+        
+        Keyword Arguments:
+            ax {[type]} -- [description] (default: {None})
+        """
         self.num_columns=0
         self.num_rows=0
         self.column_names=[]
@@ -32,7 +41,10 @@ class DataTable(object):
             self.series.append(ss[0])
 
     def __str__(self):
-        """
+        """[summary]
+        
+        [description]
+
         .. todo:: Refine this. It doesn't work
         """
         return self.data

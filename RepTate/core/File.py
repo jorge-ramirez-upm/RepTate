@@ -12,17 +12,25 @@ Module that defines a basic File, with headers, columns and data.
 
 """ 
 import os
-from FileType import *
+#from FileType import *
 from DataTable import *
 
 class File(object):
-    """Basic class that describes elements of a DataSet"""
+    """Basic class that describes elements of a DataSet
+    
+    [description]
+    """
 
     def __init__(self, file_name="", file_type=None, parent_dataset=None, ax=None):
-        """ Constructor:
-            file_name: Full path
-            file_name_short: Just the file name
-            header_lines: 
+        """Constructor
+        
+        [description]
+        
+        Keyword Arguments:
+            file_name {str} -- Full path
+            file_type {[type]} -- [description] (default: {None})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
         """
         self.file_full_path = os.path.abspath(file_name)
         tmpname = self.file_full_path.split(os.sep)
@@ -46,4 +54,8 @@ class File(object):
         self.data_table = DataTable(ax)
         
     def __str__(self):
+        """[summary]
+        
+        [description]
+        """
         return '%s: %s' % (self.file_full_path, self.file_parameters)

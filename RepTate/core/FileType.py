@@ -13,15 +13,14 @@ Module for the basic definition of file types.
 """ 
 import numpy as np
 import logging
+from File import File
 #from Table import *
-from File import *
 from DataTable import *
 #get info on the current OS
 from sys import platform
 
 
 class TXTColumnFile(object):
-	
     """Basic class for text-column based data files
     
     Columns should be separated by espaces or tabs
@@ -66,9 +65,16 @@ class TXTColumnFile(object):
                  description='Generic text file with columns', 
                  col_names=[], basic_file_parameters=[], col_units=[]):
         """Constructor
-           col_names: list with names of columns to read
-           basic_file_parameters: list with file parameters that should always be included in the header line
-           col_units: TO DO
+    
+        [description]
+
+        Keyword Arguments:
+            name {str} -- Name of file type
+            extension {str} -- File extension
+            description {str} -- Description of file contents
+            col_names {list of str}: list with names of columns to read
+            basic_file_parameters {list of str}: list with file parameters that should always be included in the header line
+            col_units {list of str}: Default units of columns
         """
         self.name=name
         self.extension=extension
@@ -82,6 +88,16 @@ class TXTColumnFile(object):
         self.logger = logging.getLogger('ReptateLogger')
 
     def is_number(self, s):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            s {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         try:
             float(s)
             return True
@@ -89,6 +105,14 @@ class TXTColumnFile(object):
             return False
         
     def get_parameters(self, line, file):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+            file {[type]} -- [description]
+        """
         items=line.split(';')
         file.file_parameters={}
         for i in range(len(items)):
@@ -100,6 +124,17 @@ class TXTColumnFile(object):
                     file.file_parameters[par[0]]=par[1]
                 
     def find_col_names_and_first_data_lines(self, lines, file):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            lines {[type]} -- [description]
+            file {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         colnameline=0
         firstdata=0
         for i in range(1,len(lines)):
@@ -116,6 +151,18 @@ class TXTColumnFile(object):
         return colnameline, firstdata   
                 
     def read_file(self, filename, parent_dataset, ax):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            filename {[type]} -- [description]
+            parent_dataset {[type]} -- [description]
+            ax {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         file=File(filename, self, parent_dataset, ax)
         #specify encoding to avoid crash [due to e.g. °C] on OS X or macOS
         if platform == "darwin":
@@ -149,5 +196,3 @@ class TXTColumnFile(object):
         file.data_table.data = file.data_table.data[file.data_table.data[:,0].argsort()]
 
         return file
-
-    

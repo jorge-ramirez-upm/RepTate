@@ -17,21 +17,41 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QTableWidget, QApplication
 
 class SubQTableWidget(QTableWidget):
-    """Subclass of QTableWidget that enables (i) to copy selected QTableWidget items to the clipboard
-    in a tab-separated format and (ii) to paste the content of the clipboard into the QTableWidget"""
+    """Subclass of QTableWidget
+
+    Subclass of QTableWidget that enables (i) to copy selected QTableWidget items to the clipboard
+    in a tab-separated format and (ii) to paste the content of the clipboard into the QTableWidget
+    """
     def __init__(self, parent=None):
+        """[summary]
+
+        [description]
+
+        Keyword Arguments:
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(parent)
 
     def keyPressEvent(self, event):
+        """[summary]
+
+        [description]
+
+        Arguments:
+            event {[type]} -- [description]
+        """
         if event.matches(QKeySequence.Copy):
             self.copy()
         elif event.matches(QKeySequence.Paste):
             self.paste()
         else:
             QTableWidget.keyPressEvent(self, event)
- 
+
     def copy(self):
-        """Copy the selected data of the dataInspector into the clipboard"""
+        """Copy the selected data of the dataInspector into the clipboard
+
+        [description]
+        """
         sel = self.selectedIndexes() #returns a list of all selected item indexes in the view
         if sel:
             text = ""
@@ -46,11 +66,15 @@ class SubQTableWidget(QTableWidget):
                 text += self.item(row, col).text()
                 text += '\t' #tab separated format
             text = text.rstrip('\t')
-            QApplication.clipboard().setText(text);
+            QApplication.clipboard().setText(text)
 
     def paste(self):
+        """[summary]
+
+        [description]
+        """
         text = QApplication.clipboard().text()
-        if text=="":
+        if text == "":
             return
         rows = text.split("\r") #this is Excel's carriage return...
         for i in range(len(rows)):

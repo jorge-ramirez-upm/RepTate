@@ -16,7 +16,10 @@ import numpy as np
 from scipy.integrate import ode, odeint
 
 class TheoryRoliePoly(Theory, CmdBase):
-    """Rolie-Poly"""
+    """Rolie-Poly
+    
+    [description]
+    """
     thname="RoliePoly"
     description="RoliePoly"
     citations="Likhtman, A.E. & Graham, R.S.\n\
@@ -24,6 +27,15 @@ Simple constitutive equation for linear polymer melts derived from molecular the
 J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
 
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThRoliePoly"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super(TheoryRoliePoly, self).__init__(name, parent_dataset, ax)
         self.function = self.RoliePoly
         self.has_modes = True
@@ -37,6 +49,14 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
             self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True, min_value=0)
 
     def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
         if (name=="nmodes"):
             oldn=self.parameters["nmodes"].value
         super(TheoryRoliePoly, self).set_param_value(name, value)
@@ -52,6 +72,13 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
                     del self.parameters["tauR%d"%i]
 
     def get_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         nmodes=self.parameters["nmodes"].value
         tau=np.zeros(nmodes)
         G=np.zeros(nmodes)
@@ -61,6 +88,14 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         return tau, G
 
     def set_modes(self, tau, G):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            tau {[type]} -- [description]
+            G {[type]} -- [description]
+        """
         nmodes=len(tau)
         self.set_param_value("nmodes", nmodes)
         for i in range(nmodes):
@@ -68,13 +103,15 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
             self.set_param_value("G%d"%i,G[i])
 
     def sigmadotshear(self, sigma, t, p):
+        """Rolie-Poly differential equation under shear flow
+        
+        [description]
+        
+        Arguments:
+            sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
+            t {float} -- time
+            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
-        Rolie-Poly differential equation under shear flow
-    
-        :param vector sigma: vector of state variables, sigma = [sxx, syy, sxy]
-        :param float t: time
-        :param vector p: vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
-        """ 
         sxx, syy, sxy = sigma
         tauD, tauR, beta, delta, gammadot = p
     
@@ -86,6 +123,16 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
 
         
     def RoliePoly(self, f=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         ft=f.data_table
         tt=self.tables[f.file_name_short]
         tt.num_columns=ft.num_columns
@@ -112,5 +159,3 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         
         # return viscosity to agree with input data file (t, eta)
         tt.data[:,1] = tt.data[:,1]/gammadot
-       
-       

@@ -15,22 +15,42 @@ from Application import *
 from QApplicationWindow import *
 import numpy as np
 from TheoryDiscrMWD import TheoryDiscrMWD
-#from TheoryMaxwellModes import TheoryMaxwellModesTime
-
 
 class ApplicationMWD(CmdBase):
-    """
-    Application to analyze Molecular Weight distributions
+    """Application to analyze Molecular Weight distributions
     
-    .. todo:: IS IT NECESSARY TO KEEP TWO SEPARATE APPLICATIONS FOR REACT AND FOR MWD???
+    [description]
     """
     name="MWD"
     description="Experimental Molecular weight distributions"
     def __new__(cls, name="LVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUIApplicationMWD(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationMWD(name, parent)
 
-class BaseApplicationMWD:    
+class BaseApplicationMWD:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="MWD", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"MWD"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
         # VIEWS
@@ -49,6 +69,17 @@ class BaseApplicationMWD:
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
     def viewWM(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         max_y = np.max(dt.data[:, 1])
@@ -56,11 +87,35 @@ class BaseApplicationMWD:
         y[:, 0] = dt.data[:, 1]/max_y
         return x, y, True
 
-class CLApplicationMWD(BaseApplicationMWD, Application):    
+class CLApplicationMWD(BaseApplicationMWD, Application):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="MWD", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"MWD"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
-class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):    
+class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="MWD", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"MWD"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
         self.populate_views() #populate the view ComboBox

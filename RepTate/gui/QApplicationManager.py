@@ -26,12 +26,22 @@ path = os.path.dirname(os.path.abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path,'ReptateMainWindow.ui'))
 
 class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
-    """ Main Reptate window and application manager"""    
+    """Main Reptate window and application manager
+    
+    [description]
+    """
     # count = 0
     reptatelogger = logging.getLogger('ReptateLogger')
     reptatelogger.setLevel(logging.DEBUG)
 
     def __init__(self, parent=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__()
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -76,7 +86,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.verticalLayout.addWidget(self.text_edit)
 
     def handle_doubleClickTab(self, index):
-        """Edit DataSet-tab name"""
+        """Edit DataSet-tab name
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         old_name = self.ApplicationtabWidget.tabText(index)
         new_tab_name, success = QInputDialog.getText (
             self, "Change Name",
@@ -87,23 +103,47 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             self.ApplicationtabWidget.setTabText(index, new_tab_name)
 
     def show_about(self):
-        """ Show about window"""
+        """Show about window
+        
+        [description]
+        """
         dlg = AboutWindow(self, self.version + ' ' + self.date)
         dlg.show()        
 
     def tab_changed(self, index):
-        """Capture when the active application has changed"""
+        """Capture when the active application has changed
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         #appname = self.ApplicationtabWidget.widget(index).windowTitle
         #items = self.Projecttree.findItems(appname, Qt.MatchContains)
         #self.Projecttree.setCurrentItem(items[0])
         pass
 
-    def close_app_tab(self, index):    
+    def close_app_tab(self, index):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            index {[type]} -- [description]
+        """
         app_name = self.ApplicationtabWidget.widget(index).name
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app_name)
 
     def Qopen_app(self, app_name, icon):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            app_name {[type]} -- [description]
+            icon {[type]} -- [description]
+        """
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset() #populate with empty dataset at app opening
         app_id = "%s%d"%(app_name, self.application_counter)
@@ -112,38 +152,58 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
 
     def new_mwd_window(self):
-        """ Open a new MWD application window"""
+        """Open a new MWD application window
+        
+        [description]
+        """
         app_name = 'MWD'
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-MWD.png')
 
 
     def new_tts_window(self):
-        """ Open a new TTS application window"""
+        """Open a new TTS application window
+        
+        [description]
+        """
         app_name = "TTS"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-TTS.png')
 
     def new_lve_window(self):
-        """ Open a new LVE application window"""
+        """Open a new LVE application window
+        
+        [description]
+        """
         app_name = "LVE"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-LVE.png')
 
     def new_gt_window(self):
-        """ Open a new Gt application window"""
+        """Open a new Gt application window
+        
+        [description]
+        """
         app_name = "Gt"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-Gt.png')
 
     def new_nlve_window(self):
-        """ Open a new NLVE application window"""
+        """Open a new NLVE application window
+        
+        [description]
+        """
         app_name = "NLVE"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-NLVE.png')
     
     def new_creep_window(self):
-        """ Open a new Creep application window"""
+        """Open a new Creep application window
+        
+        [description]
+        """
         app_name = "Creep"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-Creep.png')
 
     def new_sans_window(self):
-        """ Open a new SANS application window"""
+        """Open a new SANS application window
+        
+        [description]
+        """
         app_name = "SANS"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-SANS.png')
-            

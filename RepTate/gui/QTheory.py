@@ -20,8 +20,21 @@ from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHead
 path = os.path.dirname(os.path.abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(os.path.join(path,'theorytab.ui'))
 
-class QTheory(Ui_TheoryTab, QWidget, Theory):     
+class QTheory(Ui_TheoryTab, QWidget, Theory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="QTheory", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"QTheory"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name=name, parent_dataset=parent_dataset, ax=ax)
         self.setupUi(self)
 
@@ -43,7 +56,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
 
     def update_parameter_table(self):
-        """Update the theory parameter table"""
+        """Update the theory parameter table
+        
+        [description]
+        """
         #clean table
         self.thParamTable.clear()
         #populate table
@@ -64,15 +80,28 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
-        """Start editing text when a table cell is double clicked"""
+        """Start editing text when a table cell is double clicked
+        
+        [description]
+        
+        Arguments:
+            item {[type]} -- [description]
+            column {[type]} -- [description]
+        """
         if (column==1):
             self.thParamTable.editItem(item, column)
             # thcurrent = self.parent_dataset.TheorytabWidget.currentWidget()
             # thcurrent.editItem(item, column)
 
     def handle_parameterItemChanged(self, item, column):
-        """Modify parameter values when 
-        changed in the theory table"""
+        """Modify parameter values when changed in the theory table
+        
+        [description]
+        
+        Arguments:
+            item {[type]} -- [description]
+            column {[type]} -- [description]
+        """
         param_changed = item.text(0)
         if column==0: #param was checked/unchecked
             self.parameters[param_changed].min_flag = item.checkState(0)==Qt.Checked
@@ -80,5 +109,3 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         #else, assign the entered value
         val = item.text(1)
         self.set_param_value(param_changed, val)
-
-

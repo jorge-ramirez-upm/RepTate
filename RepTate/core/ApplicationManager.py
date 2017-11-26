@@ -26,7 +26,10 @@ from ApplicationGt import *
 import Version
 
 class ApplicationManager(CmdBase):
-    """Main Reptate container of applications"""
+    """Main Reptate container of applications
+    
+    [description]
+    """
 
     version = Version.version
     date = Version.date
@@ -34,7 +37,13 @@ class ApplicationManager(CmdBase):
     intro = 'Reptate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions'%(version,date)
     
     def __init__ (self, parent=None):
-        """Constructor """
+        """Constructor
+        
+        [description]
+        
+        Keyword Arguments:
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__() 
 
         # SETUP LOG
@@ -67,29 +76,65 @@ class ApplicationManager(CmdBase):
 
 # APPLICATION STUFF
     def available(self):
-        """Return list of available applications"""
+        """Return list of available applications
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         L= ["%s: %s"%(app.name,app.description) for app in list(self.available_applications.values())]
         return L
         
     def do_available(self, line):
-        """List available applications"""
+        """List available applications
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         L=self.available()
         for app in L: 
             print(app)
 
     def delete(self, name):
-        """Delete an open application"""
+        """Delete an open application
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+        """
         if name in self.applications.keys():
             del self.applications[name]
         else:
             print("Application \"%s\" not found"%name)                   
             
     def do_delete(self, name):
-        """Delete an open application"""
+        """Delete an open application
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+        """
         self.delete(name)
         
     def complete_delete(self, text, line, begidx, endidx):
-        """Complete delete application command"""
+        """Complete delete application command
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         app_names=list(self.applications.keys())
         if not text:
             completions = app_names[:]
@@ -101,18 +146,39 @@ class ApplicationManager(CmdBase):
         return completions
 
     def list(self):
-        """List open applications"""
+        """List open applications
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         L= ["%s: %s"%(app.name,app.description) for app in self.applications.values()]
         return L        
         
     def do_list(self, line):
-        """List open applications"""
+        """List open applications
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         L=self.list()
         for app in L: 
             print(app)
 
     def new(self, name):
-        """Create new application"""
+        """Create new application
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         if (name in self.available_applications):
             self.application_counter+=1
             newapp=self.available_applications[name](name+str(self.application_counter), self)
@@ -125,7 +191,13 @@ class ApplicationManager(CmdBase):
             return None   
                
     def do_new(self, name):
-        """Create new application"""
+        """Create new application
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+        """
         newapp=self.new(name)
         if (newapp!=None):
             if (self.mode==CmdMode.batch):
@@ -138,7 +210,19 @@ class ApplicationManager(CmdBase):
                     
     
     def complete_new(self, text, line, begidx, endidx):
-        """Complete new application command"""
+        """Complete new application command
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         app_names=list(self.available_applications.keys())
         if not text:
             completions = app_names[:]
@@ -150,7 +234,13 @@ class ApplicationManager(CmdBase):
         return completions
 
     def do_switch(self, name):
-        """Set focus to an open application"""
+        """Set focus to an open application
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+        """
         if name in self.applications.keys():
             app=self.applications[name]               
             app.cmdloop()
@@ -158,14 +248,32 @@ class ApplicationManager(CmdBase):
             print("Application \"%s\" not found"%name)                        
 
     def complete_switch(self, text, line, begidx, endidx):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         completions = self.complete_delete(text, line, begidx, endidx)
         return completions        
     
 # MAXWELL MODES COPY
     def do_copymodes(self, line):
         """Copy maxwell modes from one theory to another.
-           Both theories may live inside different applications and/or datasets
-           copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj"""
+        
+        Both theories may live inside different applications and/or datasets
+           copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         apps = line.split()
         if len(apps)<2:
             print('Not enough parameters passed\n'
@@ -200,7 +308,13 @@ class ApplicationManager(CmdBase):
 
     def list_theories_Maxwell(self):
         """List the theories in the current RepTate instance that provide
-        Maxwell modes"""
+        Maxwell modes
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         get_dict={}
         set_dict={}
         for appname in self.applications.keys():
@@ -217,22 +331,44 @@ class ApplicationManager(CmdBase):
                         
     def do_list_theories_Maxwell(self, line):
         """List the theories in the current RepTate instance that provide
-        Maxwell modes"""
+        Maxwell modes
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         L, S =self.list_theories_Maxwell()
         print(list(L.keys()))
                         
 
 # OTHER STUFF
     def help_tutorial(self):
+        """[summary]
+        
+        [description]
+        """
         print ('introduction')
         print ('a good place for a tutorial')
 
     def do_about(self, line):
-        """Show about info"""
+        """Show about info
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         pass
 
     def do_info(self, line):
-        """Show info about the current RepTate session"""
+        """Show info about the current RepTate session
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         print("##AVAILABLE APPLICATIONS:")
         self.do_available(line)
 
@@ -240,7 +376,13 @@ class ApplicationManager(CmdBase):
         self.do_list(line)
 
     def do_quit(self, args):
-        """Exit from the application"""
+        """Exit from the application
+        
+        [description]
+        
+        Arguments:
+            args {[type]} -- [description]
+        """
         msg = 'Do you really want to exit RepTate?'
         shall = input("\n%s (y/N) " % msg).lower() == 'y'         
         if (shall):

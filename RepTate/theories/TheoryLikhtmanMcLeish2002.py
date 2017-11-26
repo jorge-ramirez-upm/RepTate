@@ -17,9 +17,11 @@ from scipy import interp
 from Theory import *
 from QTheory import *
 
-
 class TheoryLikhtmanMcLeish2002(CmdBase):
-    """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers"""
+    """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
+    
+    [description]
+    """
     thname="Likhtman-McLeish"
     description="Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers"
     cite="Likhtman A.E. and McLeish T.C.B.\n\
@@ -28,10 +30,35 @@ Macromolecules 2002, 35, 6332-6343"
     single_file = False
     
     def __new__(cls, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUITheoryLikhtmanMcLeish2002(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryLikhtmanMcLeish2002(name, parent_dataset, ax)
     
-class BaseTheoryLikhtmanMcLeish2002:      
+class BaseTheoryLikhtmanMcLeish2002:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002
         self.parameters["taue"]=Parameter("taue", 2e-6, "Rouse time of one Entanglement", ParameterType.real, True)
@@ -45,6 +72,13 @@ class BaseTheoryLikhtmanMcLeish2002:
         self.data=f['data']
         
     def LikhtmanMcLeish2002(self, f=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        """
         ft=f.data_table
         tt=self.tables[f.file_name_short]
         tt.num_columns=ft.num_columns
@@ -80,11 +114,36 @@ class BaseTheoryLikhtmanMcLeish2002:
         tt.data[:,2]=interp(tt.data[:,0], table[:,0]/taue, Ge*table[:,2])
                        
 class CLTheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, Theory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         
 class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         print("GUITheoryLikhtmanMcLeish2002")        
-      

@@ -11,26 +11,31 @@
 Module that defines the basic properties of a View, that will be used to represent
 the data graphically.
 
-""" 
+"""
 
 class View(object):
-    """Abstract class to describe a view"""
+    """Abstract class to describe a view
+ 
+    [description]
+    """
 
     def __init__(self, name="", description="", x_label="", y_label="", x_units="", y_units="", log_x=False, log_y=False, view_proc=None, n=1, snames=[]):
-        """Constructor:
-            
-        Args:
-            name            (str): View name
-            description     (str): Description of view
-            x_label         (str): X Axis label
-            y_label         (str): Y Axis label
-            x_units         (???): To be defined
-            y_units         (???): To be defined
-            log_x          (bool): X axis logarithmic?
-            log_y          (bool): Y axis logarithmic?
-            view_proc      (func): Function that creates the X, Y1, Y2 values of the view
-            n               (int): Number of series that the view represents
-            snames         (list): Names of the series represented by the view
+        """Constructor
+        
+        [description]
+        
+        Keyword Arguments:
+            name {str} -- View name
+            description {str} -- Description of the view
+            x_label {str} -- Label of the x axis
+            y_label {str} -- Label of the y axis
+            x_units {str} -- Default units of the x axis
+            y_units {str} -- Default units of the y axis
+            log_x {bool} -- X axis logarithmic? (default: {False})
+            log_y {bool} -- Y axis logarithmic? (default: {False})
+            view_proc {func} -- Function that creates the X, Y1, Y2 values of the view (default: {None})
+            n {int} -- Number of series that the view represents (default: {1})
+            snames {list of str} -- Names of the series represented by the view
         """
         self.name=name
         self.description=description

@@ -19,8 +19,19 @@ path = os.path.dirname(os.path.abspath(__file__))
 Ui_AboutReptateWindow, QDialog = loadUiType(os.path.join(path,'AboutDialog.ui'))
 
 class AboutWindow(QDialog, Ui_AboutReptateWindow):
-    """About window in the GUI"""    
+    """About window in the GUI
+    
+    [description]
+    """
     def __init__(self, parent, version):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            parent {[type]} -- [description]
+            version {[type]} -- [description]
+        """
         super(AboutWindow, self).__init__(parent)
         self.setupUi(self)
         self.label_Version.setText('RepTate v'+version)

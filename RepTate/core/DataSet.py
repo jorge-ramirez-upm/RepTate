@@ -26,6 +26,10 @@ from tabulate import tabulate
 import itertools
 
 class ColorMode(Enum):
+    """[summary]
+    
+    [description]
+    """
     fixed = 0
     variable = 1
     gradient = 2
@@ -37,6 +41,10 @@ class ColorMode(Enum):
     }
 
 class SymbolMode(Enum):
+    """[summary]
+    
+    [description]
+    """
     fixed = 0
     fixedfilled = 1
     variable = 2
@@ -50,15 +58,25 @@ class SymbolMode(Enum):
     filledmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'x (filled)','diamond', 'thin_diamond']
 
 class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
-    """Abstract class to describe a data set"""
+    """Abstract class to describe a data set
+    
+    [description]
+    """
     def __init__(self, name="DataSet", description="", parent=None):
-        "Constructor"
+        """Constructor
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"DataSet"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__() 
 
         self.name = name
         self.description = description
         self.parent_application = parent
-        self.files = [] # TODO: Shall we change this list into a dict?
+        self.files = [] 
         self.current_file = None
         self.num_files = 0
         self.marker_size = 12
@@ -78,7 +96,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
 # DATASET STUFF ##########################################################################################################
     def do_list(self, line):
-        """List the files in the current dataset"""
+        """List the files in the current dataset
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         keylist=list(ds.file_parameters.keys()) 
         print("File\t",'\t'.join(keylist))
         for f in self.files:
@@ -94,7 +118,20 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
     def change_file_visibility(self, file_name_short, check_state=True):
-        """Hide/Show file in the figure"""
+        """Hide/Show file in the figure
+        
+        [description]
+        
+        Arguments:
+            file_name_short {[type]} -- [description]
+        
+        Keyword Arguments:
+            check_state {[type]} -- [description] (default: {True})
+        
+        Raises:
+            ValueError -- [description]
+            ValueError -- [description]
+        """
         file_matching = []
         for file in self.files:
             if file.file_name_short == file_name_short: #find changed file
@@ -121,6 +158,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.parent_application.update_plot()
 
     def do_show_all(self):
+        """[summary]
+        
+        [description]
+        """
         for file in self.files:
             if file.file_name_short not in self.inactive_files:
                 file.active = True
@@ -130,6 +171,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             self.theories[self.current_theory].do_show()
 
     def do_hide_all(self):
+        """[summary]
+        
+        [description]
+        """
         for file in self.files:
             file.active = False
             for i in range(file.data_table.MAX_NUM_SERIES):
@@ -138,7 +183,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             th.do_hide()
 
     def do_plot(self, line=""):
-        """Plot the current dataset using the current view of the parent application"""
+        """Plot the current dataset using the current view of the parent application
+        
+        [description]
+        """
         view = self.parent_application.current_view
         self.table_icon_list.clear()
         filled = False
@@ -245,9 +293,12 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter
            sort Mw [,reverse]
-
-           .. todo:: sort series in plot too
-           """
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         items=line.split(',')
         if (len(items)==0):
             print ("Wrong number of arguments")
@@ -268,7 +319,19 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             print("Parameter %s not found in files"%line)
 
     def complete_sort(self, text, line, begidx, endidx):
-        """Complete with the list of file parameters of the current file in the current dataset"""
+        """Complete with the list of file parameters of the current file in the current dataset
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         if (self.current_file==None):
             print ("A file must be selected first")
             return
@@ -284,7 +347,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             
 # FILE STUFF ##########################################################################################################
     def do_delete(self, line):
-        """Delete file from the data set"""
+        """Delete file from the data set
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         done = False
         for index, f in enumerate(self.files):
             if (f.file_name_short==line):
@@ -296,6 +365,19 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             print("File \"%s\" not found"%line)
 
     def complete_delete(self, text, line, begidx, endidx):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         f_names=[fl.file_name_short for fl in self.files]
         if not text:
             completions = f_names[:]
@@ -307,7 +389,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         return completions
     
     def do_list(self, line):
-        """List the files in the current dataset"""
+        """List the files in the current dataset
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         for f in self.files:
             if (f==self.current_file):
                 print("*%s"%f.file_name_short)
@@ -315,17 +403,23 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 print("%s"%f.file_name_short)
 
     def do_list_details(self, line):
-        """List the files in the dataset with the file parameters"""
+        """List the files in the dataset with the file parameters
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         for f in self.files:
             print(f)            
 
     def do_new(self, line):
-        """
-        Add an empty file of the given type to the current Data Set
-
-        :param str line: Arguments: TYPE [, NAME]
-        :param str TYPE: extension of file
-        :param str NAME: Name (optional)
+        """Add an empty file of the given type to the current Data Set
+        
+        [description]
+        
+        Arguments:
+            line {str} -- TYPE (extension of file) [, NAME (name, optional)]
         """
         if (line==""): 
             print("Missing file type")
@@ -356,7 +450,19 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             print("File type \"%s\" cannot be read by application %s"%(line,self.parent_application.name))
     
     def complete_new(self, text, line, begidx, endidx):
-        """Complete new file command"""
+        """Complete new file command
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         file_types=list(self.parent_application.filetypes.keys())
         if not text:
             completions = file_types[:]
@@ -368,12 +474,12 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         return completions
 
     def do_open(self, line):
-        """
-        Open file(s) from the current folder
-
-        :param str line: FILENAMES (pattern expansion characters -- \*, ? -- allowed
-
-        .. todo:: ALLOW OPENING FILES INSIDE SUBFOLDERS
+        """Open file(s)
+        
+        [description]
+        
+        Arguments:
+            line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed
         """
         if CmdBase.mode!=CmdMode.GUI:
             f_names = glob.glob(line)
@@ -437,7 +543,16 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         
 
     def __listdir(self, root):
-        "List directory 'root' appending the path separator to subdirs."
+        """List directory 'root' appending the path separator to subdirs.
+        
+        [description]
+        
+        Arguments:
+            root {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         res = []
         for name in os.listdir(root):
             path = os.path.join(root, name)
@@ -449,7 +564,16 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
 
     def __complete_path(self, path=None):
-        "Perform completion of filesystem path."
+        """Perform completion of filesystem path
+        
+        [description]
+        
+        Keyword Arguments:
+            path {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         if not path:
             return self.__listdir('.')
         
@@ -468,14 +592,21 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         return [path + ' ']
 
     def complete_open(self, text, line, begidx, endidx):
-        """
-        Complete the file_open command
+        """Complete the file_open command
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
 
-        .. todo:: ALLOW COMPLETING FILES INSIDE SUBFOLDERS
-        .. todo:: IF NO DATASET, CREATE EMPTY ONE
-        .. todo:: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION
+        todo:: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION
         """
-        "Completions for the cd command."
         test=line.split()
         if (len(test)>1):
             result=self.__complete_path(test[1])
@@ -499,7 +630,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         #return completions
 
     def do_switch(self, line):
-        """Change active file in the current dataset"""
+        """Change active file in the current dataset
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         for f in self.files:
             if (f.file_name_short==line):
                 self.current_file=f    
@@ -510,10 +647,12 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     #complete_switch = complete_delete
 
     def do_print(self, line):
-        """
-        Show the contents of the current file on the screen
+        """Show the contents of the current file on the screen
         
-        .. todo:: Change it so the file name can be selected
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         file = self.current_file
         print("Path: %s"%file.file_full_path)
@@ -524,7 +663,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
 # THEORY STUFF ##########################################################################################################
     def do_theory_delete(self, name):
-        """Delete a theory from the current dataset"""
+        """Delete a theory from the current dataset
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+        """
         if name in self.theories.keys():
             for table in self.theories[name].tables.values(): # remove matplotlib artist from ax
                 for i in range(table.MAX_NUM_SERIES):
@@ -534,7 +679,19 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             print("Theory \"%s\" not found"%name)            
 
     def complete_theory_delete(self, text, line, begidx, endidx):
-        """Complete delete theory command"""
+        """Complete delete theory command
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         th_names=list(self.theories.keys())
         if not text:
             completions = th_names[:]
@@ -546,12 +703,27 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         return completions
 
     def do_theory_list(self, line):
-        """List open theories in current dataset"""
+        """List open theories in current dataset
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         for t in self.theories.values():
             print("   %s: %s\t %s"%(t.name, t.thname, t.description))
 
     def do_theory_new(self, line):
-        """Add a new theory of the type specified to the current Data Set"""
+        """Add a new theory of the type specified to the current Data Set
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         thtypes = list(self.parent_application.theories.keys())
         if (line in thtypes):
             if (self.current_file is None):
@@ -576,7 +748,19 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             print("Theory \"%s\" does not exists"%line)
     
     def complete_theory_new(self, text, line, begidx, endidx):
-        """Complete new theory command"""        
+        """Complete new theory command
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         theory_names=list(self.parent_application.theories.keys())
         if not text:
             completions = theory_names[:]
@@ -588,7 +772,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         return completions
 
     def do_theory_switch(self, line):
-        """Change the active theory"""
+        """Change the active theory
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         if line in self.theories.keys():
             th=self.theories[line]
             th.cmdloop()
@@ -596,9 +786,28 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             print("Theory \"%s\" not found"%line)                        
         
     def complete_theory_switch(self, text, line, begidx, endidx):
-        """Complete the theory switch command"""
+        """Complete the theory switch command
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         completions = self.complete_theory_delete(text, line, begidx, endidx)
         return completions
 
     def do_legend(self, line):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         self.parent_application.do_legend(line)

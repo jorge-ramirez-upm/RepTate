@@ -17,19 +17,46 @@ import numpy as np
 from scipy import interp
 from PyQt5.QtWidgets import QToolBar, QSpinBox
 
-
 class TheoryDiscrMWD(CmdBase):
-    """Discretize a Molecular Weight Distribution"""
+    """Discretize a Molecular Weight Distribution
+    
+    [description]
+    """
     thname = "MWDiscr"
     description = "Discretize a Molecular Weight Distribution"
     citations = ""
     single_file = True
 
     def __new__(cls, name="MWDiscr", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"MWDiscr"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUITheoryDiscrMWD(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryDiscrMWD(name, parent_dataset, ax)
 
 class BaseTheoryDiscrMWD:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThDiscrMWD", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThDiscrMWD"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         self.function = self.DiscretiseMWD
         self.has_modes = False
@@ -45,10 +72,23 @@ class BaseTheoryDiscrMWD:
             "PDI", 1, "Polydispersity index", ParameterType.real, False)
 
     def do_error(self, line):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         pass
 
     def calculate_moments(self, f, line=""):
-        '''Calculate the moments Mn, Mw, and Mz of a molecular mass distribution'''
+        """Calculate the moments Mn, Mw, and Mz of a molecular mass distribution
+        
+        [description]
+        
+        Arguments:
+            f {[type]} -- [description]
+        """
         n = f[:, 0].size
         Mw = 0
         tempMz = 0
@@ -83,7 +123,13 @@ class BaseTheoryDiscrMWD:
 
 
     def DiscretiseMWD(self, f=None):
-        """Discretize a molecular weight distribution"""
+        """Discretize a molecular weight distribution
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        """
 
         # sort M, w(M) with M increasing in ft
         ft = f.data_table.data[np.argsort(f.data_table.data[:,0])]
@@ -144,6 +190,17 @@ class BaseTheoryDiscrMWD:
         self.calculate_moments(tt.data, "discretized")
 
     def clean_zeros(self, bins, phi):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            bins {[type]} -- [description]
+            phi {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         a=0
         for i in range(len(phi)):
             if phi[i] != 0: break
@@ -159,11 +216,37 @@ class BaseTheoryDiscrMWD:
         return np.delete(bins, zeros), np.delete(phi, zeros)
 
 class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"MWDiscr"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         
 class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"MWDiscr"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -182,9 +265,14 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
     #     item.setDisabled(True)
 
     def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'bpd'"""
+        """Handle a change of the parameter 'bpd'
+        
+        [description]
+        
+        Arguments:
+            value {[type]} -- [description]
+        """
         self.set_param_value("bpd", value)
         item = self.thParamTable.findItems("bpd", Qt.MatchCaseSensitive, column=0)
         item[0].setText(1, "%g"%value)
         #self.do_fit("")
-

@@ -10,7 +10,7 @@
 
 Module that defines the basic structure and properties of a theory.
 
-""" 
+"""
 import enum
 import time
 import getpass
@@ -26,34 +26,38 @@ from tabulate import tabulate
 
 class Theory(CmdBase):
     """Abstract class to describe a theory
-            thname            (str): Theory name
-            description     (str): Description of theory
+    
+    [description]
     """
     thname=""
+    """ thname {str} -- Theory name """
     description=""
+    """ description {str} -- Description of theory """
     citations=""
+    """ citations {str} -- Articles that should be cited """
     nfev = 0
+    """ nfev {int} -- Number of function evaluations """    
 
     def __init__(self, name="Theory", parent_dataset=None, ax=None):
-        """Constructor:
-        Args:
-            name            (str): Name used internally by the dataset
-            type           (enum): Type of theory (point, line, user)
-            parameters     (dict): Parameters of the theory
-            point_function (func): Calculation for point theory
-            line_function  (func): Calculation for line theory
-            user_function  (func): Calculation for user theory
-            citations       (str): Articles that should be cited
-       Theory Options:
-            min            (real): min for integration/calculation
-            max            (real): max
-            npoints         (int): Number of points to calculate
-            point_distribution   : all_points, linear, log
-            dt             (real): default time step
-            dt_min         (real): minimum time step for adaptive algorithms
-            eps            (real): precision for adaptive algorithms
-            integration_method   : Euler, RungeKutta5, AdaptiveDt
-            stop_steady    (bool): Stop calculation if steady state of component 0 is attained
+        """Constructor
+        
+        The following variables should be set by the particular realization of the theory:
+        parameters     (dict): Parameters of the theory
+        function       (func): Function that calculates the theory
+        min            (real): min for integration/calculation
+        max            (real): max
+        npoints         (int): Number of points to calculate
+        point_distribution   : all_points, linear, log
+        dt             (real): default time step
+        dt_min         (real): minimum time step for adaptive algorithms
+        eps            (real): precision for adaptive algorithms
+        integration_method   : Euler, RungeKutta5, AdaptiveDt
+        stop_steady    (bool): Stop calculation if steady state of component 0 is attained
+        
+        Keyword Arguments:
+            name {str} -- Name of theory (default: {"Theory"})
+            parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})
+            ax {matplotlib axes} -- matplotlib graph (default: {None})
         """
         super(Theory, self).__init__() 
         self.name=name
@@ -98,18 +102,30 @@ class Theory(CmdBase):
         self.do_cite("")
             
     def precmd(self, line):
-        """ 
+        """Calculations before the theory is calculated
+        
+        This function could be erased
         This method is called after the line has been input but before
         it has been interpreted. If you want to modifdy the input line
         before execution (for example, variable substitution) do it here.
         
-        .. todo:: Substitute parameter values if symbol {param} is used
+        Arguments:
+            line {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
         """
         super(Theory,self).precmd(line)
         return line
         
     def do_calculate(self, line):
-        """Calculate the theory"""
+        """Calculate the theory
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         if not self.tables:
             return
         for f in self.parent_dataset.files:
@@ -119,10 +135,15 @@ class Theory(CmdBase):
             self.do_error(line)
     
     def do_error(self, line):
-        """Report the error of the current theory on all the files, taking into account \
-the current selected xrange and yrange.\n\
-File error is calculated as the mean square of the residual, averaged over all points in the file.\n\
-Total error is the mean square of the residual, averaged over all points in all files.
+        """Report the error of the current theory
+        
+        Report the error of the current theory on all the files, taking into account \
+        the current selected xrange and yrange.\n\
+        File error is calculated as the mean square of the residual, averaged over all points in the file.\n\
+        Total error is the mean square of the residual, averaged over all points in all files.
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         total_error=0
         npoints=0
@@ -151,6 +172,17 @@ Total error is the mean square of the residual, averaged over all points in all 
         self.Qprint("%20s %10.5g (%10d)"%("TOTAL",total_error/npoints,npoints))
 
     def func_fit(self, x, *param_in):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            x {[type]} -- [description]
+            *param_in {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         ind=0
         for p in self.parameters.keys():
             par = self.parameters[p] 
@@ -179,7 +211,13 @@ Total error is the mean square of the residual, averaged over all points in all 
         return y
 
     def do_fit(self, line):
-        """Minimize the error"""
+        """Minimize the error
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         if not self.tables:
             return
         self.fitting = True
@@ -285,13 +323,32 @@ Total error is the mean square of the residual, averaged over all points in all 
         self.do_calculate(line)
 
     def do_print(self, line):
-        """Print the theory table associated with the given file name"""
+        """Print the theory table associated with the given file name
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         if line in self.tables:
             print(self.tables[line].data)
         else:
             print("Theory table for \"%s\" not found"%line)
 
     def complete_print(self, text, line, begidx, endidx):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         file_names=list(self.tables.keys())
         if not text:
             completions = file_names[:]
@@ -305,7 +362,12 @@ Total error is the mean square of the residual, averaged over all points in all 
     def do_parameters(self, line):
         """View and switch the minimization state of the theory parameters
            parameters A B
-           With no arguments, show the current values
+        
+        Several parameters are allowed
+        With no arguments, show the current values
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         if (line==""):
             plist = list(self.parameters.keys())
@@ -325,6 +387,19 @@ Total error is the mean square of the residual, averaged over all points in all 
                     print("Parameter %s not found"%s)
 
     def complete_parameters(self, text, line, begidx, endidx):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            text {[type]} -- [description]
+            line {[type]} -- [description]
+            begidx {[type]} -- [description]
+            endidx {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         parameter_names=list(self.parameters.keys())
         if not text:
             completions = parameter_names[:]
@@ -336,11 +411,21 @@ Total error is the mean square of the residual, averaged over all points in all 
         return completions
 
     def plot_theory_stuff(self):
+        """[summary]
+        
+        [description]
+        """
         pass
 
 # SAVE THEORY STUFF
     def do_save(self, line):
-        """Save the results from all theory predictions to file"""
+        """Save the results from all theory predictions to file
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         print('Saving prediction of '+self.thname+' theory')
         for f in self.parent_dataset.files:
             fparam=f.file_parameters
@@ -374,6 +459,14 @@ Total error is the mean square of the residual, averaged over all points in all 
 
 # SPAN STUFF
     def change_xmin(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
         try:
             self.xmin+=dx                
             self.xminline.set_data([self.xmin,self.xmin],[0,1])
@@ -382,6 +475,14 @@ Total error is the mean square of the residual, averaged over all points in all 
             pass
 
     def change_xmax(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
         try:
             self.xmax+=dx                
             self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
@@ -390,22 +491,41 @@ Total error is the mean square of the residual, averaged over all points in all 
             pass
 
     def change_ymin(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
         self.ymin+=dy     
         self.yminline.set_data([0, 1], [self.ymin, self.ymin])           
         self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
 
     def change_ymax(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
         self.ymax+=dy     
         self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])           
         self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax], [1 ,self.ymin], [0, self.ymin]])
 
     def do_xrange(self, line):
         """Set/show xrange for fit and shows limits
-           xrange  : switches ON/OFF the horizontal span
-           xrange xmin xmax : Sets the limits of the span
+        
+        With no arguments: switches ON/OFF the horizontal span
+        
+        Arguments:
+            line {[xmin xmax]} -- Sets the limits of the span
         """
         if (line==""):
-            # TODO: Set range to current view limits
+            """.. todo:: Set range to current view limits"""
             self.xmin, self.xmax = self.ax.get_xlim()
             self.xminline.set_data([self.xmin,self.xmin],[0,1])
             self.xmaxline.set_data([self.xmax,self.xmax],[0,1])
@@ -432,8 +552,11 @@ Total error is the mean square of the residual, averaged over all points in all 
             
     def do_yrange(self, line):
         """Set/show yrange for fit and shows limits
-           yrange  : switches ON/OFF the vertical span
-           yrange ymin ymax : Sets the limits of the span
+        
+        With no arguments: switches ON/OFF the vertical span
+        
+        Arguments:
+            line {[ymin ymax]} -- Sets the limits of the span
         """
         if (line==""):
             self.yrange.set_visible(not self.yrange.get_visible()) 
@@ -459,6 +582,10 @@ Total error is the mean square of the residual, averaged over all points in all 
 
 # MODES STUFF
     def copy_modes(self):
+        """[summary]
+        
+        [description]
+        """
         apmng=self.parent_dataset.parent_application.parent_manager
         L=apmng.list_theories_Maxwell()
         print("Found %d theories that provide modes"%len(L))
@@ -474,25 +601,67 @@ Total error is the mean square of the residual, averaged over all points in all 
             self.set_modes(tt[0],tt[1])
     
     def do_copy_modes(self, line):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         self.copy_modes()
     
     def get_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         tau=np.ones(1)
         G=np.ones(1)
         return tau, G
     
     def set_modes(self, tau, G):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            tau {[type]} -- [description]
+            G {[type]} -- [description]
+        """
         pass
 
     def do_cite(self, line):
-        """Print citation information"""
+        """Print citation information
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         print(self.citations)
 
     def do_plot(self, line):
-        """Call the plot from the parent Dataset"""
+        """Call the plot from the parent Dataset
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
         self.parent_dataset.do_plot(line)
 
     def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
         if (self.parameters[name].type==ParameterType.real):
             self.parameters[name].value=float(value)
         elif (self.parameters[name].type==ParameterType.integer):
@@ -502,10 +671,15 @@ Total error is the mean square of the residual, averaged over all points in all 
         else:
             pass
 
-    def default(self, line):       
-        """Called on an input line when the command prefix is not recognized.
-           Check if there is an = sign in the line. If so, it is a parameter change.
-           Else, we execute the line as Python code.
+    def default(self, line):
+        """Called when the input command is not recognized
+        
+        Called on an input line when the command prefix is not recognized.
+        Check if there is an = sign in the line. If so, it is a parameter change.
+        Else, we execute the line as Python code.
+        
+        Arguments:
+            line {[type]} -- [description]
         """
         if "=" in line:
             par=line.split("=")
@@ -520,18 +694,33 @@ Total error is the mean square of the residual, averaged over all points in all 
             super(Theory, self).default(line)
     
     def do_hide(self):
+        """[summary]
+        
+        [description]
+        """
         self.active = False
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
                     table.series[i].set_visible(False)
     
     def do_show(self):
+        """[summary]
+        
+        [description]
+        """
         self.active = True
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
                     table.series[i].set_visible(True)
 
     def Qprint(self, msg):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            msg {[type]} -- [description]
+        """
         if CmdBase.mode == CmdMode.GUI:
             self.thTextBox.append(msg)
         else:

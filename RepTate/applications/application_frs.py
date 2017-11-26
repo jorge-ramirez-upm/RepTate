@@ -14,11 +14,22 @@ Module for handling FRS experiments and simulations.
 from Application import Application
 
 class ApplicationFRS_I(Application):
-    """Application to FRS Intensity simulations"""
+    """Application to FRS Intensity simulations
+    
+    [description]
+    """
     name="FRS_I"
     description="FRS Intensity"
 
     def __init__(self, name = "FRS_I", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"FRS_I"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super(ApplicationFRS_I, self).__init__(name, parent)
         
         # VIEWS
@@ -31,6 +42,17 @@ class ApplicationFRS_I(Application):
         self.filetypes[ftype.extension]=ftype
 
     def viewIt(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -38,14 +60,19 @@ class ApplicationFRS_I(Application):
         return x, y, True
 
     def viewLogIt(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
         y[: ,0] = np.log10(dt.data[:, 1])
         return x, y, True
-
-
-       
- 
- 
-

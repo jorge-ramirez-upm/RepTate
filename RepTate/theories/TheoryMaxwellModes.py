@@ -16,16 +16,44 @@ from QTheory import *
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction
 
 class TheoryMaxwellModesFrequency(CmdBase):
-    """Fit Maxwell modes to a frequency dependent relaxation function"""
+    """Fit Maxwell modes to a frequency dependent relaxation function
+    
+    [description]
+    """
     thname="MaxwellModesFrequency"
     description="Fit Maxwell modes to frequency dependent function"
     single_file = True 
 
     def __new__(cls, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryMaxwellModesFrequency(name, parent_dataset, ax)
  
 class BaseTheoryMaxwellModesFrequency:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesFrequency
         self.has_modes = True
@@ -43,23 +71,55 @@ class BaseTheoryMaxwellModesFrequency:
         self.setup_graphic_modes()
 
     def drag_first_mode(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
         self.set_param_value("logwmin", self.parameters["logwmin"].value + dx)
         self.set_param_value("logG00", self.parameters["logG00"].value + dy)
         self.do_calculate("")
 
     def drag_mode(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
         pass
 
     def drag_last_mode(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
         self.set_param_value("logwmax", self.parameters["logwmax"].value + dx)
         nmodes=self.parameters["nmodes"].value
         self.set_param_value("logG%02d"%(nmodes-1), self.parameters["logG%02d"%(nmodes-1)].value + dy)
         pass
 
     def update_modes(self):
+        """[summary]
+        
+        [description]
+        """
         pass
 
     def setup_graphic_modes(self):
+        """[summary]
+        
+        [description]
+        """
         nmodes=self.parameters["nmodes"].value
         freq=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
         G=np.zeros(nmodes)
@@ -114,6 +174,14 @@ class BaseTheoryMaxwellModesFrequency:
             self.artistmodes.append(auxartist)
 
     def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
         if (name=="nmodes"):
             oldn=self.parameters["nmodes"].value
         super(BaseTheoryMaxwellModesFrequency, self).set_param_value(name, value) #what does that do?
@@ -125,6 +193,13 @@ class BaseTheoryMaxwellModesFrequency:
                     del self.parameters["logG%02d"%i]
 
     def get_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         nmodes=self.parameters["nmodes"].value
         freq=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
         tau=1.0/freq
@@ -134,9 +209,24 @@ class BaseTheoryMaxwellModesFrequency:
         return tau, G
 
     def set_modes(self, tau, G):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            tau {[type]} -- [description]
+            G {[type]} -- [description]
+        """
         print("set_modes not allowed in this theory (%s)"%self.name)
 
     def MaxwellModesFrequency(self, f=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        """
         ft=f.data_table
         tt=self.tables[f.file_name_short]
         tt.num_columns=ft.num_columns
@@ -156,6 +246,10 @@ class BaseTheoryMaxwellModesFrequency:
             tt.data[:,2]+=G*wT/(1+wTsq)
 
     def plot_theory_stuff(self):
+        """[summary]
+        
+        [description]
+        """
         data_table_tmp = DataTable(self.ax)
         data_table_tmp.num_columns = 3
         nmodes = self.parameters["nmodes"].value
@@ -175,14 +269,38 @@ class BaseTheoryMaxwellModesFrequency:
             self.graphicmodes[i].set_data(x[i,0], y[i,0])            
         #self.modesseries.set_data(x[:,0], y[:,0])      
 
-
-
 class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         
 class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         
         # add widgets specific to the theory
@@ -206,12 +324,23 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
     #     item.setDisabled(True)
 
     def modesaction_change(self):
+        """[summary]
+        
+        [description]
+        """
         self.view_modes = self.modesaction.isChecked()
         #self.modesseries.set_visible(self.view_modes)
         self.setup_graphic_modes()
         self.parent_dataset.parent_application.update_plot()
 
     def handle_spinboxValueChanged(self, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            value {[type]} -- [description]
+        """
         """Handle a change of the parameter 'nmode'"""
         self.set_param_value("nmodes", value)
 
@@ -220,16 +349,44 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
 ########################################
 
 class TheoryMaxwellModesTime(CmdBase):
-    """Fit Maxwell modes to a time depenendent relaxation function"""
+    """Fit Maxwell modes to a time depenendent relaxation function
+    
+    [description]
+    """
     thname="MaxwellModesTime"
     description="Fit Maxwell modes to time dependent function"
     citations=""
     single_file = True 
     def __new__(cls, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUITheoryMaxwellModesTime(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryMaxwellModesTime(name, parent_dataset, ax)
       
 class BaseTheoryMaxwellModesTime:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesTime
         self.has_modes = True
@@ -252,6 +409,14 @@ class BaseTheoryMaxwellModesTime:
         self.modesseries.set_alpha(0.5)
 
     def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
         if (name=="nmodes"):
             oldn=self.parameters["nmodes"].value
         super(BaseTheoryMaxwellModesTime, self).set_param_value(name, value) #what does that do?
@@ -263,6 +428,13 @@ class BaseTheoryMaxwellModesTime:
                     del self.parameters["logG%02d"%i]
 
     def get_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         nmodes=self.parameters["nmodes"].value
         tau=np.logspace(self.parameters["logtmin"].value, self.parameters["logtmax"].value, nmodes)
         G=np.zeros(nmodes)
@@ -271,9 +443,24 @@ class BaseTheoryMaxwellModesTime:
         return tau, G
 
     def set_modes(self, tau, G):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            tau {[type]} -- [description]
+            G {[type]} -- [description]
+        """
         print("set_modes not allowed in this theory (%s)"%self.name)
 
     def MaxwellModesTime(self, f=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        """
         ft=f.data_table
         tt=self.tables[f.file_name_short]
         tt.num_columns=ft.num_columns
@@ -290,6 +477,10 @@ class BaseTheoryMaxwellModesTime:
             tt.data[:,1]+=G*expT_tau
 
     def plot_theory_stuff(self):
+        """[summary]
+        
+        [description]
+        """
         data_table_tmp = DataTable(self.ax)
         data_table_tmp.num_columns = 2
         nmodes = self.parameters["nmodes"].value
@@ -309,11 +500,37 @@ class BaseTheoryMaxwellModesTime:
 
 
 class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
         
 class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -337,10 +554,21 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
     #     item.setDisabled(True)
 
     def modesaction_change(self):
+        """[summary]
+        
+        [description]
+        """
         self.view_modes = self.modesaction.isChecked()
         self.modesseries.set_visible(self.view_modes)
         self.parent_dataset.parent_application.update_plot()
 
     def handle_spinboxValueChanged(self, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            value {[type]} -- [description]
+        """
         """Handle a change of the parameter 'nmode'"""
         self.set_param_value("nmodes", value)

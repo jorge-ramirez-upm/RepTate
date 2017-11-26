@@ -20,19 +20,41 @@ from TheoryTTS import TheoryWLFShift
 
 
 class ApplicationLVE(CmdBase):
-    """
-    Application to Analyze Linear Viscoelastic Data
+    """Application to Analyze Linear Viscoelastic Data
     
-    .. todo:: DO WE NEED A SEPARATE APPLICATION FROM TTS???
+    [description]
     """
     name = "LVE"
     description = "Linear Viscoelasticity"
 
     def __new__(cls, name="LVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUIApplicationLVE(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationLVE(name, parent)
 
 class BaseApplicationLVE:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="LVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
         # VIEWS
@@ -56,6 +78,17 @@ class BaseApplicationLVE:
         #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
 
     def viewLogG1G2(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -65,6 +98,17 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewG1G2(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
@@ -74,6 +118,17 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewEtaStar(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -81,6 +136,17 @@ class BaseApplicationLVE:
         return x, y, True        
 
     def viewDelta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -88,6 +154,17 @@ class BaseApplicationLVE:
         return x, y, True
     
     def viewTanDelta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -95,12 +172,36 @@ class BaseApplicationLVE:
         return x, y, True
 
 class CLApplicationLVE(BaseApplicationLVE, Application):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="LVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
         
 
 class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="LVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
         self.populate_views() #populate the view ComboBox

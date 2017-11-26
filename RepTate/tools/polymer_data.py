@@ -12,7 +12,18 @@ Module to define the basic information about a polymer for the materials databas
 
 """ 
 class polymer:
+    """[summary]
+    
+    [description]
+    """
     def __init__ (self, **kwargs):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            **kwargs {[type]} -- [description]
+        """
         self.data = {
             'short'       : '',     # Short name
             'long'        : '',     # Full name
@@ -34,5 +45,5 @@ class polymer:
             'T0'          : 0,      # Reference temperature?
             'CTg'         : 0,      # Molecular weight dependence of Tg
         }
-        
+
         self.data.update(kwargs)

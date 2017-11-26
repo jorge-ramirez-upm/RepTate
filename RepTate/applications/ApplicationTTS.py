@@ -17,24 +17,45 @@ from QApplicationWindow import *
 import numpy as np
 from TheoryTTS import TheoryWLFShift
 
-
 class ApplicationTTS(CmdBase):
-    """
-    Application to Analyze Linear Viscoelastic Data
-    
-    .. todo:: DO WE NEED A SEPARATE APPLICATION FROM TTS???
+    """Application to Analyze Linear Viscoelastic Data
+
+    [description]
     """
     name = "TTS"
     description = "Linear Viscoelasticity"
 
     def __new__(cls, name="TTS", parent=None):
+        """[summary]
+
+        [description]
+
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"TTS"})
+            parent {[type]} -- [description] (default: {None})
+
+        Returns:
+            [type] -- [description]
+        """
         if (CmdBase.mode == CmdMode.GUI):
-            return GUIApplicationTTS(name, parent)  
-        else: 
+            return GUIApplicationTTS(name, parent)
+        else:
             return CLApplicationTTS(name, parent)
 
 class BaseApplicationTTS:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="TTS", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"TTS"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
         # VIEWS
@@ -53,6 +74,17 @@ class BaseApplicationTTS:
         self.theories[TheoryWLFShift.thname]=TheoryWLFShift
 
     def viewLogG1G2(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -62,6 +94,17 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewG1G2(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
@@ -71,6 +114,17 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewEtaStar(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -78,6 +132,17 @@ class BaseApplicationTTS:
         return x, y, True        
 
     def viewDelta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -85,6 +150,17 @@ class BaseApplicationTTS:
         return x, y, True
     
     def viewTanDelta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -92,12 +168,36 @@ class BaseApplicationTTS:
         return x, y, True
 
 class CLApplicationTTS(BaseApplicationTTS, Application):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="TTS", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"TTS"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
         
 
 class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="TTS", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"TTS"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
         self.populate_views() #populate the view ComboBox

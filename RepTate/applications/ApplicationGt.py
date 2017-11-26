@@ -17,15 +17,41 @@ import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesTime
 
 class ApplicationGt(CmdBase):
-    """Application to analyze the relaxation modulus"""
+    """Application to analyze the relaxation modulus
+    
+    [description]
+    """
     name="Gt"
     description="Relaxation modulus"
     
     def __new__(cls, name="Gt", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"Gt"})
+            parent {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
         return GUIApplicationGt(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationGt(name, parent)
 
 class BaseApplicationGt:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name = "Gt", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"Gt"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
         # VIEWS
@@ -41,6 +67,17 @@ class BaseApplicationGt:
         self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
     def viewGt(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -48,6 +85,17 @@ class BaseApplicationGt:
         return x, y, True
 
     def viewLogGt(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         #validindex = np.logical_and(dt.data[:, 0]>0, dt.data[:, 1]>0)
         #x = np.zeros((np.sum(validindex), 1))
         #y = np.zeros((np.sum(validindex), 1))
@@ -60,12 +108,36 @@ class BaseApplicationGt:
         return x, y, True
 
 class CLApplicationGt(BaseApplicationGt, Application):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="Gt", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"Gt"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
         
 
 class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="Gt", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"Gt"})
+            parent {[type]} -- [description] (default: {None})
+        """
         super().__init__(name, parent)
 
         self.populate_views() #populate the view ComboBox

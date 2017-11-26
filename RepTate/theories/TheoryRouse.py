@@ -14,24 +14,55 @@ Module for the Rouse theory for the relaxation modulus.
 from Theory import *
 
 class TheoryRouseTime(Theory, CmdBase):
-    """Fit Rouse modes to a time depenendent relaxation function"""
+    """Fit Rouse modes to a time depenendent relaxation function
+    
+    [description]
+    """
     thname="RouseTime"
     description="Fit Rouse modes to time dependent function"
     citations=""
 
     def __init__(self, name="ThRouseTime", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThRouseTime"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super(TheoryRouseTime, self).__init__(name, parent_dataset, ax)
         self.function = self.RouseTime
 
     def RouseTime(self, f=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        """
         pass   
 
 class TheoryRouseFrequency(Theory, CmdBase):
-    """Fit Maxwell modes to a frequency dependent relaxation function"""
+    """Fit Rouse modes to a frequency depenendent relaxation function
+    
+    [description]
+    """
     thname="RouseFrequency"
     description="Fit Maxwell modes to frequency dependent function"
 
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
         super(TheoryRouseFrequency, self).__init__(name, parent_dataset, ax)
         self.function = self.RouseFrequency
         self.has_modes = True
@@ -42,6 +73,14 @@ class TheoryRouseFrequency(Theory, CmdBase):
             self.parameters["logG%d"%i]=Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
 
     def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
         if (name=="nmodes"):
             oldn=self.parameters["nmodes"].value
         super(TheoryRouseFrequency, self).set_param_value(name, value)
@@ -53,6 +92,13 @@ class TheoryRouseFrequency(Theory, CmdBase):
                     del self.parameters["logG%d"%i]
 
     def get_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         nmodes=self.parameters["nmodes"].value
         freq=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
         tau=1.0/freq
@@ -62,4 +108,12 @@ class TheoryRouseFrequency(Theory, CmdBase):
         return tau, G
 
     def set_modes(self, tau, G):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            tau {[type]} -- [description]
+            G {[type]} -- [description]
+        """
         print("set_modes not allowed in this theory (%s)"%self.name)
