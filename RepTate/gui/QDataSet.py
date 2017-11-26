@@ -12,6 +12,7 @@ Module that defines the GUI counterpart of Dataset.
 Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 This software is distributed under the GNU General Public License. 
 """ 
+from os.path import dirname, join, abspath
 from PyQt5.QtGui import *
 from PyQt5.uic import loadUiType
 import itertools
@@ -21,7 +22,8 @@ from DataSet import *
 from QTheory import *
 from SubQTreeWidget import *
 
-Ui_DataSet, QWidget = loadUiType('gui/DataSet.ui')
+path = dirname(abspath(__file__))
+Ui_DataSet, QWidget = loadUiType(os.path.join(path,'DataSet.ui'))
 
 class QDataSet(DataSet, QWidget, Ui_DataSet): 
     def __init__(self, name="QDataSet", parent=None):

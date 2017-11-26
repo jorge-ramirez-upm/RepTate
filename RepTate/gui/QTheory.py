@@ -18,7 +18,8 @@ from PyQt5.uic import loadUiType
 from Theory import *
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView
 
-Ui_TheoryTab, QWidget = loadUiType('gui/theorytab.ui')
+path = os.path.dirname(os.path.abspath(__file__))
+Ui_TheoryTab, QWidget = loadUiType(os.path.join(path,'theorytab.ui'))
 
 class QTheory(Ui_TheoryTab, QWidget, Theory):     
     def __init__(self, name="QTheory", parent_dataset=None, ax=None):

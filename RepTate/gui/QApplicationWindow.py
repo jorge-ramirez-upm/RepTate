@@ -46,8 +46,8 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
     
-Ui_AppWindow, QMainWindow = loadUiType('gui/QApplicationWindow.ui')
-
+path = os.path.dirname(os.path.abspath(__file__))
+Ui_AppWindow, QMainWindow = loadUiType(os.path.join(path,'QApplicationWindow.ui'))
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def __init__(self, name='Application Template', parent=None):

@@ -285,3 +285,4 @@ __pycache__/
 dist
 /RepTate/*.spec
 /RepTate/core/*.bak
+/RepTate/theories/*.bak
