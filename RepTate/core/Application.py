@@ -453,7 +453,7 @@ class Application(CmdBase):
         [description]
         """
         self.set_axes_properties()
-        self.set_legend_properties()
+        #self.set_legend_properties()
         self.figure.canvas.draw()   
 
     def set_axes_properties(self):
