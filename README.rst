@@ -2,7 +2,11 @@
 RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment
 ==========================================================================================
 
-RepTate with a dual user interface: text and GUI.
+New implementation of RepTate in python:
+- Dual user interface: 
+    - Graphical User Interface (GUI), using pyqt.
+    - Command Line Interface (CL) for batch processing
+- Works on Windows, Linux and Mac.
 
 More info: 
 
@@ -10,25 +14,11 @@ More info:
 
 .. _ReadTheDocs: http://reptate.readthedocs.io/en/latest/index.html
 
-- Author's blog at UPM_.
+- Download an installation package from Jorge Ramirez's blog at UPM_.
 
-.. _UPM: http://blogs.upm.es/compsoftmatter/
+.. _UPM: http://blogs.upm.es/compsoftmatter/software/reptate
 
-.. image:: RepTate/docs/source/images/FourWindowsReptate.png
+.. image:: RepTate/docs/source/images/ReptateLVE.png
     :width: 400pt
     :align: center
-
-COMPLEX TABLE:
-
-+------------+------------+-----------+
-| Header 1   | Header 2   | Header 3  |
-+============+============+===========+
-| body row 1 | column 2   | column 3  |
-+------------+------------+-----------+
-| body row 2 | Cells may span columns.|
-+------------+------------+-----------+
-| body row 3 | Cells may  | - Cells   |
-+------------+ span rows. | - contain |
-| body row 4 |            | - blocks. |
-+------------+------------+-----------+
 
