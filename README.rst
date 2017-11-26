@@ -14,7 +14,7 @@ More info:
 
 .. _ReadTheDocs: http://reptate.readthedocs.io/en/latest/index.html
 
-- Download an installation package from Jorge Ramirez's blog at UPM_.
+- Download a binary installation package from Jorge Ramirez's blog at UPM_.
 
 .. _UPM: http://blogs.upm.es/compsoftmatter/software/reptate
 
