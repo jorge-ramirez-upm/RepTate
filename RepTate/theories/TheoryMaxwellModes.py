@@ -1,16 +1,15 @@
+# RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+# http://blogs.upm.es/compsoftmatter/software/reptate/
+# https://github.com/jorge-ramirez-upm/RepTate
+# http://reptate.readthedocs.io
+# Jorge Ramirez, jorge.ramirez@upm.es
+# Victor Boudara, mmvahb@leeds.ac.uk
+# Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
+# This software is distributed under the GNU General Public License. 
 """Module TheoryMaxwellModes
-
-RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
-http://blogs.upm.es/compsoftmatter/software/reptate/
-https://github.com/jorge-ramirez-upm/RepTate
-http://reptate.readthedocs.io
-Jorge Ramirez, jorge.ramirez@upm.es
-Victor Boudara, mmvahb@leeds.ac.uk
 
 Module that defines theories related to Maxwell modes, in the frequency and time domains.
 
-Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-This software is distributed under the GNU General Public License. 
 """ 
 from Theory import *
 from QTheory import *

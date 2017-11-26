@@ -1,18 +1,17 @@
+# RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+# http://blogs.upm.es/compsoftmatter/software/reptate/
+# https://github.com/jorge-ramirez-upm/RepTate
+# http://reptate.readthedocs.io
+# Jorge Ramirez, jorge.ramirez@upm.es
+# Victor Boudara, mmvahb@leeds.ac.uk
+# Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
+# This software is distributed under the GNU General Public License. 
 """Module DataSet
-
-RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
-http://blogs.upm.es/compsoftmatter/software/reptate/
-https://github.com/jorge-ramirez-upm/RepTate
-http://reptate.readthedocs.io
-Jorge Ramirez, jorge.ramirez@upm.es
-Victor Boudara, mmvahb@leeds.ac.uk
 
 Module that describes the basic container for data sets (sets of experimental data
 read from different files), as well as the particular theories that are being applied
 to that data set.
 
-Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-This software is distributed under the GNU General Public License. 
 """ 
 import os
 import glob

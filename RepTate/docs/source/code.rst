@@ -9,6 +9,7 @@ Navigate the source Code of Reptate
    CodeCoreGUI
    CodeApplications
    CodeTheories
+   CodeTools
    CodeTODO
 
 Main Application

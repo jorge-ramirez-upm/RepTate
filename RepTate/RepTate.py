@@ -1,16 +1,15 @@
+# RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+# http://blogs.upm.es/compsoftmatter/software/reptate/
+# https://github.com/jorge-ramirez-upm/RepTate
+# http://reptate.readthedocs.io
+# Jorge Ramirez, jorge.ramirez@upm.es
+# Victor Boudara, mmvahb@leeds.ac.uk
+# Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
+# This software is distributed under the GNU General Public License. 
 """Module Reptate
-
-RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
-http://blogs.upm.es/compsoftmatter/software/reptate/
-https://github.com/jorge-ramirez-upm/RepTate
-http://reptate.readthedocs.io
-Jorge Ramirez, jorge.ramirez@upm.es
-Victor Boudara, mmvahb@leeds.ac.uk
 
 Main program that launches the GUI.
 
-Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-This software is distributed under the GNU General Public License. 
 """ 
 import sys
 import getopt

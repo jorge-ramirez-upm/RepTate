@@ -6,6 +6,17 @@
 Welcome to RepTate's documentation!
 ===================================
 
+More info on:
+
+- http://blogs.upm.es/compsoftmatter/software/reptate/
+
+- https://github.com/jorge-ramirez-upm/RepTate
+
+Authors:
+
+- Jorge Ramirez (jorge.ramirez@upm.es)
+- Victor Boudara (mmvahb@leeds.ac.uk)
+
 Contents:
 
 .. toctree::
