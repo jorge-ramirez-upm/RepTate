@@ -285,7 +285,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     else:
                         tt.series[i].set_visible(False)
                         tt.series[i].set_label('')
-                th.plot_theory_stuff()
         
         self.parent_application.update_plot()
 

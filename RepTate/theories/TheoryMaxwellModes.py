@@ -18,6 +18,7 @@ from Parameter import Parameter, ParameterType
 from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction
+from PyQt5.QtCore import QSize
 from DraggableArtists import DraggableModes, DragType
 
 class TheoryMaxwellModesFrequency(CmdBase):
@@ -73,7 +74,7 @@ class BaseTheoryMaxwellModesFrequency:
         # GRAPHIC MODES
         self.graphicmodes = []
         self.artistmodes = []
-        self.setup_graphic_modes()
+        #self.setup_graphic_modes()
 
     def drag_first_mode(self, dx, dy):
         """[summary]
@@ -120,6 +121,14 @@ class BaseTheoryMaxwellModesFrequency:
         """
         pass
 
+    def destroy_graphic_modes(self):
+        nmodes=self.parameters["nmodes"].value
+        for i in range(nmodes):
+            self.parent_dataset.parent_application.ax.lines.remove(self.graphicmodes[i]) 
+        self.graphicmodes.clear()
+        self.artistmodes.clear()
+        
+        
     def setup_graphic_modes(self):
         """[summary]
         
@@ -255,6 +264,8 @@ class BaseTheoryMaxwellModesFrequency:
         
         [description]
         """
+        if not self.view_modes:
+            return
         data_table_tmp = DataTable(self.ax)
         data_table_tmp.num_columns = 3
         nmodes = self.parameters["nmodes"].value
@@ -272,7 +283,6 @@ class BaseTheoryMaxwellModesFrequency:
             return
         for i in range(nmodes):
             self.graphicmodes[i].set_data(x[i,0], y[i,0])            
-        #self.modesseries.set_data(x[:,0], y[:,0])      
 
 class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
     """[summary]
@@ -334,9 +344,11 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         [description]
         """
         self.view_modes = self.modesaction.isChecked()
-        #self.modesseries.set_visible(self.view_modes)
-        self.setup_graphic_modes()
-        self.parent_dataset.parent_application.update_plot()
+        if self.view_modes:
+            self.setup_graphic_modes()
+            self.parent_dataset.parent_application.update_plot()
+        else:
+            self.destroy_graphic_modes()
 
     def handle_spinboxValueChanged(self, value):
         """[summary]
@@ -347,7 +359,12 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
             value {[type]} -- [description]
         """
         """Handle a change of the parameter 'nmode'"""
+        if self.view_modes:
+            self.destroy_graphic_modes()
         self.set_param_value("nmodes", value)
+        if self.view_modes:
+            self.setup_graphic_modes()
+            self.parent_dataset.parent_application.update_plot()
 
 
 ########################################
