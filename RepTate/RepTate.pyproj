@@ -76,16 +76,19 @@
     <Compile Include="gui\SplashScreen.py" />
     <Compile Include="gui\SubQTableWidget.py" />
     <Compile Include="gui\SubQTreeWidget.py" />
+    <Compile Include="gui\SubQTreeWidgetItem.py" />
     <Compile Include="RepTate.py" />
     <Compile Include="RepTateCL.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="theories\TheoryDiscrMWD.py" />
     <Compile Include="theories\TheoryLikhtmanMcLeish2002.py" />
     <Compile Include="theories\TheoryMaxwellModes.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="theories\TheoryRoliePoly.py" />
+    <Compile Include="theories\TheoryRouse.py" />
     <Compile Include="theories\TheoryTTS.py">
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".pylintrc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -13,7 +13,6 @@ Module for the actual object that contains the data, both for experiments and th
 """ 
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
 
 class DataTable(object):
     """Class that stores data and series

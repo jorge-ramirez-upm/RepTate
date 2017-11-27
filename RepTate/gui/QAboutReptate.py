@@ -11,12 +11,12 @@
 Module that defines the About window.
 
 """ 
-import os
-from PyQt5.QtGui import *
+from os.path import dirname, join, abspath
+from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUiType
 
-path = os.path.dirname(os.path.abspath(__file__))
-Ui_AboutReptateWindow, QDialog = loadUiType(os.path.join(path,'AboutDialog.ui'))
+path = dirname(abspath(__file__))
+Ui_AboutReptateWindow, QDialog = loadUiType(join(path,'AboutDialog.ui'))
 
 class AboutWindow(QDialog, Ui_AboutReptateWindow):
     """About window in the GUI

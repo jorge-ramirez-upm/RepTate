@@ -5,24 +5,20 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module Application
 
 Module that defines the basic class from which all applications are derived.
 
-""" 
+"""
 import logging
-import itertools
-import seaborn as sns   
+import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
-from matplotlib.widgets import Cursor
 
-from CmdBase import *
-from FileType import *
-from View import *
-from Theory import *
-from DataSet import *
+from CmdBase import CmdBase, CmdMode
+from Theory import Theory
+from DataSet import DataSet
 from TheoryBasic import *
 
 class Application(CmdBase):

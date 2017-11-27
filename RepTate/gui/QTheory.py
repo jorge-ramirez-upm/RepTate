@@ -11,14 +11,15 @@
 Module that defines the GUI counterpart of the class Theory.
 
 """ 
-# from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+#from PyQt5.QtCore import *
 from PyQt5.uic import loadUiType
-from Theory import *
+from Theory import Theory
+from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView
+from PyQt5.QtCore import Qt
 
-path = os.path.dirname(os.path.abspath(__file__))
-Ui_TheoryTab, QWidget = loadUiType(os.path.join(path,'theorytab.ui'))
+path = dirname(abspath(__file__))
+Ui_TheoryTab, QWidget = loadUiType(join(path,'theorytab.ui'))
 
 class QTheory(Ui_TheoryTab, QWidget, Theory):
     """[summary]

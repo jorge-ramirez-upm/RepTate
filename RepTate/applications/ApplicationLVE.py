@@ -11,8 +11,11 @@
 Module for the analysis of small angle oscillatory shear data - Master curves
 
 """ 
-from Application import *
-from QApplicationWindow import *
+from CmdBase import CmdBase, CmdMode
+from Application import Application
+from QApplicationWindow import QApplicationWindow
+from View import View
+from FileType import TXTColumnFile
 import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesFrequency
 from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002

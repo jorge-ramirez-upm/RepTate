@@ -12,10 +12,13 @@ Module that defines the Likhtman-McLeish theory for melts of linear monodisperse
 polymers.
 
 """ 
+from os.path import sep
 import numpy as np
 from scipy import interp
-from Theory import *
-from QTheory import *
+from CmdBase import CmdBase, CmdMode
+from Theory import Theory
+from QTheory import QTheory
+from Parameter import Parameter, ParameterType
 
 class TheoryLikhtmanMcLeish2002(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
@@ -66,7 +69,7 @@ class BaseTheoryLikhtmanMcLeish2002:
         self.parameters["Me"]=Parameter("Me", 5, "Entanglement molecular weight", ParameterType.real, True)
         self.parameters["cnu"]=Parameter("cnu", 0.1, "Constraint Release parameter", ParameterType.real, False)
 
-        f=np.load("theories"+os.path.sep+"linlin.npz")
+        f=np.load("theories"+sep+"linlin.npz")
         self.Zarray=f['Z']
         self.cnuarray=f['cnu']
         self.data=f['data']

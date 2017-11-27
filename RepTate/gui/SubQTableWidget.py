@@ -12,8 +12,7 @@ Module that defines a QTableWidget that allows copy/paste of data.
 
 """ 
 import sys
-from PyQt5 import QtCore
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QTableWidget, QApplication
 
 class SubQTableWidget(QTableWidget):

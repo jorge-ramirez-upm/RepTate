@@ -11,7 +11,8 @@
 Module that defines the basic theories that should be available for all Applications.
 
 """ 
-from Theory import *
+from CmdBase import CmdBase
+from Theory import Theory
 import numpy as np
 
 class TheoryPolynomial(Theory, CmdBase):

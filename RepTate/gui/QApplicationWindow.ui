@@ -18,7 +18,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -32,7 +41,23 @@
       <property name="styleSheet">
        <string notr="true"/>
       </property>
-      <layout class="QVBoxLayout" name="mplvl"/>
+      <layout class="QVBoxLayout" name="mplvl">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -61,7 +86,16 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
     </layout>
@@ -88,7 +122,16 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -123,7 +166,7 @@
        </item>
        <item>
         <widget class="QComboBox" name="viewComboBox">
-         <property name="currentText" stdset="0">
+         <property name="currentText">
           <string/>
          </property>
         </widget>

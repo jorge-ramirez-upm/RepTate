@@ -12,17 +12,16 @@ Module that defines the GUI counterpart of Dataset.
 
 """ 
 from os.path import dirname, join, abspath
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon
 from PyQt5.uic import loadUiType
-import itertools
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
-from DataSet import *
-from QTheory import *
-from SubQTreeWidget import *
+from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
+from DataSet import DataSet
+from QTheory import QTheory
+from SubQTreeWidget import SubQTreeWidget
 
 path = dirname(abspath(__file__))
-Ui_DataSet, QWidget = loadUiType(os.path.join(path,'DataSet.ui'))
+Ui_DataSet, QWidget = loadUiType(join(path,'DataSet.ui'))
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
     """[summary]

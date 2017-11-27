@@ -17,11 +17,10 @@ import os
 import glob
 
 from enum import Enum
-from CmdBase import *
-from Theory import *
-from FileType import *
-from File import *
-# from Application import *
+from CmdBase import CmdBase, CmdMode
+from Theory import Theory
+from FileType import TXTColumnFile
+from File import File
 from tabulate import tabulate
 import itertools
 

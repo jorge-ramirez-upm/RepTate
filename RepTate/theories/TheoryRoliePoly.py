@@ -11,7 +11,7 @@
 Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
 
 """ 
-from Theory import *
+from Theory import Theory
 import numpy as np
 from scipy.integrate import ode, odeint
 

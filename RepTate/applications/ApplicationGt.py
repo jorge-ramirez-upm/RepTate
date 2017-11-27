@@ -5,14 +5,17 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module ApplicationGt
 
 Module for the analysis of stress relaxation data from simulations and experiments.
 
 """
+from CmdBase import CmdBase, CmdMode
 from Application import Application
-from QApplicationWindow import *
+from View import View
+from FileType import TXTColumnFile
+from QApplicationWindow import QApplicationWindow
 import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesTime
 

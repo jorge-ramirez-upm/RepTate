@@ -11,9 +11,14 @@
 Module that defines theories related to Maxwell modes, in the frequency and time domains.
 
 """ 
-from Theory import *
-from QTheory import *
+import numpy as np
+from CmdBase import CmdBase, CmdMode
+from DataTable import DataTable
+from Parameter import Parameter, ParameterType
+from Theory import Theory
+from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction
+from DraggableArtists import DraggableModes, DragType
 
 class TheoryMaxwellModesFrequency(CmdBase):
     """Fit Maxwell modes to a frequency dependent relaxation function

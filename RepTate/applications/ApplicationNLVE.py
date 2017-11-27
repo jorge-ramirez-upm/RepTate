@@ -11,11 +11,13 @@
 Module for handling data from start up of shear and extensional flow experiments.
 
 """ 
-from Application import *
+from CmdBase import CmdBase, CmdMode
+from Application import Application
+from QApplicationWindow import QApplicationWindow
+from View import View
+from FileType import TXTColumnFile
 import numpy as np
 from TheoryRoliePoly import TheoryRoliePoly
-from QApplicationWindow import *
-
 
 class ApplicationNLVE(QApplicationWindow):
     """Application to Non-linear flow Data

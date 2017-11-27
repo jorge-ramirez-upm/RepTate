@@ -14,13 +14,14 @@ Module that defines the basic structure and properties of a theory.
 import enum
 import time
 import getpass
+import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats.distributions import t
 
-from CmdBase import *
-from DataTable import *
-from Parameter import *
-from DraggableArtists import *
+from CmdBase import CmdBase, CmdMode
+from DataTable import DataTable
+from Parameter import Parameter, ParameterType
+from DraggableArtists import DraggableVLine, DraggableHLine, DragType
 
 from tabulate import tabulate
 

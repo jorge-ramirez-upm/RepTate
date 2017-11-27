@@ -15,13 +15,13 @@ import sys
 import logging
 import logging.handlers
 import matplotlib.pyplot as plt
+import readline
 
-from CmdBase import *
-from ApplicationTTS import *
-from ApplicationLVE import *
-from ApplicationMWD import *
-# from ApplicationNLVE import *
-from ApplicationGt import *
+from CmdBase import CmdBase, CmdMode
+from ApplicationTTS import ApplicationTTS
+from ApplicationLVE import ApplicationLVE
+from ApplicationMWD import ApplicationMWD
+from ApplicationGt import ApplicationGt
 #from ApplicationFRS_I import *
 import Version
 

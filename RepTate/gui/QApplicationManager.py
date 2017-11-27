@@ -12,18 +12,19 @@ Module for the main Graphical User Interface of RepTate. It is the GUI counterpa
 ApplicationManager.
 
 """ 
-import os
-from PyQt5.QtCore import *
+import logging
+from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QInputDialog
 
-from QApplicationWindow import *
-from ApplicationManager import *
-from QAboutReptate import *
+from CmdBase import CmdBase, CmdMode
+from QApplicationWindow import QApplicationWindow
+from ApplicationManager import ApplicationManager
+from QAboutReptate import AboutWindow
 
-path = os.path.dirname(os.path.abspath(__file__))
-Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path,'ReptateMainWindow.ui'))
+path = dirname(abspath(__file__))
+Ui_MainWindow, QMainWindow = loadUiType(join(path,'ReptateMainWindow.ui'))
 
 class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     """Main Reptate window and application manager

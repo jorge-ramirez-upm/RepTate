@@ -14,9 +14,13 @@ Module for the pseudo theory for Time-Temperature superposition shift of LVE dat
 import numpy as np
 from scipy import interp
 from scipy.optimize import minimize
-from Theory import *
-from QTheory import *
+from CmdBase import CmdBase, CmdMode
+from Parameter import Parameter, ParameterType
+from Theory import Theory
+from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction
+from PyQt5.QtCore import QSize
+
 
 class TheoryWLFShift(CmdBase):
     """Basic theory for Time-Temperature Superposition, based on the WLF equation

@@ -14,11 +14,6 @@ Module for the basic definition of file types.
 import numpy as np
 import logging
 from File import File
-#from Table import *
-from DataTable import *
-#get info on the current OS
-from sys import platform
-
 
 class TXTColumnFile(object):
     """Basic class for text-column based data files
@@ -165,10 +160,8 @@ class TXTColumnFile(object):
         """
         file=File(filename, self, parent_dataset, ax)
         #specify encoding to avoid crash [due to e.g. °C] on OS X or macOS
-        if platform == "darwin":
-            f = open(filename, "r", encoding="latin-1") 
-        else:
-            f = open(filename, "r")
+        # It seems to work on Windows too
+        f = open(filename, "r", encoding="latin-1") 
         lines=f.readlines()
         
         self.get_parameters(lines[0], file)

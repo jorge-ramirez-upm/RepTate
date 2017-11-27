@@ -12,40 +12,34 @@ Module that defines the basic GUI class from which all GUI applications are deri
 It is the GUI counterpart of Application.
 
 """ 
-import sys
-import os
+from os.path import dirname, join, abspath, isfile
 import logging
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QIcon,QColor
 from PyQt5.uic import loadUiType
-import seaborn as sns   
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.backends.backend_pdf import PdfPages
-import itertools
-import numpy as np
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog
-from QDataSet import *
-from SubQTreeWidgetItem import *
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem
+from QDataSet import QDataSet
+from SubQTreeWidgetItem import SubQTreeWidgetItem
 from DataSet import ColorMode, SymbolMode
-from Application import *
-from DraggableArtists import *
+from CmdBase import CmdBase, CmdMode
+from Application import Application
+from DraggableArtists import DragType, DraggableSeries
 
 #To recompile the symbol-settings dialog:
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
-from markerSettings import *
+from markerSettings import Ui_Dialog
 
-from SubQTableWidget import *
+from SubQTableWidget import SubQTableWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
     
-path = os.path.dirname(os.path.abspath(__file__))
-Ui_AppWindow, QMainWindow = loadUiType(os.path.join(path,'QApplicationWindow.ui'))
+path = dirname(abspath(__file__))
+Ui_AppWindow, QMainWindow = loadUiType(join(path,'QApplicationWindow.ui'))
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     """[summary]
@@ -133,12 +127,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # plt.style.use('seaborn-poster')
         # self.figure=plt.figure()
         # self.ax = self.figure.add_subplot(111)
-        self.canvas = FigureCanvas(self.figure)
+        self.canvas = FigureCanvasQTAgg(self.figure)
         self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
         self.canvas.setFocus()
         self.mplvl.addWidget(self.canvas)
-        self.mpl_toolbar = NavigationToolbar(self.canvas, self)
-        self.mpl_toolbar.setIconSize(QSize(16, 16))
+        self.mpl_toolbar = NavigationToolbar2QT(self.canvas, self)
+        self.mpl_toolbar.setIconSize(QtCore.QSize(16, 16))
         self.mpl_toolbar.setFixedHeight(36)
         self.mpl_toolbar.layout().setSpacing(0)
         self.mpl_toolbar.addAction(self.actionTrack_data)
@@ -187,7 +181,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         #Setting up the marker-settings dialog
         # self.marker_dic = {'square': 's', 'plus (filled)': 'P', 'point': '.', 'triangle_right': '>', 'hline': '_', 'vline': '|', 'pentagon': 'p', 'tri_left': '3', 'tri_up': '2', 'circle': 'o', 'diamond': 'D', 'star': '*', 'hexagon1': 'h', 'octagon': '8', 'hexagon2': 'H', 'tri_right': '4', 'x (filled)': 'X', 'thin_diamond': 'd', 'tri_down': '1', 'triangle_left': '<', 'plus': '+', 'triangle_down': 'v', 'triangle_up': '^', 'x': 'x'}
-        self.dialog = QtWidgets.QDialog()
+        self.dialog = QDialog()
         self.dialog.ui = Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         self.populate_cbSymbolType()
@@ -664,7 +658,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         paths_to_open = []
         for url in e.mimeData().urls():
             path = url.toLocalFile()
-            if os.path.isfile(path):
+            if isfile(path):
                 paths_to_open.append(path)
         self.new_tables_from_files(paths_to_open)
 

@@ -11,8 +11,7 @@
 Module that defines the a QTreeWidget that allows to select nothing.
 
 """ 
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QMessageBox
 
 class SubQTreeWidget(QTreeWidget):

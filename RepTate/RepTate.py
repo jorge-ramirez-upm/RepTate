@@ -19,10 +19,10 @@ sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
 sys.path.append('visual')
-from QApplicationManager import *
-from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
+from QApplicationManager import QApplicationManager
+#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
-from SplashScreen import *
+from SplashScreen import SplashScreen
 from time import time, sleep
 
 def start_RepTate(argv):

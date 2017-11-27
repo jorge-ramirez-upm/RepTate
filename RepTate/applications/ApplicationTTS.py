@@ -5,15 +5,18 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module ApplicationTTS
 
-Module for handling small angle oscillatory shear experiments and applying the 
+Module for handling small angle oscillatory shear experiments and applying the
 time-temperature superposition principle.
 
-""" 
-from Application import *
-from QApplicationWindow import *
+"""
+from CmdBase import CmdBase, CmdMode
+from Application import Application
+from QApplicationWindow import QApplicationWindow
+from View import View
+from FileType import TXTColumnFile
 import numpy as np
 from TheoryTTS import TheoryWLFShift
 
@@ -37,21 +40,21 @@ class ApplicationTTS(CmdBase):
         Returns:
             [type] -- [description]
         """
-        if (CmdBase.mode == CmdMode.GUI):
+        if CmdBase.mode == CmdMode.GUI:
             return GUIApplicationTTS(name, parent)
         else:
             return CLApplicationTTS(name, parent)
 
 class BaseApplicationTTS:
     """[summary]
-    
+
     [description]
     """
-    def __init__(self, name="TTS", parent = None):
+    def __init__(self, name="TTS", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             name {[type]} -- [description] (default: {"TTS"})
             parent {[type]} -- [description] (default: {None})
@@ -59,15 +62,23 @@ class BaseApplicationTTS:
         super().__init__(name, parent)
 
         # VIEWS
-        self.views["log(G',G''(w))"] = View(name="log(G',G''(w))", description="log Storage,Loss moduli", x_label="log($\omega$)", y_label="log(G'($\omega$),G''($\omega$))", x_units="rad/s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogG1G2, n=2, snames=["G'(w)","G''(w)"])
-        self.views["G',G''(w)"] = View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", "rad/s", "Pa", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"])
-        self.views["etastar"] = View("etastar", "Complex Viscosity", "$\omega$", "$|\eta^*(\omega)|$", "rad/s", "Pa.s", True, True, self.viewEtaStar, 1, ["eta*(w)"])
-        self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"])
-        self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"])
+        self.views["log(G',G''(w))"] = View(name="log(G',G''(w))", 
+                                            description="log Storage,Loss moduli", x_label="log($\omega$)", 
+                                            y_label="log(G'($\omega$),G''($\omega$))", x_units="rad/s", y_units="Pa", 
+                                            log_x=False, log_y=False, view_proc=self.viewLogG1G2, n=2, snames=["G'(w)","G''(w)"])
+        self.views["G',G''(w)"] = View("G',G''(w)", "Storage,Loss moduli", "$\omega$", 
+                                       "G'($\omega$),G''($\omega$)", "rad/s", "Pa", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"])
+        self.views["etastar"] = View("etastar", "Complex Viscosity", "$\omega$", 
+                                     "$|\eta^*(\omega)|$", "rad/s", "Pa.s", True, True, self.viewEtaStar, 1, ["eta*(w)"])
+        self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", 
+                                   "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"])
+        self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", 
+                                        "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"])
         self.current_view=self.views["log(G',G''(w))"]
 
         # FILES
-        ftype=TXTColumnFile("OSC files", "osc", "Small-angle oscillatory masurements from the Rheometer", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
+        ftype=TXTColumnFile("OSC files", "osc", 
+                            "Small-angle oscillatory masurements from the Rheometer", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
@@ -75,7 +86,7 @@ class BaseApplicationTTS:
 
     def viewLogG1G2(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
         
         Arguments:

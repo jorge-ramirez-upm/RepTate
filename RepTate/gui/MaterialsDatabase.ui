@@ -51,7 +51,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item>
@@ -66,7 +75,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -105,9 +123,9 @@
                <colorrole role="Button">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>127</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -177,18 +195,18 @@
                <colorrole role="Base">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>255</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
                <colorrole role="Window">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>127</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -242,9 +260,9 @@
                <colorrole role="Button">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>127</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -314,18 +332,18 @@
                <colorrole role="Base">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>255</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
                <colorrole role="Window">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>127</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -379,9 +397,9 @@
                <colorrole role="Button">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>127</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -451,18 +469,18 @@
                <colorrole role="Base">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>127</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
                <colorrole role="Window">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
-                  <red>255</red>
+                  <red>254</red>
                   <green>255</green>
-                  <blue>127</blue>
+                  <blue>181</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -508,6 +526,9 @@
             <property name="autoFillBackground">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -528,7 +549,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -552,6 +582,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textaT">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>false</bool>
             </property>
@@ -572,7 +605,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -596,6 +638,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textbT">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -632,7 +677,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item>
@@ -647,7 +701,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -671,6 +734,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textREStaue">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -691,7 +757,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -715,6 +790,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textRESGe">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -735,7 +813,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -759,6 +846,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textRESMe">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -795,7 +885,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item>
@@ -810,7 +909,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -834,6 +942,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textRESZ">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -854,7 +965,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -878,6 +998,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textREStauR">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -898,7 +1021,16 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -922,6 +1054,9 @@
           </item>
           <item>
            <widget class="QTextEdit" name="textREStauD">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(254, 255, 181);</string>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -938,10 +1073,10 @@
   <widget class="QFrame" name="frame_13">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>600</y>
+     <x>180</x>
+     <y>590</y>
      <width>624</width>
-     <height>62</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -951,6 +1086,18 @@
     <enum>QFrame::Raised</enum>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_10">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QPushButton" name="pushButton">
       <property name="text">
@@ -1047,7 +1194,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1091,7 +1247,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1135,7 +1300,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1179,7 +1353,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1238,7 +1421,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1282,7 +1474,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1326,7 +1527,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1370,7 +1580,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1414,7 +1633,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1458,7 +1686,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1531,7 +1768,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1575,7 +1821,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1619,7 +1874,16 @@
        <property name="spacing">
         <number>5</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>

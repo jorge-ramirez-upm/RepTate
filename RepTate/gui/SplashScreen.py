@@ -11,8 +11,9 @@
 Module that defines the GUI Splashscreen that is loaded during the startup of RepTate.
 
 """ 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap, QColor
+from PyQt5.QtWidgets import QSplashScreen, QApplication
 from PyQt5.QtGui import QPixmap
 
 class SplashScreen(QSplashScreen):
@@ -25,10 +26,10 @@ class SplashScreen(QSplashScreen):
         
         [description]
         """
-        QtWidgets.QSplashScreen.__init__(
+        QSplashScreen.__init__(
             self,
-            QtGui.QPixmap("gui/Images/logo.jpg"))
-        QtWidgets.QApplication.flush()
+            QPixmap("gui/Images/logo.jpg"))
+        QApplication.flush()
 
     def showMessage(self, msg):
         """Procedure to update message in splash
@@ -38,11 +39,11 @@ class SplashScreen(QSplashScreen):
         Arguments:
             msg {[type]} -- [description]
         """
-        align = QtCore.Qt.Alignment(QtCore.Qt.AlignBottom |
-                                    QtCore.Qt.AlignRight |
-                                    QtCore.Qt.AlignAbsolute)
+        align = Qt.Alignment(Qt.AlignBottom |
+                             Qt.AlignRight |
+                             Qt.AlignAbsolute)
         #color = QtGui.QColor(QtCore.Qt.White)
-        color = QtGui.QColor(0, 0, 0)
+        color = QColor(0, 0, 0)
         QSplashScreen.showMessage(self, msg, align, color)
         QApplication.processEvents()
 

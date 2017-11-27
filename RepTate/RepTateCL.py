@@ -18,7 +18,7 @@ sys.path.append('gui')
 sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
-from ApplicationManager import * 
+from ApplicationManager import ApplicationManager
 from time import time, sleep
 
 def start_RepTate(argv):

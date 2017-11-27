@@ -11,9 +11,7 @@
 Module that defines the a SubQTreeWidgetItem that allows to sort items in the DataSet
 
 """ 
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QTreeWidgetItem
-#from Table import *
 
 class SubQTreeWidgetItem(QTreeWidgetItem):
     """Subclass of QTreeWidgetItem for dataset items

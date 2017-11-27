@@ -11,10 +11,13 @@
 Module that defines the theory to discretize a molecular weight distribution.
 
 """ 
-from Theory import *
-from QTheory import *
+from CmdBase import CmdBase, CmdMode
+from Parameter import Parameter, ParameterType
+from Theory import Theory
+from QTheory import QTheory
 import numpy as np
 from scipy import interp
+from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QToolBar, QSpinBox
 
 class TheoryDiscrMWD(CmdBase):
@@ -102,7 +105,7 @@ class BaseTheoryDiscrMWD:
         PDI = Mw/Mn
 
         if line=="input":
-            file_table = self.parent_dataset.DataSettreeWidget.currentItem()
+            file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
             print(file_table.text(0),file_table.text(1),file_table.text(2),file_table.text(3))
             self.parent_dataset.DataSettreeWidget.blockSignals(True)
             file_table.setText(1, "%0.3g"%Mn)

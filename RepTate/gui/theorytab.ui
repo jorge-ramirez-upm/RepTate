@@ -14,13 +14,34 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="thToolsLayout"/>
    </item>
    <item>
     <widget class="QSplitter" name="splitter">
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="handleWidth">
+      <number>3</number>
      </property>
      <widget class="QTreeWidget" name="thParamTable">
       <column>
@@ -29,7 +50,12 @@
        </property>
       </column>
      </widget>
-     <widget class="QTextBrowser" name="thTextBox"/>
+     <widget class="QTextBrowser" name="thTextBox">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(217, 255, 255);
+;</string>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>

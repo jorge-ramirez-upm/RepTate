@@ -12,8 +12,7 @@ Module that defines a basic File, with headers, columns and data.
 
 """ 
 import os
-#from FileType import *
-from DataTable import *
+from DataTable import DataTable
 
 class File(object):
     """Basic class that describes elements of a DataSet

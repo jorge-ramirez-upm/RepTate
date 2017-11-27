@@ -11,8 +11,11 @@
 Module for handling Molecular weight distributions from GPC experiments.
 
 """ 
-from Application import *
-from QApplicationWindow import *
+from CmdBase import CmdBase, CmdMode
+from Application import Application
+from QApplicationWindow import QApplicationWindow
+from View import View
+from FileType import TXTColumnFile
 import numpy as np
 from TheoryDiscrMWD import TheoryDiscrMWD
 
