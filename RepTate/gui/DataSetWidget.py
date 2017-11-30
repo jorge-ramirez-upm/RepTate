@@ -6,7 +6,7 @@
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License. 
-"""Module SubQTreeWidget
+"""Module DataSetWidget
 
 Module that defines the a QTreeWidget that allows to select nothing.
 
@@ -14,7 +14,7 @@ Module that defines the a QTreeWidget that allows to select nothing.
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QMessageBox
 
-class SubQTreeWidget(QTreeWidget):
+class DataSetWidget(QTreeWidget):
     """Subclass of QTreeWidget
     
     Subclass of QTreeWidget that allows to select nothing in the DataSet 

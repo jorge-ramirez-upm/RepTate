@@ -18,7 +18,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
 from DataSet import DataSet
 from QTheory import QTheory
-from SubQTreeWidget import SubQTreeWidget
+from DataSetWidget import DataSetWidget
 
 PATH = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(join(PATH,'DataSet.ui'))
@@ -45,7 +45,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.selected_file = None
 
 
-        self.DataSettreeWidget = SubQTreeWidget(self)
+        self.DataSettreeWidget = DataSetWidget(self)
         self.splitter.insertWidget(0, self.DataSettreeWidget)
         
 
