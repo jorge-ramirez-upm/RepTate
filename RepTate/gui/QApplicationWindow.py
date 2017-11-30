@@ -31,15 +31,16 @@ from DraggableArtists import DragType, DraggableSeries
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
 from markerSettings import Ui_Dialog
 
-from SubQTableWidget import SubQTableWidget
+from InspectorTableWidget import InspectorTableWidget
 
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    _fromUtf8 = lambda s: s
+# I think the following lines are not needed anymore
+#try:
+#    _fromUtf8 = QtCore.QString.fromUtf8
+#except AttributeError:
+#    _fromUtf8 = lambda s: s
     
-path = dirname(abspath(__file__))
-Ui_AppWindow, QMainWindow = loadUiType(join(path,'QApplicationWindow.ui'))
+PATH = dirname(abspath(__file__))
+Ui_AppWindow, QMainWindow = loadUiType(join(PATH,'QApplicationWindow.ui'))
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     """[summary]
@@ -94,8 +95,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionShiftHorizontally)
         self.LayoutDataInspector.insertWidget(0, tb)
         #custom QTable to have the copy/pastefeature
-        self.tableWidget = SubQTableWidget(self)
-        self.LayoutDataInspector.insertWidget(-1, self.tableWidget)
+        self.inspector_table = InspectorTableWidget(self)
+        self.LayoutDataInspector.insertWidget(-1, self.inspector_table)
 
         # Dataset Toolbar
         tb = QToolBar()
@@ -112,9 +113,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.ViewDataTheorydockWidget.setTitleBarWidget(QWidget())                
 
         # Tests TableWidget
-        self.tableWidget.setRowCount(30)
-        self.tableWidget.setColumnCount(10)
-        self.tableWidget.setHorizontalHeaderLabels(['x','y','z','a','b','c','d','e','f','g'])
+        self.inspector_table.setRowCount(30)
+        self.inspector_table.setColumnCount(10)
+        self.inspector_table.setHorizontalHeaderLabels(['x','y','z','a','b','c','d','e','f','g'])
 
         # Hide Data Inspector
         self.DataInspectordockWidget.hide()
@@ -171,8 +172,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
         
-        connection_id = self.actionCopy.triggered.connect(self.tableWidget.copy)
-        connection_id = self.actionPaste.triggered.connect(self.tableWidget.paste)
+        connection_id = self.actionCopy.triggered.connect(self.inspector_table.copy)
+        connection_id = self.actionPaste.triggered.connect(self.inspector_table.paste)
 
 
         # Annotation stuff
@@ -570,7 +571,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.populate_inspector()
         else: # handle case where no dataset is left
             self.dataset_actions_disabled(True)
-            self.tableWidget.setRowCount(0) #empty the inspector
+            self.inspector_table.setRowCount(0) #empty the inspector
             self.DataInspectordockWidget.setWindowTitle("File:")
         self.update_Qplot()
 
@@ -732,7 +733,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if num == 1:
             #inspect_header = dfile.col_names[:]
             inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
-            inspec_tab = self.tableWidget.setHorizontalHeaderLabels(inspect_header)
+            inspec_tab = self.inspector_table.setHorizontalHeaderLabels(inspect_header)
 
 
     def openDataset(self):

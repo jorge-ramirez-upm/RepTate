@@ -23,8 +23,8 @@ from QApplicationWindow import QApplicationWindow
 from ApplicationManager import ApplicationManager
 from QAboutReptate import AboutWindow
 
-path = dirname(abspath(__file__))
-Ui_MainWindow, QMainWindow = loadUiType(join(path,'ReptateMainWindow.ui'))
+PATH = dirname(abspath(__file__))
+Ui_MainWindow, QMainWindow = loadUiType(join(PATH,'ReptateMainWindow.ui'))
 
 class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     """Main Reptate window and application manager

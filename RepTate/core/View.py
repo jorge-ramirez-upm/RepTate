@@ -19,7 +19,7 @@ class View(object):
     [description]
     """
 
-    def __init__(self, name="", description="", x_label="", y_label="", x_units="", y_units="", log_x=False, log_y=False, view_proc=None, n=1, snames=[]):
+    def __init__(self, name="", description="", x_label="", y_label="", x_units="", y_units="", log_x=False, log_y=False, view_proc=None, n=1, snames=[], inverse_view_proc=None):
         """Constructor
         
         [description]
@@ -34,6 +34,7 @@ class View(object):
             log_x {bool} -- X axis logarithmic? (default: {False})
             log_y {bool} -- Y axis logarithmic? (default: {False})
             view_proc {func} -- Function that creates the X, Y1, Y2 values of the view (default: {None})
+            inverse_view_proc {func} -- Function that inverses the view: From the n values of the view, returns the data table values (default: {None})
             n {int} -- Number of series that the view represents (default: {1})
             snames {list of str} -- Names of the series represented by the view
         """
@@ -46,5 +47,6 @@ class View(object):
         self.log_x=log_x
         self.log_y=log_y
         self.view_proc=view_proc
+        self.inverse_view_proc=inverse_view_proc
         self.n=n
         self.snames=snames

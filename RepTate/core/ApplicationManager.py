@@ -31,8 +31,8 @@ class ApplicationManager(CmdBase):
     [description]
     """
 
-    version = Version.version
-    date = Version.date
+    version = Version.VERSION
+    date = Version.DATE
     prompt = 'reptate> '
     intro = 'Reptate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions'%(version,date)
     

@@ -1,12 +1,17 @@
+rem CREATE CLEAN PYTHON ENVIRONMENT
+rem NEED MODULES matplotlib pyreadline pint seaborn tabulate pyqt5 pyinstaller packaging certifi
+
+
 rem CREATE GUI Version First
 rmdir /s /q build\RepTate
 rmdir /s /q dist\RepTate
-pyinstaller -w -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
+pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
+rem pyinstaller -w -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
 mkdir dist\RepTate\gui
-copy gui\theorytab.ui dist\RepTate\gui
-copy gui\DataSet.ui dist\RepTate\gui
+copy gui\theorytab.ui dist\RepTate
+copy gui\DataSet.ui dist\RepTate
 copy gui\Theory_rc.py dist\RepTate\gui
-copy gui\QApplicationWindow.ui dist\RepTate\gui
+copy gui\QApplicationWindow.ui dist\RepTate
 copy gui\AboutDialog.ui dist\RepTate
 copy gui\About_rc.py dist\RepTate
 copy gui\ReptateMainWindow.ui dist\RepTate
@@ -18,12 +23,15 @@ mkdir dist\RepTate\theories
 copy theories\linlin.npz dist\RepTate\theories
 mkdir dist\RepTate\gui\Images
 copy gui\Images\logo.jpg dist\RepTate\gui\Images
+rem exit /b
+
 
 rem Then CREATE CL Version
 rmdir /s /q build\RepTateCL
 rmdir /s /q dist\RepTateCL
 pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTateCL.py
 copy dist\RepTateCL\RepTateCL.exe dist\RepTate
+mkdir dist\RepTate\tests
 xcopy tests dist\RepTate\tests /E
 
 rem Clean up build folders

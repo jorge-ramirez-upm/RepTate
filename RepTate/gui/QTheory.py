@@ -18,8 +18,8 @@ from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView
 from PyQt5.QtCore import Qt
 
-path = dirname(abspath(__file__))
-Ui_TheoryTab, QWidget = loadUiType(join(path,'theorytab.ui'))
+PATH = dirname(abspath(__file__))
+Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
 
 class QTheory(Ui_TheoryTab, QWidget, Theory):
     """[summary]

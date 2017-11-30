@@ -6,7 +6,7 @@
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License. 
-"""Module SubQTableWidget
+"""Module InspectorTableWidget
 
 Module that defines a QTableWidget that allows copy/paste of data.
 
@@ -15,7 +15,7 @@ import sys
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QTableWidget, QApplication
 
-class SubQTableWidget(QTableWidget):
+class InspectorTableWidget(QTableWidget):
     """Subclass of QTableWidget
 
     Subclass of QTableWidget that enables (i) to copy selected QTableWidget items to the clipboard

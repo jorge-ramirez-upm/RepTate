@@ -20,8 +20,8 @@ from DataSet import DataSet
 from QTheory import QTheory
 from SubQTreeWidget import SubQTreeWidget
 
-path = dirname(abspath(__file__))
-Ui_DataSet, QWidget = loadUiType(join(path,'DataSet.ui'))
+PATH = dirname(abspath(__file__))
+Ui_DataSet, QWidget = loadUiType(join(PATH,'DataSet.ui'))
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
     """[summary]
@@ -338,7 +338,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         file = self.selected_file
         if not file: 
-            self.parent_application.tableWidget.setRowCount(0)
+            self.parent_application.inspector_table.setRowCount(0)
             self.parent_application.DataInspectordockWidget.setWindowTitle("File:")
             return
         if self.parent_application.DataInspectordockWidget.isHidden():
@@ -346,7 +346,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         dt = file.data_table
         nrow = dt.num_rows
         ncol = dt.num_columns
-        inspec_tab = self.parent_application.tableWidget
+        inspec_tab = self.parent_application.inspector_table
         inspec_tab.setRowCount(nrow)
         inspec_tab.setColumnCount(ncol)
         for i in range(nrow):

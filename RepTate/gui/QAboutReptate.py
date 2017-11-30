@@ -15,8 +15,8 @@ from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUiType
 
-path = dirname(abspath(__file__))
-Ui_AboutReptateWindow, QDialog = loadUiType(join(path,'AboutDialog.ui'))
+PATH = dirname(abspath(__file__))
+Ui_AboutReptateWindow, QDialog = loadUiType(join(PATH,'AboutDialog.ui'))
 
 class AboutWindow(QDialog, Ui_AboutReptateWindow):
     """About window in the GUI

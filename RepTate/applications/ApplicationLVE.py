@@ -99,6 +99,20 @@ class BaseApplicationLVE:
         y[: ,0] = np.log10(dt.data[:, 1])
         y[: ,1] = np.log10(dt.data[:, 2])
         return x, y, True
+        
+    def inverseviewLogG1G2(self, x, y):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        return np.pow(10.0, x), np.pow(10.0, y)
 
     def viewG1G2(self, dt, file_parameters):
         """[summary]

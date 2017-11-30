@@ -653,7 +653,7 @@ class Theory(CmdBase):
             line {[type]} -- [description]
         """
         self.parent_dataset.do_plot(line)
-        self.plot_theory_stuff()
+        #self.plot_theory_stuff()
 
     def set_param_value(self, name, value):
         """[summary]

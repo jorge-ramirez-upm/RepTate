@@ -140,9 +140,6 @@ class BaseTheoryMaxwellModesFrequency:
         for i in range(nmodes):
             G[i]=np.power(10, self.parameters["logG%02d"%i].value)
 
-        self.graphicmodes.clear()
-        self.artistmodes.clear()
-
         # First mode
         auxseries = self.ax.plot([], [], label='')
         auxseries = auxseries[0]        
@@ -186,6 +183,7 @@ class BaseTheoryMaxwellModesFrequency:
             self.graphicmodes.append(auxseries)
             auxartist = DraggableModes(auxseries, DragType.both, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_last_mode)
             self.artistmodes.append(auxartist)
+        self.plot_theory_stuff()
 
     def set_param_value(self, name, value):
         """[summary]
