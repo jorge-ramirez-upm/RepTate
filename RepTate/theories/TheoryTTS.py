@@ -18,9 +18,8 @@ from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType
 from Theory import Theory
 from QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QAction
+from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle
 from PyQt5.QtCore import QSize
-
 
 class TheoryWLFShift(CmdBase):
     """Basic theory for Time-Temperature Superposition, based on the WLF equation
@@ -71,6 +70,10 @@ class BaseTheoryWLFShift:
         self.parameters["T0"]=Parameter("T0", 25, "Temperature to shift WLF to, in °C", ParameterType.real, False)
         self.parameters["CTg"]=Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, False)
         self.parameters["dx12"]=Parameter("dx12", 0, "For PBd", ParameterType.real, False)
+        self.parameters["vert"]=Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
+                                               min_flag=False, display_flag=False)
+        self.parameters["iso"]=Parameter(name="iso", value=True, description="Isofrictional state", type=ParameterType.boolean, 
+                                               min_flag=False, display_flag=False)
 
     def bT(self, T, T0, rho0, c3):
         """[summary]
@@ -106,15 +109,23 @@ class BaseTheoryWLFShift:
         rho0=self.parameters["rho0"].value
         CTg=self.parameters["CTg"].value
         dx12=self.parameters["dx12"].value
+        iso=self.parameters["iso"].value
+        vert=self.parameters["vert"].value
 
         T=f.file_parameters["T"]
         Mw=f.file_parameters["Mw"]
 
-        C2 += CTg / Mw - 68.7 * dx12
-        T0corrected = T0 - CTg / Mw + 68.7 * dx12
+        if iso:
+            C2 += CTg / Mw - 68.7 * dx12
+            T0corrected = T0 - CTg / Mw + 68.7 * dx12
+        else:
+            T0corrected = T0
         tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2)))
 
-        bT = (rho0 - T * C3 * 1E-3) * (T + 273.15) / ((rho0 - T0 * C3 * 1E-3) * (T0 + 273.15))
+        if vert:
+            bT = (rho0 - T * C3 * 1E-3) * (T + 273.15) / ((rho0 - T0 * C3 * 1E-3) * (T0 + 273.15))
+        else:
+            bT = 1
         tt.data[:,1] = ft.data[:,1] / bT
         tt.data[:,2] = ft.data[:,2] / bT
 
@@ -386,6 +397,20 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24,24))
-        self.savemaster = tb.addAction('Save Master')
+        self.verticalshift = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_ArrowUp')), 'Vertical shift')
+        self.verticalshift.setCheckable(True)
+        self.verticalshift.setChecked(True)
+        self.isofrictional = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_FileDialogInfoView')), 'Shift to isofrictional state')
+        self.isofrictional.setCheckable(True)
+        self.isofrictional.setChecked(True)
+        self.savemaster = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
         self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
+        connection_id = self.isofrictional.triggered.connect(self.do_isofrictional)
         connection_id = self.savemaster.triggered.connect(self.do_save)
+
+    def do_vertical_shift(self):
+        self.set_param_value("vert", self.verticalshift.isChecked())
+
+    def do_isofrictional(self):
+        self.set_param_value("iso", self.isofrictional.isChecked())

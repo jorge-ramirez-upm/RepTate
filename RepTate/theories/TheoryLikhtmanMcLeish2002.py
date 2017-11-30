@@ -67,7 +67,7 @@ class BaseTheoryLikhtmanMcLeish2002:
         self.parameters["taue"]=Parameter("taue", 2e-6, "Rouse time of one Entanglement", ParameterType.real, True)
         self.parameters["Ge"]=Parameter("Ge", 1e6, "Entanglement moduluas", ParameterType.real, True)
         self.parameters["Me"]=Parameter("Me", 5, "Entanglement molecular weight", ParameterType.real, True)
-        self.parameters["cnu"]=Parameter("cnu", 0.1, "Constraint Release parameter", ParameterType.real, False)
+        self.parameters["cnu"]=Parameter(name="cnu", value=0.1, description="Constraint Release parameter", type=ParameterType.discrete_real, min_flag=False, discrete_values=[0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10])
 
         f=np.load("theories"+sep+"linlin.npz")
         self.Zarray=f['Z']

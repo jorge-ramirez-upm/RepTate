@@ -663,15 +663,38 @@ class Theory(CmdBase):
         Arguments:
             name {[type]} -- [description]
             value {[type]} -- [description]
+
+        Returns:
+            Success{bool} -- True if the operation was successful
         """
         if (self.parameters[name].type==ParameterType.real):
             self.parameters[name].value=float(value)
+            return True
         elif (self.parameters[name].type==ParameterType.integer):
             self.parameters[name].value=int(value)
-        elif (self.parameters[name].type==ParameterType.discrete):
-            pass
+            return True
+        elif (self.parameters[name].type==ParameterType.discrete_integer):
+            if int(value) in self.parameters[name].discrete_values:
+                self.parameters[name].value=int(value)
+                return True
+            else:
+                print("Values allowed=", self.parameters[name].discrete_values)
+                return False
+        elif (self.parameters[name].type==ParameterType.discrete_real):
+            if float(value) in self.parameters[name].discrete_values:
+                self.parameters[name].value=float(value)
+                return True
+            else:
+                print("Values allowed=", self.parameters[name].discrete_values)
+                return False
+        elif (self.parameters[name].type==ParameterType.boolean):
+            if value in [True, 'true', 'True', '1', 't', 'T', 'y', 'yes']:
+                self.parameters[name].value=True
+            else:
+                self.parameters[name].value=False
         else:
             pass
+
 
     def default(self, line):
         """Called when the input command is not recognized

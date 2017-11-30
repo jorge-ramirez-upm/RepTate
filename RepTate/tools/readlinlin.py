@@ -12,7 +12,7 @@ Reads the linlin data from the compact *.npz file
 
 """ 
 import numpy as np
-f=np.load("linlin.npz")
+f=np.load("../theories/linlin.npz")
 Z=f['Z']
 cnu=f['cnu']
 data=f['data']

@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>41d5c2f2-6dbc-423a-8657-cd5c56d3d66b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>RepTate.py</StartupFile>
+    <StartupFile>RepTateCL.py</StartupFile>
     <SearchPath>gui\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -14,8 +14,7 @@
     <IsWindowsApplication>False</IsWindowsApplication>
     <InterpreterId>Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>
-    </CommandLineArguments>
+    <CommandLineArguments>-c</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

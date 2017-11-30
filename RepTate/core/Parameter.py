@@ -23,37 +23,47 @@ class ShiftType(enum.Enum):
     log=1
 
 class ParameterType(enum.Enum):
-    """[summary]
+    """Types of parameters that can be used in a Theory
     
-    [description]
+    Parameters can be:
+        real: Any real number
+        integer: Any integer number
+        discrete_real: It can take a value only from a discrete set of prescribed real values
+        discrete_integer: It can take a value only from a discrete set of prescribed integer values
+        bool: The parameter is a flag
     """
     real = 0
     integer = 1
-    discrete = 2
+    discrete_real = 2
+    discrete_integer = 3
+    boolean = 4
 
 class Parameter(object):
     """Abstract class to describe theory parameters
     
     [description]
     """
-    def __init__(self, name="", value=0.0, description="", type=ParameterType.real, 
+    def __init__(self, name="", value=0, description="", type=ParameterType.real, 
                  min_flag=True, min_factor=1.0, min_shift_type=ShiftType.linear, 
-                 bracketed = False, min_value=-math.inf, max_value=math.inf):
+                 bracketed = False, min_value=-math.inf, max_value=math.inf, 
+                 display_flag=True, discrete_values=[]):
         """Constructor
         
         [description]
 
         Arguments:
             name {str} -- Parameter name
-            description {str} -- Meaning of parameter
-            type {enum} -- Type of parameter (real, integer, discrete)
             value {real} -- Value of parameter
+            description {str} -- Meaning of parameter
+            type {enum} -- Type of parameter (real, integer, discrete_real, discrete_integer)
             min_flag {bool} -- Is this parameter optimized?
             min_factor {real} -- Factor to scale this parameter during minimization
             min_shift_type {user} -- How do we shift this parameter during minimization
             bracketed {bool} -- Is the parameter bracketed?
             min_value {real} -- Minimum allowed value for the parameter
-            max_value {real} -- Maximum allowed value        
+            max_value {real} -- Maximum allowed value
+            display_flag {bool} -- This parameter will be shown in the Theory table
+            discrete_values {list} -- Allowed values that the parameter can take
         """
         self.name=name
         self.description=description
@@ -62,6 +72,16 @@ class Parameter(object):
             self.value=float(value)
         elif (self.type==ParameterType.integer):
             self.value=int(value)
+        elif (self.type==ParameterType.discrete_real):
+            self.value=float(value)
+        elif (self.type==ParameterType.discrete_integer):
+            self.value=int(value)
+        elif (self.type==ParameterType.boolean):
+            if value in [True, 'true', 'True', '1', 't', 'T', 'y', 'yes']:
+                self.value=True
+            else:
+                self.value=False
+
         else:
             pass # NOT IMPLEMENTED YET
         self.error=math.inf
@@ -72,6 +92,8 @@ class Parameter(object):
         self.min_value = min_value
         self.max_value= max_value
         self.min_allowed = min_flag
+        self.display_flag = display_flag
+        self.discrete_values = discrete_values
 
     def copy(self, par2):
         """Copy the contents of another parameter
@@ -114,5 +136,7 @@ class Parameter(object):
 
         .. todo:: Refine this.
         """
-        return "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%s,%s,%g,%g)"%(self.name,self.value,self.description, self.type, self.min_flag,\
-                self.min_factor, self.min_shift_type, self.bracketed, self.min_value, self.max_value)
+        return "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%s,%s,%g,%g,%s)"%(
+            self.name, self.value, self.description, self.type, 
+            self.min_flag, self.min_factor, self.min_shift_type, 
+            self.bracketed, self.min_value, self.max_value, self.display_flag)

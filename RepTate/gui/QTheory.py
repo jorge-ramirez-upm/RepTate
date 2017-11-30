@@ -15,7 +15,7 @@ Module that defines the GUI counterpart of the class Theory.
 from PyQt5.uic import loadUiType
 from Theory import Theory
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox
 from PyQt5.QtCore import Qt
 
 PATH = dirname(abspath(__file__))
@@ -66,16 +66,18 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         #populate table
         for param in sorted(self.parameters): #parameters in alphabetic order
             p = self.parameters[param]
-            if p.min_allowed: #only allowed param enter the table
+            if p.display_flag: #only allowed param enter the table
                 try:
                     err = "%0.3g"%p.error
                 except:
                     err = "-"    
                 item = QTreeWidgetItem(self.thParamTable, [p.name, "%0.3g"%p.value, err])
                 if p.min_flag:
-                    item.setCheckState(0,2)
+                    item.setCheckState(0, Qt.Checked)
                 else:
-                    item.setCheckState(0,0)
+                    item.setCheckState(0, Qt.PartiallyChecked)
+                    item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
+                    
                 item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
 
@@ -109,4 +111,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             return
         #else, assign the entered value
         val = item.text(1)
-        self.set_param_value(param_changed, val)
+        success = self.set_param_value(param_changed, val)
+        if (not success):
+            msg = QMessageBox()
+            msg.setWindowTitle("Not a valid value")
+            msg.setText("Allowed values are: \n"+", ".join(str(x) for x in self.parameters[param_changed].discrete_values))
+            msg.exec_()
+            item.setText(1, str(self.parameters[param_changed].value))
+

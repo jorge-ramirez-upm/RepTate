@@ -67,7 +67,7 @@ class BaseTheoryMaxwellModesFrequency:
         self.view_modes = False
         self.parameters["logwmin"]=Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, True)
         self.parameters["logwmax"]=Parameter("logwmax", 4, "Log of frequency range maximum", ParameterType.real, True)
-        self.parameters["nmodes"]=Parameter("nmodes", 5, "Number of Maxwell modes", ParameterType.integer, False)
+        self.parameters["nmodes"]=Parameter(name="nmodes", value=5, description="Number of Maxwell modes", type=ParameterType.integer, min_flag=False, display_flag=False)
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
         
