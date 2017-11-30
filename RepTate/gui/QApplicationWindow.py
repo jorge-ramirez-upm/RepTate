@@ -21,7 +21,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem
 from QDataSet import QDataSet
-from SubQTreeWidgetItem import SubQTreeWidgetItem
+from DataSetWidgetItem import DataSetWidgetItem
 from DataSet import ColorMode, SymbolMode
 from CmdBase import CmdBase, CmdMode
 from Application import Application
@@ -694,7 +694,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
-        newitem = SubQTreeWidgetItem(ds.DataSettreeWidget, lnew)
+        newitem = DataSetWidgetItem(ds.DataSettreeWidget, lnew)
         newitem.setCheckState(0, 2)
         
         self.dataset_actions_disabled(False) #activate buttons

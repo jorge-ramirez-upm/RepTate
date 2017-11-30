@@ -6,14 +6,14 @@
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License. 
-"""Module SubQTreeWidgetItem
+"""Module DataSetWidgetItem
 
-Module that defines the a SubQTreeWidgetItem that allows to sort items in the DataSet
+Module that defines the a DataSetWidgetItem that allows to sort items in the DataSet
 
 """ 
 from PyQt5.QtWidgets import QTreeWidgetItem
 
-class SubQTreeWidgetItem(QTreeWidgetItem):
+class DataSetWidgetItem(QTreeWidgetItem):
     """Subclass of QTreeWidgetItem for dataset items
     
     Each item of a dataset is a wrapper of the QTreeWidgetItem

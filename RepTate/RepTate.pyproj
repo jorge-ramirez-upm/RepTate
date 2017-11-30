@@ -69,14 +69,14 @@
     <Compile Include="core\View.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gui\DataSetWidget.py" />
+    <Compile Include="gui\DataSetWidgetItem.py" />
+    <Compile Include="gui\InspectorTableWidget.py" />
     <Compile Include="gui\markerSettings.py" />
     <Compile Include="gui\QApplicationWindow.py" />
     <Compile Include="gui\QDataSet.py" />
     <Compile Include="gui\QTheory.py" />
     <Compile Include="gui\SplashScreen.py" />
-    <Compile Include="gui\SubQTableWidget.py" />
-    <Compile Include="gui\SubQTreeWidget.py" />
-    <Compile Include="gui\SubQTreeWidgetItem.py" />
     <Compile Include="RepTate.py" />
     <Compile Include="RepTateCL.py" />
     <Compile Include="theories\TheoryBasic.py">
