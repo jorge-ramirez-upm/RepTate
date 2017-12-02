@@ -15,7 +15,7 @@ Module that defines the GUI counterpart of the class Theory.
 from PyQt5.uic import loadUiType
 from Theory import Theory
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton
 from PyQt5.QtCore import Qt
 
 PATH = dirname(abspath(__file__))
@@ -119,3 +119,24 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             msg.exec_()
             item.setText(1, str(self.parameters[param_changed].value))
 
+    def Qcopy_modes(self):
+        """[summary]
+        
+        [description]
+        """
+        apmng=self.parent_dataset.parent_application.parent_manager
+        G, S=apmng.list_theories_Maxwell()
+        for item in G.keys():
+            if self.name in item:
+                del G[item]
+                break
+        if G:
+            d = QDialog()
+            layout = QVBoxLayout(d)
+            d.setLayout(layout)
+            for item in G.keys():
+                rb = QRadioButton(item, d)
+                layout.addWidget(rb)
+            d.setWindowTitle("Select provider of Maxwell modes:")
+            d.setWindowModality(Qt.ApplicationModal)
+            d.exec_()

@@ -71,8 +71,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         for th_name in sorted(self.parent_application.theories):
              self.cbtheory.addItem(th_name)
         self.cbtheory.setCurrentIndex(0)
-        # self.cbtheory.addItem("MaxwellModesFrequency") 
-        # self.cbtheory.addItem("MWDiscr") 
         
         ###
 

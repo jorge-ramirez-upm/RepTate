@@ -78,6 +78,10 @@
     <Compile Include="gui\SplashScreen.py" />
     <Compile Include="RepTate.py" />
     <Compile Include="RepTateCL.py" />
+    <Compile Include="resources\About_rc.py" />
+    <Compile Include="resources\MainWindow_rc.py" />
+    <Compile Include="resources\Reptate_rc.py" />
+    <Compile Include="resources\Theory_rc.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
@@ -100,6 +104,8 @@
     <Folder Include="applications\" />
     <Folder Include="core\" />
     <Folder Include="gui\" />
+    <Folder Include="resources\" />
+    <Folder Include="resourcs\" />
     <Folder Include="theories\" />
   </ItemGroup>
   <ItemGroup>

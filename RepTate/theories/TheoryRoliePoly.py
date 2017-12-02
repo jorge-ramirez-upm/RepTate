@@ -17,6 +17,10 @@ from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType
 from Theory import Theory
 from QTheory import QTheory
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+from Theory_rc import *
 
 class TheoryRoliePoly(CmdBase):
     """Rolie-Poly
@@ -228,3 +232,49 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24,24))
+
+        self.tbutflow = QToolButton()
+        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu()
+        self.shear_flow_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-garden-shears.png'), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-socks.png'), "Extensional Flow")
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+        self.tbutflow.setMenu(menu)
+        tb.addWidget(self.tbutflow)
+
+        self.tbutmodes = QToolButton()
+        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu()
+        self.get_modes_action = menu.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogYesButton')), "Get Modes")
+        self.edit_modes_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'), "Edit Modes")
+        self.plot_modes_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'), "Plot Modes")
+        self.tbutmodes.setDefaultAction(self.get_modes_action)
+        self.tbutmodes.setMenu(menu)
+        tb.addWidget(self.tbutmodes)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
+        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+
+    def select_shear_flow(self):
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+
+    def select_extensional_flow(self):
+        self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
+    def get_modes_reptate(self):
+        self.Qcopy_modes()
+
+    def edit_modes_window(self):
+        pass
+
+    def plot_modes_graph(self):
+        pass

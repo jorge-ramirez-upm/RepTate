@@ -306,9 +306,8 @@ class ApplicationManager(CmdBase):
                 "No copy has been made")
             return
 
-
     def list_theories_Maxwell(self):
-        """List the theories in the current RepTate instance that provide
+        """List the theories in the current RepTate instance that provide and need
         Maxwell modes
         
         [description]
