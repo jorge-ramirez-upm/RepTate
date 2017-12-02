@@ -19,23 +19,57 @@ from FileType import TXTColumnFile
 import numpy as np
 from TheoryRoliePoly import TheoryRoliePoly
 
-class ApplicationNLVE(QApplicationWindow):
-    """Application to Non-linear flow Data
-    """
-    name="NLVE"
-    description="Non-Linear Flow"
+class ApplicationNLVE(CmdBase):
+    """Application to Analyze Start up of Non Linear flow
     
-    def __init__(self, name="NLVE", parent = None):
-        super(ApplicationNLVE, self).__init__(name, parent)
-        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
-        #     QApplication.__init__(self, name, self)
+    [description]
+    """
+    name = "NLVE"
+    description = "Non-Linear Flow"
 
+    def __new__(cls, name="NLVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"NLVE"})
+            parent {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        return GUIApplicationNLVE(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationNLVE(name, parent)
+
+class BaseApplicationNLVE:
+    """[summary]
+    
+    [description]
+    """    
+    def __init__(self, name="NLVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent)
+        
         # VIEWS
-        self.views["Log(eta(t))"]=View("Log(eta(t))", "Log transient viscosity", "Log(t)", "Log($\eta$(t))", False, False, self.viewLogeta, 1, ["$\eta$(t)"])
-        self.views["Log(sigma(t))"]=View("Log(sigma(t))", "Log transient shear stress", "Log($\gamma$)", "Log($\sigma_{xy}$($\gamma$))", False, False, self.viewLogSigma, 1, ["$\sigma_{xy}$($\gamma$)"])
+        self.views["Log(eta(t))"]=View(name="Log(eta(t))", description="Log transient viscosity", 
+                                       x_label="Log(t)", y_label="Log($\eta$(t))", x_units="s", y_units="Pa$\cdot$s",
+                                       log_x=False, log_y=False, view_proc=self.viewLogeta, n=1, snames=["$\eta$(t)"])
+        self.views["Log(sigma(t))-gamma"]=View(name="Log(sigma(t))", description="Log transient shear stress vs gamma", 
+                                         x_label="Log($\gamma$)", y_label="Log($\sigma_{xy}$($\gamma$))", 
+                                         x_units="-", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogSigmaGamma, 
+                                         n=1, snames=["$\sigma_{xy}$($\gamma$)"])
+        self.views["Log(sigma(t))-t"]=View(name="Log(sigma(t))", description="Log transient shear stress vs time", 
+                                         x_label="Log(t)", y_label="Log($\sigma_{xy}$(t))", 
+                                         x_units="s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogSigmaTime, 
+                                         n=1, snames=["$\sigma_{xy}$($\gamma$)"])
         self.current_view=self.views["Log(eta(t))"]
-        # if CmdBase.mode==CmdMode.GUI: #if GUI mode
-        #     self.populateViews()
 
         # FILES
         ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])
@@ -45,15 +79,90 @@ class ApplicationNLVE(QApplicationWindow):
         self.theories[TheoryRoliePoly.thname]=TheoryRoliePoly
 
     def viewLogeta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(dt.data[:, 1]) #exp data files contain eta, so does Rolie-Poly
+        y[:, 0] = np.log10(dt.data[:, 1]/float(file_parameters["gdot"]))    
         return x, y, True
 
-    def viewLogSigma(self, dt, file_parameters):
+    def viewLogSigmaTime(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0]) 
+        y[:, 0] = np.log10(dt.data[:, 1]) 
+        return x, y, True
+
+    def viewLogSigmaGamma(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0]*float(file_parameters["gdot"])) #compute strain
-        y[:, 0] = np.log10(dt.data[:, 1]*float(file_parameters["gdot"])) #compute stress
+        y[:, 0] = np.log10(dt.data[:, 1]) 
         return x, y, True
+
+class CLApplicationNLVE(BaseApplicationNLVE, Application):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="NLVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent)
+        
+
+class GUIApplicationNLVE(BaseApplicationNLVE, QApplicationWindow):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="NLVE", parent = None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"LVE"})
+            parent {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent)
+
+        self.populate_views() #populate the view ComboBox

@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>41d5c2f2-6dbc-423a-8657-cd5c56d3d66b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>RepTateCL.py</StartupFile>
+    <StartupFile>RepTate.py</StartupFile>
     <SearchPath>gui\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>

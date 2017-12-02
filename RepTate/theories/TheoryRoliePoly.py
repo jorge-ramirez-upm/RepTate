@@ -11,11 +11,14 @@
 Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
 
 """ 
-from Theory import Theory
 import numpy as np
 from scipy.integrate import ode, odeint
+from CmdBase import CmdBase, CmdMode
+from Parameter import Parameter, ParameterType
+from Theory import Theory
+from QTheory import QTheory
 
-class TheoryRoliePoly(Theory, CmdBase):
+class TheoryRoliePoly(CmdBase):
     """Rolie-Poly
     
     [description]
@@ -25,7 +28,29 @@ class TheoryRoliePoly(Theory, CmdBase):
     citations="Likhtman, A.E. & Graham, R.S.\n\
 Simple constitutive equation for linear polymer melts derived from molecular theory: Rolie-Poly equation\n\
 J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
+    single_file = False
 
+    def __new__(cls, name="ThRoliePoly", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        return GUITheoryRoliePoly(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryRoliePoly(name, parent_dataset, ax)
+
+
+class BaseTheoryRoliePoly:
+    """[summary]
+    
+    [description]
+    """
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
         """[summary]
         
@@ -36,17 +61,27 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super(TheoryRoliePoly, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.RoliePoly
         self.has_modes = True
-        self.parameters["beta"]=Parameter("beta", 0.5, "CCR coefficient", ParameterType.real, False)
-        self.parameters["delta"]=Parameter("deta", -0.5, "CCR exponent", ParameterType.real, False)
-        self.parameters["lmax"]=Parameter("lmax", 10.0, "Maximum extensibility", ParameterType.real, False)
-        self.parameters["nmodes"]=Parameter("nmodes", 2, "Number of modes", ParameterType.integer, False)
+        self.parameters["beta"]=Parameter(name="beta", value=0.5, description="CCR coefficient", 
+                                          type=ParameterType.real, min_flag=False)
+        self.parameters["delta"]=Parameter(name="delta", value=-0.5, description="CCR exponent", 
+                                           type=ParameterType.real, min_flag=False)
+        self.parameters["lmax"]=Parameter(name="lmax", value=10.0, description="Maximum extensibility", 
+                                          type=ParameterType.real, min_flag=False)
+        self.parameters["nmodes"]=Parameter(name="nmodes", value=2, description="Number of modes", 
+                                          type=ParameterType.integer, min_flag=False, display_flag=False)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False, min_value=0)
-            self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False, min_value=0)
-            self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True, min_value=0)
+            self.parameters["G%d"%i]=Parameter(name="G%d"%i, value=1000.0, description="Modulus of mode %d"%i, 
+                                               type=ParameterType.real, min_flag=False, display_flag=False, 
+                                               bracketed=True, min_value=0)
+            self.parameters["tauD%d"%i]=Parameter(name="tauD%d"%i, value=10.0, description="Terminal time of mode %d"%i,
+                                                  type=ParameterType.real, min_flag=False, display_flag=False,
+                                                  bracketed=True, min_value=0)
+            self.parameters["tauR%d"%i]=Parameter(name="tauR%d"%i, value=0.5, description="Rouse time of mode %d"%i,
+                                                  type=ParameterType.real, min_flag=True, 
+                                                  bracketed=True, min_value=0)
 
     def set_param_value(self, name, value):
         """[summary]
@@ -157,5 +192,39 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
             sig = odeint(self.sigmadotshear, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
             tt.data[:,1] += self.parameters["G%d"%i].value*np.delete(sig[:,2],[0]) #return sxy
         
-        # return viscosity to agree with input data file (t, eta)
-        tt.data[:,1] = tt.data[:,1]/gammadot
+        # return stress to agree with input data file (t, eta)
+        #tt.data[:,1] = tt.data[:,1]/gammadot
+
+class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+
+class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)

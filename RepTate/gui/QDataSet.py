@@ -65,11 +65,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tb.addAction(self.actionNew_Theory)
         self.cbtheory = QComboBox()
         self.cbtheory.setToolTip("Choose a Theory")
-        self.cbtheory.addItem("Select Theory")
-        self.cbtheory.model().item(0).setEnabled(False)
+        # self.cbtheory.addItem("Select Theory")
+        # self.cbtheory.model().item(0).setEnabled(False)
 
-        for th_name in self.parent_application.theories:
+        for th_name in sorted(self.parent_application.theories):
              self.cbtheory.addItem(th_name)
+        self.cbtheory.setCurrentIndex(0)
         # self.cbtheory.addItem("MaxwellModesFrequency") 
         # self.cbtheory.addItem("MWDiscr") 
         
@@ -448,10 +449,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         
         [description]
         """
-        if self.cbtheory.currentIndex() == 0:
-            return
+        #if self.cbtheory.currentIndex() == 0:
+        #    return
         th_name = self.cbtheory.currentText()
-        self.cbtheory.setCurrentIndex(0) # reset the combobox selection
+        #self.cbtheory.setCurrentIndex(0) # reset the combobox selection
         self.new_theory(th_name)
 
     def new_theory(self, th_name, th_tab_id=""):

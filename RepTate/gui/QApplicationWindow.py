@@ -74,7 +74,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.tab_count = 0
         self.curves = []
         self.zorder = 100
-        #self.views={} # we use 'views' of Application.py
        
         # Accept Drag and drop events
         self.setAcceptDrops(True)

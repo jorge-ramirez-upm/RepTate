@@ -17,7 +17,7 @@ from DataTable import DataTable
 from Parameter import Parameter, ParameterType
 from Theory import Theory
 from QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction
+from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
 from PyQt5.QtCore import QSize
 from DraggableArtists import DraggableModes, DragType
 
@@ -88,6 +88,8 @@ class BaseTheoryMaxwellModesFrequency:
         self.set_param_value("logwmin", self.parameters["logwmin"].value + dx)
         self.set_param_value("logG00", self.parameters["logG00"].value + dy)
         self.do_calculate("")
+        self.parent_dataset.parent_application.update_plot()
+
 
     def drag_mode(self, dx, dy):
         """[summary]
@@ -98,6 +100,7 @@ class BaseTheoryMaxwellModesFrequency:
             dx {[type]} -- [description]
             dy {[type]} -- [description]
         """
+        
         pass
 
     def drag_last_mode(self, dx, dy):
@@ -112,7 +115,8 @@ class BaseTheoryMaxwellModesFrequency:
         self.set_param_value("logwmax", self.parameters["logwmax"].value + dx)
         nmodes=self.parameters["nmodes"].value
         self.set_param_value("logG%02d"%(nmodes-1), self.parameters["logG%02d"%(nmodes-1)].value + dy)
-        pass
+        self.do_calculate("")
+        self.parent_dataset.parent_application.update_plot()
 
     def update_modes(self):
         """[summary]
@@ -203,6 +207,7 @@ class BaseTheoryMaxwellModesFrequency:
             if (oldn>self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value,oldn):
                     del self.parameters["logG%02d"%i]
+        return True
 
     def get_modes(self):
         """[summary]
@@ -324,7 +329,7 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction('View modes')
+        self.modesaction = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogYesButton')), 'View modes')
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
@@ -347,6 +352,7 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
             self.parent_dataset.parent_application.update_plot()
         else:
             self.destroy_graphic_modes()
+            self.parent_dataset.parent_application.update_plot()
 
     def handle_spinboxValueChanged(self, value):
         """[summary]
@@ -561,7 +567,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction('View modes')
+        self.modesaction = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogSaveButton')), 'View modes')
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
@@ -581,6 +587,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         self.view_modes = self.modesaction.isChecked()
         self.modesseries.set_visible(self.view_modes)
         self.parent_dataset.parent_application.update_plot()
+        self.parent_dataset.do_plot()
 
     def handle_spinboxValueChanged(self, value):
         """[summary]

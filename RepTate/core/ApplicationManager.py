@@ -20,6 +20,7 @@ import readline
 from CmdBase import CmdBase, CmdMode
 from ApplicationTTS import ApplicationTTS
 from ApplicationLVE import ApplicationLVE
+from ApplicationNLVE import ApplicationNLVE
 from ApplicationMWD import ApplicationMWD
 from ApplicationGt import ApplicationGt
 #from ApplicationFRS_I import *
@@ -70,7 +71,7 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationMWD.name]=ApplicationMWD
         self.available_applications[ApplicationTTS.name]=ApplicationTTS
         self.available_applications[ApplicationLVE.name]=ApplicationLVE
-        # self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
+        self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
         self.available_applications[ApplicationGt.name]=ApplicationGt
         #self.available_applications[ApplicationFRS_I.name]=ApplicationFRS_I
 

@@ -66,7 +66,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionMWD.triggered.connect(self.new_mwd_window)
         self.actionTTS.triggered.connect(self.new_tts_window)
         self.actionLVE.triggered.connect(self.new_lve_window)
-        #self.actionNLVE.triggered.connect(self.new_nlve_window)
+        self.actionNLVE.triggered.connect(self.new_nlve_window)
         self.actionGt.triggered.connect(self.new_gt_window)
         #self.actionCreep.triggered.connect(self.new_creep_window)
         #self.actionSANS.triggered.connect(self.new_sans_window)

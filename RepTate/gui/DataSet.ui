@@ -17,16 +17,7 @@
    <property name="spacing">
     <number>5</number>
    </property>
-   <property name="leftMargin">
-    <number>5</number>
-   </property>
-   <property name="topMargin">
-    <number>5</number>
-   </property>
-   <property name="rightMargin">
-    <number>5</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>5</number>
    </property>
    <item>
@@ -51,16 +42,7 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -101,6 +83,9 @@
    <property name="toolTip">
     <string>Create Selected Theory</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+N</string>
+   </property>
   </action>
   <action name="actionCalculate_Theory">
    <property name="icon">
@@ -113,6 +98,9 @@
    <property name="toolTip">
     <string>Calculate Theroy</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
+   </property>
   </action>
   <action name="actionMinimize_Error">
    <property name="icon">
@@ -124,6 +112,9 @@
    </property>
    <property name="toolTip">
     <string>Minimize Error</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+M</string>
    </property>
   </action>
   <action name="actionTheory_Options">
