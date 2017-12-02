@@ -87,28 +87,6 @@ class BaseTheoryRoliePoly:
                                                   type=ParameterType.real, min_flag=True, 
                                                   bracketed=True, min_value=0)
 
-    def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
-        """
-        if (name=="nmodes"):
-            oldn=self.parameters["nmodes"].value
-        super(TheoryRoliePoly, self).set_param_value(name, value)
-        if (name=="nmodes"):
-            for i in range(self.parameters["nmodes"].value):
-                self.parameters["G%d"%i]=Parameter("G%d"%i, 1000.0, "Modulus of mode %d"%i, ParameterType.real, False, min_value=0)
-                self.parameters["tauD%d"%i]=Parameter("tauD%d"%i, 10.0, "Terminal time of mode %d"%i, ParameterType.real, False, min_value=0)
-                self.parameters["tauR%d"%i]=Parameter("tauR%d"%i, 0.5, "Rouse time of mode %d"%i, ParameterType.real, True, min_value=0)
-            if (oldn>self.parameters["nmodes"].value):
-                for i in range(self.parameters["nmodes"].value,oldn):
-                    del self.parameters["G%d"%i]
-                    del self.parameters["tauD%d"%i]
-                    del self.parameters["tauR%d"%i]
 
     def get_modes(self):
         """[summary]
@@ -278,3 +256,32 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
 
     def plot_modes_graph(self):
         pass
+
+    def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
+        if (name=="nmodes"):
+            oldn=self.parameters["nmodes"].value
+        super(GUITheoryRoliePoly, self).set_param_value(name, value)
+        if (name=="nmodes"):
+            for i in range(self.parameters["nmodes"].value):
+                self.parameters["G%d"%i]=Parameter(name="G%d"%i, value=1000.0, description="Modulus of mode %d"%i, 
+                                                   type=ParameterType.real, min_flag=False, display_flag=False, 
+                                                   bracketed=True, min_value=0)
+                self.parameters["tauD%d"%i]=Parameter(name="tauD%d"%i, value=10.0, description="Terminal time of mode %d"%i,
+                                                      type=ParameterType.real, min_flag=False, display_flag=False,
+                                                      bracketed=True, min_value=0)
+                self.parameters["tauR%d"%i]=Parameter(name="tauR%d"%i, value=0.5, description="Rouse time of mode %d"%i,
+                                                      type=ParameterType.real, min_flag=True, 
+                                                      bracketed=True, min_value=0)
+            if (oldn>self.parameters["nmodes"].value):
+                for i in range(self.parameters["nmodes"].value,oldn):
+                    del self.parameters["G%d"%i]
+                    del self.parameters["tauD%d"%i]
+                    del self.parameters["tauR%d"%i]

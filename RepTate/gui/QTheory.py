@@ -163,6 +163,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             d = GetModesDialog(self, G)
             if d.exec_():
                 item = d.btngrp.checkedButton().text()
+                tau, G0 = G[item]()
+                self.set_modes(tau,G0)
                 print(item)
             
             #item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)
