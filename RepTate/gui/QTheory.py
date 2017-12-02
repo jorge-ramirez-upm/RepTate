@@ -15,11 +15,40 @@ Module that defines the GUI counterpart of the class Theory.
 from PyQt5.uic import loadUiType
 from Theory import Theory
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
 from PyQt5.QtCore import Qt
 
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
+
+class GetModesDialog(QDialog):
+    def __init__(self, parent = None, th_dict = {}):
+        super(GetModesDialog, self).__init__(parent)
+
+        self.setWindowTitle("Get Maxwell modes")
+        layout = QVBoxLayout(self)
+        
+        self.btngrp = QButtonGroup()
+
+        for item in th_dict.keys():
+            rb = QRadioButton(item, self)
+            layout.addWidget(rb)
+            self.btngrp.addButton(rb)
+
+        # OK and Cancel buttons
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
+            Qt.Horizontal, self)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)    
+        
+    # static method to create the dialog and return (date, time, accepted)
+    @staticmethod
+    def getMaxwellModesProvider(self, parent = None, th_dict = {}):
+        dialog = GetModesDialog(parent, th_dict)
+        result = dialog.exec_()
+        return (self.btngrp.checkedButton().text(), result == QDialog.Accepted)
 
 class QTheory(Ui_TheoryTab, QWidget, Theory):
     """[summary]
@@ -131,12 +160,20 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 del G[item]
                 break
         if G:
-            d = QDialog()
-            layout = QVBoxLayout(d)
-            d.setLayout(layout)
-            for item in G.keys():
-                rb = QRadioButton(item, d)
-                layout.addWidget(rb)
-            d.setWindowTitle("Select provider of Maxwell modes:")
-            d.setWindowModality(Qt.ApplicationModal)
-            d.exec_()
+            d = GetModesDialog(self, G)
+            if d.exec_():
+                item = d.btngrp.checkedButton().text()
+                print(item)
+            
+            #item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)
+            #print(item)
+            
+            #d = QDialog(self, )
+            #layout = QVBoxLayout(d)
+            #d.setLayout(layout)
+            #for item in G.keys():
+            #    rb = QRadioButton(item, d)
+            #    layout.addWidget(rb)
+            #d.setWindowTitle("Select provider of Maxwell modes:")
+            #d.setWindowModality(Qt.ApplicationModal)
+            #d.exec_()

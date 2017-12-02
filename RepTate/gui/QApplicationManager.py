@@ -16,7 +16,7 @@ import logging
 from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QInputDialog
+from PyQt5.QtWidgets import QApplication, QInputDialog,QLineEdit
 
 from CmdBase import CmdBase, CmdMode
 from QApplicationWindow import QApplicationWindow
