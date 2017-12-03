@@ -23,7 +23,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True , icon='gui\\Images\\Reptate64.ico')
+          console=False , icon='gui\\Images\\Reptate64.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

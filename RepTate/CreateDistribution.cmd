@@ -1,12 +1,13 @@
+echo off
 rem CREATE CLEAN PYTHON ENVIRONMENT
 rem NEED MODULES matplotlib pyreadline pint seaborn tabulate pyqt5 pyinstaller packaging certifi
-
 
 rem CREATE GUI Version First
 rmdir /s /q build\RepTate
 rmdir /s /q dist\RepTate
-pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
-rem pyinstaller -w -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
+rem ADD -w FLAG TO MAKE A WINDOWS APPLICATION WITH NO TERMINAL
+rem pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
+pyinstaller -w -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
 mkdir dist\RepTate\gui
 copy gui\theorytab.ui dist\RepTate
 copy gui\DataSet.ui dist\RepTate
@@ -38,3 +39,8 @@ rem Clean up build folders
 rmdir /s /q build\RepTate
 rmdir /s /q build\RepTateCL
 rmdir /s /q dist\RepTateCL
+
+for /f %%i in ('python tools\getreptateversion.py') do set version=%%i
+cd dist
+c:\Progra~1\7-zip\7z.exe a RepTate%version%.zip RepTate
+cd ..

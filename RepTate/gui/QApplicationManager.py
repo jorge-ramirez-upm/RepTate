@@ -49,6 +49,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         CmdBase.mode = CmdMode.GUI #set GUI mode
         self.setupUi(self)
 
+        self.setWindowTitle('RepTate v' + self.version + ' ' + self.date);
+
         # App tabs behaviour
         self.ApplicationtabWidget.setMovable(True)
         self.ApplicationtabWidget.setTabsClosable(True)
