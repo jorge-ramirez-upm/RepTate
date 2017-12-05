@@ -189,25 +189,6 @@ class BaseTheoryMaxwellModesFrequency:
             self.artistmodes.append(auxartist)
         self.plot_theory_stuff()
 
-    def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
-        """
-        if (name=="nmodes"):
-            oldn=self.parameters["nmodes"].value
-        super(BaseTheoryMaxwellModesFrequency, self).set_param_value(name, value) #what does that do?
-        if (name=="nmodes"):
-            for i in range(self.parameters["nmodes"].value):
-                self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
-            if (oldn>self.parameters["nmodes"].value):
-                for i in range(self.parameters["nmodes"].value,oldn):
-                    del self.parameters["logG%02d"%i]
-        return True
 
     def get_modes(self):
         """[summary]
@@ -599,3 +580,23 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         """
         """Handle a change of the parameter 'nmode'"""
         self.set_param_value("nmodes", value)
+
+    def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
+        if (name=="nmodes"):
+            oldn=self.parameters["nmodes"].value
+        super(GUITheoryMaxwellModesFrequency, self).set_param_value(name, value) #what does that do? NO IDEA, REALLY (JR)
+        if (name=="nmodes"):
+            for i in range(self.parameters["nmodes"].value):
+                self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            if (oldn>self.parameters["nmodes"].value):
+                for i in range(self.parameters["nmodes"].value,oldn):
+                    del self.parameters["logG%02d"%i]
+        return True

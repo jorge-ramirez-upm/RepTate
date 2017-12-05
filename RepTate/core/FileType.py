@@ -159,8 +159,6 @@ class TXTColumnFile(object):
             [type] -- [description]
         """
         file=File(filename, self, parent_dataset, ax)
-        #specify encoding to avoid crash [due to e.g. °C] on OS X or macOS
-        # It seems to work on Windows too
         f = open(filename, "r", encoding="latin-1") 
         lines=f.readlines()
         

@@ -18,10 +18,65 @@ from Parameter import Parameter, ParameterType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 from Theory_rc import *
+
+
+class EditModesDialog(QDialog):
+    def __init__(self, parent = None, times=None, G=None):
+        super(EditModesDialog, self).__init__(parent)
+
+        self.setWindowTitle("Edit Maxwell modes")
+        layout = QVBoxLayout(self)
+        nmodes = len(times)
+
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, 40) # min and max number of modes
+        self.spinbox.setSuffix(" modes")
+        self.spinbox.setValue(nmodes) #initial value
+        layout.addWidget(self.spinbox)
+
+        self.table = QTableWidget()
+        self.table.setRowCount(nmodes)
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(["tau", "G"])
+        for i in range(nmodes):
+            tau = "%g"%times[i]
+            mod = "%g"%G[i]
+            self.table.setItem(i, 0, QTableWidgetItem(tau)) 
+            self.table.setItem(i, 1, QTableWidgetItem(mod)) 
+
+        layout.addWidget(self.table)
+        #self.btngrp = QButtonGroup()
+
+        #for item in th_dict.keys():
+        #    rb = QRadioButton(item, self)
+        #    layout.addWidget(rb)
+        #    self.btngrp.addButton(rb)
+
+        # OK and Cancel buttons
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
+            Qt.Horizontal, self)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)   
+        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+
+    def handle_spinboxValueChanged(self, value):
+        self.table.setRowCount(value)
+
+        
+    # static method to create the dialog and return (date, time, accepted)
+    #@staticmethod
+    #def getMaxwellModesProvider(self, parent = None, th_dict = {}):
+    #    dialog = GetModesDialog(parent, th_dict)
+    #    result = dialog.exec_()
+    #    return (self.btngrp.checkedButton().text(), result == QDialog.Accepted)
+
 
 class TheoryRoliePoly(CmdBase):
     """Rolie-Poly
@@ -155,6 +210,27 @@ class BaseTheoryRoliePoly:
         aux2 = beta*(trace_sigma/3)**delta
         return [2*gammadot*sxy - (sxx-1)/tauD - aux1*(sxx + aux2*(sxx-1)), -1.0*(syy-1)/tauD - aux1*(syy + aux2*(syy-1)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
 
+
+    def sigmadotshearnostretch(self, sigma, t, p):
+        """Rolie-Poly differential equation under shear flow
+        
+        [description]
+        
+        Arguments:
+            sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
+            t {float} -- time
+            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
+        """
+        sxx, syy, sxy = sigma
+        tauD, tauR, beta, delta, gammadot = p
+    
+        # Create the vector with the time derivative of sigma
+        trace_sigma = sxx + 2*syy
+        aux1 = 2*(1-np.sqrt(3/trace_sigma))/tauR
+        aux2 = beta*(trace_sigma/3)**delta
+        return [2*gammadot*sxy - (sxx-1)/tauD - 2.0/3.0*gammadot*sxy*(sxx + beta*(sxx-1)), 
+                -1.0*(syy-1)/tauD - 2.0/3.0*gammadot*sxy*(syy + beta*(syy-1)), 
+                gammadot*syy - sxy/tauD - 2.0/3.0*gammadot*sxy*(sxy + beta*sxy)]
         
     def RoliePoly(self, f=None):
         """[summary]
@@ -184,15 +260,49 @@ class BaseTheoryRoliePoly:
         delta = self.parameters["delta"].value
         gammadot = float(f.file_parameters["gdot"])
         nmodes = self.parameters["nmodes"].value
+        nstretch = self.parameters["nstretch"].value
         for i in range(nmodes):
             tauD = self.parameters["tauD%02d"%i].value
             tauR = self.parameters["tauR%02d"%i].value
             p = [tauD, tauR, beta, delta, gammadot]
-            sig = odeint(self.sigmadotshear, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
+            if i<nstretch:
+                sig = odeint(self.sigmadotshear, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
+            else:
+                sig = odeint(self.sigmadotshearnostretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
             tt.data[:,1] += self.parameters["G%02d"%i].value*np.delete(sig[:,2],[0]) #return sxy
         
         # return stress to agree with input data file (t, eta)
         #tt.data[:,1] = tt.data[:,1]/gammadot
+
+    def set_param_value(self, name, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
+        if (name=="nmodes"):
+            oldn=self.parameters["nmodes"].value
+        super(BaseTheoryRoliePoly, self).set_param_value(name, value)
+        if (name=="nmodes"):
+            for i in range(self.parameters["nmodes"].value):
+                self.parameters["G%02d"%i]=Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
+                                                   type=ParameterType.real, min_flag=False, display_flag=False, 
+                                                   bracketed=True, min_value=0)
+                self.parameters["tauD%02d"%i]=Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
+                                                      type=ParameterType.real, min_flag=False, display_flag=False,
+                                                      bracketed=True, min_value=0)
+                self.parameters["tauR%02d"%i]=Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
+                                                      type=ParameterType.real, min_flag=True, display_flag=True,
+                                                      bracketed=True, min_value=0)
+            if (oldn>self.parameters["nmodes"].value):
+                for i in range(self.parameters["nmodes"].value,oldn):
+                    del self.parameters["G%02d"%i]
+                    del self.parameters["tauD%02d"%i]
+                    del self.parameters["tauR%02d"%i]
+        return True
 
 class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
     """[summary]
@@ -258,6 +368,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(0, self.MAX_MODES) # min and max number of modes
         self.spinbox.setSuffix(" Rmodes")
+        self.spinbox.setToolTip("Number of stretching modes")
         self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
         tb.addWidget(self.spinbox)
 
@@ -269,6 +380,11 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
         connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
         connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
+        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+
+    def handle_spinboxValueChanged(self, value):
+        nmodes = self.parameters["nmodes"].value
+        self.set_param_value("nstretch", min(nmodes, value))
 
     def show_linear_envelope(self):
         self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
@@ -314,36 +430,18 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.Qcopy_modes()
 
     def edit_modes_window(self):
-        pass
+        times, G = self.get_modes()
+        d = EditModesDialog(self, times, G)
+        if d.exec_():
+            nmodes=d.table.rowCount()
+            self.set_param_value("nmodes", nmodes)
+            self.set_param_value("nstretch", nmodes)
+
+            for i in range(nmodes):
+                self.set_param_value("tauD%02d"%i,float(d.table.item(i, 0).text()))
+                self.set_param_value("G%02d"%i,float(d.table.item(i, 1).text()))
+                self.set_param_value("tauR%02d"%i,0.5)
+                pass
 
     def plot_modes_graph(self):
         pass
-
-    def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
-        """
-        if (name=="nmodes"):
-            oldn=self.parameters["nmodes"].value
-        super(GUITheoryRoliePoly, self).set_param_value(name, value)
-        if (name=="nmodes"):
-            for i in range(self.parameters["nmodes"].value):
-                self.parameters["G%02d"%i]=Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
-                                                   type=ParameterType.real, min_flag=False, display_flag=False, 
-                                                   bracketed=True, min_value=0)
-                self.parameters["tauD%02d"%i]=Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
-                                                      type=ParameterType.real, min_flag=False, display_flag=False,
-                                                      bracketed=True, min_value=0)
-                self.parameters["tauR%02d"%i]=Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
-                                                      type=ParameterType.real, min_flag=True, 
-                                                      bracketed=True, min_value=0)
-            if (oldn>self.parameters["nmodes"].value):
-                for i in range(self.parameters["nmodes"].value,oldn):
-                    del self.parameters["G%02d"%i]
-                    del self.parameters["tauD%02d"%i]
-                    del self.parameters["tauR%02d"%i]

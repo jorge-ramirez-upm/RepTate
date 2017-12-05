@@ -44,11 +44,11 @@ class GetModesDialog(QDialog):
         layout.addWidget(buttons)    
         
     # static method to create the dialog and return (date, time, accepted)
-    @staticmethod
-    def getMaxwellModesProvider(self, parent = None, th_dict = {}):
-        dialog = GetModesDialog(parent, th_dict)
-        result = dialog.exec_()
-        return (self.btngrp.checkedButton().text(), result == QDialog.Accepted)
+    #@staticmethod
+    #def getMaxwellModesProvider(self, parent = None, th_dict = {}):
+    #    dialog = GetModesDialog(parent, th_dict)
+    #    result = dialog.exec_()
+    #    return (self.btngrp.checkedButton().text(), result == QDialog.Accepted)
 
 class QTheory(Ui_TheoryTab, QWidget, Theory):
     """[summary]
@@ -161,9 +161,12 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 break
         if G:
             d = GetModesDialog(self, G)
-            if d.exec_():
+            if (d.exec_() and d.btngrp.checkedButton() != None):
                 item = d.btngrp.checkedButton().text()
                 tau, G0 = G[item]()
+                tauinds = (-tau).argsort()
+                tau = tau[tauinds]
+                G0 = G0[tauinds]
                 self.set_modes(tau,G0)
             
             #item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)
