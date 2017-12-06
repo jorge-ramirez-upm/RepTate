@@ -80,6 +80,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         # DataSet Tabs behaviour ##########
         self.DataSettabWidget.setTabsClosable(True)
+        self.DataSettabWidget.setTabBarAutoHide(True)
         self.DataSettabWidget.setUsesScrollButtons(True)
         self.DataSettabWidget.setMovable(True)
         
