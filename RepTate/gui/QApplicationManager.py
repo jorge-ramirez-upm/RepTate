@@ -89,7 +89,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.verticalLayout.addWidget(self.text_edit)
 
     def handle_doubleClickTab(self, index):
-        """Edit DataSet-tab name
+        """Edit Application name
         
         [description]
         
@@ -97,13 +97,18 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             index {[type]} -- [description]
         """
         old_name = self.ApplicationtabWidget.tabText(index)
-        new_tab_name, success = QInputDialog.getText (
-            self, "Change Name",
-            "Insert New Tab Name",
-            QLineEdit.Normal,
-            old_name)
+        dlg = QInputDialog(self)
+        dlg.setWindowTitle("Change Application Name")
+        dlg.setLabelText("New Application Name:")
+        dlg.setTextValue(old_name)
+        dlg.resize(400,100)
+        success = dlg.exec()
+        new_tab_name = dlg.textValue()
         if (success and new_tab_name!=""):    
             self.ApplicationtabWidget.setTabText(index, new_tab_name)
+            self.applications[old_name].name = new_tab_name
+            self.applications[new_tab_name] = self.applications.pop(old_name)
+            
 
     def show_about(self):
         """Show about window

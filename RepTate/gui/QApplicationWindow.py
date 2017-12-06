@@ -576,7 +576,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.update_Qplot()
 
     def handle_doubleClickTab(self, index):
-        """Edit DataSet-tab name
+        """Edit DataSet name
         
         [description]
         
@@ -584,13 +584,17 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             index {[type]} -- [description]
         """
         old_name = self.DataSettabWidget.tabText(index)
-        new_tab_name, success = QInputDialog.getText (
-                self, "Change Name",
-                "Insert New Tab Name",
-                QLineEdit.Normal,
-                old_name)
+        dlg = QInputDialog(self)
+        dlg.setWindowTitle("Change DataSet Name")
+        dlg.setLabelText("New DataSet Name:")
+        dlg.setTextValue(old_name)
+        dlg.resize(400,100)
+        success = dlg.exec()
+        new_tab_name = dlg.textValue()
         if (success and new_tab_name!=""):    
             self.DataSettabWidget.setTabText(index, new_tab_name)
+            self.datasets[old_name].name = new_tab_name
+            self.datasets[new_tab_name] = self.datasets.pop(old_name)
 
     def close_data_tab_handler(self, index):
         """Delete a dataset tab from the current application

@@ -271,14 +271,26 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
 
     def handle_thTabBarDoubleClicked(self, index):
-        """Edit theory tab name
+        """Edit Theory name
         
         [description]
         
         Arguments:
             index {[type]} -- [description]
         """
-        pass
+        old_name = self.TheorytabWidget.tabText(index)
+        dlg = QInputDialog(self)
+        dlg.setWindowTitle("Change Theory Name")
+        dlg.setLabelText("New Theory Name:")
+        dlg.setTextValue(old_name)
+        dlg.resize(400,100)
+        success = dlg.exec()
+        new_tab_name = dlg.textValue()
+        if (success and new_tab_name!=""):    
+            self.TheorytabWidget.setTabText(index, new_tab_name)
+            self.theories[old_name].name = new_tab_name
+            self.theories[new_tab_name] = self.theories.pop(old_name)
+            self.current_theory = new_tab_name
 
     def handle_thTabCloseRequested(self, index):
         """Delete a theory tab from the current dataset
@@ -463,6 +475,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         if not self.files:
             return
+        if self.parent_application.theories[th_name].single_file and len(self.files)==0: 
+            header = "New Theory"
+            message = "Some data files in the DataSet are needed"%th_name
+            QMessageBox.warning(self, header, message)
+            return
         if self.parent_application.theories[th_name].single_file and len(self.files)>1: 
             header = "New Theory"
             message = "Theory \"%s\" cannot be applied to multiple data files"%th_name
@@ -474,8 +491,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         # add new theory tab
         if th_tab_id == "": 
-            th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
-            th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
+            th_tab_id = newth.name
+            #th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
+            #th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
         #self.handle_thCurrentChanged(index)
