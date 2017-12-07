@@ -47,7 +47,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.DataSettreeWidget = DataSetWidget(self)
         self.splitter.insertWidget(0, self.DataSettreeWidget)
-        
 
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))   
@@ -110,7 +109,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionCalculate_Theory.triggered.connect(self.handle_actionCalculate_Theory)
 
         connection_id = self.actionVertical_Limits.triggered.connect(self.toggle_vertical_limits)
-        connection_id = self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)
+        connection_id = self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)        
 
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)
