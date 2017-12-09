@@ -19,7 +19,7 @@ from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
 from PyQt5.QtCore import QSize
-from DraggableArtists import DraggableModes, DragType, DraggableModesSeries
+from DraggableArtists import DragType, DraggableModesSeries
 
 class TheoryMaxwellModesFrequency(CmdBase):
     """Fit Maxwell modes to a frequency dependent relaxation function
@@ -64,31 +64,24 @@ class BaseTheoryMaxwellModesFrequency:
         self.function = self.MaxwellModesFrequency
         self.has_modes = True
         self.MAX_MODES = 40
-        self.view_modes = False
-        self.parameters["logwmin"]=Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, True)
-        self.parameters["logwmax"]=Parameter("logwmax", 4, "Log of frequency range maximum", ParameterType.real, True)
-        self.parameters["nmodes"]=Parameter(name="nmodes", value=5, description="Number of Maxwell modes", type=ParameterType.integer, min_flag=False, display_flag=False)
+        self.view_modes = True
+        wmin = self.parent_dataset.minpositivecol(0)
+        wmax = self.parent_dataset.maxcol(0)
+        nmodes=int(np.round(np.log10(wmax/wmin)))
+        print(wmin, wmax, nmodes)
+        self.parameters["logwmin"]=Parameter("logwmin", np.log10(wmin), "Log of frequency range minimum", ParameterType.real, True)
+        self.parameters["logwmax"]=Parameter("logwmax", np.log10(wmax), "Log of frequency range maximum", ParameterType.real, True)
+        self.parameters["nmodes"]=Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, min_flag=False, display_flag=False)
+        # Interpolate modes from data
+        w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
+        G = np.abs(np.interp(w, self.parent_dataset.files[0].data_table.data[:,0], self.parent_dataset.files[0].data_table.data[:,1]))
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, True)
         
         # GRAPHIC MODES
         self.graphicmodes = []
         self.artistmodes = []
-
-    def drag_first_mode(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
-        """
-        self.set_param_value("logwmin", self.parameters["logwmin"].value + dx)
-        self.set_param_value("logG00", self.parameters["logG00"].value + dy)
-        self.do_calculate("")
-        self.parent_dataset.parent_application.update_plot()
-
+        self.setup_graphic_modes()
 
     def drag_mode(self, dx, dy):
         """[summary]
@@ -99,38 +92,20 @@ class BaseTheoryMaxwellModesFrequency:
             dx {[type]} -- [description]
             dy {[type]} -- [description]
         """
-        
-        pass
-
-    def drag_last_mode(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
-        """
-        self.set_param_value("logwmax", self.parameters["logwmax"].value + dx)
         nmodes=self.parameters["nmodes"].value
-        self.set_param_value("logG%02d"%(nmodes-1), self.parameters["logG%02d"%(nmodes-1)].value + dy)
+        self.set_param_value("logwmin", dx[0])
+        self.set_param_value("logwmax", dx[nmodes-1])
+        for i in range(nmodes):
+            self.set_param_value("logG%02d"%i, dy[i])
         self.do_calculate("")
-        self.parent_dataset.parent_application.update_plot()
+        self.update_parameter_table()
 
     def update_modes(self):
         """[summary]
         
         [description]
         """
-        pass
-
-    def destroy_graphic_modes(self):
-        nmodes=self.parameters["nmodes"].value
-        for i in range(nmodes):
-            self.parent_dataset.parent_application.ax.lines.remove(self.graphicmodes[i]) 
-        self.graphicmodes.clear()
-        self.artistmodes.clear()
-        
+        pass        
         
     def setup_graphic_modes(self):
         """[summary]
@@ -138,54 +113,21 @@ class BaseTheoryMaxwellModesFrequency:
         [description]
         """
         nmodes=self.parameters["nmodes"].value
-        freq=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
+        w=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
         G=np.zeros(nmodes)
         for i in range(nmodes):
             G[i]=np.power(10, self.parameters["logG%02d"%i].value)
 
-        # First mode
-        auxseries = self.ax.plot([], [], label='')
-        auxseries = auxseries[0]        
-        auxseries.set_marker('D')
-        auxseries.set_linestyle('')
-        auxseries.set_visible(self.view_modes)
-        auxseries.set_markerfacecolor('yellow')
-        auxseries.set_markeredgecolor('black')
-        auxseries.set_markeredgewidth(3)
-        auxseries.set_markersize(8)
-        auxseries.set_alpha(0.5)
-        self.graphicmodes.append(auxseries)
-        auxartist = DraggableModes(auxseries, DragType.both, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_first_mode)
-        self.artistmodes.append(auxartist)
-        for i in range(1,nmodes-1):
-            auxseries = self.ax.plot([], [], label='')
-            auxseries = auxseries[0]        
-            auxseries.set_marker('D')
-            auxseries.set_linestyle('')
-            auxseries.set_visible(self.view_modes)
-            auxseries.set_markerfacecolor('green')
-            auxseries.set_markeredgecolor('black')
-            auxseries.set_markeredgewidth(3)
-            auxseries.set_markersize(8)
-            auxseries.set_alpha(0.5)
-            self.graphicmodes.append(auxseries)
-            auxartist = DraggableModes(auxseries, DragType.vertical, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_mode)
-            self.artistmodes.append(auxartist)
-        # LAST MODE
-        if (nmodes > 1):
-            auxseries = self.ax.plot([], [], label='')
-            auxseries = auxseries[0]        
-            auxseries.set_marker('D')
-            auxseries.set_linestyle('')
-            auxseries.set_visible(self.view_modes)
-            auxseries.set_markerfacecolor('red')
-            auxseries.set_markeredgecolor('black')
-            auxseries.set_markeredgewidth(3)
-            auxseries.set_markersize(8)
-            auxseries.set_alpha(0.5)
-            self.graphicmodes.append(auxseries)
-            auxartist = DraggableModes(auxseries, DragType.both, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_last_mode)
-            self.artistmodes.append(auxartist)
+        self.graphicmodes = self.ax.plot(w, G)[0]
+        self.graphicmodes.set_marker('D')
+        self.graphicmodes.set_linestyle('')
+        self.graphicmodes.set_visible(self.view_modes)
+        self.graphicmodes.set_markerfacecolor('yellow')
+        self.graphicmodes.set_markeredgecolor('black')
+        self.graphicmodes.set_markeredgewidth(3)
+        self.graphicmodes.set_markersize(8)
+        self.graphicmodes.set_alpha(0.5)
+        self.artistmodes = DraggableModesSeries(self.graphicmodes, DragType.special, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_mode)
         self.plot_theory_stuff()
 
 
@@ -264,8 +206,7 @@ class BaseTheoryMaxwellModesFrequency:
         except TypeError as e:
             print(e)
             return
-        for i in range(nmodes):
-            self.graphicmodes[i].set_data(x[i,0], y[i,0])            
+        self.graphicmodes.set_data(x, y)
 
 class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
     """[summary]
@@ -311,28 +252,19 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogYesButton')), 'View modes')
         self.modesaction.setCheckable(True)
-        self.modesaction.setChecked(False)
+        self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(self.modesaction_change)
         
-
-    # def nmode_non_editable(self):
-    #     item = self.thParamTable.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
-    #     item.setDisabled(True)
-
     def modesaction_change(self):
         """[summary]
         
         [description]
         """
         self.view_modes = self.modesaction.isChecked()
-        if self.view_modes:
-            self.setup_graphic_modes()
-            self.parent_dataset.parent_application.update_plot()
-        else:
-            self.destroy_graphic_modes()
-            self.parent_dataset.parent_application.update_plot()
+        self.graphicmodes.set_visible(self.view_modes)
+        self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
         """[summary]
@@ -343,12 +275,26 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
             value {[type]} -- [description]
         """
         """Handle a change of the parameter 'nmode'"""
-        if self.view_modes:
-            self.destroy_graphic_modes()
-        self.set_param_value("nmodes", value)
-        if self.view_modes:
-            self.setup_graphic_modes()
-            self.parent_dataset.parent_application.update_plot()
+        nmodesold=self.parameters["nmodes"].value
+        wminold=self.parameters["logwmin"].value
+        wmaxold=self.parameters["logwmax"].value
+        wold=np.logspace(wminold, wmaxold, nmodesold)
+        Gold=np.zeros(nmodesold)
+        for i in range(nmodesold):
+            Gold[i]=self.parameters["logG%02d"%i].value
+            del self.parameters["logG%02d"%i]
+
+        nmodesnew=value
+        self.set_param_value("nmodes", nmodesnew)
+        wnew=np.logspace(wminold, wmaxold, nmodesnew)
+        
+        Gnew = np.interp(wnew, wold, Gold)
+
+        for i in range(nmodesnew):
+            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,Gnew[i],"Log of Mode %d amplitude"%i, ParameterType.real, True)
+        
+        self.do_calculate("")
+        self.update_parameter_table()
 
 
 ##################################################################################
@@ -401,13 +347,13 @@ class BaseTheoryMaxwellModesTime:
         self.view_modes = True
         tmin = self.parent_dataset.minpositivecol(0)
         tmax = self.parent_dataset.maxcol(0)
-        nmodes=5
+        nmodes=int(np.round(np.log10(tmax/tmin)))
         self.parameters["logtmin"]=Parameter("logtmin", np.log10(tmin), "Log of time range minimum", ParameterType.real, True)
         self.parameters["logtmax"]=Parameter("logtmax", np.log10(tmax), "Log of time range maximum", ParameterType.real, True)
-        self.parameters["nmodes"]=Parameter(name="nmodes", value=5, description="Number of Maxwell modes", type=ParameterType.integer, min_flag=False, display_flag=False)
+        self.parameters["nmodes"]=Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, min_flag=False, display_flag=False)
         # Interpolate modes from data
         tau = np.logspace(np.log10(tmin), np.log10(tmax), nmodes)
-        G = np.interp(tau, self.parent_dataset.files[0].data_table.data[:,0], self.parent_dataset.files[0].data_table.data[:,1])
+        G = np.abs(np.interp(tau, self.parent_dataset.files[0].data_table.data[:,0], self.parent_dataset.files[0].data_table.data[:,1]))
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, True)
 
@@ -595,8 +541,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         """
         self.view_modes = self.modesaction.isChecked()
         self.graphicmodes.set_visible(self.view_modes)
-        if self.view_modes:
-            self.parent_dataset.parent_application.update_plot()
+        self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
         """[summary]
