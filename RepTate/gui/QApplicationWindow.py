@@ -25,7 +25,7 @@ from DataSetWidgetItem import DataSetWidgetItem
 from DataSet import ColorMode, SymbolMode
 from CmdBase import CmdBase, CmdMode
 from Application import Application
-from DraggableArtists import DragType, DraggableSeries
+from DraggableArtists import DragType, DraggableSeries, DraggableNote
 
 #To recompile the symbol-settings dialog:
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
@@ -137,6 +137,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.mpl_toolbar.setFixedHeight(36)
         self.mpl_toolbar.layout().setSpacing(0)
         self.mpl_toolbar.addAction(self.actionTrack_data)
+        self.mpl_toolbar.addAction(self.actionAdd_Annotation)
         self.mpl_toolbar.setVisible(False)
         self.mplvl.addWidget(self.mpl_toolbar)
 
@@ -178,6 +179,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         # Annotation stuff
         connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
+        self.graphicnotes = []
+        self.artistnotes = []
+        connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
         plt.connect('motion_notify_event', self.mpl_motion_event)
 
         #Setting up the marker-settings dialog
@@ -261,6 +265,18 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.annotation.remove()
             self.canvas.draw()
 
+    def add_annotation(self):
+        text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
+        if ok:
+            xmin, xmax = self.ax.get_xlim()
+            ymin, ymax = self.ax.get_ylim()
+            xpos = (xmin+xmax)/2
+            ypos = (ymin+ymax)/2
+            ann = self.ax.annotate(text, xy=(xpos, ypos), xytext=(xpos, ypos), size=20, va="center", ha="center")
+            self.graphicnotes.append(ann)
+            self.artistnotes.append(DraggableNote(ann, DragType.both, None, None))
+            self.canvas.draw()
+            
     def populate_cbPalette(self):
         """Populate the list color palettes of the marker-settings dialog
         

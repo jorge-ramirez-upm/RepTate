@@ -708,3 +708,70 @@ class DraggableHSpan(DraggableArtist):
         ymin = self.data[0][1]
         ymax = self.data[1][1]
         self.artist.set_xy([[0, ymin+dy], [0, ymax+dy], [1, ymax+dy], [1 ,ymin+dy], [0, ymin+dy]])
+
+class DraggableNote(DraggableArtist):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, artist, mode=DragType.none, function=None, function2=None):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            artist {[type]} -- [description]
+        
+        Keyword Arguments:
+            mode {[type]} -- [description] (default: {DragType})
+            function {[type]} -- [description] (default: {None})
+            function2 {[type]} -- [description] (default: {None})
+        """
+        super(DraggableNote, self).__init__(artist, mode, function)
+        self.function2=function2
+
+    def get_data(self):
+        """[summary]
+        
+        [description]
+        """
+        self.data=self.artist.get_position()
+
+    def modify_artist(self, dx, dy):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dx {[type]} -- [description]
+            dy {[type]} -- [description]
+        """
+        self.artist.set_position([self.press[0]+dx, self.press[1]+dy])
+
+    def on_release(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
+        if DraggableArtist.lock is not self: return
+        xpress, ypress = self.press
+        if event.xdata is None: return
+        if event.ydata is None: return
+        dx = event.xdata - xpress
+        dy = event.ydata - ypress
+        #if (self.mode==DragType.none):   
+        #    self.function(0, 0)
+        #elif (self.mode==DragType.horizontal):
+        #    self.function(dx, 0)
+        #elif (self.mode==DragType.vertical):
+        #    self.function(0, dy)
+        #elif (self.mode==DragType.both):
+        #    self.function(dx, dy)
+        self.press = None
+        DraggableArtist.lock = None
+        self.artist.set_animated(False)
+        self.background = None
+        self.artist.figure.canvas.draw()

@@ -392,6 +392,18 @@
     <string>Track data</string>
    </property>
   </action>
+  <action name="actionAdd_Annotation">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-spiral-bound-booklet.png</normaloff>:/Images/Images/new_icons/icons8-spiral-bound-booklet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Annotation</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Annotation</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>
