@@ -47,3 +47,25 @@ class DataTable(object):
         .. todo:: Refine this. It doesn't work
         """
         return self.data
+        
+    def mincol(self, col):
+        """Minimum value in table column col
+        [description]
+
+        """
+        return np.min(self.data[:,col])
+        
+    def minpositivecol(self, col):
+        """Minimum positive value in table column col
+        [description]
+
+        """
+        return (self.data[self.data[:,col]>0,col]).min()
+
+    def maxcol(self, col):
+        """Maximum value in table column col
+        [description]
+
+        """
+        return np.max(self.data[:,col])
+        

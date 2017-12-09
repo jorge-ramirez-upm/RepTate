@@ -58,3 +58,25 @@ class File(object):
         [description]
         """
         return '%s: %s' % (self.file_full_path, self.file_parameters)
+        
+    def mincol(self, col):
+        """Minimum value in data_table column col
+        [description]
+
+        """
+        return self.data_table.mincol(col)
+        
+    def minpositivecol(self, col):
+        """Minimum positive value in data_table column col
+        [description]
+
+        """
+        return self.data_table.minpositivecol(col)
+
+    def maxcol(self, col):
+        """Maximum value in data_table column col
+        [description]
+
+        """
+        return self.data_table.maxcol(col)
+    

@@ -812,3 +812,39 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             line {[type]} -- [description]
         """
         self.parent_application.do_legend(line)
+
+    def mincol(self, col):
+        """Minimum value in table column line of all Files in DataSet
+        [description]
+
+        """
+        min=1e100
+        for f in self.files:
+            minfile=f.mincol(col)
+            if minfile<min:
+                min=minfile
+        return min
+
+    def minpositivecol(self, col):
+        """Minimum positive value in table column line of all Files in DataSet
+        [description]
+
+        """
+        min=1e100
+        for f in self.files:
+            minfile=f.minpositivecol(col)
+            if minfile<min:
+                min=minfile
+        return min
+        
+    def maxcol(self, col):
+        """Maximum value in table column line of all Files in DataSet
+        [description]
+
+        """
+        max=-1e100
+        for f in self.files:
+            maxfile=f.maxcol(col)
+            if maxfile>max:
+                max=maxfile
+        return max
