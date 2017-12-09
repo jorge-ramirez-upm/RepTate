@@ -1,6 +1,6 @@
-================
-RepTate Tutorial
-================
+========
+Tutorial
+========
 
 .. toctree::
    :maxdepth: 2

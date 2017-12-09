@@ -58,8 +58,12 @@ class BaseApplicationGt:
         super().__init__(name, parent)
 
         # VIEWS
-        self.views["G(t)"]=View("G(t)", "Relaxation modulus", "t", "G(t)", "s", "Pa", True, True, self.viewGt, 1, ["G(t)"])
-        self.views["Log[G(t)]"]=View("Log[G(t)]", "Log Relaxation modulus", "log(t)", "log(G(t))", "s", "Pa", False, False, self.viewLogGt, 1, ["log(G(t))"])
+        self.views["Log[G(t)]"]=View(name="Log[G(t)]", description="Log Relaxation modulus", x_label="log(t)", 
+                                     y_label="log(G(t))", x_units="s", y_units="Pa", log_x=False, log_y=False, 
+                                     view_proc=self.viewLogGt, n=1, snames=["log(G(t))"], index=0)
+        self.views["G(t)"]=View(name="G(t)", description="Relaxation modulus", x_label="t", y_label="G(t)", 
+                                x_units="s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewGt, 
+                                n=1, snames=["G(t)"], index=1)
         self.current_view=self.views["Log[G(t)]"]
 
         # FILES

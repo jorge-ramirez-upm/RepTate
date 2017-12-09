@@ -61,11 +61,11 @@ class BaseApplicationLVE:
         super().__init__(name, parent)
 
         # VIEWS
-        self.views["log(G',G''(w))"] = View(name="log(G',G''(w))", description="log Storage,Loss moduli", x_label="log($\omega$)", y_label="log(G'($\omega$),G''($\omega$))", x_units="rad/s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogG1G2, n=2, snames=["G'(w)","G''(w)"])
-        self.views["G',G''(w)"] = View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", "rad/s", "Pa", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"])
-        self.views["etastar"] = View("etastar", "Complex Viscosity", "$\omega$", "$|\eta^*(\omega)|$", "rad/s", "Pa.s", True, True, self.viewEtaStar, 1, ["eta*(w)"])
-        self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"])
-        self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"])
+        self.views["log(G',G''(w))"] = View(name="log(G',G''(w))", description="log Storage,Loss moduli", x_label="log($\omega$)", y_label="log(G'($\omega$),G''($\omega$))", x_units="rad/s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogG1G2, n=2, snames=["G'(w)","G''(w)"], index=0)
+        self.views["G',G''(w)"] = View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", "rad/s", "Pa", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"], index=1)
+        self.views["etastar"] = View("etastar", "Complex Viscosity", "$\omega$", "$|\eta^*(\omega)|$", "rad/s", "Pa.s", True, True, self.viewEtaStar, 1, ["eta*(w)"], index=2)
+        self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"], index=3)
+        self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"], index=4)
         self.current_view=self.views["log(G',G''(w))"]
 
         # FILES

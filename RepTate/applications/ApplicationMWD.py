@@ -57,7 +57,9 @@ class BaseApplicationMWD:
         super().__init__(name, parent)
 
         # VIEWS
-        self.views["W(M)"]=View("W(M)", "Molecular weight distribution", "M", "W(M)", "g/mol", "-", True, False, self.viewWM, 1, ["W(M)"])
+        self.views["W(M)"]=View(name="W(M)", description="Molecular weight distribution", x_label="M", y_label="W(M)", 
+                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.viewWM, n=1, 
+                                snames=["W(M)"], index=0)
         self.current_view=self.views["W(M)"]
 
         # FILES

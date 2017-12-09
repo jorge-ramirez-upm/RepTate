@@ -632,9 +632,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         """
         selectedview = self.current_view.name
-        for i in sorted(self.views):
-            #add keys of 'views' dict to the list of views avaliable 
-            self.viewComboBox.addItem(i) 
+        nviews = len(self.views)
+        for ind in range(nviews):
+            for i in self.views:
+                if self.views[i].index == ind:
+                    #add keys of 'views' dict to the list of views avaliable 
+                    self.viewComboBox.insertItem(self.views[i].index, i)
         index = self.viewComboBox.findText(selectedview, QtCore.Qt.MatchFixedString)
         self.viewComboBox.setCurrentIndex(index)
 
