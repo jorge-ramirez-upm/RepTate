@@ -19,6 +19,7 @@ from View import View
 from FileType import TXTColumnFile
 import numpy as np
 from TheoryTTS import TheoryWLFShift
+from TheoryTTS_Test import TheoryWLFShiftTest
 
 class ApplicationTTS(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
@@ -80,6 +81,7 @@ class BaseApplicationTTS:
 
         # THEORIES
         self.theories[TheoryWLFShift.thname]=TheoryWLFShift
+        self.theories[TheoryWLFShiftTest.thname]=TheoryWLFShiftTest
 
     def viewLogG1G2(self, dt, file_parameters):
         """[summary]

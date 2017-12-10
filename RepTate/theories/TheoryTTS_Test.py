@@ -24,53 +24,54 @@ from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
 from PyQt5.QtCore import QSize
 
-class TheoryWLFShift(CmdBase):
+class TheoryWLFShiftTest(CmdBase):
     """Basic theory for Time-Temperature Superposition, based on the WLF equation
     
     [description]
     """
-    thname="WLFShift"
+    thname="WLFShiftTest"
     description="Basic theory for Time-Temperature Superposition, based on the WLF equation"
     cite=""
     single_file = False 
 
-    def __new__(cls, name="ThWLFShift", parent_dataset=None, ax=None):
+    def __new__(cls, name="ThWLFShifTest", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShift"})
+            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         
         Returns:
             [type] -- [description]
         """
-        return GUITheoryWLFShift(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryWLFShift(name, parent_dataset, ax)
+        return GUITheoryWLFShiftTest(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryWLFShiftTest(name, parent_dataset, ax)
 
-class BaseTheoryWLFShift:
+class BaseTheoryWLFShiftTest:
     """[summary]
     
     [description]
     """
-    def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+    def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShift"})
+            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-        self.function = self.TheoryWLFShift
+        self.function = self.TheoryWLFShiftTest
         self.parameters["C1"]=Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, True)
         self.parameters["C2"]=Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, True)
         self.parameters["rho0"]=Parameter("rho0", 0.928, "Density of polymer at 0 °C", ParameterType.real, False)
         self.parameters["C3"]=Parameter("C3", 0.61, "Density parameter", ParameterType.real, False)
-        self.parameters["T0"]=Parameter("T0", 25, "Temperature to shift WLF to, in °C", ParameterType.real, False)
+        self.parameters["Tr"]=Parameter("Tr", 25, "Material parameter Tr Reference T WLF shift", ParameterType.real, False)
+        self.parameters["T"]=Parameter("T", 25, "Temperature to shift WLF to, in °C", ParameterType.real, False)
         self.parameters["CTg"]=Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, False)
         self.parameters["dx12"]=Parameter("dx12", 0, "For PBd", ParameterType.real, False)
         self.parameters["vert"]=Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
@@ -91,7 +92,7 @@ class BaseTheoryWLFShift:
         """
         return 
 
-    def TheoryWLFShift(self, f=None):
+    def TheoryWLFShiftTest(self, f=None):
         """[summary]
         
         [description]
@@ -105,7 +106,8 @@ class BaseTheoryWLFShift:
         tt.num_rows=ft.num_rows
         tt.data=np.zeros((tt.num_rows, tt.num_columns))
 
-        T0=self.parameters["T0"].value
+        T=self.parameters["T"].value
+        Tr=self.parameters["Tr"].value
         C1=self.parameters["C1"].value
         C2=self.parameters["C2"].value
         C3=self.parameters["C3"].value
@@ -115,26 +117,25 @@ class BaseTheoryWLFShift:
         iso=self.parameters["iso"].value
         vert=self.parameters["vert"].value
 
-        T=f.file_parameters["T"]
+        Tf=f.file_parameters["T"]
         Mw=f.file_parameters["Mw"]
 
-        if iso:
-            C2 += CTg / Mw - 68.7 * dx12
-            T0corrected = T0 - CTg / Mw + 68.7 * dx12
-        else:
-            T0corrected = T0
-        tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2)))
-
-        # Trying a new expression for the shift
         #if iso:
-            #C2 += CTg / Mw - 68.7 * dx12 # Old Reptate code
+        #    C2 += CTg / Mw - 68.7 * dx12
         #    T0corrected = T0 - CTg / Mw + 68.7 * dx12
         #else:
         #    T0corrected = T0
-        #tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2 - T0corrected)))
+        #tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2)))
+
+        # Trying a new expression for the shift
+        if iso:
+            Trcorrected = Tr - CTg / Mw + 68.7 * dx12
+        else:
+            Trcorrected = Tr
+        tt.data[:,0] = ft.data[:,0]*np.power(10.0, -C1*C2*(Tf - T)/(C2 + T - Trcorrected)/(C2 + Tf - Trcorrected))
         
         if vert:
-            bT = (rho0 - T * C3 * 1E-3) * (T + 273.15) / ((rho0 - T0 * C3 * 1E-3) * (T0 + 273.15))
+            bT = (rho0 - Tf * C3 * 1E-3) * (Tf + 273.15) / ((rho0 - T * C3 * 1E-3) * (T + 273.15))
         else:
             bT = 1
         tt.data[:,1] = ft.data[:,1] / bT
@@ -331,7 +332,7 @@ class BaseTheoryWLFShift:
         return completions
         
     def do_save(self, line):
-        """Save the results from WLFShift theory predictions to a TTS file
+        """Save the results from WLFShiftTest theory predictions to a TTS file
         
         [description]
         
@@ -398,35 +399,35 @@ class BaseTheoryWLFShift:
                 fout.write('\n')
             fout.close()
 
-class CLTheoryWLFShift(BaseTheoryWLFShift, Theory):
+class CLTheoryWLFShiftTest(BaseTheoryWLFShiftTest, Theory):
     """[summary]
     
     [description]
     """
-    def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+    def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShift"})
+            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         
-class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
+class GUITheoryWLFShiftTest(BaseTheoryWLFShiftTest, QTheory):
     """[summary]
     
     [description]
     """
-    def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
+    def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShift"})
+            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
