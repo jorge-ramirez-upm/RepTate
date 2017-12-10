@@ -11,6 +11,9 @@
 Module for the pseudo theory for Time-Temperature superposition shift of LVE data.
 
 """ 
+import os
+import time
+import getpass
 import numpy as np
 from scipy import interp
 from scipy.optimize import minimize
@@ -18,7 +21,7 @@ from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType
 from Theory import Theory
 from QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle
+from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
 from PyQt5.QtCore import QSize
 
 class TheoryWLFShift(CmdBase):
@@ -134,7 +137,8 @@ class BaseTheoryWLFShift:
         
         The error is calculated as the vertical distance between theory points, in the current view,\
         calculated over all possible pairs of theory tables, when the theories overlap in the horizontal direction and\
-        they correspond to files with the same Mw. 1/2 of the error is added to each file.
+        they correspond to files with the same Mw (if the parameters Mw2 and phi exist, their values are also
+        used to classify the error). 1/2 of the error is added to each file.
         Report the error of the current theory on all the files.\n\
         File error is calculated as the mean square of the residual, averaged over all calculated points in the shifted tables.\n\
         Total error is the mean square of the residual, averaged over all points considered in all files.
@@ -156,6 +160,18 @@ class BaseTheoryWLFShift:
         for i in range(nfiles):
             Filei=self.parent_dataset.files[i]
             Mwi=Filei.file_parameters["Mw"]
+            if "Mw2" in Filei.file_parameters:
+                Mw2i=Filei.file_parameters["Mw2"]
+            else:
+                Mw2i=0
+            if "phi" in Filei.file_parameters:
+                phii=Filei.file_parameters["phi"]
+            else:
+                phii=0
+            if "phi2" in Filei.file_parameters:
+                phi2i=Filei.file_parameters["phi2"]
+            else:
+                phi2i=0
             xthi, ythi, success = view.view_proc(self.tables[Filei.file_name_short], Filei.file_parameters)
             # We need to sort arrays
             for k in range(view.n):
@@ -165,7 +181,7 @@ class BaseTheoryWLFShift:
                 ythi[:,k] = ythi[p,k]
             xth.append(xthi)
             yth.append(ythi)
-            Mw.append(Mwi)
+            Mw.append((Mwi,Mw2i,phii,phi2i))
             
             xmin[i,:]=np.amin(xthi,0)
             xmax[i,:]=np.amax(xthi,0)
@@ -174,7 +190,7 @@ class BaseTheoryWLFShift:
         p = list(set(Mw))
         for o in p:
             MwUnique[o]=[0.0, 0]
-
+            
         for i in range(nfiles):
             for j in range(i+1,nfiles):
                 if (Mw[i] != Mw[j]): continue
@@ -191,15 +207,15 @@ class BaseTheoryWLFShift:
                     MwUnique[Mw[i]][1]+=npt
         
         if (line==""): 
-            self.Qprint("%20s %10s (%10s)"%("Mw","Error","# Points"))
-            self.Qprint("=============================================")
+            self.Qprint("%5s %5s %5s %5s %10s (%10s)"%("Mw","Mw2","phi","phi2","Error","# Points"))
+            self.Qprint("=====================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1]>0):
-                    self.Qprint("%20.5gk %10.5g (%10d)"%(o,MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
+                    self.Qprint("%5gk %5gk %5g %5g %10.5g (%10d)"%(o[0], o[1], o[2], o[3],MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
                 else:
-                    self.Qprint("%20.5gk %10s (%10d)"%(o,"-",0))
+                    self.Qprint("%5gk %5gk %5g %5g %10s (%10d)"%(o[0], o[1], o[2], o[3],"-",0))
         if (npoints>0):
             total_error/=npoints
         else:
@@ -315,42 +331,56 @@ class BaseTheoryWLFShift:
             line {[type]} -- [description]
         """
         print('Saving prediction of '+self.thname+' theory')
+        nfiles=len(self.parent_dataset.files)
         Mw=[]
-        for f in self.parent_dataset.files:
-            Mwi=f.file_parameters["Mw"]
-            Mw.append(Mwi)            
+        for i in range(nfiles):
+            Filei=self.parent_dataset.files[i]
+            Mwi=Filei.file_parameters["Mw"]
+            if "Mw2" in Filei.file_parameters:
+                Mw2i=Filei.file_parameters["Mw2"]
+            else:
+                Mw2i=0
+            if "phi" in Filei.file_parameters:
+                phii=Filei.file_parameters["phi"]
+            else:
+                phii=0
+            if "phi2" in Filei.file_parameters:
+                phi2i=Filei.file_parameters["phi2"]
+            else:
+                phi2i=0
+            Mw.append((Mwi,Mw2i,phii,phi2i))
         MwUnique = list(set(Mw))
         MwUnique.sort()
 
         for m in MwUnique:
             data=np.zeros(0)
             fparam={}
-            for f in self.parent_dataset.files:
-                if (f.file_parameters["Mw"]==m):
-                    ttable=self.tables[f.file_name_short]
+            for i in range(nfiles):
+                if (Mw[i] == m): 
+                    Filei=self.parent_dataset.files[i]
+                    ttable=self.tables[Filei.file_name_short]
                     data = np.append(data, ttable.data)
                     data=np.reshape(data, (-1, ttable.num_columns))
-                    fparam.update(f.file_parameters)
+                    fparam.update(Filei.file_parameters)
             data=data[data[:, 0].argsort()]
             fparam["T"]=self.parameters["T0"].value
 
-            ofilename=os.path.dirname(self.parent_dataset.files[0].file_full_path)+os.sep+fparam["chem"]+'_'+str(fparam["Mw"])+'k'+'_'+str(fparam["T"])+'.tts'
+            if line=="":
+                ofilename=os.path.dirname(self.parent_dataset.files[0].file_full_path)+os.sep+fparam["chem"]+'_Mw'+str(m[0])+'k'+'_Mw2'+str(m[1])+'_phi'+str(m[2])+'_phiB'+str(m[3])+str(fparam["T"])+'.tts'
+            else:
+                ofilename=line+os.sep+fparam["chem"]+'_Mw'+str(m[0])+'k'+'_Mw2'+str(m[1])+'_phi'+str(m[2])+'_phiB'+str(m[3])+str(fparam["T"])+'.tts'            
             print('File: '+ofilename)
             fout=open(ofilename, 'w')
-            k = list(f.file_parameters.keys())
-            k.sort()
-            for i in k:            
-                fout.write(i + "=" + str(f.file_parameters[i])+ ";")
-            fout.write('\n')
-            fout.write('# Master curve predicted with '+self.thname+' Theory\n')
-            fout.write('# ')
+            for i in sorted(fparam):
+                fout.write(i + "=" + str(fparam[i])+ ";")
             k = list(self.parameters.keys())
             k.sort()
             for i in k:
-                fout.write(i + '=' + str(self.parameters[i].value) + '; ')
+                fout.write(i + '=' + str(self.parameters[i].value) + ';')
             fout.write('\n')
+            fout.write('# Master curve predicted with WLF Theory\n')
             fout.write('# Date: '+ time.strftime("%Y-%m-%d %H:%M:%S") + ' - User: ' + getpass.getuser() + '\n')
-            k = f.file_type.col_names
+            k = Filei.file_type.col_names
             for i in k: 
                 fout.write(i+'\t')
             fout.write('\n')
@@ -407,10 +437,14 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
         connection_id = self.isofrictional.triggered.connect(self.do_isofrictional)
-        connection_id = self.savemaster.triggered.connect(self.do_save)
+        connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
 
     def do_vertical_shift(self):
         self.set_param_value("vert", self.verticalshift.isChecked())
 
     def do_isofrictional(self):
         self.set_param_value("iso", self.isofrictional.isChecked())
+
+    def do_save_dialog(self):
+        folder = str(QFileDialog.getExistingDirectory(self, "Select Directory to save Master curves"))
+        self.do_save(folder)
