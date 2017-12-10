@@ -404,6 +404,21 @@
     <string>Add Annotation</string>
    </property>
   </action>
+  <action name="actionShow_Legend">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-categorize.png</normaloff>:/Images/Images/new_icons/icons8-categorize.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Legend</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Legend</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>

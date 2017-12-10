@@ -138,6 +138,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.mpl_toolbar.layout().setSpacing(0)
         self.mpl_toolbar.addAction(self.actionTrack_data)
         self.mpl_toolbar.addAction(self.actionAdd_Annotation)
+        self.mpl_toolbar.addAction(self.actionShow_Legend)
         self.mpl_toolbar.setVisible(False)
         self.mplvl.addWidget(self.mpl_toolbar)
 
@@ -146,6 +147,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.update_Qplot()
         # sns.despine() # Remove up and right side of plot box
         # LEGEND STUFF
+        self.legend = None
         # leg=plt.legend(loc='upper left', frameon=True, ncol=2)
         # if leg:
         #     leg.draggable()
@@ -182,6 +184,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.graphicnotes = []
         self.artistnotes = []
         connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
+        connection_id = self.actionShow_Legend.triggered.connect(self.show_legend)
         plt.connect('motion_notify_event', self.mpl_motion_event)
 
         #Setting up the marker-settings dialog
@@ -276,7 +279,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.graphicnotes.append(ann)
             self.artistnotes.append(DraggableNote(ann, DragType.both, None, None))
             self.canvas.draw()
-            
+
+    def show_legend(self):
+        if self.actionShow_Legend.isChecked():
+            self.legend=plt.legend(loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
+            self.legend.draggable()
+        else:
+            self.legend.remove()
+        self.canvas.draw()
+                    
     def populate_cbPalette(self):
         """Populate the list color palettes of the marker-settings dialog
         

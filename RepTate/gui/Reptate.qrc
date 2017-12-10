@@ -153,6 +153,7 @@
     <file>Images/MWD.ico</file>
     <file>Images/new_icons/icons8-binoculars.png</file>
     <file>Images/new_icons/icons8-spiral-bound-booklet.png</file>
+    <file>Images/new_icons/icons8-categorize.png</file>
   </qresource>
   <qresource prefix="Markers">
     <file>Images/Matplotlib_markers/marker_filled_thin_diamond.png</file>
