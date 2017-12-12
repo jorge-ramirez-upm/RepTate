@@ -32,7 +32,6 @@ class TheoryWLFShift(CmdBase):
     thname="WLFShift"
     description="Basic theory for Time-Temperature Superposition, based on the WLF equation"
     cite=""
-    single_file = False 
 
     def __new__(cls, name="ThWLFShift", parent_dataset=None, ax=None):
         """[summary]
@@ -54,6 +53,8 @@ class BaseTheoryWLFShift:
     
     [description]
     """
+    single_file = False 
+
     def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):
         """[summary]
         

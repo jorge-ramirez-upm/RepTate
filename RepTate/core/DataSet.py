@@ -731,8 +731,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 print("Current dataset is empty\n"
                     "%s was not created"%line)
                 return
-            if self.parent_application.theories[line].single_file and len(self.files)>1:
-                print("Theory %s cannot be applied to multiple data files"%line)
             self.num_theories += 1
             #th_id = "%s%02d"%(line,self.num_theories)
             th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name

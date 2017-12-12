@@ -30,7 +30,6 @@ class TheoryLikhtmanMcLeish2002(CmdBase):
     cite="Likhtman A.E. and McLeish T.C.B.\n\
 Quantitative Theory for Linear Dynamics of Linear Entangled Polymers\n\
 Macromolecules 2002, 35, 6332-6343"
-    single_file = False
     
     def __new__(cls, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
         """[summary]
@@ -52,6 +51,8 @@ class BaseTheoryLikhtmanMcLeish2002:
     
     [description]
     """
+    single_file = False
+
     def __init__(self, name="ThLikhtmanMcLeish2002", parent_dataset=None, ax=None):
         """[summary]
         

@@ -28,7 +28,6 @@ class TheoryDiscrMWD(CmdBase):
     thname = "MWDiscr"
     description = "Discretize a Molecular Weight Distribution"
     citations = ""
-    single_file = True
 
     def __new__(cls, name="MWDiscr", parent_dataset=None, ax=None):
         """[summary]
@@ -50,6 +49,8 @@ class BaseTheoryDiscrMWD:
     
     [description]
     """
+    single_file = True
+    
     def __init__(self, name="ThDiscrMWD", parent_dataset=None, ax=None):
         """[summary]
         

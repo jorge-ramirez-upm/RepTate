@@ -152,24 +152,25 @@ class Theory(CmdBase):
         self.Qprint("%20s %10s (%10s)"%("File","Error","# Points"))
         self.Qprint("=============================================")
         for f in self.parent_dataset.files:
-            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-            xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-            if (self.xrange.get_visible()):
-                conditionx=(xexp>self.xmin)*(xexp<self.xmax)
-            else:
-                conditionx=np.ones_like(xexp, dtype=np.bool)
-            if (self.yrange.get_visible()):
-                conditiony=(yexp>self.ymin)*(yexp<self.ymax)
-            else:
-                conditiony=np.ones_like(yexp, dtype=np.bool)
-            conditionnaninf=(~np.isnan(xexp))*(~np.isnan(yexp))*(~np.isnan(xth))*(~np.isnan(yth))*(~np.isinf(xexp))*(~np.isinf(yexp))*(~np.isinf(xth))*(~np.isinf(yth))
-            yexp=np.extract(conditionx*conditiony*conditionnaninf, yexp)
-            yth=np.extract(conditionx*conditiony*conditionnaninf, yth)
-            f_error=np.mean((yth-yexp)**2)
-            npt=len(yth)
-            total_error+=f_error*npt
-            npoints+=npt
-            self.Qprint("%20s %10.5g (%10d)"%(f.file_name_short,f_error,npt))
+            if f.active:
+                xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
+                xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+                if (self.xrange.get_visible()):
+                    conditionx=(xexp>self.xmin)*(xexp<self.xmax)
+                else:
+                    conditionx=np.ones_like(xexp, dtype=np.bool)
+                if (self.yrange.get_visible()):
+                    conditiony=(yexp>self.ymin)*(yexp<self.ymax)
+                else:
+                    conditiony=np.ones_like(yexp, dtype=np.bool)
+                conditionnaninf=(~np.isnan(xexp))*(~np.isnan(yexp))*(~np.isnan(xth))*(~np.isnan(yth))*(~np.isinf(xexp))*(~np.isinf(yexp))*(~np.isinf(xth))*(~np.isinf(yth))
+                yexp=np.extract(conditionx*conditiony*conditionnaninf, yexp)
+                yth=np.extract(conditionx*conditiony*conditionnaninf, yth)
+                f_error=np.mean((yth-yexp)**2)
+                npt=len(yth)
+                total_error+=f_error*npt
+                npoints+=npt
+                self.Qprint("%20s %10.5g (%10d)"%(f.file_name_short,f_error,npt))
         self.Qprint("%20s %10.5g (%10d)"%("TOTAL",total_error/npoints,npoints))
 
     def func_fit(self, x, *param_in):
@@ -194,20 +195,21 @@ class Theory(CmdBase):
         y = []
         view = self.parent_dataset.parent_application.current_view
         for f in self.parent_dataset.files:
-            xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-            for i in range(view.n):
-                if (self.xrange.get_visible()):
-                    conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
-                else:
-                    conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
-                if (self.yrange.get_visible()):
-                    conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
-                else:
-                    conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
-                conditionnaninf=(~np.isnan(xexp)[:,0])*(~np.isnan(yexp)[:,0])*(~np.isinf(xexp)[:,0])*(~np.isinf(yexp)[:,0])
-                ycond=np.extract(conditionx*conditiony*conditionnaninf, yth[:,i])
-                y = np.append(y, ycond)
+            if f.active:
+                xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+                xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
+                for i in range(view.n):
+                    if (self.xrange.get_visible()):
+                        conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
+                    else:
+                        conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
+                    if (self.yrange.get_visible()):
+                        conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
+                    else:
+                        conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
+                    conditionnaninf=(~np.isnan(xexp)[:,0])*(~np.isnan(yexp)[:,0])*(~np.isinf(xexp)[:,0])*(~np.isinf(yexp)[:,0])
+                    ycond=np.extract(conditionx*conditiony*conditionnaninf, yth[:,i])
+                    y = np.append(y, ycond)
         self.nfev += 1
         return y
 
@@ -244,22 +246,23 @@ class Theory(CmdBase):
                 self.ymax = temp
                 
         for f in self.parent_dataset.files:
-            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-            for i in range(view.n):   
-                if (self.xrange.get_visible()):
-                    conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
-                else:
-                    conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
-                if (self.yrange.get_visible()):
-                    conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
-                else:
-                    conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
-                conditionnaninf=(~np.isnan(xexp)[:,0])*(~np.isnan(yexp)[:,0])*(~np.isinf(xexp)[:,0])*(~np.isinf(yexp)[:,0])
-                xcond=np.extract(conditionx*conditiony*conditionnaninf, xexp[:,i])
-                ycond=np.extract(conditionx*conditiony*conditionnaninf, yexp[:,i])
+            if f.active:
+                xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
+                for i in range(view.n):   
+                    if (self.xrange.get_visible()):
+                        conditionx=(xexp[:,i]>self.xmin)*(xexp[:,i]<self.xmax)
+                    else:
+                        conditionx=np.ones_like(xexp[:,i], dtype=np.bool)
+                    if (self.yrange.get_visible()):
+                        conditiony=(yexp[:,i]>self.ymin)*(yexp[:,i]<self.ymax)
+                    else:
+                        conditiony=np.ones_like(yexp[:,i], dtype=np.bool)
+                    conditionnaninf=(~np.isnan(xexp)[:,0])*(~np.isnan(yexp)[:,0])*(~np.isinf(xexp)[:,0])*(~np.isinf(yexp)[:,0])
+                    xcond=np.extract(conditionx*conditiony*conditionnaninf, xexp[:,i])
+                    ycond=np.extract(conditionx*conditiony*conditionnaninf, yexp[:,i])
 
-                x = np.append(x, xcond)
-                y = np.append(y, ycond)      
+                    x = np.append(x, xcond)
+                    y = np.append(y, ycond)      
 
         # Mount the vector of parameters (Active ones only)
         initial_guess = []
