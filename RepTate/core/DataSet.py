@@ -22,6 +22,8 @@ from Theory import Theory
 from FileType import TXTColumnFile
 from File import File
 from tabulate import tabulate
+from DataTable import DataTable
+
 import itertools
 
 class ColorMode(Enum):
@@ -511,11 +513,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         unique = False
                 if unique:
                     self.files.append(df)
-                    self.current_file=df
+                    self.current_file = df
                     newtables.append(df)
                     for th_name in self.theories:
                         #add a theory table
-                        self.theories[th_name].tables[df.file_name_short]=DataTable(self.parent_application.ax)
+                        self.theories[th_name].tables[df.file_name_short] = DataTable(self.parent_application.ax)
                         self.theories[th_name].function(df)
             if CmdBase.mode==CmdMode.GUI:
                 return (True, newtables, f_ext[0])
