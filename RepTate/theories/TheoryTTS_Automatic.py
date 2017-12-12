@@ -6,7 +6,7 @@
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License. 
-"""Module TheoryTTS
+"""Module TheoryTTS_Automatic
 
 Module for the pseudo theory for Time-Temperature superposition shift of LVE data.
 
@@ -66,32 +66,13 @@ class BaseTheoryTTSShiftAutomatic:
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryTTSShiftAutomatic
-        self.parameters["C1"]=Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, True)
-        self.parameters["C2"]=Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, True)
-        self.parameters["rho0"]=Parameter("rho0", 0.928, "Density of polymer at 0 °C", ParameterType.real, False)
-        self.parameters["C3"]=Parameter("C3", 0.61, "Density parameter", ParameterType.real, False)
-        self.parameters["Tr"]=Parameter("Tr", 25, "Material parameter Tr Reference T WLF shift", ParameterType.real, False)
-        self.parameters["T"]=Parameter("T", 25, "Temperature to shift WLF to, in °C", ParameterType.real, False)
-        self.parameters["CTg"]=Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, False)
-        self.parameters["dx12"]=Parameter("dx12", 0, "For PBd", ParameterType.real, False)
+        for f in parent_dataset.files:
+            self.parameters[f.file_name_short+"_H"]=Parameter(f.file_name_short+"_H", 0.0, "Horizontal Shift file"+f.file_name_short, ParameterType.real, True)
+            self.parameters[f.file_name_short+"_V"]=Parameter(f.file_name_short+"_V", 1.0, "Vertical Shift file"+f.file_name_short, ParameterType.real, True)
+        self.parameters["T"]=Parameter(name="T", value=25, description="Temperature to shift to, in °C", type=ParameterType.real, min_flag=False)
         self.parameters["vert"]=Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
-                                               min_flag=False, display_flag=False)
-        self.parameters["iso"]=Parameter(name="iso", value=True, description="Isofrictional state", type=ParameterType.boolean, 
-                                               min_flag=False, display_flag=False)
-
-    def bT(self, T, T0, rho0, c3):
-        """[summary]
+                                               min_flag=False, display_flag=False)    
         
-        [description]
-        
-        Arguments:
-            T {[type]} -- [description]
-            T0 {[type]} -- [description]
-            rho0 {[type]} -- [description]
-            c3 {[type]} -- [description]
-        """
-        return 
-
     def TheoryTTSShiftAutomatic(self, f=None):
         """[summary]
         
@@ -107,40 +88,24 @@ class BaseTheoryTTSShiftAutomatic:
         tt.data=np.zeros((tt.num_rows, tt.num_columns))
 
         T=self.parameters["T"].value
-        Tr=self.parameters["Tr"].value
-        C1=self.parameters["C1"].value
-        C2=self.parameters["C2"].value
-        C3=self.parameters["C3"].value
-        rho0=self.parameters["rho0"].value
-        CTg=self.parameters["CTg"].value
-        dx12=self.parameters["dx12"].value
-        iso=self.parameters["iso"].value
+        H=self.parameters[f.file_name_short+"_H"].value
+        V=self.parameters[f.file_name_short+"_V"].value
         vert=self.parameters["vert"].value
-
         Tf=f.file_parameters["T"]
-        Mw=f.file_parameters["Mw"]
 
-        #if iso:
-        #    C2 += CTg / Mw - 68.7 * dx12
-        #    T0corrected = T0 - CTg / Mw + 68.7 * dx12
-        #else:
-        #    T0corrected = T0
-        #tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2)))
-
-        # Trying a new expression for the shift
-        if iso:
-            Trcorrected = Tr - CTg / Mw + 68.7 * dx12
+        if Tf==T:
+            tt.data[:,0] = ft.data[:,0]
+            tt.data[:,1] = ft.data[:,1]
+            tt.data[:,2] = ft.data[:,2]
         else:
-            Trcorrected = Tr
-        tt.data[:,0] = ft.data[:,0]*np.power(10.0, -C1*C2*(Tf - T)/(C2 + T - Trcorrected)/(C2 + Tf - Trcorrected))
+            tt.data[:,0] = ft.data[:,0]*np.power(10.0, H)
+            if vert:
+                tt.data[:,1] = ft.data[:,1]*V
+                tt.data[:,2] = ft.data[:,2]*V
+            else:
+                tt.data[:,1] = ft.data[:,1]
+                tt.data[:,2] = ft.data[:,2]
         
-        if vert:
-            bT = (rho0 - Tf * C3 * 1E-3) * (Tf + 273.15) / ((rho0 - T * C3 * 1E-3) * (T + 273.15))
-        else:
-            bT = 1
-        tt.data[:,1] = ft.data[:,1] / bT
-        tt.data[:,2] = ft.data[:,2] / bT
-
     def do_error(self, line):
         """Override the error calculation for TTS
         
@@ -439,20 +404,13 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         self.verticalshift = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_ArrowUp')), 'Vertical shift')
         self.verticalshift.setCheckable(True)
         self.verticalshift.setChecked(True)
-        self.isofrictional = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_FileDialogInfoView')), 'Shift to isofrictional state')
-        self.isofrictional.setCheckable(True)
-        self.isofrictional.setChecked(True)
         self.savemaster = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
-        connection_id = self.isofrictional.triggered.connect(self.do_isofrictional)
         connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
 
     def do_vertical_shift(self):
         self.set_param_value("vert", self.verticalshift.isChecked())
-
-    def do_isofrictional(self):
-        self.set_param_value("iso", self.isofrictional.isChecked())
 
     def do_save_dialog(self):
         folder = str(QFileDialog.getExistingDirectory(self, "Select Directory to save Master curves"))
