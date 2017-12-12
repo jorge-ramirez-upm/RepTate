@@ -13,6 +13,7 @@ Contents:
 
    about
    features
+   installation
    tutorial/tutorial
    manual/manual
    developers/developers
