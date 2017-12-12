@@ -28,7 +28,6 @@ class TheoryMaxwellModesFrequency(CmdBase):
     """
     thname="MaxwellModesFrequency"
     description="Fit Maxwell modes to frequency dependent function"
-    single_file = True 
 
     def __new__(cls, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
         """[summary]
@@ -50,6 +49,8 @@ class BaseTheoryMaxwellModesFrequency:
     
     [description]
     """
+    single_file = True 
+
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
         """[summary]
         
@@ -309,7 +310,6 @@ class TheoryMaxwellModesTime(CmdBase):
     thname="MaxwellModesTime"
     description="Fit Maxwell modes to time dependent function"
     citations=""
-    single_file = True 
     def __new__(cls, name="ThMaxwellTime", parent_dataset=None, ax=None):
         """[summary]
         
@@ -330,6 +330,8 @@ class BaseTheoryMaxwellModesTime:
     
     [description]
     """
+    single_file = True 
+
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
         """[summary]
         

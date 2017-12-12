@@ -50,7 +50,7 @@ class DataSetWidget(QTreeWidget):
         Arguments:
             event {[type]} -- [description]
         """
-        if event.key() == Qt.Key_Backspace:
+        if event.key() == Qt.Key_Backspace or event.key() == Qt.Key_Delete:
             self.delete()
         else:
             QTreeWidget.keyPressEvent(self, event)

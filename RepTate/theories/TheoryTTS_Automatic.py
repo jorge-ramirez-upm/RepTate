@@ -32,7 +32,6 @@ class TheoryTTSShiftAutomatic(CmdBase):
     thname="TTSShiftAutomatic"
     description="Basic theory for Time-Temperature Superposition, based on the WLF equation"
     cite=""
-    single_file = False 
 
     def __new__(cls, name="ThWLFShifTest", parent_dataset=None, ax=None):
         """[summary]
@@ -54,6 +53,8 @@ class BaseTheoryTTSShiftAutomatic:
     
     [description]
     """
+    single_file = False 
+
     def __init__(self, name="ThTTSShiftAutomatic", parent_dataset=None, ax=None):
         """[summary]
         

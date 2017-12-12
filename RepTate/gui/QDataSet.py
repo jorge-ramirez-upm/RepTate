@@ -90,7 +90,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         self.TheoryLayout.insertWidget(0, tb)
-
+        self.TheorytabWidget.setMinimumHeight(100)
+        
         #desactive buttons when no theory tab
         self.theory_actions_disabled(True)
 
@@ -227,7 +228,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         
         [description]
         """
-        if self.current_theory and self.files!=[]:
+        if self.current_theory and self.files:
+            if self.theories[self.current_theory].single_file and len(self.files)-len(self.inactive_files)>1: 
+                header = "New Theory"
+                message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
+                QMessageBox.warning(self, header, message)
+                return
             self.theories[self.current_theory].do_fit("")
             self.theories[self.current_theory].update_parameter_table()
 
@@ -473,16 +479,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th_name {[type]} -- [description]
         """
         if not self.files:
-            return
-        if self.parent_application.theories[th_name].single_file and len(self.files)==0: 
-            header = "New Theory"
-            message = "Some data files in the DataSet are needed"%th_name
-            QMessageBox.warning(self, header, message)
-            return
-        if self.parent_application.theories[th_name].single_file and len(self.files)>1: 
-            header = "New Theory"
-            message = "Theory \"%s\" cannot be applied to multiple data files"%th_name
-            QMessageBox.warning(self, header, message)
             return
         if self.current_theory:
             self.set_no_limits(self.current_theory) #remove the xy-range limits

@@ -88,7 +88,6 @@ class TheoryRoliePoly(CmdBase):
     citations="Likhtman, A.E. & Graham, R.S.\n\
 Simple constitutive equation for linear polymer melts derived from molecular theory: Rolie-Poly equation\n\
 J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
-    single_file = False
 
     def __new__(cls, name="ThRoliePoly", parent_dataset=None, ax=None):
         """[summary]
@@ -111,6 +110,8 @@ class BaseTheoryRoliePoly:
     
     [description]
     """
+    single_file = False
+
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
         """[summary]
         
