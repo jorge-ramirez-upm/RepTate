@@ -43,6 +43,6 @@ rm -rf dist/RepTateCL
 
 version=`python tools/getreptateversion.py`
 cd dist
-zip -r RepTate$version_Linux.zip RepTate
+zip -r RepTate$version\_Linux.zip RepTate
 cd ..
 

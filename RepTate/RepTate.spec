@@ -4,10 +4,10 @@ block_cipher = None
 
 
 a = Analysis(['RepTate.py'],
-             pathex=['applications', 'core', 'theories', 'tools', 'gui', 'c:\\Users\\Jorge\\OneDrive - Universidad Politécnica de Madrid\\Codes\\Python\\RepTate\\RepTate'],
-             binaries=None,
-             datas=None,
-             hiddenimports=['packaging', 'packaging.version', 'packaging.specifiers', 'packaging.requirements'],
+             pathex=['applications', 'core', 'theories', 'tools', 'gui', '/home/jramirez/RepTate/RepTate'],
+             binaries=[],
+             datas=[],
+             hiddenimports=['packaging', 'packaging.version', 'packaging.specifiers', 'packaging.requirements', 'scipy._lib.messagestream', 'pandas._libs.tslibs.timedeltas'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=False , icon='gui\\Images\\Reptate64.ico')
+          console=False , icon='guiImagesReptate64.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
