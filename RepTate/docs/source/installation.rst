@@ -23,7 +23,8 @@ After installing miniconda with Python 3.6, 64-bit, open a terminal and run::
     > conda install -c unidata pint 
     > conda install matplotlib 
     > conda install scipy
-    > conda install -c conda-forge tabulate 
+    > conda install pyreadline
+    > pip install tabulate 
     > conda install seaborn
 
 If necessary, install the git CVS system. Then, clone the Reptate source code distribution from the `github <https://github.com/jorge-ramirez-upm/RepTate>`_.. site::
