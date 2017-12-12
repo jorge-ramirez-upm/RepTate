@@ -65,6 +65,12 @@
        </property>
        <item>
         <widget class="QTabWidget" name="TheorytabWidget">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="styleSheet">
           <string notr="true">QTreeWidget::item { border: 0.5px ; border-style: solid ; border-color: lightgray ; selection-color: rgb(0, 0, 0); }</string>
          </property>

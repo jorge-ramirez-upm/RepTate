@@ -90,7 +90,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         self.TheoryLayout.insertWidget(0, tb)
-
+        self.TheorytabWidget.setMinimumHeight(100)
+        
         #desactive buttons when no theory tab
         self.theory_actions_disabled(True)
 
