@@ -487,8 +487,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         # add new theory tab
         if th_tab_id == "": 
             th_tab_id = newth.name
-            #th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
-            #th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
+            th_tab_id = ''.join(c for c in th_tab_id if c.isupper()) #get the upper case letters of th_name
+            th_tab_id = "%s%d"%(th_tab_id, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
         #self.handle_thCurrentChanged(index)
