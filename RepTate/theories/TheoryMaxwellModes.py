@@ -14,7 +14,7 @@ Module that defines theories related to Maxwell modes, in the frequency and time
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from DataTable import DataTable
-from Parameter import Parameter, ParameterType, ShiftType
+from Parameter import Parameter, ParameterType, ShiftType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
@@ -68,16 +68,16 @@ class BaseTheoryMaxwellModesFrequency:
         self.view_modes = True
         wmin = self.parent_dataset.minpositivecol(0)
         wmax = self.parent_dataset.maxcol(0)
-        nmodes=int(np.round(np.log10(wmax/wmin)))
+        nmodes = int(np.round(np.log10(wmax/wmin)))
         print(wmin, wmax, nmodes)
-        self.parameters["logwmin"]=Parameter("logwmin", np.log10(wmin), "Log of frequency range minimum", ParameterType.real, True)
-        self.parameters["logwmax"]=Parameter("logwmax", np.log10(wmax), "Log of frequency range maximum", ParameterType.real, True)
-        self.parameters["nmodes"]=Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, min_flag=False, display_flag=False)
+        self.parameters["logwmin"] = Parameter("logwmin", np.log10(wmin), "Log of frequency range minimum", ParameterType.real, opt_type=OptType.opt)
+        self.parameters["logwmax"] = Parameter("logwmax", np.log10(wmax), "Log of frequency range maximum", ParameterType.real, opt_type=OptType.opt)
+        self.parameters["nmodes"] = Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
         # Interpolate modes from data
         w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
         G = np.abs(np.interp(w, self.parent_dataset.files[0].data_table.data[:,0], self.parent_dataset.files[0].data_table.data[:,1]))
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i] = Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
         
         # GRAPHIC MODES
         self.graphicmodes = []
@@ -349,15 +349,15 @@ class BaseTheoryMaxwellModesTime:
         self.view_modes = True
         tmin = self.parent_dataset.minpositivecol(0)
         tmax = self.parent_dataset.maxcol(0)
-        nmodes=int(np.round(np.log10(tmax/tmin)))
-        self.parameters["logtmin"]=Parameter("logtmin", np.log10(tmin), "Log of time range minimum", ParameterType.real, True)
-        self.parameters["logtmax"]=Parameter("logtmax", np.log10(tmax), "Log of time range maximum", ParameterType.real, True)
-        self.parameters["nmodes"]=Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, min_flag=False, display_flag=False)
+        nmodes = int(np.round(np.log10(tmax/tmin)))
+        self.parameters["logtmin"] = Parameter("logtmin", np.log10(tmin), "Log of time range minimum", ParameterType.real, opt_type=OptType.opt)
+        self.parameters["logtmax"] = Parameter("logtmax", np.log10(tmax), "Log of time range maximum", ParameterType.real, opt_type=OptType.opt)
+        self.parameters["nmodes"] = Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
         # Interpolate modes from data
         tau = np.logspace(np.log10(tmin), np.log10(tmax), nmodes)
         G = np.abs(np.interp(tau, self.parent_dataset.files[0].data_table.data[:,0], self.parent_dataset.files[0].data_table.data[:,1]))
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i] = Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, True)
 
         # GRAPHIC MODES
         self.graphicmodes = None
@@ -570,7 +570,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         Gnew = np.interp(taunew, tauold, Gold)
 
         for i in range(nmodesnew):
-            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,Gnew[i],"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,Gnew[i],"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
         
         self.do_calculate("")
         self.update_parameter_table()

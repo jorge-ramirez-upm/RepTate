@@ -18,7 +18,7 @@ import numpy as np
 from scipy import interp
 from scipy.optimize import minimize
 from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
@@ -68,11 +68,11 @@ class BaseTheoryTTSShiftAutomatic:
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryTTSShiftAutomatic
         for f in parent_dataset.files:
-            self.parameters[f.file_name_short+"_H"]=Parameter(f.file_name_short+"_H", 0.0, "Horizontal Shift file"+f.file_name_short, ParameterType.real, True)
-            self.parameters[f.file_name_short+"_V"]=Parameter(f.file_name_short+"_V", 1.0, "Vertical Shift file"+f.file_name_short, ParameterType.real, True)
-        self.parameters["T"]=Parameter(name="T", value=25, description="Temperature to shift to, in °C", type=ParameterType.real, min_flag=False)
-        self.parameters["vert"]=Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
-                                               min_flag=False, display_flag=False)    
+            self.parameters[f.file_name_short+"_H"] = Parameter(f.file_name_short+"_H", 0.0, "Horizontal Shift file"+f.file_name_short, ParameterType.real, opt_type=OptType.opt)
+            self.parameters[f.file_name_short+"_V"] = Parameter(f.file_name_short+"_V", 1.0, "Vertical Shift file"+f.file_name_short, ParameterType.real, opt_type=OptType.opt)
+        self.parameters["T"] = Parameter(name="T", value=25, description="Temperature to shift to, in °C", type=ParameterType.real, opt_type=OptType.const)
+        self.parameters["vert"] = Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
+                                               opt_type=OptType.const, display_flag=False)    
         
     def TheoryTTSShiftAutomatic(self, f=None):
         """[summary]
@@ -212,7 +212,7 @@ class BaseTheoryTTSShiftAutomatic:
         ind=0
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag:
+            if par.opt_type == OptType.opt:
                 par.value=param_in[0][ind]
                 ind+=1
         self.do_calculate("")
@@ -234,13 +234,13 @@ class BaseTheoryTTSShiftAutomatic:
         initial_guess=[]
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag: 
+            if par.opt_type == OptType.opt: 
                 initial_guess.append(par.value)
 
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
         
         if (not res['success']):
-            self.Qprint("Solution not found: ", res['message'])
+            self.Qprint("Solution not found: %s", res['message'])
             return
 
         self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
@@ -252,7 +252,7 @@ class BaseTheoryTTSShiftAutomatic:
         self.Qprint("===========================")
         for p in k:
             par = self.parameters[p] 
-            if par.min_flag:
+            if par.opt_type == OptType.opt:
                 ind+=1
                 self.Qprint('*%9s = %10.5g'%(par.name, par.value))
             else:

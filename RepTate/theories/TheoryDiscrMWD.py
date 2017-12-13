@@ -65,15 +65,15 @@ class BaseTheoryDiscrMWD:
         self.function = self.DiscretiseMWD
         self.has_modes = False
         self.parameters["bpd"] = Parameter(
-            "bpd", 10, "Number modes per decade", ParameterType.integer, False)
+            "bpd", 10, "Number modes per decade", ParameterType.integer, opt_type=OptType.const)
         self.parameters["Mn"] = Parameter(
-            "Mn", 1000, "Number-average molecular mass", ParameterType.real, False)
+            "Mn", 1000, "Number-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["Mw"] = Parameter(
-            "Mw", 1000, "Weight-average molecular mass", ParameterType.real, False)
+            "Mw", 1000, "Weight-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["Mz"] = Parameter(
-            "Mz", 1, "z-average molecular mass", ParameterType.real, False)
+            "Mz", 1, "z-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["PDI"] = Parameter(
-            "PDI", 1, "Polydispersity index", ParameterType.real, False)
+            "PDI", 1, "Polydispersity index", ParameterType.real, opt_type=OptType.const)
 
     def do_error(self, line):
         """[summary]

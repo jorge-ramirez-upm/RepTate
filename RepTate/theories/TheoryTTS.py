@@ -18,7 +18,7 @@ import numpy as np
 from scipy import interp
 from scipy.optimize import minimize
 from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
@@ -67,17 +67,17 @@ class BaseTheoryWLFShift:
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShift
-        self.parameters["C1"]=Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, True)
-        self.parameters["C2"]=Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, True)
-        self.parameters["rho0"]=Parameter("rho0", 0.928, "Density of polymer at 0 °C", ParameterType.real, False)
-        self.parameters["C3"]=Parameter("C3", 0.61, "Density parameter", ParameterType.real, False)
-        self.parameters["T0"]=Parameter("T0", 25, "Temperature to shift WLF to, in °C", ParameterType.real, False)
-        self.parameters["CTg"]=Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, False)
-        self.parameters["dx12"]=Parameter("dx12", 0, "For PBd", ParameterType.real, False)
-        self.parameters["vert"]=Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
-                                               min_flag=False, display_flag=False)
-        self.parameters["iso"]=Parameter(name="iso", value=True, description="Isofrictional state", type=ParameterType.boolean, 
-                                               min_flag=False, display_flag=False)
+        self.parameters["C1"] = Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, opt_type=OptType.opt)
+        self.parameters["C2"] = Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, opt_type=OptType.opt)
+        self.parameters["rho0"] = Parameter("rho0", 0.928, "Density of polymer at 0 °C", ParameterType.real, opt_type=OptType.const)
+        self.parameters["C3"] = Parameter("C3", 0.61, "Density parameter", ParameterType.real, opt_type=OptType.const)
+        self.parameters["T0"] = Parameter("T0", 25, "Temperature to shift WLF to, in °C", ParameterType.real, opt_type=OptType.const)
+        self.parameters["CTg"] = Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, opt_type=OptType.const)
+        self.parameters["dx12"] = Parameter("dx12", 0, "For PBd", ParameterType.real, opt_type=OptType.const)
+        self.parameters["vert"] = Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
+                                               opt_type=OptType.const, display_flag=False)
+        self.parameters["iso"] = Parameter(name="iso", value=True, description="Isofrictional state", type=ParameterType.boolean, 
+                                               opt_type=OptType.const, display_flag=False)
 
     def bT(self, T, T0, rho0, c3):
         """[summary]
@@ -246,7 +246,7 @@ class BaseTheoryWLFShift:
         ind=0
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag:
+            if par.opt_type == OptType.opt:
                 par.value=param_in[0][ind]
                 ind+=1
         self.do_calculate("")
@@ -268,7 +268,7 @@ class BaseTheoryWLFShift:
         initial_guess=[]
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag: 
+            if par.opt_type == OptType.opt: 
                 initial_guess.append(par.value)
 
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
@@ -286,7 +286,7 @@ class BaseTheoryWLFShift:
         self.Qprint("===========================")
         for p in k:
             par = self.parameters[p] 
-            if par.min_flag:
+            if par.opt_type == OptType.opt:
                 ind+=1
                 self.Qprint('*%9s = %10.5g'%(par.name, par.value))
             else:
