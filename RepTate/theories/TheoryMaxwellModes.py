@@ -357,7 +357,7 @@ class BaseTheoryMaxwellModesTime:
         tau = np.logspace(np.log10(tmin), np.log10(tmax), nmodes)
         G = np.abs(np.interp(tau, self.parent_dataset.files[0].data_table.data[:,0], self.parent_dataset.files[0].data_table.data[:,1]))
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%02d"%i] = Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i] = Parameter("logG%02d"%i,np.log10(G[i]),"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
 
         # GRAPHIC MODES
         self.graphicmodes = None
