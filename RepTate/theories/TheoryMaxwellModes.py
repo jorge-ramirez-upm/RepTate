@@ -292,7 +292,7 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         Gnew = np.interp(wnew, wold, Gold)
 
         for i in range(nmodesnew):
-            self.parameters["logG%02d"%i]=Parameter("logG%02d"%i,Gnew[i],"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%02d"%i] = Parameter("logG%02d"%i,Gnew[i],"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
         
         self.do_calculate("")
         self.update_parameter_table()
