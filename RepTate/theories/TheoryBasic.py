@@ -14,6 +14,7 @@ Module that defines the basic theories that should be available for all Applicat
 from CmdBase import CmdBase
 from Theory import Theory
 import numpy as np
+from Parameter import OptType
 
 class TheoryPolynomial(Theory, CmdBase):
     """Fit a polynomial of degree n to the data

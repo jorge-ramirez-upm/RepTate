@@ -12,6 +12,8 @@ Module for the Rouse theory for the relaxation modulus.
 
 """ 
 from Theory import Theory
+from Parameter import OptType
+
 
 class TheoryRouseTime(Theory, CmdBase):
     """Fit Rouse modes to a time depenendent relaxation function

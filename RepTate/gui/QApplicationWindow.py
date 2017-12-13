@@ -511,7 +511,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not ds:
             return
         self.disconnect_curve_drag()
-        paths_to_reopen, th_to_reopen= self.clear_files_and_th_from_dataset(ds)
+        paths_to_reopen, th_to_reopen = self.clear_files_and_th_from_dataset(ds)
         if paths_to_reopen:
             self.new_tables_from_files(paths_to_reopen)
         for th_name, tab_name in th_to_reopen:
@@ -519,7 +519,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def clear_files_and_th_from_dataset(self, ds):
         """Remove all files from dataset and widgetTree,
-        return a list with the full path of deleted files
+        return a list with the full path of deleted files and opened theories
         
         [description]
         

@@ -12,7 +12,7 @@ Module that defines the theory to discretize a molecular weight distribution.
 
 """ 
 from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 import numpy as np
