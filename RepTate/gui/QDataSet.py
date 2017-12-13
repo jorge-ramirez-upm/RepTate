@@ -222,6 +222,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if self.current_theory and self.files!=[]:
             self.theories[self.current_theory].do_calculate("")
             self.theories[self.current_theory].update_parameter_table()
+            self.parent_application.update_Qplot()
 
     def handle_actionMinimize_Error(self):
         """Minimize the error
@@ -236,6 +237,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 return
             self.theories[self.current_theory].do_fit("")
             self.theories[self.current_theory].update_parameter_table()
+            self.parent_application.update_Qplot()
+
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed
@@ -482,6 +485,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             return
         if self.current_theory:
             self.set_no_limits(self.current_theory) #remove the xy-range limits
+        self.theory_actions_disabled(False) #enable theory buttons
         newth = self.do_theory_new(th_name)
 
         # add new theory tab
@@ -493,4 +497,3 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
         #self.handle_thCurrentChanged(index)
         newth.update_parameter_table()
-        self.theory_actions_disabled(False)
