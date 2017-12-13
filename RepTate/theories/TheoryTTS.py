@@ -274,7 +274,7 @@ class BaseTheoryWLFShift:
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
         
         if (not res['success']):
-            self.Qprint("Solution not found: ", res['message'])
+            self.Qprint("Solution not found: %s"%res['message'])
             return
 
         self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
