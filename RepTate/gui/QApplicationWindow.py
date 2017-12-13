@@ -321,7 +321,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if color: #check for none
             self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s"%color.name())
             self.color1 = color.getRgbF()
-            print("handle_pickColor1 ", self.color1)
 
     def handle_pickColor2(self):
         """Call the colocr picker and save the selected color to `color2` in 

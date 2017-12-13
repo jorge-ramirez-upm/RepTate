@@ -67,9 +67,12 @@ class EditModesDialog(QDialog):
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value):
+        nrow_old = self.table.rowCount()
         self.table.setRowCount(value)
+        for i in range(nrow_old, value): #create extra rows with defaut values
+            self.table.setItem(i, 0, QTableWidgetItem("10")) 
+            self.table.setItem(i, 1, QTableWidgetItem("1000")) 
 
-        
     # static method to create the dialog and return (date, time, accepted)
     #@staticmethod
     #def getMaxwellModesProvider(self, parent = None, th_dict = {}):
@@ -207,9 +210,9 @@ class BaseTheoryRoliePoly:
     
         # Create the vector with the time derivative of sigma
         trace_sigma = sxx + 2*syy
-        aux1 = 2*(1-np.sqrt(3/trace_sigma))/tauR
+        aux1 = 2*(1-np.sqrt(3./trace_sigma))/tauR
         aux2 = beta*(trace_sigma/3)**delta
-        return [2*gammadot*sxy - (sxx-1)/tauD - aux1*(sxx + aux2*(sxx-1)), -1.0*(syy-1)/tauD - aux1*(syy + aux2*(syy-1)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
+        return [2*gammadot*sxy - (sxx-1.)/tauD - aux1*(sxx + aux2*(sxx-1.)), -1.0*(syy-1.)/tauD - aux1*(syy + aux2*(syy-1.)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
 
 
     def sigmadotshearnostretch(self, sigma, t, p):
@@ -271,9 +274,6 @@ class BaseTheoryRoliePoly:
             else:
                 sig = odeint(self.sigmadotshearnostretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
             tt.data[:,1] += self.parameters["G%02d"%i].value*np.delete(sig[:,2],[0]) #return sxy
-        
-        # return stress to agree with input data file (t, eta)
-        #tt.data[:,1] = tt.data[:,1]/gammadot
 
     def set_param_value(self, name, value):
         """[summary]

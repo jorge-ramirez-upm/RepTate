@@ -1,5 +1,12 @@
 <RCC>
   <qresource prefix="/Images">
+    <file>Images/new_icons/icons8-edit-file.png</file>
+    <file>Images/new_icons/icons8-categorize.png</file>
+    <file>Images/new_icons/icons8-garden-shears.png</file>
+    <file>Images/new_icons/icons8-scatter-plot.png</file>
+    <file>Images/new_icons/icons8-socks.png</file>
+    <file>Images/new_icons/icons8-spiral-bound-booklet.png</file>
+    <file>Images/new_icons/icons8-exit-sign@2x.png</file>
     <file>Images/new_icons/icons8-sine-100.png</file>
     <file>Images/new_icons/icons8-krita-squared.png</file>
     <file>Images/new_icons/icons8-color-wheel-2.png</file>
