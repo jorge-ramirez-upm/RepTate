@@ -18,6 +18,9 @@ from View import View
 from FileType import TXTColumnFile
 import numpy as np
 
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+
 # IMPORT THEORIES
 # Import theories specific to the Application e.g.:
 # from TheoryReact import TheoryA
@@ -64,18 +67,33 @@ class BaseApplicationReact:
         # VIEWS
         # set the views that can be selected in the view combobox
         # the order is defined by the index, index 0 is the defaut view
-        self.views['y(x)'] = View(name='y(x)', description='y as a function of x', x_label='x', y_label='y(x)', x_units='-', y_units='-', log_x=False, log_y=False, view_proc=self.viewyx, n=1, snames=['y(x)'], index=0)
-
+        self.views["w(M)"]=View(name="w(M)", description="Molecular weight distribution", x_label="M", y_label="w(M)", 
+                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_wM, n=1, 
+                                snames=["w(M)"], index=0)
+        self.views["g(M)"]=View(name="g(M)", description="g(M)", x_label="M", y_label="g", 
+                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_gM, n=1, 
+                                snames=["g(M)"], index=1)
+        self.views['br/1000C']=View(name="br/1000C", description="br/1000C(M)", x_label="M", y_label="br/1000C(M)", 
+                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_br_1000C, n=1, 
+                                snames=["br/1000C(M)"], index=2)
+                                
         # FILES
         # set the type of files that ApplicationReact can open
-        ftype = TXTColumnFile(name='content of files', extension='txt', description='description of the file type', col_names=['col1','col2'], basic_file_parameters=['param1','param2'], col_units=['units_col1','units_col2'])
+        ftype = TXTColumnFile(name='React files', extension='reac', description='Reatc file', col_names=['M', 'w(M)', 'g', 'br/1000C'], basic_file_parameters=[], col_units=['g/mol', '-', '-', '-'])
         self.filetypes[ftype.extension] = ftype #add each the file type to dictionary
 
         # THEORIES
         # add the theories related to ApplicationReact to the dictionary, e.g.:
         # self.theories[TheoryA.thname] = TheoryA
 
-    def viewyx(self, dt, file_parameters):
+
+        #SPECIFIC FIGURE
+        plt.clf()
+        self.ax = self.figure.add_subplot(2, 1, 1)
+        self.ax2 = self.figure.add_subplot(2, 2, 3)
+        self.ax3 = self.figure.add_subplot(2, 2, 4)
+
+    def view_wM(self, dt, file_parameters):
         """[summary]
         
         [description]
@@ -91,6 +109,42 @@ class BaseApplicationReact:
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
+        return x, y, True
+
+    def view_gM(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 2]
+        return x, y, True
+
+    def view_br_1000C(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 3]
         return x, y, True
 
 
