@@ -22,7 +22,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -69,6 +78,7 @@
    <addaction name="actionGt"/>
    <addaction name="actionCreep"/>
    <addaction name="actionSANS"/>
+   <addaction name="actionReact"/>
    <addaction name="separator"/>
    <addaction name="actionMaterials_Database"/>
    <addaction name="separator"/>
@@ -237,6 +247,21 @@
    </property>
    <property name="shortcut">
     <string>F1</string>
+   </property>
+  </action>
+  <action name="actionReact">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-test-tube.png</normaloff>:/Icons/Images/new_icons/icons8-test-tube.png</iconset>
+   </property>
+   <property name="text">
+    <string>React</string>
+   </property>
+   <property name="toolTip">
+    <string>React module</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+8</string>
    </property>
   </action>
  </widget>

@@ -23,6 +23,7 @@ from ApplicationLVE import ApplicationLVE
 from ApplicationNLVE import ApplicationNLVE
 from ApplicationMWD import ApplicationMWD
 from ApplicationGt import ApplicationGt
+from ApplicationReact import ApplicationReact
 #from ApplicationFRS_I import *
 import Version
 
