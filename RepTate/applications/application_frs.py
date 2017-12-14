@@ -36,10 +36,9 @@ class ApplicationFRS_I(Application):
         self.views["I(t)"]=View(name="I(t)", description="FRS Intensity decay", x_label="t", y_label="I(t)", 
                                 x_units="s", y_units="-", log_x=True, log_y=True, view_proc=self.viewIt, n=1, 
                                 snames=["I(t)"], index=0)
-        self.views["Log[I(t)]"]=View(name="Log[I(t)]", description="Log FRS Intensity decay", x_label="log(t)", 
+        self.views["log[I(t)]"]=View(name="log[I(t)]", description="log FRS Intensity decay", x_label="log(t)", 
                                      y_label="log(I(t))", x_units="s", y_units="-", log_x=False, log_y=False, 
                                      view_proc=self.viewLogIt, n=1, snames=["log(I(t))"], index=1)
-        self.current_view=self.views["I(t)"]
 
         # FILES
         ftype=TXTColumnFile("I(t) FRS files", "FRS_INTENSITY", "I(t) decay from FRS", ['t','I'], ['d','Na','ka','Ns','ka','Keq','beta'], ['s', 'Pa'])

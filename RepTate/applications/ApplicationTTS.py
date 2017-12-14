@@ -73,7 +73,6 @@ class BaseApplicationTTS:
         self.views["etastar"] = View("etastar", "Complex Viscosity", "$\omega$", "$|\eta^*(\omega)|$", "rad/s", "Pa.s", True, True, self.viewEtaStar, 1, ["eta*(w)"], index=2)
         self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"], index=3)
         self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"], index=4)
-        self.current_view=self.views["log(G',G''(w))"]
 
         # FILES
         ftype=TXTColumnFile("OSC files", "osc", 
