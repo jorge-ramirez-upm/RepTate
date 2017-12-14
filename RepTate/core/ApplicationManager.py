@@ -73,6 +73,7 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationLVE.name]=ApplicationLVE
         self.available_applications[ApplicationNLVE.name]=ApplicationNLVE
         self.available_applications[ApplicationGt.name]=ApplicationGt
+        self.available_applications[ApplicationReact.name]=ApplicationReact
         #self.available_applications[ApplicationFRS_I.name]=ApplicationFRS_I
 
 # APPLICATION STUFF
