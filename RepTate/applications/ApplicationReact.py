@@ -88,10 +88,10 @@ class BaseApplicationReact:
 
 
         #SPECIFIC FIGURE
-        plt.clf()
-        self.ax = self.figure.add_subplot(2, 1, 1)
-        self.ax2 = self.figure.add_subplot(2, 2, 3)
-        self.ax3 = self.figure.add_subplot(2, 2, 4)
+        # plt.clf()
+        # self.ax = self.figure.add_subplot(2, 1, 1)
+        # self.ax2 = self.figure.add_subplot(2, 2, 3)
+        # self.ax3 = self.figure.add_subplot(2, 2, 4)
 
     def view_wM(self, dt, file_parameters):
         """[summary]
