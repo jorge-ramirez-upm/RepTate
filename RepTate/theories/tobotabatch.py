@@ -17,6 +17,9 @@ from Polybits import Polybits
 class Tobitabatch(Polybits):
     tobbatchnumber = 1
 
+    def __init__(self):
+        pass
+
     def tobbatchstart(self, pfin_conv, ptau, pbeta, pCs, pCb, n):
         self.bobinit(n) #TODO does this aims at modifying n?
         random.seed() #seed based on current time
@@ -38,24 +41,24 @@ class Tobitabatch(Polybits):
 
         self.scount = 0
         self.bcount = 0
-        self.getconv1(self.fin_con, cur_conv)
-        m, success = self.request_arm(m)
+        self.getconv1(self.fin_con, cur_conv) #TODO return value
+        m, success = self.request_arm()
         if success:  #don't do anything if arms not available
             self.br_poly[n].first_end = m
             self.arm_pool[m].up = m 
             self.arm_pool[m].down = m
-            self.calclength(cur_conv, seg_len)
+            self.calclength(cur_conv, seg_len)# TODO return value
             self.arm_pool[m].arm_len = seg_len
             self.arm_pool[m].arm_conv = cur_conv
             self.rlevel = 0
             self.tobita_grow(1, m, cur_conv, True)
         
-        m1, success = self.request_arm(m1)
+        m1, success = self.request_arm()
         if success: #don't do anything if arms not available
             self.arm_pool[m].L1 = -m1
             self.arm_pool[m1].R2 = m
             self.armupdown(m, m1)
-            self.calclength(cur_conv, seg_len)
+            self.calclength(cur_conv, seg_len) #TODO return value
             self.arm_pool[m1].arm_len = seg_len
             self.arm_pool[m1].arm_conv = cur_conv
             self.rlevel = 0
@@ -65,24 +68,24 @@ class Tobitabatch(Polybits):
             self.polyclean(n)
             
             #renumber segments starting from zero
-            m1 = br_poly[n].first_end
+            m1 = self.br_poly[n].first_end
             first = m1
             anum = 0
-            self.arm_pool[m1].armnum = anum;
+            self.arm_pool[m1].armnum = anum
             m1 = self.arm_pool[m1].down
             while m1 != first:
-                inc(anum)
-                arm_pool[m1].armnum = anum
-                m1 = arm_pool[m1].down
-            first = br_poly[n].first_end
-            mass_segs(first, len1, nsegs)
-            br_poly[n].num_br = bcount
-            br_poly[n].tot_len = len1
-            mass_rg2(first, 1.0, len2, jtot, gfact)
-            br_poly[n].gfactor = gfact
+                anum += 1
+                self.arm_pool[m1].armnum = anum
+                m1 = self.arm_pool[m1].down
+            first = self.br_poly[n].first_end
+            self.mass_segs(first, len1, nsegs) #TODO return value
+            self.br_poly[n].num_br = bcount
+            self.br_poly[n].tot_len = len1
+            self.mass_rg2(first, 1.0, len2, jtot, gfact) #TODO return value
+            self.br_poly[n].gfactor = gfact
 
             #check to see whether to save the polymer
-            bobcount(n, n1)
+            self.bobcount(n, n1)  #TODO return value??
             return True
         else:
             return False

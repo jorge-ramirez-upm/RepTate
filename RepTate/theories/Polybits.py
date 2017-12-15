@@ -35,7 +35,7 @@ class ReactResults:
 
         self.numinbin = np.zeros((MAX_BOB_BINS))
 
-class Polybits:
+class PolyBits:
     MAX_ARM = 1000000
     MAX_POL = 1000000
     MAX_REACT = 11
