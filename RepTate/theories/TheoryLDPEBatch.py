@@ -4,11 +4,12 @@
 # http://reptate.readthedocs.io
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
+# Daniel Read, d.j.read@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License. 
-"""Module TheoryTemplate
+"""Module TheoryTobitaBatch
 
-Template file for creating a new theory
+TobitaBatch file for creating a new theory
 """ 
 import numpy as np
 from CmdBase import CmdBase, CmdMode
@@ -18,45 +19,45 @@ from QTheory import QTheory
 from DataTable import DataTable
 
 
-class TheoryTemplate(CmdBase):
-    """[summary]
+class TheoryTobitaBatch(CmdBase):
+    """Rolie-Poly
     
     [description]
     """
-    thname='TemplateTheory'
-    description='Template Theory'
+    thname='TobitaBatchTheory'
+    description='TobitaBatch Theory'
     citations=''
 
-    def __new__(cls, name='ThTemplate', parent_dataset=None, ax=None):
+    def __new__(cls, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
+            name {[type]} -- [description] (default: {'ThTobitaBatch'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         
         Returns:
             [type] -- [description]
         """
-        return GUITheoryTemplate(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTemplate(name, parent_dataset, ax)
+        return GUITheoryTobitaBatch(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTobitaBatch(name, parent_dataset, ax)
 
 
-class BaseTheoryTemplate:
+class BaseTheoryTobitaBatch:
     """[summary]
     
     [description]
     """
     single_file = False # True if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
+            name {[type]} -- [description] (default: {'ThTobitaBatch'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
@@ -65,6 +66,9 @@ class BaseTheoryTemplate:
         self.has_modes = False # True if the theory has modes
         self.parameters['param1'] = Parameter(name='param1', value=1, description='parameter 1', 
                                           type=ParameterType.real, opt_type=OptType.const)
+                
+
+
 
     def get_modes(self):
         """[summary]
@@ -87,7 +91,7 @@ class BaseTheoryTemplate:
         pass
         
     def function_template(self, f=None):
-        """Template function that returns the square of y
+        """TobitaBatch function that returns the square of y
         
         [description]
         
@@ -106,18 +110,18 @@ class BaseTheoryTemplate:
         tt.data[:, 1] = ft.data[:, 1] * ft.data[:, 1]
 
 
-class CLTheoryTemplate(BaseTheoryTemplate, Theory):
+class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
     """[summary]
     
     [description]
     """
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
+            name {[type]} -- [description] (default: {'ThTobitaBatch'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
@@ -126,18 +130,18 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
     # This class usually stays empty
 
 
-class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
+class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
     """[summary]
     
     [description]
     """
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
+            name {[type]} -- [description] (default: {'ThTobitaBatch'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """

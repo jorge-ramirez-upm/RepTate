@@ -19,7 +19,7 @@ from DataTable import DataTable
 
 
 class TheoryTemplate(CmdBase):
-    """[summary]
+    """Rolie-Poly
     
     [description]
     """
