@@ -1,7 +1,7 @@
 # RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
-# http:#blogs.upm.es/compsoftmatter/software/reptate/
-# https:#github.com/jorge-ramirez-upm/RepTate
-# http:#reptate.readthedocs.io
+# http://blogs.upm.es/compsoftmatter/software/reptate/
+# https://github.com/jorge-ramirez-upm/RepTate
+# http://reptate.readthedocs.io
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Daniel Read, d.j.read@leeds.ac.uk
@@ -79,4 +79,4 @@ class PolyMassRg(PolyBits):
         jtot = (lenc*lenc*jc + len1*len1*j1 + len2*len2*j2 + 2.0*(len1*len2*(h1 + h2) + len1*lenc*(h1 + hc) + len2*lenc*(h2 + hc)))/(lentot*lentot)
         gfact = 3*jtot/lentot
         return lentot, jtot, gfact
-
+    

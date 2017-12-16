@@ -1,20 +1,23 @@
 # RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
-# http:#blogs.upm.es/compsoftmatter/software/reptate/
-# https:#github.com/jorge-ramirez-upm/RepTate
-# http:#reptate.readthedocs.io
+# http://blogs.upm.es/compsoftmatter/software/reptate/
+# https://github.com/jorge-ramirez-upm/RepTate
+# http://reptate.readthedocs.io
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Daniel Read, d.j.read@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License. 
 """Module PolyCleanUp
-provides routines for cleaning up connectivity of branched polymers
 
 """
 import numpy as np
 from PolyBits import PolyBits
 
 class PolyCleanUp(PolyBits):
+    """
+    Provides routines for cleaning up connectivity of branched polymers
+
+    """
     
     def __init__(self):
         super().__init__()
@@ -111,7 +114,7 @@ class PolyCleanUp(PolyBits):
                 self.arm_pool[tc1].R2 = -m
                 self.arm_pool[tc1].R1 = t2 #!this should already be so!!
             if t2 > 0:
-                self.arm_pool[tc2].L1 =-m
+                self.arm_pool[tc2].L1 = -m
                 self.arm_pool[tc2].L2 = t1 # this should already be so!!
             elif t2 < 0: # specifically exclude case where t1=0
                 self.arm_pool[tc2].R1 = -m
