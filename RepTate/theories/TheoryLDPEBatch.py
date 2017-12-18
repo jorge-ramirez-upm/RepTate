@@ -277,5 +277,11 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
         """
         super().__init__(name, parent_dataset, ax)
 
-    # add widgets specific to the theory here:
+
+        #disable buttons 
+        self.parent_dataset.actionMinimize_Error.setDisabled(True)
+        self.parent_dataset.actionCalculate_Theory.setDisabled(True)
+        self.parent_dataset.actionShow_Limits.setDisabled(True)
+        self.parent_dataset.actionVertical_Limits.setDisabled(True)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(True)
        
