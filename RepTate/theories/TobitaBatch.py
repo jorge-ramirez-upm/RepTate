@@ -12,6 +12,7 @@
 """
 import numpy as np
 #np.random.random() uses the Mersenne Twister pseudorandom number generator 
+import polybits
 from PolyMassRg import PolyMassRg
 from PolyCleanUp import PolyCleanUp
 from BinsAndBob import BinsAndBob
@@ -50,47 +51,47 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
         self.scount = 0
         self.bcount = 0
         cur_conv = self.getconv1(self.fin_conv) 
-        m, success = self.request_arm()
+        m, success = polybits.request_arm()
         if success:  #don't do anything if arms not available
-            self.br_poly[n].first_end = m
-            self.arm_pool[m].up = m
-            self.arm_pool[m].down = m
+            polybits.br_poly[n].first_end = m
+            polybits.arm_pool[m].up = m
+            polybits.arm_pool[m].down = m
             seg_len = self.calclength(cur_conv)
-            self.arm_pool[m].arm_len = seg_len
-            self.arm_pool[m].arm_conv = cur_conv
+            polybits.arm_pool[m].arm_len = seg_len
+            polybits.arm_pool[m].arm_conv = cur_conv
             self.rlevel = 0
             self.tobita_grow(1, m, cur_conv, True)
 
-        m1, success = self.request_arm()
+        m1, success = polybits.request_arm()
         if success: #don't do anything if arms not available
-            self.arm_pool[m].L1 = -m1
-            self.arm_pool[m1].R2 = m
-            self.armupdown(m, m1)
+            polybits.arm_pool[m].L1 = -m1
+            polybits.arm_pool[m1].R2 = m
+            polybits.armupdown(m, m1)
             seg_len = self.calclength(cur_conv) 
-            self.arm_pool[m1].arm_len = seg_len
-            self.arm_pool[m1].arm_conv = cur_conv
+            polybits.arm_pool[m1].arm_len = seg_len
+            polybits.arm_pool[m1].arm_conv = cur_conv
             self.rlevel = 0
             self.tobita_grow(-1, m1, cur_conv, True) #end check for arm availability
 
-        if self.arms_avail: # not true if we ran out of arms somewhere !
+        if polybits.arms_avail: # not true if we ran out of arms somewhere !
             self.polyclean(n)
 
             #renumber segments starting from zero
-            m1 = self.br_poly[n].first_end
+            m1 = polybits.br_poly[n].first_end
             first = m1
             anum = 0
-            self.arm_pool[m1].armnum = anum
-            m1 = self.arm_pool[m1].down
+            polybits.arm_pool[m1].armnum = anum
+            m1 = polybits.arm_pool[m1].down
             while m1 != first:
                 anum += 1
-                self.arm_pool[m1].armnum = anum
-                m1 = self.arm_pool[m1].down
-            first = self.br_poly[n].first_end
+                polybits.arm_pool[m1].armnum = anum
+                m1 = polybits.arm_pool[m1].down
+            first = polybits.br_poly[n].first_end
             len1, nsegs = self.mass_segs(first)
-            self.br_poly[n].num_br = self.bcount
-            self.br_poly[n].tot_len = len1
+            polybits.br_poly[n].num_br = self.bcount
+            polybits.br_poly[n].tot_len = len1
             len2, jtot, gfact = self.mass_rg2(first, 1.0)
-            self.br_poly[n].gfactor = gfact
+            polybits.br_poly[n].gfactor = gfact
 
             #check to see whether to save the polymer
             self.bobcount(n, n1)  #OK: do not change n, n1
@@ -113,80 +114,80 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
             self.rlevel = 100000
             return
 
-        if not self.arms_avail:   # don't do anything if arms aren't available
+        if not polybits.arms_avail:   # don't do anything if arms aren't available
             return
 
         seg_len = self.scilength(cur_conv)
-        if sc_tag and (seg_len < self.arm_pool[m].arm_len):
-            self.arm_pool[m].arm_len = seg_len   # scission event
-            self.arm_pool[m].scission = True
+        if sc_tag and (seg_len < polybits.arm_pool[m].arm_len):
+            polybits.arm_pool[m].arm_len = seg_len   # scission event
+            polybits.arm_pool[m].scission = True
         seg_len = self.brlength(cur_conv)
 
-        if seg_len < self.arm_pool[m].arm_len: # a branch point
+        if seg_len < polybits.arm_pool[m].arm_len: # a branch point
             self.bcount += 1
-            m1, success = self.request_arm() # return success=False if arms not available
+            m1, success = polybits.request_arm() # return success=False if arms not available
             if success: 
-                self.armupdown(m, m1)
-                m2, success = self.request_arm()
+                polybits.armupdown(m, m1)
+                m2, success = polybits.request_arm()
                 if success:
-                    self.armupdown(m,m2)
+                    polybits.armupdown(m,m2)
                     if (dir > 0): #going to the right
-                        self.arm_pool[m].R1 = m1
-                        self.arm_pool[m1].L2 = -m    #I think it might be useful if
+                        polybits.arm_pool[m].R1 = m1
+                        polybits.arm_pool[m1].L2 = -m    #I think it might be useful if
                                                       #1 is connected to 2 all the time
                                                       # sign(L1) etc indicates direction of subsequent segment.
-                        self.arm_pool[m1].arm_len = self.arm_pool[m].arm_len - seg_len
-                        self.arm_pool[m].arm_len = seg_len
-                        self.arm_pool[m1].arm_conv = cur_conv
-                        self.arm_pool[m1].scission = self.arm_pool[m].scission
-                        self.arm_pool[m].scission = False
+                        polybits.arm_pool[m1].arm_len = polybits.arm_pool[m].arm_len - seg_len
+                        polybits.arm_pool[m].arm_len = seg_len
+                        polybits.arm_pool[m1].arm_conv = cur_conv
+                        polybits.arm_pool[m1].scission = polybits.arm_pool[m].scission
+                        polybits.arm_pool[m].scission = False
                         new_conv = self.getconv2(cur_conv)
                         seg_len = self.calclength(new_conv)
-                        self.arm_pool[m2].arm_len = seg_len
-                        self.arm_pool[m2].arm_conv = new_conv
-                        self.arm_pool[m1].L1 = m2
-                        self.arm_pool[m2].L2 = m1
-                        self.arm_pool[m].R2 = m2
-                        self.arm_pool[m2].L1 = -m
+                        polybits.arm_pool[m2].arm_len = seg_len
+                        polybits.arm_pool[m2].arm_conv = new_conv
+                        polybits.arm_pool[m1].L1 = m2
+                        polybits.arm_pool[m2].L2 = m1
+                        polybits.arm_pool[m].R2 = m2
+                        polybits.arm_pool[m2].L1 = -m
                         self.tobita_grow(1, m2, new_conv, True)
                         self.tobita_grow(dir, m1, cur_conv, False)
                     else:  #going to the left
-                        self.arm_pool[m].L1 = -m1
-                        self.arm_pool[m1].R2 = m
-                        self.arm_pool[m1].arm_len = self.arm_pool[m].arm_len - seg_len
-                        self.arm_pool[m].arm_len = seg_len
-                        self.arm_pool[m1].arm_conv = cur_conv
-                        self.arm_pool[m1].scission = self.arm_pool[m].scission
-                        self.arm_pool[m].scission = False
+                        polybits.arm_pool[m].L1 = -m1
+                        polybits.arm_pool[m1].R2 = m
+                        polybits.arm_pool[m1].arm_len = polybits.arm_pool[m].arm_len - seg_len
+                        polybits.arm_pool[m].arm_len = seg_len
+                        polybits.arm_pool[m1].arm_conv = cur_conv
+                        polybits.arm_pool[m1].scission = polybits.arm_pool[m].scission
+                        polybits.arm_pool[m].scission = False
                         new_conv = self.getconv2(cur_conv)
                         seg_len = self.calclength(new_conv)
-                        self.arm_pool[m2].arm_len = seg_len
-                        self.arm_pool[m2].arm_conv = new_conv
-                        self.arm_pool[m1].R1 = m2
-                        self.arm_pool[m2].L2 = -m1
-                        self.arm_pool[m].L2 = m2
-                        self.arm_pool[m2].L1 = m
+                        polybits.arm_pool[m2].arm_len = seg_len
+                        polybits.arm_pool[m2].arm_conv = new_conv
+                        polybits.arm_pool[m1].R1 = m2
+                        polybits.arm_pool[m2].L2 = -m1
+                        polybits.arm_pool[m].L2 = m2
+                        polybits.arm_pool[m2].L1 = m
                         self.tobita_grow(1, m2, new_conv, True)
                         self.tobita_grow(dir, m1, cur_conv, False)
                     # end of arm m2 available
                 # end of arm m1 available
             # end of it's a branchpoint
         else: # non side-branching condition - deal with end of chain
-            if self.arm_pool[m].scission: # the end of the chain is a scission point
+            if polybits.arm_pool[m].scission: # the end of the chain is a scission point
                 if np.random.random() < 0.50: # and there is more growth at the scission point
                     new_conv = self.getconv2(cur_conv)
-                    m1, success = self.request_arm() # success=False if arm not available
+                    m1, success = polybits.request_arm() # success=False if arm not available
                     if success: 
-                        self.armupdown(m, m1)
+                        polybits.armupdown(m, m1)
                         seg_len = self.calclength(new_conv)
-                        self.arm_pool[m1].arm_len = seg_len
-                        self.arm_pool[m1].arm_conv = new_conv
+                        polybits.arm_pool[m1].arm_len = seg_len
+                        polybits.arm_pool[m1].arm_conv = new_conv
                         if dir > 0:
-                            self.arm_pool[m].R1 = m1
-                            self.arm_pool[m1].L2 = -m
+                            polybits.arm_pool[m].R1 = m1
+                            polybits.arm_pool[m1].L2 = -m
                         else:
-                            self.arm_pool[m].L1 = m1
-                            self.arm_pool[m1].L2 = m
+                            polybits.arm_pool[m].L1 = m1
+                            polybits.arm_pool[m1].L2 = m
                         self.tobita_grow(1, m1, new_conv, True)
                     # end check for arm available
                 # end of more growth from scission point
@@ -199,16 +200,16 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
                 Pbeta = self.beta/pref         # prob termination by combination
                 rnd = np.random.random()
                 if rnd < Pbeta: #prob for termination by combination
-                    m1, success = self.request_arm() # success=False if arm not available
+                    m1, success = polybits.request_arm() # success=False if arm not available
                     if success:
-                        self.armupdown(m, m1)
+                        polybits.armupdown(m, m1)
                         seg_len = self.calclength(cur_conv)
-                        self.arm_pool[m1].arm_len = seg_len
-                        self.arm_pool[m1].arm_conv = cur_conv
-                        self.arm_pool[m].R1 = -m1
-                        self.arm_pool[m1].R2 = -m
+                        polybits.arm_pool[m1].arm_len = seg_len
+                        polybits.arm_pool[m1].arm_conv = cur_conv
+                        polybits.arm_pool[m].R1 = -m1
+                        polybits.arm_pool[m1].R2 = -m
                         self.tobita_grow(-1, m1, cur_conv, True)
-                    # end self.request_arm check
+                    # end polybits.request_arm check
                 # otherwise, end of chain: do nothing
             # end of right growth
             else: # must be left growth
@@ -221,52 +222,52 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
                 if rnd < Plambd: # grew from a branch
                     self.bcount += 1
                     new_conv = self.getconv1(cur_conv)
-                    m1, success = self.request_arm()
+                    m1, success = polybits.request_arm()
                     if success: # check arm availability
-                        self.armupdown(m, m1)
-                        m2, success = self.request_arm()
+                        polybits.armupdown(m, m1)
+                        m2, success = polybits.request_arm()
                         if success:
-                            self.armupdown(m, m2)
+                            polybits.armupdown(m, m2)
                             seg_len = self.calclength(new_conv)
-                            self.arm_pool[m1].arm_len = seg_len
-                            self.arm_pool[m1].arm_conv = new_conv
-                            self.arm_pool[m].L1 = m1
-                            self.arm_pool[m1].L2 = m
+                            polybits.arm_pool[m1].arm_len = seg_len
+                            polybits.arm_pool[m1].arm_conv = new_conv
+                            polybits.arm_pool[m].L1 = m1
+                            polybits.arm_pool[m1].L2 = m
                             self.tobita_grow(1, m1, new_conv, True)
                             seg_len = self.calclength(new_conv)
-                            self.arm_pool[m2].arm_len = seg_len
-                            self.arm_pool[m2].arm_conv = new_conv
-                            self.arm_pool[m].L2 = -m2
-                            self.arm_pool[m2].R1 = m
-                            self.arm_pool[m1].L1 = -m2
-                            self.arm_pool[m2].R2 = m1
+                            polybits.arm_pool[m2].arm_len = seg_len
+                            polybits.arm_pool[m2].arm_conv = new_conv
+                            polybits.arm_pool[m].L2 = -m2
+                            polybits.arm_pool[m2].R1 = m
+                            polybits.arm_pool[m1].L1 = -m2
+                            polybits.arm_pool[m2].R2 = m1
                             self.tobita_grow(-1, m2, new_conv, True)
-                        # end self.request_arm m2 check
-                    # end self.request_arm m1 check
+                        # end polybits.request_arm m2 check
+                    # end polybits.request_arm m1 check
                 elif rnd < (Psigma + Plambd): # grew from scission
                     new_conv = self.getconv1(cur_conv)
                     if np.random.random() <= 0.50:
-                        m1, success = self.request_arm()
+                        m1, success = polybits.request_arm()
                         if success: # check arm availability
-                            self.armupdown(m, m1)
+                            polybits.armupdown(m, m1)
                             seg_len = self.calclength(new_conv)
-                            self.arm_pool[m1].arm_len = seg_len
-                            self.arm_pool[m1].arm_conv = new_conv
-                            self.arm_pool[m].L1 = m1
-                            self.arm_pool[m1].L2 = m
+                            polybits.arm_pool[m1].arm_len = seg_len
+                            polybits.arm_pool[m1].arm_conv = new_conv
+                            polybits.arm_pool[m].L1 = m1
+                            polybits.arm_pool[m1].L2 = m
                             self.tobita_grow(1, m1, new_conv, True)
-                        # end self.request_arm check
+                        # end polybits.request_arm check
                     else:
-                        m2, success = self.request_arm()
+                        m2, success = polybits.request_arm()
                         if success: # check arm availability
-                            self.armupdown(m, m2)
+                            polybits.armupdown(m, m2)
                             seg_len = self.calclength(new_conv)
-                            self.arm_pool[m2].arm_len = seg_len
-                            self.arm_pool[m2].arm_conv = new_conv
-                            self.arm_pool[m].L2 = -m2
-                            self.arm_pool[m2].R1 = m
+                            polybits.arm_pool[m2].arm_len = seg_len
+                            polybits.arm_pool[m2].arm_conv = new_conv
+                            polybits.arm_pool[m].L2 = -m2
+                            polybits.arm_pool[m2].R1 = m
                             self.tobita_grow(-1, m2, new_conv, True)
-                        # end self.request_arm check
+                        # end polybits.request_arm check
                 # grew from initiation : do nothing
             # end of left-growth chain end possibilities
         # end of all chain-end possibilities
