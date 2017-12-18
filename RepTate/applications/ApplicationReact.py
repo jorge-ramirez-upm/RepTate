@@ -23,7 +23,7 @@ import matplotlib.gridspec as gridspec
 
 # IMPORT THEORIES
 # Import theories specific to the Application e.g.:
-# from TheoryReact import TheoryA
+from TheoryLDPEBatch import TheoryTobitaBatch
 
 
 class ApplicationReact(CmdBase):
@@ -84,7 +84,7 @@ class BaseApplicationReact:
 
         # THEORIES
         # add the theories related to ApplicationReact to the dictionary, e.g.:
-        # self.theories[TheoryA.thname] = TheoryA
+        self.theories[TheoryTobitaBatch.thname] = TheoryTobitaBatch
 
 
         #SPECIFIC FIGURE

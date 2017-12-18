@@ -8,7 +8,7 @@
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License.
 """Module BinsAndBob
- provides routines for binning molecular information calculating averages etc.
+ Provides routines for binning molecular information calculating averages etc.
 
  also provides routines for generating required information for BoB
  and deciding whether to save polymers for BoB output

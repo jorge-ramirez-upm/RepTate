@@ -7,7 +7,7 @@
 # Daniel Read, d.j.read@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
 # This software is distributed under the GNU General Public License. 
-"""Module Polycleanup
+"""Module PolyMassRg
 provides routines for cleaning up connectivity of branched polymers
 
 """
@@ -19,7 +19,7 @@ class PolyMassRg(PolyBits):
     def __init__(self):
         super().__init__()
 
-    def mass_segs(self, first): #TODO: return values lentot, segtot, check calls
+    def mass_segs(self, first): #TODO: return values lentot, segtot, check all calls
         # var
         # next: integer
         lentot = self.arm_pool[first].arm_len
@@ -60,7 +60,7 @@ class PolyMassRg(PolyBits):
         jtot = (lenc*lenc*jc + len1*len1*j1 + len2*len2*j2 + 2.0*(len1*len2*(h1 + h2) + len1*lenc*(h1 + hc) + len2*lenc*(h2 + hc)))/(lentot*lentot)
         return lentot, htot, jtot
 
-    def mass_rg2(self, m, cur_c): #TODO: return values lentot, htot, jtot in calls
+    def mass_rg2(self, m, cur_c): #TODO: return values lentot, htot, jtot. check all calls
         # var
         # mc,m1,m2: integer
         # h1,h2,j1,j2,len1,len2,lenc,hc,jc: double

@@ -13,10 +13,12 @@
 import numpy as np
 #np.random.random() uses the Mersenne Twister pseudorandom number generator 
 from Polybits import Polybits
+from PolyMassRg import PolyMassRg
+from PolyCleanUp import PolyCleanUp
+from BinsAndBob import BinsAndBob
 
 
-
-class TobitaBatch(Polybits):
+class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp, Polybits):
     """
     Routines for making one LDPE polymer using the tobita batch algorithm
     """
@@ -48,13 +50,13 @@ class TobitaBatch(Polybits):
 
         self.scount = 0
         self.bcount = 0
-        cur_conv = self.getconv1(self.fin_con) #TODO return value
+        cur_conv = self.getconv1(self.fin_con) 
         m, success = self.request_arm()
         if success:  #don't do anything if arms not available
             self.br_poly[n].first_end = m
             self.arm_pool[m].up = m
             self.arm_pool[m].down = m
-            seg_len = self.calclength(cur_conv)# TODO return value
+            seg_len = self.calclength(cur_conv)
             self.arm_pool[m].arm_len = seg_len
             self.arm_pool[m].arm_conv = cur_conv
             self.rlevel = 0
@@ -65,7 +67,7 @@ class TobitaBatch(Polybits):
             self.arm_pool[m].L1 = -m1
             self.arm_pool[m1].R2 = m
             self.armupdown(m, m1)
-            seg_len = self.calclength(cur_conv) #TODO return value
+            seg_len = self.calclength(cur_conv) 
             self.arm_pool[m1].arm_len = seg_len
             self.arm_pool[m1].arm_conv = cur_conv
             self.rlevel = 0
@@ -123,8 +125,8 @@ class TobitaBatch(Polybits):
 
         if seg_len < self.arm_pool[m].arm_len: # a branch point
             self.bcount += 1
-            m1, success = self.request_arm()
-            if success: # return false if arms not available
+            m1, success = self.request_arm() # return success=False if arms not available
+            if success: 
                 self.armupdown(m, m1)
                 m2, success = self.request_arm()
                 if success:
@@ -174,8 +176,8 @@ class TobitaBatch(Polybits):
             if self.arm_pool[m].scission: # the end of the chain is a scission point
                 if np.random.random() < 0.50: # and there is more growth at the scission point
                     new_conv = self.getconv2(cur_conv)
-                    m1, success = self.request_arm()
-                    if success: # returns false if arm not available
+                    m1, success = self.request_arm() # success=False if arm not available
+                    if success: 
                         self.armupdown(m, m1)
                         seg_len = self.calclength(new_conv)
                         self.arm_pool[m1].arm_len = seg_len
@@ -198,8 +200,8 @@ class TobitaBatch(Polybits):
                 Pbeta = self.beta/pref         # prob termination by combination
                 rnd = np.random.random()
                 if rnd < Pbeta: #prob for termination by combination
-                    m1, success = self.request_arm()
-                    if success:# false if arm not available
+                    m1, success = self.request_arm() # success=False if arm not available
+                    if success:
                         self.armupdown(m, m1)
                         seg_len = self.calclength(cur_conv)
                         self.arm_pool[m1].arm_len = seg_len
