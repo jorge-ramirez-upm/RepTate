@@ -19,8 +19,8 @@ class PolyCleanUp(PolyBits):
 
     """
     
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, parent_dataset, ax):
+        super().__init__(name, parent_dataset, ax)
    
     def polyclean(self, n):
         seg1 = self.br_poly[n].first_end

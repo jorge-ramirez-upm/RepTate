@@ -12,13 +12,12 @@
 """
 import numpy as np
 #np.random.random() uses the Mersenne Twister pseudorandom number generator 
-from Polybits import Polybits
 from PolyMassRg import PolyMassRg
 from PolyCleanUp import PolyCleanUp
 from BinsAndBob import BinsAndBob
 
 
-class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp, Polybits):
+class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
     """
     Routines for making one LDPE polymer using the tobita batch algorithm
     """
@@ -27,8 +26,8 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp, Polybits):
     # var
     # scount, bcount, rlevel : integer
     # fin_conv, tau, beta, Cs, Cb : double
-    def __init__(self):
-        pass
+    def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
+        super().__init__(name, parent_dataset, ax)
 
     def tobbatchstart(self, pfin_conv, ptau, pbeta, pCs, pCb, n):
         self.bobinit(n) #OK: does not modify n
@@ -50,7 +49,7 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp, Polybits):
 
         self.scount = 0
         self.bcount = 0
-        cur_conv = self.getconv1(self.fin_con) 
+        cur_conv = self.getconv1(self.fin_conv) 
         m, success = self.request_arm()
         if success:  #don't do anything if arms not available
             self.br_poly[n].first_end = m

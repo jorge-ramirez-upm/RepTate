@@ -42,7 +42,9 @@ class PolyBits:
     MAX_BOB_BINS = 5000
     MAX_MWD_BINS = 1000
 
-    def __init__(self):
+    def __init__(self, name, parent_dataset, ax):
+        super().__init__(name, parent_dataset, ax)
+        
         self.arm_pool = [Arm() for i in range(self.MAX_ARM)] #array of Arm;
         self.br_poly = [Polymer() for i in range(self.MAX_POL)] #array of polymer;
         self.react_dist = [ReactResults(self.MAX_MWD_BINS, self.MAX_BOB_BINS) for i in range(self.MAX_REACT)] #array[1..maxreact] of reactresults;

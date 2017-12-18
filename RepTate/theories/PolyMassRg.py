@@ -16,8 +16,8 @@ from PolyBits import PolyBits
 
 class PolyMassRg(PolyBits):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, parent_dataset, ax):
+        super().__init__(name, parent_dataset, ax)
 
     def mass_segs(self, first): #TODO: return values lentot, segtot, check all calls
         # var

@@ -19,8 +19,8 @@ from PolyBits import PolyBits
 
 class BinsAndBob(PolyBits):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, parent_dataset, ax):
+        super().__init__(name, parent_dataset, ax)
         self.multi_wt = np.zeros((self.MAX_MWD_BINS))
         self.multi_avbr = np.zeros((self.MAX_MWD_BINS))
         self.multi_wmass = np.zeros((self.MAX_MWD_BINS))
@@ -53,7 +53,7 @@ class BinsAndBob(PolyBits):
         lgstep = (lgmax - lgmin)/self.react_dist[n].nummwdbins
 
         #initialise bins and other counters
-        for ibin in range (self.react_dist[n].nummwdbins): #1 to self.react_dist[n].nummwdbins 
+        for ibin in range(int(self.react_dist[n].nummwdbins)): #1 to self.react_dist[n].nummwdbins 
             self.react_dist[n].wt[ibin] = 0.0
             self.react_dist[n].avbr[ibin] = 0.0
             self.react_dist[n].avg[ibin] = 0.0
@@ -68,7 +68,8 @@ class BinsAndBob(PolyBits):
         i = self.react_dist[n].first_poly
         while True:
             cplen = self.br_poly[i].tot_len * self.react_dist[n].monmass
-            ibin = np.trunc((np.log10(cplen) - lgmin)/lgstep) + 1 
+            ibin = np.trunc((np.log10(cplen) - lgmin)/lgstep) + 1
+            ibin = int(ibin)
             wttot += 1
             m_w = m_w + cplen
             m_n = m_n + 1.0/cplen
@@ -182,6 +183,7 @@ class BinsAndBob(PolyBits):
         """
         ibin = np.trunc((np.log10(self.br_poly[m].tot_len * self.react_dist[n].monmass) - self.react_dist[n].boblgmin) / (self.react_dist[n].boblgmax - self.react_dist[n].boblgmin) * self.react_dist[n].numbobbins) + 1
         ibin = np.min((np.max((1, ibin)), self.react_dist[n].numbobbins))
+        ibin = int(ibin)
         self.react_dist[n].numinbin[ibin] = self.react_dist[n].numinbin[ibin] + 1
         if self.react_dist[n].numinbin[ibin] <= self.react_dist[n].bobbinmax:  #  check to see whether to "save" the polymer
             self.br_poly[m].saved = True

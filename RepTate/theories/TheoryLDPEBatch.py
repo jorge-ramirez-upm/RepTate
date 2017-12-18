@@ -18,6 +18,7 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 
+from TobitaBatch import TobitaBatch
 
 class TheoryTobitaBatch(CmdBase):
     """Rolie-Poly
@@ -44,7 +45,7 @@ class TheoryTobitaBatch(CmdBase):
         return GUITheoryTobitaBatch(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTobitaBatch(name, parent_dataset, ax)
 
 
-class BaseTheoryTobitaBatch(PolyBits):
+class BaseTheoryTobitaBatch(TobitaBatch):
     """[summary]
     
     [description]
@@ -63,7 +64,7 @@ class BaseTheoryTobitaBatch(PolyBits):
         """
         super().__init__(name, parent_dataset, ax)
         self.react_pool_init()
-        self.reactname = 'LDPE batch %d'self.tobbatchnumber
+        self.reactname = 'LDPE batch %d'%self.tobbatchnumber
         self.tobbatchnumber += 1
         self.function = self.Calc
         self.simexists = False
@@ -147,7 +148,7 @@ class BaseTheoryTobitaBatch(PolyBits):
                     self.react_dist[ndist].first_poly = m
                     self.br_poly[m].nextpoly = 0
                 else:           # next polymer, put to top of list
-                    br_poly[m].nextpoly = self.react_dist[ndist].first_poly
+                    self.br_poly[m].nextpoly = self.react_dist[ndist].first_poly
                     self.react_dist[ndist].first_poly = m
 
                 # make a polymer
@@ -162,8 +163,8 @@ class BaseTheoryTobitaBatch(PolyBits):
                     message = 'Ran out of storage for arm records. Options to avoid this are:\n'
                     message += '(1) Reduce number of polymers requested\n'
                     message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
-                    message += '(3) Close some other theories\n')
-                    message += '(4) Adjust parameters to avoid gelation')
+                    message += '(3) Close some other theories\n'
+                    message += '(4) Adjust parameters to avoid gelation'
                     self.Qprint(message)
                     i = numtomake
                     self.tobitabatcherrorflag = True
@@ -234,24 +235,6 @@ class BaseTheoryTobitaBatch(PolyBits):
         """
         pass
         
-    def function_template(self, f=None):
-        """TobitaBatch function that returns the square of y
-        
-        [description]
-        
-        Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            [type] -- [description]
-        """
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = ft.data[:, 1] * ft.data[:, 1]
 
 
 class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
