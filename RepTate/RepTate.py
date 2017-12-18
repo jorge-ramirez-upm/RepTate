@@ -40,6 +40,10 @@ def start_RepTate(argv):
     splash = SplashScreen()
     splash.show()
     ex = QApplicationManager()
+    #### DEBUG
+    new_app = ex.new_React_window()
+    new_app.new_tables_from_files(['data/React/out1.reac'])
+    ####
     while time() - start < 1:
         sleep(0.001)
         if (time()-start < 0.5):

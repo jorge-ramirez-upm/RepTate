@@ -798,8 +798,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
         success, newtables, ext = ds.do_open(paths_to_open)
-        self.check_no_param_missing(newtables, ext)
         if success==True:
+            self.check_no_param_missing(newtables, ext)
             for dt in newtables:
                 self.addTableToCurrentDataSet(dt, ext)
             ds.do_plot()

@@ -53,7 +53,7 @@ class BinsAndBob(PolyBits):
         lgstep = (lgmax - lgmin)/self.react_dist[n].nummwdbins
 
         #initialise bins and other counters
-        for ibin in range(int(self.react_dist[n].nummwdbins)): #1 to self.react_dist[n].nummwdbins 
+        for ibin in range(self.react_dist[n].nummwdbins): #1 to self.react_dist[n].nummwdbins 
             self.react_dist[n].wt[ibin] = 0.0
             self.react_dist[n].avbr[ibin] = 0.0
             self.react_dist[n].avg[ibin] = 0.0
@@ -90,8 +90,8 @@ class BinsAndBob(PolyBits):
             self.react_dist[n].wt[ibin] = self.react_dist[n].wt[ibin] / lgstep / wttot
             self.react_dist[n].lgmid[ibin] = lgmin + ibin*lgstep - 0.5*lgstep
 
-        self.react_dist[n].m_w = m_w/wttot
-        self.react_dist[n].m_n = wttot/m_n
+        self.react_dist[n].M_w = m_w/wttot
+        self.react_dist[n].M_n = wttot/m_n
         self.react_dist[n].brav = brav/wttot * 500.0
 
 

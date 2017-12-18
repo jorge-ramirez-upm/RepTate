@@ -107,15 +107,8 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         numtomake = np.round(self.parameters['num_to_make'].value)
         monmass = self.parameters['mon_mass'].value
         Me = self.parameters['Me'].value
-        nbins = np.round(self.parameters['nbin'].value)
+        nbins = int(np.round(self.parameters['nbin'].value))
         
-        #resize theory data table
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-
         if not self.dist_exists:
             ndist, success = self.request_dist()
             if not success:
@@ -185,17 +178,26 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         if (self.react_dist[ndist].npoly >= 100) and (not self.tobitabatcherrorflag):
             self.molbin(ndist)
             ft = f.data_table
-            # for i in range(self.react_dist[ndist].nummwdbins)
-            tt.data[:, 0] = np.power(10, self.react_dist[ndist].lgmid[:])
-            tt.data[:, 1] = self.react_dist[ndist].wt[:]
-            tt.data[:, 2] = self.react_dist[ndist].avg[:]
-            tt.data[:, 3] = self.react_dist[ndist].avbr[:]
+            # print("nummwdbins=", self.react_dist[ndist].nummwdbins)
+            
+            #resize theory data table
+            ft = f.data_table
+            tt = self.tables[f.file_name_short]
+            tt.num_columns = ft.num_columns
+            tt.num_rows = self.react_dist[ndist].nummwdbins
+            tt.data = np.zeros((tt.num_rows, tt.num_columns))
+
+            for i in range(self.react_dist[ndist].nummwdbins):
+                tt.data[i, 0] = np.power(10, self.react_dist[ndist].lgmid[i])
+                tt.data[i, 1] = self.react_dist[ndist].wt[i]
+                tt.data[i, 2] = self.react_dist[ndist].avg[i]
+                tt.data[i, 3] = self.react_dist[ndist].avbr[i]
 
             self.Qprint('*************************')
             self.Qprint('End of calculation \"%s\"'%self.react_dist[ndist].name)
             self.Qprint('Made %d polymers'%self.react_dist[ndist].npoly)
             self.Qprint('Saved %d polymers in memory'%self.react_dist[ndist].nsaved)
-            self.Qprint('Mn = %.3g'%self.react_dist[ndist].M_n)
+            # self.Qprint('Mn = %.3g'%self.react_dist[ndist].M_n)
             self.Qprint('Mw = %.3g'%self.react_dist[ndist].M_w)
             self.Qprint('br/1000C = %.3g'%self.react_dist[ndist].brav)
             self.Qprint('*************************')
@@ -210,10 +212,11 @@ class BaseTheoryTobitaBatch(TobitaBatch):
 
         self.simexists = True
         self.Qprint('%d arm records left in memory'%self.arms_left) 
-        self.Qprint(ndist)
+        self.Qprint('%s'%ndist)
         return Calc
 
-
+    def do_error(self, line):
+        pass
 
     def get_modes(self):
         """[summary]
