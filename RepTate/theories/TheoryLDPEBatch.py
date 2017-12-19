@@ -22,7 +22,7 @@ import polybits
 from TobitaBatch import TobitaBatch
 
 class TheoryTobitaBatch(CmdBase):
-    """Rolie-Poly
+    """TheoryTobitaBatch
     
     [description]
     """
@@ -71,6 +71,7 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         self.function = self.Calc
         self.simexists = False
         self.dist_exists = False
+        self.ndist = 0
         self.has_modes = False # True if the theory has modes
 
         self.parameters['tau'] = Parameter(name='tau', value=0.002, description='tau', 
@@ -113,11 +114,12 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         
         if not self.dist_exists:
             ndist, success = polybits.request_dist()
+            self.ndist = ndist
             if not success:
                 self.Qprint('Too many theories open for internal storage. Please close a theory')
                 return
             self.dist_exists = True
-
+        ndist = self.ndist
         polybits.react_dist[ndist].name = self.reactname
         polybits.react_dist[ndist].polysaved = False
 
@@ -239,7 +241,9 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         """
         pass
         
-
+    def destructor(self):
+        """Return arms to pool"""
+        polybits.return_dist(self.ndist)
 
 class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
     """[summary]
@@ -281,7 +285,7 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
 
         #disable buttons 
         self.parent_dataset.actionMinimize_Error.setDisabled(True)
-        self.parent_dataset.actionCalculate_Theory.setDisabled(True)
+        # self.parent_dataset.actionCalculate_Theory.setDisabled(True)
         self.parent_dataset.actionShow_Limits.setDisabled(True)
         self.parent_dataset.actionVertical_Limits.setDisabled(True)
         self.parent_dataset.actionHorizontal_Limits.setDisabled(True)
