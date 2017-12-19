@@ -127,6 +127,7 @@ class Theory(CmdBase):
         Arguments:
             line {[type]} -- [description]
         """
+        start_time = time.time()
         if not self.tables:
             return
         for f in self.parent_dataset.files:
@@ -134,7 +135,8 @@ class Theory(CmdBase):
         if not self.fitting:
             self.do_plot(line)
             self.do_error(line)
-    
+        self.Qprint("---Calculated in %.3g seconds ---" % (time.time() - start_time))
+
     def do_error(self, line):
         """Report the error of the current theory
         

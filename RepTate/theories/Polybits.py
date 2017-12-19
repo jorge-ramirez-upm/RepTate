@@ -15,7 +15,7 @@ provides routines for requesting / returning arms to the arm-pool
 TO USE THESE ROUTINES, FIRST CALL pool_inits
 """ 
 import numpy as np
-
+from request_arm import request_arm as rq
 
 class Arm:
     pass
@@ -106,27 +106,32 @@ def pool_reinit():
 
 def request_arm():
     global arms_avail, first_in_pool, mmax, arms_left
+    m, arms_avail, first_in_pool, mmax, arms_left, success = rq(arm_pool, arms_avail, first_in_pool, mmax, arms_left)
+    return m, success
 
-    m = first_in_pool
-    if arm_pool[m].R1 == 0:
-        # need to decide what to do if you run out of arms!
-        arms_avail = False
-        return m, False
-    else:
-        first_in_pool = arm_pool[m].R1
-        mmax = np.max((mmax, m))
-        arm_pool[first_in_pool].L1 = 0
-        arm_pool[m].L1 = 0
-        arm_pool[m].L2 = 0
-        arm_pool[m].R1 = 0
-        arm_pool[m].R2 = 0
-        arm_pool[m].up = 0
-        arm_pool[m].down = 0
-        arm_pool[m].ended = False
-        arm_pool[m].endfin = False
-        arm_pool[m].scission = False
-        arms_left -= 1
-        return m, True
+# def request_arm():
+#     global arms_avail, first_in_pool, mmax, arms_left
+
+#     m = first_in_pool
+#     if arm_pool[m].R1 != 0:
+#         first_in_pool = arm_pool[m].R1
+#         mmax = mmax if mmax > m else m
+#         arm_pool[first_in_pool].L1 = 0
+#         arm_pool[m].L1 = 0
+#         arm_pool[m].L2 = 0
+#         arm_pool[m].R1 = 0
+#         arm_pool[m].R2 = 0
+#         arm_pool[m].up = 0
+#         arm_pool[m].down = 0
+#         arm_pool[m].ended = False
+#         arm_pool[m].endfin = False
+#         arm_pool[m].scission = False
+#         arms_left -= 1
+#         return m, True
+#     elif arm_pool[m].R1 == 0:
+#         # need to decide what to do if you run out of arms!
+#         arms_avail = False
+#         return m, False
 
 def return_arm(m):
     global first_in_pool, arms_avail, arms_left

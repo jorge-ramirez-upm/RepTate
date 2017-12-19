@@ -25,6 +25,9 @@ import matplotlib.gridspec as gridspec
 # Import theories specific to the Application e.g.:
 from TheoryLDPEBatch import TheoryTobitaBatch
 
+#precompile files
+import os
+os.system("cd theories/; python3 Cython_setup.py build_ext --inplace")
 
 class ApplicationReact(CmdBase):
     """[summary]

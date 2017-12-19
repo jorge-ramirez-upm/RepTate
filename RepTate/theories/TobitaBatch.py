@@ -17,6 +17,9 @@ from PolyMassRg import PolyMassRg
 from PolyCleanUp import PolyCleanUp
 from BinsAndBob import BinsAndBob
 
+from scilength import scilength
+from brlength import brlength
+
 
 class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
     """
@@ -99,7 +102,6 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
         else:
             return False
 
-
     def tobita_grow(self, dir, m, cur_conv, sc_tag):
         """dir,m:integer cur_conv: double sc_tag: boolean"""
         # var
@@ -117,11 +119,11 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
         if not polybits.arms_avail:   # don't do anything if arms aren't available
             return
 
-        seg_len = self.scilength(cur_conv)
+        seg_len = scilength(cur_conv, self.Cs, self.fin_conv)
         if sc_tag and (seg_len < polybits.arm_pool[m].arm_len):
             polybits.arm_pool[m].arm_len = seg_len   # scission event
             polybits.arm_pool[m].scission = True
-        seg_len = self.brlength(cur_conv)
+        seg_len = brlength(cur_conv, self.Cb, self.fin_conv)
 
         if seg_len < polybits.arm_pool[m].arm_len: # a branch point
             self.bcount += 1
@@ -288,29 +290,29 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
             r = np.trunc(r) + 1
         return r
 
-    def scilength(self, conv):
-        """Calculate length between scission-points of a segment grown at conversion "conv" """
-        # var
-        # rnd,eta  :double
-        rnd = np.random.random()
-        if rnd == 0.0:
-            rnd = 1.0
-        eta = self.Cs * np.log((1.0 - conv) / (1.0 - self.fin_conv)) + 1.0e-80
-        r = -np.log(rnd)/eta
-        if r < 1000.0:
-            r = np.trunc(r) + 1
-        return r
+    # def scilength(self, conv):
+    #     """Calculate length between scission-points of a segment grown at conversion "conv" """
+    #     # var
+    #     # rnd,eta  :double
+    #     rnd = np.random.random()
+    #     if rnd == 0.0:
+    #         rnd = 1.0
+    #     eta = self.Cs * np.log((1.0 - conv) / (1.0 - self.fin_conv)) + 1.0e-80
+    #     r = -np.log(rnd)/eta
+    #     if r < 1000.0:
+    #         r = np.trunc(r) + 1
+    #     return r
 
-    def brlength(self, conv):
-        """Calculate length between branch-points of a segment grown at conversion "conv" """
-        # var
-        # rnd,rho :double
-        rnd = np.random.random()
-        if rnd == 0.0:
-            rnd = 1.0
-        rho = self.Cb * np.log((1.0 - conv) / (1.0 - self.fin_conv))
-        r = -np.log(rnd)/rho
-        return r
+    # def brlength(self, conv):
+    #     """Calculate length between branch-points of a segment grown at conversion "conv" """
+    #     # var
+    #     # rnd,rho :double
+    #     rnd = np.random.random()
+    #     if rnd == 0.0:
+    #         rnd = 1.0
+    #     rho = self.Cb * np.log((1.0 - conv) / (1.0 - self.fin_conv))
+    #     r = -np.log(rnd)/rho
+    #     return r
 
     def getconv1(self, cur_conv):
         """Calculate conversion of older segment"""
