@@ -40,6 +40,8 @@ MAX_REACT = 11
 MAX_BOB_BINS = 5000
 MAX_MWD_BINS = 1000
 
+np.random.seed() # random seed
+iy3 = int(-1000 * np.random.random())
 
 arm_pool = [Arm() for i in range(MAX_ARM)] #array of Arm;
 br_poly = [Polymer() for i in range(MAX_POL)] #array of polymer;

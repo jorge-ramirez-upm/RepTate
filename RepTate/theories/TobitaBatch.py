@@ -11,11 +11,12 @@
 
 """
 import numpy as np
-#np.random.random() uses the Mersenne Twister pseudorandom number generator 
+#numpy uses the Mersenne Twister pseudorandom number generator 
 import polybits
 from PolyMassRg import PolyMassRg
 from PolyCleanUp import PolyCleanUp
 from BinsAndBob import BinsAndBob
+from ran3 import ran3
 
 
 class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
@@ -32,7 +33,6 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
 
     def tobbatchstart(self, pfin_conv, ptau, pbeta, pCs, pCb, n):
         self.bobinit(n) #OK: does not modify n
-        np.random.seed() # random seed
 
         # passed variables
         self.fin_conv = pfin_conv
@@ -173,7 +173,8 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
             # end of it's a branchpoint
         else: # non side-branching condition - deal with end of chain
             if polybits.arm_pool[m].scission: # the end of the chain is a scission point
-                if np.random.random() < 0.50: # and there is more growth at the scission point
+                rnd, polybits.iy3 = ran3(polybits.iy3)
+                if rnd < 0.50: # and there is more growth at the scission point
                     new_conv = self.getconv2(cur_conv)
                     m1, success = polybits.request_arm() # success=False if arm not available
                     if success: 
@@ -197,7 +198,7 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
                 lambd = self.Cb * cur_conv / (1.0 - cur_conv)  # calculate branching population
                 pref = self.tau + self.beta + sigma + lambd
                 Pbeta = self.beta/pref         # prob termination by combination
-                rnd = np.random.random()
+                rnd, polybits.iy3 = ran3(polybits.iy3)
                 if rnd < Pbeta: #prob for termination by combination
                     m1, success = polybits.request_arm() # success=False if arm not available
                     if success:
@@ -217,7 +218,7 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
                 pref = self.tau + self.beta + sigma + lambd
                 Plambd = lambd/pref     # prob reaction from polymer transfer (branching)
                 Psigma = sigma/pref # prob reaction from scission site
-                rnd = np.random.random()
+                rnd, polybits.iy3 = ran3(polybits.iy3)
                 if rnd < Plambd: # grew from a branch
                     self.bcount += 1
                     new_conv = self.getconv1(cur_conv)
@@ -245,7 +246,8 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
                     # end polybits.request_arm m1 check
                 elif rnd < (Psigma + Plambd): # grew from scission
                     new_conv = self.getconv1(cur_conv)
-                    if np.random.random() <= 0.50:
+                    rnd2, polybits.iy3 = ran3(polybits.iy3)
+                    if rnd2 <= 0.50:
                         m1, success = polybits.request_arm()
                         if success: # check arm availability
                             polybits.armupdown(m, m1)
@@ -276,7 +278,7 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
         """Calculates initial length of a segment grown at conversion "conv" """
         # var
         # rnd,sigma,lambd,pref :double
-        rnd = np.random.random()
+        rnd, polybits.iy3 = ran3(polybits.iy3)
         if rnd == 0.0:
             rnd = 1.0
         sigma = self.Cs * conv/(1.0 - conv) # calculate scission event population
@@ -291,7 +293,7 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
         """Calculate length between scission-points of a segment grown at conversion "conv" """
         # var
         # rnd,eta  :double
-        rnd = np.random.random()
+        rnd, polybits.iy3 = ran3(polybits.iy3)
         if rnd == 0.0:
             rnd = 1.0
         eta = Cs * np.log((1.0 - conv) / (1.0 - fin_conv)) + 1.0e-80
@@ -304,7 +306,7 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
         """Calculate length between branch-points of a segment grown at conversion "conv" """
         # var
         # rnd,rho :double
-        rnd = np.random.random()
+        rnd, polybits.iy3 = ran3(polybits.iy3)
         if rnd == 0.0:
             rnd = 1.0
         rho = Cb * np.log((1.0 - conv) / (1.0 - fin_conv))
@@ -313,11 +315,12 @@ class TobitaBatch(BinsAndBob, PolyMassRg, PolyCleanUp):
 
     def getconv1(self, cur_conv):
         """Calculate conversion of older segment"""
-        return np.random.random() * cur_conv
+        rnd, polybits.iy3 = ran3(polybits.iy3)
+        return rnd * cur_conv
 
     def getconv2(self, cur_conv):
         """Calculate conversion of newer segment growing from scission or branchpoint"""
         # var
         # rnd :double
-        rnd = np.random.random()
+        rnd, polybits.iy3 = ran3(polybits.iy3)
         return 1.0 - (1.0 - cur_conv) * np.exp(-rnd * np.log((1.0 - cur_conv) / (1.0 - self.fin_conv)))
