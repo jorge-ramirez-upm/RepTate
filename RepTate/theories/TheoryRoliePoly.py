@@ -14,7 +14,7 @@ Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
 import numpy as np
 from scipy.integrate import ode, odeint
 from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
@@ -67,9 +67,12 @@ class EditModesDialog(QDialog):
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value):
+        nrow_old = self.table.rowCount()
         self.table.setRowCount(value)
+        for i in range(nrow_old, value): #create extra rows with defaut values
+            self.table.setItem(i, 0, QTableWidgetItem("10")) 
+            self.table.setItem(i, 1, QTableWidgetItem("1000")) 
 
-        
     # static method to create the dialog and return (date, time, accepted)
     #@staticmethod
     #def getMaxwellModesProvider(self, parent = None, th_dict = {}):
@@ -125,25 +128,25 @@ class BaseTheoryRoliePoly:
         super().__init__(name, parent_dataset, ax)
         self.function = self.RoliePoly
         self.has_modes = True
-        self.parameters["beta"]=Parameter(name="beta", value=0.5, description="CCR coefficient", 
-                                          type=ParameterType.real, min_flag=False)
-        self.parameters["delta"]=Parameter(name="delta", value=-0.5, description="CCR exponent", 
-                                           type=ParameterType.real, min_flag=False)
-        self.parameters["lmax"]=Parameter(name="lmax", value=10.0, description="Maximum extensibility", 
-                                          type=ParameterType.real, min_flag=False)
-        self.parameters["nmodes"]=Parameter(name="nmodes", value=2, description="Number of modes", 
-                                          type=ParameterType.integer, min_flag=False, display_flag=False)
-        self.parameters["nstretch"]=Parameter(name="nstretch", value=2, description="Number of strecthing modes", 
-                                          type=ParameterType.integer, min_flag=False, display_flag=False)
+        self.parameters["beta"] = Parameter(name="beta", value=0.5, description="CCR coefficient", 
+                                          type=ParameterType.real, opt_type=OptType.const)
+        self.parameters["delta"] = Parameter(name="delta", value=-0.5, description="CCR exponent", 
+                                           type=ParameterType.real, opt_type=OptType.const)
+        self.parameters["lmax"] = Parameter(name="lmax", value=10.0, description="Maximum extensibility", 
+                                          type=ParameterType.real, opt_type=OptType.const)
+        self.parameters["nmodes"] = Parameter(name="nmodes", value=2, description="Number of modes", 
+                                          type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
+        self.parameters["nstretch"] = Parameter(name="nstretch", value=2, description="Number of strecthing modes", 
+                                          type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["G%02d"%i]=Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
-                                               type=ParameterType.real, min_flag=False, display_flag=False, 
+            self.parameters["G%02d"%i] = Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
+                                               type=ParameterType.real, opt_type=OptType.nopt, display_flag=False, 
                                                bracketed=True, min_value=0)
-            self.parameters["tauD%02d"%i]=Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
-                                                  type=ParameterType.real, min_flag=False, display_flag=False,
+            self.parameters["tauD%02d"%i] = Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
+                                                  type=ParameterType.real, opt_type=OptType.nopt, display_flag=False,
                                                   bracketed=True, min_value=0)
-            self.parameters["tauR%02d"%i]=Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
-                                                  type=ParameterType.real, min_flag=True, 
+            self.parameters["tauR%02d"%i] = Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
+                                                  type=ParameterType.real, opt_type=OptType.opt, 
                                                   bracketed=True, min_value=0)
 
         self.view_LVEenvelope = False
@@ -207,9 +210,9 @@ class BaseTheoryRoliePoly:
     
         # Create the vector with the time derivative of sigma
         trace_sigma = sxx + 2*syy
-        aux1 = 2*(1-np.sqrt(3/trace_sigma))/tauR
+        aux1 = 2*(1-np.sqrt(3./trace_sigma))/tauR
         aux2 = beta*(trace_sigma/3)**delta
-        return [2*gammadot*sxy - (sxx-1)/tauD - aux1*(sxx + aux2*(sxx-1)), -1.0*(syy-1)/tauD - aux1*(syy + aux2*(syy-1)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
+        return [2*gammadot*sxy - (sxx-1.)/tauD - aux1*(sxx + aux2*(sxx-1.)), -1.0*(syy-1.)/tauD - aux1*(syy + aux2*(syy-1.)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
 
 
     def sigmadotshearnostretch(self, sigma, t, p):
@@ -271,9 +274,6 @@ class BaseTheoryRoliePoly:
             else:
                 sig = odeint(self.sigmadotshearnostretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
             tt.data[:,1] += self.parameters["G%02d"%i].value*np.delete(sig[:,2],[0]) #return sxy
-        
-        # return stress to agree with input data file (t, eta)
-        #tt.data[:,1] = tt.data[:,1]/gammadot
 
     def set_param_value(self, name, value):
         """[summary]
@@ -289,14 +289,14 @@ class BaseTheoryRoliePoly:
         super(BaseTheoryRoliePoly, self).set_param_value(name, value)
         if (name=="nmodes"):
             for i in range(self.parameters["nmodes"].value):
-                self.parameters["G%02d"%i]=Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
-                                                   type=ParameterType.real, min_flag=False, display_flag=False, 
+                self.parameters["G%02d"%i] = Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
+                                                   type=ParameterType.real, opt_type=OptType.nopt, display_flag=False, 
                                                    bracketed=True, min_value=0)
-                self.parameters["tauD%02d"%i]=Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
-                                                      type=ParameterType.real, min_flag=False, display_flag=False,
+                self.parameters["tauD%02d"%i] = Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
+                                                      type=ParameterType.real, opt_type=OptType.nopt, display_flag=False,
                                                       bracketed=True, min_value=0)
-                self.parameters["tauR%02d"%i]=Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
-                                                      type=ParameterType.real, min_flag=True, display_flag=True,
+                self.parameters["tauR%02d"%i] = Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
+                                                      type=ParameterType.real, opt_type=OptType.opt, display_flag=True,
                                                       bracketed=True, min_value=0)
             if (oldn>self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value,oldn):

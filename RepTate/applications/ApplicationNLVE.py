@@ -58,18 +58,17 @@ class BaseApplicationNLVE:
         super().__init__(name, parent)
         
         # VIEWS
-        self.views["Log(eta(t))"]=View(name="Log(eta(t))", description="Log transient viscosity", 
-                                       x_label="Log(t)", y_label="Log($\eta$(t))", x_units="s", y_units="Pa$\cdot$s",
+        self.views["log(eta(t))"]=View(name="log(eta(t))", description="log transient viscosity", 
+                                       x_label="log(t)", y_label="log($\eta$(t))", x_units="s", y_units="Pa$\cdot$s",
                                        log_x=False, log_y=False, view_proc=self.viewLogeta, n=1, snames=["$\eta$(t)"], index=0)
-        self.views["Log(sigma(t))-gamma"]=View(name="Log(sigma(t))", description="Log transient shear stress vs gamma", 
-                                         x_label="Log($\gamma$)", y_label="Log($\sigma_{xy}$($\gamma$))", 
+        self.views["log(sigma(t))-gamma"]=View(name="log(sigma(t))", description="log transient shear stress vs gamma", 
+                                         x_label="log($\gamma$)", y_label="log($\sigma_{xy}$($\gamma$))", 
                                          x_units="-", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogSigmaGamma, 
                                          n=1, snames=["$\sigma_{xy}$($\gamma$)"], index=1)
-        self.views["Log(sigma(t))-t"]=View(name="Log(sigma(t))", description="Log transient shear stress vs time", 
-                                         x_label="Log(t)", y_label="Log($\sigma_{xy}$(t))", 
+        self.views["log(sigma(t))-t"]=View(name="log(sigma(t))", description="log transient shear stress vs time", 
+                                         x_label="log(t)", y_label="log($\sigma_{xy}$(t))", 
                                          x_units="s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogSigmaTime, 
                                          n=1, snames=["$\sigma_{xy}$($\gamma$)"], index=2)
-        self.current_view=self.views["Log(eta(t))"]
 
         # FILES
         ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])

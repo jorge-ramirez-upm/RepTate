@@ -17,6 +17,7 @@ from Theory import Theory
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
 from PyQt5.QtCore import Qt
+from Parameter import OptType
 
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
@@ -96,16 +97,20 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         for param in sorted(self.parameters): #parameters in alphabetic order
             p = self.parameters[param]
             if p.display_flag: #only allowed param enter the table
-                try:
-                    err = "%0.3g"%p.error
-                except:
-                    err = "-"    
-                item = QTreeWidgetItem(self.thParamTable, [p.name, "%0.3g"%p.value, err])
-                if p.min_flag:
-                    item.setCheckState(0, Qt.Checked)
-                else:
+                if p.opt_type == OptType.const:
+                    item = QTreeWidgetItem(self.thParamTable, [p.name, "%0.3g"%p.value, "N/A"])
                     item.setCheckState(0, Qt.PartiallyChecked)
                     item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
+                else:
+                    try:
+                        err = "%0.3g"%p.error
+                    except:
+                        err = "-"    
+                    item = QTreeWidgetItem(self.thParamTable, [p.name, "%0.3g"%p.value, err])
+                    if p.opt_type == OptType.opt:
+                        item.setCheckState(0, Qt.Checked)
+                    elif p.opt_type == OptType.nopt:
+                        item.setCheckState(0, Qt.Unchecked)
                     
                 item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
@@ -120,7 +125,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             item {[type]} -- [description]
             column {[type]} -- [description]
         """
-        if (column==1):
+        if (column == 1):
             self.thParamTable.editItem(item, column)
             # thcurrent = self.parent_dataset.TheorytabWidget.currentWidget()
             # thcurrent.editItem(item, column)
@@ -135,8 +140,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             column {[type]} -- [description]
         """
         param_changed = item.text(0)
-        if column==0: #param was checked/unchecked
-            self.parameters[param_changed].min_flag = item.checkState(0)==Qt.Checked
+        if column == 0: #param was checked/unchecked
+            if item.checkState(0) == Qt.Checked:
+                self.parameters[param_changed].opt_type = OptType.opt
+            elif item.checkState(0) == Qt.Unchecked:
+                self.parameters[param_changed].opt_type = OptType.nopt
             return
         #else, assign the entered value
         val = item.text(1)
@@ -153,8 +161,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         
         [description]
         """
-        apmng=self.parent_dataset.parent_application.parent_manager
-        G, S=apmng.list_theories_Maxwell()
+        apmng = self.parent_dataset.parent_application.parent_manager
+        G, S = apmng.list_theories_Maxwell()
         for item in G.keys():
             if self.name in item:
                 del G[item]

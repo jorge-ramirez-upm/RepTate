@@ -321,7 +321,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if color: #check for none
             self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s"%color.name())
             self.color1 = color.getRgbF()
-            print("handle_pickColor1 ", self.color1)
 
     def handle_pickColor2(self):
         """Call the colocr picker and save the selected color to `color2` in 
@@ -511,7 +510,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not ds:
             return
         self.disconnect_curve_drag()
-        paths_to_reopen, th_to_reopen= self.clear_files_and_th_from_dataset(ds)
+        paths_to_reopen, th_to_reopen = self.clear_files_and_th_from_dataset(ds)
         if paths_to_reopen:
             self.new_tables_from_files(paths_to_reopen)
         for th_name, tab_name in th_to_reopen:
@@ -519,7 +518,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def clear_files_and_th_from_dataset(self, ds):
         """Remove all files from dataset and widgetTree,
-        return a list with the full path of deleted files
+        return a list with the full path of deleted files and opened theories
         
         [description]
         
@@ -658,15 +657,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
-        selectedview = self.current_view.name
         nviews = len(self.views)
         for ind in range(nviews):
             for i in self.views:
                 if self.views[i].index == ind:
                     #add keys of 'views' dict to the list of views avaliable 
                     self.viewComboBox.insertItem(self.views[i].index, i)
-        index = self.viewComboBox.findText(selectedview, QtCore.Qt.MatchFixedString)
-        self.viewComboBox.setCurrentIndex(index)
+                    if self.views[i].index == 0: #index 0 is the defaut view
+                        self.current_view = self.views[i] 
+        self.viewComboBox.setCurrentIndex(0) 
+        
 
     def dragEnterEvent(self, e):
         """[summary]

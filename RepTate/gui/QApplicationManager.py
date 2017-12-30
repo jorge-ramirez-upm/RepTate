@@ -72,6 +72,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionGt.triggered.connect(self.new_gt_window)
         #self.actionCreep.triggered.connect(self.new_creep_window)
         #self.actionSANS.triggered.connect(self.new_sans_window)
+        self.actionReact.triggered.connect(self.new_React_window)
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)        
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)
         #self.Projecttree.itemSelectionChanged.connect(self.treeChanged)
@@ -215,3 +216,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """
         app_name = "SANS"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-SANS.png')
+
+    def new_React_window(self):
+        """Open a new React application window
+        
+        [description]
+        """
+        app_name = "React"
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-test-tube.png')

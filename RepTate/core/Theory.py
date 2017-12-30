@@ -20,7 +20,7 @@ from scipy.stats.distributions import t
 
 from CmdBase import CmdBase, CmdMode
 from DataTable import DataTable
-from Parameter import Parameter, ParameterType
+from Parameter import Parameter, ParameterType, OptType
 from DraggableArtists import DraggableVLine, DraggableHLine, DragType
 
 from tabulate import tabulate
@@ -188,7 +188,7 @@ class Theory(CmdBase):
         ind=0
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag: 
+            if par.opt_type == OptType.opt: 
                 par.value=param_in[ind]
                 ind+=1
         self.do_calculate("")
@@ -270,7 +270,7 @@ class Theory(CmdBase):
         param_max = []
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag:
+            if par.opt_type == OptType.opt:
                 initial_guess.append(par.value)
                 param_min.append(par.min_value) #list of min values for fitting parameters
                 param_max.append(par.max_value) #list of max values for fitting parameters
@@ -317,7 +317,7 @@ class Theory(CmdBase):
         self.Qprint("=============================================")
         for p in k:
             par = self.parameters[p] 
-            if par.min_flag:
+            if par.opt_type == OptType.opt:
                 par.error=par_error[ind]
                 ind+=1
                 self.Qprint('%10s = %10.5g +/- %10.5g'%(par.name, par.value, par.error))
@@ -379,14 +379,17 @@ class Theory(CmdBase):
             print("%10s   %10s (with * = is optimized)"%("Parameter","Value"))
             print("=============================================")
             for p in plist:
-                if self.parameters[p].min_flag: 
+                if self.parameters[p].opt_type == OptType.opt: 
                     print("*%9s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
-                else: 
+                elif self.parameters[p].opt_type == OptType.nopt: 
                     print("%10s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
         else:
             for s in line.split():
                 if (s in self.parameters):
-                    self.parameters[s].min_flag=not self.parameters[s].min_flag
+                    if self.parameters[s].opt_type == OptType.opt:
+                        self.parameters[s].opt_type == OptType.nopt
+                    elif self.parameters[s].opt_type == OptType.nopt:
+                        self.parameters[s].opt_type == OptType.opt
                 else:
                     print("Parameter %s not found"%s)
 

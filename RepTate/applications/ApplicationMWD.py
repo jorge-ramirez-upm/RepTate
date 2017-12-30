@@ -60,7 +60,6 @@ class BaseApplicationMWD:
         self.views["W(M)"]=View(name="W(M)", description="Molecular weight distribution", x_label="M", y_label="W(M)", 
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.viewWM, n=1, 
                                 snames=["W(M)"], index=0)
-        self.current_view=self.views["W(M)"]
 
         # FILES
         ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], ['Mn','Mw','PDI'], ["g/mol", '-'])

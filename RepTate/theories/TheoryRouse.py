@@ -12,6 +12,8 @@ Module for the Rouse theory for the relaxation modulus.
 
 """ 
 from Theory import Theory
+from Parameter import OptType
+
 
 class TheoryRouseTime(Theory, CmdBase):
     """Fit Rouse modes to a time depenendent relaxation function
@@ -66,11 +68,11 @@ class TheoryRouseFrequency(Theory, CmdBase):
         super(TheoryRouseFrequency, self).__init__(name, parent_dataset, ax)
         self.function = self.RouseFrequency
         self.has_modes = True
-        self.parameters["logwmin"]=Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, True)
-        self.parameters["logwmax"]=Parameter("logwmax", 4, "Log of frequency range maximum", ParameterType.real, True)
-        self.parameters["nmodes"]=Parameter("nmodes", 5, "Number of Rouse modes", ParameterType.integer, False)
+        self.parameters["logwmin"] = Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, opt_type=OptType.nopt)
+        self.parameters["logwmax"] = Parameter("logwmax", 4, "Log of frequency range maximum", ParameterType.real, opt_type=OptType.nopt)
+        self.parameters["nmodes"] = Parameter("nmodes", 5, "Number of Rouse modes", ParameterType.integer, opt_type=OptType.const)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%d"%i]=Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+            self.parameters["logG%d"%i] = Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
 
     def set_param_value(self, name, value):
         """[summary]
@@ -82,11 +84,11 @@ class TheoryRouseFrequency(Theory, CmdBase):
             value {[type]} -- [description]
         """
         if (name=="nmodes"):
-            oldn=self.parameters["nmodes"].value
+            oldn = self.parameters["nmodes"].value
         super(TheoryRouseFrequency, self).set_param_value(name, value)
         if (name=="nmodes"):
             for i in range(self.parameters["nmodes"].value):
-                self.parameters["logG%d"%i]=Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, True)
+                self.parameters["logG%d"%i] = Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
             if (oldn>self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value,oldn):
                     del self.parameters["logG%d"%i]

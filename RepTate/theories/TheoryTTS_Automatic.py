@@ -18,7 +18,7 @@ import numpy as np
 from scipy import interp
 from scipy.optimize import minimize
 from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog, QComboBox
@@ -67,12 +67,10 @@ class BaseTheoryTTSShiftAutomatic:
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryTTSShiftAutomatic
-        self.parameters["Hshift"]=Parameter("Hshift", 0.0, "Horizontal Shift", ParameterType.real, True)
-        self.parameters["Vshift"]=Parameter("Vshift", 1.0, "Vertical Shift", ParameterType.real, False)
         
-        self.parameters["T"]=Parameter(name="T", value=25, description="Temperature to shift to, in °C", type=ParameterType.real, min_flag=False, display_flag=False)
+        self.parameters["T"]=Parameter(name="T", value=25, description="Temperature to shift to, in °C", type=ParameterType.real, opt_type=OptType.const, display_flag=False)
         self.parameters["vert"]=Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
-                                               min_flag=False, display_flag=False)    
+                                          opt_type=OptType.const, display_flag=False)    
         self.Mwset, self.Mw, self.Tdict = self.get_cases()
         self.current_master_curve=None
         self.current_table=None
@@ -80,7 +78,6 @@ class BaseTheoryTTSShiftAutomatic:
         self.shiftParameters = {}
         for k in self.tables.keys():
             self.shiftParameters[k] = (0.0,0.0) # log10 of horizontal, then vertical
-
 
     def TheoryTTSShiftAutomatic(self, f=None):
         """[summary]
@@ -229,7 +226,7 @@ class BaseTheoryTTSShiftAutomatic:
         ind=0
         for p in self.parameters.keys():
             par = self.parameters[p] 
-            if par.min_flag:
+            if par.opt_type == OptType.opt:
                 par.value=param_in[0][ind]
                 ind+=1
         self.do_calculate("")
@@ -366,34 +363,6 @@ class BaseTheoryTTSShiftAutomatic:
                 #print(Temps0[i], XSHIFT, YSHIFT)
                 self.Qprint('%15.3g %15.3g %15.3g'%(Temps0[i], XSHIFT, YSHIFT))
 
-
-        # Mount the vector of parameters (Active ones only)
-#        initial_guess=[]
-#        for p in self.parameters.keys():
-#            par = self.parameters[p] 
-#            if par.min_flag: 
-#                initial_guess.append(par.value)
-
-#        res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
-        
-#        if (not res['success']):
-#            self.Qprint("Solution not found: ", res['message'])
-#            return
-
-#        self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
-
-#        ind=0
-#        k=list(self.parameters.keys())
-#        k.sort()
-#        self.Qprint("%10s   %10s"%("Parameter","Value"))
-#        self.Qprint("===========================")
-#        for p in k:
-#            par = self.parameters[p] 
-#            if par.min_flag:
-#                ind+=1
-#                self.Qprint('*%9s = %10.5g'%(par.name, par.value))
-#            else:
-#                self.Qprint('%10s = %10.5g'%(par.name, par.value))
         self.fitting=False
         self.do_calculate(line)
 

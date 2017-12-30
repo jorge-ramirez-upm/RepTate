@@ -90,8 +90,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         self.TheoryLayout.insertWidget(0, tb)
-        self.TheorytabWidget.setMinimumHeight(100)
-        
+        self.splitter.setSizes((3, 2))
+
         #desactive buttons when no theory tab
         self.theory_actions_disabled(True)
 
@@ -222,6 +222,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if self.current_theory and self.files!=[]:
             self.theories[self.current_theory].do_calculate("")
             self.theories[self.current_theory].update_parameter_table()
+            self.parent_application.update_Qplot()
 
     def handle_actionMinimize_Error(self):
         """Minimize the error
@@ -236,6 +237,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 return
             self.theories[self.current_theory].do_fit("")
             self.theories[self.current_theory].update_parameter_table()
+            self.parent_application.update_Qplot()
+
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed
@@ -482,15 +485,15 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             return
         if self.current_theory:
             self.set_no_limits(self.current_theory) #remove the xy-range limits
+        self.theory_actions_disabled(False) #enable theory buttons
         newth = self.do_theory_new(th_name)
 
         # add new theory tab
         if th_tab_id == "": 
             th_tab_id = newth.name
-            #th_name_short = ''.join(c for c in th_name if c.isupper()) #get the upper case letters of th_name
-            #th_tab_id = "%s%d"%(th_name_short, self.num_theories) #append number
+            th_tab_id = ''.join(c for c in th_tab_id if c.isupper()) #get the upper case letters of th_name
+            th_tab_id = "%s%d"%(th_tab_id, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
         #self.handle_thCurrentChanged(index)
         newth.update_parameter_table()
-        self.theory_actions_disabled(False)

@@ -733,8 +733,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 return
             self.num_theories += 1
             #th_id = "%s%02d"%(line,self.num_theories)
-            th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name
-            th_id = "%s%02d"%(th_id,self.num_theories)
+            # th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name
+            th_id = "%s%02d"%(line, self.num_theories)
             th = self.parent_application.theories[line](th_id, self, self.parent_application.ax)
             self.theories[th.name]=th
             if (self.mode!=CmdMode.GUI): 

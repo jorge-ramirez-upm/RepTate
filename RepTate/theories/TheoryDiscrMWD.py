@@ -12,12 +12,12 @@ Module that defines the theory to discretize a molecular weight distribution.
 
 """ 
 from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 import numpy as np
 from scipy import interp
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import QToolBar, QSpinBox
 
 class TheoryDiscrMWD(CmdBase):
@@ -65,15 +65,15 @@ class BaseTheoryDiscrMWD:
         self.function = self.DiscretiseMWD
         self.has_modes = False
         self.parameters["bpd"] = Parameter(
-            "bpd", 10, "Number modes per decade", ParameterType.integer, False)
+            "bpd", 10, "Number modes per decade", ParameterType.integer, opt_type=OptType.const)
         self.parameters["Mn"] = Parameter(
-            "Mn", 1000, "Number-average molecular mass", ParameterType.real, False)
+            "Mn", 1000, "Number-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["Mw"] = Parameter(
-            "Mw", 1000, "Weight-average molecular mass", ParameterType.real, False)
+            "Mw", 1000, "Weight-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["Mz"] = Parameter(
-            "Mz", 1, "z-average molecular mass", ParameterType.real, False)
+            "Mz", 1, "z-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["PDI"] = Parameter(
-            "PDI", 1, "Polydispersity index", ParameterType.real, False)
+            "PDI", 1, "Polydispersity index", ParameterType.real, opt_type=OptType.const)
 
     def do_error(self, line):
         """[summary]
@@ -107,7 +107,6 @@ class BaseTheoryDiscrMWD:
 
         if line=="input":
             file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
-            print(file_table.text(0),file_table.text(1),file_table.text(2),file_table.text(3))
             self.parent_dataset.DataSettreeWidget.blockSignals(True)
             file_table.setText(1, "%0.3g"%Mn)
             file_table.setText(2, "%0.3g"%Mw)
@@ -264,9 +263,11 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
-    # def nmode_non_editable(self):
-    #     item = self.thParamTable.findItems("nmodes", Qt.MatchCaseSensitive, column=0)
-    #     item.setDisabled(True)
+        #disable useless buttons for this theory
+        self.parent_dataset.actionMinimize_Error.setDisabled(True)
+        self.parent_dataset.actionShow_Limits.setDisabled(True)
+        self.parent_dataset.actionVertical_Limits.setDisabled(True)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(True)
 
     def handle_spinboxValueChanged(self, value):
         """Handle a change of the parameter 'bpd'
