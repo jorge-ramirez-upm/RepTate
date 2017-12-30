@@ -1,4 +1,4 @@
-T=-60;Mw=1.9;chem=PI;origin=LeedsDA;label=PI2k;
+T=-60;Mw=2.4;chem=PI;origin=LeedsDA;label=PI2k;
 Freq	G'	G"	Temp	Strain	PhaseAngle	Eta*	Torque	PhaseAngle	Eta"	Eta'	Temp	tan_delta	NormalStress
 rad/s	Pa	Pa	°C	%	°	Pa-s	N-m	°	Pa-s	Pa-s	°C	 	Pa
 100.000	2.0222e+07	2.0561e+08	-59.994	0.07862	84.383	2.0660e+06	0.03190	84.3830	2.0222e+05	2.0561e+06	-59.99	10.1677	0.00000

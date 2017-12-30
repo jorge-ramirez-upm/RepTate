@@ -92,7 +92,7 @@ class Application(CmdBase):
             [type] -- [description]
         """
         print("\nApplication window %s has been closed\n"%self.name)
-        print("Please, return to the RepTate prompt and delete de application")
+        print("Please, return to the RepTate prompt and delete the application")
 
     def zoom_wheel(self, event):
         """[summary]

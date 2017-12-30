@@ -14,7 +14,8 @@
     <IsWindowsApplication>False</IsWindowsApplication>
     <InterpreterId>Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-c</CommandLineArguments>
+    <CommandLineArguments>
+    </CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -99,6 +100,8 @@
     <Compile Include="gui\QApplicationManager.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="theories\TheoryTTS_Automatic.py" />
+    <Compile Include="theories\TheoryTTS_Test.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="applications\" />
