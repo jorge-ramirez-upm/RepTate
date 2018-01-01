@@ -132,7 +132,7 @@ class BaseTheoryTTSShiftAutomatic:
             Tdict[c]=[]
         for i in range(nfiles):
             Filei=self.parent_dataset.files[i]
-            Tdict[Mw[i]].append([Tlist[i], i, Filei.file_name_short])
+            Tdict[Mw[i]].append([Tlist[i], i, Filei.file_name_short, Filei])
         return p, Mw, Tdict
     
         
@@ -293,12 +293,15 @@ class BaseTheoryTTSShiftAutomatic:
             self.Qprint('===========================')
             Temps0=[x[0] for x in self.Tdict[case]]
             Temps=np.abs(np.array([x[0] for x in self.Tdict[case]])-Tdesired)
-            Files=[x[2] for x in self.Tdict[case]]
+            Filenames=[x[2] for x in self.Tdict[case]]
+            Files=[x[3] for x in self.Tdict[case]]
             indices = np.argsort(Temps)
-            #print(case, indices, Temps, Files)
+            #print(case, indices, Temps, Filenames)
             # first master curve is built from first file in indices list
-            fname = Files[indices[0]]
-            self.current_master_curve = self.tables[fname].data
+            fname = Filenames[indices[0]]
+            self.parent_dataset
+            #self.current_master_curve = np.array(self.tables[fname].data, copy=True)
+            self.current_master_curve = np.array(Files[indices[0]].data_table.data, copy=True)
             self.current_master_curve.view('i8,i8,i8').sort(order=['f1'], axis=0)
             self.shiftParameters[fname] = (0.0, 0.0)
             #print(self.current_master_curve) #DEBUG
@@ -312,15 +315,17 @@ class BaseTheoryTTSShiftAutomatic:
                 YSHIFT = 0.0
                 if (Temps[i]==0):
                     # Add to current_master_curve
-                    fname = Files[i]
-                    tt = self.tables[fname].data
+                    fname = Filenames[i]
+                    #tt = np.array(self.tables[fname].data, copy=True)
+                    tt = np.array(Files[i].data_table.data, copy=True)
                     self.current_master_curve = np.concatenate((self.current_master_curve,tt),axis=0)
                     self.current_master_curve=self.current_master_curve[self.current_master_curve[:,0].argsort()]
                     self.shiftParameters[fname] = (XSHIFT, YSHIFT)
 
                 else:
-                    fname = Files[i]
-                    tt = self.tables[fname].data
+                    fname = Filenames[i]
+                    #tt = np.array(self.tables[fname].data, copy=True)
+                    tt = np.array(Files[i].data_table.data, copy=True)
                     # Calculate preliminary shift factors (horizontal and vertical)
                     # Calculate mid-point of tt
                     #print(tt)
