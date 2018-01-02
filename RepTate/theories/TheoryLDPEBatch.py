@@ -18,8 +18,7 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 
-import polybits
-from TobitaBatch import TobitaBatch
+from react_ctypes_helper import *
 
 class TheoryTobitaBatch(CmdBase):
     """TheoryTobitaBatch
@@ -46,7 +45,7 @@ class TheoryTobitaBatch(CmdBase):
         return GUITheoryTobitaBatch(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTobitaBatch(name, parent_dataset, ax)
 
 
-class BaseTheoryTobitaBatch(TobitaBatch):
+class BaseTheoryTobitaBatch():
     """[summary]
     
     [description]
@@ -65,9 +64,10 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         """
         super().__init__(name, parent_dataset, ax)
         
-        polybits.react_pool_init()
-        self.reactname = 'LDPE batch %d'%self.tobbatchnumber
-        self.tobbatchnumber += 1
+        react_pool_init()
+        self.link_lists()
+        self.reactname = "LDPE batch %d"%(tb_global.tobbatchnumber)
+        tb_global.tobbatchnumber += 1
         self.function = self.Calc
         self.simexists = False
         self.dist_exists = False
@@ -93,6 +93,16 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
                                           type=ParameterType.real, opt_type=OptType.const)
 
+    def link_lists(self):
+        for i in range(pb_global_const.maxarm + 1):
+            arm_pool[i] = return_arm_pool(c_int(i))
+        
+        for i in range(pb_global_const.maxpol + 1):
+            br_poly[i] = return_br_poly(c_int(i))
+
+        for i in range(pb_global_const.maxreact + 1):
+            react_dist[i] = return_react_dist(c_int(i))
+    
 
 # function TTheory_tobita_batch.Calc(var ytheory, ydata: TTable; var FileParam: TStringList;
 #   var TheoryParam: array of real): Integer;
@@ -112,48 +122,53 @@ class BaseTheoryTobitaBatch(TobitaBatch):
         Me = self.parameters['Me'].value
         nbins = int(np.round(self.parameters['nbin'].value))
         
+        c_ndist = c_int()
+
         if not self.dist_exists:
-            ndist, success = polybits.request_dist()
-            self.ndist = ndist
+            success = request_dist(byref(c_ndist))
+            self.ndist = c_ndist.value
             if not success:
                 self.Qprint('Too many theories open for internal storage. Please close a theory')
                 return
             self.dist_exists = True
         ndist = self.ndist
-        polybits.react_dist[ndist].name = self.reactname
-        polybits.react_dist[ndist].polysaved = False
+        # react_dist[ndist].name = self.reactname #TODO: set the dist name in the C library 
+        react_dist[ndist].contents.polysaved = False
 
         if self.simexists:
-            polybits.return_dist_polys(ndist)
+            return_dist_polys(c_int(ndist))
 
         # initialise tobita batch
-        self.tobbatchstart(fin_conv, tau, beta, Cs, Cb, ndist)
-        polybits.react_dist[ndist].npoly = 0
+        tobbatchstart(c_double(fin_conv), c_double(tau), c_double(beta), c_double(Cs), c_double(Cb), c_int(ndist))
+        react_dist[ndist].contents.npoly = 0
 
-        polybits.react_dist[ndist].M_e = Me
-        polybits.react_dist[ndist].monmass = monmass
-        polybits.react_dist[ndist].nummwdbins = nbins
+        react_dist[ndist].contents.M_e = Me
+        react_dist[ndist].contents.monmass = monmass
+        react_dist[ndist].contents.nummwdbins = nbins
 
         # make numtomake polymers
         i = 0
         while i < numtomake:
             # get a polymer
-            m, success = polybits.request_poly()
+            c_m = c_int()
+            success = request_poly(byref(c_m))
+            m = c_m.value
             if success: # check availability of polymers
             # put it in list
-                if polybits.react_dist[ndist].npoly == 0:  # case of first polymer made
-                    polybits.react_dist[ndist].first_poly = m
-                    polybits.br_poly[m].nextpoly = 0
+
+                if react_dist[ndist].contents.npoly == 0:  # case of first polymer made
+                    react_dist[ndist].contents.first_poly = m
+                    br_poly[m].contents.nextpoly = 0
                 else:           # next polymer, put to top of list
-                    polybits.br_poly[m].nextpoly = polybits.react_dist[ndist].first_poly
-                    polybits.react_dist[ndist].first_poly = m
+                    br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
+                    react_dist[ndist].contents.first_poly = m
 
                 # make a polymer
-                if self.tobbatch(m, ndist): # routine returns false if arms ran out
-                    polybits.react_dist[ndist].npoly += 1
+                if tobbatch(c_int(m), c_int(ndist)): # routine returns false if arms ran out
+                    react_dist[ndist].contents.npoly += 1
                     i += 1
                     # check for error
-                    if self.tobitabatcherrorflag:
+                    if tb_global.tobitabatcherrorflag:
                         self.Qprint('Polymers too large: gelation occurs for these parameters')
                         i = numtomake
                 else: # error message if we ran out of arms
@@ -164,10 +179,10 @@ class BaseTheoryTobitaBatch(TobitaBatch):
                     message += '(4) Adjust parameters to avoid gelation'
                     self.Qprint(message)
                     i = numtomake
-                    self.tobitabatcherrorflag = True
+                    tb_global.tobitabatcherrorflag = True
                 # update on number made
-                if polybits.react_dist[ndist].npoly % np.trunc(numtomake/20) == 0:
-                    self.Qprint('Made %d polymers'%polybits.react_dist[ndist].npoly)
+                if react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
+                    self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
 
             else:   # polymer wasn't available
                 message = 'Ran out of storage for polymer records. Options to avoid this are:'
@@ -176,47 +191,47 @@ class BaseTheoryTobitaBatch(TobitaBatch):
                 self.Qprint(message)
                 i = numtomake
         # end make polymers loop
-        Calc = 0
+        calc = 0
         
         # do analysis of polymers made
-        if (polybits.react_dist[ndist].npoly >= 100) and (not self.tobitabatcherrorflag):
-            self.molbin(ndist)
+        if (react_dist[ndist].contents.npoly >= 100) and (not tb_global.tobitabatcherrorflag):
+            molbin(ndist)
             ft = f.data_table
-            # print("nummwdbins=", polybits.react_dist[ndist].nummwdbins)
+            # print("nummwdbins=", polybits.react_dist[ndist].contents.nummwdbins)
             
             #resize theory data table
             ft = f.data_table
             tt = self.tables[f.file_name_short]
             tt.num_columns = ft.num_columns
-            tt.num_rows = polybits.react_dist[ndist].nummwdbins
+            tt.num_rows = react_dist[ndist].contents.nummwdbins
             tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-            for i in range(polybits.react_dist[ndist].nummwdbins):
-                tt.data[i, 0] = np.power(10, polybits.react_dist[ndist].lgmid[i])
-                tt.data[i, 1] = polybits.react_dist[ndist].wt[i]
-                tt.data[i, 2] = polybits.react_dist[ndist].avg[i]
-                tt.data[i, 3] = polybits.react_dist[ndist].avbr[i]
+            for i in range(1, react_dist[ndist].contents.nummwdbins + 1):
+                tt.data[i - 1, 0] = np.power(10, react_dist[ndist].contents.lgmid[i])
+                tt.data[i - 1, 1] = react_dist[ndist].contents.wt[i]
+                tt.data[i - 1, 2] = react_dist[ndist].contents.avg[i]
+                tt.data[i - 1, 3] = react_dist[ndist].contents.avbr[i]
 
             self.Qprint('*************************')
-            self.Qprint('End of calculation \"%s\"'%polybits.react_dist[ndist].name)
-            self.Qprint('Made %d polymers'%polybits.react_dist[ndist].npoly)
-            self.Qprint('Saved %d polymers in memory'%polybits.react_dist[ndist].nsaved)
-            self.Qprint('Mn = %.3g'%polybits.react_dist[ndist].M_n)
-            self.Qprint('Mw = %.3g'%polybits.react_dist[ndist].M_w)
-            self.Qprint('br/1000C = %.3g'%polybits.react_dist[ndist].brav)
+            # self.Qprint('End of calculation \"%s\"'%react_dist[ndist].contents.name)
+            self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
+            self.Qprint('Saved %d polymers in memory'%react_dist[ndist].contents.nsaved)
+            self.Qprint('Mn = %.3g'%react_dist[ndist].contents.m_n)
+            self.Qprint('Mw = %.3g'%react_dist[ndist].contents.m_w)
+            self.Qprint('br/1000C = %.3g'%react_dist[ndist].contents.brav)
             self.Qprint('*************************')
-            # labelout.Caption = 'Made '+inttostr(polybits.react_dist[ndist].npoly)+' polymers, Mn='
-            #   +floattostrF(polybits.react_dist[ndist].M_n,ffGeneral,5,2)+', Mw='
-            #   +floattostrF(polybits.react_dist[ndist].M_w,ffGeneral,5,2)+', br/1000C='
-            #   +floattostrF(polybits.react_dist[ndist].brav,ffGeneral,5,2)
+            # labelout.Caption = 'Made '+inttostr(polybits.react_dist[ndist].contents.npoly)+' polymers, Mn='
+            #   +floattostrF(polybits.react_dist[ndist].contents.M_n,ffGeneral,5,2)+', Mw='
+            #   +floattostrF(polybits.react_dist[ndist].contents.M_w,ffGeneral,5,2)+', br/1000C='
+            #   +floattostrF(polybits.react_dist[ndist].contents.brav,ffGeneral,5,2)
 
-            Calc = polybits.react_dist[ndist].nummwdbins - 1
-            polybits.react_dist[ndist].polysaved = True
+            calc = react_dist[ndist].contents.nummwdbins - 1
+            react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.Qprint('%d arm records left in memory'%polybits.arms_left) 
+        self.Qprint('%d arm records left in memory'%pb_global.arms_left) 
         self.Qprint('%s'%ndist)
-        return Calc
+        return calc
 
     def do_error(self, line):
         pass
