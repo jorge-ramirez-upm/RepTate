@@ -671,7 +671,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             name {[type]} -- [description]
         """
         if name in self.theories.keys():
-            if self.theories[name].name.rstrip("0123456789") == "TobitaBatchTheory":
+            if self.theories[name].name.rstrip("0123456789") == "TobitaBatchTheory": #TODO: implement the "destructor" is a nicer way
                 self.theories[name].destructor()
             for table in self.theories[name].tables.values(): # remove matplotlib artist from ax
                 for i in range(table.MAX_NUM_SERIES):

@@ -63,6 +63,9 @@ request_dist.restype = c_bool
 return_dist_polys = react_lib.return_dist_polys
 return_dist_polys.restype = None
 
+return_dist = react_lib.return_dist
+return_dist.restype = None
+
 request_poly = react_lib.request_poly
 request_poly.restype = c_bool
 

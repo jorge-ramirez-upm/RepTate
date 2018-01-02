@@ -258,7 +258,7 @@ class BaseTheoryTobitaBatch():
         
     def destructor(self):
         """Return arms to pool"""
-        polybits.return_dist(self.ndist)
+        return_dist(c_int(self.ndist))
 
 class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
     """[summary]
