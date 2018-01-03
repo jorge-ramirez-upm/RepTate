@@ -11,7 +11,6 @@
 Template file for creating a new theory
 """ 
 import numpy as np
-from scipy.integrate import ode, odeint
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
@@ -20,21 +19,21 @@ from DataTable import DataTable
 
 
 class TheoryTemplate(CmdBase):
-    """Rolie-Poly
+    """[summary]
     
     [description]
     """
-    thname="TemplateTheory"
-    description="Template Theory"
+    thname='TemplateTheory'
+    description='Template Theory'
     citations=''
 
-    def __new__(cls, name="ThTemplate", parent_dataset=None, ax=None):
+    def __new__(cls, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTemplate"})
+            name {[type]} -- [description] (default: {'ThTemplate'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         
@@ -51,20 +50,20 @@ class BaseTheoryTemplate:
     """
     single_file = False # True if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name="ThTemplate", parent_dataset=None, ax=None):
+    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTemplate"})
+            name {[type]} -- [description] (default: {'ThTemplate'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.function_template # main theory function
         self.has_modes = False # True if the theory has modes
-        self.parameters["param1"] = Parameter(name="param1", value=1, description="parameter 1", 
+        self.parameters['param1'] = Parameter(name='param1', value=1, description='parameter 1', 
                                           type=ParameterType.real, opt_type=OptType.const)
 
     def get_modes(self):
@@ -104,7 +103,7 @@ class BaseTheoryTemplate:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = ft.data[:, 1] * t.data[:, 1]
+        tt.data[:, 1] = ft.data[:, 1] * ft.data[:, 1]
 
 
 class CLTheoryTemplate(BaseTheoryTemplate, Theory):
@@ -112,13 +111,13 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
     
     [description]
     """
-    def __init__(self, name="ThTemplate", parent_dataset=None, ax=None):
+    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTemplate"})
+            name {[type]} -- [description] (default: {'ThTemplate'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
@@ -132,17 +131,17 @@ class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
     
     [description]
     """
-    def __init__(self, name="ThTemplate", parent_dataset=None, ax=None):
+    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTemplate"})
+            name {[type]} -- [description] (default: {'ThTemplate'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
-        # add widgets specific to the theory here:
+    # add widgets specific to the theory here:
        

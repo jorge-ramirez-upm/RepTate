@@ -471,7 +471,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         #    return
         th_name = self.cbtheory.currentText()
         #self.cbtheory.setCurrentIndex(0) # reset the combobox selection
-        self.new_theory(th_name)
+        if th_name!='':
+            self.new_theory(th_name)
 
     def new_theory(self, th_name, th_tab_id=""):
         """[summary]

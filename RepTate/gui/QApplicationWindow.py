@@ -313,7 +313,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 self.dialog.ui.cbSymbolType.addItem(QIcon(ipath), m)
     
     def handle_pickColor1(self):
-        """Call the colocr picker and save the selected color to `color1` in RGB format
+        """Call the color picker and save the selected color to `color1` in RGB format
         
         [description]
         """
@@ -323,7 +323,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.color1 = color.getRgbF()
 
     def handle_pickColor2(self):
-        """Call the colocr picker and save the selected color to `color2` in 
+        """Call the color picker and save the selected color to `color2` in 
         RGB format used for gradient color type
         
         [description]
@@ -798,8 +798,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
         success, newtables, ext = ds.do_open(paths_to_open)
-        self.check_no_param_missing(newtables, ext)
         if success==True:
+            self.check_no_param_missing(newtables, ext)
             for dt in newtables:
                 self.addTableToCurrentDataSet(dt, ext)
             ds.do_plot()

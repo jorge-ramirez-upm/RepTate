@@ -158,6 +158,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_id = "%s%d"%(app_name, self.application_counter)
         ind = self.ApplicationtabWidget.addTab(newapp, QIcon(icon), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
+        return newapp
 
 
     def new_mwd_window(self):
@@ -223,4 +224,4 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         """
         app_name = "React"
-        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-test-tube.png')
+        return self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-test-tube.png')

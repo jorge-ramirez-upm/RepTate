@@ -13,6 +13,7 @@ Module that defines the basic structure and properties of a theory.
 """
 import enum
 import time
+import _thread
 import getpass
 import numpy as np
 from scipy.optimize import curve_fit
@@ -24,6 +25,7 @@ from Parameter import Parameter, ParameterType, OptType
 from DraggableArtists import DraggableVLine, DraggableHLine, DragType
 
 from tabulate import tabulate
+
 
 class Theory(CmdBase):
     """Abstract class to describe a theory
@@ -68,6 +70,7 @@ class Theory(CmdBase):
         self.tables={}
         self.function=None
         self.active = True #defines if the theorie is plotted
+        self.calculate_is_busy = False
         
         # THEORY OPTIONS
         self.npoints=100
@@ -119,7 +122,7 @@ class Theory(CmdBase):
         super(Theory,self).precmd(line)
         return line
         
-    def do_calculate(self, line):
+    def do_calculate(self, line, timing=True, threading=True):
         """Calculate the theory
         
         [description]
@@ -127,14 +130,33 @@ class Theory(CmdBase):
         Arguments:
             line {[type]} -- [description]
         """
+        if self.fitting or (not threading): #do not create new thread if running do_fit function
+            self.do_calculate_(line, timing)
+        else:
+            try:
+                _thread.start_new_thread(self.do_calculate_, (line, timing) )
+            except:
+                print("Error: unable to start thread")
+                self.do_calculate_(line, timing)
+    
+    def do_calculate_(self, line, timing=True):
+        """Redefinition of do_calculate funtion for multithreading"""
+        if self.calculate_is_busy:
+            return
         if not self.tables:
             return
+
+        self.calculate_is_busy = True
+        start_time = time.time()
         for f in self.parent_dataset.files:
             self.function(f)
         if not self.fitting:
             self.do_plot(line)
             self.do_error(line)
-    
+        if timing:
+            self.Qprint("---Calculated in %.3g seconds ---" % (time.time() - start_time))
+        self.calculate_is_busy = False
+
     def do_error(self, line):
         """Report the error of the current theory
         
@@ -191,7 +213,7 @@ class Theory(CmdBase):
             if par.opt_type == OptType.opt: 
                 par.value=param_in[ind]
                 ind+=1
-        self.do_calculate("")
+        self.do_calculate("", timing=False)
         y = []
         view = self.parent_dataset.parent_application.current_view
         for f in self.parent_dataset.files:
@@ -213,7 +235,24 @@ class Theory(CmdBase):
         self.nfev += 1
         return y
 
+
     def do_fit(self, line):
+        """Minimize the error
+
+        [description]
+
+        Arguments:
+            line {[type]} -- [description]
+        """
+        if self.calculate_is_busy: #no fitting allowed if already running do_calculate function
+            return
+        try:
+            _thread.start_new_thread(self.do_fit_, (line, ) )
+        except:
+            print("Error: unable to start thread")
+            self.do_fit_(line)
+
+    def do_fit_(self, line):
         """Minimize the error
         
         [description]
@@ -224,6 +263,7 @@ class Theory(CmdBase):
         if not self.tables:
             return
         self.fitting = True
+        start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
         self.Qprint("\n\n------------------\nMinimize the error\n------------------")
         # Vectors that contain all X and Y in the files & view
@@ -324,7 +364,9 @@ class Theory(CmdBase):
             else:
                 self.Qprint('%10s = %10.5g'%(par.name, par.value))
         self.fitting=False
-        self.do_calculate(line)
+        self.do_calculate(line, timing=False, threading=False)
+        self.Qprint("---Fit in %.3g seconds ---" % (time.time() - start_time))
+
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
@@ -754,5 +796,6 @@ class Theory(CmdBase):
         """
         if CmdBase.mode == CmdMode.GUI:
             self.thTextBox.append(msg)
+            self.thTextBox.verticalScrollBar().setValue(self.thTextBox.verticalScrollBar().maximum())
         else:
             print(msg)
