@@ -17,12 +17,13 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QSizePolicy
+from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QSizePolicy, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 
 from react_ctypes_helper import *
+from ctypes import *
 
 class TheoryTobitaBatch(CmdBase):
     """TheoryTobitaBatch
@@ -315,10 +316,35 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
         self.thToolsLayout.insertWidget(0, tb)
 
         #BOB settings
-        self.bob_settings = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-bob-hat.png'), 'Edit BoB Settings')
+        self.bob_settings = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-bob-hat.png'), 'Edit BoB Binning Settings')
+        self.save_bob_configuration = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'), 'Save Polymer Configuration for BoB')
 
         #signals
         connection_id = self.bob_settings.triggered.connect(self.handle_edit_bob_settings)
+        connection_id = self.save_bob_configuration.triggered.connect(self.handle_save_bob_configuration)
+
+    def handle_save_bob_configuration(self):
+        stars = '*************************\n'
+        if self.simexists:
+            ndist = self.ndist
+            react_dist[ndist].contents.M_e = self.parameters['Me'].value
+            react_dist[ndist].contents.monmass = self.parameters['mon_mass'].value
+
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            dir_start = "data/React/polyconf.dat"
+            dilogue_name = "Save"
+            ext_filter = "Data Files (*.dat)"
+            out_file = QFileDialog.getSaveFileName(self, dilogue_name, dir_start, options=options)
+            if out_file[0] == "":
+                return
+            # output polymers
+            b_out_file = out_file[0].encode('utf-8')
+            polyconfwrite(c_int(ndist), c_char_p(b_out_file))
+            message = stars + 'Saved %d polymers in %s\n'%(react_dist[ndist].contents.nsaved, out_file[0]) + stars
+        else:    
+            message = stars + 'No simulation performed yet\n' + stars
+        self.Qprint(message)
 
     def handle_edit_bob_settings(self):
         ndist = self.ndist
@@ -334,12 +360,12 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
             react_dist[ndist].contents.boblgmin = c_double(np.log10(float(d.table.item(2, 0).text())))
             react_dist[ndist].contents.bobbinmax = c_int(int(d.table.item(3, 0).text()))
     
-    
+
 class EditBobSettingsDialog(QDialog):
     def __init__(self, parent=None, numbobbins=None, bobmax=None, bobmin=None, bobbinmax=None):
         super(EditBobSettingsDialog, self).__init__(parent)
 
-        self.setWindowTitle('Edit BoB Settings')
+        self.setWindowTitle('Edit BoB Binning Settings')
         layout = QVBoxLayout(self)        
         self.table = QTableWidget()
         self.table.setRowCount(4)

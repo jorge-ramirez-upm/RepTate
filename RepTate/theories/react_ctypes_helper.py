@@ -111,3 +111,6 @@ tobbatch.restype = c_bool
 #function
 molbin = react_lib.molbin
 molbin.restype = None
+
+polyconfwrite = react_lib.polyconfwrite
+polyconfwrite.restype = None
