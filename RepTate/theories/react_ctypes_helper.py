@@ -10,9 +10,13 @@
 Define the C-variables and functions from the C-files that are needed in Python
 """
 from ctypes import *
+import sys
 
-react_lib = CDLL('theories/react_lib.so')
-
+lib_path = 'theories/react_lib_%s.so'%(sys.platform)
+try:
+    react_lib = CDLL(lib_path)
+except:
+    print('OS not recognized')
 
 ###############
 # polybits.c
