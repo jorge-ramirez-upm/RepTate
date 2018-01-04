@@ -20,7 +20,7 @@ import numpy as np
 from TheoryMaxwellModes import TheoryMaxwellModesFrequency
 from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
 from TheoryTTS import TheoryWLFShift
-
+from TheoryCarreauYasuda import TheoryCarreauYasuda
 
 class ApplicationLVE(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
@@ -64,8 +64,9 @@ class BaseApplicationLVE:
         self.views["log(G',G''(w))"] = View(name="log(G',G''(w))", description="log Storage,Loss moduli", x_label="log($\omega$)", y_label="log(G'($\omega$),G''($\omega$))", x_units="rad/s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogG1G2, n=2, snames=["G'(w)","G''(w)"], index=0)
         self.views["G',G''(w)"] = View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", "rad/s", "Pa", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"], index=1)
         self.views["etastar"] = View("etastar", "Complex Viscosity", "$\omega$", "$|\eta^*(\omega)|$", "rad/s", "Pa.s", True, True, self.viewEtaStar, 1, ["eta*(w)"], index=2)
-        self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"], index=3)
-        self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"], index=4)
+        self.views["logetastar"] = View("logetastar", "log Complex Viscosity", "log($\omega$)", "log$|\eta^*(\omega)|$", "rad/s", "Pa.s", False, False, self.viewLogEtaStar, 1, ["eta*(w)"], index=3)
+        self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"], index=4)
+        self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"], index=5)
 
         # FILES
         ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
@@ -76,6 +77,7 @@ class BaseApplicationLVE:
         # THEORIES
         self.theories[TheoryMaxwellModesFrequency.thname]=TheoryMaxwellModesFrequency
         self.theories[TheoryLikhtmanMcLeish2002.thname]=TheoryLikhtmanMcLeish2002
+        self.theories[TheoryCarreauYasuda.thname]=TheoryCarreauYasuda
         #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
 
@@ -149,6 +151,25 @@ class BaseApplicationLVE:
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
         y[: ,0] = np.sqrt(dt.data[:, 1]**2 + dt.data[:, 2]**2)/dt.data[:, 0]
+        return x, y, True        
+
+        
+    def viewLogEtaStar(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(np.sqrt(dt.data[:, 1]**2 + dt.data[:, 2]**2)/dt.data[:, 0])
         return x, y, True        
 
     def viewDelta(self, dt, file_parameters):
