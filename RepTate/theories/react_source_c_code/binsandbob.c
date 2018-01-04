@@ -268,13 +268,13 @@ void polyconfwrite(int n, char *fname)
                 first = br_poly[i].first_end;
                 armwt = 0.5 * arm_pool[first].arm_len / br_poly[i].tot_len / npoly * enrich;
                 armz = 0.5 * arm_pool[first].arm_len / N_e;
-                fprintf(fp, "-1 -1 1 -1 %12f %15f", armz, armwt);
-                fprintf(fp, "0 -1 -1 -1 %12f %15f", armz, armwt);
+                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", -1, -1, 1, -1, armz, armwt);
+                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", 0, -1, -1, -1, armz, armwt);
             }
             else
             { // it's a branched polymer
                 numarms = 2 * br_poly[i].num_br + 1;
-                fprintf(fp, "%d", numarms); //number of arms
+                fprintf(fp, "%d\n", numarms); //number of arms
                 atally = atally + numarms;
                 first = br_poly[i].first_end;
 
@@ -333,7 +333,7 @@ void polyconfwrite(int n, char *fname)
                         mc = abs(arm_pool[m1].R2);
                         tR2 = arm_pool[mc].armnum;
                     }
-                    fprintf(fp, "%d %d %d %d %12f, %15f", tL1, tL2, tR1, tR2, armz, armwt);
+                    fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", tL1, tL2, tR1, tR2, armz, armwt);
 
                     m1 = arm_pool[m1].down;
 
@@ -386,9 +386,9 @@ void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved
     N_e_av = N_e_av / nmix;
 
     // opening lines
-    fprintf(fp, "reactmix");
-    fprintf(fp, "%12f", N_e_av);
-    fprintf(fp, "%d", *numsaved_out);
+    fprintf(fp, "reactmix\n");
+    fprintf(fp, "%g\n", N_e_av);
+    fprintf(fp, "%d\n", *numsaved_out);
 
     atally = 0;
 
@@ -420,18 +420,18 @@ void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved
 
                     if (br_poly[i].num_br == 0)
                     { //it's a linear polymer
-                        fprintf(fp, "2");
+                        fprintf(fp, "2\n");
                         atally = atally + 2;
                         first = br_poly[i].first_end;
                         armwt = 0.5 * arm_pool[first].arm_len / br_poly[i].tot_len * polywt;
                         armz = 0.5 * arm_pool[first].arm_len / N_e;
-                        fprintf(fp, "-1 -1 1 -1 %12f %15f", armz, armwt);
-                        fprintf(fp, "0 -1 -1 -1 %12f %15f", armz, armwt);
+                        fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", -1, -1, 1, -1, armz, armwt);
+                        fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", 0, -1, -1, -1, armz, armwt);
                     }
                     else
                     { // it's a branched polymer
                         numarms = 2 * br_poly[i].num_br + 1;
-                        fprintf(fp, "%d", numarms); //number of arms
+                        fprintf(fp, "%d\n", numarms); //number of arms
                         atally = atally + numarms;
                         first = br_poly[i].first_end;
 
@@ -490,7 +490,7 @@ void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved
                                 mc = abs(arm_pool[m1].R2);
                                 tR2 = arm_pool[mc].armnum;
                             }
-                            fprintf(fp, "%d %d %d %d %12f %15f", tL1, tL2, tR1, tR2, armz, armwt);
+                            fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", tL1, tL2, tR1, tR2, armz, armwt);
 
                             m1 = arm_pool[m1].down;
 
