@@ -52,10 +52,6 @@ polymer_pointers = polymer_pointer * (pb_global_const.maxpol + 1)
 reactresults_pointer = POINTER(reactresults)
 reactresults_pointers = reactresults_pointer * (pb_global_const.maxreact + 1)
 
-#list
-arm_pool = arm_pointers()
-br_poly = polymer_pointers()
-react_dist = reactresults_pointers()
 
 #function
 react_pool_init = react_lib.react_pool_init
@@ -82,6 +78,11 @@ return_br_poly.restype = polymer_pointer
 return_react_dist = react_lib.return_react_dist
 return_react_dist.restype = reactresults_pointer
 
+#initialise lists
+react_pool_init()
+arm_pool = arm_pointers(*list([return_arm_pool(c_int(i)) for i in range(pb_global_const.maxarm + 1)]))
+br_poly = polymer_pointers(*list([return_br_poly(c_int(i)) for i in range(pb_global_const.maxpol + 1)]))
+react_dist = reactresults_pointers(*list([return_react_dist(c_int(i)) for i in range(pb_global_const.maxreact + 1)]))
 
 
 ###############

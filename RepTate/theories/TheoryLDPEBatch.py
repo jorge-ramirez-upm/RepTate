@@ -55,7 +55,7 @@ class BaseTheoryTobitaBatch():
     
     [description]
     """
-    single_file = False # True if the theory can be applied to multiple files simultaneously
+    single_file = True # True if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]
@@ -69,8 +69,6 @@ class BaseTheoryTobitaBatch():
         """
         super().__init__(name, parent_dataset, ax)
         
-        react_pool_init()
-        self.link_lists()
         self.reactname = "LDPE batch %d"%(tb_global.tobbatchnumber)
         tb_global.tobbatchnumber += 1
         self.function = self.Calc
@@ -98,16 +96,6 @@ class BaseTheoryTobitaBatch():
         self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
                                           type=ParameterType.real, opt_type=OptType.const)
 
-    def link_lists(self):
-        for i in range(pb_global_const.maxarm + 1):
-            arm_pool[i] = return_arm_pool(c_int(i))
-        
-        for i in range(pb_global_const.maxpol + 1):
-            br_poly[i] = return_br_poly(c_int(i))
-
-        for i in range(pb_global_const.maxreact + 1):
-            react_dist[i] = return_react_dist(c_int(i))
-    
 
 # function TTheory_tobita_batch.Calc(var ytheory, ydata: TTable; var FileParam: TStringList;
 #   var TheoryParam: array of real): Integer;
