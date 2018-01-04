@@ -16,7 +16,7 @@ import sys
 import cmd
 import readline
 from enum import Enum
-from pint import UnitRegistry
+#from pint import UnitRegistry
 
 class CmdMode(Enum):
     """[summary]
@@ -45,7 +45,7 @@ class CmdBase(cmd.Cmd):
 
     prompt = '> '
     mode = CmdMode.cmdline
-    ureg = UnitRegistry()
+    #ureg = UnitRegistry()
 
     def __init__ (self, parent=None):
         """Constructor
