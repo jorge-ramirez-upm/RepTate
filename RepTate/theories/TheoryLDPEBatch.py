@@ -17,10 +17,13 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QSizePolicy, QFileDialog
+from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QSizePolicy, QFileDialog, QLineEdit, QGroupBox, QFormLayout
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
+#BoB form
+from PyQt5.QtWidgets import QVBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel
+from PyQt5.QtGui import QIntValidator, QDoubleValidator
 
 from react_ctypes_helper import *
 from ctypes import *
@@ -361,40 +364,64 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
 
         d = EditBobSettingsDialog(self, numbobbins, bobmax, bobmin, bobbinmax)
         if d.exec_():
-            react_dist[ndist].contents.numbobbins = c_int(int(d.table.item(0, 0).text()))
-            react_dist[ndist].contents.boblgmax = c_double(np.log10(float(d.table.item(1, 0).text())))
-            react_dist[ndist].contents.boblgmin = c_double(np.log10(float(d.table.item(2, 0).text())))
-            react_dist[ndist].contents.bobbinmax = c_int(int(d.table.item(3, 0).text()))
-    
+            try:
+                numbobbins = int(d.e1.text())
+                bobmax = float(d.e2.text())
+                bobmin = float(d.e3.text())
+                bobbinmax = int(d.e4.text())
+            except ValueError:
+                pass
+            react_dist[ndist].contents.numbobbins = c_int(numbobbins)
+            react_dist[ndist].contents.boblgmax = c_double(np.log10(bobmax))
+            react_dist[ndist].contents.boblgmin = c_double(np.log10(bobmin))
+            react_dist[ndist].contents.bobbinmax = c_int(bobbinmax)
 
 class EditBobSettingsDialog(QDialog):
-    def __init__(self, parent=None, numbobbins=None, bobmax=None, bobmin=None, bobbinmax=None):
-        super(EditBobSettingsDialog, self).__init__(parent)
+    """Create the form that is used to modify the BoB binning settings"""
 
-        self.setWindowTitle('Edit BoB Binning Settings')
-        layout = QVBoxLayout(self)        
-        self.table = QTableWidget()
-        self.table.setRowCount(4)
-        self.table.setColumnCount(1)
-        self.table.horizontalHeader().hide()    
-        self.table.setVerticalHeaderLabels(
-            ["Number of bins for Bob",
-            "Maximum bin Mw (g/mol)", 
-            "Minimum bin Mw (g/mol)", 
-            "Maximum no. of polymers per bin"])
-        font = QFont()
-        font.setBold(True)
-        self.table.verticalHeader().setFont(font);
-        self.table.setItem(0, 0, QTableWidgetItem("%d"%numbobbins)) 
-        self.table.setItem(1, 0, QTableWidgetItem("%.2e"%bobmax))
-        self.table.setItem(2, 0, QTableWidgetItem("%.2e"%bobmin)) 
-        self.table.setItem(3, 0, QTableWidgetItem("%d"%bobbinmax)) 
-        layout.addWidget(self.table) 
+    def __init__(self, parent, numbobbins, bobmax, bobmin, bobbinmax):
+        super().__init__(parent)
+        self.createFormGroupBox(numbobbins, bobmax, bobmin, bobbinmax)
+ 
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+ 
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.formGroupBox)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Edit")
+ 
+    def createFormGroupBox(self, numbobbins, bobmax, bobmin, bobbinmax):
+        self.formGroupBox = QGroupBox("Edit BoB Binning Settings")
+        layout = QFormLayout()
+        
+        val_double = QDoubleValidator()
+        val_double.setBottom(0) #set smalled double allowed in the form
+        val_int = QIntValidator()
+        val_int.setBottom(0) #set smalled int allowed in the form
+        
+        self.e1 = QLineEdit()
+        self.e1.setValidator(val_int)
+        self.e1.setMaxLength(6)
+        self.e1.setText("%d"%numbobbins)
 
-        # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
-            Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)   
+        self.e2 = QLineEdit()
+        self.e2.setValidator(val_double)
+        self.e2.setText("%.2e"%bobmax)
+        
+        self.e3 = QLineEdit()
+        self.e3.setValidator(val_double)
+        self.e3.setText("%.2e"%bobmin)
+
+        self.e4 = QLineEdit()
+        self.e4.setValidator(val_int)
+        self.e4.setMaxLength(6)
+        self.e4.setText("%d"%bobbinmax)
+
+        layout.addRow(QLabel("Number of bins for Bob:"), self.e1)
+        layout.addRow(QLabel("Maximum bin Mw (g/mol):"), self.e2)
+        layout.addRow(QLabel("Minimum bin Mw (g/mol):"), self.e3)
+        layout.addRow(QLabel("Maximum no. of polymers per bin:"), self.e4)
+        self.formGroupBox.setLayout(layout)
