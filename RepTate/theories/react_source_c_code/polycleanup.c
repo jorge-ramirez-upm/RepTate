@@ -30,7 +30,7 @@ void armclean(int m)
         armclean(m1);
         armclean(m2);
     }
-    else if ((m1 != 0) && (m2 = 0)) // < changed to <> by DJR
+    else if ((m1 != 0) && (m2 == 0)) // < changed to <> by DJR
     {
 
         mc1 = abs(m1);
@@ -91,7 +91,7 @@ void armclean(int m)
         // re-call clean-up on m
         armclean(m);
     }
-    else if ((m1 = 0) && (m2 != 0))
+    else if ((m1 == 0) && (m2 != 0))
     {
         mc2 = abs(m2);
         // add lengths together
