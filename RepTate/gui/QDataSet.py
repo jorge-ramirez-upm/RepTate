@@ -19,9 +19,11 @@ from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, Q
 from DataSet import DataSet
 from QTheory import QTheory
 from DataSetWidget import DataSetWidget
+import threading
 
 PATH = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(join(PATH,'DataSet.ui'))
+
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
     """[summary]
@@ -111,7 +113,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         connection_id = self.actionVertical_Limits.triggered.connect(self.toggle_vertical_limits)
         connection_id = self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)        
-
+    
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)
         
@@ -214,15 +216,57 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.theories[self.current_theory].do_yrange("")
             self.set_limit_icon()
 
+
     def handle_actionCalculate_Theory(self):
-        """Calculate the theory
+        if self.current_theory and self.files:
+            th = self.theories[self.current_theory]
+            if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
+                return
+            th.handle_actionCalculate_Theory()
+    #         if th.calculate_is_busy or th.is_fitting or self.thread_calc_busy or self.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
+    #             return
+    #         self.thread_calc_busy = True
+    #         self.actionCalculate_Theory.setDisabled(True)
+    #         print("handle_actionCalculate_Theory thread started")
+    #         self.thread_calc = CalculateThread(self.end_thread_calc, th.do_calculate, "", )
+    #         self.thread_calc.start()
+    #         print("handle_actionCalculate_Theory thread ended")
+    
+    # def end_thread_calc(self):
+    #     self.theories[self.current_theory].update_parameter_table()
+    #     self.parent_application.update_Qplot()
+    #     self.thread_calc_busy = False
+    #     self.actionCalculate_Theory.setDisabled(False)
+
+
+
+
+
+    # def handle_actionCalculate_Theory_(self, th):
+    #     """Calculate the theory
         
-        [description]
-        """
-        if self.current_theory and self.files!=[]:
-            self.theories[self.current_theory].do_calculate("")
-            self.theories[self.current_theory].update_parameter_table()
-            self.parent_application.update_Qplot()
+    #     [description]
+    #     """
+    #     print("begin do_calculate")
+    #     th.do_calculate("")
+    #     print("end do_calculate")
+        # th.update_parameter_table()
+        # self.parent_application.update_Qplot()
+
+    # def handle_actionMinimize_Error(self):
+    #     if self.current_theory and self.files:
+    #         th = self.theories[self.current_theory]
+    #         if th.calculate_is_busy or th.is_fitting: #do nothing if already busy in do_calculate or do_fit
+    #             return
+    #         if th.single_file and len(self.files)-len(self.inactive_files)>1: 
+    #             header = "New Theory"
+    #             message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
+    #             QMessageBox.warning(self, header, message)
+    #             return
+
+    #         thread1 = CalculateThread(self.handle_actionMinimize_Error_, th)
+    #         thread1.start()
+
 
     def handle_actionMinimize_Error(self):
         """Minimize the error
@@ -230,14 +274,33 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         """
         if self.current_theory and self.files:
-            if self.theories[self.current_theory].single_file and len(self.files)-len(self.inactive_files)>1: 
+            th = self.theories[self.current_theory]
+            if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
+                return
+            if th.single_file and (len(self.files) - len(self.inactive_files))>1: 
                 header = "New Theory"
                 message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
                 QMessageBox.warning(self, header, message)
                 return
-            self.theories[self.current_theory].do_fit("")
-            self.theories[self.current_theory].update_parameter_table()
-            self.parent_application.update_Qplot()
+            th.handle_actionMinimize_Error()
+    #         if th.calculate_is_busy or th.is_fitting or self.thread_fit_busy or self.thread_calc_busy: #do nothing if already busy in do_calculate or do_fit
+    #             return
+    #         if th.single_file and len(self.files)-len(self.inactive_files)>1: 
+    #             header = "New Theory"
+    #             message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
+    #             QMessageBox.warning(self, header, message)
+    #             return
+            
+    #         self.thread_fit_busy = True
+    #         self.actionMinimize_Error.setDisabled(True)
+    #         self.thread_fit = CalculateThread(self.end_thread_fit, th.do_fit, "", )
+    #         self.thread_fit.start()
+
+    # def end_thread_fit(self):
+    #     self.theories[self.current_theory].update_parameter_table()
+    #     self.parent_application.update_Qplot()
+    #     self.thread_fit_busy = False
+    #     self.actionMinimize_Error.setDisabled(False)
 
 
     def handle_thCurrentChanged(self, index):
@@ -250,8 +313,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         th = self.TheorytabWidget.widget(index)
         if th:
-            th.do_show()
             self.current_theory = th.name
+            th.do_show()
             ntab = self.TheorytabWidget.count()
             #hide all theory curves
             for i in range(ntab):   
@@ -261,6 +324,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         else:
             self.current_theory = None
             self.theory_actions_disabled(True)
+        if th.thread_calc_busy or th.thread_fit_busy:
+            return
         self.parent_application.update_plot()
         self.parent_application.update_Qplot()
 

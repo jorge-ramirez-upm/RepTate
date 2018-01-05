@@ -142,6 +142,9 @@ class BaseTheoryTobitaBatch():
         # make numtomake polymers
         i = 0
         while i < numtomake:
+            if self.stop_theory_calc_flag:
+                self.Qprint('Polymer creation stopped by user')
+                break
             # get a polymer
             c_m = c_int()
             success = request_poly(byref(c_m))
@@ -303,13 +306,28 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
         tb.setIconSize(QSize(24,24))
         self.thToolsLayout.insertWidget(0, tb)
 
-        #BOB settings
-        self.bob_settings = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-bob-hat.png'), 'Edit BoB Binning Settings')
-        self.save_bob_configuration = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'), 'Save Polymer Configuration for BoB')
+        #BOB settings buttons
+        self.bob_settings_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-bob-hat.png'), 'Edit BoB Binning Settings')
+        self.save_bob_configuration_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'), 'Save Polymer Configuration for BoB')
+        #stop calculation button
+        self.stop_calulation_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-road-closure.png'), 'Stop Current Calulation')
+        self.stop_calulation_button.setDisabled(True)
 
         #signals
-        connection_id = self.bob_settings.triggered.connect(self.handle_edit_bob_settings)
-        connection_id = self.save_bob_configuration.triggered.connect(self.handle_save_bob_configuration)
+        connection_id = self.bob_settings_button.triggered.connect(self.handle_edit_bob_settings)
+        connection_id = self.save_bob_configuration_button.triggered.connect(self.handle_save_bob_configuration)
+        connection_id = self.stop_calulation_button.triggered.connect(self.handle_stop_calulation)
+    
+    def theory_buttons_disabled(self, state):
+        self.bob_settings_button.setDisabled(state)
+        self.save_bob_configuration_button.setDisabled(state)
+        self.stop_calulation_button.setDisabled(not state)
+
+
+    def handle_stop_calulation(self):
+        self.Qprint("Stop current calculation requested")
+        self.stop_theory_calc_flag = True
+        self.stop_calulation_button.setDisabled(True)
 
     def handle_save_bob_configuration(self):
         stars = '*************************\n'

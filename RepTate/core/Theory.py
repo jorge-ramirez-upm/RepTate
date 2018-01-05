@@ -13,7 +13,6 @@ Module that defines the basic structure and properties of a theory.
 """
 import enum
 import time
-import _thread
 import getpass
 import numpy as np
 from scipy.optimize import curve_fit
@@ -78,7 +77,7 @@ class Theory(CmdBase):
         self.dt_min=1e-6 
         self.eps=1e-4
         self.stop_steady=False
-        self.fitting=False
+        self.is_fitting=False
         self.has_modes=False
         
         # XRANGE for FIT
@@ -122,25 +121,35 @@ class Theory(CmdBase):
         super(Theory,self).precmd(line)
         return line
         
-    def do_calculate(self, line, timing=True, threading=True):
-        """Calculate the theory
+    # def do_calculate(self, line, timing=True, threading=True):
+    #     """Calculate the theory
         
-        [description]
+    #     [description]
         
-        Arguments:
-            line {[type]} -- [description]
-        """
-        if self.fitting or (not threading): #do not create new thread if running do_fit function
-            self.do_calculate_(line, timing)
-        else:
-            try:
-                _thread.start_new_thread(self.do_calculate_, (line, timing) )
-            except:
-                print("Error: unable to start thread")
-                self.do_calculate_(line, timing)
+    #     Arguments:
+    #         line {[type]} -- [description]
+    #     """
+    #     if self.is_fitting or (not threading): #do not create new thread if running do_fit function
+    #         self.do_calculate_(line, timing)
+    #     else:
+    #         try:
+    #             _thread.start_new_thread(self.do_calculate_, (line, timing) )
+    #         except:
+    #             print("Error: unable to start thread")
+    #             self.do_calculate_(line, timing)
     
-    def do_calculate_(self, line, timing=True):
-        """Redefinition of do_calculate funtion for multithreading"""
+
+
+        # def print_time(threadName, delay, counter):
+        #     while counter:
+        #         if exitFlag:
+        #             threadName.exit()
+        #         time.sleep(delay)
+        #         print ("%s: %s" % (threadName, time.ctime(time.time())))
+        #         counter -= 1
+
+    def do_calculate(self, line, timing=True):
+        """Calculate the theory"""
         if self.calculate_is_busy:
             return
         if not self.tables:
@@ -150,7 +159,7 @@ class Theory(CmdBase):
         start_time = time.time()
         for f in self.parent_dataset.files:
             self.function(f)
-        if not self.fitting:
+        if not self.is_fitting:
             self.do_plot(line)
             self.do_error(line)
         if timing:
@@ -236,23 +245,23 @@ class Theory(CmdBase):
         return y
 
 
+    # def do_fit(self, line):
+    #     """Minimize the error
+
+    #     [description]
+
+    #     Arguments:
+    #         line {[type]} -- [description]
+    #     """
+    #     if self.calculate_is_busy: #no fitting allowed if already running do_calculate function
+    #         return
+    #     try:
+    #         _thread.start_new_thread(self.do_fit_, (line, ) )
+    #     except:
+    #         print("Error: unable to start thread")
+    #         self.do_fit_(line)
+
     def do_fit(self, line):
-        """Minimize the error
-
-        [description]
-
-        Arguments:
-            line {[type]} -- [description]
-        """
-        if self.calculate_is_busy: #no fitting allowed if already running do_calculate function
-            return
-        try:
-            _thread.start_new_thread(self.do_fit_, (line, ) )
-        except:
-            print("Error: unable to start thread")
-            self.do_fit_(line)
-
-    def do_fit_(self, line):
         """Minimize the error
         
         [description]
@@ -262,7 +271,7 @@ class Theory(CmdBase):
         """
         if not self.tables:
             return
-        self.fitting = True
+        self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
         self.Qprint("\n\n------------------\nMinimize the error\n------------------")
@@ -363,9 +372,9 @@ class Theory(CmdBase):
                 self.Qprint('%10s = %10.5g +/- %10.5g'%(par.name, par.value, par.error))
             else:
                 self.Qprint('%10s = %10.5g'%(par.name, par.value))
-        self.fitting=False
-        self.do_calculate(line, timing=False, threading=False)
-        self.Qprint("---Fit in %.3g seconds ---" % (time.time() - start_time))
+        self.is_fitting=False
+        self.do_calculate(line, timing=False)
+        self.Qprint("---Fitting in %.3g seconds ---" % (time.time() - start_time))
 
 
     def do_print(self, line):

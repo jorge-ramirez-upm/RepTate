@@ -16,11 +16,25 @@ from PyQt5.uic import loadUiType
 from Theory import Theory
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from Parameter import OptType
 
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
+
+
+class CalculationThread(QThread):
+    end_signal = pyqtSignal()
+    def __init__(self, end_function, fthread, *args):
+        super().__init__()
+        self.end_signal.connect(end_function)
+        self.args = args
+        self.function = fthread
+
+    def run(self):
+        self.function(*self.args)
+        self.end_signal.emit()
+
 
 class GetModesDialog(QDialog):
     def __init__(self, parent = None, th_dict = {}):
@@ -82,8 +96,78 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     
         self.thTextBox.setReadOnly(True)
 
+        self.stop_theory_calc_flag = False 
+        self.thread_calc_busy = False
+        self.thread_fit_busy = False
+
         connection_id = self.thParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         connection_id = self.thParamTable.itemChanged.connect(self.handle_parameterItemChanged)
+
+    def handle_actionCalculate_Theory(self):
+        self.thread_calc_busy = True
+        #disable buttons
+        self.parent_dataset.actionCalculate_Theory.setDisabled(True)
+        self.parent_dataset.actionNew_Theory.setDisabled(True)
+        try:
+            self.theory_buttons_disabled(True) # TODO: Add that function to all theories
+        except AttributeError: #the function is not defined in the current theory
+            pass
+        #start thread
+        self.thread_calc = CalculationThread(self.end_thread_calc, self.do_calculate, "", )
+        self.thread_calc.start()
+    
+    def end_thread_calc(self):
+        if self.stop_theory_calc_flag: #calculation stopped by user
+            self.stop_theory_calc_flag = False #reset flag
+        else:
+            self.update_parameter_table()
+            for file in self.parent_dataset.files: #copy theory data to the plot series
+                tt = self.tables[file.file_name_short]
+                view = self.parent_dataset.parent_application.current_view
+                x, y, success = view.view_proc(tt, file.file_parameters)
+                for i in range(tt.MAX_NUM_SERIES):
+                    if (i<view.n):
+                        tt.series[i].set_data(x[:,i], y[:,i]) 
+        
+            self.parent_dataset.parent_application.update_Qplot()
+
+        self.thread_calc_busy = False
+        #enable buttons
+        self.parent_dataset.actionCalculate_Theory.setDisabled(False)
+        self.parent_dataset.actionNew_Theory.setDisabled(False)
+        try:
+            self.theory_buttons_disabled(False) # TODO: Add that function to all theories
+        except AttributeError: #the function is not defined in the current theory
+            pass
+
+    def handle_actionMinimize_Error(self):
+        """Minimize the error
+        
+        [description]
+        """
+        self.thread_fit_busy = True
+        #disable buttons
+        self.parent_dataset.actionMinimize_Error.setDisabled(True)
+        self.parent_dataset.actionNew_Theory.setDisabled(True)
+        try:
+            self.theory_buttons_disabled(True) # TODO: Add that function to all theories
+        except AttributeError: #the function is not defined in the current theory
+            pass
+        #start thread
+        self.thread_fit = CalculationThread(self.end_thread_fit, self.do_fit, "", )
+        self.thread_fit.start()
+
+    def end_thread_fit(self):
+        self.update_parameter_table()
+        self.parent_dataset.parent_application.update_Qplot()
+        self.thread_fit_busy = False
+        #enable buttons
+        self.parent_dataset.actionMinimize_Error.setDisabled(False)
+        self.parent_dataset.actionNew_Theory.setDisabled(False)
+        try:
+            self.theory_buttons_disabled(False) # TODO: Add that function to all theories
+        except AttributeError: #the function is not defined in the current theory
+            pass
 
 
     def update_parameter_table(self):
