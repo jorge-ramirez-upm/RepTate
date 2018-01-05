@@ -56,6 +56,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.setTabsClosable(True)
         self.ApplicationtabWidget.setUsesScrollButtons(True)
 
+
         # log file
         log_file_name = 'Qreptate.log'
         handler = logging.handlers.RotatingFileHandler(
