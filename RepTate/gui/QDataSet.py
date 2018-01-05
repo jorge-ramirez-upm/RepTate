@@ -92,7 +92,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         self.TheoryLayout.insertWidget(0, tb)
-        self.splitter.setSizes((3, 2))
+        self.splitter.setSizes((1000, 3000))
 
         #desactive buttons when no theory tab
         self.theory_actions_disabled(True)
@@ -223,50 +223,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
                 return
             th.handle_actionCalculate_Theory()
-    #         if th.calculate_is_busy or th.is_fitting or self.thread_calc_busy or self.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
-    #             return
-    #         self.thread_calc_busy = True
-    #         self.actionCalculate_Theory.setDisabled(True)
-    #         print("handle_actionCalculate_Theory thread started")
-    #         self.thread_calc = CalculateThread(self.end_thread_calc, th.do_calculate, "", )
-    #         self.thread_calc.start()
-    #         print("handle_actionCalculate_Theory thread ended")
-    
-    # def end_thread_calc(self):
-    #     self.theories[self.current_theory].update_parameter_table()
-    #     self.parent_application.update_Qplot()
-    #     self.thread_calc_busy = False
-    #     self.actionCalculate_Theory.setDisabled(False)
-
-
-
-
-
-    # def handle_actionCalculate_Theory_(self, th):
-    #     """Calculate the theory
-        
-    #     [description]
-    #     """
-    #     print("begin do_calculate")
-    #     th.do_calculate("")
-    #     print("end do_calculate")
-        # th.update_parameter_table()
-        # self.parent_application.update_Qplot()
-
-    # def handle_actionMinimize_Error(self):
-    #     if self.current_theory and self.files:
-    #         th = self.theories[self.current_theory]
-    #         if th.calculate_is_busy or th.is_fitting: #do nothing if already busy in do_calculate or do_fit
-    #             return
-    #         if th.single_file and len(self.files)-len(self.inactive_files)>1: 
-    #             header = "New Theory"
-    #             message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
-    #             QMessageBox.warning(self, header, message)
-    #             return
-
-    #         thread1 = CalculateThread(self.handle_actionMinimize_Error_, th)
-    #         thread1.start()
-
 
     def handle_actionMinimize_Error(self):
         """Minimize the error
@@ -283,25 +239,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 QMessageBox.warning(self, header, message)
                 return
             th.handle_actionMinimize_Error()
-    #         if th.calculate_is_busy or th.is_fitting or self.thread_fit_busy or self.thread_calc_busy: #do nothing if already busy in do_calculate or do_fit
-    #             return
-    #         if th.single_file and len(self.files)-len(self.inactive_files)>1: 
-    #             header = "New Theory"
-    #             message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
-    #             QMessageBox.warning(self, header, message)
-    #             return
-            
-    #         self.thread_fit_busy = True
-    #         self.actionMinimize_Error.setDisabled(True)
-    #         self.thread_fit = CalculateThread(self.end_thread_fit, th.do_fit, "", )
-    #         self.thread_fit.start()
-
-    # def end_thread_fit(self):
-    #     self.theories[self.current_theory].update_parameter_table()
-    #     self.parent_application.update_Qplot()
-    #     self.thread_fit_busy = False
-    #     self.actionMinimize_Error.setDisabled(False)
-
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed

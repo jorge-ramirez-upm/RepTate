@@ -389,16 +389,7 @@ class EditBobSettingsDialog(QDialog):
         self.table.setItem(1, 0, QTableWidgetItem("%.2e"%bobmax))
         self.table.setItem(2, 0, QTableWidgetItem("%.2e"%bobmin)) 
         self.table.setItem(3, 0, QTableWidgetItem("%d"%bobbinmax)) 
-
-
-        layout.addWidget(self.table)
-
-        # dialogWidth = self.table.horizontalHeader().length() + 50
-        # dialogHeight = self.table.verticalHeader().length() 
-
-        # self.setMinimumWidth(dialogWidth)
-        # self.setMinimumHeight(dialogHeight)
-
+        layout.addWidget(self.table) 
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
