@@ -1,5 +1,5 @@
-#ifndef MY_STRUCTS_H
-#define MY_STRUCTS_H
+#ifndef REACT_STRUCTS_H
+#define REACT_STRUCTS_H
 
 #include <stdbool.h>
 
