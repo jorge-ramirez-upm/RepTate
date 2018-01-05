@@ -75,6 +75,18 @@ class BaseTheoryLikhtmanMcLeish2002:
         self.cnuarray = f['cnu']
         self.data = f['data']
         
+        # Estimate initial values of the theory
+        w = self.parent_dataset.files[0].data_table.data[:,0]
+        Gp = self.parent_dataset.files[0].data_table.data[:,1]
+        Gpp = self.parent_dataset.files[0].data_table.data[:,2]
+
+        Gpp_Gp = Gpp/Gp
+        ind = len(Gpp_Gp)-np.argmax(np.flip(Gpp_Gp,0)<0.8)
+        taue = 1.0/w[ind]
+        Ge = Gp[ind]
+        self.set_param_value("taue", taue)
+        self.set_param_value("Ge", Ge)
+        
     def LikhtmanMcLeish2002(self, f=None):
         """[summary]
         
