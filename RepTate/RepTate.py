@@ -32,7 +32,7 @@ def start_RepTate(argv):
     :param list argv: Command line parameters passed to Reptate
     """
     GUI = True
-    QApplication.setStyle("Fusion") #comment that line for a native look
+    #QApplication.setStyle("Fusion") #comment that line for a native look
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     
     app = QApplication(sys.argv)
