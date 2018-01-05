@@ -407,7 +407,6 @@ void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved
             {
                 if (br_poly[i].saved)
                 {
-
                     if (react_dist[n].numinbin[br_poly[i].bin] <= react_dist[n].bobbinmax)
                     {
                         enrich = 1.0;

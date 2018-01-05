@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "my_structs.h"
+#include "react_structs.h"
 #include "polybits.h"
 
 polybits_global_const pb_global_const = {.maxbobbins = 5000, .maxmwdbins = 1000, .maxarm = 1000000, .maxpol = 1000000, .maxreact = 11};
