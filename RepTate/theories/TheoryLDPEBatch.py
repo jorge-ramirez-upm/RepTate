@@ -19,7 +19,7 @@ from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QSizePolicy, QFileDialog
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
 
 from react_ctypes_helper import *
@@ -376,17 +376,29 @@ class EditBobSettingsDialog(QDialog):
         self.table = QTableWidget()
         self.table.setRowCount(4)
         self.table.setColumnCount(1)
-        self.table.setHorizontalHeaderLabels([""])
+        self.table.horizontalHeader().hide()    
         self.table.setVerticalHeaderLabels(
             ["Number of bins for Bob",
-            "Maximum bin Mw", 
-            "Minimum bin Mw", 
+            "Maximum bin Mw (g/mol)", 
+            "Minimum bin Mw (g/mol)", 
             "Maximum no. of polymers per bin"])
-        self.table.setItem(0, 0, QTableWidgetItem(str(numbobbins))) 
-        self.table.setItem(1, 0, QTableWidgetItem(str(bobmax)))
-        self.table.setItem(2, 0, QTableWidgetItem(str(bobmin))) 
-        self.table.setItem(3, 0, QTableWidgetItem(str(bobbinmax))) 
+        font = QFont()
+        font.setBold(True)
+        self.table.verticalHeader().setFont(font);
+        self.table.setItem(0, 0, QTableWidgetItem("%d"%numbobbins)) 
+        self.table.setItem(1, 0, QTableWidgetItem("%.2e"%bobmax))
+        self.table.setItem(2, 0, QTableWidgetItem("%.2e"%bobmin)) 
+        self.table.setItem(3, 0, QTableWidgetItem("%d"%bobbinmax)) 
+
+
         layout.addWidget(self.table)
+
+        # dialogWidth = self.table.horizontalHeader().length() + 50
+        # dialogHeight = self.table.verticalHeader().length() 
+
+        # self.setMinimumWidth(dialogWidth)
+        # self.setMinimumHeight(dialogHeight)
+
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
