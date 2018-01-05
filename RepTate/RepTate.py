@@ -32,7 +32,7 @@ def start_RepTate(argv):
     :param list argv: Command line parameters passed to Reptate
     """
     GUI = True
-    #QApplication.setStyle("Fusion") #comment that line for a native look
+    QApplication.setStyle("Fusion") #comment that line for a native look
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     
     app = QApplication(sys.argv)
@@ -40,6 +40,8 @@ def start_RepTate(argv):
     splash = SplashScreen()
     splash.show()
     ex = QApplicationManager()
+    ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
+
     # #### DEBUG
     # new_app = ex.new_React_window()
     # new_app.new_tables_from_files(['data/React/out1.reac'])
