@@ -16,7 +16,7 @@ from PyQt5.uic import loadUiType
 from Theory import Theory
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, QThread
 from Parameter import OptType
 
 PATH = dirname(abspath(__file__))
@@ -24,16 +24,13 @@ Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
 
 
 class CalculationThread(QThread):
-    end_signal = pyqtSignal()
-    def __init__(self, end_function, fthread, *args):
+    def __init__(self, fthread, *args):
         super().__init__()
-        self.end_signal.connect(end_function)
         self.args = args
         self.function = fthread
 
     def run(self):
         self.function(*self.args)
-        self.end_signal.emit()
 
 
 class GetModesDialog(QDialog):
@@ -113,7 +110,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         except AttributeError: #the function is not defined in the current theory
             pass
         #start thread
-        self.thread_calc = CalculationThread(self.end_thread_calc, self.do_calculate, "", )
+        self.thread_calc = CalculationThread(self.do_calculate, "", )
+        self.thread_calc.finished.connect(self.end_thread_calc)
         self.thread_calc.start()
     
     def end_thread_calc(self):
@@ -154,7 +152,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         except AttributeError: #the function is not defined in the current theory
             pass
         #start thread
-        self.thread_fit = CalculationThread(self.end_thread_fit, self.do_fit, "", )
+        self.thread_fit = CalculationThread(self.do_fit, "", )
+        self.thread_fit.finished.connect(self.end_thread_fit)
         self.thread_fit.start()
 
     def end_thread_fit(self):
