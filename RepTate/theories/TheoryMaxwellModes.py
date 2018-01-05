@@ -69,7 +69,7 @@ class BaseTheoryMaxwellModesFrequency:
         wmin = self.parent_dataset.minpositivecol(0)
         wmax = self.parent_dataset.maxcol(0)
         nmodes = int(np.round(np.log10(wmax/wmin)))
-        print(wmin, wmax, nmodes)
+        # print(wmin, wmax, nmodes)
         self.parameters["logwmin"] = Parameter("logwmin", np.log10(wmin), "Log of frequency range minimum", ParameterType.real, opt_type=OptType.opt)
         self.parameters["logwmax"] = Parameter("logwmax", np.log10(wmax), "Log of frequency range maximum", ParameterType.real, opt_type=OptType.opt)
         self.parameters["nmodes"] = Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
