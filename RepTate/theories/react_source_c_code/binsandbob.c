@@ -12,7 +12,7 @@ int multi_nummwdbins;
 //  and MWD for polymers made in distribution n
 void molbin(int n)
 {
-    int i, i1, ibin;
+    int i, ibin;
     double wttot, m_w, m_n, brav, lgstep, lgmin, lgmax, cplen;
 
     react_dist[n].nummwdbins = MIN(react_dist[n].nummwdbins, pb_global_const.maxmwdbins);
@@ -92,7 +92,7 @@ void molbin(int n)
 // in inmix array
 void multimolbin(int reqbins, double *weights, bool *inmix)
 {
-    int i, i1, ibin, n;
+    int i, ibin, n;
     double wttot, m_w, m_n, brav, lgstep, lgmin, lgmax, cplen, wtpoly;
 
     multi_nummwdbins = MIN(reqbins, pb_global_const.maxmwdbins);

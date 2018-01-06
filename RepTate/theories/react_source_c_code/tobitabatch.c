@@ -17,6 +17,15 @@ int scount, bcount, rlevel;
 double fin_conv, tau, beta, Cs, Cb;
 long iy3;
 
+/* these functions are "private" to tabitabatch.c */
+void tobita_grow(int dir, int m, double cur_conv, bool sc_tag);
+void calclength(double conv, double *r_out);
+void scilength(double conv, double *r_out);
+void brlength(double conv, double *r_out);
+void getconv1(double cur_conv, double *new_conv_out);
+void getconv2(double cur_conv, double *new_conv_out);
+
+
 void tobbatchstart(double pfin_conv, double ptau, double pbeta, double pCs, double pCb, int n)
 {
     bobinit(n);
