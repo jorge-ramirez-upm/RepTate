@@ -258,11 +258,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 if i != index:
                     th_to_hide = self.TheorytabWidget.widget(i)
                     th_to_hide.do_hide()
+            if th.thread_calc_busy or th.thread_fit_busy:
+                return
         else:
             self.current_theory = None
             self.theory_actions_disabled(True)
-        if th.thread_calc_busy or th.thread_fit_busy:
-            return
         self.parent_application.update_plot()
         self.parent_application.update_Qplot()
 
