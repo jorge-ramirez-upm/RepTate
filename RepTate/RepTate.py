@@ -23,7 +23,7 @@ from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
-from time import time, sleep
+# from time import time, sleep
 
 def start_RepTate(argv):
     """
@@ -33,10 +33,8 @@ def start_RepTate(argv):
     """
     GUI = True
     QApplication.setStyle("Fusion") #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
-    
+                                    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     app = QApplication(sys.argv)
-    start = time() 
     splash = SplashScreen()
     splash.showMessage("Loading RepTate...\n")
     splash.show()
