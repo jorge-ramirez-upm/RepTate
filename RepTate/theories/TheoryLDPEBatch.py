@@ -29,13 +29,18 @@ from react_ctypes_helper import *
 from ctypes import *
 
 class TheoryTobitaBatch(CmdBase):
-    """TheoryTobitaBatch
+    """LDPE batch reaction theory
     
-    [description]
+    The LDPE batch reaction theory uses an algorithm described in the paper by H.
+Tobita (J. Pol. Sci. Part B, 39, 391-403 (2001)). It is designed for a batch
+reaction - in which the reagents are well mixed at the beginning and monomer
+is consumed as the reaction proceeds. It is equivalent to the "plug-flow"
+approximation for a tubular reactor. One possibility when modelling a real
+tubular reactor is to mix several batch reactions with different conversions.
     """
-    thname='TobitaBatchTheory'
-    description='TobitaBatch Theory'
-    citations=''
+    thname = 'TobitaBatchTheory'
+    description = 'The LDPE batch reaction theory'
+    citations = 'J. Pol. Sci. Part B, 39, 391-403 (2001)'
 
     def __new__(cls, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]

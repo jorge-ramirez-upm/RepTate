@@ -1,14 +1,16 @@
 #include <stdlib.h>
-#include <time.h>
 #include <math.h>
+#include <time.h>
+
+#include "tobitaCSTR.h"
+#include "binsandbob.h"
 #include "polybits.h"
 #include "polycleanup.h"
-#include "binsandbob.h"
-#include "tobitabatch.h"
 #include "polymassrg.h"
 #include "ran3.h"
 
-tobitabatch_global tb_global = { .tobbatchnumber = 0, .tobitabatcherrorflag = false};
+tobitaCSTR_global tCSTR_global = {.tobCSTRnumber = 1, .tobitaCSTRerrorflag = false};
+
 long iy3;
 
 /* local functions */
@@ -19,33 +21,42 @@ static void brlength(double conv, double *r_out);
 static void getconv1(double cur_conv, double *new_conv_out);
 static void getconv2(double cur_conv, double *new_conv_out);
 /* local variables */
-static double fin_conv, tau, beta, Cs, Cb;
+static double tau, beta, sigma, lambda, Pbeta, Psigma, Plambda, siglam, Psiglam, pref;
 static int scount, bcount, rlevel;
 
-
-void tobbatchstart(double pfin_conv, double ptau, double pbeta, double pCs, double pCb, int n)
+void tobCSTRstart(double ttau, double tbeta, double tsigma, double tlambda, int n)
 {
+
     bobinit(n);
     iy3 = time(NULL); //initialize seed
     // passed variables
-    fin_conv = pfin_conv;
-    tau = ptau;
-    beta = pbeta;
-    Cs = pCs;
-    Cb = pCb;
-    tb_global.tobitabatcherrorflag = false;
+    tau = ttau;
+    beta = tbeta;
+    sigma = tsigma;
+    lambda = tlambda;
+
+    siglam = sigma + lambda;
+    pref = tau + beta + sigma + lambda;
+    Plambda = lambda / pref; // prob reaction from polymer transfer (branching)
+    Psigma = sigma / pref;   // prob reaction from scission site
+    Psiglam = siglam / pref;
+    Pbeta = beta / pref; // prob termination by combination
+
+    tCSTR_global.tobitaCSTRerrorflag = false;
 }
 
-bool tobbatch(int n, int n1)
+bool tobCSTR(int n, int n1)
 {
     double cur_conv, seg_len, len1, len2, jtot, gfact;
     int m, m1, first, anum, nsegs;
+
     scount = 0;
     bcount = 0;
-    getconv1(fin_conv, &cur_conv);
+    getconv1(0.0, &cur_conv);
     if (request_arm(&m))
     { // don't do anything if arms not available
-        br_poly[n].first_end = m;
+        br_poly[n]
+            .first_end = m;
         arm_pool[m].up = m;
         arm_pool[m].down = m;
         calclength(cur_conv, &seg_len);
@@ -69,6 +80,7 @@ bool tobbatch(int n, int n1)
     if (pb_global.arms_avail)
     { // not true if we ran out of arms somewhere !
         polyclean(n);
+
         // renumber segments starting from zero
         m1 = br_poly[n].first_end;
         first = m1;
@@ -102,21 +114,24 @@ bool tobbatch(int n, int n1)
 
 void tobita_grow(int dir, int m, double cur_conv, bool sc_tag)
 {
+
     int m1, m2;
     double seg_len, new_conv, rnd;
-    double sigma, lambda, pref, Psigma, Plambda, Pbeta;
 
     rlevel++; //recursion level
-    if ((rlevel > 5000) || tb_global.tobitabatcherrorflag)
+    if ((rlevel > 5000) || tCSTR_global.tobitaCSTRerrorflag)
     {
+        ///
         ///  need to decide what to do if you make molecules too big
-        tb_global.tobitabatcherrorflag = true;
+        ///
+        tCSTR_global.tobitaCSTRerrorflag = true;
         rlevel = 100000;
         return;
     }
 
     if (pb_global.arms_avail)
     { // don't do anything if arms aren't available
+
         scilength(cur_conv, &seg_len);
         if ((sc_tag) && (seg_len < arm_pool[m].arm_len))
         {
@@ -207,11 +222,7 @@ void tobita_grow(int dir, int m, double cur_conv, bool sc_tag)
             }         // end of scission at chain end
                       // chain end possibilities depend on the direction
             else if (dir > 0)
-            {                                              //  growing to the right
-                sigma = Cs * cur_conv / (1.0 - cur_conv);  // calculate scission event population
-                lambda = Cb * cur_conv / (1.0 - cur_conv); // calculate branching population
-                pref = tau + beta + sigma + lambda;
-                Pbeta = beta / pref; // prob termination by combination
+            { //  growing to the right
                 rnd = ran3(&iy3);
                 if (rnd < Pbeta)
                 { //prob for termination by combination
@@ -228,12 +239,7 @@ void tobita_grow(int dir, int m, double cur_conv, bool sc_tag)
                 }     // otherwise, end of chain: do nothing
             }         // end of right growth
             else
-            {                                              // must be left growth
-                sigma = Cs * cur_conv / (1.0 - cur_conv);  // calculate scission event population
-                lambda = Cb * cur_conv / (1.0 - cur_conv); // calculate branching population
-                pref = tau + beta + sigma + lambda;
-                Plambda = lambda / pref; // prob reaction from polymer transfer (branching)
-                Psigma = sigma / pref;   // prob reaction from scission site
+            { // must be left growth
                 rnd = ran3(&iy3);
                 if (rnd < Plambda)
                 { // grew from a branch
@@ -262,7 +268,7 @@ void tobita_grow(int dir, int m, double cur_conv, bool sc_tag)
                         } // end request_arm m2 check
                     }     // end request_arm m1 check
                 }
-                else if (rnd < (Psigma + Plambda))
+                else if (rnd < Psiglam)
                 { // grew from scission
                     getconv1(cur_conv, &new_conv);
                     if (ran3(&iy3) <= 0.50)
@@ -293,66 +299,73 @@ void tobita_grow(int dir, int m, double cur_conv, bool sc_tag)
                     }
                 } // grew from initiation : do nothing
             }     // end of left-growth chain end possibilities
-        }         // end of all chain-end possibilities
-    }             //end check for arms available
+
+        } // end of all chain-end possibilities
+
+    } //end check for arms available
+
     rlevel--;
 }
 
-void calclength(double conv, double *r_out)
+void calclength(double conv, double *r) //TODO: conv variable not used...
 {
     // Calculates initial length of a segment grown at conversion "conv"
-    double rnd, sigma, lambda, pref;
+    double rnd;
     rnd = ran3(&iy3);
     if (rnd == 0.0)
     {
         rnd = 1.0;
     }
-    sigma = Cs * conv / (1.0 - conv);  // calculate scission event population
-    lambda = Cb * conv / (1.0 - conv); // calculate branching population
-    pref = tau + beta + sigma + lambda;
-    *r_out = -log(rnd) / pref;
-    if ((*r_out) < 1000.0)
+    *r = (-log(rnd) / pref);
+    if (*r < 1000.0)
     {
-        *r_out = (int)(*r_out) + 1;
+        *r = (int)(*r) + 1;
     }
 }
 
-void scilength(double conv, double *r_out)
+void scilength(double conv, double *r)
 {
     // Calculate length between scission-points of a segment grown at conversion "conv"
     double rnd, eta;
+
     rnd = ran3(&iy3);
     if (rnd == 0.0)
     {
         rnd = 1.0;
     }
-    //  eta = Cs*(1.0d0-exp(-(Cs+Cb)*log((1.0d0-conv)/(1.0d0-fin_conv))))/(Cs+Cb)
-    eta = Cs * log((1.0 - conv) / (1.0 - fin_conv)) + 1.0e-80;
-    *r_out = (-log(rnd) / eta);
-    if ((*r_out) < 1000.0)
+    eta = (sigma / siglam) * (1.0 - exp(siglam * conv)) + 1.0e-80; //scission density
+    *r = (-log(rnd) / eta);
+    if (*r < 1000.0)
     {
-        *r_out = (int)(*r_out) + 1;
+        *r = (int)(*r) + 1;
     }
 }
-
-void brlength(double conv, double *r_out)
+void brlength(double conv, double *r)
 {
     // Calculate length between branch-points of a segment grown at conversion "conv"
     double rnd, rho;
+
     rnd = ran3(&iy3);
     if (rnd == 0.0)
     {
         rnd = 1.0;
     }
     // rho = Cb*(1.0d0-exp(-(Cs+Cb)*log((1.0d0-conv)/(1.0d0-fin_conv))))/(Cs+Cb)  !branching density
-    rho = Cb * log((1.0 - conv) / (1.0 - fin_conv));
-    *r_out = -log(rnd) / rho;
+    rho = (lambda / siglam) * (1.0 - exp(siglam * conv)) + 1.0e-80; //branching density
+    *r = (-log(rnd) / rho);
 }
 
 void getconv1(double cur_conv, double *new_conv)
 {
     // Calculate conversion of older segment
-    *new_conv = ran3(&iy3) * cur_conv;
+    double rnd;
+
+    rnd = ran3(&iy3);
+    if (rnd == 0.0)
+    {
+        rnd = 1.0;
+    }
+    *new_conv = cur_conv + log(rnd);
 }
 
 void getconv2(double cur_conv, double *new_conv)
@@ -360,5 +373,5 @@ void getconv2(double cur_conv, double *new_conv)
     //Calculate conversion of newer segment growing from scission or branchpoint
     double rnd;
     rnd = ran3(&iy3);
-    *new_conv = 1.0 - (1.0 - cur_conv) * exp(-rnd * log((1.0 - cur_conv) / (1.0 - fin_conv)));
+    *new_conv = rnd * cur_conv;
 }
