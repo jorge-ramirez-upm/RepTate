@@ -19,6 +19,8 @@ from DataTable import DataTable
 
 from react_ctypes_helper import *
 from ctypes import *
+import react_gui_tools as rgt
+
 
 class TheoryTobitaCSTR(CmdBase):
     """LDPE CSTR reaction theory
@@ -290,6 +292,19 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
+        rgt.initialise_tool_bar(self)
 
-    # add widgets specific to the theory here:
+    
+    def theory_buttons_disabled(self, state):
+        rgt.theory_buttons_disabled(self, state)
+
+
+    def handle_stop_calulation(self):
+        rgt.handle_stop_calulation(self)
+
+    def handle_save_bob_configuration(self):
+        rgt.handle_save_bob_configuration(self)
        
+
+    def handle_edit_bob_settings(self):
+        rgt.handle_edit_bob_settings(self)
