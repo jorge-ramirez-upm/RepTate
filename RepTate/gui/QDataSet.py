@@ -311,9 +311,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             index {[type]} -- [description]
         """
         th_name = self.TheorytabWidget.widget(index).name
+        th = self.theories[th_name]
+        th.Qprint("Close theory tab requested")
+        th.stop_theory_calc_flag = True
         self.set_no_limits(th_name)
         self.do_theory_delete(th_name) #call DataSet.do_theory_delete 
         self.TheorytabWidget.removeTab(index)
+
 
 
     def handle_itemSelectionChanged(self):
@@ -471,10 +475,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         #if self.cbtheory.currentIndex() == 0:
         #    return
+        self.actionNew_Theory.setDisabled(True)
         th_name = self.cbtheory.currentText()
         #self.cbtheory.setCurrentIndex(0) # reset the combobox selection
         if th_name!='':
             self.new_theory(th_name)
+        self.actionNew_Theory.setDisabled(False)
 
     def new_theory(self, th_name, th_tab_id=""):
         """[summary]
@@ -498,5 +504,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th_tab_id = "%s%d"%(th_tab_id, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
+        self.TheorytabWidget.setTabToolTip(index, th_name) #set new-tab tool tip
         #self.handle_thCurrentChanged(index)
         newth.update_parameter_table()

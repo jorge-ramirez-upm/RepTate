@@ -115,3 +115,22 @@ molbin.restype = None
 
 polyconfwrite = react_lib.polyconfwrite
 polyconfwrite.restype = None
+
+
+###############
+# tobitaCSTR.c
+###############
+
+#struct
+class tobitaCSTR_global(Structure):
+    _fields_ = [("tobCSTRnumber", c_int), ("tobitaCSTRerrorflag",c_bool)]
+
+#global variable
+tCSTR_global = tobitaCSTR_global.in_dll(react_lib, "tCSTR_global")
+
+#function
+tobCSTRstart = react_lib.tobCSTRstart
+tobCSTRstart.restype = None
+
+tobCSTR = react_lib.tobCSTR
+tobCSTR.restype = c_bool
