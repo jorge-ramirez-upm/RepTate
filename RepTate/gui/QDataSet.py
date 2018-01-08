@@ -504,5 +504,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th_tab_id = "%s%d"%(th_tab_id, self.num_theories) #append number
         index = self.TheorytabWidget.addTab(newth, th_tab_id) #add theory tab
         self.TheorytabWidget.setCurrentIndex(index) #set new theory tab as curent tab
+        self.TheorytabWidget.setTabToolTip(index, th_name) #set new-tab tool tip
         #self.handle_thCurrentChanged(index)
         newth.update_parameter_table()
