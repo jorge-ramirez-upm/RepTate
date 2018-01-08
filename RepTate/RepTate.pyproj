@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>41d5c2f2-6dbc-423a-8657-cd5c56d3d66b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>RepTate.py</StartupFile>
+    <StartupFile>tests\RepTate_Test_LVE.py</StartupFile>
     <SearchPath>gui\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -79,10 +79,8 @@
     <Compile Include="gui\SplashScreen.py" />
     <Compile Include="RepTate.py" />
     <Compile Include="RepTateCL.py" />
-    <Compile Include="resources\About_rc.py" />
-    <Compile Include="resources\MainWindow_rc.py" />
-    <Compile Include="resources\Reptate_rc.py" />
-    <Compile Include="resources\Theory_rc.py" />
+    <Compile Include="tests\RepTate_Test_LVE.py" />
+    <Compile Include="tests\RepTate_Test_TTS.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
@@ -107,9 +105,8 @@
     <Folder Include="applications\" />
     <Folder Include="core\" />
     <Folder Include="gui\" />
-    <Folder Include="resources\" />
-    <Folder Include="resourcs\" />
     <Folder Include="theories\" />
+    <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit" />
