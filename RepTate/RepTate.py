@@ -38,22 +38,23 @@ def start_RepTate(argv):
     app = QApplication(sys.argv)
     start = time() 
     splash = SplashScreen()
-    splash.show()
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
+    splash.showMessage("Loading RepTate...\nVersion " + ex.version + ' ' + ex.date)
+    splash.show()
 
     # #### DEBUG
     # new_app = ex.new_React_window()
     # new_app.new_tables_from_files(['data/React/out1.reac'])
-    # ####
-    while time() - start < 1:
-        sleep(0.001)
-        if (time()-start < 0.5):
-            splash.showMessage("Loading Reptate...")
-        else:
-            splash.showMessage("Version "+ ex.version + ' ' + ex.date)
-        app.processEvents()
-    
+    # # ####
+    # while time() - start < .1:
+    #     sleep(0.001)
+    #     if (time()-start < 0.5):
+    #         splash.showMessage("Loading Reptate...")
+    #     else:
+    #     app.processEvents()
+
+
     # ex.new_lve_window()
     splash.finish(ex)
     ex.showMaximized()

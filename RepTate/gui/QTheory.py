@@ -110,6 +110,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         except AttributeError: #the function is not defined in the current theory
             pass
         #start thread
+        # self.do_calculate("")
+        # self.end_thread_calc()
         self.thread_calc = CalculationThread(self.do_calculate, "", )
         self.thread_calc.finished.connect(self.end_thread_calc)
         self.thread_calc.start()
@@ -152,6 +154,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         except AttributeError: #the function is not defined in the current theory
             pass
         #start thread
+        # self.do_fit("")
+        # self.end_thread_fit()
         self.thread_fit = CalculationThread(self.do_fit, "", )
         self.thread_fit.finished.connect(self.end_thread_fit)
         self.thread_fit.start()

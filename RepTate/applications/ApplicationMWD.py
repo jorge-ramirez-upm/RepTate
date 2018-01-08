@@ -17,7 +17,7 @@ from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
 import numpy as np
-from TheoryDiscrMWD import TheoryDiscrMWD
+# from TheoryDiscrMWD import TheoryDiscrMWD
 
 class ApplicationMWD(CmdBase):
     """Application to analyze Molecular Weight distributions
@@ -54,6 +54,7 @@ class BaseApplicationMWD:
             name {[type]} -- [description] (default: {"MWD"})
             parent {[type]} -- [description] (default: {None})
         """
+        from TheoryDiscrMWD import TheoryDiscrMWD
         super().__init__(name, parent)
 
         # VIEWS

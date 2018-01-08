@@ -17,10 +17,10 @@ from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
 import numpy as np
-from TheoryMaxwellModes import TheoryMaxwellModesFrequency
-from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
-from TheoryTTS import TheoryWLFShift
-from TheoryCarreauYasuda import TheoryCarreauYasuda
+# from TheoryMaxwellModes import TheoryMaxwellModesFrequency
+# from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
+# from TheoryTTS import TheoryWLFShift
+# from TheoryCarreauYasuda import TheoryCarreauYasuda
 
 class ApplicationLVE(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
@@ -58,6 +58,10 @@ class BaseApplicationLVE:
             name {[type]} -- [description] (default: {"LVE"})
             parent {[type]} -- [description] (default: {None})
         """
+        from TheoryMaxwellModes import TheoryMaxwellModesFrequency
+        from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
+        from TheoryTTS import TheoryWLFShift
+        from TheoryCarreauYasuda import TheoryCarreauYasuda
         super().__init__(name, parent)
 
         # VIEWS

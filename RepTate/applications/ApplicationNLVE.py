@@ -55,6 +55,8 @@ class BaseApplicationNLVE:
             name {[type]} -- [description] (default: {"LVE"})
             parent {[type]} -- [description] (default: {None})
         """
+        from TheoryRoliePoly import TheoryRoliePoly
+
         super().__init__(name, parent)
         
         # VIEWS

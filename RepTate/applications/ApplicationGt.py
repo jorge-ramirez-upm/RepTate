@@ -17,7 +17,7 @@ from View import View
 from FileType import TXTColumnFile
 from QApplicationWindow import QApplicationWindow
 import numpy as np
-from TheoryMaxwellModes import TheoryMaxwellModesTime
+# from TheoryMaxwellModes import TheoryMaxwellModesTime
 
 class ApplicationGt(CmdBase):
     """Application to analyze the relaxation modulus
@@ -55,6 +55,8 @@ class BaseApplicationGt:
             name {[type]} -- [description] (default: {"Gt"})
             parent {[type]} -- [description] (default: {None})
         """
+        from TheoryMaxwellModes import TheoryMaxwellModesTime
+
         super().__init__(name, parent)
 
         # VIEWS

@@ -702,7 +702,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
-        plt.tight_layout(pad=1.2)
+        try:
+            plt.tight_layout(pad=1.2)
+        except:
+            pass
         # self.canvas = FigureCanvas(self.figure)
         #self.mplvl.addWidget(self.canvas)
         self.canvas.draw()
