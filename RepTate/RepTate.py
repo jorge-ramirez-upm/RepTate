@@ -38,10 +38,11 @@ def start_RepTate(argv):
     app = QApplication(sys.argv)
     start = time() 
     splash = SplashScreen()
+    splash.showMessage("Loading RepTate...\n")
+    splash.show()
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
     splash.showMessage("Loading RepTate...\nVersion " + ex.version + ' ' + ex.date)
-    splash.show()
 
     # #### DEBUG
     # new_app = ex.new_React_window()
