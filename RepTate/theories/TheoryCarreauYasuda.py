@@ -93,7 +93,7 @@ class BaseTheoryCarreauYasuda:
         etastar = np.sqrt(Gp**2+Gpp**2)/w
         
         ind0 = np.argmax(etastar<0.5*eta0)
-        ind1 = len(etastar)-np.argmax(np.flip(etastar,0)>2.0*etainf)
+        ind1 = len(etastar)-np.argmax(np.flipud(etastar)>2.0*etainf)
         wa = w[ind0]
         wb = w[ind1]
         etaa = etastar[ind0]
