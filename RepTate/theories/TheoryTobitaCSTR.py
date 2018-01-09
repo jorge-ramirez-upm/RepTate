@@ -177,9 +177,9 @@ class BaseTheoryTobitaCSTR:
             # put it in list
                 if react_dist[ndist].contents.npoly == 0:  # case of first polymer made
                     react_dist[ndist].contents.first_poly = m
-                    br_poly[m].contents.nextpoly = 0
+                    set_br_poly_nextpoly(c_int(m), c_int(0)) #br_poly[m].contents.nextpoly = 0
                 else:           # next polymer, put to top of list
-                    br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
+                    set_br_poly_nextpoly(c_int(m), c_int(react_dist[ndist].contents.first_poly)) #br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
                     react_dist[ndist].contents.first_poly = m
 
                 # make a polymer

@@ -159,6 +159,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_id = "%s%d"%(app_name, self.application_counter)
         ind = self.ApplicationtabWidget.addTab(newapp, QIcon(icon), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
+        self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
         return newapp
 
 

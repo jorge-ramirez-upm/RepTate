@@ -15,7 +15,7 @@ void molbin(int n)
     int i, ibin;
     double wttot, m_w, m_n, brav, lgstep, lgmin, lgmax, cplen;
 
-    react_dist[n].nummwdbins = MIN(react_dist[n].nummwdbins, pb_global_const.maxmwdbins);
+    react_dist[n].nummwdbins = fmin(react_dist[n].nummwdbins, pb_global_const.maxmwdbins);
     // first find largest and smallest polymer
     lgmax = 0.0;
     lgmin = 1.0e80;
@@ -24,8 +24,8 @@ void molbin(int n)
     while (true)
     {
         cplen = br_poly[i].tot_len;
-        lgmax = MAX(lgmax, cplen);
-        lgmin = MIN(lgmin, cplen);
+        lgmax = fmax(lgmax, cplen);
+        lgmin = fmin(lgmin, cplen);
         i = br_poly[i].nextpoly;
         if (i == 0)
         {
@@ -95,7 +95,7 @@ void multimolbin(int reqbins, double *weights, bool *inmix)
     int i, ibin, n;
     double wttot, m_w, m_n, brav, lgstep, lgmin, lgmax, cplen, wtpoly;
 
-    multi_nummwdbins = MIN(reqbins, pb_global_const.maxmwdbins);
+    multi_nummwdbins = fmin(reqbins, pb_global_const.maxmwdbins);
 
     // first find largest and smallest polymer
     lgmax = 0.0;
@@ -110,8 +110,8 @@ void multimolbin(int reqbins, double *weights, bool *inmix)
             while (true)
             {
                 cplen = br_poly[i].tot_len * react_dist[n].monmass;
-                lgmax = MAX(lgmax, cplen);
-                lgmin = MIN(lgmin, cplen);
+                lgmax = fmax(lgmax, cplen);
+                lgmin = fmin(lgmin, cplen);
                 i = br_poly[i].nextpoly;
                 if (i == 0)
                 {
@@ -208,7 +208,7 @@ void bobcount(int m, int n)
     int ibin;
 
     ibin = trunc((log10(br_poly[m].tot_len * react_dist[n].monmass) - react_dist[n].boblgmin) / (react_dist[n].boblgmax - react_dist[n].boblgmin) * react_dist[n].numbobbins) + 1;
-    ibin = MIN(MAX(1, ibin), react_dist[n].numbobbins);
+    ibin = fmin(fmax(1, ibin), react_dist[n].numbobbins);
     react_dist[n].numinbin[ibin] = react_dist[n].numinbin[ibin] + 1;
     if (react_dist[n].numinbin[ibin] <= react_dist[n].bobbinmax)
     { //  check to see whether to "save" the polymer

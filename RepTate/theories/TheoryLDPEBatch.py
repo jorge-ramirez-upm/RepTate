@@ -11,6 +11,7 @@
 
 TobitaBatch file for creating a new theory
 """ 
+import sys
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
@@ -103,6 +104,7 @@ class BaseTheoryTobitaBatch():
         self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
                                           type=ParameterType.real, opt_type=OptType.const)
 
+        print("size of react dist %d"%sys.getsizeof(react_dist))
 
 # function TTheory_tobita_batch.Calc(var ytheory, ydata: TTable; var FileParam: TStringList;
 #   var TheoryParam: array of real): Integer;
@@ -161,9 +163,9 @@ class BaseTheoryTobitaBatch():
 
                 if react_dist[ndist].contents.npoly == 0:  # case of first polymer made
                     react_dist[ndist].contents.first_poly = m
-                    br_poly[m].contents.nextpoly = 0
+                    set_br_poly_nextpoly(c_int(m), c_int(0)) # br_poly[m].contents.nextpoly = 0
                 else:           # next polymer, put to top of list
-                    br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
+                    set_br_poly_nextpoly(c_int(m), c_int(react_dist[ndist].contents.first_poly)) # br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
                     react_dist[ndist].contents.first_poly = m
 
                 # make a polymer

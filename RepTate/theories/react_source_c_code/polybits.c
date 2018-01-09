@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 
 #include "react_structs.h"
 #include "polybits.h"
@@ -66,7 +67,7 @@ void react_pool_init(void)
 void pool_reinit(void)
 {
     int i;
-    for (i = 1; i <= MIN(pb_global.mmax + 1, pb_global_const.maxarm); i++)
+    for (i = 1; i <= fmin(pb_global.mmax + 1, pb_global_const.maxarm); i++)
     {
         arm_pool[i].L1 = i - 1;
         arm_pool[i].R1 = i + 1;
@@ -94,7 +95,7 @@ bool request_arm(int *m_out)
     else
     {
         pb_global.first_in_pool = arm_pool[m].R1;
-        pb_global.mmax = MAX(pb_global.mmax, m);
+        pb_global.mmax = fmax(pb_global.mmax, m);
         arm_pool[pb_global.first_in_pool].L1 = 0;
         arm_pool[m].L1 = 0;
         arm_pool[m].L2 = 0;
@@ -271,4 +272,8 @@ polymer *return_br_poly(int i)
 reactresults *return_react_dist(int i)
 {
     return &(react_dist[i]);
+}
+
+void set_br_poly_nextpoly(int m, int nextpol){
+    br_poly[m].nextpoly = nextpol;
 }
