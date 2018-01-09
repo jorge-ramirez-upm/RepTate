@@ -604,7 +604,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     def handle_doubleClickTab(self, index):
         """Edit DataSet name
         
-        [description]
+        Edit the dataset tab name, leave the 'dataset' dictionary keys unchanged.
+        Two datasets can share the sae name.
         
         Arguments:
             index {[type]} -- [description]
@@ -619,8 +620,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         new_tab_name = dlg.textValue()
         if (success and new_tab_name!=""):    
             self.DataSettabWidget.setTabText(index, new_tab_name)
-            self.datasets[old_name].name = new_tab_name
-            self.datasets[new_tab_name] = self.datasets.pop(old_name)
+            # self.datasets[old_name].name = new_tab_name
+            # self.datasets[new_tab_name] = self.datasets.pop(old_name)
 
     def close_data_tab_handler(self, index):
         """Delete a dataset tab from the current application

@@ -283,8 +283,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
     def handle_thTabBarDoubleClicked(self, index):
         """Edit Theory name
         
-        [description]
-        
+        Edit the theory tab name, leave 'theories' dictionary keys unchanged.
+        Two tabs can share the same name
+
         Arguments:
             index {[type]} -- [description]
         """
@@ -298,9 +299,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         new_tab_name = dlg.textValue()
         if (success and new_tab_name!=""):    
             self.TheorytabWidget.setTabText(index, new_tab_name)
-            self.theories[old_name].name = new_tab_name
-            self.theories[new_tab_name] = self.theories.pop(old_name)
-            self.current_theory = new_tab_name
+            # self.theories[old_name].name = new_tab_name
+            # self.theories[new_tab_name] = self.theories.pop(old_name)
+            # self.current_theory = new_tab_name
 
     def handle_thTabCloseRequested(self, index):
         """Delete a theory tab from the current dataset
