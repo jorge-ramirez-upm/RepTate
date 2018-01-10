@@ -81,6 +81,15 @@ return_react_dist.restype = reactresults_pointer
 set_br_poly_nextpoly = react_lib.set_br_poly_nextpoly
 set_br_poly_nextpoly.restype = None
 
+increase_arm_records_in_arm_pool = react_lib.increase_arm_records_in_arm_pool
+increase_arm_records_in_arm_pool.restype = c_bool
+
+increase_polymer_records_in_br_poly = react_lib.increase_polymer_records_in_br_poly
+increase_polymer_records_in_br_poly.restype = c_bool
+
+increase_dist_records_in_react_dist = react_lib.increase_dist_records_in_react_dist
+increase_dist_records_in_react_dist.restype = c_bool
+
 
 #initialise lists
 react_pool_init()
