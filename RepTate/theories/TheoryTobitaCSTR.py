@@ -17,7 +17,6 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 
-<<<<<<< HEAD
 from react_ctypes_helper import *
 from ctypes import *
 import react_gui_tools as rgt
@@ -36,17 +35,6 @@ reactor during free-radical polymerisation.
     thname='TobitaCSTRTheory'
     description='Tobita LDPE CSTR reaction theory'
     citations='J. Pol. Sci. Part B, 39, 391-403 (2001)'
-=======
-
-class TheoryTobitaCSTR(CmdBase):
-    """[summary]
-    
-    [description]
-    """
-    thname='TemplateTheory'
-    description='Template Theory'
-    citations=''
->>>>>>> faster_loading
 
     def __new__(cls, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
@@ -130,11 +118,7 @@ class BaseTheoryTobitaCSTR:
     def do_error(self, line):
         pass
 
-<<<<<<< HEAD
     def Calc(self, f=None):
-=======
-    def function_template(self, f=None):
->>>>>>> faster_loading
         """Template function that returns the square of y
         
         [description]
@@ -193,15 +177,9 @@ class BaseTheoryTobitaCSTR:
             # put it in list
                 if react_dist[ndist].contents.npoly == 0:  # case of first polymer made
                     react_dist[ndist].contents.first_poly = m
-<<<<<<< HEAD
                     set_br_poly_nextpoly(c_int(m), c_int(0)) #br_poly[m].contents.nextpoly = 0
                 else:           # next polymer, put to top of list
                     set_br_poly_nextpoly(c_int(m), c_int(react_dist[ndist].contents.first_poly)) #br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
-=======
-                    br_poly[m].contents.nextpoly = 0
-                else:           # next polymer, put to top of list
-                    br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
->>>>>>> faster_loading
                     react_dist[ndist].contents.first_poly = m
 
                 # make a polymer
@@ -273,14 +251,9 @@ class BaseTheoryTobitaCSTR:
         self.Qprint('%s'%ndist)
         return calc
 
-<<<<<<< HEAD
     def destructor(self):
         """Return arms to pool"""
         return_dist(c_int(self.ndist))
-=======
-
-
->>>>>>> faster_loading
 
 
 class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
@@ -319,7 +292,6 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-<<<<<<< HEAD
         rgt.initialise_tool_bar(self)
 
     
@@ -336,8 +308,3 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
 
     def handle_edit_bob_settings(self):
         rgt.handle_edit_bob_settings(self)
-=======
-
-    # add widgets specific to the theory here:
-       
->>>>>>> faster_loading
