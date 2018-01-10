@@ -268,7 +268,9 @@ class BaseTheoryWLFShift:
 
         # Mount the vector of parameters (Active ones only)
         initial_guess=[]
-        for p in self.parameters.keys():
+        k=list(self.parameters.keys())
+        k.sort()
+        for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt: 
                 initial_guess.append(par.value)
@@ -282,8 +284,6 @@ class BaseTheoryWLFShift:
         self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
 
         ind=0
-        k=list(self.parameters.keys())
-        k.sort()
         self.Qprint("%10s   %10s"%("Parameter","Value"))
         self.Qprint("===========================")
         for p in k:
