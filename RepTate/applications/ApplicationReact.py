@@ -79,7 +79,11 @@ class BaseApplicationReact:
         self.views['br/1000C']=View(name="br/1000C", description="br/1000C(M)", x_label="M", y_label="br/1000C(M)", 
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_br_1000C, n=1, 
                                 snames=["br/1000C(M)"], index=2)
-                                
+        
+        #set multiviews
+        self.with_multiviews = True
+        self.multiviews = [self.views["w(M)"], self.views["g(M)"], self.views['br/1000C']] #default view order in multiplot views
+        self.nplots = len(self.multiviews)
         # FILES
         # set the type of files that ApplicationReact can open
         ftype = TXTColumnFile(name='React files', extension='reac', description='Reatc file', col_names=['M', 'w(M)', 'g', 'br/1000C'], basic_file_parameters=[], col_units=['g/mol', '-', '-', '-'])

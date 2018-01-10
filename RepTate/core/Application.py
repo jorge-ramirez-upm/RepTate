@@ -21,6 +21,8 @@ from Theory import Theory
 from DataSet import DataSet
 from TheoryBasic import *
 
+from MultiView import MultiView, PlotOrganizationType
+
 class Application(CmdBase):
     """Main abstract class that represents an application
     
@@ -50,6 +52,9 @@ class Application(CmdBase):
         self.current_view=0
         self.num_datasets=0
         self.legend_visible = False      
+        self.multiviews = [] #default view order in multiplot views
+        self.nplots = 2 #number of plots
+        self.ncols = 1 #number of columns in the multiplot
 
         # Theories available everywhere
         # self.theories[TheoryPolynomial.thname]=TheoryPolynomial
@@ -58,14 +63,20 @@ class Application(CmdBase):
         # self.theories[TheoryExponential2.thname]=TheoryExponential2
             
         # MATPLOTLIB STUFF
-        sns.set_style("white")
-        sns.set_style("ticks")
-        plt.style.use('seaborn-poster')
-        self.figure = plt.figure(self.name)
-        self.figure.canvas.mpl_connect('close_event', self.handle_close_window)
-        self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
-        self.ax = self.figure.add_subplot(111)
-        sns.despine() # Remove up and right side of plot box
+        self.multiplots = MultiView(PlotOrganizationType.OptimalRow, self.nplots, self.ncols)
+        self.multiplots.setStyleSheet("QTabBar::tab { color:black; height: 30px; width 22px; }")
+        self.figure = self.multiplots.figure
+        self.axarr = self.multiplots.axarr #
+        self.ax = self.axarr[0]
+        # sns.set_style("white")
+        # sns.set_style("ticks")
+        # plt.style.use('seaborn-poster')
+        # self.figure = plt.figure(self.name)
+        # self.figure.canvas.mpl_connect('close_event', self.handle_close_window)
+        # self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
+        # self.ax = self.figure.add_subplot(111)
+        # sns.despine() # Remove up and right side of plot box
+
         #CURSOR STUFF
         #self.cursor = Cursor(self.ax, useblit=True, color='red', linewidth=1, linestyle='--')
         # LEGEND STUFF
@@ -74,7 +85,8 @@ class Application(CmdBase):
         #    leg.draggable()
         
         if (CmdBase.mode==CmdMode.cmdline):
-            self.figure.show() 
+            # self.figure.show() 
+            self.multiplot.show()
         
         
         #self.figure.draw() # DOESN'T WORK!

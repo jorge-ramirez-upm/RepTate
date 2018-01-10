@@ -128,10 +128,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # plt.style.use('seaborn-poster')
         # self.figure=plt.figure()
         # self.ax = self.figure.add_subplot(111)
-        self.canvas = FigureCanvasQTAgg(self.figure)
-        self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
-        self.canvas.setFocus()
-        self.mplvl.addWidget(self.canvas)
+        
+        # self.canvas = FigureCanvasQTAgg(self.figure)
+        # self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
+        # self.canvas.setFocus()
+        self.canvas = self.multiplots.canvas
+        self.mplvl.addWidget(self.multiplots)
+        
         self.mpl_toolbar = NavigationToolbar2QT(self.canvas, self)
         self.mpl_toolbar.setIconSize(QtCore.QSize(16, 16))
         self.mpl_toolbar.setFixedHeight(36)
