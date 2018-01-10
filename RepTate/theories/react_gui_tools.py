@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PyQt5.QtCore import QSize
 
 def initialise_tool_bar(self):
+    """Add icons in theoty toolbar"""
     #disable buttons 
     self.parent_dataset.actionMinimize_Error.setDisabled(True)
     # self.parent_dataset.actionCalculate_Theory.setDisabled(True)
@@ -32,12 +33,20 @@ def initialise_tool_bar(self):
     connection_id = self.stop_calulation_button.triggered.connect(self.handle_stop_calulation)
 
 def theory_buttons_disabled(self, state):
+    """
+    Enable/Disable theory buttons, typically called at the start and stop of a calculation.
+    This is relevant in mutithread mode only.
+    """
     self.bob_settings_button.setDisabled(state)
     self.save_bob_configuration_button.setDisabled(state)
     self.stop_calulation_button.setDisabled(not state)
 
 
 def handle_stop_calulation(self):
+    """
+    Raise a flag to kindly notify the thread Calc routine to stop.
+    This is relevant in mutithread mode only.
+    """
     self.Qprint("Stop current calculation requested")
     self.stop_theory_calc_flag = True
     self.stop_calulation_button.setDisabled(True)
@@ -45,6 +54,10 @@ def handle_stop_calulation(self):
 
 
 def handle_save_bob_configuration(parent):
+    """
+    Launch a dialog to select a filename when to save the polymer configurations.
+    Then call the C routine 'polyconfwrite' that the data into the selected file
+    """
     stars = '*************************\n'
     if parent.simexists:
         ndist = parent.ndist
@@ -68,64 +81,57 @@ def handle_save_bob_configuration(parent):
     parent.Qprint(message)
 
 def handle_edit_bob_settings(parent):
-        ndist = parent.ndist
-        numbobbins = react_dist[ndist].contents.numbobbins
-        bobmax = np.power(10, react_dist[ndist].contents.boblgmax)
-        bobmin = np.power(10, react_dist[ndist].contents.boblgmin)
-        bobbinmax = react_dist[ndist].contents.bobbinmax
+    """Launch a dialog and modify the BoB binning settings if the user press "OK", else nothing happend."""
+    ndist = parent.ndist
+    numbobbins = react_dist[ndist].contents.numbobbins
+    bobmax = np.power(10, react_dist[ndist].contents.boblgmax)
+    bobmin = np.power(10, react_dist[ndist].contents.boblgmin)
+    bobbinmax = react_dist[ndist].contents.bobbinmax
 
-        d = EditBobSettingsDialog(parent, numbobbins, bobmax, bobmin, bobbinmax)
-        if d.exec_():
-            try:
-                numbobbins = int(d.e1.text())
-                bobmax = float(d.e2.text())
-                bobmin = float(d.e3.text())
-                bobbinmax = int(d.e4.text())
-            except ValueError:
-                pass
-            react_dist[ndist].contents.numbobbins = c_int(numbobbins)
-            react_dist[ndist].contents.boblgmax = c_double(np.log10(bobmax))
-            react_dist[ndist].contents.boblgmin = c_double(np.log10(bobmin))
-            react_dist[ndist].contents.bobbinmax = c_int(bobbinmax)
+    d = EditBobSettingsDialog(parent, numbobbins, bobmax, bobmin, bobbinmax)
+    if d.exec_():
+        try:
+            numbobbins = int(d.e1.text())
+            bobmax = float(d.e2.text())
+            bobmin = float(d.e3.text())
+            bobbinmax = int(d.e4.text())
+        except ValueError:
+            pass
+        react_dist[ndist].contents.numbobbins = c_int(numbobbins)
+        react_dist[ndist].contents.boblgmax = c_double(np.log10(bobmax))
+        react_dist[ndist].contents.boblgmin = c_double(np.log10(bobmin))
+        react_dist[ndist].contents.bobbinmax = c_int(bobbinmax)
 
 def handle_increase_records(parent, name):
-        if name == "arm":
-            print("arm")
-            current_max = pb_global_const.maxarm
-            f = increase_arm_records_in_arm_pool
-        elif name == "polymer":
-            print("polym")
-            current_max = pb_global_const.maxpol
-            f = increase_polymer_records_in_br_poly
-        elif name == "dist":
-            print("dist")
-            current_max = pb_global_const.maxreact
-            f = increase_dist_records_in_react_dist
-        else:
-            return False
+    """Launch a dialog asking if the user what to allocate more memory for arms, polymers, or distribution.
+        'name' should be "arm", "polymer", or "dist".
+    """
+    if name == "arm":
+        current_max = pb_global_const.maxarm
+        f = increase_arm_records_in_arm_pool
+    elif name == "polymer":
+        current_max = pb_global_const.maxpol
+        f = increase_polymer_records_in_br_poly
+    elif name == "dist":
+        current_max = pb_global_const.maxreact
+        f = increase_dist_records_in_react_dist
+    else:
+        return False 
 
-        d = IncreaseRecordsDialog(parent, current_max, name) #create the dialog
-        if d.exec_():
-            if d.r1.isChecked():
-                print("r1 checked")
-                new_max = int(current_max*1.5)
-            if d.r2.isChecked():
-                print("r2 checked")
-                new_max = int(current_max*2)
-            if d.r3.isChecked():
-                print("r3 checked")
-                new_max = int(current_max*5)
-            success = f(c_int(new_max))
-            print("success:", success)
-            if not success:
-                parent.Qprint("Allocation of new memory failed\n%d %s records in memory"%(current_max, name))
-            
-            print("maxarm", pb_global_const.maxarm)
-            print("maxpol", pb_global_const.maxpol)
-            print("maxdist", pb_global_const.maxreact)
-            return success
-        else:
-            return False
+    d = IncreaseRecordsDialog(parent, current_max, name) #create the dialog
+    if d.exec_():
+        if d.r1.isChecked():
+            new_max = int(current_max*1.5)
+        if d.r2.isChecked():
+            new_max = int(current_max*2)
+        if d.r3.isChecked():
+            new_max = int(current_max*5)
+        success = f(c_int(new_max)) #call C routine to allocate more memory (use realloc)
+        if not success:
+            parent.Qprint("Allocation of new memory failed\n%d %s records in memory"%(current_max, name))
+        return success
+    else:
+        return False
 
 ###################
 
@@ -148,6 +154,7 @@ class EditBobSettingsDialog(QDialog):
         self.setWindowTitle("Edit")
  
     def createFormGroupBox(self, numbobbins, bobmax, bobmin, bobbinmax):
+        """Create a form to set the new values of the BoB binning parameters"""
         self.formGroupBox = QGroupBox("Edit BoB Binning Settings")
         layout = QFormLayout()
         
@@ -186,6 +193,9 @@ class EditBobSettingsDialog(QDialog):
 
 
 class IncreaseRecordsDialog(QDialog):
+    """
+    Dialog containing radio buttons to choose a new memory size for the records of "name" 
+    """
     def __init__(self, parent, current_max, name):
         super().__init__(parent)
         self.createExclusiveGroup(current_max, name)
@@ -201,6 +211,7 @@ class IncreaseRecordsDialog(QDialog):
         self.setWindowTitle("Edit")
 
     def createExclusiveGroup(self, current_max, name):
+        """Create the radio buttons choices"""
         self.formGroupBox = QGroupBox("Increse the number of %s records"%name)
         self.r1 = QRadioButton("Increase to %.2e (1.5x)"%int(1.5*current_max))
         self.r2 = QRadioButton("Increase to %.2e (2x)"%(2*current_max))

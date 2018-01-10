@@ -32,7 +32,6 @@ void molbin(int n)
             break;
         }
     }
-
     lgmax = log10((lgmax * 1.01) * react_dist[n].monmass);
     lgmin = log10((lgmin / 1.01) * react_dist[n].monmass);
     lgstep = (lgmax - lgmin) / react_dist[n].nummwdbins;

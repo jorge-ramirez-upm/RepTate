@@ -160,7 +160,7 @@ class BaseTheoryTobitaBatch():
         react_dist[ndist].contents.M_e = Me
         react_dist[ndist].contents.monmass = monmass
         react_dist[ndist].contents.nummwdbins = nbins
-
+        c_m = c_int()
         # make numtomake polymers
         i = 0
         while i < numtomake:
@@ -168,7 +168,6 @@ class BaseTheoryTobitaBatch():
                 self.Qprint('Polymer creation stopped by user')
                 break
             # get a polymer
-            c_m = c_int()
             success = request_poly(byref(c_m))
             m = c_m.value
             if success: # check availability of polymers
@@ -231,7 +230,6 @@ class BaseTheoryTobitaBatch():
                     i = numtomake
         # end make polymers loop
         calc = 0
-        print("do analysis of polymers made")
         # do analysis of polymers made
         if (react_dist[ndist].contents.npoly >= 100) and (not tb_global.tobitabatcherrorflag):
             molbin(ndist)
@@ -340,21 +338,22 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
 
     
     def theory_buttons_disabled(self, state):
+        """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
 
-
     def handle_stop_calulation(self):
+        """Kindly request the stop of the calculation thread."""
         rgt.handle_stop_calulation(self)
 
     def handle_save_bob_configuration(self):
+        """Save polymer configuraions to a file"""
         rgt.handle_save_bob_configuration(self)
-       
 
     def handle_edit_bob_settings(self):
+        """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
 
     @pyqtSlot(str)
     def handle_increase_memory(self, name):
-        print("handle_increase_memory name is %s"%name)
+        """Open a dialog to request more memory for the 'name'-records."""
         self.success_increase_memory = rgt.handle_increase_records(self, name)
-        print("success_increase_memory:", self.success_increase_memory)
