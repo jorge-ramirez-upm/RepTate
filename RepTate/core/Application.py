@@ -64,7 +64,6 @@ class Application(CmdBase):
             
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow, self.nplots, self.ncols)
-        self.multiplots.setStyleSheet("QTabBar::tab { color:black; height: 30px; width 22px; }")
         self.figure = self.multiplots.figure
         self.axarr = self.multiplots.axarr #
         self.ax = self.axarr[0]
