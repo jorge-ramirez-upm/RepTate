@@ -22,6 +22,7 @@ from CmdBase import CmdBase, CmdMode
 from DataTable import DataTable
 from Parameter import Parameter, ParameterType, OptType
 from DraggableArtists import DraggableVLine, DraggableHLine, DragType
+from PyQt5.QtGui import QTextCursor
 
 from tabulate import tabulate
 
@@ -163,7 +164,8 @@ class Theory(CmdBase):
             self.do_plot(line)
             self.do_error(line)
         if timing:
-            self.Qprint("---Calculated in %.3g seconds ---" % (time.time() - start_time))
+            self.Qprint("")
+            self.Qprint("---Calculated in %.3g seconds---" % (time.time() - start_time))
         self.calculate_is_busy = False
 
     def do_error(self, line):
@@ -180,8 +182,9 @@ class Theory(CmdBase):
         total_error=0
         npoints=0
         view = self.parent_dataset.parent_application.current_view
-        self.Qprint("%20s %10s (%10s)"%("File","Error","# Points"))
-        self.Qprint("=============================================")
+        self.Qprint("")
+        self.Qprint("%14s %10s (%6s)"%("File","Error","# Pts."))
+        self.Qprint("==================================")
         for f in self.parent_dataset.files:
             if f.active:
                 xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
@@ -201,8 +204,8 @@ class Theory(CmdBase):
                 npt=len(yth)
                 total_error+=f_error*npt
                 npoints+=npt
-                self.Qprint("%20s %10.5g (%10d)"%(f.file_name_short,f_error,npt))
-        self.Qprint("%20s %10.5g (%10d)"%("TOTAL",total_error/npoints,npoints))
+                self.Qprint("%14s %10.5g (%6d)"%(f.file_name_short,f_error,npt))
+        self.Qprint("%14s %10.5g (%6d)"%("TOTAL",total_error/npoints,npoints))
 
     def func_fit(self, x, *param_in):
         """[summary]
@@ -274,7 +277,10 @@ class Theory(CmdBase):
         self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
-        self.Qprint("\n\n------------------\nMinimize the error\n------------------")
+        self.Qprint("")
+        self.Qprint("==================================")
+        self.Qprint("PARAMETER FITTING")
+        self.Qprint("==================================")
         # Vectors that contain all X and Y in the files & view
         x = []
         y = []
@@ -340,8 +346,9 @@ class Theory(CmdBase):
         fres0 = sum(residuals**2)
         residuals = y - self.func_fit(x, *pars)
         fres1 = sum(residuals**2)
-        self.Qprint('Initial Error = %g --> Final Error = %g  with %g function evaluation'%(fres0, fres1, self.nfev))
-
+        self.Qprint('Initial Error = %g -->'%(fres0))
+        self.Qprint('Final Error   = %g'%(fres1))
+        self.Qprint('%g function evaluations'%(self.nfev))
         # fiterror = np.mean((infodict['fvec'])**2)
         # funcev = infodict['nfev']
         # print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
@@ -362,19 +369,21 @@ class Theory(CmdBase):
         ind=0
         k=list(self.parameters.keys())
         k.sort()
-        self.Qprint("%10s   %10s +/- %10s (if it was optimized)"%("Parameter","Value","Error"))
-        self.Qprint("=============================================")
+        self.Qprint("")
+        self.Qprint("%9s = %10s ± %-9s"%("Parameter","Value","Error"))
+        self.Qprint("==================================")
         for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt:
                 par.error=par_error[ind]
                 ind+=1
-                self.Qprint('%10s = %10.5g +/- %10.5g'%(par.name, par.value, par.error))
+                self.Qprint('%9s = %10.4g ± %-9.4g'%(par.name, par.value, par.error))
             else:
-                self.Qprint('%10s = %10.5g'%(par.name, par.value))
+                self.Qprint('%9s = %10.4g'%(par.name, par.value))
         self.is_fitting=False
         self.do_calculate(line, timing=False)
-        self.Qprint("---Fitting in %.3g seconds ---" % (time.time() - start_time))
+        self.Qprint("")
+        self.Qprint("---Fitting in %.3g seconds---" % (time.time() - start_time))
 
 
     def do_print(self, line):
@@ -427,13 +436,13 @@ class Theory(CmdBase):
         if (line==""):
             plist = list(self.parameters.keys())
             plist.sort()
-            print("%10s   %10s (with * = is optimized)"%("Parameter","Value"))
-            print("=============================================")
+            print("%9s   %10s (with * = is optimized)"%("Parameter","Value"))
+            print("==================================")
             for p in plist:
                 if self.parameters[p].opt_type == OptType.opt: 
-                    print("*%9s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
+                    print("*%8s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
                 elif self.parameters[p].opt_type == OptType.nopt: 
-                    print("%10s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
+                    print("%8s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
         else:
             for s in line.split():
                 if (s in self.parameters):
@@ -806,5 +815,6 @@ class Theory(CmdBase):
         if CmdBase.mode == CmdMode.GUI:
             self.thTextBox.append(msg)
             self.thTextBox.verticalScrollBar().setValue(self.thTextBox.verticalScrollBar().maximum())
+            self.thTextBox.moveCursor(QTextCursor.End)
         else:
             print(msg)

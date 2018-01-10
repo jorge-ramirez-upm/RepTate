@@ -75,23 +75,10 @@ class BaseTheoryWLFShiftTest:
         self.parameters["T"] = Parameter("T", 25, "Temperature to shift WLF to, in °C", ParameterType.real, opt_type=OptType.const)
         self.parameters["CTg"] = Parameter("CTg", 14.65, "Molecular weight dependence of Tg", ParameterType.real, opt_type=OptType.const)
         self.parameters["dx12"] = Parameter("dx12", 0, "For PBd", ParameterType.real, opt_type=OptType.const)
-        self.parameters["vert"] = Parameter(name="vert", value=True, description="Shift vertically", type=ParameterType.boolean, 
-                                               opt_type=OptType.const, display_flag=False)
-        self.parameters["iso"] = Parameter(name="iso", value=True, description="Isofrictional state", type=ParameterType.boolean, 
-                                               opt_type=OptType.const, display_flag=False)
-
-    def bT(self, T, T0, rho0, c3):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            T {[type]} -- [description]
-            T0 {[type]} -- [description]
-            rho0 {[type]} -- [description]
-            c3 {[type]} -- [description]
-        """
-        return 
+        self.parameters["vert"] = Parameter(name="vert", value=True, description="Shift vertically", 
+                                            type=ParameterType.boolean, opt_type=OptType.const, display_flag=False)
+        self.parameters["iso"] = Parameter(name="iso", value=True, description="Isofrictional state", 
+                                           type=ParameterType.boolean, opt_type=OptType.const, display_flag=False)
 
     def TheoryWLFShiftTest(self, f=None):
         """[summary]

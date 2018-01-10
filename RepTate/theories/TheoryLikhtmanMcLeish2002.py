@@ -81,11 +81,12 @@ class BaseTheoryLikhtmanMcLeish2002:
         Gpp = self.parent_dataset.files[0].data_table.data[:,2]
 
         Gpp_Gp = Gpp/Gp
-        ind = len(Gpp_Gp)-np.argmax(np.flip(Gpp_Gp,0)<0.8)
-        taue = 1.0/w[ind]
-        Ge = Gp[ind]
-        self.set_param_value("taue", taue)
-        self.set_param_value("Ge", Ge)
+        ind = len(Gpp_Gp)-np.argmax(np.flipud(Gpp_Gp)<0.8)
+        if (ind<len(w)):
+            taue = 1.0/w[ind]
+            Ge = Gp[ind]
+            self.set_param_value("taue", taue)
+            self.set_param_value("Ge", Ge)
         
     def LikhtmanMcLeish2002(self, f=None):
         """[summary]
@@ -112,7 +113,10 @@ class BaseTheoryLikhtmanMcLeish2002:
         indcnu1=1+indcnu*2
         indcnu2=indcnu1+1
         
-        Z=Mw/Me        
+        Z=Mw/Me      
+        if (Z<3):
+            self.Qprint("WARNING: Mw of %s is too small"%(f.file_name_short))
+            Z=3
         indZ0=(np.where(self.Zarray<Z))[0][-1]
         indZ1=(np.where(self.Zarray>Z))[0][0]
         table0=self.data[indZ0]
@@ -162,4 +166,4 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-        print("GUITheoryLikhtmanMcLeish2002")        
+        #print("GUITheoryLikhtmanMcLeish2002")        

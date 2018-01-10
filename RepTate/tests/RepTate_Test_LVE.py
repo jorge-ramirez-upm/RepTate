@@ -44,21 +44,37 @@ def start_RepTate(argv):
     # Open a particular application
     ex.new_lve_window()
     
+    #####################
+    # TEST Likhtman-McLeish
     # Open a Dataset
     ex.applications["LVE1"].new_tables_from_files([
+                                                   "data\PI_LINEAR\PI_23.4k_T-35.tts",
+                                                   "data\PI_LINEAR\PI_33.6k_T-35.tts",
+                                                   "data\PI_LINEAR\PI_94.9k_T-35.tts",
+                                                   "data\PI_LINEAR\PI_225.9k_T-35.tts",
                                                    "data\PI_LINEAR\PI_483.1k_T-35.tts",
+                                                   "data\PI_LINEAR\PI_634.5k_T-35.tts",
+                                                   "data\PI_LINEAR\PI_1131k_T-35.tts",
                                                    ])
-
-                                                   
-    # Switch the view
-    ex.applications["LVE1"].view_switch("logetastar")
-    
     # Open a theory
-    ex.applications["LVE1"].datasets["Set1"].new_theory("CarreauYasudaTheory")
-    
+    ex.applications["LVE1"].datasets["Set1"].new_theory("Likhtman-McLeish")
     # Minimize the theory
     ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
-                                                   
+
+
+    #####################
+    # TEST Carreau-Yasuda
+    # Open a Dataset
+    ex.new_lve_window()
+    ex.applications["LVE2"].new_tables_from_files([
+                                                   "data\PI_LINEAR\PI_483.1k_T-35.tts",
+                                                   ])
+    # Switch the view
+    ex.applications["LVE2"].view_switch("logetastar")
+    # Open a theory
+    ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
+    # Minimize the theory
+    ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
     
     sys.exit(app.exec_())
 
