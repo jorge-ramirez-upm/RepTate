@@ -224,7 +224,9 @@ class BaseTheoryTTSShiftAutomatic:
             [type] -- [description]
         """
         ind=0
-        for p in self.parameters.keys():
+        k=list(self.parameters.keys())
+        k.sort()
+        for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt:
                 par.value=param_in[0][ind]

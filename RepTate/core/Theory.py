@@ -220,7 +220,9 @@ class Theory(CmdBase):
             [type] -- [description]
         """
         ind=0
-        for p in self.parameters.keys():
+        k=list(self.parameters.keys())
+        k.sort()
+        for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt: 
                 par.value=param_in[ind]
@@ -323,7 +325,9 @@ class Theory(CmdBase):
         initial_guess = []
         param_min = []
         param_max = []
-        for p in self.parameters.keys():
+        k=list(self.parameters.keys())
+        k.sort()
+        for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt:
                 initial_guess.append(par.value)
@@ -367,8 +371,6 @@ class Theory(CmdBase):
             par_error.append(sigma*tval)
 
         ind=0
-        k=list(self.parameters.keys())
-        k.sort()
         self.Qprint("")
         self.Qprint("%9s = %10s ± %-9s"%("Parameter","Value","Error"))
         self.Qprint("==================================")
