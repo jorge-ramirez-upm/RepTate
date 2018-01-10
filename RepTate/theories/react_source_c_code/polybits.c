@@ -281,7 +281,7 @@ void set_br_poly_nextpoly(int m, int nextpol)
 
 bool increase_arm_records_in_arm_pool(int new_size)
 {
-    int current_size;
+    int current_size, i;
 
     current_size = pb_global_const.maxarm;
     arm *new_arm_pool;
@@ -291,7 +291,7 @@ bool increase_arm_records_in_arm_pool(int new_size)
         return false;
     }
     arm_pool = new_arm_pool;
-    for (int i = current_size + 1; i <= new_size; i++)
+    for (i = current_size + 1; i <= new_size; i++)
     {
         return_arm(i);
     }
@@ -301,7 +301,7 @@ bool increase_arm_records_in_arm_pool(int new_size)
 
 bool increase_polymer_records_in_br_poly(int new_size)
 {
-    int current_size;
+    int current_size, i;
     current_size = pb_global_const.maxpol;
     polymer *new_br_poly;
     new_br_poly = (polymer *)realloc(br_poly, sizeof(polymer) * (new_size + 1));
@@ -310,7 +310,7 @@ bool increase_polymer_records_in_br_poly(int new_size)
         return false;
     }
     br_poly = new_br_poly;
-    for (int i = current_size + 1; i <= new_size; i++)
+    for (i = current_size + 1; i <= new_size; i++)
     {
         br_poly[i].nextpoly = i + 1;
     }
@@ -323,7 +323,7 @@ bool increase_polymer_records_in_br_poly(int new_size)
 
 bool increase_dist_records_in_react_dist(int new_size)
 {
-    int current_size;
+    int current_size, i;
 
     current_size = pb_global_const.maxreact;
     reactresults *new_react_dist;
@@ -333,7 +333,7 @@ bool increase_dist_records_in_react_dist(int new_size)
         return false;
     }
     react_dist = new_react_dist;
-    for (int i = current_size + 1; i <= new_size; i++)
+    for (i = current_size + 1; i <= new_size; i++)
     {
         react_dist[i].wt = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
         react_dist[i].avbr = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
