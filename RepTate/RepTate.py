@@ -40,6 +40,10 @@ def start_RepTate(argv):
     start = time() 
     splash = SplashScreen()
     splash.show()
+    
+    # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
+    #CmdBase.calcmode = CalcMode.singlethread
+
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
@@ -59,8 +63,6 @@ def start_RepTate(argv):
     splash.finish(ex)
     ex.showMaximized()
 
-    # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
-    #CmdBase.calcmode = CalcMode.singlethread
     sys.exit(app.exec_())
 
 if __name__ == '__main__':

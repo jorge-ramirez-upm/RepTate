@@ -18,7 +18,7 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QInputDialog,QLineEdit
 
-from CmdBase import CmdBase, CmdMode
+from CmdBase import CmdBase, CmdMode, CalcMode
 from QApplicationWindow import QApplicationWindow
 from ApplicationManager import ApplicationManager
 from QAboutReptate import AboutWindow
@@ -49,7 +49,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         CmdBase.mode = CmdMode.GUI #set GUI mode
         self.setupUi(self)
 
-        self.setWindowTitle('RepTate v' + self.version + ' ' + self.date);
+        if CmdBase.calcmode == CalcMode.singlethread:
+            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date + ' - SINGLE THREAD!!');
+        else:
+            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date);
 
         # App tabs behaviour
         self.ApplicationtabWidget.setMovable(True)
