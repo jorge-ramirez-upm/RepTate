@@ -274,6 +274,84 @@ reactresults *return_react_dist(int i)
     return &(react_dist[i]);
 }
 
-void set_br_poly_nextpoly(int m, int nextpol){
+void set_br_poly_nextpoly(int m, int nextpol)
+{
     br_poly[m].nextpoly = nextpol;
+}
+
+bool increase_arm_records_in_arm_pool(int new_size)
+{
+    int current_size;
+
+    current_size = pb_global_const.maxarm;
+    arm *new_arm_pool;
+    new_arm_pool = (arm *)realloc(arm_pool, sizeof(arm) * (new_size + 1));
+    if (new_arm_pool == NULL) //failed to allocate new memory
+    {
+        return false;
+    }
+    arm_pool = new_arm_pool;
+    for (int i = current_size + 1; i <= new_size; i++)
+    {
+        return_arm(i);
+    }
+    pb_global_const.maxarm = new_size;
+    return true;
+}
+
+bool increase_polymer_records_in_br_poly(int new_size)
+{
+    int current_size;
+    current_size = pb_global_const.maxpol;
+    polymer *new_br_poly;
+    new_br_poly = (polymer *)realloc(br_poly, sizeof(polymer) * (new_size + 1));
+    if (new_br_poly == NULL) //failed to allocate new memory
+    {
+        return false;
+    }
+    br_poly = new_br_poly;
+    for (int i = current_size + 1; i <= new_size; i++)
+    {
+        br_poly[i].nextpoly = i + 1;
+    }
+    br_poly[current_size].nextpoly = current_size + 1;
+    br_poly[new_size].nextpoly = 0;
+    pb_global_const.maxpol = new_size;
+    pb_global.polys_avail = true;
+    return true;
+}
+
+bool increase_dist_records_in_react_dist(int new_size)
+{
+    int current_size;
+
+    current_size = pb_global_const.maxreact;
+    reactresults *new_react_dist;
+    new_react_dist = (reactresults *)realloc(react_dist, sizeof(reactresults) * (new_size + 1));
+    if (new_react_dist == NULL) //failed to allocate new memory
+    {
+        return false;
+    }
+    react_dist = new_react_dist;
+    for (int i = current_size + 1; i <= new_size; i++)
+    {
+        react_dist[i].wt = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        react_dist[i].avbr = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        react_dist[i].wmass = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        react_dist[i].avg = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        react_dist[i].lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        react_dist[i].numinbin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
+
+        react_dist[i].next = i + 1;
+        react_dist[i].nummwdbins = 100;
+        react_dist[i].numbobbins = 100;
+        react_dist[i].boblgmin = 1.0;
+        react_dist[i].boblgmax = 9.0;
+        react_dist[i].bobbinmax = 2;
+        react_dist[i].simnumber = 0;
+    }
+    react_dist[current_size].next = current_size + 1;
+    react_dist[new_size].next = 0;
+    pb_global_const.maxpol = new_size;
+    return true;
 }

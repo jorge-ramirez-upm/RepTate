@@ -19,7 +19,7 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QSizePolicy, QFileDialog, QLineEdit, QGroupBox, QFormLayout
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
 
@@ -64,7 +64,8 @@ class BaseTheoryTobitaBatch():
     [description]
     """
     single_file = True # True if the theory can be applied to multiple files simultaneously
-
+    increase_memory = pyqtSignal(str)
+    
     def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]
         
@@ -103,11 +104,13 @@ class BaseTheoryTobitaBatch():
                                           type=ParameterType.real, opt_type=OptType.const)
         self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
                                           type=ParameterType.real, opt_type=OptType.const)
+        
+        self.increase_memory.connect(self.handle_increase_memory)
 
-        print("size of react dist %d"%sys.getsizeof(react_dist))
 
 # function TTheory_tobita_batch.Calc(var ytheory, ydata: TTable; var FileParam: TStringList;
 #   var TheoryParam: array of real): Integer;
+    
     def Calc(self, f=None):
         # var
         # i,nbins,numtomake,m:integer
@@ -131,7 +134,17 @@ class BaseTheoryTobitaBatch():
             self.ndist = c_ndist.value
             if not success:
                 self.Qprint('Too many theories open for internal storage. Please close a theory')
-                return
+                try:
+                    self.success_increase_memory = None
+                    self.increase_memory.emit("dist")
+                    while self.success_increase_memory is None:
+                        pass
+                except:
+                    self.success_increase_memory = False
+
+                if not self.success_increase_memory:
+                    return
+
             self.dist_exists = True
         ndist = self.ndist
         # react_dist[ndist].name = self.reactname #TODO: set the dist name in the C library 
@@ -147,7 +160,7 @@ class BaseTheoryTobitaBatch():
         react_dist[ndist].contents.M_e = Me
         react_dist[ndist].contents.monmass = monmass
         react_dist[ndist].contents.nummwdbins = nbins
-
+        c_m = c_int()
         # make numtomake polymers
         i = 0
         while i < numtomake:
@@ -155,7 +168,6 @@ class BaseTheoryTobitaBatch():
                 self.Qprint('Polymer creation stopped by user')
                 break
             # get a polymer
-            c_m = c_int()
             success = request_poly(byref(c_m))
             m = c_m.value
             if success: # check availability of polymers
@@ -177,27 +189,47 @@ class BaseTheoryTobitaBatch():
                         self.Qprint('Polymers too large: gelation occurs for these parameters')
                         i = numtomake
                 else: # error message if we ran out of arms
-                    message = 'Ran out of storage for arm records. Options to avoid this are:\n'
-                    message += '(1) Reduce number of polymers requested\n'
-                    message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
-                    message += '(3) Close some other theories\n'
-                    message += '(4) Adjust parameters to avoid gelation'
-                    self.Qprint(message)
-                    i = numtomake
-                    tb_global.tobitabatcherrorflag = True
+                    try:
+                        self.success_increase_memory = None
+                        self.increase_memory.emit("arm")
+                        while self.success_increase_memory is None:
+                            pass
+                    except:
+                        self.success_increase_memory = False
+
+                    if not self.success_increase_memory:
+                        print("printing message")
+                        message = 'Ran out of storage for arm records. Options to avoid this are:\n'
+                        message += '(1) Reduce number of polymers requested\n'
+                        message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
+                        message += '(3) Close some other theories\n'
+                        message += '(4) Adjust parameters to avoid gelation'
+                        self.Qprint(message)
+                        i = numtomake
+                        tb_global.tobitabatcherrorflag = True
                 # update on number made
                 if react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
                     self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
 
             else:   # polymer wasn't available
-                message = 'Ran out of storage for polymer records. Options to avoid this are:'
-                message += '(1) Reduce number of polymers requested'
-                message += '(2) Close some other theories'
-                self.Qprint(message)
-                i = numtomake
+                try:
+                    self.success_increase_memory = None
+                    self.increase_memory.emit("polymer")
+                    while self.success_increase_memory is None:
+                        pass
+                    print("success_more_poly after signal emited:", self.success_increase_memory)
+                    # success_more_poly = rgt.handle_increase_records(self, "polymer")
+                except:
+                    self.success_increase_memory = False
+                print("success_increase_memory II:", self.success_increase_memory)
+                if not self.success_increase_memory:
+                    message = 'Ran out of storage for polymer records. Options to avoid this are:'
+                    message += '(1) Reduce number of polymers requested'
+                    message += '(2) Close some other theories'
+                    self.Qprint(message)
+                    i = numtomake
         # end make polymers loop
         calc = 0
-        
         # do analysis of polymers made
         if (react_dist[ndist].contents.npoly >= 100) and (not tb_global.tobitabatcherrorflag):
             molbin(ndist)
@@ -290,6 +322,7 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
     
     [description]
     """
+    
     def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
         """[summary]
         
@@ -305,15 +338,22 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
 
     
     def theory_buttons_disabled(self, state):
+        """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
 
-
     def handle_stop_calulation(self):
+        """Kindly request the stop of the calculation thread."""
         rgt.handle_stop_calulation(self)
 
     def handle_save_bob_configuration(self):
+        """Save polymer configuraions to a file"""
         rgt.handle_save_bob_configuration(self)
-       
 
     def handle_edit_bob_settings(self):
+        """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
+
+    @pyqtSlot(str)
+    def handle_increase_memory(self, name):
+        """Open a dialog to request more memory for the 'name'-records."""
+        self.success_increase_memory = rgt.handle_increase_records(self, name)
