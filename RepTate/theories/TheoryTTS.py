@@ -79,19 +79,6 @@ class BaseTheoryWLFShift:
         self.parameters["iso"] = Parameter(name="iso", value=True, description="Isofrictional state", type=ParameterType.boolean, 
                                                opt_type=OptType.const, display_flag=False)
 
-    def bT(self, T, T0, rho0, c3):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            T {[type]} -- [description]
-            T0 {[type]} -- [description]
-            rho0 {[type]} -- [description]
-            c3 {[type]} -- [description]
-        """
-        return 
-
     def TheoryWLFShift(self, f=None):
         """[summary]
         
@@ -216,20 +203,20 @@ class BaseTheoryWLFShift:
                     MwUnique[Mw[i]][1]+=npt
         
         if (line==""): 
-            self.Qprint("%5s %5s %5s %5s %10s (%10s)"%("Mw","Mw2","phi","phi2","Error","# Points"))
-            self.Qprint("=====================")
+            self.Qprint("%4s %4s %4s %4s %8s (%5s)"%("Mw","Mw2","phi","phi2","Error","# Pts."))
+            self.Qprint("==================================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1]>0):
-                    self.Qprint("%5gk %5gk %5g %5g %10.5g (%10d)"%(o[0], o[1], o[2], o[3],MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
+                    self.Qprint("%4g %4g %4g %4g %8.3g (%5d)"%(o[0], o[1], o[2], o[3],MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
                 else:
-                    self.Qprint("%5gk %5gk %5g %5g %10s (%10d)"%(o[0], o[1], o[2], o[3],"-",0))
+                    self.Qprint("%4g %4g %4g %4g %8s (%5d)"%(o[0], o[1], o[2], o[3],"-",0))
         if (npoints>0):
             total_error/=npoints
         else:
             total_error=1e10;
-        if (line==""): self.Qprint("%21s %10.5g (%10d)"%("TOTAL",total_error,npoints))
+        if (line==""): self.Qprint("%19s %8.3g (%5d)"%("TOTAL",total_error,npoints))
         return total_error
                 
     def func_fitTTS(self, *param_in):
@@ -251,7 +238,7 @@ class BaseTheoryWLFShift:
             if par.opt_type == OptType.opt:
                 par.value=param_in[0][ind]
                 ind+=1
-        self.do_calculate("")
+        self.do_calculate("", timing=False)
         error=self.do_error("none")
         return error
 
@@ -263,7 +250,8 @@ class BaseTheoryWLFShift:
         Arguments:
             line {[type]} -- [description]
         """
-        self.fitting = True
+        self.is_fitting = True
+        start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
 
         # Mount the vector of parameters (Active ones only)
@@ -274,6 +262,11 @@ class BaseTheoryWLFShift:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt: 
                 initial_guess.append(par.value)
+        if (not initial_guess):
+            self.Qprint("No parameter to minimize")
+            return
+        opt = dict(return_full=True)
+        self.nfev = 0
 
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
         
@@ -284,7 +277,7 @@ class BaseTheoryWLFShift:
         self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
 
         ind=0
-        self.Qprint("%10s   %10s"%("Parameter","Value"))
+        self.Qprint("%10s = %10s"%("Parameter","Value"))
         self.Qprint("===========================")
         for p in k:
             par = self.parameters[p] 
@@ -293,8 +286,10 @@ class BaseTheoryWLFShift:
                 self.Qprint('*%9s = %10.5g'%(par.name, par.value))
             else:
                 self.Qprint('%10s = %10.5g'%(par.name, par.value))
-        self.fitting=False
-        self.do_calculate(line)
+        self.is_fitting=False
+        self.do_calculate(line, timing=False)
+        self.Qprint("")
+        self.Qprint("---Fitting in %.3g seconds---" % (time.time() - start_time))
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
