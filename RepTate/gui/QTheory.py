@@ -13,6 +13,7 @@ Module that defines the GUI counterpart of the class Theory.
 """ 
 #from PyQt5.QtCore import *
 from PyQt5.uic import loadUiType
+from CmdBase import CmdBase, CalcMode
 from Theory import Theory
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
@@ -109,10 +110,14 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.theory_buttons_disabled(True) # TODO: Add that function to all theories
         except AttributeError: #the function is not defined in the current theory
             pass
-        #start thread
-        self.thread_calc = CalculationThread(self.do_calculate, "", )
-        self.thread_calc.finished.connect(self.end_thread_calc)
-        self.thread_calc.start()
+        if CmdBase.calcmode == CalcMode.multithread:
+            #start thread
+            self.thread_calc = CalculationThread(self.do_calculate, "", )
+            self.thread_calc.finished.connect(self.end_thread_calc)
+            self.thread_calc.start()
+        elif CmdBase.calcmode == CalcMode.singlethread:
+            self.do_calculate("")
+            self.end_thread_calc()
     
     def end_thread_calc(self):
         if self.stop_theory_calc_flag: #calculation stopped by user
@@ -151,10 +156,14 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.theory_buttons_disabled(True) # TODO: Add that function to all theories
         except AttributeError: #the function is not defined in the current theory
             pass
-        #start thread
-        self.thread_fit = CalculationThread(self.do_fit, "", )
-        self.thread_fit.finished.connect(self.end_thread_fit)
-        self.thread_fit.start()
+        if CmdBase.calcmode == CalcMode.multithread:
+            #start thread
+            self.thread_fit = CalculationThread(self.do_fit, "", )
+            self.thread_fit.finished.connect(self.end_thread_fit)
+            self.thread_fit.start()
+        elif CmdBase.calcmode == CalcMode.singlethread:
+            self.do_fit("")
+            self.end_thread_fit()
 
     def end_thread_fit(self):
         self.update_parameter_table()

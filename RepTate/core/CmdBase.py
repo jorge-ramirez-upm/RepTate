@@ -37,6 +37,23 @@ class CmdMode(Enum):
         print("batch: ", self.modes.value[1])
         print("GUI: ", self.modes.value[2])
 
+class CalcMode(Enum):
+    """[summary]
+
+    [decription]
+    """
+    singlethread = 0
+    multithread = 1
+    modes=["Calc and Min in the same thread as GUI", "Calc and Min in separate threads to GUI"]
+
+    def print(self):
+        """[summary]
+
+        [description]
+        """
+        print("Single thread: ", self.modes.value[0])
+        print("Multi-thread: ", self.modes.value[1])
+
 class CmdBase(cmd.Cmd):
     """Basic Cmd Console that is inherited by most Reptate objects
     
@@ -45,6 +62,7 @@ class CmdBase(cmd.Cmd):
 
     prompt = '> '
     mode = CmdMode.cmdline
+    calcmode = CalcMode.multithread
     #ureg = UnitRegistry()
 
     def __init__ (self, parent=None):

@@ -19,6 +19,7 @@ sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
 sys.path.append('visual')
+from CmdBase import CmdBase, CalcMode
 from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
@@ -57,6 +58,9 @@ def start_RepTate(argv):
     # ex.new_lve_window()
     splash.finish(ex)
     ex.showMaximized()
+
+    # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
+    #CmdBase.calcmode = CalcMode.singlethread
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
