@@ -18,9 +18,9 @@ from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
 import numpy as np
-from TheoryTTS import TheoryWLFShift
-from TheoryTTS_Test import TheoryWLFShiftTest
-from TheoryTTS_Automatic import TheoryTTSShiftAutomatic
+# from TheoryTTS import TheoryWLFShift
+# from TheoryTTS_Test import TheoryWLFShiftTest
+# from TheoryTTS_Automatic import TheoryTTSShiftAutomatic
 
 class ApplicationTTS(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
@@ -61,6 +61,9 @@ class BaseApplicationTTS:
             name {[type]} -- [description] (default: {"TTS"})
             parent {[type]} -- [description] (default: {None})
         """
+        from TheoryTTS import TheoryWLFShift
+        from TheoryTTS_Test import TheoryWLFShiftTest
+        from TheoryTTS_Automatic import TheoryTTSShiftAutomatic
         super().__init__(name, parent)
 
         # VIEWS

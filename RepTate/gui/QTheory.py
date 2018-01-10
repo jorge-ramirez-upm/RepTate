@@ -110,6 +110,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.theory_buttons_disabled(True) # TODO: Add that function to all theories
         except AttributeError: #the function is not defined in the current theory
             pass
+<<<<<<< HEAD
         if CmdBase.calcmode == CalcMode.multithread:
             #start thread
             self.thread_calc = CalculationThread(self.do_calculate, "", )
@@ -118,6 +119,14 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         elif CmdBase.calcmode == CalcMode.singlethread:
             self.do_calculate("")
             self.end_thread_calc()
+=======
+        #start thread
+        # self.do_calculate("")
+        # self.end_thread_calc()
+        self.thread_calc = CalculationThread(self.do_calculate, "", )
+        self.thread_calc.finished.connect(self.end_thread_calc)
+        self.thread_calc.start()
+>>>>>>> faster_loading
     
     def end_thread_calc(self):
         if self.stop_theory_calc_flag: #calculation stopped by user
@@ -156,6 +165,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.theory_buttons_disabled(True) # TODO: Add that function to all theories
         except AttributeError: #the function is not defined in the current theory
             pass
+<<<<<<< HEAD
         if CmdBase.calcmode == CalcMode.multithread:
             #start thread
             self.thread_fit = CalculationThread(self.do_fit, "", )
@@ -164,6 +174,14 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         elif CmdBase.calcmode == CalcMode.singlethread:
             self.do_fit("")
             self.end_thread_fit()
+=======
+        #start thread
+        # self.do_fit("")
+        # self.end_thread_fit()
+        self.thread_fit = CalculationThread(self.do_fit, "", )
+        self.thread_fit.finished.connect(self.end_thread_fit)
+        self.thread_fit.start()
+>>>>>>> faster_loading
 
     def end_thread_fit(self):
         self.update_parameter_table()

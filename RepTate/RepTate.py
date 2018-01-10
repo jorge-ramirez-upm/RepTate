@@ -24,7 +24,7 @@ from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
-from time import time, sleep
+# from time import time, sleep
 
 def start_RepTate(argv):
     """
@@ -34,11 +34,10 @@ def start_RepTate(argv):
     """
     GUI = True
     QApplication.setStyle("Fusion") #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
-    
+                                    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     app = QApplication(sys.argv)
-    start = time() 
     splash = SplashScreen()
+    splash.showMessage("Loading RepTate...\n")
     splash.show()
     
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
@@ -46,19 +45,20 @@ def start_RepTate(argv):
 
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
+    splash.showMessage("Loading RepTate...\nVersion " + ex.version + ' ' + ex.date)
 
     # #### DEBUG
     # new_app = ex.new_React_window()
     # new_app.new_tables_from_files(['data/React/out1.reac'])
-    # ####
-    while time() - start < 1:
-        sleep(0.001)
-        if (time()-start < 0.5):
-            splash.showMessage("Loading Reptate...")
-        else:
-            splash.showMessage("Version "+ ex.version + ' ' + ex.date)
-        app.processEvents()
-    
+    # # ####
+    # while time() - start < .1:
+    #     sleep(0.001)
+    #     if (time()-start < 0.5):
+    #         splash.showMessage("Loading Reptate...")
+    #     else:
+    #     app.processEvents()
+
+
     # ex.new_lve_window()
     splash.finish(ex)
     ex.showMaximized()

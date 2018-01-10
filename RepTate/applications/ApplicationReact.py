@@ -23,8 +23,12 @@ import matplotlib.gridspec as gridspec
 
 # IMPORT THEORIES
 # Import theories specific to the Application e.g.:
+<<<<<<< HEAD
 from TheoryLDPEBatch import TheoryTobitaBatch
 from TheoryTobitaCSTR import TheoryTobitaCSTR
+=======
+# from TheoryLDPEBatch import TheoryTobitaBatch
+>>>>>>> faster_loading
 
 
 class ApplicationReact(CmdBase):
@@ -63,6 +67,8 @@ class BaseApplicationReact:
             name {[type]} -- [description] (default: {'React'})
             parent {[type]} -- [description] (default: {None})
         """
+        from TheoryLDPEBatch import TheoryTobitaBatch
+
         super().__init__(name, parent)
 
         # VIEWS
