@@ -11,6 +11,7 @@
 Main program that launches the GUI.
 
 """ 
+import os
 import sys
 import getopt
 sys.path.append('core')
@@ -52,7 +53,7 @@ def start_RepTate(argv):
     # TEST Likhtman-McLeish
     # Open a Dataset
     ex.applications["React1"].new_tables_from_files([
-                                                   "data\React\out1.reac",
+                                                   "data%sReact%sout1.reac"%((os.sep,)*2),
                                                    ])
     # Open a theory
     ex.applications["React1"].datasets["Set1"].new_theory("TobitaCSTRTheory")
