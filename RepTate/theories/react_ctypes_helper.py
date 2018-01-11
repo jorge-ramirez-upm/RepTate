@@ -92,8 +92,17 @@ increase_dist_records_in_react_dist.restype = c_bool
 
 
 #initialise lists
+react_dist = None
+
+def link_react_dist():
+    """link the Python list react_dist with the C array react_dist"""
+    global reactresults_pointers
+    global react_dist
+    reactresults_pointers = reactresults_pointer * (pb_global_const.maxreact + 1)
+    react_dist =  reactresults_pointers(*list([return_react_dist(c_int(i)) for i in range(pb_global_const.maxreact + 1)]))
+    
 react_pool_init()
-react_dist = reactresults_pointers(*list([return_react_dist(c_int(i)) for i in range(pb_global_const.maxreact + 1)]))
+link_react_dist()
 
 
 ###############

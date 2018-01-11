@@ -121,7 +121,7 @@ def handle_increase_records(parent, name):
     d = IncreaseRecordsDialog(parent, current_max, name) #create the dialog
     if d.exec_():
         if d.r1.isChecked():
-            new_max = int(current_max*1.5)
+            new_max = int(np.ceil(current_max*1.5))
         if d.r2.isChecked():
             new_max = int(current_max*2)
         if d.r3.isChecked():
@@ -213,13 +213,13 @@ class IncreaseRecordsDialog(QDialog):
     def createExclusiveGroup(self, current_max, name):
         """Create the radio buttons choices"""
         self.formGroupBox = QGroupBox("Increse the number of %s records"%name)
-        self.r1 = QRadioButton("Increase to %.2e (1.5x)"%int(1.5*current_max))
-        self.r2 = QRadioButton("Increase to %.2e (2x)"%(2*current_max))
-        self.r3 = QRadioButton("Increase to %.2e (5x)"%(5*current_max))
+        self.r1 = QRadioButton("Increase to %.4g (1.5x)"%np.ceil(1.5*current_max))
+        self.r2 = QRadioButton("Increase to %.4g (2x)"%(2*current_max))
+        self.r3 = QRadioButton("Increase to %.4g (5x)"%(5*current_max))
         self.r1.setChecked(True)
         
         layout = QVBoxLayout()     
-        layout.addWidget(QLabel("Current number of %s records: %.2e"%(name, current_max)))
+        layout.addWidget(QLabel("Current number of %s records: %.4g"%(name, current_max)))
         layout.addWidget(self.r1)
         layout.addWidget(self.r2)
         layout.addWidget(self.r3)
