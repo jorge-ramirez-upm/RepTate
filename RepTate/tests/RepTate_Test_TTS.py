@@ -11,6 +11,7 @@
 Main program that launches the GUI.
 
 """ 
+import os
 import sys
 import getopt
 sys.path.append('core')
@@ -45,19 +46,20 @@ def start_RepTate(argv):
     ex.new_tts_window()
     
     # Open a Dataset
+    pi_dir = "data%sPI_LINEAR%sosc%s"%((os.sep,)*3)
     ex.applications["TTS1"].new_tables_from_files([
-                                                   "data\PI_LINEAR\osc\PI223k-14c_-45C_FS2_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14c_-40C_FS_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14c_-30C_FS_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14_-10C_FS_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14c_-20C_FS_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14b_0C_FS4_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14_10C_FS_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14b_25C_FS3_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14_25C_FS3_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14c_30C_FS3_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14_40C_FS_PP10.osc",
-                                                   "data\PI_LINEAR\osc\PI223k-14_50C_FS_PP10.osc",
+                                                   pi_dir + "PI223k-14c_-45C_FS2_PP10.osc",
+                                                   pi_dir + "PI223k-14c_-40C_FS_PP10.osc",
+                                                   pi_dir + "PI223k-14c_-30C_FS_PP10.osc",
+                                                   pi_dir + "PI223k-14_-10C_FS_PP10.osc",
+                                                   pi_dir + "PI223k-14c_-20C_FS_PP10.osc",
+                                                   pi_dir + "PI223k-14b_0C_FS4_PP10.osc",
+                                                   pi_dir + "PI223k-14_10C_FS_PP10.osc",
+                                                   pi_dir + "PI223k-14b_25C_FS3_PP10.osc",
+                                                   pi_dir + "PI223k-14_25C_FS3_PP10.osc",
+                                                   pi_dir + "PI223k-14c_30C_FS3_PP10.osc",
+                                                   pi_dir + "PI223k-14_40C_FS_PP10.osc",
+                                                   pi_dir + "PI223k-14_50C_FS_PP10.osc",
                                                    ])
 
     # Open a theory
