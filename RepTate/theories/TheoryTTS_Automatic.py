@@ -351,7 +351,7 @@ class BaseTheoryTTSShiftAutomatic:
                     #print(initial_guess)
                     res = minimize(self.func_fitTTS_one, initial_guess, method='Nelder-Mead')
                     if (not res['success']):
-                        self.Qprint("Solution not found: ", res['message'])
+                        self.Qprint("Solution not found: %s"%res['message'])
                         return
                     XSHIFT=res.x[0]
                     if self.parameters["vert"].value:
