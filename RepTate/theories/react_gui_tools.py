@@ -159,9 +159,10 @@ class EditBobSettingsDialog(QDialog):
         layout = QFormLayout()
         
         val_double = QDoubleValidator()
-        val_double.setBottom(0) #set smalled double allowed in the form
+        val_double.setBottom(1) #set smalled double allowed in the form
         val_int = QIntValidator()
         val_int.setBottom(0) #set smalled int allowed in the form
+        val_int.setTop(pb_global_const.maxbobbins) #set smalled int allowed in the form
         
         self.e1 = QLineEdit()
         self.e1.setValidator(val_int)
