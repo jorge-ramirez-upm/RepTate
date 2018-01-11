@@ -53,7 +53,7 @@ class BaseApplicationReact:
     
     [description]
     """
-    def __init__(self, name='React', parent=None):
+    def __init__(self, name='React', parent=None, **kwargs):
         """[summary]
         
         [description]
@@ -65,7 +65,7 @@ class BaseApplicationReact:
         from TheoryLDPEBatch import TheoryTobitaBatch
         from TheoryTobitaCSTR import TheoryTobitaCSTR
 
-        super().__init__(name, parent)
+        super().__init__(name, parent, nplots=3, ncols=2) # will call Application.__init__ with these args
 
         # VIEWS
         # set the views that can be selected in the view combobox
@@ -81,9 +81,9 @@ class BaseApplicationReact:
                                 snames=["br/1000C(M)"], index=2)
         
         #set multiviews
-        self.with_multiviews = True
         self.multiviews = [self.views["w(M)"], self.views["g(M)"], self.views['br/1000C']] #default view order in multiplot views
         self.nplots = len(self.multiviews)
+
         # FILES
         # set the type of files that ApplicationReact can open
         ftype = TXTColumnFile(name='React files', extension='reac', description='Reatc file', col_names=['M', 'w(M)', 'g', 'br/1000C'], basic_file_parameters=[], col_units=['g/mol', '-', '-', '-'])
@@ -187,6 +187,7 @@ class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
             name {[type]} -- [description] (default: {'React'})
             parent {[type]} -- [description] (default: {None})
         """
+        
         super().__init__(name, parent)
 
         #add the GUI-specific objects here:

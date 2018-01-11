@@ -31,7 +31,7 @@ class Application(CmdBase):
     name="Template"
     description="Abstract class that defines basic functionality"
 
-    def __init__(self, name="ApplicationTemplate", parent=None):
+    def __init__(self, name="ApplicationTemplate", parent=None, nplots=1, ncols=1, **kwargs):
         """Constructor of Application
         
         [description]
@@ -40,8 +40,8 @@ class Application(CmdBase):
             name {[type]} -- [description] (default: {"ApplicationTemplate"})
             parent {[type]} -- [description] (default: {None})
         """
+        
         super().__init__() 
-
         self.name=name
         self.parent_manager = parent
         self.logger = logging.getLogger('ReptateLogger')
@@ -53,8 +53,8 @@ class Application(CmdBase):
         self.num_datasets=0
         self.legend_visible = False      
         self.multiviews = [] #default view order in multiplot views
-        self.nplots = 2 #number of plots
-        self.ncols = 1 #number of columns in the multiplot
+        self.nplots = nplots #number of plots
+        self.ncols = ncols #number of columns in the multiplot
 
         # Theories available everywhere
         # self.theories[TheoryPolynomial.thname]=TheoryPolynomial

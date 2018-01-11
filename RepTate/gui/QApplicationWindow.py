@@ -47,7 +47,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     
     [description]
     """
-    def __init__(self, name='Application Template', parent=None):
+    def __init__(self, name='Application Template', parent=None, **kwargs):
         """[summary]
         
         [description]
@@ -58,7 +58,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         Returns:
             [type] -- [description]
         """
-        super().__init__(name, parent)
+
+        super().__init__(name, parent, **kwargs)
 
         if CmdBase.mode!=CmdMode.GUI:
             return None
