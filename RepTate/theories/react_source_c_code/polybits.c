@@ -296,6 +296,7 @@ bool increase_arm_records_in_arm_pool(int new_size)
         return_arm(i);
     }
     pb_global_const.maxarm = new_size;
+    pb_global.polys_avail = true;
     return true;
 }
 
@@ -352,6 +353,8 @@ bool increase_dist_records_in_react_dist(int new_size)
     }
     react_dist[current_size].next = current_size + 1;
     react_dist[new_size].next = 0;
-    pb_global_const.maxpol = new_size;
+    pb_global.first_dist_in_pool = current_size;
+    pb_global_const.maxreact = new_size;
+    pb_global.dists_avail = true;
     return true;
 }

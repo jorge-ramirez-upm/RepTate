@@ -129,11 +129,19 @@ class BaseTheoryTobitaBatch():
         
         c_ndist = c_int()
 
+        #resize theory datatable
+        ft = f.data_table        
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = 1
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+
         if not self.dist_exists:
             success = request_dist(byref(c_ndist))
             self.ndist = c_ndist.value
             if not success:
-                self.Qprint('Too many theories open for internal storage. Please close a theory')
+                self.Qprint('Too many theories open for internal storage.\nPlease close a theory or increase records\nthen press "calculate"')
                 try:
                     self.success_increase_memory = None
                     self.increase_memory.emit("dist")
@@ -141,11 +149,13 @@ class BaseTheoryTobitaBatch():
                         pass
                 except:
                     self.success_increase_memory = False
-
-                if not self.success_increase_memory:
-                    return
-
-            self.dist_exists = True
+                if self.success_increase_memory:
+                    link_react_dist() #re-link the python array with the C array
+                    global react_dist
+                    from react_ctypes_helper import react_dist
+                return
+ 
+        self.dist_exists = True
         ndist = self.ndist
         # react_dist[ndist].name = self.reactname #TODO: set the dist name in the C library 
         react_dist[ndist].contents.polysaved = False
@@ -207,6 +217,8 @@ class BaseTheoryTobitaBatch():
                         self.Qprint(message)
                         i = numtomake
                         tb_global.tobitabatcherrorflag = True
+                    else:
+                        continue # back to the start of while loop
                 # update on number made
                 if react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
                     self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
@@ -217,26 +229,23 @@ class BaseTheoryTobitaBatch():
                     self.increase_memory.emit("polymer")
                     while self.success_increase_memory is None:
                         pass
-                    print("success_more_poly after signal emited:", self.success_increase_memory)
-                    # success_more_poly = rgt.handle_increase_records(self, "polymer")
                 except:
                     self.success_increase_memory = False
-                print("success_increase_memory II:", self.success_increase_memory)
                 if not self.success_increase_memory:
                     message = 'Ran out of storage for polymer records. Options to avoid this are:'
                     message += '(1) Reduce number of polymers requested'
                     message += '(2) Close some other theories'
                     self.Qprint(message)
                     i = numtomake
+                else:
+                    continue # back to the start of while loop
         # end make polymers loop
         calc = 0
         # do analysis of polymers made
         if (react_dist[ndist].contents.npoly >= 100) and (not tb_global.tobitabatcherrorflag):
             molbin(ndist)
-            ft = f.data_table
-            # print("nummwdbins=", polybits.react_dist[ndist].contents.nummwdbins)
-            
-            #resize theory data table
+            #resize theory datatable
+            ft = f.data_table        
             ft = f.data_table
             tt = self.tables[f.file_name_short]
             tt.num_columns = ft.num_columns
