@@ -335,6 +335,7 @@ class Theory(CmdBase):
                 param_max.append(par.max_value) #list of max values for fitting parameters
         if (not param_min) or (not param_max):
             self.Qprint("No parameter to minimize")
+            self.is_fitting = False
             return
         opt = dict(return_full=True)
         self.nfev = 0
