@@ -15,7 +15,7 @@ from os.path import dirname, join, abspath
 from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox
 from DataSet import DataSet
 from QTheory import QTheory
 from DataSetWidget import DataSetWidget
@@ -23,6 +23,39 @@ import threading
 
 PATH = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(join(PATH,'DataSet.ui'))
+
+
+class EditFileParametersDialog(QDialog):
+    def __init__(self, parent = None, file=None,):
+        super(EditFileParametersDialog, self).__init__(parent)
+
+        self.setWindowTitle("Parameters - %s"%file.file_name_short)
+        layout = QVBoxLayout(self)
+
+        self.parameters = file.file_parameters
+        self.table = QTableWidget()
+        self.table.setRowCount(len(self.parameters))
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(["Parameter", "Value"])
+        k=list(self.parameters.keys())
+        k.sort()
+        for i, p in enumerate(k):
+            self.table.setItem(i, 0, QTableWidgetItem(p)) 
+            item = self.table.item(i, 0)
+            item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
+            if isinstance(self.parameters[p], str):
+                self.table.setItem(i, 1, QTableWidgetItem(self.parameters[p])) 
+            else:
+                self.table.setItem(i, 1, QTableWidgetItem(str(self.parameters[p]))) 
+            
+        layout.addWidget(self.table)
+            
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
+            Qt.Horizontal, self)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)   
 
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
@@ -99,7 +132,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         connection_id = self.actionNew_Theory.triggered.connect(self.handle_actionNew_Theory)
         connection_id = self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
-        # connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
+        #connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
         connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
@@ -215,7 +248,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if self.current_theory:        
             self.theories[self.current_theory].do_yrange("")
             self.set_limit_icon()
-
 
     def handle_actionCalculate_Theory(self):
         if self.current_theory and self.files:
@@ -468,6 +500,24 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     self.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a false checkbox change
                     item.setText(column, str(new_value)) #change table label
                     self.DataSettreeWidget.blockSignals(False)
+        else:
+            file_name_short = item.text(0)
+            for file in self.files:
+                if file.file_name_short == file_name_short:
+                    d = EditFileParametersDialog(self, file)
+                    if d.exec_():
+                        for i in range(d.table.rowCount()):
+                            k = d.table.item(i, 0).text()
+                            v = d.table.item(i, 1).text()
+                            if isinstance(file.file_parameters[k], str):
+                                file.file_parameters[k] = v
+                            else:
+                                file.file_parameters[k] = float(v)
+                            for j in range(self.DataSettreeWidget.columnCount()):
+                                if k == self.DataSettreeWidget.headerItem().text(j):
+                                    item.setText(j, v)
+                                
+
 
     def handle_actionNew_Theory(self):
         """Create new theory and do fit
