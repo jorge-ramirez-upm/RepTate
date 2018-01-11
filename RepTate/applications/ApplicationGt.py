@@ -57,7 +57,7 @@ class BaseApplicationGt:
         """
         from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-        super().__init__(name, parent)
+        super().__init__(name, parent, nplots=3, ncols=2) # will call Application.__init__ with these args
 
         # VIEWS
         self.views["log[G(t)]"]=View(name="log[G(t)]", description="log Relaxation modulus", x_label="log(t)", 
