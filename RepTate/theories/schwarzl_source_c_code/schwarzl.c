@@ -136,7 +136,7 @@ void schwarzl_gt(int n_data, double *value_G_of_t, double *time_G_of_t, double *
     //index0: t/64, index1: t/32, index2: t/16, index3: t/8, index4: t/4, index5: t/2, index6: t, index7: 2*t, index8: 4*t
     N = 9;
     ref_time_index = 6; // //index number of the value 't'
-    for (int i = start; i < finish; i++)
+    for (i = start; i < finish; i++)
     {
         times[0] = time_G_of_t[i] / 64.;
         for (p = 1; p < N; p++)
