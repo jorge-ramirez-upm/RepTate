@@ -192,7 +192,7 @@ class BaseTheoryMaxwellModesFrequency:
         """
         if not self.view_modes:
             return
-        data_table_tmp = DataTable(self.ax)
+        data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 3
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
@@ -468,7 +468,7 @@ class BaseTheoryMaxwellModesTime:
         """
         if not self.view_modes:
             return
-        data_table_tmp = DataTable(self.ax)
+        data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes

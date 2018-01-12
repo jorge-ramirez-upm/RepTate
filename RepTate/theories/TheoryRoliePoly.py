@@ -115,7 +115,7 @@ class BaseTheoryRoliePoly:
     """
     single_file = False
 
-    def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
+    def __init__(self, name="ThRoliePoly", parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -125,7 +125,7 @@ class BaseTheoryRoliePoly:
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, axarr)
         self.function = self.RoliePoly
         self.has_modes = True
         self.parameters["beta"] = Parameter(name="beta", value=0.5, description="CCR coefficient", 
@@ -150,7 +150,7 @@ class BaseTheoryRoliePoly:
                                                   bracketed=True, min_value=0)
 
         self.view_LVEenvelope = False
-        auxseries = ax.plot([], [], label='')
+        auxseries = axarr[0].plot([], [], label='')
         self.LVEenvelopeseries = auxseries[0]
         self.LVEenvelopeseries.set_marker('')
         self.LVEenvelopeseries.set_linestyle('--')
@@ -397,7 +397,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         
         [description]
         """
-        data_table_tmp = DataTable(self.ax)
+        data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
         data_table_tmp.num_rows = 100
         data_table_tmp.data=np.zeros((100, 2))
