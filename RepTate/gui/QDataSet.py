@@ -12,10 +12,10 @@ Module that defines the GUI counterpart of Dataset.
 
 """ 
 from os.path import dirname, join, abspath
-from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon
+from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon, QIntValidator, QDoubleValidator
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel
 from DataSet import DataSet
 from QTheory import QTheory
 from DataSetWidget import DataSetWidget
@@ -24,8 +24,46 @@ import threading
 PATH = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(join(PATH,'DataSet.ui'))
 
-
 class EditFileParametersDialog(QDialog):
+    """Create the form that is used to modify the file parameters"""
+
+    def __init__(self, parent, file):
+        super().__init__(parent)
+        self.createFormGroupBox(file)
+ 
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+ 
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.formGroupBox)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Edit")
+ 
+    def createFormGroupBox(self, file):
+        """Create a form to set the new values of the file parameters"""
+        self.formGroupBox = QGroupBox("Parameters of \"%s\""%file.file_name_short)
+        layout = QFormLayout()
+
+        parameters = file.file_parameters
+        self.param_dict = {}
+        self.p_new = []
+        for i, pname in enumerate(parameters): #loop over the Parameters
+            self.p_new.append(QLineEdit())
+            if isinstance(parameters[pname], str): #the parameter is a string
+                self.p_new[i].setText("%s"%parameters[pname])
+            else: #parameter is a number:
+                self.p_new[i].setValidator(QDoubleValidator())  #prevent letters
+                self.p_new[i].setText("%.4g"%parameters[pname])
+            layout.addRow("%s:"%pname, self.p_new[i])
+            self.param_dict[pname] =  self.p_new[i]
+        # layout.addRow(QLabel("Number of bins for Bob:"), self.e1)
+        self.formGroupBox.setLayout(layout)
+
+
+
+class EditFileParametersDialog_(QDialog):
     def __init__(self, parent = None, file=None,):
         super(EditFileParametersDialog, self).__init__(parent)
 
@@ -483,40 +521,41 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             item {[type]} -- [description]
             column {[type]} -- [description]
         """
-        if column>0:
-            param = self.DataSettreeWidget.headerItem().text(column) #retrive parameter name
-            file_name_short = item.text(0) #retrive file name
-            header = "Edit Parameter"
-            message = "Do you want to edit %s of \"%s\"?"%(param, file_name_short)
-            answer = QMessageBox.question(self, header, message)
-            if answer == QMessageBox.Yes:
-                old_value = item.text(column) #old parameter value       
-                message = "New value of %s"%param
-                new_value, success = QInputDialog.getDouble(self, header, message, float(old_value))
-                if success:
-                    for file in self.files:
-                        if file.file_name_short == file_name_short:
-                            file.file_parameters[param] = new_value #change value in DataSet
-                    self.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a false checkbox change
-                    item.setText(column, str(new_value)) #change table label
-                    self.DataSettreeWidget.blockSignals(False)
-        else:
-            file_name_short = item.text(0)
-            for file in self.files:
-                if file.file_name_short == file_name_short:
-                    d = EditFileParametersDialog(self, file)
-                    if d.exec_():
-                        for i in range(d.table.rowCount()):
-                            k = d.table.item(i, 0).text()
-                            v = d.table.item(i, 1).text()
-                            if isinstance(file.file_parameters[k], str):
-                                file.file_parameters[k] = v
-                            else:
-                                file.file_parameters[k] = float(v)
-                            for j in range(self.DataSettreeWidget.columnCount()):
-                                if k == self.DataSettreeWidget.headerItem().text(j):
-                                    item.setText(j, v)
-                                
+        # if column>0:
+        #     param = self.DataSettreeWidget.headerItem().text(column) #retrive parameter name
+        #     file_name_short = item.text(0) #retrive file name
+        #     header = "Edit Parameter"
+        #     message = "Do you want to edit %s of \"%s\"?"%(param, file_name_short)
+        #     answer = QMessageBox.question(self, header, message)
+        #     if answer == QMessageBox.Yes:
+        #         old_value = item.text(column) #old parameter value       
+        #         message = "New value of %s"%param
+        #         new_value, success = QInputDialog.getDouble(self, header, message, float(old_value))
+        #         if success:
+        #             for file in self.files:
+        #                 if file.file_name_short == file_name_short:
+        #                     file.file_parameters[param] = new_value #change value in DataSet
+        #             self.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a false checkbox change
+        #             item.setText(column, str(new_value)) #change table label
+        #             self.DataSettreeWidget.blockSignals(False)
+        # else:
+        file_name_short = item.text(0)
+        for file in self.files:
+            if file.file_name_short == file_name_short:
+                d = EditFileParametersDialog(self, file)
+                if d.exec_():
+                    print(d.param_dict)
+                    for p in d.param_dict:
+                        if isinstance(file.file_parameters[p], str):
+                            file.file_parameters[p] = d.param_dict[p].text()
+                        else:
+                            try:
+                                file.file_parameters[p] = float(d.param_dict[p].text())
+                            except Exception as e:
+                                print(e)
+                        for i in range(self.DataSettreeWidget.columnCount()):
+                            if p == self.DataSettreeWidget.headerItem().text(i):
+                                item.setText(i, str(file.file_parameters[p]))
 
 
     def handle_actionNew_Theory(self):
