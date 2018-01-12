@@ -40,7 +40,7 @@ def start_RepTate(argv):
     app = QApplication(sys.argv)
 
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
-    # CmdBase.calcmode = CalcMode.singlethread
+    CmdBase.calcmode = CalcMode.singlethread
 
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")

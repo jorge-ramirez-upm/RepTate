@@ -25,6 +25,8 @@ from QApplicationManager import QApplicationManager
 from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
 from time import time, sleep
+from CmdBase import CmdBase, CalcMode
+
 
 def start_RepTate(argv):
     """
@@ -37,6 +39,10 @@ def start_RepTate(argv):
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     
     app = QApplication(sys.argv)
+    
+    # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
+    CmdBase.calcmode = CalcMode.singlethread
+    
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
