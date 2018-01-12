@@ -5,7 +5,7 @@ import numpy as np
 import itertools
 import seaborn as sns   
 #from UI_Multimatplotlib import Ui_Form
-from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QTabWidget, QWidget
+from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QTabWidget, QWidget, QSizePolicy
 from PyQt5.QtCore import QSize, QMetaObject, Qt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
@@ -50,6 +50,7 @@ class MultiView(QWidget):
         self.nplots = nplots
         self.ncols = ncols
         self.setupUi(self)
+        self.parent = parent
         
     def setupUi(self, matplotlibWidget):
         sns.set_style("white")
@@ -107,8 +108,17 @@ class MultiView(QWidget):
             y0min = min(y0min, bboxnow.y0)
             x1max = max(x1max, bboxnow.x1)
             y1max = max(y1max, bboxnow.y1)
+
+        #fine tuning specific to nplots=3
+        self.bbox[0].y0 += 0.1
+        self.bbox[0].y1 += 0.1
+        self.bbox[1].x1 -= 0.05
+        self.bbox[2].x0 += 0.05
+        #make room for axes labels in single plot
+        y0min += 0.1
+        x0min += 0.05
         self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
-            
+
         self.canvas = FigureCanvasQTAgg(self.figure)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
@@ -116,19 +126,20 @@ class MultiView(QWidget):
 
         connection_id = self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)        
         sns.despine()
-
         
     def handle_plottabChanged(self, index):
-        for i in range(self.nplots):
-            if (index==0 or i==index-1):
+        if index == 0: #multiplots
+            for i in range(self.nplots):
+                self.axarr[i].set_position(self.bbox[i])
                 self.axarr[i].set_visible(True)
-                if (i==index-1):
+        else: #single plot max-size
+            tab_to_maxi = index - 1
+            for i in range(self.nplots):
+                if i == tab_to_maxi: #hide other plots
+                    self.axarr[i].set_visible(True)
                     self.axarr[i].set_position(self.bboxmax)
                 else:
-                    self.axarr[i].set_position(self.bbox[i])
-            else:
-                self.axarr[i].set_visible(False)
-                
+                    self.axarr[i].set_visible(False)
         self.canvas.draw()
 
     def organizeHorizontal(self, nplots):
@@ -179,17 +190,3 @@ class MultiView(QWidget):
             pass
         elif organizationtype == PlotOrganizationType.DefaultOrganization:
             pass
-                
-# app = QApplication(sys.argv)
-# nplots=3
-# ncols=4
-# multiplot = MultiView(PlotOrganizationType.OptimalRow, nplots, ncols)
-# x = np.linspace(0,5.0,100)
-# palette = itertools.cycle(sns.color_palette("cubehelix"))
-# markerlst = itertools.cycle(('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')) 
-# for i in range(nplots):
-#     y = np.sin((i+1)*x+i*0.5)
-#     multiplot.axarr[i].scatter(x, y, marker=next(markerlst), s=120, facecolors='none', edgecolors=next(palette), linewidths=1, label='Line %02d'%i)
-
-# multiplot.show()
-# sys.exit(app.exec_())

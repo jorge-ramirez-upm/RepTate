@@ -38,6 +38,8 @@ def start_RepTate(argv):
     
     app = QApplication(sys.argv)
     ex = QApplicationManager()
+    ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
+
     ex.show()
     
     ########################################################

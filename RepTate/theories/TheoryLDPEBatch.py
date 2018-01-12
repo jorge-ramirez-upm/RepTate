@@ -42,7 +42,7 @@ tubular reactor is to mix several batch reactions with different conversions.
     description = 'The LDPE batch reaction theory'
     citations = 'J. Pol. Sci. Part B, 39, 391-403 (2001)'
 
-    def __new__(cls, name='ThTobitaBatch', parent_dataset=None, ax=None):
+    def __new__(cls, name='ThTobitaBatch', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -55,7 +55,7 @@ tubular reactor is to mix several batch reactions with different conversions.
         Returns:
             [type] -- [description]
         """
-        return GUITheoryTobitaBatch(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTobitaBatch(name, parent_dataset, ax)
+        return GUITheoryTobitaBatch(name, parent_dataset, axarr) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTobitaBatch(name, parent_dataset, axarr)
 
 
 class BaseTheoryTobitaBatch():
@@ -66,7 +66,7 @@ class BaseTheoryTobitaBatch():
     single_file = True # True if the theory can be applied to multiple files simultaneously
     increase_memory = pyqtSignal(str)
     
-    def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -76,7 +76,7 @@ class BaseTheoryTobitaBatch():
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, axarr)
         
         self.reactname = "LDPE batch %d"%(tb_global.tobbatchnumber)
         tb_global.tobbatchnumber += 1
@@ -311,7 +311,7 @@ class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
     
     [description]
     """
-    def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -321,7 +321,7 @@ class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, axarr)
    
     # This class usually stays empty
 
@@ -332,7 +332,7 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
     [description]
     """
     
-    def __init__(self, name='ThTobitaBatch', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -342,7 +342,7 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)
 
     

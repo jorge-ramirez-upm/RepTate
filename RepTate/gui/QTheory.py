@@ -68,7 +68,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     
     [description]
     """
-    def __init__(self, name="QTheory", parent_dataset=None, ax=None):
+    def __init__(self, name="QTheory", parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -76,9 +76,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         Keyword Arguments:
             name {[type]} -- [description] (default: {"QTheory"})
             parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            axarr {[type]} -- [description] (default: {None})
         """
-        super().__init__(name=name, parent_dataset=parent_dataset, ax=ax)
+        super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
         self.setupUi(self)
 
         #build the therory widget
@@ -126,11 +126,12 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.update_parameter_table()
             for file in self.parent_dataset.files: #copy theory data to the plot series
                 tt = self.tables[file.file_name_short]
-                view = self.parent_dataset.parent_application.current_view
-                x, y, success = view.view_proc(tt, file.file_parameters)
-                for i in range(tt.MAX_NUM_SERIES):
-                    if (i<view.n):
-                        tt.series[i].set_data(x[:,i], y[:,i]) 
+                for nx in range(self.parent_dataset.nplots):
+                    view = self.parent_dataset.parent_application.multiviews[nx]
+                    x, y, success = view.view_proc(tt, file.file_parameters)
+                    for i in range(tt.MAX_NUM_SERIES):
+                        if (i<view.n):
+                            tt.series[nx][i].set_data(x[:,i], y[:,i]) 
         
             self.parent_dataset.parent_application.update_Qplot()
 

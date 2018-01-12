@@ -43,6 +43,8 @@ def start_RepTate(argv):
     # CmdBase.calcmode = CalcMode.singlethread
 
     ex = QApplicationManager()
+    ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
+
     ex.show()
     
     ########################################################

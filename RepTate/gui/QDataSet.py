@@ -346,14 +346,16 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.do_plot() #remove current series highlight
         file = self.selected_file
         if file is not None:
-            view = self.parent_application.current_view
-            for i in range(file.data_table.MAX_NUM_SERIES):
+            dt = file.data_table
+            for i in range(dt.MAX_NUM_SERIES):
+                for nx in range(self.nplots):
+                    view = self.parent_application.multiviews[nx]
                     if (i<view.n and file.active):
-                        file.data_table.series[i].set_marker('.')
-                        # file.data_table.series[i].set_linestyle(":")
-                        file.data_table.series[i].set_markerfacecolor("black")
-                        file.data_table.series[i].set_markeredgecolor("black")
-                        file.data_table.series[i].set_zorder(self.parent_application.zorder) #put series on top
+                        dt.series[nx][i].set_marker('.')
+                        # dt.series[nx][i].set_linestyle(":")
+                        dt.series[nx][i].set_markerfacecolor("black")
+                        dt.series[nx][i].set_markeredgecolor("black")
+                        dt.series[nx][i].set_zorder(self.parent_application.zorder) #put series on top
             self.parent_application.zorder += 1
         self.parent_application.update_plot()
 

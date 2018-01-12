@@ -41,7 +41,7 @@ class Theory(CmdBase):
     nfev = 0
     """ nfev {int} -- Number of function evaluations """    
 
-    def __init__(self, name="Theory", parent_dataset=None, ax=None):
+    def __init__(self, name="Theory", parent_dataset=None, axarr=None):
         """Constructor
         
         The following variables should be set by the particular realization of the theory:
@@ -65,13 +65,15 @@ class Theory(CmdBase):
         super(Theory, self).__init__() 
         self.name=name
         self.parent_dataset = parent_dataset
-        self.ax = ax
+        self.axarr = axarr
+        self.ax = axarr[0] #theory calculation only on this plot
         self.parameters={}
         self.tables={}
         self.function=None
         self.active = True #defines if the theorie is plotted
         self.calculate_is_busy = False
         
+
         # THEORY OPTIONS
         self.npoints=100
         self.dt=0.001
@@ -81,6 +83,7 @@ class Theory(CmdBase):
         self.is_fitting=False
         self.has_modes=False
         
+        ax = self.ax
         # XRANGE for FIT
         self.xmin=0.01
         self.xmax=1
@@ -101,7 +104,7 @@ class Theory(CmdBase):
     
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
-            self.tables[f.file_name_short]=DataTable(ax)
+            self.tables[f.file_name_short] = DataTable(axarr)
 
         self.do_cite("")
             
@@ -795,7 +798,8 @@ class Theory(CmdBase):
         self.active = False
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
-                    table.series[i].set_visible(False)
+                for nx in range(self.parent_dataset.nplots):
+                    table.series[nx][i].set_visible(False)
     
     def do_show(self):
         """[summary]
@@ -805,7 +809,8 @@ class Theory(CmdBase):
         self.active = True
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
-                    table.series[i].set_visible(True)
+                for nx in range(self.parent_dataset.nplots):
+                    table.series[nx][i].set_visible(True)
 
     def Qprint(self, msg):
         """[summary]

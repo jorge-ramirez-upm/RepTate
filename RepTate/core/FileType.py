@@ -145,7 +145,7 @@ class TXTColumnFile(object):
                 file.header_lines.append(lines[i])
         return colnameline, firstdata   
                 
-    def read_file(self, filename, parent_dataset, ax):
+    def read_file(self, filename, parent_dataset, axarr):
         """[summary]
         
         [description]
@@ -158,7 +158,7 @@ class TXTColumnFile(object):
         Returns:
             [type] -- [description]
         """
-        file=File(filename, self, parent_dataset, ax)
+        file=File(filename, self, parent_dataset, axarr)
         f = open(filename, "r", encoding="latin-1") 
         lines=f.readlines()
         
