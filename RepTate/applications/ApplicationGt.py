@@ -70,7 +70,7 @@ class BaseApplicationGt:
         self.views["G(t)"]=View(name="G(t)", description="Relaxation modulus", x_label="t", y_label="G(t)", 
                                 x_units="s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewGt, 
                                 n=1, snames=["G(t)"], index=1)
-        self.views["G',G''"]=View(name="G',G''", description="G', G'' from Schwarzl transformation of G(t)", x_label="$\omega$", y_label="G',G''", 
+        self.views["Schwarzl G',G''"]=View(name="Schwarzl G',G''", description="G', G'' from Schwarzl transformation of G(t)", x_label="$\omega$", y_label="G',G''", 
                                 x_units="rad/s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewSchwarzl_Gt, 
                                 n=2, snames=["G',G''"], index=2)
 
@@ -139,7 +139,6 @@ class BaseApplicationGt:
         Returns:
             [type] -- [description]
         """
-
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
 
