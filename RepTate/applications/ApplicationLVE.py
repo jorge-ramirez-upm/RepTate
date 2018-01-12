@@ -72,6 +72,10 @@ class BaseApplicationLVE:
         self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"], index=4)
         self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"], index=5)
 
+        #set multiviews
+        self.multiviews = [self.views["log(G',G''(w))"]] #default view order in multiplot views, set only one item for single view
+        self.nplots = len(self.multiviews) 
+
         # FILES
         ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
         self.filetypes[ftype.extension] = ftype

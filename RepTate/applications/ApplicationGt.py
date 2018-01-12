@@ -57,7 +57,7 @@ class BaseApplicationGt:
         """
         from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-        super().__init__(name, parent, nplots=3, ncols=2) # will call Application.__init__ with these args
+        super().__init__(name, parent, nplots=2, ncols=2) # will call Application.__init__ with these args
 
         # VIEWS
         self.views["log[G(t)]"]=View(name="log[G(t)]", description="log Relaxation modulus", x_label="log(t)", 
@@ -66,6 +66,14 @@ class BaseApplicationGt:
         self.views["G(t)"]=View(name="G(t)", description="Relaxation modulus", x_label="t", y_label="G(t)", 
                                 x_units="s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewGt, 
                                 n=1, snames=["G(t)"], index=1)
+        self.views["G',G''"]=View(name="G',G''", description="G', G'' from Schwarzl transformation of G(t)", x_label="\omega", y_label="G',G''", 
+                                x_units="rad/s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewSchwarzl, 
+                                n=1, snames=["G',G''"], index=2)
+
+
+        #set multiviews
+        self.multiviews = [self.views["log[G(t)]"], self.views["G(t)"]] #default view order in multiplot views, set only one item for single view
+        self.nplots = len(self.multiviews) 
 
         # FILES
         ftype=TXTColumnFile("G(t) files", "gt", "Relaxation modulus", ['t','Gt'], ['Mw','ncontri'], ['s', 'Pa'])
@@ -109,6 +117,24 @@ class BaseApplicationGt:
         #y = np.zeros((np.sum(validindex), 1))
         #x[:, 0] = np.log10(dt.data[validindex, 0])
         #y[:, 0] = np.log10(dt.data[validindex, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[: ,0] = dt.data[:, 1]
+        return x, y, True
+
+    def viewSchwarzl(self, dt, file_parameters): #TODO: code the Schwarzl transform. 
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
