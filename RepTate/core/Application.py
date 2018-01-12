@@ -55,7 +55,7 @@ class Application(CmdBase):
         self.multiviews = [] #default view order in multiplot views
         self.nplots = nplots #number of plots
         self.ncols = ncols #number of columns in the multiplot
-        self.curent_viewtab = 0 
+        self.current_viewtab = 0 
 
         # Theories available everywhere
         # self.theories[TheoryPolynomial.thname]=TheoryPolynomial
@@ -65,7 +65,7 @@ class Application(CmdBase):
             
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow, self.nplots, self.ncols, self)
-        self.multiplots.plotselecttabWidget.setCurrentIndex(self.curent_viewtab)
+        self.multiplots.plotselecttabWidget.setCurrentIndex(self.current_viewtab)
         self.figure = self.multiplots.figure
         self.axarr = self.multiplots.axarr #
 

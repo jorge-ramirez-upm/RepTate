@@ -147,10 +147,14 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
         file_matching[0].active = check_state
     
+        #hide datatable
         dt = file_matching[0].data_table
-        for i in range(dt.MAX_NUM_SERIES):
+        for i in range(dt.MAX_NUM_SERIES): 
             for nx in range(self.nplots): #loop over the plots
-                dt.series[nx][i].set_visible(check_state)
+                dt.series[nx][i].set_visible(check_state) 
+        #hide theory table
+        for th in self.theories.values():
+            th.set_th_table_visible(file_matching[0].file_name_short, check_state)
 
         #save the check_state to recover it upon change of tab or 'view all' events
         if check_state==False:
@@ -259,7 +263,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 except TypeError as e:
                     print(e)
                     return
-                
+
                 for i in range(dt.MAX_NUM_SERIES):
                     if (i<view.n and file.active):
                         dt.series[nx][i].set_data(x[:,i], y[:,i])

@@ -801,16 +801,27 @@ class Theory(CmdBase):
                 for nx in range(self.parent_dataset.nplots):
                     table.series[nx][i].set_visible(False)
     
+    def set_th_table_visible(self, fname, state):
+        """Show/Hide all theory lines related to the file "fname" """
+        tt = self.tables[fname]
+        for i in range(tt.MAX_NUM_SERIES):
+            for nx in range(self.parent_dataset.nplots):
+                tt.series[nx][i].set_visible(state)
+
     def do_show(self):
         """[summary]
         
         [description]
         """
         self.active = True
-        for table in self.tables.values():
-            for i in range(table.MAX_NUM_SERIES):
-                for nx in range(self.parent_dataset.nplots):
-                    table.series[nx][i].set_visible(True)
+        for fname in self.tables:
+            if fname in self.parent_dataset.inactive_files:
+                return
+            else:
+                tt = self.tables[fname]
+                for i in range(tt.MAX_NUM_SERIES):
+                    for nx in range(self.parent_dataset.nplots):
+                        tt.series[nx][i].set_visible(True)
 
     def Qprint(self, msg):
         """[summary]

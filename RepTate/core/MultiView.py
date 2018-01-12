@@ -109,11 +109,17 @@ class MultiView(QWidget):
             x1max = max(x1max, bboxnow.x1)
             y1max = max(y1max, bboxnow.y1)
 
-        #fine tuning specific to nplots=3
-        self.bbox[0].y0 += 0.1
+        #fine tuning specific to nplots=3 to make room for axis labels
+        self.bbox[0].y0 += 0.1 #lift top figure up
         self.bbox[0].y1 += 0.1
-        self.bbox[1].x1 -= 0.05
-        self.bbox[2].x0 += 0.05
+        
+        self.bbox[1].x1 -= 0.05 #push bottom-left figure left
+        self.bbox[1].y0 += 0.05 #lift bottom-left figure up
+        
+        self.bbox[2].x0 += 0.05 #push bottom-right figure right
+        self.bbox[2].y0 += 0.05 #lift bottom-right figure up
+        
+
         #make room for axes labels in single plot
         y0min += 0.1
         x0min += 0.05

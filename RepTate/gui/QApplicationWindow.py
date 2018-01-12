@@ -263,7 +263,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             ax = self.axarr[self.current_viewtab - 1]
         if (checked):
-            self.annotation = self.ax.annotate(
+            self.annotation = ax.annotate(
                 '', xy=(0, 0), ha = 'left',
                 xytext = (-40, 40), textcoords = 'offset points', va = 'center',
                 bbox = dict(
@@ -283,18 +283,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ax = self.axarr[self.current_viewtab - 1]
         text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
         if ok:
-            xmin, xmax = self.ax.get_xlim()
-            ymin, ymax = self.ax.get_ylim()
+            xmin, xmax = ax.get_xlim()
+            ymin, ymax = ax.get_ylim()
             xpos = (xmin+xmax)/2
             ypos = (ymin+ymax)/2
-            ann = self.ax.annotate(text, xy=(xpos, ypos), xytext=(xpos, ypos), size=20, va="center", ha="center")
+            ann = ax.annotate(text, xy=(xpos, ypos), xytext=(xpos, ypos), size=20, va="center", ha="center")
             self.graphicnotes.append(ann)
             self.artistnotes.append(DraggableNote(ann, DragType.both, None, None))
             self.canvas.draw()
 
     def show_legend(self):
+        # if self.current_viewtab == 0:
+        #     ax = self.axarr[0]
+        # else:
+        #     ax = self.axarr[self.current_viewtab - 1]
+
         if self.actionShow_Legend.isChecked():
-            self.legend=plt.legend(loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
+            self.legend = plt.legend((self.axarr[0],), loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
             self.legend.draggable()
         else:
             self.legend.remove()
