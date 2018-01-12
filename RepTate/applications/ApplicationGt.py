@@ -17,6 +17,10 @@ from View import View
 from FileType import TXTColumnFile
 from QApplicationWindow import QApplicationWindow
 import numpy as np
+
+from schwarzl_ctypes_helper import *
+from ctypes import *
+
 # from TheoryMaxwellModes import TheoryMaxwellModesTime
 
 class ApplicationGt(CmdBase):
@@ -67,8 +71,8 @@ class BaseApplicationGt:
                                 x_units="s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewGt, 
                                 n=1, snames=["G(t)"], index=1)
         self.views["G',G''"]=View(name="G',G''", description="G', G'' from Schwarzl transformation of G(t)", x_label="$\omega$", y_label="G',G''", 
-                                x_units="rad/s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewSchwarzl, 
-                                n=1, snames=["G',G''"], index=2)
+                                x_units="rad/s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewSchwarzl_Gt, 
+                                n=2, snames=["G',G''"], index=2)
 
 
         #set multiviews
@@ -123,7 +127,7 @@ class BaseApplicationGt:
         y[: ,0] = dt.data[:, 1]
         return x, y, True
 
-    def viewSchwarzl(self, dt, file_parameters): #TODO: code the Schwarzl transform. 
+    def viewSchwarzl_Gt(self, dt, file_parameters): #TODO: code the Schwarzl transform. 
         """[summary]
         
         [description]
@@ -135,10 +139,16 @@ class BaseApplicationGt:
         Returns:
             [type] -- [description]
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = np.log10(dt.data[:, 0])
-        y[: ,0] = np.log10(dt.data[:, 1])
+
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+
+        wp, Gp, wpp, Gpp = do_schwarzl_gt(dt.num_rows, dt.data[:, 1], dt.data[:, 0]) #call the C function
+
+        x[:, 0] = wp[:]
+        x[:, 1] = wpp[:]
+        y[: ,0] = Gp[:]
+        y[: ,1] = Gpp[:]
         return x, y, True
 
 class CLApplicationGt(BaseApplicationGt, Application):
