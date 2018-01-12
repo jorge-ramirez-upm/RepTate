@@ -27,6 +27,7 @@ from SplashScreen import SplashScreen
 from time import time, sleep
 from CmdBase import CmdBase, CalcMode
 
+
 def start_RepTate(argv):
     """
     Main RepTate application. 
@@ -50,42 +51,22 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_nlve_window()
+    ex.new_gt_window()
     
     #####################
-    # TEST Rolie-Poly
+    # TEST MaxwellModesTime
     # Open a Dataset
-
-    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s"%((os.sep,)*4)
-    ex.applications["NLVE1"].new_tables_from_files([
-                                                   dow_dir + "My_dow150-160-1 shear.shear",
-                                                   dow_dir + "My_dow150-160-01 shear.shear",
-                                                   dow_dir + "My_dow150-160-001 shear.shear",
-                                                   dow_dir + "My_dow150-160-3 shear.shear",
-                                                   dow_dir + "My_dow150-160-03 shear.shear",
-                                                   dow_dir + "My_dow150-160-003 shear.shear",
-                                                   dow_dir + "My_dow150-160-0003 shear.shear",
+    gt_dir = "data%sGt%s"%((os.sep,)*2)
+    ex.applications["Gt1"].new_tables_from_files([
+                                                   gt_dir + "C0224_NVT_450K_1atm.gt",
                                                    ])
     # Open a theory
-    ex.applications["NLVE1"].datasets["Set1"].new_theory("RoliePoly")
+    ex.applications["Gt1"].datasets["Set1"].new_theory("MaxwellModesTime")
     # Minimize the theory
-    ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
+    ex.applications["Gt1"].datasets["Set1"].handle_actionMinimize_Error()
 
 
-    # #####################
-    # # TEST Carreau-Yasuda
-    # # Open a Dataset
-    # ex.new_lve_window()
-    # ex.applications["LVE2"].new_tables_from_files([
-    #                                                pi_dir + "PI_483.1k_T-35.tts",
-    #                                                ])
-    # # Switch the view
-    # ex.applications["LVE2"].view_switch("logetastar")
-    # # Open a theory
-    # ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
-    # # Minimize the theory
-    # ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
-    
+
     sys.exit(app.exec_())
 
 if __name__ == '__main__':

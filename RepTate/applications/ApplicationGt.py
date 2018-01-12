@@ -57,7 +57,7 @@ class BaseApplicationGt:
         """
         from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-        super().__init__(name, parent, nplots=2, ncols=2) # will call Application.__init__ with these args
+        super().__init__(name, parent, nplots=3, ncols=2) # will call Application.__init__ with these args
 
         # VIEWS
         self.views["log[G(t)]"]=View(name="log[G(t)]", description="log Relaxation modulus", x_label="log(t)", 
@@ -66,13 +66,13 @@ class BaseApplicationGt:
         self.views["G(t)"]=View(name="G(t)", description="Relaxation modulus", x_label="t", y_label="G(t)", 
                                 x_units="s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewGt, 
                                 n=1, snames=["G(t)"], index=1)
-        self.views["G',G''"]=View(name="G',G''", description="G', G'' from Schwarzl transformation of G(t)", x_label="\omega", y_label="G',G''", 
+        self.views["G',G''"]=View(name="G',G''", description="G', G'' from Schwarzl transformation of G(t)", x_label="$\omega$", y_label="G',G''", 
                                 x_units="rad/s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewSchwarzl, 
                                 n=1, snames=["G',G''"], index=2)
 
 
         #set multiviews
-        self.multiviews = [self.views["log[G(t)]"], self.views["G(t)"]] #default view order in multiplot views, set only one item for single view
+        self.multiviews = [self.views["log[G(t)]"], self.views["G(t)"], self.views["G',G''"]] #default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews) 
 
         # FILES
