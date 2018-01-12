@@ -606,7 +606,6 @@ class Theory(CmdBase):
             self.xrange.set_visible(not self.xrange.get_visible()) 
             self.xminline.set_visible(not self.xminline.get_visible()) 
             self.xmaxline.set_visible(not self.xmaxline.get_visible()) 
-            print("Xmin=%g Xmax=%g"%(self.xmin,self.xmax))
         else:
             items=line.split()
             if len(items)<2:
