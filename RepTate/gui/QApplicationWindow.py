@@ -661,6 +661,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
+        print("in change view")
         selected_view_name = self.viewComboBox.currentText()
         ds = self.DataSettabWidget.currentWidget()
         if ds:
@@ -684,8 +685,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     self.viewComboBox.insertItem(self.views[i].index, i)
                     if self.views[i].index == 0: #index 0 is the defaut view
                         self.current_view = self.views[i] 
-        self.viewComboBox.setCurrentIndex(0) 
-        
+        self.viewComboBox.setCurrentIndex(0)
 
     def dragEnterEvent(self, e):
         """[summary]

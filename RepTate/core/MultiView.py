@@ -46,11 +46,11 @@ class PlotOrganizationType(enum.Enum):
 class MultiView(QWidget):
     def __init__(self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None):
         QDialog.__init__(self)
+        self.parent_application = parent
         self.pot = pot
         self.nplots = nplots
         self.ncols = ncols
         self.setupUi(self)
-        self.parent = parent
         
     def setupUi(self, matplotlibWidget):
         sns.set_style("white")
@@ -131,17 +131,45 @@ class MultiView(QWidget):
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
         self.plotcontainer.addWidget(self.canvas)
+        self.init_plot(0)
 
         connection_id = self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)        
         sns.despine()
-        
-    def handle_plottabChanged(self, index):
+
+    def init_plot(self, index):
         if index == 0: #multiplots
             for i in range(self.nplots):
                 self.axarr[i].set_position(self.bbox[i])
                 self.axarr[i].set_visible(True)
         else: #single plot max-size
             tab_to_maxi = index - 1
+            for i in range(self.nplots):
+                if i == tab_to_maxi: #hide other plots
+                    self.axarr[i].set_visible(True)
+                    self.axarr[i].set_position(self.bboxmax)
+                else:
+                    self.axarr[i].set_visible(False)
+
+        self.parent_application.current_viewtab = index
+        self.canvas.draw()
+
+
+    def handle_plottabChanged(self, index):
+        self.parent_application.current_viewtab = index
+        if index == 0: #multiplots
+            view_name = self.parent_application.multiviews[0].name
+            ind = self.parent_application.viewComboBox.findText(view_name, Qt.MatchExactly)
+            self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
+            for i in range(self.nplots):
+                self.axarr[i].set_position(self.bbox[i])
+                self.axarr[i].set_visible(True)
+
+        else: #single plot max-size
+            print([x.name for x in self.parent_application.multiviews])
+            tab_to_maxi = index - 1 # in 0 1 2
+            view_name = self.parent_application.multiviews[tab_to_maxi].name
+            ind = self.parent_application.viewComboBox.findText(view_name)
+            self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
             for i in range(self.nplots):
                 if i == tab_to_maxi: #hide other plots
                     self.axarr[i].set_visible(True)

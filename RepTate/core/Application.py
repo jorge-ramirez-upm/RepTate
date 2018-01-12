@@ -368,7 +368,10 @@ class Application(CmdBase):
             name {[type]} -- [description]
         """
         if name in list(self.views.keys()):
-            self.current_view=self.views[name]
+            if self.current_viewtab == 0:
+                self.multiviews[0] = self.views[name]
+            else:
+                self.multiviews[self.current_viewtab - 1] = self.views[name]
         else:
             print("View \"%s\" not found"%name)
         # Update the plots!
