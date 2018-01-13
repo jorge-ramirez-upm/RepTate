@@ -123,8 +123,8 @@ class BaseApplicationGt:
         #y[:, 0] = np.log10(dt.data[validindex, 1])
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[: ,0] = dt.data[:, 1]
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 1])
         return x, y, True
 
     def viewSchwarzl_Gt(self, dt, file_parameters): #TODO: code the Schwarzl transform. 
