@@ -76,7 +76,7 @@ class BaseApplicationGt:
 
 
         #set multiviews
-        self.multiviews = [self.views["log[G(t)]"], self.views["G(t)"], self.views["G',G''"]] #default view order in multiplot views, set only one item for single view
+        self.multiviews = [self.views["log[G(t)]"], self.views["G(t)"], self.views["Schwarzl G',G''"]] #default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews) 
 
         # FILES
