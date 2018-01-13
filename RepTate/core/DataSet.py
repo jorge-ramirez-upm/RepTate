@@ -693,6 +693,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         """
         if name in self.theories.keys():
             try:
+                print("name:", name, "th:", self.theories[name])
                 self.theories[name].destructor()
             except:
                 print("No destructor programmed for %s"%self.theories[name].name)

@@ -131,6 +131,37 @@ class BaseTheoryMaxwellModesFrequency:
         self.artistmodes = DraggableModesSeries(self.graphicmodes, DragType.special, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_mode)
         self.plot_theory_stuff()
 
+    def destructor(self):
+        """Called when the theory tab is closed
+        
+        [description]
+        """
+        self.graphicmodes_visible(False)
+        self.ax.lines.remove(self.graphicmodes.series[nx][i]) 
+
+    def hide_theory_extras(self):
+        """Called when the active theory is changed
+        
+        [description]
+        """
+        if CmdBase.mode == CmdMode.GUI:
+            self.Qhide_theory_extras()
+        self.graphicmodes_visible(False)
+
+    def graphicmodes_visible(self, state):
+        """[summary]
+        
+        [description]
+        """
+        self.view_modes = state
+        self.graphicmodes.set_visible(self.view_modes)
+        if self.view_modes:
+            self.artistmodes.connect()
+        else:
+            self.artistmodes.disconnect()
+        # self.do_calculate("")
+        self.parent_dataset.parent_application.update_plot()
+
 
     def get_modes(self):
         """[summary]
@@ -190,8 +221,8 @@ class BaseTheoryMaxwellModesFrequency:
         
         [description]
         """
-        if not self.view_modes:
-            return
+        # if not self.view_modes:
+        #     return
         data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 3
         nmodes = self.parameters["nmodes"].value
@@ -208,6 +239,10 @@ class BaseTheoryMaxwellModesFrequency:
             print(e)
             return
         self.graphicmodes.set_data(x, y)
+        for i in range(data_table_tmp.MAX_NUM_SERIES):
+            for nx in range(len(self.axarr)):
+                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i]) 
+
 
 class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
     """[summary]
@@ -257,15 +292,23 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+
+    def Qhide_theory_extras(self):
+        """Uncheck the modeaction button. Called when curent theory is changed
         
-    def modesaction_change(self):
+        [description]
+        """
+        self.modesaction.setChecked(False)
+
+    def modesaction_change(self, checked):
         """[summary]
         
         [description]
         """
-        self.view_modes = self.modesaction.isChecked()
-        self.graphicmodes.set_visible(self.view_modes)
-        self.do_calculate("")
+        self.graphicmodes_visible(checked)
+        # self.view_modes = self.modesaction.isChecked()
+        # self.graphicmodes.set_visible(self.view_modes)
+        # self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
         """[summary]
@@ -410,7 +453,37 @@ class BaseTheoryMaxwellModesTime:
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(self.graphicmodes, DragType.special, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_mode)
         self.plot_theory_stuff()
+    
+    def destructor(self):
+        """Called when the theory tab is closed
+        
+        [description]
+        """
+        self.graphicmodes_visible(False)
+        self.ax.lines.remove(self.graphicmodes.series[nx][i]) 
 
+    def hide_theory_extras(self):
+        """Called when the active theory is changed
+        
+        [description]
+        """
+        if CmdBase.mode == CmdMode.GUI:
+            self.Qhide_theory_extras()
+        self.graphicmodes_visible(False)
+
+    def graphicmodes_visible(self, state):
+        """[summary]
+        
+        [description]
+        """
+        self.view_modes = state
+        self.graphicmodes.set_visible(self.view_modes)
+        if self.view_modes:
+            self.artistmodes.connect()
+        else:
+            self.artistmodes.disconnect()
+        # self.do_calculate("")
+        self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
         """[summary]
@@ -484,6 +557,9 @@ class BaseTheoryMaxwellModesTime:
             print(e)
             return
         self.graphicmodes.set_data(x, y)
+        for i in range(data_table_tmp.MAX_NUM_SERIES):
+            for nx in range(len(self.axarr)):
+                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i]) 
 
 
 class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
@@ -535,15 +611,26 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(self.modesaction_change)
         
+    def Qhide_theory_extras(self):
+        """Uncheck the modeaction button. Called when curent theory is changed
+        
+        [description]
+        """
+        self.modesaction.setChecked(False)
 
-    def modesaction_change(self):
+    def modesaction_change(self, checked):
         """[summary]
         
         [description]
         """
-        self.view_modes = self.modesaction.isChecked()
-        self.graphicmodes.set_visible(self.view_modes)
-        self.do_calculate("")
+        self.graphicmodes_visible(checked)
+        # self.view_modes = self.modesaction.isChecked()
+        # self.graphicmodes.set_visible(self.view_modes)
+        # if self.view_modes:
+        #     self.artistmodes.connect()
+        # else:
+        #     self.artistmodes.disconnect()
+        # self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
         """[summary]

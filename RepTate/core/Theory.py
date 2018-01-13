@@ -346,7 +346,7 @@ class Theory(CmdBase):
             #pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1) 
             pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, method='trf', bounds=(param_min, param_max))
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
-        except RuntimeError as e:
+        except Exception as e:
             print(e)
             return
 
@@ -799,6 +799,10 @@ class Theory(CmdBase):
             for i in range(table.MAX_NUM_SERIES):
                 for nx in range(self.parent_dataset.nplots):
                     table.series[nx][i].set_visible(False)
+        try:
+            self.hide_theory_extras()
+        except: # current theory has no extras
+            pass
     
     def set_th_table_visible(self, fname, state):
         """Show/Hide all theory lines related to the file "fname" """

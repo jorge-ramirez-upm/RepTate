@@ -368,6 +368,7 @@ class Application(CmdBase):
             name {[type]} -- [description]
         """
         if name in list(self.views.keys()):
+            self.current_view = self.views[name]
             if self.current_viewtab == 0:
                 self.multiviews[0] = self.views[name]
             else:
