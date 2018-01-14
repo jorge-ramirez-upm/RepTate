@@ -37,7 +37,7 @@ def start_RepTate(argv):
     QApplication.setStyle("Fusion") #comment that line for a native look
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     
-    app = QApplication(sys.argv)
+    # app = QApplication(sys.argv)
 
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     CmdBase.calcmode = CalcMode.singlethread
@@ -71,9 +71,13 @@ def start_RepTate(argv):
     ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(1)
     print(ex.applications["React1"].multiplots.axarr[0].get_position())
 
+    ex.applications["React1"].datasets["Set1"].new_theory("TobitaBatchTheory")
+
+
     ex.show()
     
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
+    app = QApplication(sys.argv)
     start_RepTate(sys.argv[1:])

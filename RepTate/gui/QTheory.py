@@ -12,26 +12,37 @@ Module that defines the GUI counterpart of the class Theory.
 
 """ 
 #from PyQt5.QtCore import *
+import sys
 from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
 from Theory import Theory
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
-from PyQt5.QtCore import Qt, QThread
+from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from Parameter import OptType
 
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
 
 
-class CalculationThread(QThread):
+def trap_exc_during_debug(*args):
+    # when app raises uncaught exception, print info
+    print(args)
+
+# install exception hook: without this, uncaught exception would cause application to exit
+sys.excepthook = trap_exc_during_debug
+
+class CalculationThread(QObject):
+    sig_done = pyqtSignal()
+
     def __init__(self, fthread, *args):
         super().__init__()
         self.args = args
         self.function = fthread
 
-    def run(self):
+    def work(self):
         self.function(*self.args)
+        self.sig_done.emit()
 
 
 class GetModesDialog(QDialog):
@@ -111,15 +122,19 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         except AttributeError: #the function is not defined in the current theory
             pass
         if CmdBase.calcmode == CalcMode.multithread:
-            #start thread
-            self.thread_calc = CalculationThread(self.do_calculate, "", )
-            self.thread_calc.finished.connect(self.end_thread_calc)
+            self.worker = CalculationThread(self.do_calculate, "", )
+            self.worker.sig_done.connect(self.end_thread_calc)
+            self.thread_calc = QThread()
+            self.worker.moveToThread(self.thread_calc)
+            self.thread_calc.started.connect(self.worker.work)
             self.thread_calc.start()
         elif CmdBase.calcmode == CalcMode.singlethread:
             self.do_calculate("")
             self.end_thread_calc()
     
     def end_thread_calc(self):
+        if CmdBase.calcmode == CalcMode.multithread:
+            self.thread_calc.quit()
         if self.stop_theory_calc_flag: #calculation stopped by user
             self.stop_theory_calc_flag = False #reset flag
         else:
@@ -158,15 +173,19 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         except AttributeError: #the function is not defined in the current theory
             pass
         if CmdBase.calcmode == CalcMode.multithread:
-            #start thread
-            self.thread_fit = CalculationThread(self.do_fit, "", )
-            self.thread_fit.finished.connect(self.end_thread_fit)
+            self.worker = CalculationThread(self.do_fit, "", )
+            self.worker.sig_done.connect(self.end_thread_fit)
+            self.thread_fit = QThread()
+            self.worker.moveToThread(self.thread_fit)
+            self.thread_fit.started.connect(self.worker.work)
             self.thread_fit.start()
         elif CmdBase.calcmode == CalcMode.singlethread:
             self.do_fit("")
             self.end_thread_fit()
 
     def end_thread_fit(self):
+        if CmdBase.calcmode == CalcMode.multithread:
+            self.thread_calc.quit()
         self.update_parameter_table()
         self.parent_dataset.parent_application.update_Qplot()
         self.thread_fit_busy = False
