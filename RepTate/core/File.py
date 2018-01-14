@@ -20,7 +20,7 @@ class File(object):
     [description]
     """
 
-    def __init__(self, file_name="", file_type=None, parent_dataset=None, ax=None):
+    def __init__(self, file_name="", file_type=None, parent_dataset=None, axarr=None):
         """Constructor
         
         [description]
@@ -29,7 +29,7 @@ class File(object):
             file_name {str} -- Full path
             file_type {[type]} -- [description] (default: {None})
             parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            axarr {[type]} -- [description] (default: {None})
         """
         self.file_full_path = os.path.abspath(file_name)
         tmpname = self.file_full_path.split(os.sep)
@@ -39,7 +39,7 @@ class File(object):
         self.file_name_short = short
         self.file_type = file_type
         self.parent_dataset = parent_dataset
-        self.ax = ax
+        self.axarr = axarr
 
         #plot attributes
         self.marker = None
@@ -50,8 +50,8 @@ class File(object):
         self.header_lines=[]
         self.file_parameters={}
         self.active = True
-        self.data_table = DataTable(ax)
-        
+        self.data_table = DataTable(axarr)
+
     def __str__(self):
         """[summary]
         

@@ -51,41 +51,22 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_lve_window()
+    ex.new_gt_window()
     
     #####################
-    # TEST Likhtman-McLeish
+    # TEST MaxwellModesTime
     # Open a Dataset
-    pi_dir = "data%sPI_LINEAR%s"%((os.sep,)*2)
-    ex.applications["LVE1"].new_tables_from_files([
-                                                   pi_dir + "PI_23.4k_T-35.tts",
-                                                   pi_dir + "PI_33.6k_T-35.tts",
-                                                   pi_dir + "PI_94.9k_T-35.tts",
-                                                   pi_dir + "PI_225.9k_T-35.tts",
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   pi_dir + "PI_634.5k_T-35.tts",
-                                                   pi_dir + "PI_1131k_T-35.tts",
+    gt_dir = "data%sGt%s"%((os.sep,)*2)
+    ex.applications["Gt1"].new_tables_from_files([
+                                                   gt_dir + "C0224_NVT_450K_1atm.gt",
                                                    ])
     # Open a theory
-    ex.applications["LVE1"].datasets["Set1"].new_theory("Likhtman-McLeish")
+    ex.applications["Gt1"].datasets["Set1"].new_theory("MaxwellModesTime")
     # Minimize the theory
-    ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
+    ex.applications["Gt1"].datasets["Set1"].handle_actionMinimize_Error()
 
 
-    #####################
-    # TEST Carreau-Yasuda
-    # Open a Dataset
-    ex.new_lve_window()
-    ex.applications["LVE2"].new_tables_from_files([
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   ])
-    # Switch the view
-    ex.applications["LVE2"].view_switch("logetastar")
-    # Open a theory
-    ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
-    # Minimize the theory
-    ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
-    
+
     sys.exit(app.exec_())
 
 if __name__ == '__main__':

@@ -40,6 +40,10 @@ class ApplicationFRS_I(Application):
                                      y_label="log(I(t))", x_units="s", y_units="-", log_x=False, log_y=False, 
                                      view_proc=self.viewLogIt, n=1, snames=["log(I(t))"], index=1)
 
+        #set multiviews
+        self.multiviews = [self.views['I(t)']] 
+        self.nplots = len(self.multiviews) 
+
         # FILES
         ftype=TXTColumnFile("I(t) FRS files", "FRS_INTENSITY", "I(t) decay from FRS", ['t','I'], ['d','Na','ka','Ns','ka','Keq','beta'], ['s', 'Pa'])
         self.filetypes[ftype.extension]=ftype

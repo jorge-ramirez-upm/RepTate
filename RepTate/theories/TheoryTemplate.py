@@ -27,7 +27,7 @@ class TheoryTemplate(CmdBase):
     description='Template Theory'
     citations=''
 
-    def __new__(cls, name='ThTemplate', parent_dataset=None, ax=None):
+    def __new__(cls, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -40,7 +40,7 @@ class TheoryTemplate(CmdBase):
         Returns:
             [type] -- [description]
         """
-        return GUITheoryTemplate(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTemplate(name, parent_dataset, ax)
+        return GUITheoryTemplate(name, parent_dataset, axarr) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTemplate(name, parent_dataset, axarr)
 
 
 class BaseTheoryTemplate:
@@ -50,7 +50,7 @@ class BaseTheoryTemplate:
     """
     single_file = False # True if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -60,7 +60,7 @@ class BaseTheoryTemplate:
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, axarr)
         self.function = self.function_template # main theory function
         self.has_modes = False # True if the theory has modes
         self.parameters['param1'] = Parameter(name='param1', value=1, description='parameter 1', 
@@ -111,7 +111,7 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
     
     [description]
     """
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -121,7 +121,7 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, axarr)
    
     # This class usually stays empty
 
@@ -131,7 +131,7 @@ class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
     
     [description]
     """
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
@@ -141,7 +141,7 @@ class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:
        

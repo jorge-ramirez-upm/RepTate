@@ -71,6 +71,10 @@ class BaseApplicationNLVE:
                                          x_label="log(t)", y_label="log($\sigma_{xy}$(t))", 
                                          x_units="s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogSigmaTime, 
                                          n=1, snames=["$\sigma_{xy}$($\gamma$)"], index=2)
+        
+        #set multiviews
+        self.multiviews = [self.views["log(eta(t))"]] #default view order in multiplot views, set only one item for single view
+        self.nplots = len(self.multiviews) 
 
         # FILES
         ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])

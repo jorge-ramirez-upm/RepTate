@@ -21,7 +21,7 @@ class DataTable(object):
     """
     MAX_NUM_SERIES=3
 
-    def __init__(self, ax=None):
+    def __init__(self, axarr=None):
         """Constructor
         
         [description]
@@ -35,9 +35,13 @@ class DataTable(object):
         self.column_units=[]
         self.data=np.zeros((self.num_rows, self.num_columns))
         self.series=[]
-        for i in range(self.MAX_NUM_SERIES): 
-            ss = ax.plot([], [], label='')
-            self.series.append(ss[0])
+        
+        for nx in range(len(axarr)): #create series for each plot
+            serries_nx = []
+            for i in range(self.MAX_NUM_SERIES): 
+                ss = axarr[nx].plot([], [], label='')
+                serries_nx.append(ss[0])
+            self.series.append(serries_nx)
 
     def __str__(self):
         """[summary]

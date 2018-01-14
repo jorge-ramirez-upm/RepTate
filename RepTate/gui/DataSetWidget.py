@@ -70,17 +70,20 @@ class DataSetWidget(QTreeWidget):
             
             for file in self.parent_dataset.files: #remove files and lines
                 if file.file_name_short == file_name_short:  
-                    for i in range(file.data_table.MAX_NUM_SERIES):
-                        self.parent_dataset.parent_application.ax.lines.remove(file.data_table.series[i]) 
+                    dt = file.data_table
+                    for i in range(dt.MAX_NUM_SERIES):
+                        for nx in range(self.parent_dataset.nplots):
+                            self.parent_dataset.parent_application.axarr[nx].lines.remove(dt.series[nx][i]) 
                     self.parent_dataset.files.remove(file)
                     break
 
             for th in self.parent_dataset.theories.values(): #remove corresponding theory lines
                 print(th.tables)
                 try:
-                    table = th.tables[file_name_short]
-                    for i in range(table.MAX_NUM_SERIES):
-                        self.parent_dataset.parent_application.ax.lines.remove(table.series[i])  
+                    tt = th.tables[file_name_short]
+                    for i in range(tt.MAX_NUM_SERIES):
+                        for nx in range(self.parent_dataset.nplots):
+                            self.parent_dataset.parent_application.axarr[nx].lines.remove(tt.series[nx][i])  
                     del th.tables[file_name_short]
                 except KeyError:
                     pass

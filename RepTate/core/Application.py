@@ -21,6 +21,8 @@ from Theory import Theory
 from DataSet import DataSet
 from TheoryBasic import *
 
+from MultiView import MultiView, PlotOrganizationType
+
 class Application(CmdBase):
     """Main abstract class that represents an application
     
@@ -29,7 +31,7 @@ class Application(CmdBase):
     name="Template"
     description="Abstract class that defines basic functionality"
 
-    def __init__(self, name="ApplicationTemplate", parent=None):
+    def __init__(self, name="ApplicationTemplate", parent=None, nplots=1, ncols=1, **kwargs):
         """Constructor of Application
         
         [description]
@@ -38,8 +40,8 @@ class Application(CmdBase):
             name {[type]} -- [description] (default: {"ApplicationTemplate"})
             parent {[type]} -- [description] (default: {None})
         """
+        
         super().__init__() 
-
         self.name=name
         self.parent_manager = parent
         self.logger = logging.getLogger('ReptateLogger')
@@ -50,6 +52,10 @@ class Application(CmdBase):
         self.current_view=0
         self.num_datasets=0
         self.legend_visible = False      
+        self.multiviews = [] #default view order in multiplot views
+        self.nplots = nplots #number of plots
+        self.ncols = ncols #number of columns in the multiplot
+        self.current_viewtab = 0 
 
         # Theories available everywhere
         # self.theories[TheoryPolynomial.thname]=TheoryPolynomial
@@ -58,14 +64,20 @@ class Application(CmdBase):
         # self.theories[TheoryExponential2.thname]=TheoryExponential2
             
         # MATPLOTLIB STUFF
-        sns.set_style("white")
-        sns.set_style("ticks")
-        plt.style.use('seaborn-poster')
-        self.figure = plt.figure(self.name)
-        self.figure.canvas.mpl_connect('close_event', self.handle_close_window)
-        self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
-        self.ax = self.figure.add_subplot(111)
-        sns.despine() # Remove up and right side of plot box
+        self.multiplots = MultiView(PlotOrganizationType.OptimalRow, self.nplots, self.ncols, self)
+        self.multiplots.plotselecttabWidget.setCurrentIndex(self.current_viewtab)
+        self.figure = self.multiplots.figure
+        self.axarr = self.multiplots.axarr #
+
+        # sns.set_style("white")
+        # sns.set_style("ticks")
+        # plt.style.use('seaborn-poster')
+        # self.figure = plt.figure(self.name)
+        # self.figure.canvas.mpl_connect('close_event', self.handle_close_window)
+        # self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
+        # self.ax = self.figure.add_subplot(111)
+        # sns.despine() # Remove up and right side of plot box
+
         #CURSOR STUFF
         #self.cursor = Cursor(self.ax, useblit=True, color='red', linewidth=1, linestyle='--')
         # LEGEND STUFF
@@ -74,7 +86,8 @@ class Application(CmdBase):
         #    leg.draggable()
         
         if (CmdBase.mode==CmdMode.cmdline):
-            self.figure.show() 
+            # self.figure.show() 
+            self.multiplot.show()
         
         
         #self.figure.draw() # DOESN'T WORK!
@@ -104,8 +117,8 @@ class Application(CmdBase):
         """
         # get the current x and y limits
         base_scale = 1.1
-        cur_xlim = self.ax.get_xlim()
-        cur_ylim = self.ax.get_ylim()
+        cur_xlim = self.axarr[0].get_xlim()
+        cur_ylim = self.axarr[0].get_ylim()
         # set the range
         #cur_xrange = (cur_xlim[1] - cur_xlim[0])*.5
         #cur_yrange = (cur_ylim[1] - cur_ylim[0])*.5
@@ -127,11 +140,11 @@ class Application(CmdBase):
         y_top = ydata - cur_ylim[0]
         y_bottom = cur_ylim[1] - ydata
         # set new limits
-        self.ax.set_xlim([xdata - x_left*scale_factor,
+        self.axarr[0].set_xlim([xdata - x_left*scale_factor,
                     xdata + x_right*scale_factor])
-        self.ax.set_ylim([ydata - y_top*scale_factor,
+        self.axarr[0].set_ylim([ydata - y_top*scale_factor,
                     ydata + y_bottom*scale_factor])
-        self.ax.figure.canvas.draw() # force re-draw
+        self.axarr[0].figure.canvas.draw() # force re-draw
 
     def new(self, line):
         """Create new empty dataset in the application
@@ -203,12 +216,14 @@ class Application(CmdBase):
         except KeyError:
             return
         for th in ds.theories.values():
-            for table in th.tables.values(): 
-                for i in range(table.MAX_NUM_SERIES):
-                    self.ax.lines.remove(table.series[i]) 
+            for tt in th.tables.values(): 
+                for i in range(tt.MAX_NUM_SERIES):
+                    for nx in range(self.nplots):
+                        self.axarr[nx].lines.remove(tt.series[nx][i]) 
         for file in ds.files: 
             for i in range(file.data_table.MAX_NUM_SERIES):
-                self.ax.lines.remove(file.data_table.series[i]) 
+                for nx in range(self.nplots):
+                    self.axarr[nx].lines.remove(file.data_table.series[nx][i]) 
 
     def do_delete(self, name):
         """Delete a dataset from the current application
@@ -353,7 +368,11 @@ class Application(CmdBase):
             name {[type]} -- [description]
         """
         if name in list(self.views.keys()):
-            self.current_view=self.views[name]
+            self.current_view = self.views[name]
+            if self.current_viewtab == 0:
+                self.multiviews[0] = self.views[name]
+            else:
+                self.multiviews[self.current_viewtab - 1] = self.views[name]
         else:
             print("View \"%s\" not found"%name)
         # Update the plots!
@@ -450,54 +469,61 @@ class Application(CmdBase):
         """
         self.set_axes_properties()
         #self.set_legend_properties()
-        self.figure.canvas.draw()   
+        self.canvas.draw() 
 
     def set_axes_properties(self):
         """[summary]
         
         [description]
         """
-        if (self.current_view.log_x): 
-            self.ax.set_xscale("log")
-            #self.ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
-            locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-            self.ax.xaxis.set_major_locator(locmaj)
-            locmin = LogLocator(base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-            self.ax.xaxis.set_minor_locator(locmin)
-            self.ax.xaxis.set_minor_formatter(NullFormatter())
-        else:
-            self.ax.set_xscale("linear")
-            self.ax.xaxis.set_minor_locator(AutoMinorLocator())
-        if (self.current_view.log_y): 
-            self.ax.set_yscale("log")
-            #self.ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
-            locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-            self.ax.yaxis.set_major_locator(locmaj)
-            locmin = LogLocator(base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-            self.ax.yaxis.set_minor_locator(locmin)
-            self.ax.yaxis.set_minor_formatter(NullFormatter())
-        else:
-            self.ax.set_yscale("linear")
-            self.ax.yaxis.set_minor_locator(AutoMinorLocator())
-        
-        self.ax.set_xlabel(self.current_view.x_label + ' [' + self.current_view.x_units + ']')
-        self.ax.set_ylabel(self.current_view.y_label + ' [' + self.current_view.y_units + ']')
-        self.ax.relim(True)
-        self.ax.autoscale(True)
-        self.ax.autoscale_view()
+        for nx in range(self.nplots):
+            view = self.multiviews[nx]
+            if (view.log_x): 
+                self.axarr[nx].set_xscale("log")
+                #self.axarr[nx].xaxis.set_minor_locator(LogLocator(subs=range(10)))
+                locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+                self.axarr[nx].xaxis.set_major_locator(locmaj)
+                locmin = LogLocator(base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+                self.axarr[nx].xaxis.set_minor_locator(locmin)
+                self.axarr[nx].xaxis.set_minor_formatter(NullFormatter())
+            else:
+                self.axarr[nx].set_xscale("linear")
+                self.axarr[nx].xaxis.set_minor_locator(AutoMinorLocator())
+            if (view.log_y): 
+                self.axarr[nx].set_yscale("log")
+                #self.axarr[nx].yaxis.set_minor_locator(LogLocator(subs=range(10)))
+                locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+                self.axarr[nx].yaxis.set_major_locator(locmaj)
+                locmin = LogLocator(base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+                self.axarr[nx].yaxis.set_minor_locator(locmin)
+                self.axarr[nx].yaxis.set_minor_formatter(NullFormatter())
+            else:
+                self.axarr[nx].set_yscale("linear")
+                self.axarr[nx].yaxis.set_minor_locator(AutoMinorLocator())
+            
+            self.axarr[nx].set_xlabel(view.x_label + ' [' + view.x_units + ']')
+            self.axarr[nx].set_ylabel(view.y_label + ' [' + view.y_units + ']')
+            
+            # self.axarr[nx].plot(self.xData,self.yData)
+            
+            self.axarr[nx].relim(True)
+            self.axarr[nx].autoscale(True)
+            self.axarr[nx].autoscale_view()
+            self.axarr[nx].set_aspect("auto")
 
     def set_legend_properties(self):
         """[summary]
         
         [description]
         """
-        leg=self.ax.legend(frameon=True, ncol=2)
-        if (self.legend_visible):
-            leg.draggable()
-        else:
-            try:
-                leg.remove()
-            except AttributeError as e:
-                pass
-                #print("legend: %s"%e)
+        pass 
+            # leg=self.axarr[0].legend(frameon=True, ncol=2)
+            # if (self.legend_visible):
+            #     leg.draggable()
+            # else:
+            #     try:
+            #         leg.remove()
+            #     except AttributeError as e:
+            #         pass
+            #         #print("legend: %s"%e)
 

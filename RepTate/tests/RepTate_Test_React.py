@@ -20,13 +20,12 @@ sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
 sys.path.append('visual')
+from CmdBase import CmdBase, CalcMode
 from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
 from time import time, sleep
-from CmdBase import CmdBase, CalcMode
-
 
 def start_RepTate(argv):
     """
@@ -39,52 +38,40 @@ def start_RepTate(argv):
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     
     app = QApplication(sys.argv)
-    
+
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     CmdBase.calcmode = CalcMode.singlethread
-    
+
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
-    ex.show()
-    
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_lve_window()
+    ex.new_React_window()
     
     #####################
     # TEST Likhtman-McLeish
     # Open a Dataset
-    pi_dir = "data%sPI_LINEAR%s"%((os.sep,)*2)
-    ex.applications["LVE1"].new_tables_from_files([
-                                                   pi_dir + "PI_23.4k_T-35.tts",
-                                                   pi_dir + "PI_33.6k_T-35.tts",
-                                                   pi_dir + "PI_94.9k_T-35.tts",
-                                                   pi_dir + "PI_225.9k_T-35.tts",
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   pi_dir + "PI_634.5k_T-35.tts",
-                                                   pi_dir + "PI_1131k_T-35.tts",
+    ex.applications["React1"].new_tables_from_files([
+                                                   "data%sReact%sout1.reac"%((os.sep,)*2),
                                                    ])
     # Open a theory
-    ex.applications["LVE1"].datasets["Set1"].new_theory("Likhtman-McLeish")
-    # Minimize the theory
-    ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
+    ex.applications["React1"].datasets["Set1"].new_theory("TobitaCSTRTheory")
 
+    print(ex.applications["React1"].multiplots.axarr[0].get_position())
+    ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(1)
+    print(ex.applications["React1"].multiplots.axarr[0].get_position())
+    # Calculate the theory
+    ex.applications["React1"].datasets["Set1"].handle_actionCalculate_Theory()
+    print(ex.applications["React1"].multiplots.axarr[0].get_position())
 
-    #####################
-    # TEST Carreau-Yasuda
-    # Open a Dataset
-    ex.new_lve_window()
-    ex.applications["LVE2"].new_tables_from_files([
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   ])
-    # Switch the view
-    ex.applications["LVE2"].view_switch("logetastar")
-    # Open a theory
-    ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
-    # Minimize the theory
-    ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
+    ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(0)
+    print(ex.applications["React1"].multiplots.axarr[0].get_position())
+    ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(1)
+    print(ex.applications["React1"].multiplots.axarr[0].get_position())
+
+    ex.show()
     
     sys.exit(app.exec_())
 

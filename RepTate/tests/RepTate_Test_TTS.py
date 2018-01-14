@@ -20,6 +20,7 @@ sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
 sys.path.append('visual')
+from CmdBase import CmdBase, CalcMode
 from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
@@ -37,7 +38,13 @@ def start_RepTate(argv):
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     
     app = QApplication(sys.argv)
+
+    # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
+    CmdBase.calcmode = CalcMode.singlethread
+
     ex = QApplicationManager()
+    ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
+
     ex.show()
     
     ########################################################

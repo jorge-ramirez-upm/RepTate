@@ -27,7 +27,6 @@ from SplashScreen import SplashScreen
 from time import time, sleep
 from CmdBase import CmdBase, CalcMode
 
-
 def start_RepTate(argv):
     """
     Main RepTate application. 
@@ -51,40 +50,41 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_lve_window()
+    ex.new_nlve_window()
     
     #####################
-    # TEST Likhtman-McLeish
+    # TEST Rolie-Poly
     # Open a Dataset
-    pi_dir = "data%sPI_LINEAR%s"%((os.sep,)*2)
-    ex.applications["LVE1"].new_tables_from_files([
-                                                   pi_dir + "PI_23.4k_T-35.tts",
-                                                   pi_dir + "PI_33.6k_T-35.tts",
-                                                   pi_dir + "PI_94.9k_T-35.tts",
-                                                   pi_dir + "PI_225.9k_T-35.tts",
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   pi_dir + "PI_634.5k_T-35.tts",
-                                                   pi_dir + "PI_1131k_T-35.tts",
+
+    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s"%((os.sep,)*4)
+    ex.applications["NLVE1"].new_tables_from_files([
+                                                   dow_dir + "My_dow150-160-1 shear.shear",
+                                                   dow_dir + "My_dow150-160-01 shear.shear",
+                                                   dow_dir + "My_dow150-160-001 shear.shear",
+                                                   dow_dir + "My_dow150-160-3 shear.shear",
+                                                   dow_dir + "My_dow150-160-03 shear.shear",
+                                                   dow_dir + "My_dow150-160-003 shear.shear",
+                                                   dow_dir + "My_dow150-160-0003 shear.shear",
                                                    ])
     # Open a theory
-    ex.applications["LVE1"].datasets["Set1"].new_theory("Likhtman-McLeish")
+    ex.applications["NLVE1"].datasets["Set1"].new_theory("RoliePoly")
     # Minimize the theory
-    ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
+    ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
 
-    #####################
-    # TEST Carreau-Yasuda
-    # Open a Dataset
-    ex.new_lve_window()
-    ex.applications["LVE2"].new_tables_from_files([
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   ])
-    # Switch the view
-    ex.applications["LVE2"].view_switch("logetastar")
-    # Open a theory
-    ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
-    # Minimize the theory
-    ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
+    # #####################
+    # # TEST Carreau-Yasuda
+    # # Open a Dataset
+    # ex.new_lve_window()
+    # ex.applications["LVE2"].new_tables_from_files([
+    #                                                pi_dir + "PI_483.1k_T-35.tts",
+    #                                                ])
+    # # Switch the view
+    # ex.applications["LVE2"].view_switch("logetastar")
+    # # Open a theory
+    # ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
+    # # Minimize the theory
+    # ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
     
     sys.exit(app.exec_())
 

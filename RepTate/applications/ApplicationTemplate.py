@@ -50,7 +50,7 @@ class BaseApplicationTemplate:
     
     [description]
     """
-    def __init__(self, name='Template', parent=None):
+    def __init__(self, name='Template', parent=None, nplots=1, ncols=2):
         """[summary]
         
         [description]
@@ -65,6 +65,13 @@ class BaseApplicationTemplate:
         # set the views that can be selected in the view combobox
         # the order is defined by the index, index 0 is the defaut view
         self.views['y(x)'] = View(name='y(x)', description='y as a function of x', x_label='x', y_label='y(x)', x_units='-', y_units='-', log_x=False, log_y=False, view_proc=self.viewyx, n=1, snames=['y(x)'], index=0)
+
+        #set multiviews
+        #default view order in multiplot views, set only one item for single view
+        #if more than one item, modify the 'nplots' in the super().__init__ call
+        self.multiviews = [self.views['y(x)']] 
+        self.nplots = len(self.multiviews) 
+
 
         # FILES
         # set the type of files that ApplicationTemplate can open

@@ -41,7 +41,7 @@ class Theory(CmdBase):
     nfev = 0
     """ nfev {int} -- Number of function evaluations """    
 
-    def __init__(self, name="Theory", parent_dataset=None, ax=None):
+    def __init__(self, name="Theory", parent_dataset=None, axarr=None):
         """Constructor
         
         The following variables should be set by the particular realization of the theory:
@@ -65,13 +65,15 @@ class Theory(CmdBase):
         super(Theory, self).__init__() 
         self.name=name
         self.parent_dataset = parent_dataset
-        self.ax = ax
+        self.axarr = axarr
+        self.ax = axarr[0] #theory calculation only on this plot
         self.parameters={}
         self.tables={}
         self.function=None
         self.active = True #defines if the theorie is plotted
         self.calculate_is_busy = False
         
+
         # THEORY OPTIONS
         self.npoints=100
         self.dt=0.001
@@ -81,6 +83,7 @@ class Theory(CmdBase):
         self.is_fitting=False
         self.has_modes=False
         
+        ax = self.ax
         # XRANGE for FIT
         self.xmin=0.01
         self.xmax=1
@@ -101,7 +104,7 @@ class Theory(CmdBase):
     
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
-            self.tables[f.file_name_short]=DataTable(ax)
+            self.tables[f.file_name_short] = DataTable(axarr)
 
         self.do_cite("")
             
@@ -343,7 +346,7 @@ class Theory(CmdBase):
             #pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1) 
             pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, method='trf', bounds=(param_min, param_max))
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
-        except RuntimeError as e:
+        except Exception as e:
             print(e)
             return
 
@@ -603,7 +606,6 @@ class Theory(CmdBase):
             self.xrange.set_visible(not self.xrange.get_visible()) 
             self.xminline.set_visible(not self.xminline.get_visible()) 
             self.xmaxline.set_visible(not self.xmaxline.get_visible()) 
-            print("Xmin=%g Xmax=%g"%(self.xmin,self.xmax))
         else:
             items=line.split()
             if len(items)<2:
@@ -795,17 +797,34 @@ class Theory(CmdBase):
         self.active = False
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
-                    table.series[i].set_visible(False)
+                for nx in range(self.parent_dataset.nplots):
+                    table.series[nx][i].set_visible(False)
+        try:
+            self.hide_theory_extras()
+        except: # current theory has no extras
+            pass
     
+    def set_th_table_visible(self, fname, state):
+        """Show/Hide all theory lines related to the file "fname" """
+        tt = self.tables[fname]
+        for i in range(tt.MAX_NUM_SERIES):
+            for nx in range(self.parent_dataset.nplots):
+                tt.series[nx][i].set_visible(state)
+
     def do_show(self):
         """[summary]
         
         [description]
         """
         self.active = True
-        for table in self.tables.values():
-            for i in range(table.MAX_NUM_SERIES):
-                    table.series[i].set_visible(True)
+        for fname in self.tables:
+            if fname in self.parent_dataset.inactive_files:
+                return
+            else:
+                tt = self.tables[fname]
+                for i in range(tt.MAX_NUM_SERIES):
+                    for nx in range(self.parent_dataset.nplots):
+                        tt.series[nx][i].set_visible(True)
 
     def Qprint(self, msg):
         """[summary]

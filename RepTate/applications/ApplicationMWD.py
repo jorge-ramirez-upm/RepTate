@@ -62,6 +62,10 @@ class BaseApplicationMWD:
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.viewWM, n=1, 
                                 snames=["W(M)"], index=0)
 
+        #set multiviews
+        self.multiviews = [self.views["W(M)"]] #default view order in multiplot views, set only one item for single view
+        self.nplots = len(self.multiviews) 
+
         # FILES
         ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], ['Mn','Mw','PDI'], ["g/mol", '-'])
         self.filetypes[ftype.extension]=ftype

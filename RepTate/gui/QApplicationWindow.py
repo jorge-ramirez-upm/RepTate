@@ -47,7 +47,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     
     [description]
     """
-    def __init__(self, name='Application Template', parent=None):
+    def __init__(self, name='Application Template', parent=None, **kwargs):
         """[summary]
         
         [description]
@@ -58,7 +58,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         Returns:
             [type] -- [description]
         """
-        super().__init__(name, parent)
+
+        super().__init__(name, parent, **kwargs)
 
         if CmdBase.mode!=CmdMode.GUI:
             return None
@@ -128,10 +129,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # plt.style.use('seaborn-poster')
         # self.figure=plt.figure()
         # self.ax = self.figure.add_subplot(111)
-        self.canvas = FigureCanvasQTAgg(self.figure)
-        self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
-        self.canvas.setFocus()
-        self.mplvl.addWidget(self.canvas)
+        
+        # self.canvas = FigureCanvasQTAgg(self.figure)
+        # self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
+        # self.canvas.setFocus()
+        self.canvas = self.multiplots.canvas
+        self.mplvl.addWidget(self.multiplots)
+        
         self.mpl_toolbar = NavigationToolbar2QT(self.canvas, self)
         self.mpl_toolbar.setIconSize(QtCore.QSize(16, 16))
         self.mpl_toolbar.setFixedHeight(36)
@@ -254,8 +258,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         Arguments:
             checked {[type]} -- [description]
         """
+        if self.current_viewtab == 0:
+            ax = self.axarr[0]
+        else:
+            ax = self.axarr[self.current_viewtab - 1]
         if (checked):
-            self.annotation = self.ax.annotate(
+            self.annotation = ax.annotate(
                 '', xy=(0, 0), ha = 'left',
                 xytext = (-40, 40), textcoords = 'offset points', va = 'center',
                 bbox = dict(
@@ -269,20 +277,29 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.canvas.draw()
 
     def add_annotation(self):
+        if self.current_viewtab == 0:
+            ax = self.axarr[0]
+        else:
+            ax = self.axarr[self.current_viewtab - 1]
         text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
         if ok:
-            xmin, xmax = self.ax.get_xlim()
-            ymin, ymax = self.ax.get_ylim()
+            xmin, xmax = ax.get_xlim()
+            ymin, ymax = ax.get_ylim()
             xpos = (xmin+xmax)/2
             ypos = (ymin+ymax)/2
-            ann = self.ax.annotate(text, xy=(xpos, ypos), xytext=(xpos, ypos), size=20, va="center", ha="center")
+            ann = ax.annotate(text, xy=(xpos, ypos), xytext=(xpos, ypos), size=20, va="center", ha="center")
             self.graphicnotes.append(ann)
             self.artistnotes.append(DraggableNote(ann, DragType.both, None, None))
             self.canvas.draw()
 
     def show_legend(self):
+        # if self.current_viewtab == 0:
+        #     ax = self.axarr[0]
+        # else:
+        #     ax = self.axarr[self.current_viewtab - 1]
+
         if self.actionShow_Legend.isChecked():
-            self.legend=plt.legend(loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
+            self.legend = plt.legend((self.axarr[0],), loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
             self.legend.draggable()
         else:
             self.legend.remove()
@@ -485,7 +502,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for curve in self.curves:
             curve.disconnect()
         self.curves.clear()
-        for curve in ds.selected_file.data_table.series:
+
+        for curve in ds.selected_file.data_table.series[0]: #drag allowed on axarr[0] only
             cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y)
             self.curves.append(cur)
 
@@ -666,8 +684,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     self.viewComboBox.insertItem(self.views[i].index, i)
                     if self.views[i].index == 0: #index 0 is the defaut view
                         self.current_view = self.views[i] 
-        self.viewComboBox.setCurrentIndex(0) 
-        
+        self.viewComboBox.setCurrentIndex(0)
 
     def dragEnterEvent(self, e):
         """[summary]
@@ -703,13 +720,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
-        try:
-            plt.tight_layout(pad=1.2)
-        except:
-            pass
+        pass
+        # try:
+        #     plt.tight_layout(pad=1.2)
+        # except:
+        #     pass
         # self.canvas = FigureCanvas(self.figure)
         #self.mplvl.addWidget(self.canvas)
-        self.canvas.draw()
+        # self.canvas.draw()
 
     def addTableToCurrentDataSet(self, dt, ext):
         """Add file table to curent dataset tab
@@ -918,9 +936,24 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
-        # TIGHT LAYOUT in order to view axes and everything
-        plt.tight_layout(pad=1.2)
-
+        #large window settings
+        w_large = 900
+        h_large = 650
+        font_large = 16
+        #small window settings
+        w_small = 300
+        h_small = 400
+        font_small = 10
+        #interpolate for current window size
+        width = event.width 
+        height = event.height
+        scale_w = font_small + (width - w_small)*(font_large - font_small)/(w_large - w_small)
+        scale_h = font_small + (height - h_small)*(font_large - font_small)/(h_large - h_small)
+        font_size = min(scale_w, scale_h)
+        #resize plot fonts
+        for ax in self.axarr:
+            for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
+                item.set_fontsize(font_size)
 
     # def No_Limits(self):
     #     self.actionShow_Limits.setIcon(self.actionNo_Limits.icon())

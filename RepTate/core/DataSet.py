@@ -77,6 +77,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.name = name
         self.description = description
         self.parent_application = parent
+        self.nplots = self.parent_application.nplots
         self.files = [] 
         self.current_file = None
         self.num_files = 0
@@ -145,8 +146,15 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             return
 
         file_matching[0].active = check_state
-        for i in range(file_matching[0].data_table.MAX_NUM_SERIES):
-            file_matching[0].data_table.series[i].set_visible(check_state)
+    
+        #hide datatable
+        dt = file_matching[0].data_table
+        for i in range(dt.MAX_NUM_SERIES): 
+            for nx in range(self.nplots): #loop over the plots
+                dt.series[nx][i].set_visible(check_state) 
+        #hide theory table
+        for th in self.theories.values():
+            th.set_th_table_visible(file_matching[0].file_name_short, check_state)
 
         #save the check_state to recover it upon change of tab or 'view all' events
         if check_state==False:
@@ -166,8 +174,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         for file in self.files:
             if file.file_name_short not in self.inactive_files:
                 file.active = True
-                for i in range(file.data_table.MAX_NUM_SERIES):
-                    file.data_table.series[i].set_visible(True)
+                dt = file.data_table
+                for i in range(dt.MAX_NUM_SERIES):
+                    for nx in range(self.nplots): #loop over the plots
+                        dt.series[nx][i].set_visible(True)
         if self.current_theory:
             self.theories[self.current_theory].do_show()
 
@@ -178,8 +188,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         """
         for file in self.files:
             file.active = False
-            for i in range(file.data_table.MAX_NUM_SERIES):
-                file.data_table.series[i].set_visible(False)
+            dt = file.data_table
+            for i in range(dt.MAX_NUM_SERIES):
+                for nx in range(self.nplots): #loop over the plots
+                    dt.series[nx][i].set_visible(False)
         for th in self.theories.values():
             th.do_hide()
 
@@ -188,7 +200,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         
         [description]
         """
-        view = self.parent_application.current_view
+        # view = self.parent_application.current_view
+
         self.table_icon_list.clear()
         filled = False
         if self.symbolmode == SymbolMode.fixed: #single symbol, empty?
@@ -232,11 +245,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         size =  self.marker_size #if file.size is None else file.size
         width = self.line_width
         for j, file in enumerate(self.files):
-            try:
-                x, y, success = view.view_proc(file.data_table, file.file_parameters)
-            except TypeError as e:
-                print(e)
-                return
+            dt = file.data_table
 
             marker = next(markerlst) #if file.marker is None else file.marker 
             marker_name = next(marker_name_lst) #if file.marker is None else file.marker 
@@ -247,47 +256,59 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     #save file name with associated marker shape, fillm and color
                     self.table_icon_list.append((file.file_name_short, marker_name, face, color))
 
-            for i in range(file.data_table.MAX_NUM_SERIES):
-                if (i<view.n and file.active):
-                    file.data_table.series[i].set_data(x[:,i], y[:,i])
-                    file.data_table.series[i].set_visible(True)
-                    file.data_table.series[i].set_marker(marker)
-                    file.data_table.series[i].set_markerfacecolor(face)
-                    file.data_table.series[i].set_markeredgecolor(color)
-                    file.data_table.series[i].set_markeredgewidth(width)
-                    file.data_table.series[i].set_markersize(size)
-                    file.data_table.series[i].set_linestyle('')
-                    if (file.active and i==0):
-                        label=""
-                        for pmt in file.file_type.basic_file_parameters:
-                            try:
-                                label+=pmt+'='+str(file.file_parameters[pmt])+' ';
-                            except KeyError as e: #if parameter missing from data file
-                                if CmdBase.mode!=CmdMode.GUI:
-                                    print("Parameter %s not found in data file"%(e))
-                        #file.data_table.series[i].set_label(file.file_name_short)
-                        file.data_table.series[i].set_label(label)
+            for nx in range(self.nplots):
+                view = self.parent_application.multiviews[nx]
+                try:
+                    x, y, success = view.view_proc(dt, file.file_parameters)
+                except TypeError as e:
+                    print(e)
+                    return
+
+                for i in range(dt.MAX_NUM_SERIES):
+                    if (i<view.n and file.active):
+                        dt.series[nx][i].set_data(x[:,i], y[:,i])
+                        dt.series[nx][i].set_visible(True)
+                        dt.series[nx][i].set_marker(marker)
+                        dt.series[nx][i].set_markerfacecolor(face)
+                        dt.series[nx][i].set_markeredgecolor(color)
+                        dt.series[nx][i].set_markeredgewidth(width)
+                        dt.series[nx][i].set_markersize(size)
+                        dt.series[nx][i].set_linestyle('')
+                        if (file.active and i==0):
+                            label=""
+                            for pmt in file.file_type.basic_file_parameters:
+                                try:
+                                    label+=pmt+'='+str(file.file_parameters[pmt])+' ';
+                                except KeyError as e: #if parameter missing from data file
+                                    if CmdBase.mode!=CmdMode.GUI:
+                                        print("Parameter %s not found in data file"%(e))
+                            #dt.series[nx][i].set_label(file.file_name_short)
+                            dt.series[nx][i].set_label(label)
+                        else:
+                            dt.series[nx][i].set_label('')
                     else:
-                        file.data_table.series[i].set_label('')
-                else:
-                    file.data_table.series[i].set_visible(False)
-                    file.data_table.series[i].set_label('')
-        
-            for th in self.theories.values():
-                tt = th.tables[file.file_name_short]
-                x, y, success = view.view_proc(tt, file.file_parameters)
-                for i in range(tt.MAX_NUM_SERIES):
-                    if (i<view.n and file.active and th.active):
-                        tt.series[i].set_data(x[:,i], y[:,i])
-                        tt.series[i].set_visible(True)
-                        tt.series[i].set_marker('')
-                        tt.series[i].set_linestyle('-')
-                        tt.series[i].set_color(color)
-                        tt.series[i].set_label('')
-                    else:
-                        tt.series[i].set_visible(False)
-                        tt.series[i].set_label('')
-                th.plot_theory_stuff()
+                        dt.series[nx][i].set_visible(False)
+                        dt.series[nx][i].set_label('')
+            
+                for th in self.theories.values():
+                    tt = th.tables[file.file_name_short]
+                    try:
+                        x, y, success = view.view_proc(tt, file.file_parameters)
+                    except Exception as e:
+                        print(e)
+                        return
+                    for i in range(tt.MAX_NUM_SERIES):
+                        if (i<view.n and file.active and th.active):
+                            tt.series[nx][i].set_data(x[:,i], y[:,i])
+                            tt.series[nx][i].set_visible(True)
+                            tt.series[nx][i].set_marker('')
+                            tt.series[nx][i].set_linestyle('-')
+                            tt.series[nx][i].set_color(color)
+                            tt.series[nx][i].set_label('')
+                        else:
+                            tt.series[nx][i].set_visible(False)
+                            tt.series[nx][i].set_label('')
+                    th.plot_theory_stuff()
         
         self.parent_application.update_plot()
 
@@ -440,7 +461,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         
         if (ext in self.parent_application.filetypes):  
             self.num_files+=1
-            f = File(fname, self.parent_application.filetypes[ext], self, self.parent_application.ax)
+            f = File(fname, self.parent_application.filetypes[ext], self, self.parent_application.axarr)
             self.files.append(f)
             self.current_file=f
             #leg=self.current_application.ax.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
@@ -505,7 +526,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         if (f_ext[0] in self.parent_application.filetypes): 
             ft = self.parent_application.filetypes[f_ext[0]] 
             for f in f_names:
-                df = ft.read_file(f, self, self.parent_application.ax)
+                df = ft.read_file(f, self, self.parent_application.axarr)
                 unique = True
                 for file in self.files:
                     if df.file_name_short == file.file_name_short: #check if file already exists in current ds
@@ -516,7 +537,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     newtables.append(df)
                     for th_name in self.theories:
                         #add a theory table
-                        self.theories[th_name].tables[df.file_name_short] = DataTable(self.parent_application.ax)
+                        self.theories[th_name].tables[df.file_name_short] = DataTable(self.parent_application.axarr)
                         self.theories[th_name].function(df)
             if CmdBase.mode==CmdMode.GUI:
                 return (True, newtables, f_ext[0])
@@ -535,7 +556,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
     #     for i in len(paths_to_open):
     #         path, ft = paths_to_open[i]
-    #         df = ft.read_file(path, self, self.parent_application.ax)
+    #         df = ft.read_file(path, self, self.parent_application.axarr[0])
             
         
         
@@ -672,12 +693,14 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         """
         if name in self.theories.keys():
             try:
+                print("name:", name, "th:", self.theories[name])
                 self.theories[name].destructor()
             except:
                 print("No destructor programmed for %s"%self.theories[name].name)
-            for table in self.theories[name].tables.values(): # remove matplotlib artist from ax
-                for i in range(table.MAX_NUM_SERIES):
-                    self.parent_application.ax.lines.remove(table.series[i])
+            for tt in self.theories[name].tables.values(): # remove matplotlib artist from ax
+                for i in range(tt.MAX_NUM_SERIES):
+                    for nx in range(self.nplots):
+                        self.parent_application.axarr[nx].lines.remove(tt.series[nx][i])
             del self.theories[name]
         else:
             print("Theory \"%s\" not found"%name)            
@@ -738,7 +761,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             #th_id = "%s%02d"%(line,self.num_theories)
             # th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name
             th_id = "%s%02d"%(line, self.num_theories)
-            th = self.parent_application.theories[line](th_id, self, self.parent_application.ax)
+            th = self.parent_application.theories[line](th_id, self, self.parent_application.axarr)
             self.theories[th.name]=th
             if (self.mode!=CmdMode.GUI): 
                 if (self.mode==CmdMode.batch):

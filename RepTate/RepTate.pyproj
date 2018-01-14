@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>41d5c2f2-6dbc-423a-8657-cd5c56d3d66b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>RepTate.py</StartupFile>
+    <StartupFile>tests\RepTate_Test_React.py</StartupFile>
     <SearchPath>gui\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -80,6 +80,7 @@
     <Compile Include="RepTate.py" />
     <Compile Include="RepTateCL.py" />
     <Compile Include="tests\RepTate_Test_LVE.py" />
+    <Compile Include="tests\RepTate_Test_React.py" />
     <Compile Include="tests\RepTate_Test_TTS.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
