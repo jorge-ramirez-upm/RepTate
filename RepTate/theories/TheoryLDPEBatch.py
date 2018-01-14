@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialo
 from PyQt5.QtCore import QSize, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication
 
 
 from react_ctypes_helper import *
@@ -154,7 +155,6 @@ class BaseTheoryTobitaBatch():
                     global react_dist
                     from react_ctypes_helper import react_dist
                 return
- 
         self.dist_exists = True
         ndist = self.ndist
         # react_dist[ndist].name = self.reactname #TODO: set the dist name in the C library 
@@ -222,6 +222,8 @@ class BaseTheoryTobitaBatch():
                 # update on number made
                 if react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
                     self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
+                    QApplication.processEvents() # needed to use Qprint if in single-thread
+
 
             else:   # polymer wasn't available
                 try:

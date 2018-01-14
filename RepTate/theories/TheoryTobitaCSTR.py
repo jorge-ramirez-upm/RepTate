@@ -16,6 +16,8 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from react_ctypes_helper import *
 from ctypes import *
@@ -58,6 +60,7 @@ class BaseTheoryTobitaCSTR:
     [description]
     """
     single_file = True # True if the theory can be applied to multiple files simultaneously
+    increase_memory = pyqtSignal(str)
 
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
@@ -94,6 +97,8 @@ class BaseTheoryTobitaCSTR:
                                           type=ParameterType.real, opt_type=OptType.const)
         self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
                                           type=ParameterType.real, opt_type=OptType.const)
+
+        self.increase_memory.connect(self.handle_increase_memory)
 
     def get_modes(self):
         """[summary]
@@ -141,11 +146,31 @@ class BaseTheoryTobitaCSTR:
         nbins = int(np.round(self.parameters['nbin'].value))
         
         c_ndist = c_int()
+
+        #resize theory datatable
+        ft = f.data_table        
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = 1
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+
         if not self.dist_exists:
             success = request_dist(byref(c_ndist))
             self.ndist = c_ndist.value
             if not success:
-                self.Qprint('Too many theories open for internal storage. Please close a theory')
+                self.Qprint('Too many theories open for internal storage.\nPlease close a theory or increase records\nthen press "calculate"')
+                try:
+                    self.success_increase_memory = None
+                    self.increase_memory.emit("dist")
+                    while self.success_increase_memory is None:
+                        pass
+                except:
+                    self.success_increase_memory = False
+                if self.success_increase_memory:
+                    link_react_dist() #re-link the python array with the C array
+                    global react_dist
+                    from react_ctypes_helper import react_dist
                 return
             self.dist_exists = True
         ndist = self.ndist
@@ -191,24 +216,47 @@ class BaseTheoryTobitaCSTR:
                         self.Qprint('Polymers too large: gelation occurs for these parameters')
                         i = numtomake
                 else: # error message if we ran out of arms
-                    message = 'Ran out of storage for arm records. Options to avoid this are:\n'
-                    message += '(1) Reduce number of polymers requested\n'
-                    message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
-                    message += '(3) Close some other theories\n'
-                    message += '(4) Adjust parameters to avoid gelation'
-                    self.Qprint(message)
-                    i = numtomake
-                    tCSTR_global.tobitaCSTRerrorflag = True
+                    try:
+                        self.success_increase_memory = None
+                        self.increase_memory.emit("arm")
+                        while self.success_increase_memory is None:
+                            pass
+                    except:
+                        self.success_increase_memory = False
+
+                    if not self.success_increase_memory:
+                        message = 'Ran out of storage for arm records. Options to avoid this are:\n'
+                        message += '(1) Reduce number of polymers requested\n'
+                        message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
+                        message += '(3) Close some other theories\n'
+                        message += '(4) Adjust parameters to avoid gelation'
+                        self.Qprint(message)
+                        i = numtomake
+                        tCSTR_global.tobitaCSTRerrorflag = True
+                    else:
+                        continue # back to the start of while loop
                 # update on number made
                 if react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
                     self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
+                    QApplication.processEvents() # needed to use Qprint if in single-thread
+
 
             else:   # polymer wasn't available
-                message = 'Ran out of storage for polymer records. Options to avoid this are:'
-                message += '(1) Reduce number of polymers requested'
-                message += '(2) Close some other theories'
-                self.Qprint(message)
-                i = numtomake
+                try:
+                    self.success_increase_memory = None
+                    self.increase_memory.emit("polymer")
+                    while self.success_increase_memory is None:
+                        pass
+                except:
+                    self.success_increase_memory = False
+                if not self.success_increase_memory:
+                    message = 'Ran out of storage for polymer records. Options to avoid this are:'
+                    message += '(1) Reduce number of polymers requested'
+                    message += '(2) Close some other theories'
+                    self.Qprint(message)
+                    i = numtomake
+                else:
+                    continue # back to the start of while loop
         # end make polymers loop
 
         calc = 0
@@ -308,3 +356,8 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
 
     def handle_edit_bob_settings(self):
         rgt.handle_edit_bob_settings(self)
+
+    @pyqtSlot(str)
+    def handle_increase_memory(self, name):
+        """Open a dialog to request more memory for the 'name'-records."""
+        self.success_increase_memory = rgt.handle_increase_records(self, name)
