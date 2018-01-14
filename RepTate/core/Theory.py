@@ -825,6 +825,7 @@ class Theory(CmdBase):
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.parent_dataset.nplots):
                         tt.series[nx][i].set_visible(True)
+        self.parent_dataset.do_plot("")
 
     def Qprint(self, msg):
         """[summary]
