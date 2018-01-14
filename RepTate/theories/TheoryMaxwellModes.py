@@ -19,6 +19,7 @@ from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
 from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from DraggableArtists import DragType, DraggableModesSeries
 
 class TheoryMaxwellModesFrequency(CmdBase):
@@ -137,7 +138,7 @@ class BaseTheoryMaxwellModesFrequency:
         [description]
         """
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.graphicmodes.series[nx][i]) 
+        self.ax.lines.remove(self.graphicmodes) 
 
     def hide_theory_extras(self):
         """Called when the active theory is changed
@@ -286,7 +287,7 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogYesButton')), 'View modes')
+        self.modesaction = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
@@ -460,7 +461,7 @@ class BaseTheoryMaxwellModesTime:
         [description]
         """
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.graphicmodes.series[nx][i]) 
+        self.ax.lines.remove(self.graphicmodes) 
 
     def hide_theory_extras(self):
         """Called when the active theory is changed
@@ -604,7 +605,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogYesButton')), 'View modes')
+        self.modesaction = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)

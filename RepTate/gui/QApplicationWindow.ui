@@ -347,7 +347,7 @@
     <string>Reload Data</string>
    </property>
    <property name="toolTip">
-    <string>Re-read data files</string>
+    <string>Reload data files and theories</string>
    </property>
   </action>
   <action name="actionInspect_Data">

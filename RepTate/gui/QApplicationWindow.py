@@ -561,7 +561,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #save theory tabs of ds
         ntabs = ds.TheorytabWidget.count()
         for i in range(ntabs):
-            thname = ds.TheorytabWidget.widget(0).name.rstrip("0123456789")
+            th = ds.TheorytabWidget.widget(0)
+            try:
+                th.destructor()
+            except:
+                pass
+            thname = th.name.rstrip("0123456789")
             thtabname = ds.TheorytabWidget.tabText(0)
             th_cleaned.append((thname, thtabname))
             ds.TheorytabWidget.removeTab(0)

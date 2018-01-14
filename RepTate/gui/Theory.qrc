@@ -20,5 +20,6 @@
         <file>Images/new_icons/icons8-stop-hand-in-a-circle.png</file>
         <file>Images/new_icons/icons8-stop-sign.png</file>
         <file>Images/new_icons/icons8-road-closure.png</file>
+        <file>Images/new_icons/icons8-visible.png</file>
     </qresource>
 </RCC>

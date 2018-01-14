@@ -86,6 +86,11 @@ def start_RepTate(argv):
     # Minimize the theory
     ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
     
+    # Open a theory
+    ex.applications["LVE2"].datasets["Set1"].new_theory("MaxwellModesFrequency")
+    # Minimize the theory
+    ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
+    
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
