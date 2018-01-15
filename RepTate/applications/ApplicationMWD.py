@@ -45,6 +45,7 @@ class BaseApplicationMWD:
     
     [description]
     """
+    
     def __init__(self, name="MWD", parent = None):
         """[summary]
         

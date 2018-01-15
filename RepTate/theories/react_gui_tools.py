@@ -55,7 +55,7 @@ def handle_stop_calulation(self):
 
 def handle_save_bob_configuration(parent):
     """
-    Launch a dialog to select a filename when to save the polymer configurations.
+    Launch a dialog to select a filename where to save the polymer configurations.
     Then call the C routine 'polyconfwrite' that the data into the selected file
     """
     stars = '*************************\n'
