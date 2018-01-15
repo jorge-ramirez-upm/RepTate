@@ -387,7 +387,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
-        self.linearenvelope = tb.addAction(self.style().standardIcon(getattr(QStyle, 'SP_FileDialogListView')), 'Show Linear Envelope')
+        self.linearenvelope = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'Show Linear Envelope')
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
 
