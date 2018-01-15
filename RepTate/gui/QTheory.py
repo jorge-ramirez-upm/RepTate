@@ -25,12 +25,12 @@ PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
 
 
-def trap_exc_during_debug(*args):
-    # when app raises uncaught exception, print info
-    print(args)
+# def trap_exc_during_debug(*args):
+#     # when app raises uncaught exception, print info
+#     print(args)
 
-# install exception hook: without this, uncaught exception would cause application to exit
-sys.excepthook = trap_exc_during_debug
+# # install exception hook: without this, uncaught exception would cause application to exit
+# sys.excepthook = trap_exc_during_debug
 
 class CalculationThread(QObject):
     sig_done = pyqtSignal()

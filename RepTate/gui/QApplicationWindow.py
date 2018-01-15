@@ -725,7 +725,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
-        pass
+        # pass
         # try:
         #     plt.tight_layout(pad=1.2)
         # except:
@@ -795,8 +795,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             #inspect_header = dfile.col_names[:]
             inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
             inspec_tab = self.inspector_table.setHorizontalHeaderLabels(inspect_header)
-
-
+        
     def openDataset(self):
         """[summary]
         
@@ -833,8 +832,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.update_Qplot()
             # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
             ds.set_table_icons(ds.table_icon_list)
-            # ds.DataSettreeWidget.blockSignals(False) 
-
+            # ds.DataSettreeWidget.blockSignals(False)
         else:
             QMessageBox.about(self, "Open", success)
     

@@ -62,7 +62,7 @@ class BaseTheoryDiscrMWD:
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-        self.function = self.DiscretiseMWD
+        self.function = self.discretise_mwd
         self.has_modes = False
         self.parameters["bpd"] = Parameter(
             "bpd", 10, "Number modes per decade", ParameterType.integer, opt_type=OptType.const)
@@ -124,8 +124,18 @@ class BaseTheoryDiscrMWD:
             %(line, Mn/1000, Mw/1000, PDI, Mz/Mw)
             )
 
-
-    def DiscretiseMWD(self, f=None):
+    def add_to_bin(self, phi, edge_bins, wi, k, data_up, data_down):
+        kk = k
+        mup = data_up
+        while True:
+            mdown = max (edge_bins[kk - 1], data_down)
+            phi[kk] += wi * (mup - mdown)
+            mup = mdown
+            kk = kk - 1
+            if mdown == data_down:
+                break
+        
+    def discretise_mwd(self, f=None):
         """Discretize a molecular weight distribution
         
         [description]
@@ -161,36 +171,95 @@ class BaseTheoryDiscrMWD:
         for j in range(n - 1):
             mid_ft[j] = (np.log10(ft[j + 1, 0]) + np.log10(ft[j, 0]))/2 #mid-values of logM
 
-        #find into which bin the data point belong
-        inds = np.digitize(mid_ft, edge_bins, right=False) 
-        '''returns indices of the bins to which each value in input array belongs
-        edge_bins[inds[j]-1] <= mid_ft[j] < edge_bins[inds[j]]'''
 
         phi = np.zeros(nbin)
-        nk = np.zeros(nbin)
-        for j in range(n - 1):
-            k = inds[j]
-            dlogMj = np.log10(ft[j + 1, 0]) - np.log10(ft[j, 0])
-            wj = (ft[j + 1, 1] + ft[j, 1]) / 2
-            dlogMk = (np.log10(bins[k + 1])  - np.log10(bins[k - 1])) / 2
-            phi[k] +=  wj*dlogMj/dlogMk #weight x width / bin_width
-            nk[k] += 1
+        for i in range(n - 1): # [1..n-2]
+            #loop over the data points
+            #add w[i]*(mid_ft[i]-mid_ft[i-1]) to bin[i] until mid_ft[i] > edge_bin[i]
+            #interpolate: add the area belonging to bin[i]
+            # (edge_bin[i] - mid_ft[i-1])*w[i] to bin[i]
+            # (mid_ft[i-1] - edge_bin[i])*w[i] to bin[i+1]
 
-        sum_nk = np.sum(nk)        
-        for k in range(nbin):
-            if nk[k]>0: 
-                phi[k] = phi[k]/nk[k] * sum_nk/nbin
-                
+            k = 0
+            wi = ft[i, 1]
+            while edge_bins[k] < mid_ft[i]:
+                k += 1
+            if i == 0:
+                low = mid_ft[0] - (mid_ft[1] - mid_ft[0])
+                if low < 0:
+                    low = mid_ft[0]/2
+                self.add_to_bin(phi, edge_bins, wi, k, mid_ft[0], low)
+                # phi[k] += wi * (mid_ft[1] - mid_ft[0]) #bin width taken as (log) distance to next point
+                continue
+            try:
+                full_bin = mid_ft[i - 1] > edge_bins[k - 1]
+            except:
+                full_bin = False
+
+            if full_bin:
+                phi[k] += wi * (mid_ft[i] - mid_ft[i - 1])
+            else:
+                self.add_to_bin(phi, edge_bins, wi, k, mid_ft[i], mid_ft[i-1])
+
+        #treat the last data point
+        k = 0
+        wi = ft[n - 1, 1]
+        high = mid_ft[n - 2] + (mid_ft[n - 2] - mid_ft[n - 3])
+        while edge_bins[k] < high:
+            k += 1
+        self.add_to_bin(phi, edge_bins, wi, k, high, mid_ft[n - 2])
+
+
+                # kk = k
+                # mup = mid_ft[i]
+                # while True:
+                #     mdown = max (edge_bins[kk - 1], mid_ft[i - 1])
+                #     phi[kk] += wi * (mup - mdown)
+                #     mup = mdown
+                #     kk = kk - 1
+                #     if mdown == mid_ft[i - 1]:
+                #         break
+
+
+
+                # phi[k] += wi * (mid_ft[i] - edge_bins[k - 1])
+                # phi[k - 1] += wi * (edge_bins[k - 1] - edge_bins[k - 2])
+                # phi[k - 2] += wi * (edge_bins[k - 2] - mid_ft[i - 1])
+
+        # phi = phi/np.sum(phi)
+        
         #copy weights and M into theory table
-        bins, phi = self.clean_zeros(bins, phi)
+        # bins, phi = self.clean_zeros(bins, phi)
         tt = self.tables[f.file_name_short]
         tt.num_columns = 2
         tt.num_rows = len(phi)
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = bins
         tt.data[:, 1] = phi/np.sum(phi)
-
+        print (np.sum( tt.data[:, 1]))
         self.calculate_moments(tt.data, "discretized")
+
+
+        # #find into which bin the data point belong
+        # inds = np.digitize(mid_ft, edge_bins, right=False) 
+        # #returns indices of the bins to which each value in input array belongs
+        # #edge_bins[inds[j]-1] <= mid_ft[j] < edge_bins[inds[j]]
+
+        # nk = np.zeros(nbin)
+        # for j in range(n - 1):
+        #     k = inds[j]
+        #     dlogMj = np.log10(ft[j + 1, 0]) - np.log10(ft[j, 0])
+        #     wj = (ft[j + 1, 1] + ft[j, 1]) / 2
+        #     dlogMk = (np.log10(bins[k + 1])  - np.log10(bins[k - 1])) / 2
+        #     phi[k] +=  wj*dlogMj/dlogMk #weight x width / bin_width
+        #     nk[k] += 1
+
+        # sum_nk = np.sum(nk)        
+        # for k in range(nbin):
+        #     if nk[k]>0: 
+        #         phi[k] = phi[k]/nk[k] * sum_nk/nbin
+                
+
 
     def clean_zeros(self, bins, phi):
         """[summary]

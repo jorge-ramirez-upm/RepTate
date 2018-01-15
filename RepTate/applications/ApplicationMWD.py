@@ -55,12 +55,16 @@ class BaseApplicationMWD:
             parent {[type]} -- [description] (default: {None})
         """
         from TheoryDiscrMWD import TheoryDiscrMWD
+        
         super().__init__(name, parent)
 
         # VIEWS
         self.views["W(M)"]=View(name="W(M)", description="Molecular weight distribution", x_label="M", y_label="W(M)", 
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.viewWM, n=1, 
                                 snames=["W(M)"], index=0)
+        self.views["LogW(M)"]=View(name="W(M)", description="Molecular weight distribution", x_label="log M", y_label="log W(M)", 
+                                x_units="g/mol", y_units="-", log_x=False, log_y=False, view_proc=self.viewlogWM, n=1, 
+                                snames=["W(M)"], index=1)
 
         #set multiviews
         self.multiviews = [self.views["W(M)"]] #default view order in multiplot views, set only one item for single view
@@ -94,6 +98,25 @@ class BaseApplicationMWD:
         max_y = np.max(dt.data[:, 1])
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]/max_y
+        return x, y, True
+
+    def viewlogWM(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        max_y = np.max(dt.data[:, 1])
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1]/max_y)
         return x, y, True
 
 class CLApplicationMWD(BaseApplicationMWD, Application):
