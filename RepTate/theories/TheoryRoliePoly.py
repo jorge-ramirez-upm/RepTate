@@ -150,7 +150,7 @@ class BaseTheoryRoliePoly:
                                                   bracketed=True, min_value=0)
 
         self.view_LVEenvelope = False
-        auxseries = axarr[0].plot([], [], label='')
+        auxseries = self.ax.plot([], [], label='')
         self.LVEenvelopeseries = auxseries[0]
         self.LVEenvelopeseries.set_marker('')
         self.LVEenvelopeseries.set_linestyle('--')
@@ -160,6 +160,31 @@ class BaseTheoryRoliePoly:
         self.LVEenvelopeseries.set_label('')
 
         self.MAX_MODES = 40
+
+    def destructor(self):
+        """Called when the theory tab is closed
+        
+        [description]
+        """
+        self.extra_graphic_visible(False)
+        self.ax.lines.remove(self.LVEenvelopeseries) 
+
+    def hide_theory_extras(self):
+        """Called when the active theory is changed
+        
+        [description]
+        """
+        if CmdBase.mode == CmdMode.GUI:
+            self.Qhide_theory_extras()
+        self.extra_graphic_visible(False)
+
+    def extra_graphic_visible(self, state):
+        """[summary]
+        
+        [description]
+        """
+        self.LVEenvelopeseries.set_visible(state)
+        self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
         """[summary]
@@ -387,10 +412,18 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("nstretch", min(nmodes, value))
 
-    def show_linear_envelope(self):
-        self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
-        self.plot_theory_stuff()
-        self.parent_dataset.parent_application.update_plot()
+    def Qhide_theory_extras(self):
+        """Uncheck the LVE button. Called when curent theory is changed
+        
+        [description]
+        """
+        self.linearenvelope.setChecked(False)
+
+    def show_linear_envelope(self, state):
+        self.extra_graphic_visible(state)
+        # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        # self.plot_theory_stuff()
+        # self.parent_dataset.parent_application.update_plot()
        
     def plot_theory_stuff(self):
         """[summary]

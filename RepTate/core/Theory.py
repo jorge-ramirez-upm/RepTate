@@ -802,6 +802,7 @@ class Theory(CmdBase):
         try:
             self.hide_theory_extras()
         except: # current theory has no extras
+            # print("current theory has no extras to hide")
             pass
     
     def set_th_table_visible(self, fname, state):
