@@ -61,7 +61,7 @@ class BaseApplicationGt:
         """
         from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-        super().__init__(name, parent, nplots=3, ncols=2) # will call Application.__init__ with these args
+        super().__init__(name, parent, nplots=2, ncols=2) # will call Application.__init__ with these args
 
         # VIEWS
         self.views["log[G(t)]"]=View(name="log[G(t)]", description="log Relaxation modulus", x_label="log(t)", 
@@ -76,7 +76,7 @@ class BaseApplicationGt:
 
 
         #set multiviews
-        self.multiviews = [self.views["log[G(t)]"], self.views["G(t)"], self.views["Schwarzl G',G''"]] #default view order in multiplot views, set only one item for single view
+        self.multiviews = [self.views["log[G(t)]"], self.views["Schwarzl G',G''"]] #default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews) 
 
         # FILES
