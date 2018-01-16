@@ -12,7 +12,7 @@ Define the C-variables and functions from the C-files that are needed in Python
 from ctypes import *
 import sys
 
-lib_path = 'theories/Schwarzl_lib_%s.so'%(sys.platform)
+lib_path = 'theories/schwarzl_lib_%s.so'%(sys.platform)
 try:
     schwarzl_lib = CDLL(lib_path)
 except:
