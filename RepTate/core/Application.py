@@ -197,6 +197,11 @@ class Application(CmdBase):
         """
         if ds_name in self.datasets.keys():
             self.remove_ds_ax_lines(ds_name)
+            for th in self.datasets[ds_name].theories.values():
+                try:
+                    th.destructor()
+                except:
+                    pass
             self.datasets[ds_name].theories.clear()
             self.datasets[ds_name].files.clear()
             del self.datasets[ds_name] 
