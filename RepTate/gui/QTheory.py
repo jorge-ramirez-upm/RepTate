@@ -134,7 +134,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     
     def end_thread_calc(self):
         if CmdBase.calcmode == CalcMode.multithread:
-            self.thread_calc.quit()
+            try:
+                self.thread_calc.quit()
+            except:
+                pass
         if self.stop_theory_calc_flag: #calculation stopped by user
             self.stop_theory_calc_flag = False #reset flag
         else:
@@ -185,7 +188,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def end_thread_fit(self):
         if CmdBase.calcmode == CalcMode.multithread:
-            self.thread_calc.quit()
+            try:
+                self.thread_fit.quit()
+            except:
+                pass
         self.update_parameter_table()
         self.parent_dataset.parent_application.update_Qplot()
         self.thread_fit_busy = False
