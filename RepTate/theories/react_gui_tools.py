@@ -5,16 +5,16 @@ import react_ctypes_helper as rch
 from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PyQt5.QtCore import QSize
+import psutil
 
 def request_more_polymer(parent_theory):
     """Generic function called when run out of polymers"""
-    try:
-        success_increase_memory = None
-        success_increase_memory = handle_increase_records(parent_theory, 'polymer')
-        while success_increase_memory is None:
-            pass
-    except:
-        success_increase_memory = False
+    success_increase_memory = None
+    success_increase_memory = handle_increase_records(parent_theory, 'polymer')
+    while success_increase_memory is None:
+        pass
+    # except:
+    #     success_increase_memory = False
     if not success_increase_memory:
         message = 'Ran out of storage for polymer records. Options to avoid this are:'
         message += '(1) Reduce number of polymers requested'
@@ -27,13 +27,12 @@ def request_more_polymer(parent_theory):
 
 def request_more_arm(parent_theory):
     """Generic function called when run out of arms"""
-    try:
-        success_increase_memory = None
-        success_increase_memory = handle_increase_records(parent_theory, 'arm')
-        while success_increase_memory is None:
-            pass
-    except:
-        success_increase_memory = False
+    success_increase_memory = None
+    success_increase_memory = handle_increase_records(parent_theory, 'arm')
+    while success_increase_memory is None:
+        pass
+    # except:
+    #     success_increase_memory = False
 
     if not success_increase_memory:
         message = 'Ran out of storage for arm records. Options to avoid this are:\n'
@@ -50,14 +49,13 @@ def request_more_arm(parent_theory):
 
 def request_more_dist(parent_theory):
     """Generic function called when run out of distributions"""
-    try:
-        success_increase_memory = None
-        success_increase_memory = handle_increase_records(parent_theory, 'dist')
-        # parent_theory.increase_memory.emit("dist")
-        while success_increase_memory is None:
-            pass
-    except:
-        success_increase_memory = False
+    success_increase_memory = None
+    success_increase_memory = handle_increase_records(parent_theory, 'dist')
+    # parent_theory.increase_memory.emit("dist")
+    while success_increase_memory is None:
+        pass
+    # except:
+    #     success_increase_memory = False
     if success_increase_memory:
         rch.link_react_dist() #re-link the python array with the C array
         parent_theory.Qprint('Number of dist. was increased. Press \"calculate\"')
@@ -168,16 +166,19 @@ def handle_increase_records(parent_theory, name):
     if name == "arm":
         current_max = rch.pb_global_const.maxarm
         f = rch.increase_arm_records_in_arm_pool
+        size_of = 75e-6 #size of an 'arm' structure (MB) in C
     elif name == "polymer":
         current_max = rch.pb_global_const.maxpol
         f = rch.increase_polymer_records_in_br_poly
+        size_of = 45e-6 #size of a 'polymer' structure (MB) in C
     elif name == "dist":
         current_max = rch.pb_global_const.maxreact
         f = rch.increase_dist_records_in_react_dist
+        size_of = 60097e-6 #size of a 'dist' structure (MB) in C
     else:
         return False 
 
-    d = IncreaseRecordsDialog(parent_theory, current_max, name) #create the dialog
+    d = IncreaseRecordsDialog(parent_theory, current_max, name, size_of) #create the dialog
     if d.exec_():
         if d.r1.isChecked():
             new_max = int(np.ceil(current_max*1.5))
@@ -185,7 +186,7 @@ def handle_increase_records(parent_theory, name):
             new_max = int(current_max*2)
         if d.r3.isChecked():
             new_max = int(current_max*5)
-        success = f(ct.c_int(new_max)) #call C routine to allocate more memory (use realloc)
+        success = f(ct.c_int(new_max)) #call C routine to allocate more memory (using 'realloc')
         if not success:
             parent_theory.Qprint("Allocation of new memory failed\n%d %s records in memory"%(current_max, name))
         return success
@@ -256,9 +257,9 @@ class IncreaseRecordsDialog(QDialog):
     """
     Dialog containing radio buttons to choose a new memory size for the records of "name" 
     """
-    def __init__(self, parent_theory, current_max, name):
+    def __init__(self, parent_theory, current_max, name, size_of):
         super().__init__(parent_theory)
-        self.createExclusiveGroup(current_max, name)
+        self.createExclusiveGroup(current_max, name, size_of)
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
@@ -270,17 +271,19 @@ class IncreaseRecordsDialog(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Edit")
 
-    def createExclusiveGroup(self, current_max, name):
+    def createExclusiveGroup(self, current_max, name, size_of):
         """Create the radio buttons choices"""
-        self.formGroupBox = QGroupBox("Increse the number of %s records"%name)
-        self.r1 = QRadioButton("Increase to %.4g (1.5x)"%np.ceil(1.5*current_max))
-        self.r2 = QRadioButton("Increase to %.4g (2x)"%(2*current_max))
-        self.r3 = QRadioButton("Increase to %.4g (5x)"%(5*current_max))
+        self.formGroupBox = QGroupBox("Increase the number of %s records?"%name)
+        self.r1 = QRadioButton("%.4g (1.5x) requests %dMB of RAM"%(np.ceil(1.5*current_max), size_of*np.ceil(0.5*current_max)))
+        self.r2 = QRadioButton("%.4g (2x) requests %dMB of RAM"%(2*current_max, size_of*current_max))
+        self.r3 = QRadioButton("%.4g (5x) requests %dMB of RAM"%(5*current_max, size_of*current_max*4))
         self.r1.setChecked(True)
         
         layout = QVBoxLayout()     
-        layout.addWidget(QLabel("Current number of %s records: %.4g"%(name, current_max)))
+        layout.addWidget(QLabel("Current number of %s records: %.4g.\nIncrease to:"%(name, current_max)))
         layout.addWidget(self.r1)
         layout.addWidget(self.r2)
         layout.addWidget(self.r3)
+        layout.addWidget(QLabel("(%dMB of RAM available)"%(psutil.virtual_memory()[1]/2.**20))) # size of free RAM avaliable
+        layout.addWidget(QLabel("Or press Cancel."))
         self.formGroupBox.setLayout(layout)
