@@ -292,6 +292,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th = self.theories[self.current_theory]
             if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
                 return
+            if th.single_file and (len(self.files) - len(self.inactive_files))>1: 
+                header = "New Theory"
+                message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
+                QMessageBox.warning(self, header, message)
+                return
             th.handle_actionCalculate_Theory()
 
     def handle_actionMinimize_Error(self):
