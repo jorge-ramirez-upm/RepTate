@@ -44,6 +44,13 @@ class PlotOrganizationType(enum.Enum):
     Specified=4
 
 class MultiView(QWidget):
+    LEFT=0.1
+    RIGHT=0.98
+    BOTTOM=0.15
+    TOP=0.98
+    WSPACE=0.25
+    HSPACE=0.25
+
     def __init__(self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None):
         QDialog.__init__(self)
         self.parent_application = parent
@@ -95,9 +102,8 @@ class MultiView(QWidget):
         self.axarr = []
         self.figure = plt.figure()
         for i in range(self.nplots):
-            self.axarr.append(self.figure.add_subplot(gs[i]))
-        
-        #self.figure, self.axarr = plt.subplots(self.nplots)
+            self.axarr.append(self.figure.add_subplot(gs[i]))            
+
         self.bbox = []
         x0min = y0min = 1e9
         x1max = y1max = -1e9
@@ -108,24 +114,8 @@ class MultiView(QWidget):
             y0min = min(y0min, bboxnow.y0)
             x1max = max(x1max, bboxnow.x1)
             y1max = max(y1max, bboxnow.y1)
-        
-        if(self.nplots == 3):
-            #fine tuning specific to nplots=3 to make room for axis labels
-            self.bbox[0].y0 += 0.1 #lift top figure up
-            self.bbox[0].y1 += 0.1
-            
-            self.bbox[1].x1 -= 0.05 #push bottom-left figure left
-            self.bbox[1].y0 += 0.05 #lift bottom-left figure up
-            
-            self.bbox[2].x0 += 0.05 #push bottom-right figure right
-            self.bbox[2].y0 += 0.05 #lift bottom-right figure up
-        
-
-        #make room for axes labels in single plot
-        y0min += 0.1
-        x0min += 0.05
+                
         self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
-        self.axarr[0].set_position(self.bboxmax)
 
         self.canvas = FigureCanvasQTAgg(self.figure)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
@@ -181,16 +171,22 @@ class MultiView(QWidget):
         self.canvas.draw()
 
     def organizeHorizontal(self, nplots):
-        gs = gridspec.GridSpec(1, self.nplots)
+        gs = gridspec.GridSpec(1, self.nplots,left=MultiView.LEFT,right=MultiView.RIGHT,
+                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
+                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
         return gs
 
     def organizeVertical(self, nplots):
-        gs = gridspec.GridSpec(self.nplots, 1)
+        gs = gridspec.GridSpec(self.nplots, 1,left=MultiView.LEFT,right=MultiView.RIGHT,
+                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
+                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
         return gs
 
     def organizeOptimalRow(self, nplots, ncols):
         row = math.ceil(nplots / ncols)
-        gstmp = gridspec.GridSpec(row, ncols)
+        gstmp = gridspec.GridSpec(row, ncols,left=MultiView.LEFT,right=MultiView.RIGHT,
+                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
+                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
         gs=[]
         # First row might be different
         gs.append(gstmp[0,0:row*ncols-nplots+1])
@@ -203,7 +199,9 @@ class MultiView(QWidget):
 
     def organizeOptimalColumn(self, nplots, ncols):
         row = math.ceil(nplots/ncols)
-        gstmp = gridspec.GridSpec(row, ncols)
+        gstmp = gridspec.GridSpec(row, ncols,left=MultiView.LEFT,right=MultiView.RIGHT,
+                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
+                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
         gs = []
         # First column might be different
         gs.append(gstmp[0:row*ncols-nplots+1,0])
