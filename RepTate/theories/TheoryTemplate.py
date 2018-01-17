@@ -48,7 +48,7 @@ class BaseTheoryTemplate:
     
     [description]
     """
-    single_file = False # True if the theory can be applied to multiple files simultaneously
+    single_file = False # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]

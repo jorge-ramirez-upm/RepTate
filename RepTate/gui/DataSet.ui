@@ -123,7 +123,7 @@
     <string>Calculate Theory</string>
    </property>
    <property name="toolTip">
-    <string>Calculate Theroy</string>
+    <string>Calculate Theory</string>
    </property>
    <property name="shortcut">
     <string>Alt+C</string>
