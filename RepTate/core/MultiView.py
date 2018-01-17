@@ -171,22 +171,22 @@ class MultiView(QWidget):
         self.canvas.draw()
 
     def organizeHorizontal(self, nplots):
-        gs = gridspec.GridSpec(1, self.nplots,left=MultiView.LEFT,right=MultiView.RIGHT,
-                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
-                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
+        gs = gridspec.GridSpec(1, self.nplots,left=self.LEFT,right=self.RIGHT,
+                                  bottom=self.BOTTOM,top=self.TOP,
+                                  wspace=self.WSPACE,hspace=self.HSPACE)
         return gs
 
     def organizeVertical(self, nplots):
-        gs = gridspec.GridSpec(self.nplots, 1,left=MultiView.LEFT,right=MultiView.RIGHT,
-                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
-                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
+        gs = gridspec.GridSpec(self.nplots, 1,left=self.LEFT,right=self.RIGHT,
+                                  bottom=self.BOTTOM,top=self.TOP,
+                                  wspace=self.WSPACE,hspace=self.HSPACE)
         return gs
 
     def organizeOptimalRow(self, nplots, ncols):
         row = math.ceil(nplots / ncols)
-        gstmp = gridspec.GridSpec(row, ncols,left=MultiView.LEFT,right=MultiView.RIGHT,
-                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
-                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
+        gstmp = gridspec.GridSpec(row, ncols,left=self.LEFT,right=self.RIGHT,
+                                  bottom=self.BOTTOM,top=self.TOP,
+                                  wspace=self.WSPACE,hspace=self.HSPACE)
         gs=[]
         # First row might be different
         gs.append(gstmp[0,0:row*ncols-nplots+1])
@@ -199,9 +199,9 @@ class MultiView(QWidget):
 
     def organizeOptimalColumn(self, nplots, ncols):
         row = math.ceil(nplots/ncols)
-        gstmp = gridspec.GridSpec(row, ncols,left=MultiView.LEFT,right=MultiView.RIGHT,
-                                  bottom=MultiView.BOTTOM,top=MultiView.TOP,
-                                  wspace=MultiView.WSPACE,hspace=MultiView.HSPACE)
+        gstmp = gridspec.GridSpec(row, ncols,left=self.LEFT,right=self.RIGHT,
+                                  bottom=self.BOTTOM,top=self.TOP,
+                                  wspace=self.WSPACE,hspace=self.HSPACE)
         gs = []
         # First column might be different
         gs.append(gstmp[0:row*ncols-nplots+1,0])
