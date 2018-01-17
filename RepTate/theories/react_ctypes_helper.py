@@ -9,12 +9,12 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
-from ctypes import *
+import ctypes as ct
 import sys
 
 lib_path = 'theories/react_lib_%s.so'%(sys.platform)
 try:
-    react_lib = CDLL(lib_path)
+    react_lib = ct.CDLL(lib_path)
 except:
     print('OS %s not recognized'%(sys.platform))
 
@@ -23,33 +23,33 @@ except:
 ###############
 
 #struct
-class polybits_global_const(Structure):
-    _fields_ = [("maxbobbins", c_int), ("maxmwdbins", c_int), ("maxarm", c_int), ("maxpol", c_int), ("maxreact", c_int)]
+class polybits_global_const(ct.Structure):
+    _fields_ = [("maxbobbins", ct.c_int), ("maxmwdbins", ct.c_int), ("maxarm", ct.c_int), ("maxpol", ct.c_int), ("maxreact", ct.c_int)]
 
-class polybits_global(Structure):
-    _fields_ = [("first_in_pool", c_int), ("first_poly_in_pool", c_int), ("first_dist_in_pool", c_int), ("mmax", c_int), ("num_react", c_int), ("arms_left", c_int), ("react_pool_initialised", c_bool), ("react_pool_declared", c_bool), ("arms_avail", c_bool), ("polys_avail", c_bool), ("dists_avail", c_bool)]
+class polybits_global(ct.Structure):
+    _fields_ = [("first_in_pool", ct.c_int), ("first_poly_in_pool", ct.c_int), ("first_dist_in_pool", ct.c_int), ("mmax", ct.c_int), ("num_react", ct.c_int), ("arms_left", ct.c_int), ("react_pool_initialised", ct.c_bool), ("react_pool_declared", ct.c_bool), ("arms_avail", ct.c_bool), ("polys_avail", ct.c_bool), ("dists_avail", ct.c_bool)]
 
-class arm(Structure):
-    _fields_ = [("arm_len", c_double), ("arm_conv", c_double), ("arm_time", c_double), ("arm_tm", c_double), ("arm_tddb", c_double), ("L1", c_int),("L2", c_int), ("R1", c_int), ("R2", c_int), ("up", c_int), ("down", c_int), ("armnum", c_int), ("armcat", c_int),("ended", c_int), ("endfin", c_int), ("scission", c_int)]   
+class arm(ct.Structure):
+    _fields_ = [("arm_len", ct.c_double), ("arm_conv", ct.c_double), ("arm_time", ct.c_double), ("arm_tm", ct.c_double), ("arm_tddb", ct.c_double), ("L1", ct.c_int),("L2", ct.c_int), ("R1", ct.c_int), ("R2", ct.c_int), ("up", ct.c_int), ("down", ct.c_int), ("armnum", ct.c_int), ("armcat", ct.c_int),("ended", ct.c_int), ("endfin", ct.c_int), ("scission", ct.c_int)]   
 
-class polymer(Structure):
-    _fields_ = [("first_end", c_int), ("num_br", c_int), ("bin", c_int), ("num_sat", c_int), ("num_unsat", c_int), ("armnum", c_int), ("nextpoly", c_int), ("tot_len", c_double), ("gfactor", c_double), ("saved", c_bool)]
+class polymer(ct.Structure):
+    _fields_ = [("first_end", ct.c_int), ("num_br", ct.c_int), ("bin", ct.c_int), ("num_sat", ct.c_int), ("num_unsat", ct.c_int), ("armnum", ct.c_int), ("nextpoly", ct.c_int), ("tot_len", ct.c_double), ("gfactor", ct.c_double), ("saved", ct.c_bool)]
 
-class reactresults(Structure):
-     _fields_ = [("wt", POINTER(c_double)), ("avbr", POINTER(c_double)), ("wmass", POINTER(c_double)), ("avg", POINTER(c_double)), ("lgmid", POINTER(c_double)), ("numinbin", POINTER(c_int)), ("monmass", c_double), ("M_e", c_double), ("N_e", c_double), ("boblgmin", c_double), ("boblgmax", c_double), ("m_w", c_double), ("m_n", c_double), ("brav", c_double), ("first_poly", c_int), ("next", c_int), ("nummwdbins", c_int), ("numbobbins", c_int), ("bobbinmax", c_int), ("nsaved", c_int), ("npoly", c_int), ("simnumber", c_int), ("polysaved", c_bool), ("name", c_char_p)]
+class reactresults(ct.Structure):
+     _fields_ = [("wt", ct.POINTER(ct.c_double)), ("avbr", ct.POINTER(ct.c_double)), ("wmass", ct.POINTER(ct.c_double)), ("avg", ct.POINTER(ct.c_double)), ("lgmid", ct.POINTER(ct.c_double)), ("numinbin", ct.POINTER(ct.c_int)), ("monmass", ct.c_double), ("M_e", ct.c_double), ("N_e", ct.c_double), ("boblgmin", ct.c_double), ("boblgmax", ct.c_double), ("m_w", ct.c_double), ("m_n", ct.c_double), ("brav", ct.c_double), ("first_poly", ct.c_int), ("next", ct.c_int), ("nummwdbins", ct.c_int), ("numbobbins", ct.c_int), ("bobbinmax", ct.c_int), ("nsaved", ct.c_int), ("npoly", ct.c_int), ("simnumber", ct.c_int), ("polysaved", ct.c_bool), ("name", ct.c_char_p)]
 
 #global variable
 pb_global_const = polybits_global_const.in_dll(react_lib, "pb_global_const")
 pb_global = polybits_global.in_dll(react_lib, "pb_global")
 
 #pointer
-arm_pointer = POINTER(arm)
+arm_pointer = ct.POINTER(arm)
 arm_pointers = arm_pointer * (pb_global_const.maxarm + 1)
 
-polymer_pointer = POINTER(polymer)
+polymer_pointer = ct.POINTER(polymer)
 polymer_pointers = polymer_pointer * (pb_global_const.maxpol + 1)
 
-reactresults_pointer = POINTER(reactresults)
+reactresults_pointer = ct.POINTER(reactresults)
 reactresults_pointers = reactresults_pointer * (pb_global_const.maxreact + 1)
 
 
@@ -58,7 +58,7 @@ react_pool_init = react_lib.react_pool_init
 react_pool_init.restype = None
 
 request_dist = react_lib.request_dist
-request_dist.restype = c_bool
+request_dist.restype = ct.c_bool
 
 return_dist_polys = react_lib.return_dist_polys
 return_dist_polys.restype = None
@@ -67,7 +67,7 @@ return_dist = react_lib.return_dist
 return_dist.restype = None
 
 request_poly = react_lib.request_poly
-request_poly.restype = c_bool
+request_poly.restype = ct.c_bool
 
 return_arm_pool = react_lib.return_arm_pool
 return_arm_pool.restype = arm_pointer
@@ -82,13 +82,13 @@ set_br_poly_nextpoly = react_lib.set_br_poly_nextpoly
 set_br_poly_nextpoly.restype = None
 
 increase_arm_records_in_arm_pool = react_lib.increase_arm_records_in_arm_pool
-increase_arm_records_in_arm_pool.restype = c_bool
+increase_arm_records_in_arm_pool.restype = ct.c_bool
 
 increase_polymer_records_in_br_poly = react_lib.increase_polymer_records_in_br_poly
-increase_polymer_records_in_br_poly.restype = c_bool
+increase_polymer_records_in_br_poly.restype = ct.c_bool
 
 increase_dist_records_in_react_dist = react_lib.increase_dist_records_in_react_dist
-increase_dist_records_in_react_dist.restype = c_bool
+increase_dist_records_in_react_dist.restype = ct.c_bool
 
 
 #initialise lists
@@ -99,7 +99,7 @@ def link_react_dist():
     global reactresults_pointers
     global react_dist
     reactresults_pointers = reactresults_pointer * (pb_global_const.maxreact + 1)
-    react_dist =  reactresults_pointers(*list([return_react_dist(c_int(i)) for i in range(pb_global_const.maxreact + 1)]))
+    react_dist =  reactresults_pointers(*list([return_react_dist(ct.c_int(i)) for i in range(pb_global_const.maxreact + 1)]))
     
 react_pool_init()
 link_react_dist()
@@ -110,8 +110,8 @@ link_react_dist()
 ###############
 
 #struct
-class tobitabatch_global(Structure):
-    _fields_ = [("tobbatchnumber", c_int), ("tobitabatcherrorflag",c_bool)]
+class tobitabatch_global(ct.Structure):
+    _fields_ = [("tobbatchnumber", ct.c_int), ("tobitabatcherrorflag", ct.c_bool)]
 
 #global variable
 tb_global = tobitabatch_global.in_dll(react_lib, "tb_global")
@@ -121,7 +121,7 @@ tobbatchstart = react_lib.tobbatchstart
 tobbatchstart.restype = None
 
 tobbatch = react_lib.tobbatch
-tobbatch.restype = c_bool
+tobbatch.restype = ct.c_bool
 
 
 
@@ -142,8 +142,8 @@ polyconfwrite.restype = None
 ###############
 
 #struct
-class tobitaCSTR_global(Structure):
-    _fields_ = [("tobCSTRnumber", c_int), ("tobitaCSTRerrorflag",c_bool)]
+class tobitaCSTR_global(ct.Structure):
+    _fields_ = [("tobCSTRnumber", ct.c_int), ("tobitaCSTRerrorflag", ct.c_bool)]
 
 #global variable
 tCSTR_global = tobitaCSTR_global.in_dll(react_lib, "tCSTR_global")
@@ -153,4 +153,4 @@ tobCSTRstart = react_lib.tobCSTRstart
 tobCSTRstart.restype = None
 
 tobCSTR = react_lib.tobCSTR
-tobCSTR.restype = c_bool
+tobCSTR.restype = ct.c_bool

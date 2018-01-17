@@ -1,94 +1,153 @@
 import numpy as np
-from ctypes import *
-from react_ctypes_helper import *
+import ctypes as ct
+import react_ctypes_helper as rch
 #BoB form
 from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PyQt5.QtCore import QSize
 
-def initialise_tool_bar(self):
+def request_more_polymer(parent_theory):
+    """Generic function called when run out of polymers"""
+    try:
+        success_increase_memory = None
+        success_increase_memory = handle_increase_records(parent_theory, 'polymer')
+        while success_increase_memory is None:
+            pass
+    except:
+        success_increase_memory = False
+    if not success_increase_memory:
+        message = 'Ran out of storage for polymer records. Options to avoid this are:'
+        message += '(1) Reduce number of polymers requested'
+        message += '(2) Close some other theories'
+        parent_theory.Qprint(message)
+    else:
+        parent_theory.Qprint('Number of polymers was increased')
+    
+    return success_increase_memory
+
+def request_more_arm(parent_theory):
+    """Generic function called when run out of arms"""
+    try:
+        success_increase_memory = None
+        success_increase_memory = handle_increase_records(parent_theory, 'arm')
+        while success_increase_memory is None:
+            pass
+    except:
+        success_increase_memory = False
+
+    if not success_increase_memory:
+        message = 'Ran out of storage for arm records. Options to avoid this are:\n'
+        message += '(1) Reduce number of polymers requested\n'
+        message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
+        message += '(3) Close some other theories\n'
+        message += '(4) Adjust parameters to avoid gelation'
+        parent_theory.Qprint(message)
+        # i = numtomake
+        # rch.tCSTR_global.tobitaCSTRerrorflag = True
+    else:
+        parent_theory.Qprint('Number of arms was increased')
+    return success_increase_memory
+
+def request_more_dist(parent_theory):
+    """Generic function called when run out of distributions"""
+    try:
+        success_increase_memory = None
+        success_increase_memory = handle_increase_records(parent_theory, 'dist')
+        # parent_theory.increase_memory.emit("dist")
+        while success_increase_memory is None:
+            pass
+    except:
+        success_increase_memory = False
+    if success_increase_memory:
+        rch.link_react_dist() #re-link the python array with the C array
+        parent_theory.Qprint('Number of dist. was increased. Press \"calculate\"')
+    else:
+        parent_theory.Qprint('Too many theories open for internal storage.\nPlease close a theory or increase records"')
+
+
+def initialise_tool_bar(parent_theory):
     """Add icons in theoty toolbar"""
     #disable buttons 
-    self.parent_dataset.actionMinimize_Error.setDisabled(True)
-    # self.parent_dataset.actionCalculate_Theory.setDisabled(True)
-    self.parent_dataset.actionShow_Limits.setDisabled(True)
-    self.parent_dataset.actionVertical_Limits.setDisabled(True)
-    self.parent_dataset.actionHorizontal_Limits.setDisabled(True)
+    parent_theory.parent_dataset.actionMinimize_Error.setDisabled(True)
+    # parent_theory.parent_dataset.actionCalculate_Theory.setDisabled(True)
+    parent_theory.parent_dataset.actionShow_Limits.setDisabled(True)
+    parent_theory.parent_dataset.actionVertical_Limits.setDisabled(True)
+    parent_theory.parent_dataset.actionHorizontal_Limits.setDisabled(True)
 
     ######toolbar
     tb = QToolBar()
     tb.setIconSize(QSize(24,24))
-    self.thToolsLayout.insertWidget(0, tb)
+    parent_theory.thToolsLayout.insertWidget(0, tb)
 
     #BOB settings buttons
-    self.bob_settings_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-bob-hat.png'), 'Edit BoB Binning Settings')
-    self.save_bob_configuration_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'), 'Save Polymer Configuration for BoB')
+    parent_theory.bob_settings_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-bob-hat.png'), 'Edit BoB Binning Settings')
+    parent_theory.save_bob_configuration_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'), 'Save Polymer Configuration for BoB')
     #stop calculation button
-    self.stop_calulation_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-road-closure.png'), 'Stop Current Calulation')
-    self.stop_calulation_button.setDisabled(True)
+    parent_theory.stop_calulation_button = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-road-closure.png'), 'Stop Current Calulation')
+    parent_theory.stop_calulation_button.setDisabled(True)
 
     #signals
-    connection_id = self.bob_settings_button.triggered.connect(self.handle_edit_bob_settings)
-    connection_id = self.save_bob_configuration_button.triggered.connect(self.handle_save_bob_configuration)
-    connection_id = self.stop_calulation_button.triggered.connect(self.handle_stop_calulation)
+    connection_id = parent_theory.bob_settings_button.triggered.connect(parent_theory.handle_edit_bob_settings)
+    connection_id = parent_theory.save_bob_configuration_button.triggered.connect(parent_theory.handle_save_bob_configuration)
+    connection_id = parent_theory.stop_calulation_button.triggered.connect(parent_theory.handle_stop_calulation)
 
-def theory_buttons_disabled(self, state):
+def theory_buttons_disabled(parent_theory, state):
     """
     Enable/Disable theory buttons, typically called at the start and stop of a calculation.
-    This is relevant in mutithread mode only.
+    This is relevant in multithread mode only.
     """
-    self.bob_settings_button.setDisabled(state)
-    self.save_bob_configuration_button.setDisabled(state)
-    self.stop_calulation_button.setDisabled(not state)
+    parent_theory.bob_settings_button.setDisabled(state)
+    parent_theory.save_bob_configuration_button.setDisabled(state)
+    parent_theory.stop_calulation_button.setDisabled(not state)
 
 
-def handle_stop_calulation(self):
+def handle_stop_calulation(parent_theory):
     """
     Raise a flag to kindly notify the thread Calc routine to stop.
-    This is relevant in mutithread mode only.
+    This is relevant in multithread mode only.
     """
-    self.Qprint("Stop current calculation requested")
-    self.stop_theory_calc_flag = True
-    self.stop_calulation_button.setDisabled(True)
+    parent_theory.Qprint("Stop current calculation requested")
+    parent_theory.stop_theory_calc_flag = True
+    parent_theory.stop_calulation_button.setDisabled(True)
 
 
 
-def handle_save_bob_configuration(parent):
+def handle_save_bob_configuration(parent_theory):
     """
     Launch a dialog to select a filename where to save the polymer configurations.
     Then call the C routine 'polyconfwrite' that the data into the selected file
     """
-    stars = '*************************\n'
-    if parent.simexists:
-        ndist = parent.ndist
-        react_dist[ndist].contents.M_e = parent.parameters['Me'].value
-        react_dist[ndist].contents.monmass = parent.parameters['mon_mass'].value
+    stars = '*************************'
+    if parent_theory.simexists:
+        ndist = parent_theory.ndist
+        rch.react_dist[ndist].contents.M_e = parent_theory.parameters['Me'].value
+        rch.react_dist[ndist].contents.monmass = parent_theory.parameters['mon_mass'].value
 
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         dir_start = "data/React/polyconf.dat"
         dilogue_name = "Save"
         ext_filter = "Data Files (*.dat)"
-        out_file = QFileDialog.getSaveFileName(parent, dilogue_name, dir_start, options=options)
+        out_file = QFileDialog.getSaveFileName(parent_theory, dilogue_name, dir_start, options=options)
         if out_file[0] == "":
             return
         # output polymers
         b_out_file = out_file[0].encode('utf-8')
-        polyconfwrite(c_int(ndist), c_char_p(b_out_file))
-        message = stars + 'Saved %d polymers in %s\n'%(react_dist[ndist].contents.nsaved, out_file[0]) + stars
+        rch.polyconfwrite(ct.c_int(ndist), ct.c_char_p(b_out_file))
+        message = stars + '\nSaved %d polymers in %s\n'%(rch.react_dist[ndist].contents.nsaved, out_file[0]) + stars
     else:    
-        message = stars + 'No simulation performed yet\n' + stars
-    parent.Qprint(message)
+        message = stars + '\nNo simulation performed yet\n' + stars
+    parent_theory.Qprint(message)
 
-def handle_edit_bob_settings(parent):
+def handle_edit_bob_settings(parent_theory):
     """Launch a dialog and modify the BoB binning settings if the user press "OK", else nothing happend."""
-    ndist = parent.ndist
-    numbobbins = react_dist[ndist].contents.numbobbins
-    bobmax = np.power(10, react_dist[ndist].contents.boblgmax)
-    bobmin = np.power(10, react_dist[ndist].contents.boblgmin)
-    bobbinmax = react_dist[ndist].contents.bobbinmax
+    ndist = parent_theory.ndist
+    numbobbins = rch.react_dist[ndist].contents.numbobbins
+    bobmax = np.power(10, rch.react_dist[ndist].contents.boblgmax)
+    bobmin = np.power(10, rch.react_dist[ndist].contents.boblgmin)
+    bobbinmax = rch.react_dist[ndist].contents.bobbinmax
 
-    d = EditBobSettingsDialog(parent, numbobbins, bobmax, bobmin, bobbinmax)
+    d = EditBobSettingsDialog(parent_theory, numbobbins, bobmax, bobmin, bobbinmax)
     if d.exec_():
         try:
             numbobbins = int(d.e1.text())
@@ -97,28 +156,28 @@ def handle_edit_bob_settings(parent):
             bobbinmax = int(d.e4.text())
         except ValueError:
             pass
-        react_dist[ndist].contents.numbobbins = c_int(numbobbins)
-        react_dist[ndist].contents.boblgmax = c_double(np.log10(bobmax))
-        react_dist[ndist].contents.boblgmin = c_double(np.log10(bobmin))
-        react_dist[ndist].contents.bobbinmax = c_int(bobbinmax)
+        rch.react_dist[ndist].contents.numbobbins = ct.c_int(numbobbins)
+        rch.react_dist[ndist].contents.boblgmax = ct.c_double(np.log10(bobmax))
+        rch.react_dist[ndist].contents.boblgmin = ct.c_double(np.log10(bobmin))
+        rch.react_dist[ndist].contents.bobbinmax = ct.c_int(bobbinmax)
 
-def handle_increase_records(parent, name):
+def handle_increase_records(parent_theory, name):
     """Launch a dialog asking if the user what to allocate more memory for arms, polymers, or distribution.
         'name' should be "arm", "polymer", or "dist".
     """
     if name == "arm":
-        current_max = pb_global_const.maxarm
-        f = increase_arm_records_in_arm_pool
+        current_max = rch.pb_global_const.maxarm
+        f = rch.increase_arm_records_in_arm_pool
     elif name == "polymer":
-        current_max = pb_global_const.maxpol
-        f = increase_polymer_records_in_br_poly
+        current_max = rch.pb_global_const.maxpol
+        f = rch.increase_polymer_records_in_br_poly
     elif name == "dist":
-        current_max = pb_global_const.maxreact
-        f = increase_dist_records_in_react_dist
+        current_max = rch.pb_global_const.maxreact
+        f = rch.increase_dist_records_in_react_dist
     else:
         return False 
 
-    d = IncreaseRecordsDialog(parent, current_max, name) #create the dialog
+    d = IncreaseRecordsDialog(parent_theory, current_max, name) #create the dialog
     if d.exec_():
         if d.r1.isChecked():
             new_max = int(np.ceil(current_max*1.5))
@@ -126,9 +185,9 @@ def handle_increase_records(parent, name):
             new_max = int(current_max*2)
         if d.r3.isChecked():
             new_max = int(current_max*5)
-        success = f(c_int(new_max)) #call C routine to allocate more memory (use realloc)
+        success = f(ct.c_int(new_max)) #call C routine to allocate more memory (use realloc)
         if not success:
-            parent.Qprint("Allocation of new memory failed\n%d %s records in memory"%(current_max, name))
+            parent_theory.Qprint("Allocation of new memory failed\n%d %s records in memory"%(current_max, name))
         return success
     else:
         return False
@@ -139,8 +198,8 @@ def handle_increase_records(parent, name):
 class EditBobSettingsDialog(QDialog):
     """Create the form that is used to modify the BoB binning settings"""
 
-    def __init__(self, parent, numbobbins, bobmax, bobmin, bobbinmax):
-        super().__init__(parent)
+    def __init__(self, parent_theory, numbobbins, bobmax, bobmin, bobbinmax):
+        super().__init__(parent_theory)
         self.createFormGroupBox(numbobbins, bobmax, bobmin, bobbinmax)
  
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -162,7 +221,7 @@ class EditBobSettingsDialog(QDialog):
         val_double.setBottom(1) #set smalled double allowed in the form
         val_int = QIntValidator()
         val_int.setBottom(0) #set smalled int allowed in the form
-        val_int.setTop(pb_global_const.maxbobbins) #set smalled int allowed in the form
+        val_int.setTop(rch.pb_global_const.maxbobbins) #set smalled int allowed in the form
         
         self.e1 = QLineEdit()
         self.e1.setValidator(val_int)
@@ -197,8 +256,8 @@ class IncreaseRecordsDialog(QDialog):
     """
     Dialog containing radio buttons to choose a new memory size for the records of "name" 
     """
-    def __init__(self, parent, current_max, name):
-        super().__init__(parent)
+    def __init__(self, parent_theory, current_max, name):
+        super().__init__(parent_theory)
         self.createExclusiveGroup(current_max, name)
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)

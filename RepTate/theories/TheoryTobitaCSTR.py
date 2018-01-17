@@ -17,10 +17,10 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from react_ctypes_helper import *
-from ctypes import *
+
+import ctypes as ct
+import react_ctypes_helper as rch
 import react_gui_tools as rgt
 
 
@@ -59,8 +59,7 @@ class BaseTheoryTobitaCSTR:
     
     [description]
     """
-    single_file = True # True if the theory can be applied to multiple files simultaneously
-    increase_memory = pyqtSignal(str)
+    single_file = True # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
@@ -73,8 +72,8 @@ class BaseTheoryTobitaCSTR:
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-        self.reactname = "LDPE CSTR %d"%(tCSTR_global.tobCSTRnumber)
-        tCSTR_global.tobCSTRnumber += 1
+        self.reactname = "LDPE CSTR %d"%(rch.tCSTR_global.tobCSTRnumber)
+        rch.tCSTR_global.tobCSTRnumber += 1
         self.function = self.Calc
         self.simexists = False
         self.dist_exists = False
@@ -97,8 +96,6 @@ class BaseTheoryTobitaCSTR:
                                           type=ParameterType.real, opt_type=OptType.const)
         self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
                                           type=ParameterType.real, opt_type=OptType.const)
-
-        self.increase_memory.connect(self.handle_increase_memory)
 
     def get_modes(self):
         """[summary]
@@ -145,7 +142,7 @@ class BaseTheoryTobitaCSTR:
         Me = self.parameters['Me'].value
         nbins = int(np.round(self.parameters['nbin'].value))
         
-        c_ndist = c_int()
+        c_ndist = ct.c_int()
 
         #resize theory datatable
         ft = f.data_table        
@@ -156,37 +153,28 @@ class BaseTheoryTobitaCSTR:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
         if not self.dist_exists:
-            success = request_dist(byref(c_ndist))
+            success = rch.request_dist(ct.byref(c_ndist))
             self.ndist = c_ndist.value
             if not success:
-                self.Qprint('Too many theories open for internal storage.\nPlease close a theory or increase records\nthen press "calculate"')
-                try:
-                    self.success_increase_memory = None
-                    self.increase_memory.emit("dist")
-                    while self.success_increase_memory is None:
-                        pass
-                except:
-                    self.success_increase_memory = False
-                if self.success_increase_memory:
-                    link_react_dist() #re-link the python array with the C array
-                    global react_dist
-                    from react_ctypes_helper import react_dist
+                rgt.request_more_dist(self) #launch dialog asking for more dist
                 return
-            self.dist_exists = True
+            else:
+                self.dist_exists = True
         ndist = self.ndist
-        # react_dist[ndist].contents.name = self.reactname #TODO: set the dist name in the C library 
-        react_dist[ndist].contents.polysaved = False
+        # rch.react_dist[ndist].contents.name = self.reactname #TODO: set the dist name in the C library 
+        rch.react_dist[ndist].contents.polysaved = False
 
         if self.simexists:
-            return_dist_polys(c_int(ndist))
+            rch.return_dist_polys(ct.c_int(ndist))
 
         # initialise tobita batch
-        tobCSTRstart(c_double(tau), c_double(beta), c_double(sigma), c_double(lambda_), c_int(ndist))
-        react_dist[ndist].contents.npoly = 0
+        rch.tobCSTRstart(ct.c_double(tau), ct.c_double(beta), ct.c_double(sigma), ct.c_double(lambda_), ct.c_int(ndist))
+        rch.react_dist[ndist].contents.npoly = 0
 
-        react_dist[ndist].contents.M_e = Me
-        react_dist[ndist].contents.monmass = monmass
-        react_dist[ndist].contents.nummwdbins = nbins
+        rch.react_dist[ndist].contents.M_e = Me
+        rch.react_dist[ndist].contents.monmass = monmass
+        rch.react_dist[ndist].contents.nummwdbins = nbins
+        c_m = ct.c_int()
 
         # make numtomake polymers
         i = 0
@@ -195,113 +183,89 @@ class BaseTheoryTobitaCSTR:
                 self.Qprint('Polymer creation stopped by user')
                 break
             # get a polymer
-            c_m = c_int()
-            success = request_poly(byref(c_m))
+            success = rch.request_poly(ct.byref(c_m))
             m = c_m.value
             if success: # check availability of polymers
             # put it in list
-                if react_dist[ndist].contents.npoly == 0:  # case of first polymer made
-                    react_dist[ndist].contents.first_poly = m
-                    set_br_poly_nextpoly(c_int(m), c_int(0)) #br_poly[m].contents.nextpoly = 0
+                if rch.react_dist[ndist].contents.npoly == 0:  # case of first polymer made
+                    rch.react_dist[ndist].contents.first_poly = m
+                    rch.set_br_poly_nextpoly(ct.c_int(m), ct.c_int(0)) #br_poly[m].contents.nextpoly = 0
                 else:           # next polymer, put to top of list
-                    set_br_poly_nextpoly(c_int(m), c_int(react_dist[ndist].contents.first_poly)) #br_poly[m].contents.nextpoly = react_dist[ndist].contents.first_poly
-                    react_dist[ndist].contents.first_poly = m
+                    rch.set_br_poly_nextpoly(ct.c_int(m), ct.c_int(rch.react_dist[ndist].contents.first_poly)) #br_poly[m].contents.nextpoly = rch.react_dist[ndist].contents.first_poly
+                    rch.react_dist[ndist].contents.first_poly = m
 
                 # make a polymer
-                if tobCSTR(c_int(m), c_int(ndist)): # routine returns false if arms ran out
-                    react_dist[ndist].contents.npoly += 1
+                if rch.tobCSTR(ct.c_int(m), ct.c_int(ndist)): # routine returns false if arms ran out
+                    rch.react_dist[ndist].contents.npoly += 1
                     i += 1
                     # check for error
-                    if tCSTR_global.tobitaCSTRerrorflag:
+                    if rch.tCSTR_global.tobitaCSTRerrorflag:
                         self.Qprint('Polymers too large: gelation occurs for these parameters')
                         i = numtomake
                 else: # error message if we ran out of arms
-                    try:
-                        self.success_increase_memory = None
-                        self.increase_memory.emit("arm")
-                        while self.success_increase_memory is None:
-                            pass
-                    except:
-                        self.success_increase_memory = False
-
-                    if not self.success_increase_memory:
-                        message = 'Ran out of storage for arm records. Options to avoid this are:\n'
-                        message += '(1) Reduce number of polymers requested\n'
-                        message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
-                        message += '(3) Close some other theories\n'
-                        message += '(4) Adjust parameters to avoid gelation'
-                        self.Qprint(message)
-                        i = numtomake
-                        tCSTR_global.tobitaCSTRerrorflag = True
+                    success_increase_memory = rgt.request_more_arm(self)
+                    if success_increase_memory:
+                        continue  # back to the start of while loop
                     else:
-                        continue # back to the start of while loop
+                        i = numtomake
+                        rch.tCSTR_global.tobitaCSTRerrorflag = True
+
                 # update on number made
-                if react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
-                    self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
+                if rch.react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
+                    self.Qprint('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
                     QApplication.processEvents() # needed to use Qprint if in single-thread
 
-
             else:   # polymer wasn't available
-                try:
-                    self.success_increase_memory = None
-                    self.increase_memory.emit("polymer")
-                    while self.success_increase_memory is None:
-                        pass
-                except:
-                    self.success_increase_memory = False
-                if not self.success_increase_memory:
-                    message = 'Ran out of storage for polymer records. Options to avoid this are:'
-                    message += '(1) Reduce number of polymers requested'
-                    message += '(2) Close some other theories'
-                    self.Qprint(message)
-                    i = numtomake
+                success_increase_memory = rgt.request_more_polymer(self)
+                if success_increase_memory:
+                    continue
                 else:
-                    continue # back to the start of while loop
+                    i = numtomake
         # end make polymers loop
 
         calc = 0
         # do analysis of polymers made
-        if (react_dist[ndist].contents.npoly >= 100) and (not tCSTR_global.tobitaCSTRerrorflag):
-            molbin(ndist)
+        if (rch.react_dist[ndist].contents.npoly >= 100) and (not rch.tCSTR_global.tobitaCSTRerrorflag):
+            rch.molbin(ndist)
             ft = f.data_table
 
             #resize theory data table
             ft = f.data_table
             tt = self.tables[f.file_name_short]
             tt.num_columns = ft.num_columns
-            tt.num_rows = react_dist[ndist].contents.nummwdbins
+            tt.num_rows = rch.react_dist[ndist].contents.nummwdbins
             tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-            for i in range(1, react_dist[ndist].contents.nummwdbins + 1):
-                tt.data[i - 1, 0] = np.power(10, react_dist[ndist].contents.lgmid[i])
-                tt.data[i - 1, 1] = react_dist[ndist].contents.wt[i]
-                tt.data[i - 1, 2] = react_dist[ndist].contents.avg[i]
-                tt.data[i - 1, 3] = react_dist[ndist].contents.avbr[i]
+            for i in range(1, rch.react_dist[ndist].contents.nummwdbins + 1):
+                tt.data[i - 1, 0] = np.power(10, rch.react_dist[ndist].contents.lgmid[i])
+                tt.data[i - 1, 1] = rch.react_dist[ndist].contents.wt[i]
+                tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
+                tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
 
             self.Qprint('*************************')
-            # self.Qprint('End of calculation \"%s\"'%react_dist[ndist].contents.name)
-            self.Qprint('Made %d polymers'%react_dist[ndist].contents.npoly)
-            self.Qprint('Saved %d polymers in memory'%react_dist[ndist].contents.nsaved)
-            self.Qprint('Mn = %.3g'%react_dist[ndist].contents.m_n)
-            self.Qprint('Mw = %.3g'%react_dist[ndist].contents.m_w)
-            self.Qprint('br/1000C = %.3g'%react_dist[ndist].contents.brav)
+            # self.Qprint('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
+            self.Qprint('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
+            self.Qprint('Saved %d polymers in memory'%rch.react_dist[ndist].contents.nsaved)
+            self.Qprint('Mn = %.3g'%rch.react_dist[ndist].contents.m_n)
+            self.Qprint('Mw = %.3g'%rch.react_dist[ndist].contents.m_w)
+            self.Qprint('br/1000C = %.3g'%rch.react_dist[ndist].contents.brav)
             self.Qprint('*************************')
-            # labelout.Caption = 'Made '+inttostr(polybits.react_dist[ndist].contents.npoly)+' polymers, Mn='
-            #   +floattostrF(polybits.react_dist[ndist].contents.M_n,ffGeneral,5,2)+', Mw='
-            #   +floattostrF(polybits.react_dist[ndist].contents.M_w,ffGeneral,5,2)+', br/1000C='
-            #   +floattostrF(polybits.react_dist[ndist].contents.brav,ffGeneral,5,2)
+            # labelout.Caption = 'Made '+inttostr(polybits.rch.react_dist[ndist].contents.npoly)+' polymers, Mn='
+            #   +floattostrF(polybits.rch.react_dist[ndist].contents.M_n,ffGeneral,5,2)+', Mw='
+            #   +floattostrF(polybits.rch.react_dist[ndist].contents.M_w,ffGeneral,5,2)+', br/1000C='
+            #   +floattostrF(polybits.rch.react_dist[ndist].contents.brav,ffGeneral,5,2)
 
-            calc = react_dist[ndist].contents.nummwdbins - 1
-            react_dist[ndist].contents.polysaved = True
+            calc = rch.react_dist[ndist].contents.nummwdbins - 1
+            rch.react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.Qprint('%d arm records left in memory'%pb_global.arms_left) 
+        self.Qprint('%d arm records left in memory'%rch.pb_global.arms_left) 
         self.Qprint('%s'%ndist)
         return calc
 
     def destructor(self):
         """Return arms to pool"""
-        return_dist(c_int(self.ndist))
+        rch.return_dist(ct.c_int(self.ndist))
 
 
 class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
@@ -357,7 +321,7 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
     def handle_edit_bob_settings(self):
         rgt.handle_edit_bob_settings(self)
 
-    @pyqtSlot(str)
-    def handle_increase_memory(self, name):
-        """Open a dialog to request more memory for the 'name'-records."""
-        self.success_increase_memory = rgt.handle_increase_records(self, name)
+    # @pyqtSlot(str)
+    # def handle_increase_memory(self, name):
+    #     """Open a dialog to request more memory for the 'name'-records."""
+    #     self.success_increase_memory = rgt.handle_increase_records(self, name)
