@@ -16,7 +16,6 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 import numpy as np
-from scipy import interp
 from PyQt5.QtCore import Qt, QSize, QFile
 from PyQt5.QtWidgets import QToolBar, QSpinBox, QFileDialog
 from PyQt5.QtGui import QIcon
@@ -97,10 +96,12 @@ class BaseTheoryDiscrMWD:
                 ft = f.data_table.data
                 mmin = min(ft[:, 0])
                 mmax = max(ft[:, 0])
+                self.set_param_value("logmmin", np.log10(mmin))
+                self.set_param_value("logmmax", np.log10(mmax))
                 nbin = self.parameters["nbin"].value
                 bins_edges = np.logspace(np.log10(mmin), np.log10(mmax), nbin + 1)
                 for i in range(nbin + 1):
-                    self.parameters["logM%02d"%i] = Parameter("logM%02d"%i,np.log10(bins_edges[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const, display_flag=False)
+                    self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(bins_edges[i]), "Log of molecular mass", ParameterType.real, opt_type=OptType.const, display_flag=False)
                 self.current_file = f
                 break
 
@@ -183,10 +184,15 @@ class BaseTheoryDiscrMWD:
         """
         nbin = self.parameters["nbin"].value
         newx = np.sort(newx)
-        for i in range(1, nbin): #exclude the min and max edges
+        #check if point was dragged out of the limits
+        # if yes put it 1% away from boundary
+        if newx[0] < np.power(10, self.parameters["logmmin"].value):
+            newx[1] *= 1.01
+        if newx[-1] > np.power(10, self.parameters["logmmax"].value):
+            newx[-2] /= 1.01
+        for i in range(1, nbin): # exclude the min and max edges
             self.set_param_value("logM%02d"%i, np.log10(newx[i]))
-        self.set_param_value("logmmin", np.log10(newx[0]))
-        self.set_param_value("logmmax", np.log10(newx[nbin - 1]))
+
         self.do_calculate("")
         self.update_parameter_table()
 
@@ -286,7 +292,7 @@ class BaseTheoryDiscrMWD:
         for i in range(nbin): 
             x = []
             y = []
-            w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1])
+            w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1], left=0, right=0) #interpolate out of range values to zero
             x.append(edge_bins[i])
             y.append(w_interp[0])
             for j in range(n):
@@ -305,7 +311,7 @@ class BaseTheoryDiscrMWD:
         for i in range(nbin): 
             x = []
             y = []
-            w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1])
+            w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1], left=0, right=0)
             x.append(edge_bins[i])
             y.append(w_interp[0])
             for j in range(n):
@@ -443,8 +449,8 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         """
         self.spinbox.setValue(value)
         nbinold = self.parameters["nbin"].value
-        mminold=self.parameters["logmmin"].value
-        mmaxold=self.parameters["logmmax"].value
+        mminold = self.parameters["logmmin"].value
+        mmaxold = self.parameters["logmmax"].value
         for i in range(nbinold + 1):
             del self.parameters["logM%02d"%i]
         self.set_param_value("nbin", value)
