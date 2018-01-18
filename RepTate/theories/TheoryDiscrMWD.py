@@ -70,7 +70,6 @@ class BaseTheoryDiscrMWD:
         self.view_bins = True
         self.bins = None
 
-
         self.parameters["Mn"] = Parameter(
             "Mn", 1000, "Number-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["Mw"] = Parameter(
@@ -80,21 +79,20 @@ class BaseTheoryDiscrMWD:
         self.parameters["PDI"] = Parameter(
             "PDI", 1, "Polydispersity index", ParameterType.real, opt_type=OptType.const)
         
-        mmin = 0.1*self.parent_dataset.minpositivecol(0)
-        mmax = 10*self.parent_dataset.maxcol(0)
-        nbin = int(np.round(3*np.log10(mmax/mmin)))
+        mmin = self.parent_dataset.minpositivecol(0)
+        mmax = self.parent_dataset.maxcol(0)
+        nbin = int(np.round(3*np.log10(mmax/mmin))) # default: 3 bins per decade 
         self.parameters["logmmin"] = Parameter("logmmin", np.log10(mmin), "Log of minimum molecular mass", ParameterType.real, opt_type=OptType.const, display_flag=False)
         self.parameters["logmmax"] = Parameter("logmmax", np.log10(mmax), "Log of maximum molecular mass", ParameterType.real, opt_type=OptType.const, display_flag=False)
         self.parameters["nbin"] = Parameter(name="nbin", value=nbin, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
-        # Interpolate modes from data
+
         bins = np.logspace(np.log10(mmin), np.log10(mmax), nbin)
         for f in self.parent_dataset.files:
             if f not in self.parent_dataset.inactive_files:
                 break
-        weight = np.abs(np.interp(bins, f.data_table.data[:,0], f.data_table.data[:,1]))
         for i in range(self.parameters["nbin"].value):
             self.parameters["logM%02d"%i] = Parameter("logM%02d"%i,np.log10(bins[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
-        
+
         self.setup_graphic_bins()
 
     def setup_graphic_bins(self):
@@ -105,7 +103,6 @@ class BaseTheoryDiscrMWD:
         nbin = self.parameters["nbin"].value
         self.zeros = np.zeros(nbin)
         self.bins = np.logspace(self.parameters["logmmin"].value, self.parameters["logmmax"].value, nbin)
-
 
         self.graphic_bins = self.ax.plot(self.bins, self.zeros)[0]
         self.graphic_bins.set_marker('D')
@@ -191,10 +188,14 @@ class BaseTheoryDiscrMWD:
         Mw = 0
         tempMz = 0
         tempMn = 0
-        for i in range(n):
-            Mw += f[i, 1]*f[i, 0] # w*M
-            tempMz += f[i, 1]*f[i, 0]*f[i, 0] # w*M^2
-            tempMn += f[i, 1]/f[i, 0] # w/M
+        temp_sum = 0
+        for i in range(n - 1):
+            M = f[i, 0]
+            w = f[i, 1]
+            # M = np.power(10, (np.log10(f[i + 1, 0]) + np.log10(f[i, 0])) / 2 )
+            Mw += w * M 
+            tempMz += w * M * M # w*M^2
+            tempMn += w / M # w/M
         Mn = 1/tempMn
         Mz = tempMz/Mw
         PDI = Mw/Mn
@@ -222,17 +223,6 @@ class BaseTheoryDiscrMWD:
                 %(line, Mn/1000, Mw/1000, PDI, Mz/Mw)
                 )
 
-    def add_to_bin(self, phi, edge_bins, wi, k, data_up, data_down):
-        kk = k
-        mup = data_up
-        while True:
-            mdown = max (edge_bins[kk - 1], data_down)
-            phi[kk] += wi * (mup - mdown)
-            mup = mdown
-            kk = kk - 1
-            if mdown == data_down:
-                break
-        
     def discretise_mwd(self, f=None):
         """Discretize a molecular weight distribution
         
@@ -242,96 +232,86 @@ class BaseTheoryDiscrMWD:
             f {[type]} -- [description] (default: {None})
         """
 
-        # sort M, w(M) with M increasing in ft
+        # sort M, w with M increasing in ft
         ft = f.data_table.data[np.argsort(f.data_table.data[:,0])]
+
+        #normalize area under the data point
         n = ft[:, 0].size
-        #normalize the weights w(M)
-        ft[:,1] = ft[:,1]/np.sum(ft[:,1])
-        self.calculate_moments(ft, "input")
+        temp_area = 0
+        temp = np.zeros((n, 2))
+        for i in range(n - 1):
+            dlogM = np.log10(ft[i + 1, 0]) - np.log10(ft[i, 0])
+            mean_w = (ft[i, 1] + ft[i + 1, 1]) / 2
+            temp_area += mean_w * dlogM
+            temp[i, 0] = np.power(10, (np.log10(ft[i + 1, 0]) + np.log10(ft[i, 0])) / 2)
+            temp[i, 1] = mean_w * dlogM
+        ft[:, 1] = ft[:, 1]/temp_area
+        temp[:, 1] = temp[:, 1]/temp_area
+        self.calculate_moments(temp, "input")
         
         nbin = self.parameters["nbin"].value
-        logbins = np.zeros(nbin)
+        edge_bins = np.zeros(nbin)
         for i in range(nbin):
-            logbins[i] = self.parameters["logM%02d"%i].value
+            edge_bins[i] = np.power(10, self.parameters["logM%02d"%i].value)
         
-        #create the edges of the bins
-        edge_bins = np.zeros(nbin - 1)
-        for k in range(nbin - 1):
-            edge_bins[k] = (logbins[k + 1] + logbins[k]) / 2
+        out_mbins = np.zeros(nbin - 1) #output M bins
+        #each M-bin is the Mw value of along the bin width
+        for i in range(nbin - 1): 
+            x = []
+            y = []
+            w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1])
+            x.append(edge_bins[i])
+            y.append(w_interp[0])
+            for j in range(n):
+                if edge_bins[i] <= ft[j, 0]  and ft[j, 0] < edge_bins[i + 1]:
+                    x.append(ft[j, 0])
+                    y.append(ft[j, 1])
+            x.append(edge_bins[i + 1])
+            y.append(w_interp[1])
+            tempM = 0
+            for j in range(len(x)):
+                tempM += x[j] * y[j]
+            out_mbins[i] = tempM / np.sum(y)
 
-        #create mid data point values
-        mid_ft = np.zeros(n - 1)
-        for j in range(n - 1):
-            mid_ft[j] = (np.log10(ft[j + 1, 0]) + np.log10(ft[j, 0]))/2 #mid-values of logM
-        
-        low = mid_ft[0] - (mid_ft[1] - mid_ft[0])
-        high = mid_ft[n - 2] + (mid_ft[n - 2] - mid_ft[n - 3])
-        if low < edge_bins[0] or high > edge_bins[nbin - 2]: #must increase the number of bins
-            self.handle_spinboxValueChanged(nbin + 1)
-            self.discretise_mwd(f)
-            return
+        w_out = np.zeros(nbin - 1)
+        #add area inder the curve to w_out and normalize by bin width
+        for i in range(nbin - 1): 
+            x = []
+            y = []
+            w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1])
+            x.append(edge_bins[i])
+            y.append(w_interp[0])
+            for j in range(n):
+                if edge_bins[i] <= ft[j, 0]  and ft[j, 0] < edge_bins[i + 1]:
+                    x.append(ft[j, 0])
+                    y.append(ft[j, 1])
+            x.append(edge_bins[i + 1])
+            y.append(w_interp[1])
+            w_out[i] = np.trapz(y, x=np.log10(x))/ (np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i]) )
 
-        phi = np.zeros(nbin)
-        for i in range(n - 1): # [1..n-2]
-            #loop over the data points
-            #add w[i]*(mid_ft[i]-mid_ft[i-1]) to bin[i] until mid_ft[i] > edge_bin[i]
-            #interpolate: add the area belonging to bin[i]
-            # (edge_bin[i] - mid_ft[i-1])*w[i] to bin[i]
-            # (mid_ft[i-1] - edge_bin[i])*w[i] or less to bin[i+1]
-            k = 0
-            wi = ft[i, 1]
-            while edge_bins[k] < mid_ft[i]:
-                k += 1
-            if i == 0: #case of the first bin
-                low = mid_ft[0] - (mid_ft[1] - mid_ft[0])
-                if low < 0:
-                    low = mid_ft[0]/2
-                self.add_to_bin(phi, edge_bins, wi, k, mid_ft[0], low)
-                continue
-            try:
-                full_bin = mid_ft[i - 1] > edge_bins[k - 1]
-            except:
-                full_bin = False
-            if full_bin:
-                phi[k] += wi * (mid_ft[i] - mid_ft[i - 1])
-            else:
-                self.add_to_bin(phi, edge_bins, wi, k, mid_ft[i], mid_ft[i-1])
-
-        #treat the last data point
-        k = 0
-        wi = ft[n - 1, 1]
-        high = mid_ft[n - 2] + (mid_ft[n - 2] - mid_ft[n - 3])
-        while edge_bins[k] < high:
-            k += 1
-        self.add_to_bin(phi, edge_bins, wi, k, high, mid_ft[n - 2])
-
-        phi = phi/np.sum(phi) #normalize
+        #compute the area under the discretized curve
+        temp_area = 0
+        for i in range(nbin - 2):
+            dlogM = np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i])
+            mean_w = (w_out[i] + w_out[i + 1]) / 2
+            temp_area += mean_w * dlogM
+        w_out /= temp_area
 
         #copy weights and M into theory table
-        logbins, phi = self.clean_zeros(logbins, phi, nbin) #remove the weight = 0
         tt = self.tables[f.file_name_short]
         tt.num_columns = 2
-        tt.num_rows = len(phi) 
+        tt.num_rows = len(w_out) 
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        # weight = np.zeros(nbin-1)
-        # mass = np.zeros(nbin-1)
-        # for i in range(nbin-1):
-        #     weight[i] = ((phi[i + 1] + phi[i]) / 2) / (logbins[i+1] - logbins[i])
-        #     mass[i] = np.power(10, (logbins[i] + logbins[i + 1])/2 )
-        # tt.data[:, 1] = phi/np.sum(phi)
-        # weight = weight/np.sum(weight)
-        # print (weight)
-        # print(mass)
-        # tt.data[:, 0] = mass
-        # tt.data[:, 1] = weight
-        tt.data[:, 0] = np.power(10, logbins)
-        tt.data[:, 1] = phi/np.sum(phi)
+        tt.data[:, 0] = out_mbins
+        tt.data[:, 1] = w_out
 
-        size = len(tt.data[:, 1])
-        self.saved_th = np.zeros((size, 2))
-        self.saved_th[:, 0] = np.power(10, logbins)
-        self.saved_th[:, 1] = phi/np.sum(phi)
-        self.calculate_moments(tt.data, "discretized")
+        #compute phi
+        self.saved_th = np.zeros((nbin - 1, 2))
+        self.saved_th[:, 0] = out_mbins
+        for i in range(nbin - 2):
+            self.saved_th[i, 1] = (np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i])) * (w_out[i] + w_out[i + 1]) / 2
+        self.saved_th[:, 1] /=  np.sum(self.saved_th[:, 1])
+        self.calculate_moments(self.saved_th, "discretized")
 
     def plot_theory_stuff(self):
         """[summary]
