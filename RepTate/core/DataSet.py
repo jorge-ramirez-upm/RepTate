@@ -261,7 +261,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 try:
                     x, y, success = view.view_proc(dt, file.file_parameters)
                 except TypeError as e:
-                    print(e)
+                    print("in do_plot()", e)
                     return
 
                 for i in range(dt.MAX_NUM_SERIES):
@@ -291,11 +291,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         dt.series[nx][i].set_label('')
             
                 for th in self.theories.values():
+                    if th.active:
+                        th.plot_theory_stuff()
                     tt = th.tables[file.file_name_short]
                     try:
                         x, y, success = view.view_proc(tt, file.file_parameters)
                     except Exception as e:
-                        print(e)
+                        print("in do_plot th", e)
                         return
                     for i in range(tt.MAX_NUM_SERIES):
                         if (i<view.n and file.active and th.active):
@@ -308,7 +310,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         else:
                             tt.series[nx][i].set_visible(False)
                             tt.series[nx][i].set_label('')
-                    th.plot_theory_stuff()
         
         self.parent_application.update_plot()
 

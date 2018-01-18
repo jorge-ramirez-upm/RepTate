@@ -72,10 +72,10 @@ class BaseApplicationMWD:
         self.nplots = len(self.multiviews) 
 
         # FILES
-        ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], ['Mn','Mw','PDI'], ["g/mol", '-'])
-        self.filetypes[ftype.extension]=ftype
         ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], ['Mn','Mw','PDI'], ["g/mol", '-'])
         #ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
+        self.filetypes[ftype.extension]=ftype
+        ftype=TXTColumnFile("React Files", "reac", "Relaxation modulus", ['M','W(logM)', 'g', 'br/1000C'], ['Mn','Mw','PDI'], ["g/mol", '-'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
@@ -96,9 +96,8 @@ class BaseApplicationMWD:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        max_y = np.max(dt.data[:, 1])
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 1]/max_y
+        y[:, 0] = dt.data[:, 1]
         return x, y, True
 
     def viewlogWM(self, dt, file_parameters):
@@ -115,9 +114,8 @@ class BaseApplicationMWD:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        max_y = np.max(dt.data[:, 1])
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(dt.data[:, 1]/max_y)
+        y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
 class CLApplicationMWD(BaseApplicationMWD, Application):

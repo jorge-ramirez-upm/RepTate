@@ -161,8 +161,14 @@ class Theory(CmdBase):
 
         self.calculate_is_busy = True
         start_time = time.time()
-        for f in self.parent_dataset.files:
-            self.function(f)
+        if self.single_file: #find the first active file in dataset
+            for f in self.parent_dataset.files:
+                if f.file_name_short not in self.parent_dataset.inactive_files:
+                    self.function(f)
+                    break
+        else:
+            for f in self.parent_dataset.files:
+                self.function(f)
         if not self.is_fitting:
             self.do_plot(line)
             self.do_error(line)
@@ -800,7 +806,7 @@ class Theory(CmdBase):
                 for nx in range(self.parent_dataset.nplots):
                     table.series[nx][i].set_visible(False)
         try:
-            self.hide_theory_extras()
+            self.show_theory_extras(False)
         except: # current theory has no extras
             # print("current theory has no extras to hide")
             pass
@@ -826,6 +832,11 @@ class Theory(CmdBase):
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.parent_dataset.nplots):
                         tt.series[nx][i].set_visible(True)
+        try:
+            self.show_theory_extras(True)
+        except: # current theory has no extras
+            # print("current theory has no extras to show")
+            pass
         self.parent_dataset.do_plot("")
 
     def Qprint(self, msg):

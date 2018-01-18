@@ -209,7 +209,7 @@ class DraggableBinSeries(DraggableArtist):
             event {[type]} -- [description]
         """
         if event.inaxes != self.artist.axes: return
-        if DraggableArtist.lock is not None: return
+        # if DraggableArtist.lock is not None: return 
         contains, attrd = self.artist.contains(event)
         if not contains: return
         self.xdata, self.ydata = self.artist.get_data()

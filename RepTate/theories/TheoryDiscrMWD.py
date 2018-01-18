@@ -69,6 +69,7 @@ class BaseTheoryDiscrMWD:
         self.has_modes = False
         self.view_bins = True
         self.bins = None
+        self.current_file = None
 
         self.parameters["Mn"] = Parameter(
             "Mn", 1000, "Number-average molecular mass", ParameterType.real, opt_type=OptType.const)
@@ -86,14 +87,23 @@ class BaseTheoryDiscrMWD:
         self.parameters["logmmax"] = Parameter("logmmax", np.log10(mmax), "Log of maximum molecular mass", ParameterType.real, opt_type=OptType.const, display_flag=False)
         self.parameters["nbin"] = Parameter(name="nbin", value=nbin, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
 
-        bins = np.logspace(np.log10(mmin), np.log10(mmax), nbin)
-        for f in self.parent_dataset.files:
-            if f not in self.parent_dataset.inactive_files:
-                break
-        for i in range(self.parameters["nbin"].value):
-            self.parameters["logM%02d"%i] = Parameter("logM%02d"%i,np.log10(bins[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
-
+        self.set_equally_spaced_bins()
         self.setup_graphic_bins()
+
+    def set_equally_spaced_bins(self):
+        """Find the first active file in the dataset and setup the bins"""
+        for f in self.parent_dataset.files:
+            if f.file_name_short not in self.parent_dataset.inactive_files:
+                ft = f.data_table.data
+                mmin = min(ft[:, 0])
+                mmax = max(ft[:, 0])
+                nbin = self.parameters["nbin"].value
+                bins_edges = np.logspace(np.log10(mmin), np.log10(mmax), nbin + 1)
+                for i in range(nbin + 1):
+                    self.parameters["logM%02d"%i] = Parameter("logM%02d"%i,np.log10(bins_edges[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const, display_flag=False)
+                self.current_file = f
+                break
+
 
     def setup_graphic_bins(self):
         """[summary]
@@ -101,20 +111,31 @@ class BaseTheoryDiscrMWD:
         [description]
         """
         nbin = self.parameters["nbin"].value
-        self.zeros = np.zeros(nbin)
-        self.bins = np.logspace(self.parameters["logmmin"].value, self.parameters["logmmax"].value, nbin)
+        #marker at the Mw value of the bin
+        self.Mw_bin = self.ax.plot(np.zeros(nbin), np.zeros(nbin))[0]
+        self.Mw_bin.set_marker('|')
+        self.Mw_bin.set_linestyle('')
+        self.Mw_bin.set_visible(False)
+        # self.Mw_bin.set_markerfacecolor('yellow')
+        self.Mw_bin.set_markeredgecolor('black')
+        self.Mw_bin.set_markeredgewidth(3)
+        self.Mw_bin.set_markersize(14)
+        self.Mw_bin.set_alpha(0.5)
 
-        self.graphic_bins = self.ax.plot(self.bins, self.zeros)[0]
-        self.graphic_bins.set_marker('D')
+        #setup the movable edge bin
+        self.bins = np.logspace(self.parameters["logmmin"].value, self.parameters["logmmax"].value, nbin + 1)
+        self.graphic_bins = self.ax.plot(self.bins, np.zeros(nbin + 1), picker=10)[0]
+        self.graphic_bins.set_marker('d')
         self.graphic_bins.set_linestyle('')
         self.graphic_bins.set_visible(self.view_bins)
         self.graphic_bins.set_markerfacecolor('yellow')
         self.graphic_bins.set_markeredgecolor('black')
         self.graphic_bins.set_markeredgewidth(3)
-        self.graphic_bins.set_markersize(8)
+        self.graphic_bins.set_markersize(11)
         self.graphic_bins.set_alpha(0.5)
         self.artist_bins = DraggableBinSeries(self.graphic_bins, DragType.horizontal, self.parent_dataset.parent_application.current_view.log_x, self.parent_dataset.parent_application.current_view.log_y, self.drag_bin)
         # self.plot_theory_stuff()
+
 
     def destructor(self):
         """Called when the theory tab is closed
@@ -122,16 +143,16 @@ class BaseTheoryDiscrMWD:
         [description]
         """
         self.graphic_bins_visible(False)
-        self.ax.lines.remove(self.graphic_bins) 
+        self.ax.lines.remove(self.graphic_bins)
 
-    def hide_theory_extras(self):
+    def show_theory_extras(self, show=False):
         """Called when the active theory is changed
         
         [description]
         """
         if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras()
-        self.graphic_bins_visible(False)
+            self.Qhide_theory_extras(show)
+        self.graphic_bins_visible(show)
 
     def graphic_bins_visible(self, state):
         """[summary]
@@ -139,7 +160,10 @@ class BaseTheoryDiscrMWD:
         [description]
         """
         self.view_bins = state
-        self.graphic_bins.set_visible(state)
+        self.graphic_bins.set_visible(state) #movable edge bins
+        self.Mw_bin.set_visible(state) #Mw tick marks
+        self.set_bar_plot(state) #bar plot
+
         if self.view_bins:
             self.artist_bins.connect()
         else:
@@ -159,7 +183,7 @@ class BaseTheoryDiscrMWD:
         """
         nbin = self.parameters["nbin"].value
         newx = np.sort(newx)
-        for i in range(1, nbin - 1):
+        for i in range(1, nbin): #exclude the min and max edges
             self.set_param_value("logM%02d"%i, np.log10(newx[i]))
         self.set_param_value("logmmin", np.log10(newx[0]))
         self.set_param_value("logmmax", np.log10(newx[nbin - 1]))
@@ -203,15 +227,15 @@ class BaseTheoryDiscrMWD:
         if line=="input":
             file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
             self.parent_dataset.DataSettreeWidget.blockSignals(True)
-            file_table.setText(1, "%0.3g"%Mn)
-            file_table.setText(2, "%0.3g"%Mw)
+            file_table.setText(1, "%0.3g"%(Mn/1000))
+            file_table.setText(2, "%0.3g"%(Mw/1000))
             file_table.setText(3, "%0.3g"%PDI)
             self.parent_dataset.DataSettreeWidget.blockSignals(False)
 
         if line=="discretized":
-            self.set_param_value("Mn", Mn)
-            self.set_param_value("Mw", Mw)
-            self.set_param_value("Mz", Mz)
+            self.set_param_value("Mn", Mn/1000)
+            self.set_param_value("Mw", Mw/1000)
+            self.set_param_value("Mz", Mz/1000)
             self.set_param_value("PDI", PDI)
 
         if line == "":
@@ -233,9 +257,13 @@ class BaseTheoryDiscrMWD:
         """
 
         # sort M, w with M increasing in ft
-        ft = f.data_table.data[np.argsort(f.data_table.data[:,0])]
+        f.data_table.data = f.data_table.data[np.argsort(f.data_table.data[:,0])]
+        ft = f.data_table.data
 
-        #normalize area under the data point
+        if f != self.current_file:
+            self.set_equally_spaced_bins()
+
+        #normalize area under the data points to compute the moments
         n = ft[:, 0].size
         temp_area = 0
         temp = np.zeros((n, 2))
@@ -245,18 +273,17 @@ class BaseTheoryDiscrMWD:
             temp_area += mean_w * dlogM
             temp[i, 0] = np.power(10, (np.log10(ft[i + 1, 0]) + np.log10(ft[i, 0])) / 2)
             temp[i, 1] = mean_w * dlogM
-        ft[:, 1] = ft[:, 1]/temp_area
-        temp[:, 1] = temp[:, 1]/temp_area
+        temp[:, 1] /= temp_area
         self.calculate_moments(temp, "input")
         
         nbin = self.parameters["nbin"].value
-        edge_bins = np.zeros(nbin)
-        for i in range(nbin):
+        edge_bins = np.zeros(nbin + 1)
+        for i in range(nbin + 1):
             edge_bins[i] = np.power(10, self.parameters["logM%02d"%i].value)
         
-        out_mbins = np.zeros(nbin - 1) #output M bins
         #each M-bin is the Mw value of along the bin width
-        for i in range(nbin - 1): 
+        out_mbins = np.zeros(nbin) #output M bins
+        for i in range(nbin): 
             x = []
             y = []
             w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1])
@@ -273,9 +300,9 @@ class BaseTheoryDiscrMWD:
                 tempM += x[j] * y[j]
             out_mbins[i] = tempM / np.sum(y)
 
-        w_out = np.zeros(nbin - 1)
         #add area inder the curve to w_out and normalize by bin width
-        for i in range(nbin - 1): 
+        w_out = np.zeros(nbin)
+        for i in range(nbin): 
             x = []
             y = []
             w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1])
@@ -289,27 +316,23 @@ class BaseTheoryDiscrMWD:
             y.append(w_interp[1])
             w_out[i] = np.trapz(y, x=np.log10(x))/ (np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i]) )
 
-        #compute the area under the discretized curve
-        temp_area = 0
-        for i in range(nbin - 2):
-            dlogM = np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i])
-            mean_w = (w_out[i] + w_out[i + 1]) / 2
-            temp_area += mean_w * dlogM
-        w_out /= temp_area
-
-        #copy weights and M into theory table
+        # #copy weights and M into theory table
         tt = self.tables[f.file_name_short]
         tt.num_columns = 2
         tt.num_rows = len(w_out) 
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = out_mbins
-        tt.data[:, 1] = w_out
+        # tt.data[:, 0] = out_mbins
+        # tt.data[:, 1] = w_out
 
-        #compute phi
-        self.saved_th = np.zeros((nbin - 1, 2))
+        #graphic stuff
+        self.bin_height = w_out
+        self.bin_edges = edge_bins
+        
+        #compute moments of discretized distribution
+        self.saved_th = np.zeros((nbin, 2))
         self.saved_th[:, 0] = out_mbins
-        for i in range(nbin - 2):
-            self.saved_th[i, 1] = (np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i])) * (w_out[i] + w_out[i + 1]) / 2
+        for i in range(nbin):
+            self.saved_th[i, 1] = (np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i])) * w_out[i]
         self.saved_th[:, 1] /=  np.sum(self.saved_th[:, 1])
         self.calculate_moments(self.saved_th, "discretized")
 
@@ -319,30 +342,33 @@ class BaseTheoryDiscrMWD:
         [description]
         """
         nbin = self.parameters["nbin"].value
-        x = np.zeros(nbin)
-        y = np.zeros(nbin)
-        for i in range(nbin):
+        x = np.zeros(nbin + 1)
+        y = np.zeros(nbin + 1)
+        for i in range(nbin + 1):
             x[i]= self.parameters["logM%02d"%i].value
-
         self.graphic_bins.set_data(np.power(10, x), y)
+        
+        #set the bar plot
+        self.set_bar_plot(True)
 
-    def clean_zeros(self, bins, phi, nbin):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            bins {[type]} -- [description]
-            phi {[type]} -- [description]
-        
-        Returns:
-            [type] -- [description]
-        """
-        zeros = []
-        for i in range(nbin):
-            if phi[i] == 0:
-                zeros.append(i)
-        return np.delete(bins, zeros), np.delete(phi, zeros)
+        #set the tick marks of for each bin Mw value
+        self.Mw_bin.set_data(self.saved_th[:, 0], np.zeros(len(self.saved_th[:, 0])))
+        self.Mw_bin.set_visible(True)
+
+    def set_bar_plot(self, visible=True):
+        """Hide/Show the bar plot"""
+        nbin = self.parameters["nbin"].value
+        try:
+            self.bar_bins.remove() #remove existing bars, if any
+        except:
+            pass #no bar plot to remove
+        if visible:
+            edges = self.bin_edges[:-1] #remove last bin
+            width = np.zeros(nbin)
+            for i in range(nbin):
+                width[i] = (self.bin_edges[i + 1] - self.bin_edges[i])
+            self.bar_bins = self.ax.bar(edges, self.bin_height, width,  align='edge', color='grey', edgecolor='black', alpha=0.5)
+
 
 class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
     """[summary]
@@ -419,22 +445,22 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         nbinold = self.parameters["nbin"].value
         mminold=self.parameters["logmmin"].value
         mmaxold=self.parameters["logmmax"].value
-        for i in range(nbinold):
+        for i in range(nbinold + 1):
             del self.parameters["logM%02d"%i]
         self.set_param_value("nbin", value)
-        mnew = np.logspace(mminold, mmaxold, value)
-        for i in range(value):
+        mnew = np.logspace(mminold, mmaxold, value + 1)
+        for i in range(value + 1):
             self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
         
         self.do_calculate("")
         self.update_parameter_table()
     
-    def Qhide_theory_extras(self):
+    def Qhide_theory_extras(self, state):
         """Uncheck the view_bins_button button. Called when curent theory is changed
         
         [description]
         """
-        self.view_bins_button.setChecked(False)
+        self.view_bins_button.setChecked(state)
 
     def handle_view_bins_button_triggered(self, checked):
         """[summary]
@@ -442,6 +468,8 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         [description]
         """
         self.graphic_bins_visible(checked)
+        self.set_bar_plot(True) #leave the bar plot on
+        self.parent_dataset.parent_application.update_plot()
 
     def handle_save_theory_results(self):
         """

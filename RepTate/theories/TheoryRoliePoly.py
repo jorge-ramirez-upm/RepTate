@@ -169,14 +169,14 @@ class BaseTheoryRoliePoly:
         self.extra_graphic_visible(False)
         self.ax.lines.remove(self.LVEenvelopeseries) 
 
-    def hide_theory_extras(self):
+    def show_theory_extras(self, show=False):
         """Called when the active theory is changed
         
         [description]
         """
         if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras()
-        self.extra_graphic_visible(False)
+            self.Qhide_theory_extras(show)
+        self.extra_graphic_visible(show)
 
     def extra_graphic_visible(self, state):
         """[summary]
@@ -412,12 +412,12 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("nstretch", min(nmodes, value))
 
-    def Qhide_theory_extras(self):
+    def Qhide_theory_extras(self, state):
         """Uncheck the LVE button. Called when curent theory is changed
         
         [description]
         """
-        self.linearenvelope.setChecked(False)
+        self.linearenvelope.setChecked(state)
 
     def show_linear_envelope(self, state):
         self.extra_graphic_visible(state)

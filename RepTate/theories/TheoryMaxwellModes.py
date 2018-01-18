@@ -140,14 +140,14 @@ class BaseTheoryMaxwellModesFrequency:
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.graphicmodes) 
 
-    def hide_theory_extras(self):
+    def show_theory_extras(self, show=False):
         """Called when the active theory is changed
         
         [description]
         """
         if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras()
-        self.graphicmodes_visible(False)
+            self.Qhide_theory_extras(show)
+        self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
         """[summary]
@@ -294,12 +294,12 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(self.modesaction_change)
 
-    def Qhide_theory_extras(self):
+    def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed
         
         [description]
         """
-        self.modesaction.setChecked(False)
+        self.modesaction.setChecked(state)
 
     def modesaction_change(self, checked):
         """[summary]
@@ -463,14 +463,14 @@ class BaseTheoryMaxwellModesTime:
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.graphicmodes) 
 
-    def hide_theory_extras(self):
+    def show_theory_extras(self, show=False):
         """Called when the active theory is changed
         
         [description]
         """
         if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras()
-        self.graphicmodes_visible(False)
+            self.Qhide_theory_extras(show)
+        self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
         """[summary]
@@ -612,12 +612,12 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(self.modesaction_change)
         
-    def Qhide_theory_extras(self):
+    def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed
         
         [description]
         """
-        self.modesaction.setChecked(False)
+        self.modesaction.setChecked(state)
 
     def modesaction_change(self, checked):
         """[summary]
