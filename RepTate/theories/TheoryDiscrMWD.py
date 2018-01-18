@@ -495,10 +495,10 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         # output polymers
         Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.saved_th, "")
         fout.write("Mn=%.3g;Mw=%.3g;PDI=%.3g;Mz/Mw=%.3g\n"%(Mn, Mw, PDI, Mz_Mw))
-        fout.write("%10s %12s\n"%("M", "phi(M)"))
+        fout.write("%-10s %12s\n"%("M", "phi(M)"))
         k = 0
         for i in range(len(self.saved_th[:, 0])):
-            fout.write("%10.3e %12.6e\n"%(self.saved_th[i, 0], self.saved_th[i, 1]))
+            fout.write("%-10.3e %12.6e\n"%(self.saved_th[i, 0], self.saved_th[i, 1]))
             k += 1
         message = stars
         message += "Saved %d bins to \"%s\""%(k, out_file[0])
