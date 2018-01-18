@@ -68,6 +68,7 @@ class Application(CmdBase):
         self.multiplots.plotselecttabWidget.setCurrentIndex(self.current_viewtab)
         self.figure = self.multiplots.figure
         self.axarr = self.multiplots.axarr #
+        self.canvas = self.multiplots.canvas
 
         # sns.set_style("white")
         # sns.set_style("ticks")
@@ -87,9 +88,9 @@ class Application(CmdBase):
         
         if (CmdBase.mode==CmdMode.cmdline):
             # self.figure.show() 
-            self.multiplot.show()
-        
-        
+            self.multiplots.show()
+
+
         #self.figure.draw() # DOESN'T WORK!
         #self.figure.set_visible(True) #??? DOES IT DO ANYTHING?
 

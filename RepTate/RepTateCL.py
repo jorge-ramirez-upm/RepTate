@@ -20,7 +20,7 @@ sys.path.append('applications')
 sys.path.append('theories')
 from ApplicationManager import ApplicationManager
 from time import time, sleep
-
+from PyQt5.QtWidgets import QApplication
 def start_RepTate(argv):
     """
     Main RepTate application. 
@@ -28,6 +28,7 @@ def start_RepTate(argv):
     :param list argv: Command line parameters passed to Reptate
     """
     GUI = False
+    qapp = QApplication(sys.argv)
     app = ApplicationManager()
     sys.exit(app.cmdloop())
 

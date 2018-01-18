@@ -58,7 +58,7 @@ class BaseApplicationMWD:
         from TheoryDiscrMWD import TheoryDiscrMWD
         
         super().__init__(name, parent)
-
+    
         # VIEWS
         self.views["W(M)"]=View(name="W(M)", description="Molecular weight distribution", x_label="M", y_label="W(M)", 
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.viewWM, n=1, 

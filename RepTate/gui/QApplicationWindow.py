@@ -133,7 +133,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.canvas = FigureCanvasQTAgg(self.figure)
         # self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
         # self.canvas.setFocus()
-        self.canvas = self.multiplots.canvas
+        # self.canvas = self.multiplots.canvas
         self.mplvl.addWidget(self.multiplots)
         
         self.mpl_toolbar = NavigationToolbar2QT(self.canvas, self)
