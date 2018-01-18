@@ -71,7 +71,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.logger = logging.getLogger('ReptateLogger')
         self.name = name
         self.parent_application = parent
-        self.canvas = 0
         self.tab_count = 0
         self.curves = []
         self.zorder = 100
@@ -394,7 +393,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.dialog.ui.rbFixedSymbol.setChecked(is_fixed)
         # self.dialog.ui.rbVariableSymbol.setChecked(not is_fixed)
         self.dialog.ui.cbSymbolType.setDisabled(not is_fixed)
-
+        #preset the color combobox
+        ind = self.dialog.ui.cbPalette.findText(ds.palette_name)
+        self.dialog.ui.cbPalette.setCurrentIndex(ind)
+        
             #colors
         # self.dialog.ui.rbFixedColor.setChecked(False)
         # self.dialog.ui.rbGradientColor.setChecked(False)
@@ -429,8 +431,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 ds.color1 = self.color1 if self.color1 else ColorMode.color1.value
             elif self.dialog.ui.rbPalette.isChecked(): #color from palette?
                 ds.colormode = ColorMode.variable
-                palette_name = self.dialog.ui.cbPalette.currentText()
-                ds.palette = ColorMode.colorpalettes.value[palette_name]
+                ds.palette_name = self.dialog.ui.cbPalette.currentText()
+                # ds.palette = ColorMode.colorpalettes.value[palette_name]
             else: # color from gradient
                 ds.colormode = ColorMode.gradient
                 ds.color1 = self.color1 if self.color1 else ColorMode.color1.value

@@ -45,10 +45,10 @@ class ColorMode(Enum):
         "Bright": [(0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043), (0.541, 0.169, 0.886), (1.0, 0.769, 0.0), 
                    (0.0, 0.843, 1.0), (0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043), (0.541, 0.169, 0.886), 
                    (1.0, 0.769, 0.0), (0.0, 0.843, 1.0), (0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043)],
-        "Dark": [(0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0), (0.463, 0.0, 0.631), (0.722, 0.525, 0.043), 
+        "Dark": [(0, 0, 0), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0), (0.463, 0.0, 0.631), (0.722, 0.525, 0.043), 
                  (0.0, 0.388, 0.455), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0), (0.463, 0.0, 0.631), 
                  (0.722, 0.525, 0.043), (0.0, 0.388, 0.455), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0)],
-        "ColorBlind": [(0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), 
+        "ColorBlind": [(0, 0, 0), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), 
                        (0.941, 0.894, 0.259), (0.337, 0.706, 0.914), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), 
                        (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), (0.941, 0.894, 0.259), (0.337, 0.706, 0.914), 
                        (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0)],
@@ -104,7 +104,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.colormode = ColorMode.variable
         self.color1 = ColorMode.color1.value
         self.color2 = ColorMode.color2.value
-        self.palette = ColorMode.colorpalettes.value["Rainbow"]
+        self.palette_name = "ColorBlind"
         self.symbolmode = SymbolMode.fixed
         self.symbol1 = SymbolMode.symbol1.value
         self.symbol1_name = SymbolMode.symbol1_name.value
@@ -240,7 +240,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         if self.colormode == ColorMode.fixed: #single color?
             colors = [self.color1]
         elif self.colormode == ColorMode.variable: #variable colors from palette
-            colors = self.palette
+            colors = ColorMode.colorpalettes.value[self.palette_name]
         else:
             n = len(self.files) - len(self.inactive_files) #number of files to plot
             if n < 2:
