@@ -8,4 +8,5 @@ Contents:
    :maxdepth: 2
 
    functionality
+   callgraphGUI
    code
