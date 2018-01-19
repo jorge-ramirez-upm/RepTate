@@ -34,13 +34,22 @@ Prediction of LVE data of linear polymer melts
 #. Plot the files using the default LVE Application view::
 
     plot
+.. image:: tutorial_images/PI_LVE_plot.png
+    :width: 400pt
+    :align: center
+    :alt: Empty Graph window
 
 #. View the legend. By default, the legend shows the most important file parameters, according to the corresponding file type.
 
     legend
+.. image:: tutorial_images/PI_LVE_legend.png
+    :width: 400pt
+    :align: center
+    :alt: Empty Graph window
 
 #. Create new theory (calculation is done with default paramter values)::
-
+    
+    theory_new Likhtman-McLeish
     WARNING: Mw of PI_13.5k_T-35 is too small
 
             File      Error (# Pts.)
@@ -102,35 +111,31 @@ Fit Maxwell modes to LVE
 
 #. Create LVE Application::
 
-    >new LVE
+    new LVE
 
 #. Add files to the dataset (master curve tts files)::
     
-    >open data/PI_LINEAR/PI_483.1k_T-35.tts
+    open data/PI_LINEAR/PI_483.1k_T-35.tts
 
 #. Plot the files using the default LVE Application view::
 
-    >plot
-.. image:: tutorial_images/PI_LVE_plot.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+    plot
     
 #. Create new theory::
 
-    >theory_new MaxwellModesFrequency
+    theory_new MaxwellModesFrequency
     
 #. Set the xrange for the fitting (wrt the current view)::
 
-    >xrange -8 -3
+    xrange -8 -3
     
 #. Change the number of Maxwell modes::
 
-    >nmodes=5
+    nmodes=5
     
 #. Fit the theory to the data files::
 
-    >fit
+    fit
     ==================================
     PARAMETER FITTING
     ==================================
