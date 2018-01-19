@@ -124,7 +124,7 @@ Fit Maxwell modes to LVE
 
     >xrange -8 -3
     
-#.Change the number of Maxwell modes::
+#. Change the number of Maxwell modes::
 
     >nmodes=5
     
