@@ -475,7 +475,7 @@ class Application(CmdBase):
         """
         self.legend_visible = not self.legend_visible 
         self.set_legend_properties()
-        self.figure.canvas.draw()
+        self.canvas.draw()
 
     def do_legend(self, line):
         """[summary]
@@ -542,14 +542,14 @@ class Application(CmdBase):
         
         [description]
         """
-        pass 
-            # leg=self.axarr[0].legend(frameon=True, ncol=2)
-            # if (self.legend_visible):
-            #     leg.draggable()
-            # else:
-            #     try:
-            #         leg.remove()
-            #     except AttributeError as e:
-            #         pass
-            #         #print("legend: %s"%e)
+        # pass 
+        leg=self.axarr[0].legend(frameon=True, ncol=2)
+        if (self.legend_visible):
+            leg.draggable()
+        else:
+            try:
+                leg.remove()
+            except AttributeError as e:
+                pass
+                #print("legend: %s"%e)
 

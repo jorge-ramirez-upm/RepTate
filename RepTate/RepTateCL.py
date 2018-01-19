@@ -21,12 +21,17 @@ sys.path.append('theories')
 from ApplicationManager import ApplicationManager
 from time import time, sleep
 from PyQt5.QtWidgets import QApplication
+from CmdBase import CmdBase, CalcMode
+
 def start_RepTate(argv):
     """
     Main RepTate application. 
     
     :param list argv: Command line parameters passed to Reptate
     """
+    # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
+    CmdBase.calcmode = CalcMode.singlethread
+
     GUI = False
     qapp = QApplication(sys.argv)
     app = ApplicationManager()

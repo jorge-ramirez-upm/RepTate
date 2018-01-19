@@ -232,23 +232,6 @@ class Theory(CmdBase):
         self.nfev += 1
         return y
 
-
-    # def do_fit(self, line):
-    #     """Minimize the error
-
-    #     [description]
-
-    #     Arguments:
-    #         line {[type]} -- [description]
-    #     """
-    #     if self.calculate_is_busy: #no fitting allowed if already running do_calculate function
-    #         return
-    #     try:
-    #         _thread.start_new_thread(self.do_fit_, (line, ) )
-    #     except:
-    #         print("Error: unable to start thread")
-    #         self.do_fit_(line)
-
     def do_fit(self, line):
         """Minimize the error
         
