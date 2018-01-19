@@ -3,12 +3,10 @@ channels:
 - conda-forge
 - defaults
 dependencies:
-- matplotlib=2.0.2=py35_2
-- numpy=1.13.1=py35_0
-- pandas=0.20.3=py35_1
-- pint=0.8.1=py35_0
-- scipy=0.19.1=np113py35_0
+- matplotlib=2.1.0=py35_1
+- numpy=1.11.1=py35_1
+- scipy=0.18.0=np111py35_0
 - seaborn=0.7.1=py35_0
-- tabulate=0.7.7=py35_0
+- tabulate=0.7.5=py35_0
 - sphinxcontrib-bibtex=0.3.6=py35_0
-- graphviz=2.38.0=py35_2
+- graphviz=2.38.0=7
