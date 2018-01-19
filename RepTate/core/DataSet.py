@@ -787,6 +787,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     th.prompt = ''
                 else:
                     th.prompt = self.prompt[:-2]+'/'+th.name+'> '
+                th.do_calculate("")
                 th.cmdloop()
             th.do_calculate("")
             return th
