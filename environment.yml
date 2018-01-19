@@ -11,3 +11,4 @@ dependencies:
 - seaborn=0.7.1=py35_0
 - tabulate=0.7.7=py35_0
 - sphinxcontrib-bibtex=0.3.6=py35_0
+- graphviz=2.38.0=7
