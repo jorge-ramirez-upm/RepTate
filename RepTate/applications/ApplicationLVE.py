@@ -89,6 +89,10 @@ class BaseApplicationLVE:
         #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
 
+        #set the current view
+        self.set_views()
+
+            
     def viewLogG1G2(self, dt, file_parameters):
         """[summary]
         
@@ -249,5 +253,4 @@ class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
         """
         super().__init__(name, parent)
 
-        self.populate_views() #populate the view ComboBox
         

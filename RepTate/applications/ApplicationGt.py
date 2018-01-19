@@ -85,6 +85,9 @@ class BaseApplicationGt:
 
         # THEORIES
         self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
+        
+        #set the current view
+        self.set_views()
 
     def viewGt(self, dt, file_parameters):
         """[summary]
@@ -183,4 +186,3 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
         """
         super().__init__(name, parent)
 
-        self.populate_views() #populate the view ComboBox

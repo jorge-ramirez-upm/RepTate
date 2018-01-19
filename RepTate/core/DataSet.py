@@ -524,9 +524,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         """
         if CmdBase.mode!=CmdMode.GUI:
             f_names = glob.glob(line)
+            if not f_names:
+                f_names = line.split() #allow to provide multiple file names separated by a space
         else:
             f_names = line
-        
         newtables = []
         if (line=="" or len(f_names)==0): 
             message = "No valid file names provided"

@@ -82,6 +82,9 @@ class BaseApplicationMWD:
         self.theories[TheoryDiscrMWD.thname] = TheoryDiscrMWD
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
 
+        #set the current view
+        self.set_views()
+
     def viewWM(self, dt, file_parameters):
         """[summary]
         
@@ -149,4 +152,4 @@ class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):
             parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
-        self.populate_views() #populate the view ComboBox
+

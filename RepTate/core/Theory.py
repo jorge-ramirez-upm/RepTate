@@ -11,6 +11,7 @@
 Module that defines the basic structure and properties of a theory.
 
 """
+import os
 import enum
 import time
 import getpass
@@ -124,33 +125,6 @@ class Theory(CmdBase):
         """
         super(Theory,self).precmd(line)
         return line
-        
-    # def do_calculate(self, line, timing=True, threading=True):
-    #     """Calculate the theory
-        
-    #     [description]
-        
-    #     Arguments:
-    #         line {[type]} -- [description]
-    #     """
-    #     if self.is_fitting or (not threading): #do not create new thread if running do_fit function
-    #         self.do_calculate_(line, timing)
-    #     else:
-    #         try:
-    #             _thread.start_new_thread(self.do_calculate_, (line, timing) )
-    #         except:
-    #             print("Error: unable to start thread")
-    #             self.do_calculate_(line, timing)
-    
-
-
-        # def print_time(threadName, delay, counter):
-        #     while counter:
-        #         if exitFlag:
-        #             threadName.exit()
-        #         time.sleep(delay)
-        #         print ("%s: %s" % (threadName, time.ctime(time.time())))
-        #         counter -= 1
 
     def do_calculate(self, line, timing=True):
         """Calculate the theory"""

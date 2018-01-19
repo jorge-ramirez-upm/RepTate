@@ -90,7 +90,10 @@ class BaseApplicationTTS:
         self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         self.theories[TheoryWLFShiftTest.thname]=TheoryWLFShiftTest
         self.theories[TheoryTTSShiftAutomatic.thname]=TheoryTTSShiftAutomatic
-
+        
+        #set the current view
+        self.set_views()
+        
     def viewLogG1G2(self, dt, file_parameters):
         """[summary]
 
@@ -217,6 +220,3 @@ class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
             parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
-
-        self.populate_views() #populate the view ComboBox
-        
