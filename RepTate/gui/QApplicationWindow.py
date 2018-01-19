@@ -396,7 +396,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #preset the color combobox
         ind = self.dialog.ui.cbPalette.findText(ds.palette_name)
         self.dialog.ui.cbPalette.setCurrentIndex(ind)
-        
+
             #colors
         # self.dialog.ui.rbFixedColor.setChecked(False)
         # self.dialog.ui.rbGradientColor.setChecked(False)
@@ -677,21 +677,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.disconnect_curve_drag()
         if ds:
             ds.highlight_series()
-            
-    def populate_views(self):
-        """Assign availiable view labels to ComboBox
-        
-        [description]
-        """
-        nviews = len(self.views)
-        for ind in range(nviews):
-            for i in self.views:
-                if self.views[i].index == ind:
-                    #add keys of 'views' dict to the list of views avaliable 
-                    self.viewComboBox.insertItem(self.views[i].index, i)
-                    if self.views[i].index == 0: #index 0 is the defaut view
-                        self.current_view = self.views[i] 
-        self.viewComboBox.setCurrentIndex(0)
 
     def dragEnterEvent(self, e):
         """[summary]

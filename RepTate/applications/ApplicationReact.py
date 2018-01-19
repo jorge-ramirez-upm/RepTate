@@ -94,12 +94,8 @@ class BaseApplicationReact:
         self.theories[TheoryTobitaBatch.thname] = TheoryTobitaBatch
         self.theories[TheoryTobitaCSTR.thname] = TheoryTobitaCSTR
 
-
-        #SPECIFIC FIGURE
-        # plt.clf()
-        # self.ax = self.figure.add_subplot(2, 1, 1)
-        # self.ax2 = self.figure.add_subplot(2, 2, 3)
-        # self.ax3 = self.figure.add_subplot(2, 2, 4)
+        #set the current view
+        self.set_views()
 
     def view_wM(self, dt, file_parameters):
         """[summary]
@@ -191,5 +187,5 @@ class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
         super().__init__(name, parent)
 
         #add the GUI-specific objects here:
-        self.populate_views() #populate the view ComboBox
+
         

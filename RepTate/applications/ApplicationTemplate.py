@@ -81,6 +81,9 @@ class BaseApplicationTemplate:
         # THEORIES
         # add the theories related to ApplicationTemplate to the dictionary, e.g.:
         # self.theories[TheoryA.thname] = TheoryA
+        
+        #set the current view
+        self.set_views()
 
     def viewyx(self, dt, file_parameters):
         """[summary]
@@ -135,5 +138,3 @@ class GUIApplicationTemplate(BaseApplicationTemplate, QApplicationWindow):
         super().__init__(name, parent)
 
         #add the GUI-specific objects here:
-        self.populate_views() #populate the view ComboBox
-        

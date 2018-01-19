@@ -83,6 +83,9 @@ class BaseApplicationNLVE:
         # THEORIES
         self.theories[TheoryRoliePoly.thname]=TheoryRoliePoly
 
+        #set the current view
+        self.set_views()
+        
     def viewLogeta(self, dt, file_parameters):
         """[summary]
         
@@ -170,4 +173,3 @@ class GUIApplicationNLVE(BaseApplicationNLVE, QApplicationWindow):
         """
         super().__init__(name, parent)
 
-        self.populate_views() #populate the view ComboBox

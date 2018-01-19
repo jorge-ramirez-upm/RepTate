@@ -344,6 +344,26 @@ class Application(CmdBase):
         self.filetype_available()
         
 # VIEW STUFF
+    def set_views(self):
+        """Set current view and assign availiable view
+        labels to viewComboBox if in GUI mode
+        
+        [description]
+        """
+        nviews = len(self.views)
+        for ind in range(nviews):
+            for view_name in self.views:
+                if self.views[view_name].index == ind:
+                    if CmdBase.mode == CmdMode.GUI:
+                        #add view name to the list of views avaliable
+                        self.viewComboBox.insertItem(self.views[view_name].index, view_name)
+                    if self.views[view_name].index == 0: 
+                        #index 0 is the defaut view
+                        self.current_view = self.views[view_name] 
+        if CmdBase.mode == CmdMode.GUI:
+            #index 0 is the defaut selection
+            self.viewComboBox.setCurrentIndex(0)
+
     def view_available(self):
         """List available views in the current application
         
