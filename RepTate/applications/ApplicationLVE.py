@@ -71,7 +71,19 @@ class BaseApplicationLVE:
         self.views["logetastar"] = View("logetastar", "log Complex Viscosity", "log($\omega$)", "log$|\eta^*(\omega)|$", "rad/s", "Pa.s", False, False, self.viewLogEtaStar, 1, ["eta*(w)"], index=3)
         self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"], index=4)
         self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"], index=5)
-
+        self.views["log(tan(delta))"] = View("log(tan(delta))", "log(tan(delta))", "log($\omega$)", "log(tan($\delta$))", "rad/s", "-", False, False, self.viewLogTanDelta, 1, ["log(tan(delta((w)))"], index=6)
+        self.views["log(G*)"] = View("log(G*)", "log(G*(omega))", "log($\omega$)", "log(G*($\omega$))", "rad/s", "Pa", False, False, self.viewLogGstar, 1, ["log(G*)"], index=7)
+        self.views["log(tan(delta),G*)"] = View("log(tan(delta),G*)", "log(tan($\delta)(G*))", "G*", "log(tan($\delta)(G*))", "Pa", "-", False, False, self.viewLogtandeltaGstar, 1, ["log(tan($\delta)(G*))"], index=8)
+        self.views["delta(G*)"] = View("delta(G*)", "$\delta$(G*))", "G*", "$\delta$(G*))", "Pa", "deg", False, False, self.viewdeltatanGstar, 1, ["delta(G*)"], index=9)
+        self.views["J',J''(w)"] = View("J',J''(w)", "J moduli", "$\omega$", "J'($\omega$),J''($\omega$)", "rad/s", "$Pa^{-1}$", True, True, self.viewJ1J2, 2, ["J'(w)","J''(w)"], index=10)
+        self.views["Cole-Cole"] = View("Cole-Cole", "Cole-Cole plot", "$\eta'$", "$\eta''$", "Pa.s", "Pa.s", False, False, self.viewColeCole, 1, ["$eta'$"], index=11)
+        self.views["log(G')"] = View(name="log(G')", description="log Storage modulus", x_label="log($\omega$)", y_label="log(G'($\omega$))", x_units="rad/s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogG1, n=1, snames=["G'(w)"], index=12)
+        self.views["G'"] = View("G'", "Storage modulus", "$\omega$", "G'($\omega$)", "rad/s", "Pa", True, True, self.viewG1, 1, ["G'(w)"], index=13)
+        self.views["log(G'')"] = View(name="log(G'')", description="log Loss modulus", x_label="log($\omega$)", y_label="log(G'($\omega$))", x_units="rad/s", y_units="Pa", log_x=False, log_y=False, view_proc=self.viewLogG2, n=1, snames=["G''(w)"], index=14)
+        self.views["G''"] = View("G''", "Loss modulus", "$\omega$", "G''($\omega$)", "rad/s", "Pa", True, True, self.viewG2, 1, ["G''(w)"], index=15)
+        self.views["log(G',G''(w),tan(delta))"] = View(name="log(G',G''(w),tan(delta))", description="log Storage,Loss moduli, tan(delta)", x_label="log($\omega$)", y_label="log(G'($\omega$),G''($\omega$),tan($\delta$))", x_units="rad/s", y_units="Pa,-", log_x=False, log_y=False, view_proc=self.viewLogG1G2tandelta, n=3, snames=["G'(w)","G''(w),tan(delta)"], index=16)
+        
+        
         #set multiviews
         self.multiviews = [self.views["log(G',G''(w))"]] #default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews) 
@@ -113,20 +125,6 @@ class BaseApplicationLVE:
         y[: ,1] = np.log10(dt.data[:, 2])
         return x, y, True
         
-    def inverseviewLogG1G2(self, x, y):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
-        
-        Returns:
-            [type] -- [description]
-        """
-        return np.pow(10.0, x), np.pow(10.0, y)
-
     def viewG1G2(self, dt, file_parameters):
         """[summary]
         
@@ -220,6 +218,211 @@ class BaseApplicationLVE:
         y[: ,0] = dt.data[:, 2]/dt.data[:, 1]
         return x, y, True
 
+    def viewLogTanDelta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 2]/dt.data[:, 1])
+        return x, y, True
+
+    def viewLogGstar(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(np.sqrt(np.square(dt.data[:, 1])+np.square(dt.data[:, 2])))
+        return x, y, True
+
+    def viewLogtandeltaGstar(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1])+np.square(dt.data[:, 2])))
+        y[: ,0] = np.log10(dt.data[:, 2]/dt.data[:, 1])
+        return x, y, True
+
+    def viewdeltatanGstar(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1])+np.square(dt.data[:, 2])))
+        y[: ,0] = np.arctan2(dt.data[:, 2], dt.data[:, 1])*180/np.pi
+        return x, y, True
+
+        
+    def viewJ1J2(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = dt.data[:, 0]
+        x[:, 1] = dt.data[:, 0]
+        y[: ,0] = dt.data[:, 1]/(np.square(dt.data[:,1])+np.square(dt.data[:,2]))
+        y[: ,1] = dt.data[:, 2]/(np.square(dt.data[:,1])+np.square(dt.data[:,2]))
+        return x, y, True
+        
+    def viewColeCole(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 2]/dt.data[:, 0]
+        y[: ,0] = dt.data[:, 1]/dt.data[:, 0]
+        return x, y, True
+
+    def viewLogG1(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 1])
+        return x, y, True
+
+    def viewG1(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[: ,0] = dt.data[:, 1]
+        return x, y, True
+
+    def viewLogG2(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 2])
+        return x, y, True
+
+    def viewG2(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[: ,0] = dt.data[:, 2]
+        return x, y, True
+
+    def viewLogG1G2tandelta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 3))
+        y = np.zeros((dt.num_rows, 3))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        x[:, 1] = np.log10(dt.data[:, 0])
+        x[:, 2] = np.log10(dt.data[:, 0])
+        y[: ,0] = np.log10(dt.data[:, 1])
+        y[: ,1] = np.log10(dt.data[:, 2])
+        y[: ,2] = np.log10(dt.data[:, 2]/dt.data[:, 1])
+        return x, y, True
+        
 class CLApplicationLVE(BaseApplicationLVE, Application):
     """[summary]
     
