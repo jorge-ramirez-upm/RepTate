@@ -21,7 +21,7 @@ sys.path.append('theories')
 from ApplicationManager import ApplicationManager
 from time import time, sleep
 from PyQt5.QtWidgets import QApplication
-from CmdBase import CmdBase, CalcMode
+from CmdBase import CmdBase, CalcMode, CmdMode
 
 def start_RepTate(argv):
     """
@@ -33,6 +33,19 @@ def start_RepTate(argv):
     CmdBase.calcmode = CalcMode.singlethread
 
     GUI = False
+    try:
+        opts, args = getopt.getopt(argv, "hb")
+    except getopt.GetoptError:
+        print('Invalid option. Usage:')
+        print ('ReptateCL.py [-b < inputfile]')
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt in ("-h","--help"):
+            print ('ReptateCL.py [-b < inputfile]')
+            sys.exit()
+        elif opt == '-b':
+            CmdBase.mode = CmdMode.batch
+    
     qapp = QApplication(sys.argv)
     app = ApplicationManager()
     sys.exit(app.cmdloop())
