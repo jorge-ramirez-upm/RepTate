@@ -39,7 +39,7 @@ class DataTable(object):
         for nx in range(len(axarr)): #create series for each plot
             serries_nx = []
             for i in range(self.MAX_NUM_SERIES): 
-                ss = axarr[nx].plot([], [], label='')
+                ss = axarr[nx].plot([], [], label='', picker=5)
                 serries_nx.append(ss[0])
             self.series.append(serries_nx)
 
