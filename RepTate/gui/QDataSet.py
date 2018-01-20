@@ -551,7 +551,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             if file.file_name_short == file_name_short:
                 d = EditFileParametersDialog(self, file)
                 if d.exec_():
-                    print(d.param_dict)
                     for p in d.param_dict:
                         if isinstance(file.file_parameters[p], str):
                             file.file_parameters[p] = d.param_dict[p].text()

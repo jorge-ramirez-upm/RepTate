@@ -310,7 +310,7 @@ class Theory(CmdBase):
             pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, method='trf', bounds=(param_min, param_max))
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
         except Exception as e:
-            print(e)
+            print("In do_fit()", e)
             return
 
         residuals = y - self.func_fit(x, *initial_guess)
