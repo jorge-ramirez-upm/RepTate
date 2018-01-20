@@ -15,10 +15,10 @@ import os
 import sys
 import cmd
 import readline
-from enum import Enum
+import enum
 #from pint import UnitRegistry
 
-class CmdMode(Enum):
+class CmdMode(enum.Enum):
     """[summary]
     
     [description]
@@ -28,16 +28,14 @@ class CmdMode(Enum):
     GUI = 2
     modes=["Command Line Interpreter", "Batch processing", "Graphical User Interface"]
 
-    def print(self):
+    def __str__(self):
         """[summary]
         
         [description]
         """
-        print("cmdline: ", self.modes.value[0])
-        print("batch: ", self.modes.value[1])
-        print("GUI: ", self.modes.value[2])
+        return "cmdline: %d\nbatch: %d\nGUI: %d"%(self.modes.value[0], self.modes.value[1], self.modes.value[2])
 
-class CalcMode(Enum):
+class CalcMode(enum.Enum):
     """[summary]
 
     [decription]
@@ -46,13 +44,12 @@ class CalcMode(Enum):
     multithread = 1
     modes=["Calc and Min in the same thread as GUI", "Calc and Min in separate threads to GUI"]
 
-    def print(self):
+    def __str__(self):
         """[summary]
 
         [description]
         """
-        print("Single thread: ", self.modes.value[0])
-        print("Multi-thread: ", self.modes.value[1])
+        return "Single thread: %d\nMulti-thread: %d"%(self.modes.value[0], self.modes.value[1])
 
 class CmdBase(cmd.Cmd):
     """Basic Cmd Console that is inherited by most Reptate objects
@@ -270,7 +267,7 @@ class CmdBase(cmd.Cmd):
             print("Current console mode: %s"%CmdMode.modes.value[CmdBase.mode.value])
         elif (line=="available"):
             c = CmdMode(0)
-            c.print()
+            print(c)
         elif (line in dict(CmdMode.__members__.items())):
             CmdBase.mode=CmdMode[line]
         else:
