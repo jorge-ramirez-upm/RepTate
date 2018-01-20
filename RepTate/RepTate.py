@@ -47,19 +47,6 @@ def start_RepTate(argv):
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
     splash.showMessage("Loading RepTate...\nVersion " + ex.version + ' ' + ex.date)
 
-    # #### DEBUG
-    # new_app = ex.new_React_window()
-    # new_app.new_tables_from_files(['data/React/out1.reac'])
-    # # ####
-    # while time() - start < .1:
-    #     sleep(0.001)
-    #     if (time()-start < 0.5):
-    #         splash.showMessage("Loading Reptate...")
-    #     else:
-    #     app.processEvents()
-
-
-    # ex.new_lve_window()
     splash.finish(ex)
     ex.showMaximized()
 
