@@ -159,6 +159,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
 
         # EVENT HANDLING
+        connection_id = self.figure.canvas.mpl_connect('pick_event', self.onpick)
         #connection_id = self.figure.canvas.mpl_connect('button_press_event', self.onclick)
         connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
         #connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_plot_hover)   
@@ -256,7 +257,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """ Copy current chart to clipboard
         """
         buf = io.BytesIO()
-        self.figure.savefig(buf)
+        self.figure.savefig(buf, dpi=150)
         QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
         buf.close()
         
@@ -919,6 +920,24 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """
         pass
         
+    def onpick (self, event):
+        """Copy series data to clipboard
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
+        if event.mouseevent.button == 3:
+            answer = QMessageBox.question(self, "Copy data", "Copy series data to clipboard?")
+            if answer == QMessageBox.Yes:
+                x, y = event.artist.get_data()
+                line_strings=[]
+                for i in range(len(x)):
+                    line_strings.append(str(x[i])+"\t"+str(y[i]))
+                array_string = "\n".join(line_strings)
+                QApplication.clipboard().setText(array_string)
+
     def onclick(self, event):
         """[summary]
         
