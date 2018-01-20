@@ -182,7 +182,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 del self.inactive_files[file_matching[0].file_name_short]
             except KeyError:
                 pass
-        self.parent_application.update_plot()
+        self.do_plot()
 
     def do_show_all(self):
         """[summary]
