@@ -11,3 +11,8 @@ Examples of use of Reptate using the Graphical User Interface.
    tutorialGUITTS
    tutorialGUILVE
    tutorialGUINLVE
+   tutorialGUIGt
+   tutorialGUICreep
+   tutorialGUISANS
+   tutorialGUIReact
+   

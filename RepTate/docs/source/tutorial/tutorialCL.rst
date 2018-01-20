@@ -17,4 +17,7 @@ Tutorial files can be found in the **tests** folder. They can be run in batch mo
    tutorialCLTTS
    tutorialCLLVE
    tutorialCLNLVE
-
+   tutorialCLGt
+   tutorialCLCree
+   tutorialCLSANS
+   tutorialCLReact
