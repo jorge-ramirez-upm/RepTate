@@ -18,6 +18,6 @@ Tutorial files can be found in the **tests** folder. They can be run in batch mo
    tutorialCLLVE
    tutorialCLNLVE
    tutorialCLGt
-   tutorialCLCree
+   tutorialCLCreep
    tutorialCLSANS
    tutorialCLReact
