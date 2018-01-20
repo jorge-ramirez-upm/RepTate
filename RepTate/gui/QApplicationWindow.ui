@@ -419,6 +419,18 @@
     <string>Show Legend</string>
    </property>
   </action>
+  <action name="actionCopyChart">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-copy.png</normaloff>:/Images/Images/new_icons/icons8-copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>CopyChart</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy Chart</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>

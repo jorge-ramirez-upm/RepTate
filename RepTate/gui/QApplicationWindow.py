@@ -12,14 +12,15 @@ Module that defines the basic GUI class from which all GUI applications are deri
 It is the GUI counterpart of Application.
 
 """ 
+import io
 from os.path import dirname, join, abspath, isfile
 import logging
-from PyQt5.QtGui import QIcon,QColor
+from PyQt5.QtGui import QIcon, QColor, QImage
 from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication
 from QDataSet import QDataSet
 from DataSetWidgetItem import DataSetWidgetItem
 from DataSet import ColorMode, SymbolMode
@@ -142,6 +143,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.mpl_toolbar.addAction(self.actionTrack_data)
         self.mpl_toolbar.addAction(self.actionAdd_Annotation)
         self.mpl_toolbar.addAction(self.actionShow_Legend)
+        self.mpl_toolbar.addAction(self.actionCopyChart)
         self.mpl_toolbar.setVisible(False)
         self.mplvl.addWidget(self.mpl_toolbar)
 
@@ -184,6 +186,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         # Annotation stuff
         connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
+        connection_id = self.actionCopyChart.triggered.connect(self.copy_chart)
         self.graphicnotes = []
         self.artistnotes = []
         connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
@@ -248,6 +251,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not self.handle_annotation.checked:
             return
         """.. todo:: Code to draw annotation. It doesn't work!"""
+        
+    def copy_chart(self):
+        """ Copy current chart to clipboard
+        """
+        buf = io.BytesIO()
+        self.figure.savefig(buf)
+        QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
+        buf.close()
         
     def handle_annotation(self, checked):
         """Draw and hide the annotation box.
