@@ -165,6 +165,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
         return newapp
 
+    def new_app_from_name(self, app_name):
+        """
+        Open a new application window from name
+        """
+        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-%s.png'%app_name)
+        
 
     def new_mwd_window(self):
         """Open a new MWD application window

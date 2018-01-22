@@ -11,7 +11,9 @@
 Main program that launches the GUI.
 
 """ 
+import os
 import sys
+import glob
 import argparse
 sys.path.append('core')
 sys.path.append('gui')
@@ -26,6 +28,35 @@ from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
 # from time import time, sleep
 
+def get_argument_files(finlist):
+    """
+    Parse files from command line and group them by extension
+
+    :param list finlist: List of files from argparse
+    """
+    df = {}
+    if (not finlist):
+        return df
+    full_paths = [os.path.join(os.getcwd(), path) for path in finlist]
+    for path in full_paths:
+        if os.path.isfile(path):
+            items=path.split('.')
+            extension = items[len(items)-1]
+            if (extension in df.keys()):
+                df[extension].append(path)
+            else:
+                df[extension] = [path]
+        else:
+            lll=glob.glob(path)
+            for f in lll:
+                items=f.split('.')
+                extension = items[len(items)-1]
+                if (extension in df.keys()):
+                    df[extension].append(f)
+                else:
+                    df[extension] = [f]
+    return df
+
 def start_RepTate(argv):
     """
     Main RepTate application. 
@@ -39,8 +70,12 @@ def start_RepTate(argv):
         epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
     parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
+    parser.add_argument('finlist', nargs='*')
 
     args = parser.parse_args() 
+
+    # Get files from command line
+    dictfiles=get_argument_files(args.finlist)
 
     if args.version:
         print(QApplicationManager.intro)
@@ -61,6 +96,17 @@ def start_RepTate(argv):
     splash.showMessage("Loading RepTate...\nVersion " + ex.version + ' ' + ex.date)
 
     splash.finish(ex)
+
+    # Handle files & open apps accordingly
+    d = {ex.extension: ex.name for ex in  list(ex.available_applications.values())}
+    for k in dictfiles.keys():
+        if (k in d.keys()):
+            ex.new_app_from_name(d[k])
+            appname="%s%d"%(d[k],ex.application_counter)
+            ex.applications[appname].new_tables_from_files(dictfiles[k])
+        else:
+            print("File type %s cannot be opened"%k)
+
     ex.showMaximized()
 
     sys.exit(app.exec_())

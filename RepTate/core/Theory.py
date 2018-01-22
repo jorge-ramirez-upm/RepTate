@@ -126,6 +126,12 @@ class Theory(CmdBase):
         super(Theory,self).precmd(line)
         return line
 
+    def update_parameter_table(self):
+        """
+        Added so that Maxwell modes works in CL
+        """
+        pass
+        
     def do_calculate(self, line, timing=True):
         """Calculate the theory"""
         if self.calculate_is_busy:
