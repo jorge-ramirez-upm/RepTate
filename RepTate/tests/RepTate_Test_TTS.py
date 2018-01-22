@@ -13,7 +13,6 @@ Main program that launches the GUI.
 """ 
 import os
 import sys
-import getopt
 sys.path.append('core')
 sys.path.append('gui')
 sys.path.append('console')

@@ -12,7 +12,7 @@ Main program that launches the GUI.
 
 """ 
 import sys
-import getopt
+import argparse
 sys.path.append('core')
 sys.path.append('gui')
 sys.path.append('console')
@@ -33,6 +33,19 @@ def start_RepTate(argv):
     :param list argv: Command line parameters passed to Reptate
     """
     GUI = True
+
+    parser = argparse.ArgumentParser(
+        description='RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.',
+        epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
+    parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
+    parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
+
+    args = parser.parse_args() 
+
+    if args.version:
+        print(QApplicationManager.intro)
+        sys.exit()
+
     QApplication.setStyle("Fusion") #comment that line for a native look
                                     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     app = QApplication(sys.argv)
