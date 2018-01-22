@@ -11,8 +11,10 @@
 Main program that launches the CL version of RepTate.
 
 """ 
+import os
 import sys
-import getopt
+import glob
+import argparse
 sys.path.append('core')
 sys.path.append('gui')
 sys.path.append('console')
@@ -22,6 +24,35 @@ from ApplicationManager import ApplicationManager
 from time import time, sleep
 from PyQt5.QtWidgets import QApplication
 from CmdBase import CmdBase, CalcMode, CmdMode
+
+def get_argument_files(finlist):
+    """
+    Parse files from command line and group them by extension
+
+    :param list finlist: List of files from argparse
+    """
+    df = {}
+    if (not finlist):
+        return df
+    full_paths = [os.path.join(os.getcwd(), path) for path in finlist]
+    for path in full_paths:
+        if os.path.isfile(path):
+            items=path.split('.')
+            extension = items[len(items)-1]
+            if (extension in df.keys()):
+                df[extension].append(path)
+            else:
+                df[extension] = [path]
+        else:
+            lll=glob.glob(path)
+            for f in lll:
+                items=f.split('.')
+                extension = items[len(items)-1]
+                if (extension in df.keys()):
+                    df[extension].append(f)
+                else:
+                    df[extension] = [f]
+    return df
 
 def start_RepTate(argv):
     """
@@ -33,21 +64,46 @@ def start_RepTate(argv):
     CmdBase.calcmode = CalcMode.singlethread
 
     GUI = False
-    try:
-        opts, args = getopt.getopt(argv, "hb")
-    except getopt.GetoptError:
-        print('Invalid option. Usage:')
-        print ('ReptateCL.py [-b < inputfile]')
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ("-h","--help"):
-            print ('ReptateCL.py [-b < inputfile]')
-            sys.exit()
-        elif opt == '-b':
-            CmdBase.mode = CmdMode.batch
+
+    parser = argparse.ArgumentParser(
+        description='RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.',
+        epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
+    parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
+    parser.add_argument('-b', '--batch', help='Run in batch mode (no graphics)', action='store_true')
+    parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
+    parser.add_argument('finlist', nargs='*')
+
+    args = parser.parse_args() 
+
+    if args.batch: 
+        CmdBase.mode = CmdMode.batch
+
+    # Get files from command line
+    dictfiles=get_argument_files(args.finlist)
+
+    if args.version:
+        print(ApplicationManager.intro)
+        sys.exit()
     
     qapp = QApplication(sys.argv)
     app = ApplicationManager()
+
+    # Handle files & open apps accordingly
+    d = {app.extension: app.name for app in  list(app.available_applications.values())}
+    for k in dictfiles.keys():
+        if (k in d.keys()):
+            app.new(d[k])
+            appname="%s%d"%(d[k],app.application_counter)
+            ds, dsname = app.applications[appname].new("")
+            app.applications[appname].datasets[dsname]=ds
+            for f in dictfiles[k]:
+                #app.applications[appname].datasets[dsname].do_open(f)
+                ds.do_open(f)
+            ds.do_plot()
+            #app.applications[dsname].datasets[dsname].do_plot()
+        else:
+            print("File type %s cannot be opened"%k)
+
     sys.exit(app.cmdloop())
 
 if __name__ == '__main__':
