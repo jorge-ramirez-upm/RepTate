@@ -30,6 +30,7 @@ class ApplicationGt(CmdBase):
     """
     name="Gt"
     description="Relaxation modulus"
+    extension="gt"
     
     def __new__(cls, name="Gt", parent = None):
         """[summary]

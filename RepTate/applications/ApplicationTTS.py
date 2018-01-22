@@ -29,6 +29,7 @@ class ApplicationTTS(CmdBase):
     """
     name = "TTS"
     description = "Linear Viscoelasticity"
+    extension = 'osc'
 
     def __new__(cls, name="TTS", parent=None):
         """[summary]

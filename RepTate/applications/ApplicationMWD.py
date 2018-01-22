@@ -26,6 +26,8 @@ class ApplicationMWD(CmdBase):
     """
     name="MWD"
     description="Experimental Molecular weight distributions"
+    extension="gpc"
+
     def __new__(cls, name="LVE", parent = None):
         """[summary]
         

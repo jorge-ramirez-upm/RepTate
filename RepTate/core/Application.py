@@ -32,6 +32,7 @@ class Application(CmdBase):
     """
     name="Template"
     description="Abstract class that defines basic functionality"
+    extension=""
 
     def __init__(self, name="ApplicationTemplate", parent=None, nplots=1, ncols=1, **kwargs):
         """Constructor of Application

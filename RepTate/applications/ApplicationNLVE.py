@@ -26,6 +26,7 @@ class ApplicationNLVE(CmdBase):
     """
     name = "NLVE"
     description = "Non-Linear Flow"
+    extension = "shear"
 
     def __new__(cls, name="NLVE", parent = None):
         """[summary]

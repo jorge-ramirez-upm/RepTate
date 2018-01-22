@@ -29,6 +29,7 @@ class ApplicationLVE(CmdBase):
     """
     name = "LVE"
     description = "Linear Viscoelasticity"
+    extension = "tts"
 
     def __new__(cls, name="LVE", parent = None):
         """[summary]

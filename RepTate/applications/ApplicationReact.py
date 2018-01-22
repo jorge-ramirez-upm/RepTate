@@ -33,6 +33,7 @@ class ApplicationReact(CmdBase):
     """
     name = 'React'
     description = 'React Application' #used in the command-line Reptate
+    extension= 'reac'
 
     def __new__(cls, name='React', parent=None):
         """[summary]
