@@ -546,6 +546,9 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         if (f_ext[0] in self.parent_application.filetypes): 
             ft = self.parent_application.filetypes[f_ext[0]] 
             for f in f_names:
+                if not os.path.isfile(f):
+                    print("File \"%s\" does not exists"%f)
+                    continue # next file name
                 df = ft.read_file(f, self, self.parent_application.axarr)
                 unique = True
                 for file in self.files:

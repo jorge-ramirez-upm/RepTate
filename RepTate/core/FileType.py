@@ -11,6 +11,7 @@
 Module for the basic definition of file types. 
 
 """ 
+import os
 import numpy as np
 import logging
 from File import File
@@ -158,32 +159,35 @@ class TXTColumnFile(object):
         Returns:
             [type] -- [description]
         """
-        file=File(filename, self, parent_dataset, axarr)
-        f = open(filename, "r", encoding="latin-1") 
-        lines=f.readlines()
+        if not os.path.isfile(filename):
+            print("File \"%s\" does not exists"%f)
+            return
+        file = File(filename, self, parent_dataset, axarr)
+        f = open(filename, "r", encoding="latin-1")
+        lines = f.readlines()
         
         self.get_parameters(lines[0], file)
         self.col_names_line, self.first_data_line = self.find_col_names_and_first_data_lines(lines, file)
     
-        self.col_index=[]
+        self.col_index = []
         if (self.col_names_line>0):
-            items=lines[self.col_names_line].split()
+            items = lines[self.col_names_line].split()
             for col in self.col_names:
                 for j in range(len(items)):
-                    if (col==items[j]):
+                    if (col == items[j]):
                         self.col_index.append(int(j))
                         break
         else:
-            self.col_index=list(range(len(self.col_names)))
+            self.col_index = list(range(len(self.col_names)))
 
-        file.data_table.num_columns=len(self.col_index)
-        rawdata=[]
+        file.data_table.num_columns = len(self.col_index)
+        rawdata = []
         for i in range(self.first_data_line, len(lines)):
-            items=lines[i].split()
-            if len(items)>0:
+            items = lines[i].split()
+            if len(items) > 0:
                 for j in self.col_index:
                     rawdata.append(float(items[j]))
-        file.data_table.num_rows=int(len(rawdata)/file.data_table.num_columns)
+        file.data_table.num_rows = int(len(rawdata)/file.data_table.num_columns)
         file.data_table.data = np.reshape(rawdata,newshape=(file.data_table.num_rows, file.data_table.num_columns))        
         file.data_table.data = file.data_table.data[file.data_table.data[:,0].argsort()]
 
