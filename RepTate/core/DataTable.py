@@ -40,7 +40,10 @@ class DataTable(object):
             serries_nx = []
             for i in range(self.MAX_NUM_SERIES): 
                 ss = axarr[nx].plot([], [], label='', picker=5)
-                ss[0].aname = aname #define artist name
+                if i == 0:
+                    ss[0].aname = aname #define artist name
+                else:    
+                    ss[0].aname = aname + " #%d"%(i + 1) #define artist name
                 serries_nx.append(ss[0])
             self.series.append(serries_nx)
 
