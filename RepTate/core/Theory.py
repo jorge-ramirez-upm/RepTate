@@ -136,10 +136,13 @@ class Theory(CmdBase):
         self.calculate_is_busy = True
         start_time = time.time()
         if self.single_file: #find the first active file in dataset
-            for f in self.parent_dataset.files:
-                if f.file_name_short not in self.parent_dataset.inactive_files:
-                    self.function(f)
-                    break
+            if len(self.parent_dataset.inactive_files) == len(self.parent_dataset.files): #all files hidden
+                self.function(self.parent_dataset.files[0])
+            else: #find first visible file
+                for f in self.parent_dataset.files:
+                    if f.file_name_short not in self.parent_dataset.inactive_files:
+                        self.function(f)
+                        break
         else:
             for f in self.parent_dataset.files:
                 self.function(f)
@@ -188,7 +191,10 @@ class Theory(CmdBase):
                 total_error+=f_error*npt
                 npoints+=npt
                 self.Qprint("%14s %10.5g (%6d)"%(f.file_name_short,f_error,npt))
-        self.Qprint("%14s %10.5g (%6d)"%("TOTAL",total_error/npoints,npoints))
+        if npoints != 0:
+            self.Qprint("%14s %10.5g (%6d)"%("TOTAL",total_error/npoints,npoints))
+        else:
+            self.Qprint("%14s %10s (%6d)"%("TOTAL", "N/A", npoints))
 
     def func_fit(self, x, *param_in):
         """[summary]
@@ -241,6 +247,8 @@ class Theory(CmdBase):
             line {[type]} -- [description]
         """
         if not self.tables:
+            return
+        if len(self.parent_dataset.inactive_files) == len(self.parent_dataset.files): #all files hidden
             return
         self.is_fitting = True
         start_time = time.time()
