@@ -105,7 +105,7 @@ class Theory(CmdBase):
     
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
-            self.tables[f.file_name_short] = DataTable(axarr)
+            self.tables[f.file_name_short] = DataTable(axarr, "TH-" + f.file_name_short)
 
         self.do_cite("")
             

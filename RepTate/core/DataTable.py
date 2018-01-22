@@ -21,7 +21,7 @@ class DataTable(object):
     """
     MAX_NUM_SERIES=3
 
-    def __init__(self, axarr=None):
+    def __init__(self, axarr=None, aname=''):
         """Constructor
         
         [description]
@@ -40,6 +40,7 @@ class DataTable(object):
             serries_nx = []
             for i in range(self.MAX_NUM_SERIES): 
                 ss = axarr[nx].plot([], [], label='', picker=5)
+                ss[0].aname = aname #define artist name
                 serries_nx.append(ss[0])
             self.series.append(serries_nx)
 

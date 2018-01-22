@@ -50,7 +50,7 @@ class File(object):
         self.header_lines=[]
         self.file_parameters={}
         self.active = True
-        self.data_table = DataTable(axarr)
+        self.data_table = DataTable(axarr, self.file_name_short)
 
     def __str__(self):
         """[summary]

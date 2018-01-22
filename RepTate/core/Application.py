@@ -22,6 +22,8 @@ from DataSet import DataSet
 from TheoryBasic import *
 
 from MultiView import MultiView, PlotOrganizationType
+from PyQt5.QtWidgets import QMenu, QApplication
+from PyQt5.QtGui import QCursor
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -57,6 +59,7 @@ class Application(CmdBase):
         self.ncols = ncols #number of columns in the multiplot
         self.current_viewtab = 0 
 
+        self.artists_clicked = []
         # Theories available everywhere
         # self.theories[TheoryPolynomial.thname]=TheoryPolynomial
         # self.theories[TheoryPowerLaw.thname]=TheoryPowerLaw
@@ -69,6 +72,9 @@ class Application(CmdBase):
         self.figure = self.multiplots.figure
         self.axarr = self.multiplots.axarr #
         self.canvas = self.multiplots.canvas
+        
+        connection_id = self.figure.canvas.mpl_connect('pick_event', self.onpick)
+        connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
 
         # sns.set_style("white")
         # sns.set_style("ticks")
@@ -93,6 +99,40 @@ class Application(CmdBase):
 
         #self.figure.draw() # DOESN'T WORK!
         #self.figure.set_visible(True) #??? DOES IT DO ANYTHING?
+
+
+    def onrelease(self, event):
+        """Called when releasing mouse"""
+        if event.button == 3: #if release a right click
+            self.open_figure_popup_menu(event)
+            self.artists_clicked.clear()
+
+    def onpick(self, event):
+        """Called when clicking on a plot/artist"""
+        if event.mouseevent.button == 3: #right click in plot
+            self.artists_clicked.append(event.artist) #collect all artists under mouse
+    
+    def open_figure_popup_menu(self, event):
+        """Open a menu to let the user Copy To Clipboard"""
+        if not self.artists_clicked: #do nothing if list of artists is empty
+            return
+        main_menu = QMenu()
+        menu = QMenu("Copy To Clipboard")
+        for artist in self.artists_clicked:
+            action_print_coordinates = menu.addAction(artist.aname)
+            action_print_coordinates.triggered.connect(lambda: self.clipboard_coordinates(artist))
+        main_menu.addMenu(menu)
+        if main_menu.exec_(QCursor.pos()):
+            self.artists_clicked.clear()
+
+    def clipboard_coordinates(self, artist):
+        """Copy data to clipboard in tab-separated format"""
+        x, y = artist.get_data()
+        line_strings=[]
+        for i in range(len(x)):
+            line_strings.append(str(x[i])+"\t"+str(y[i]))
+        array_string = "\n".join(line_strings)
+        QApplication.clipboard().setText(array_string)
 
     def handle_close_window(self, evt):
         """[summary]

@@ -557,7 +557,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     newtables.append(df)
                     for th_name in self.theories:
                         #add a theory table
-                        self.theories[th_name].tables[df.file_name_short] = DataTable(self.parent_application.axarr)
+                        self.theories[th_name].tables[df.file_name_short] = DataTable(self.parent_application.axarr, "TH_" + df.file_name_short)
                         self.theories[th_name].function(df)
             if CmdBase.mode==CmdMode.GUI:
                 return (True, newtables, f_ext[0])
