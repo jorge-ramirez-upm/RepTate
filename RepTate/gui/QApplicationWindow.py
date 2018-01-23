@@ -15,7 +15,7 @@ It is the GUI counterpart of Application.
 import io
 from os.path import dirname, join, abspath, isfile
 import logging
-from PyQt5.QtGui import QIcon, QColor, QImage
+from PyQt5.QtGui import QIcon, QColor
 from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
@@ -251,14 +251,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not self.handle_annotation.checked:
             return
         """.. todo:: Code to draw annotation. It doesn't work!"""
-        
-    def copy_chart(self):
-        """ Copy current chart to clipboard
-        """
-        buf = io.BytesIO()
-        self.figure.savefig(buf, dpi=150)
-        QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
-        buf.close()
         
     def handle_annotation(self, checked):
         """Draw and hide the annotation box.

@@ -11,6 +11,7 @@
 Module that defines the basic class from which all applications are derived.
 
 """
+import io
 import logging
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -24,6 +25,7 @@ from TheoryBasic import *
 from MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
 from PyQt5.QtGui import QCursor
+
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -114,17 +116,32 @@ class Application(CmdBase):
             self.artists_clicked.append(event.artist) #collect all artists under mouse
     
     def open_figure_popup_menu(self, event):
-        """Open a menu to let the user Copy To Clipboard"""
-        if not self.artists_clicked: #do nothing if list of artists is empty
-            return
+        """Open a menu to let the user copy data or chart to clipboard"""
         main_menu = QMenu()
-        menu = QMenu("Copy To Clipboard")
-        for artist in self.artists_clicked:
-            action_print_coordinates = menu.addAction(artist.aname)
-            action_print_coordinates.triggered.connect(lambda: self.clipboard_coordinates(artist))
-        main_menu.addMenu(menu)
+       
+        #copy chart action
+        copy_chart_action = main_menu.addAction("Copy Chart to Clipboard")
+        copy_chart_action.triggered.connect(self.copy_chart)
+       
+        #copy data sub-menu
+        if self.artists_clicked: #do nothing if list of artists is empty
+            menu = QMenu("Copy Data To Clipboard")
+            for artist in self.artists_clicked:
+                action_print_coordinates = menu.addAction(artist.aname)
+                action_print_coordinates.triggered.connect(lambda: self.clipboard_coordinates(artist))
+            main_menu.addMenu(menu)
+
+        #launch menu
         if main_menu.exec_(QCursor.pos()):
             self.artists_clicked.clear()
+    
+    def copy_chart(self):
+        """ Copy current chart to clipboard
+        """
+        buf = io.BytesIO()
+        self.figure.savefig(buf, dpi=150)
+        QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
+        buf.close()
 
     def clipboard_coordinates(self, artist):
         """Copy data to clipboard in tab-separated format"""
