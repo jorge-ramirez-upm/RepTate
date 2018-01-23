@@ -235,8 +235,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         
         [description]
         """
-        hlim = self.actionHorizontal_Limits.isChecked()
-        vlim = self.actionVertical_Limits.isChecked()
+        if self.current_theory:
+            th = self.theories[self.current_theory]
+        vlim = th.is_xrange_visible
+        hlim = th.is_yrange_visible
         if hlim and vlim:
             img = "Line Chart Both Limits"
         elif vlim:
@@ -256,35 +258,29 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th_name {[type]} -- [description]
         """
         if th_name in self.theories:
-            th = self.theories[self.current_theory]
-            th.xrange.set_visible(False) 
-            th.xminline.set_visible(False) 
-            th.xmaxline.set_visible(False) 
+            self.theories[self.current_theory].set_xy_limits_visible(False, False) #hide xrange and yrange
 
-            th.yrange.set_visible(False) 
-            th.yminline.set_visible(False) 
-            th.ymaxline.set_visible(False) 
-
-            self.actionHorizontal_Limits.setChecked(False)
-            self.actionVertical_Limits.setChecked(False)
-            self.set_limit_icon()
-
-    def toggle_vertical_limits(self):
+    def toggle_vertical_limits(self, bool):
         """Show/Hide the xrange selector for fit
         
         [description]
         """
         if self.current_theory:
-            self.theories[self.current_theory].do_xrange("")
+            th = self.theories[self.current_theory]
+            th.do_xrange("")
+            th.is_xrange_visible = self.actionVertical_Limits.isChecked()
             self.set_limit_icon()
+
  
     def toggle_horizontal_limits(self):
         """Show/Hide the yrange selector for fit
         
         [description]
         """
-        if self.current_theory:        
-            self.theories[self.current_theory].do_yrange("")
+        if self.current_theory:    
+            th = self.theories[self.current_theory]    
+            th.do_yrange("")
+            th.is_yrange_visible = self.actionHorizontal_Limits.isChecked()
             self.set_limit_icon()
 
     def handle_actionCalculate_Theory(self):
@@ -326,13 +322,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th = self.TheorytabWidget.widget(index)
         if th:
             self.current_theory = th.name
-            th.do_show()
             ntab = self.TheorytabWidget.count()
             #hide all theory curves
             for i in range(ntab):   
                 if i != index:
                     th_to_hide = self.TheorytabWidget.widget(i)
                     th_to_hide.do_hide()
+            th.do_show() #must be called last, after hiding other theories
             if th.thread_calc_busy or th.thread_fit_busy:
                 return
         else:

@@ -85,6 +85,7 @@ class Theory(CmdBase):
         self.has_modes=False
         
         ax = self.ax
+
         # XRANGE for FIT
         self.xmin=0.01
         self.xmax=1
@@ -93,6 +94,7 @@ class Theory(CmdBase):
         self.xmaxline = ax.axvline(self.xmax, color='black', linestyle='--', marker='o', visible=False)
         self.xminlinedrag=DraggableVLine(self.xminline, DragType.horizontal, self.change_xmin)
         self.xmaxlinedrag=DraggableVLine(self.xmaxline, DragType.horizontal, self.change_xmax)
+        self.is_xrange_visible = False
 
         # YRANGE for FIT
         self.ymin=0.01
@@ -102,7 +104,8 @@ class Theory(CmdBase):
         self.ymaxline = ax.axhline(self.ymax, color='black', linestyle='--', marker='o', visible=False)
         self.yminlinedrag=DraggableHLine(self.yminline, DragType.vertical, self.change_ymin)
         self.ymaxlinedrag=DraggableHLine(self.ymaxline, DragType.vertical, self.change_ymax)
-    
+        self.is_yrange_visible = False
+
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
             self.tables[f.file_name_short] = DataTable(axarr, "TH-" + f.file_name_short)
@@ -625,7 +628,23 @@ class Theory(CmdBase):
                     self.yminline.set_visible(True) 
                     self.ymaxline.set_visible(True) 
         self.do_plot(line)
+        
+    def set_xy_limits_visible(self, xstate=False, ystate=False):
+        """Hide the x- and y-range selectors
+        
+        [description]
+        """
+        self.xrange.set_visible(xstate) 
+        self.xminline.set_visible(xstate) 
+        self.xmaxline.set_visible(xstate) 
 
+        self.yrange.set_visible(ystate) 
+        self.yminline.set_visible(ystate) 
+        self.ymaxline.set_visible(ystate) 
+
+        self.parent_dataset.actionVertical_Limits.setChecked(xstate)
+        self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
+        self.parent_dataset.set_limit_icon()
 
 # MODES STUFF
     def copy_modes(self):
@@ -765,11 +784,12 @@ class Theory(CmdBase):
             super(Theory, self).default(line)
     
     def do_hide(self):
-        """[summary]
+        """Hide the theory artists and associated tools
         
         [description]
         """
         self.active = False
+        self.set_xy_limits_visible(False, False) # hide xrange and yrange 
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
                 for nx in range(self.parent_dataset.nplots):
@@ -793,6 +813,7 @@ class Theory(CmdBase):
         [description]
         """
         self.active = True
+        self.set_xy_limits_visible(self.is_xrange_visible, self.is_yrange_visible)
         for fname in self.tables:
             if fname in self.parent_dataset.inactive_files:
                 return
