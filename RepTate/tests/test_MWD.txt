@@ -2,4 +2,5 @@ new MWD
 open data/PS_Linear_Polydisperse/ps1_header.gpc
 plot
 theory_new MWDiscr
+nbin=15
 exit()

@@ -432,6 +432,8 @@ class Theory(CmdBase):
                     print("*%8s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
                 elif self.parameters[p].opt_type == OptType.nopt: 
                     print("%8s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
+                elif self.parameters[p].opt_type == OptType.const: 
+                    print("%8s = %10.5g"%(self.parameters[p].name,self.parameters[p].value))
         else:
             for s in line.split():
                 if (s in self.parameters):
@@ -439,6 +441,8 @@ class Theory(CmdBase):
                         self.parameters[s].opt_type == OptType.nopt
                     elif self.parameters[s].opt_type == OptType.nopt:
                         self.parameters[s].opt_type == OptType.opt
+                    elif self.parameters[s].opt_type == OptType.const:
+                        print("Parameter %s is not optimized"%s)
                 else:
                     print("Parameter %s not found"%s)
 

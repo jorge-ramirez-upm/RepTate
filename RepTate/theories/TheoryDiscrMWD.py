@@ -84,7 +84,7 @@ class BaseTheoryDiscrMWD:
         nbin = int(np.round(3*np.log10(mmax/mmin))) # default: 3 bins per decade 
         self.parameters["logmmin"] = Parameter("logmmin", np.log10(mmin), "Log of minimum molecular mass", ParameterType.real, opt_type=OptType.const, display_flag=False)
         self.parameters["logmmax"] = Parameter("logmmax", np.log10(mmax), "Log of maximum molecular mass", ParameterType.real, opt_type=OptType.const, display_flag=False)
-        self.parameters["nbin"] = Parameter(name="nbin", value=nbin, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
+        self.parameters["nbin"] = Parameter(name="nbin", value=nbin, description="Number of molecular weight bins", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
 
         self.set_equally_spaced_bins()
         self.setup_graphic_bins()
@@ -96,15 +96,46 @@ class BaseTheoryDiscrMWD:
                 ft = f.data_table.data
                 mmin = min(ft[:, 0])
                 mmax = max(ft[:, 0])
-                self.set_param_value("logmmin", np.log10(mmin))
-                self.set_param_value("logmmax", np.log10(mmax))
+                self.parameters["logmmin"].value = np.log10(mmin)
+                self.parameters["logmmax"].value = np.log10(mmax)
                 nbin = self.parameters["nbin"].value
                 bins_edges = np.logspace(np.log10(mmin), np.log10(mmax), nbin + 1)
                 for i in range(nbin + 1):
                     self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(bins_edges[i]), "Log of molecular mass", ParameterType.real, opt_type=OptType.const, display_flag=False)
                 self.current_file = f
                 break
+   
+    def set_param_value(self, name, new_value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            name {[type]} -- [description]
+            value {[type]} -- [description]
+        """
+        if (name=="nbin"):
+            nbinold = self.parameters["nbin"].value
+        super().set_param_value(name, new_value)
+        if (name=="nbin"):
+            new_nbin = self.parameters["nbin"].value
+            mminold = self.parameters["logmmin"].value
+            mmaxold = self.parameters["logmmax"].value
+            for i in range(nbinold + 1):
+                del self.parameters["logM%02d"%i]
+            mnew = np.logspace(mminold, mmaxold, new_nbin + 1)
+            for i in range(new_nbin + 1):
+                self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
+            self.do_calculate("")
 
+        if (name=='logmmin') or (name=='logmmax'): #make bins equally spaced again
+            nbin = self.parameters["nbin"].value
+            mmin = self.parameters["logmmin"].value
+            mmax = self.parameters["logmmax"].value
+            mnew = np.logspace(mmin, mmax, nbin + 1)
+            for i in range(nbin + 1):
+                self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
+            self.do_calculate("")
 
     def setup_graphic_bins(self):
         """[summary]
@@ -192,7 +223,6 @@ class BaseTheoryDiscrMWD:
             newx[-2] /= 1.01
         for i in range(1, nbin): # exclude the min and max edges
             self.set_param_value("logM%02d"%i, np.log10(newx[i]))
-
         self.do_calculate("")
         self.update_parameter_table()
 
@@ -219,7 +249,8 @@ class BaseTheoryDiscrMWD:
         tempMz = 0
         tempMn = 0
         temp_sum = 0
-        for i in range(n - 1):
+
+        for i in range(n):
             M = f[i, 0]
             w = f[i, 1]
             # M = np.power(10, (np.log10(f[i + 1, 0]) + np.log10(f[i, 0])) / 2 )
@@ -230,7 +261,7 @@ class BaseTheoryDiscrMWD:
         Mz = tempMz/Mw
         PDI = Mw/Mn
 
-        if line=="input":
+        if line=="input" and CmdBase.mode == CmdMode.GUI:
             file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
             self.parent_dataset.DataSettreeWidget.blockSignals(True)
             file_table.setText(1, "%0.3g"%(Mn/1000))
@@ -272,7 +303,7 @@ class BaseTheoryDiscrMWD:
         #normalize area under the data points to compute the moments
         n = ft[:, 0].size
         temp_area = 0
-        temp = np.zeros((n, 2))
+        temp = np.zeros((n - 1, 2))
         for i in range(n - 1):
             dlogM = np.log10(ft[i + 1, 0]) - np.log10(ft[i, 0])
             mean_w = (ft[i, 1] + ft[i + 1, 1]) / 2
@@ -448,17 +479,7 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
             value {[type]} -- [description]
         """
         self.spinbox.setValue(value)
-        nbinold = self.parameters["nbin"].value
-        mminold = self.parameters["logmmin"].value
-        mmaxold = self.parameters["logmmax"].value
-        for i in range(nbinold + 1):
-            del self.parameters["logM%02d"%i]
         self.set_param_value("nbin", value)
-        mnew = np.logspace(mminold, mmaxold, value + 1)
-        for i in range(value + 1):
-            self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
-        
-        self.do_calculate("")
         self.update_parameter_table()
     
     def Qhide_theory_extras(self, state):
