@@ -11,12 +11,15 @@
 Module that defines the basic theories that should be available for all Applications.
 
 """ 
-from CmdBase import CmdBase
-from Theory import Theory
 import numpy as np
-from Parameter import OptType
+from CmdBase import CmdBase, CmdMode
+from Theory import Theory
+from QTheory import QTheory
+from Parameter import Parameter, ParameterType, ShiftType, OptType
+from PyQt5.QtWidgets import QToolBar, QSpinBox
+from PyQt5.QtCore import QSize
 
-class TheoryPolynomial(Theory, CmdBase):
+class TheoryPolynomial(CmdBase):
     """Fit a polynomial of degree n to the data
     
     :math:`ax^2 + bx + c`
@@ -24,7 +27,15 @@ class TheoryPolynomial(Theory, CmdBase):
     thname = "Polynomial"
     description = "Fit a polynomial of degree n"
 
-    def __init__(self, name="Polynomial", parent_dataset=None, ax=None):
+    def __new__(cls, name="ThPolynomial", parent_dataset=None, ax=None):
+        return GUITheoryPolynomial(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryPolynomial(name, parent_dataset, ax)
+
+
+
+class BaseTheoryPolynomial:
+    single_file = True 
+
+    def __init__(self, name="ThPolynomial", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
@@ -34,30 +45,31 @@ class TheoryPolynomial(Theory, CmdBase):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super(TheoryPolynomial, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
+        self.MAX_DEGREE = 10
         self.function = self.polynomial
-        self.parameters["n"] = Parameter("n", 1.0, "Degree of Polynomial", ParameterType.integer, opt_type=OptType.const)
+        self.parameters["n"] = Parameter(name="n", value=1, description="Degree of Polynomial", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
         for i in range(self.parameters["n"].value+1):
-            self.parameters["A%d"%i] = Parameter("A%d"%i,1.0,"Coefficient order %d"%i, ParameterType.real, opt_type=OptType.opt)
+            self.parameters["A%02d"%i] = Parameter("A%02d"%i,1.0,"Coefficient order %d"%i, ParameterType.real, opt_type=OptType.opt)
 
-    def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
-        """
-        if (name=="n"):
-            oldn=self.parameters["n"].value
-        super(TheoryPolynomial, self).set_param_value(name, value)
-        if (name=="n"):
-            for i in range(self.parameters["n"].value+1):
-                self.parameters["A%d"%i] = Parameter("A%d"%i,1.0,"Coefficient order %d"%i, ParameterType.real, opt_type=OptType.opt)
-            if (oldn>self.parameters["n"].value):
-                for i in range(self.parameters["n"].value+1,oldn+1):
-                    del self.parameters["A%d"%i]
+#    def set_param_value(self, name, value):
+#        """[summary]
+#        
+#        [description]
+#        
+#        Arguments:
+#            name {[type]} -- [description]
+#            value {[type]} -- [description]
+#        """
+#        if (name=="n"):
+#            oldn=self.parameters["n"].value
+#        super(TheoryPolynomial, self).set_param_value(name, value)
+#        if (name=="n"):
+#            for i in range(self.parameters["n"].value+1):
+#                self.parameters["A%02d"%i] = Parameter("A%02d"%i,1.0,"Coefficient order %d"%i, ParameterType.real, opt_type=OptType.opt)
+#            if (oldn>self.parameters["n"].value):
+#                for i in range(self.parameters["n"].value+1,oldn+1):
+#                    del self.parameters["A%02d"%i]
 
     def polynomial(self, f=None):
         """Actual polynomial function.
@@ -78,16 +90,110 @@ class TheoryPolynomial(Theory, CmdBase):
         tt.data[:,0] = ft.data[:,0]
         for c in range(1, tt.num_columns):
             for i in range(self.parameters["n"].value+1):
-                tt.data[:,c]+=self.parameters["A%d"%i].value*tt.data[:,0]**i
+                tt.data[:,c]+=self.parameters["A%02d"%i].value*tt.data[:,0]**i
 
-class TheoryPowerLaw(Theory, CmdBase):
+class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThPolynomial", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+                
+class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThMaxwellFrequencyPolynomial", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+        
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24,24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_DEGREE) # min and max number of modes
+        self.spinbox.setPrefix("degree ")
+        self.spinbox.setValue(self.parameters["n"].value) #initial value
+        tb.addWidget(self.spinbox)
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+
+    def handle_spinboxValueChanged(self, value):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            value {[type]} -- [description]
+        """
+        """Handle a change of the parameter 'nmode'"""
+        nold=self.parameters["n"].value
+        Aold=np.zeros(nold+1)
+        for i in range(nold+1):
+            Aold[i]=self.parameters["A%02d"%i].value
+            del self.parameters["A%02d"%i]
+
+        nnew=value
+        self.set_param_value("n", nnew)
+        
+        for i in range(nnew+1):
+            if i<=nold:
+                Aval=Aold[i]
+            else:
+                Aval= 1.0
+            self.parameters["A%02d"%i] = Parameter("A%02d"%i,Aval,"Coefficient order %d"%i, ParameterType.real, opt_type=OptType.opt)
+        
+        self.do_calculate("")
+        self.update_parameter_table()
+
+class TheoryPowerLaw(CmdBase):
+    """
+    [description]
+    """
+    thname="PowerLaw"
+    description="Fit Power Law"
+
+    def __new__(cls, name="ThPowerLaw", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        return GUITheoryPowerLaw(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryPowerLaw(name, parent_dataset, ax)
+        
+class BaseTheoryPowerLaw:
     """Fit a power law to the data
     
     [description]
     """
-    thname = "PowerLaw"
-    description = "Fit a power law A*x^b to the data"
-
+    single_file = True
+    
     def __init__(self, name="PowerLaw", parent_dataset=None, ax=None):
         """[summary]
         
@@ -98,7 +204,7 @@ class TheoryPowerLaw(Theory, CmdBase):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super(TheoryPowerLaw, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.powerlaw
         self.parameters["A"] = Parameter("A", 1.0, "Prefactor", ParameterType.real, opt_type=OptType.opt)
         self.parameters["b"] = Parameter("b",1.0,"Exponent", ParameterType.real, opt_type=OptType.opt)
@@ -120,14 +226,72 @@ class TheoryPowerLaw(Theory, CmdBase):
         for c in range(1, tt.num_columns):
             tt.data[:,c] = self.parameters["A"].value*tt.data[:,0]**self.parameters["b"].value
 
-class TheoryExponential(Theory, CmdBase):
-    """Fit an exponential decay to the data
+class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThPowerLaw", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+            
+
+class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThPowerLaw", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+            
+            
+class TheoryExponential(CmdBase):
+    """Fit Exponential
     
     [description]
     """
     thname="Exponential"
-    description="Fit an exponential decay A*exp(-x/T) to the data"
+    description="Fit Exponential"
 
+    def __new__(cls, name="ThExponential", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        return GUITheoryExponential(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryExponential(name, parent_dataset, ax)
+            
+class BaseTheoryExponential:
+    """Fit an exponential decay to the data
+    
+    [description]
+    """
+    single_file = True
+    
     def __init__(self, name="Exponential", parent_dataset=None, ax=None):
         """[summary]
         
@@ -138,7 +302,7 @@ class TheoryExponential(Theory, CmdBase):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super(TheoryExponential, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.exponential
         self.parameters["A"] = Parameter("A", 1.0, "Prefactor", ParameterType.real, opt_type=OptType.opt)
         self.parameters["T"] = Parameter("T", 1.0, "Time", ParameterType.real, opt_type=OptType.opt)
@@ -160,14 +324,71 @@ class TheoryExponential(Theory, CmdBase):
         for c in range(1, tt.num_columns):
             tt.data[:,c] = self.parameters["A"].value*np.exp(-tt.data[:,0]/self.parameters["T"].value)
 
-class TheoryExponential2(Theory, CmdBase):
-    """Fit 2 exponentials decay to the data
+class CLTheoryExponential(BaseTheoryExponential, Theory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThExponential", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+        
+class GUITheoryExponential(BaseTheoryExponential, QTheory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThExponential", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+            
+            
+class TheoryExponential2(CmdBase):
+    """Fit Maxwell modes to a frequency dependent relaxation function
     
     [description]
     """
     thname="Exponential2"
-    description="Fit 2 exponentials decay A*exp(-x/T) to the data"
+    description="Fit two exponentials"
 
+    def __new__(cls, name="ThExponential2", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        return GUITheoryExponential2(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryExponential2(name, parent_dataset, ax)
+        
+class BaseTheoryExponential2:
+    """Fit 2 exponentials decay to the data
+    
+    [description]
+    """
+    single_file = True
+    
     def __init__(self, name="Exponential2", parent_dataset=None, ax=None):
         """[summary]
         
@@ -178,7 +399,7 @@ class TheoryExponential2(Theory, CmdBase):
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super(TheoryExponential2, self).__init__(name, parent_dataset, ax)
+        super().__init__(name, parent_dataset, ax)
         self.function = self.exponential2
         self.parameters["A1"] = Parameter("A1", 0.9, "Prefactor", ParameterType.real, opt_type=OptType.opt)
         self.parameters["T1"] = Parameter("T1",1.0,"Time", ParameterType.real, opt_type=OptType.opt)
@@ -201,3 +422,37 @@ class TheoryExponential2(Theory, CmdBase):
         tt.data[:,0] = ft.data[:,0]
         for c in range(1, tt.num_columns):
             tt.data[:,c] = self.parameters["A1"].value*np.exp(-tt.data[:,0]/self.parameters["T1"].value)+self.parameters["A2"].value*np.exp(-tt.data[:,0]/self.parameters["T2"].value)
+
+class CLTheoryExponential2(BaseTheoryExponential2, Theory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThExponential2", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
+        
+class GUITheoryExponential2(BaseTheoryExponential2, QTheory):
+    """[summary]
+    
+    [description]
+    """
+    def __init__(self, name="ThExponential2", parent_dataset=None, ax=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, ax)
