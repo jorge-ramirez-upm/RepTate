@@ -244,6 +244,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.actionInspect_Data.setDisabled(state)
         self.actionShowFigureTools.setDisabled(state)
         self.actionView_All_Sets.setDisabled(state)
+        self.actionAutoscale.setDisabled(state)
 
         ds = self.DataSettabWidget.currentWidget()
         if ds:
