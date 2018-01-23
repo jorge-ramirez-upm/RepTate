@@ -682,7 +682,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         selected_view_name = self.viewComboBox.currentText()
         ds = self.DataSettabWidget.currentWidget()
         if ds:
-            ds.set_no_limits(ds.current_theory) 
+            if ds.current_theory:
+                ds.theories[ds.current_theory].is_xrange_visible = False
+                ds.theories[ds.current_theory].is_yrange_visible = False
+                ds.theories[ds.current_theory].set_xy_limits_visible(False, False)
+                
         self.view_switch(selected_view_name) #view_switch of Application
         self.update_Qplot()
         self.disconnect_curve_drag()

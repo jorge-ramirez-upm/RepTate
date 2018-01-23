@@ -328,7 +328,7 @@ class Theory(CmdBase):
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
         except Exception as e:
             print("In do_fit()", e)
-            self.Qprint(e)
+            self.Qprint("%s"%e)
             self.is_fitting = False
             return
 
