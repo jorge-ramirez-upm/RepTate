@@ -63,6 +63,7 @@ class Application(CmdBase):
         self.current_viewtab = 0 
 
         self.artists_clicked = []
+        self.autoscale = True
         # Theories available everywhere
         # self.theories[TheoryPolynomial.thname]=TheoryPolynomial
         # self.theories[TheoryPowerLaw.thname]=TheoryPowerLaw
@@ -461,7 +462,10 @@ class Application(CmdBase):
             print("View \"%s\" not found"%name)
         # Update the plots!
         # Loop over datasets and call do_plot()
+        temp = self.autoscale
+        self.autoscale = True
         self.update_all_ds_plots()
+        self.autoscale = temp
     
     def update_all_ds_plots(self):
         """[summary]
@@ -551,11 +555,11 @@ class Application(CmdBase):
         
         [description]
         """
-        self.set_axes_properties()
+        self.set_axes_properties(self.autoscale)
         #self.set_legend_properties()
         self.canvas.draw() 
 
-    def set_axes_properties(self):
+    def set_axes_properties(self, autoscale=True):
         """[summary]
         
         [description]
@@ -590,10 +594,11 @@ class Application(CmdBase):
             
             # self.axarr[nx].plot(self.xData,self.yData)
             
-            self.axarr[nx].relim(True)
-            self.axarr[nx].autoscale(True)
-            self.axarr[nx].autoscale_view()
-            self.axarr[nx].set_aspect("auto")
+            if autoscale:
+                self.axarr[nx].relim(True)
+                self.axarr[nx].autoscale(True)
+                self.axarr[nx].autoscale_view()
+                self.axarr[nx].set_aspect("auto")
 
     def set_legend_properties(self):
         """[summary]

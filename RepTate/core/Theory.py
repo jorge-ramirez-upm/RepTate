@@ -73,7 +73,8 @@ class Theory(CmdBase):
         self.function=None
         self.active = True #defines if the theorie is plotted
         self.calculate_is_busy = False
-        
+        self.axarr[0].autoscale(False)
+
 
         # THEORY OPTIONS
         self.npoints=100

@@ -112,6 +112,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.ViewDataTheoryLayout.insertWidget(1, tb)
         self.ViewDataTheorydockWidget.Width=500
         self.ViewDataTheorydockWidget.setTitleBarWidget(QWidget())                
+        self.actionAutoscale = tb.addAction(QIcon(':/Images/Images/new_icons/icons8-padlock-96.png'), "Lock XY axes")
+        self.actionAutoscale.setCheckable(True)
+
 
         # Tests TableWidget
         self.inspector_table.setRowCount(30)
@@ -167,6 +170,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
+        connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
 
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
 
@@ -219,6 +223,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)  
 
+    def handle_actionAutoscale(self, checked):
+        self.autoscale = not checked
+        if self.autoscale:
+            self.actionAutoscale.setIcon(QIcon(':/Images/Images/new_icons/icons8-padlock-96.png'))
+        else:
+            self.actionAutoscale.setIcon(QIcon(':/Images/Images/new_icons/icons8-lock-96.png'))
 
     def dataset_actions_disabled(self, state):
         """Disable buttons when there is no file in the dataset
