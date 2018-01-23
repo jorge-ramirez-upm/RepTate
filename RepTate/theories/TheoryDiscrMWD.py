@@ -280,8 +280,10 @@ class BaseTheoryDiscrMWD:
         else:
             self.Qprint(
                 "Characteristics of the %s MWD:\n"
-                "Mn=%0.3g kg/mol, Mw=%0.3g kg/mol, Mw/Mn=%0.3g, Mz/Mw=%0.3g\n"
-                %(line, Mn/1000, Mw/1000, PDI, Mz/Mw)
+                "%7s %7s %7s %7s\n"
+                "\n%6.3gk %6.3gk %7.3g %7.3g\n"%(line,
+                 "Mn", "Mw", "Mw/Mn", "Mz/Mw",
+                  Mn/1000, Mw/1000, PDI, Mz/Mw) 
                 )
 
     def discretise_mwd(self, f=None):
