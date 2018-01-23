@@ -34,7 +34,7 @@ class DraggableArtist(object):
     [description]
     """
     lock = None
-    def __init__(self, artist, mode=DragType.none, function=None):
+    def __init__(self, artist=None, mode=DragType.none, function=None, parent_theory=None):
         """Constructor. 
                 
         [description]
@@ -46,6 +46,7 @@ class DraggableArtist(object):
             mode {Dragtype} -- vertical,horizontal,all,none. (default: {DragType.none})
             function -- function that should interpret the final coordinates of the artist moved (default: {None})
         """
+        self.parent_theory = parent_theory
         self.artist = artist
         self.press = None
         self.background = None
@@ -75,8 +76,8 @@ class DraggableArtist(object):
         if DraggableArtist.lock is not None: return
         contains, attrd = self.artist.contains(event)
         if not contains: return
-        self.press = event.xdata, event.ydata
         self.get_data()
+        self.press = event.xdata, event.ydata
         DraggableArtist.lock = self
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
@@ -163,6 +164,10 @@ class DraggableArtist(object):
         self.artist.set_animated(False)
         self.background = None
         self.artist.figure.canvas.draw()
+        try:
+            self.parent_theory.do_fit("")
+        except Exception as e:
+            print(e)
 
     def disconnect(self):
         """disconnect all the stored connection ids
@@ -745,7 +750,7 @@ class DraggableVLine(DraggableArtist):
     
     [description]
     """
-    def __init__(self, artist, mode=DragType.none, function=None):
+    def __init__(self, artist, mode=DragType.none, function=None, parent_theory=None):
         """[summary]
         
         [description]
@@ -757,14 +762,38 @@ class DraggableVLine(DraggableArtist):
             mode {[type]} -- [description] (default: {DragType})
             function {[type]} -- [description] (default: {None})
         """
-        super(DraggableVLine, self).__init__(artist, mode, function)
+        super(DraggableVLine, self).__init__(artist, mode, function, parent_theory)
+    
+    def on_press(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
+        if event.inaxes != self.artist.axes: return
+        if DraggableArtist.lock is not None: return
+        contains, attrd = self.artist.contains(event)
+        if not contains: return
+        self.get_data()
+        self.press = self.data[0][0], 0 # do not use event.xdata, precision matters in non-logscale
+        DraggableArtist.lock = self
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        self.artist.set_animated(True)
+        canvas.draw()
+        self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
+        axes.draw_artist(self.artist)
+        canvas.update()
+        #canvas.blit(axes.bbox)
 
     def get_data(self):
         """[summary]
         
         [description]
         """
-        self.data=self.artist.get_data()
+        self.data = self.artist.get_data()
 
     def modify_artist(self, dx, dy):
         """[summary]
@@ -775,7 +804,7 @@ class DraggableVLine(DraggableArtist):
             dx {[type]} -- [description]
             dy {[type]} -- [description]
         """
-        self.artist.set_data([self.data[0][0]+dx,self.data[0][1]+dx],[0,1])
+        self.artist.set_data([self.data[0][0] + dx, self.data[0][1] + dx], [0, 1])
 
 
 class DraggableHLine(DraggableArtist):
@@ -783,7 +812,7 @@ class DraggableHLine(DraggableArtist):
     
     [description]
     """
-    def __init__(self, artist, mode=DragType.none, function=None):
+    def __init__(self, artist, mode=DragType.none, function=None, parent_theory=None):
         """[summary]
         
         [description]
@@ -795,14 +824,38 @@ class DraggableHLine(DraggableArtist):
             mode {[type]} -- [description] (default: {DragType})
             function {[type]} -- [description] (default: {None})
         """
-        super(DraggableHLine, self).__init__(artist, mode, function)
-
+        super(DraggableHLine, self).__init__(artist, mode, function, parent_theory)
+    
+    def on_press(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            event {[type]} -- [description]
+        """
+        if event.inaxes != self.artist.axes: return
+        if DraggableArtist.lock is not None: return
+        contains, attrd = self.artist.contains(event)
+        if not contains: return
+        self.get_data()
+        self.press = 0, self.data[1][0] # do not use event.ydata, precision matters in non-logscale
+        DraggableArtist.lock = self
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        self.artist.set_animated(True)
+        canvas.draw()
+        self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
+        axes.draw_artist(self.artist)
+        canvas.update()
+        #canvas.blit(axes.bbox)
+   
     def get_data(self):
         """[summary]
         
         [description]
         """
-        self.data=self.artist.get_data()
+        self.data = self.artist.get_data()
 
     def modify_artist(self, dx, dy):
         """[summary]
@@ -813,7 +866,7 @@ class DraggableHLine(DraggableArtist):
             dx {[type]} -- [description]
             dy {[type]} -- [description]
         """
-        self.artist.set_data([0,1],[self.data[1][0]+dy,self.data[1][1]+dy])
+        self.artist.set_data([0, 1], [self.data[1][0] + dy, self.data[1][1] + dy])
 
 class DraggableVSpan(DraggableArtist):
     """[summary]

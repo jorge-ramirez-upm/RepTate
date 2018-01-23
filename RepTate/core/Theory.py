@@ -92,8 +92,8 @@ class Theory(CmdBase):
         self.xrange = ax.axvspan(self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
         self.xminline = ax.axvline(self.xmin, color='black', linestyle='--', marker='o', visible=False)
         self.xmaxline = ax.axvline(self.xmax, color='black', linestyle='--', marker='o', visible=False)
-        self.xminlinedrag=DraggableVLine(self.xminline, DragType.horizontal, self.change_xmin)
-        self.xmaxlinedrag=DraggableVLine(self.xmaxline, DragType.horizontal, self.change_xmax)
+        self.xminlinedrag=DraggableVLine(self.xminline, DragType.horizontal, self.change_xmin, self)
+        self.xmaxlinedrag=DraggableVLine(self.xmaxline, DragType.horizontal, self.change_xmax, self)
         self.is_xrange_visible = False
 
         # YRANGE for FIT
@@ -102,8 +102,8 @@ class Theory(CmdBase):
         self.yrange = ax.axhspan(self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
         self.yminline = ax.axhline(self.ymin, color='black', linestyle='--', marker='o', visible=False)
         self.ymaxline = ax.axhline(self.ymax, color='black', linestyle='--', marker='o', visible=False)
-        self.yminlinedrag=DraggableHLine(self.yminline, DragType.vertical, self.change_ymin)
-        self.ymaxlinedrag=DraggableHLine(self.ymaxline, DragType.vertical, self.change_ymax)
+        self.yminlinedrag=DraggableHLine(self.yminline, DragType.vertical, self.change_ymin, self)
+        self.ymaxlinedrag=DraggableHLine(self.ymaxline, DragType.vertical, self.change_ymax, self)
         self.is_yrange_visible = False
 
         # Pre-create as many tables as files in the dataset
@@ -256,8 +256,10 @@ class Theory(CmdBase):
             line {[type]} -- [description]
         """
         if not self.tables:
+            self.is_fitting = False
             return
         if len(self.parent_dataset.inactive_files) == len(self.parent_dataset.files): #all files hidden
+            self.is_fitting = False
             return
         self.is_fitting = True
         start_time = time.time()
@@ -326,6 +328,8 @@ class Theory(CmdBase):
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
         except Exception as e:
             print("In do_fit()", e)
+            self.Qprint(e)
+            self.is_fitting = False
             return
 
         residuals = y - self.func_fit(x, *initial_guess)
