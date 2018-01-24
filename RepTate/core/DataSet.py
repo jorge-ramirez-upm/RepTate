@@ -25,6 +25,7 @@ from tabulate import tabulate
 from DataTable import DataTable
 
 import itertools
+from collections import OrderedDict
 
 class ColorMode(Enum):
     """[summary]
@@ -76,6 +77,30 @@ class SymbolMode(Enum):
     filledmarkers = ['.','o','v','^','<','>','8','s','p','P','*','h','H','X','D','d']
     filledmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'x (filled)','diamond', 'thin_diamond']
 
+class ThLineMode(Enum):
+    """[summary]
+    
+    [description]
+    """
+    linestyles = OrderedDict(
+    [('solid',               (0, ())),
+     ('loosely dotted',      (0, (1, 10))),
+     ('dotted',              (0, (1, 5))),
+     ('densely dotted',      (0, (1, 1))),
+
+     ('loosely dashed',      (0, (5, 10))),
+     ('dashed',              (0, (5, 5))),
+     ('densely dashed',      (0, (5, 1))),
+
+     ('loosely dashdotted',  (0, (3, 10, 1, 10))),
+     ('dashdotted',          (0, (3, 5, 1, 5))),
+     ('densely dashdotted',  (0, (3, 1, 1, 1))),
+
+     ('loosely dashdotdotted', (0, (3, 10, 1, 10, 1, 10))),
+     ('dashdotdotted',         (0, (3, 5, 1, 5, 1, 5))),
+     ('densely dashdotdotted', (0, (3, 1, 1, 1, 1, 1)))])
+
+
 class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     """Abstract class to describe a data set
     
@@ -104,10 +129,12 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.colormode = ColorMode.variable
         self.color1 = ColorMode.color1.value
         self.color2 = ColorMode.color2.value
-        self.palette_name = "ColorBlind"
+        self.palette_name = 'ColorBlind'
         self.symbolmode = SymbolMode.fixed
         self.symbol1 = SymbolMode.symbol1.value
         self.symbol1_name = SymbolMode.symbol1_name.value
+        self.th_linestyle = 'solid'
+        self.th_line_width = 1.5
         self.theories = {}
         self.num_theories = 0
         self.inactive_files = {}
@@ -262,6 +289,9 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         marker_name_lst = itertools.cycle((marker_names))
         size =  self.marker_size #if file.size is None else file.size
         width = self.line_width
+        #theory settings
+        th_linestyle = ThLineMode.linestyles.value[self.th_linestyle]
+
         for j, file in enumerate(self.files):
             dt = file.data_table
 
@@ -271,7 +301,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             face = color if filled else 'none'
             if CmdBase.mode == CmdMode.GUI:
                 if file.active:
-                    #save file name with associated marker shape, fillm and color
+                    #save file name with associated marker shape, fill and color
                     self.table_icon_list.append((file.file_name_short, marker_name, face, color))
 
             for nx in range(self.nplots):
@@ -322,7 +352,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                             tt.series[nx][i].set_data(x[:,i], y[:,i])
                             tt.series[nx][i].set_visible(True)
                             tt.series[nx][i].set_marker('')
-                            tt.series[nx][i].set_linestyle('-')
+                            tt.series[nx][i].set_linestyle(th_linestyle)
+                            tt.series[nx][i].set_linewidth(self.th_line_width)
                             tt.series[nx][i].set_color(color)
                             tt.series[nx][i].set_label('')
                         else:

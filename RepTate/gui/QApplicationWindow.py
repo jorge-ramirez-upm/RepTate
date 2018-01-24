@@ -23,7 +23,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication
 from QDataSet import QDataSet
 from DataSetWidgetItem import DataSetWidgetItem
-from DataSet import ColorMode, SymbolMode
+from DataSet import ColorMode, SymbolMode, ThLineMode
 from CmdBase import CmdBase, CmdMode
 from Application import Application
 from DraggableArtists import DragType, DraggableSeries, DraggableNote
@@ -204,6 +204,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.dialog.ui.setupUi(self.dialog)
         self.populate_cbSymbolType()
         self.populate_cbPalette()
+        self.populate_cbTheoryLine()
         self.color1 = None
         self.color2 = None
         # self.populate_markers() 
@@ -319,15 +320,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.canvas.draw()
                     
     def populate_cbPalette(self):
-        """Populate the list color palettes of the marker-settings dialog
+        """Populate the list color palettes in the marker-settings dialog
         
         [description]
         """
         for palette in sorted(ColorMode.colorpalettes.value):
             self.dialog.ui.cbPalette.addItem(palette)
 
+    def populate_cbTheoryLine(self):
+        """Populate the list theory linestyle in the marker-settings dialog
+        
+        [description]
+        """
+        for ls in ThLineMode.linestyles.value:
+            self.dialog.ui.cbTheoryLine.addItem(ls)
+
     def populate_cbSymbolType(self):
-        """Populate the list of the markers of the marker-settings dialog
+        """Populate the list of the markers in the marker-settings dialog
         
         Populate the list of the markers of the marker-settings dialog
         with filled or empty markers, depending on the user's choice
@@ -401,6 +410,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #preset the spinbox
         self.dialog.ui.spinBox.setValue(ds.marker_size)
         self.dialog.ui.spinBoxLineW.setValue(ds.line_width)
+        self.dialog.ui.sbThLineWidth.setValue(ds.th_line_width)
         #preset radioButtons
             #symbols
         is_fixed = ds.symbolmode == SymbolMode.fixed
@@ -435,10 +445,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """
         ds = self.DataSettabWidget.currentWidget()
         if ds:
-            # #restore the file attributes to previous values before making changes
-            # for i, file in enumerate(ds.files):
-            #     file.color, file.marker, file.size, file.filled = self.fparam_backup[i]
-            
             #find the color mode
             if self.dialog.ui.rbFixedColor.isChecked(): #fixed color?
                 ds.colormode = ColorMode.fixed
@@ -474,6 +480,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.marker_size = self.dialog.ui.spinBox.value()
             #get the line width 
             ds.line_width = self.dialog.ui.spinBoxLineW.value()
+            #get the theory linestyle
+            ds.th_linestyle = self.dialog.ui.cbTheoryLine.currentText()
+            #get the theory line width
+            ds.th_line_width = self.dialog.ui.sbThLineWidth.value()
 
             ds.do_plot()
             # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
