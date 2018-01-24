@@ -115,10 +115,16 @@ class BaseTheoryLikhtmanMcLeish2002:
         
         Z=Mw/Me      
         if (Z<3):
-            self.Qprint("WARNING: Mw of %s is too small"%(f.file_name_short))
+            # self.Qprint("WARNING: Mw of %s is too small"%(f.file_name_short))
             Z=3
-        indZ0=(np.where(self.Zarray<Z))[0][-1]
-        indZ1=(np.where(self.Zarray>Z))[0][0]
+        if Z < self.Zarray[0]:
+            indZ0 = 0
+        else:
+            indZ0=(np.where(self.Zarray<Z))[0][-1]
+        if Z > self.Zarray[-1]:
+            indZ1 = len(self.Zarray) - 1
+        else:
+            indZ1=(np.where(self.Zarray>Z))[0][0]
         table0=self.data[indZ0]
         table1=self.data[indZ1]
 

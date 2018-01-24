@@ -324,8 +324,8 @@ class Theory(CmdBase):
         opt = dict(return_full=True)
         self.nfev = 0
         try:
-            #pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1) 
-            pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, method='trf', bounds=(param_min, param_max))
+            #pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1)
+            pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(param_min, param_max))
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
         except Exception as e:
             print("In do_fit()", e)

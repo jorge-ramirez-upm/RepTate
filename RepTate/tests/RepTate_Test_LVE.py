@@ -57,6 +57,7 @@ def start_RepTate(argv):
     # Open a Dataset
     pi_dir = "data%sPI_LINEAR%s"%((os.sep,)*2)
     ex.applications["LVE1"].new_tables_from_files([
+                                                   pi_dir + "PI_13.5k_T-35.tts",
                                                    pi_dir + "PI_23.4k_T-35.tts",
                                                    pi_dir + "PI_33.6k_T-35.tts",
                                                    pi_dir + "PI_94.9k_T-35.tts",

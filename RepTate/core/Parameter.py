@@ -12,7 +12,7 @@ Module that defines theory parameters and their properties.
 
 """ 
 import enum
-import math
+import numpy as np
 
 class ShiftType(enum.Enum):
     """[summary]
@@ -57,7 +57,7 @@ class Parameter(object):
     """
     def __init__(self, name="", value=0, description="", type=ParameterType.real, 
                  opt_type=OptType.opt, min_factor=1.0, min_shift_type=ShiftType.linear, 
-                 bracketed = False, min_value=-math.inf, max_value=math.inf, 
+                 bracketed = False, min_value=-np.inf, max_value=np.inf, 
                  display_flag=True, discrete_values=[]):
         """Constructor
         
@@ -96,7 +96,7 @@ class Parameter(object):
 
         else:
             pass # NOT IMPLEMENTED YET
-        self.error=math.inf
+        self.error=np.inf
         self.opt_type = opt_type
         self.min_factor = min_factor
         self.min_shift_type = min_shift_type
