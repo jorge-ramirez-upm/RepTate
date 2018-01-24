@@ -24,7 +24,7 @@ from TheoryBasic import *
 
 from MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QImage
 
 
 class Application(CmdBase):
