@@ -85,13 +85,13 @@ Discretization of a GPC molecular weight distribution
         :align: center
         :alt: Move bin edge
 
-#.  To save the discretized molecular weight.Click the |piggy| button.
+#.  To save the discretized molecular weight. Click the |piggy| button.
 
     The output file contains a header with the moments  :math:`M_n`, :math:`M_w` and the `PDI`, and two columns.
-    The first column is the molecular weight :math:`M_{w,i}` as indicated by the grey tick, 
+    The first column is the molecular weight :math:`M_{w,i}` as indicated by the grey tick marks, 
     the second column is the value of the area of the covered by the bin, :math:`\phi_i`. 
 
-    The sum of the area should equal 1:
+    The sum of the areas should equal 1:
 
     .. math::
        \sum \phi_i = 1.
