@@ -19,6 +19,7 @@ from CmdBase import CmdBase, CmdMode
 from Theory import Theory
 from QTheory import QTheory
 from Parameter import Parameter, ParameterType, OptType
+from collections import OrderedDict
 
 class TheoryLikhtmanMcLeish2002(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
@@ -65,6 +66,8 @@ class BaseTheoryLikhtmanMcLeish2002:
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002
+
+        self.parameters = OrderedDict()
         self.parameters["taue"] = Parameter("taue", 2e-6, "Rouse time of one Entanglement", ParameterType.real, opt_type=OptType.opt)
         self.parameters["Ge"] = Parameter("Ge", 1e6, "Entanglement modulus", ParameterType.real, opt_type=OptType.opt)
         self.parameters["Me"] = Parameter("Me", 5, "Entanglement molecular weight", ParameterType.real, opt_type=OptType.opt)

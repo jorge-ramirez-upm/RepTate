@@ -20,7 +20,7 @@ from PyQt5.QtCore import Qt, QSize, QFile
 from PyQt5.QtWidgets import QToolBar, QSpinBox, QFileDialog
 from PyQt5.QtGui import QIcon
 from DraggableArtists import DragType, DraggableBinSeries
-
+from collections import OrderedDict
 
 class TheoryDiscrMWD(CmdBase):
     """Discretize a Molecular Weight Distribution
@@ -70,6 +70,7 @@ class BaseTheoryDiscrMWD:
         self.bins = None
         self.current_file = None
 
+        self.parameters = OrderedDict()
         self.parameters["Mn"] = Parameter(
             "Mn", 1000, "Number-average molecular mass", ParameterType.real, opt_type=OptType.const)
         self.parameters["Mw"] = Parameter(

@@ -16,7 +16,7 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-
+from collections import OrderedDict
 
 class TheoryCarreauYasuda(CmdBase):
     """[summary]
@@ -63,6 +63,8 @@ class BaseTheoryCarreauYasuda:
         super().__init__(name, parent_dataset, ax)
         self.function = self.function_CarreauYasuda # main theory function
         self.has_modes = False # True if the theory has modes
+
+        self.parameters = OrderedDict()
         self.parameters['eta0'] = Parameter(name='eta0', value=1000, description='zero shear rate viscosity', 
                                             type=ParameterType.real, opt_type=OptType.opt)
         self.parameters['etainf'] = Parameter(name='etainf', value=0, description='infinite shear rate viscosity', 

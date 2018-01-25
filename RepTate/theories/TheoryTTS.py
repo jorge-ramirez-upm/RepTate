@@ -23,6 +23,7 @@ from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
 from PyQt5.QtCore import QSize
+from collections import OrderedDict
 
 class TheoryWLFShift(CmdBase):
     """Basic theory for Time-Temperature Superposition, based on the WLF equation
@@ -67,6 +68,8 @@ class BaseTheoryWLFShift:
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShift
+
+        self.parameters = OrderedDict()
         self.parameters["C1"] = Parameter("C1", 6.85, "Material parameter C1 for WLF Shift", ParameterType.real, opt_type=OptType.opt)
         self.parameters["C2"] = Parameter("C2", 150, "Material parameter C2 for WLF Shift", ParameterType.real, opt_type=OptType.opt)
         self.parameters["rho0"] = Parameter("rho0", 0.928, "Density of polymer at 0 °C", ParameterType.real, opt_type=OptType.const)
