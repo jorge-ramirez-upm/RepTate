@@ -49,7 +49,7 @@ class MultiView(QWidget):
     BOTTOM=0.15
     TOP=0.98
     WSPACE=0.25
-    HSPACE=0.25
+    HSPACE=0.35
 
     def __init__(self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None):
         QDialog.__init__(self)

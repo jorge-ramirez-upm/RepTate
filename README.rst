@@ -22,3 +22,7 @@ More info:
     :width: 400pt
     :align: center
 
+.. image:: RepTate/docs/source/images/RepTate_React_24012018_.png
+    :width: 400pt
+    :align: center
+
