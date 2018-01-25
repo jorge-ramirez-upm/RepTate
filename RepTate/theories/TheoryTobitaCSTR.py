@@ -17,6 +17,7 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import pyqtSignal
 from collections import OrderedDict
 
 import ctypes as ct
@@ -60,6 +61,9 @@ class BaseTheoryTobitaCSTR:
     [description]
     """
     single_file = True # False if the theory can be applied to multiple files simultaneously
+    signal_request_dist = pyqtSignal(object)
+    signal_request_polymer = pyqtSignal(object)
+    signal_request_arm = pyqtSignal(object)
 
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
@@ -97,7 +101,11 @@ class BaseTheoryTobitaCSTR:
                                           type=ParameterType.real, opt_type=OptType.const)
         self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
                                           type=ParameterType.real, opt_type=OptType.const)
-
+        
+        self.signal_request_dist.connect(rgt.request_more_dist)
+        self.signal_request_polymer.connect(rgt.request_more_polymer)
+        self.signal_request_arm.connect(rgt.request_more_arm)
+        
     def get_modes(self):
         """[summary]
         
@@ -157,7 +165,8 @@ class BaseTheoryTobitaCSTR:
             success = rch.request_dist(ct.byref(c_ndist))
             self.ndist = c_ndist.value
             if not success:
-                rgt.request_more_dist(self) #launch dialog asking for more dist
+                #launch dialog asking for more dist
+                self.signal_request_dist.emit(self) #use signal to open QDialog in the main GUI window
                 return
             else:
                 self.dist_exists = True
@@ -181,7 +190,7 @@ class BaseTheoryTobitaCSTR:
         i = 0
         while i < numtomake:
             if self.stop_theory_calc_flag:
-                self.Qprint('Polymer creation stopped by user')
+                self.print_signal.emit('Polymer creation stopped by user')
                 break
             # get a polymer
             success = rch.request_poly(ct.byref(c_m))
@@ -201,11 +210,14 @@ class BaseTheoryTobitaCSTR:
                     i += 1
                     # check for error
                     if rch.tCSTR_global.tobitaCSTRerrorflag:
-                        self.Qprint('Polymers too large: gelation occurs for these parameters')
+                        self.print_signal.emit('Polymers too large: gelation occurs for these parameters')
                         i = numtomake
                 else: # error message if we ran out of arms
-                    success_increase_memory = rgt.request_more_arm(self)
-                    if success_increase_memory:
+                    self.success_increase_memory = None
+                    self.signal_request_arm.emit(self)
+                    while self.success_increase_memory is None: # wait for the end of QDialog
+                        pass
+                    if self.success_increase_memory:
                         continue  # back to the start of while loop
                     else:
                         i = numtomake
@@ -213,12 +225,15 @@ class BaseTheoryTobitaCSTR:
 
                 # update on number made
                 if rch.react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
-                    self.Qprint('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
+                    self.print_signal.emit('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
                     QApplication.processEvents() # needed to use Qprint if in single-thread
 
             else:   # polymer wasn't available
-                success_increase_memory = rgt.request_more_polymer(self)
-                if success_increase_memory:
+                self.success_increase_memory = None
+                self.signal_request_polymer.emit(self)
+                while self.success_increase_memory is None:
+                    pass
+                if self.success_increase_memory:
                     continue
                 else:
                     i = numtomake
@@ -243,14 +258,14 @@ class BaseTheoryTobitaCSTR:
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
 
-            self.Qprint('*************************')
-            # self.Qprint('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
-            self.Qprint('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
-            self.Qprint('Saved %d polymers in memory'%rch.react_dist[ndist].contents.nsaved)
-            self.Qprint('Mn = %.3g'%rch.react_dist[ndist].contents.m_n)
-            self.Qprint('Mw = %.3g'%rch.react_dist[ndist].contents.m_w)
-            self.Qprint('br/1000C = %.3g'%rch.react_dist[ndist].contents.brav)
-            self.Qprint('*************************')
+            self.print_signal.emit('*************************')
+            # self.print_signal.emit('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
+            self.print_signal.emit('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
+            self.print_signal.emit('Saved %d polymers in memory'%rch.react_dist[ndist].contents.nsaved)
+            self.print_signal.emit('Mn = %.3g'%rch.react_dist[ndist].contents.m_n)
+            self.print_signal.emit('Mw = %.3g'%rch.react_dist[ndist].contents.m_w)
+            self.print_signal.emit('br/1000C = %.3g'%rch.react_dist[ndist].contents.brav)
+            self.print_signal.emit('*************************')
             # labelout.Caption = 'Made '+inttostr(polybits.rch.react_dist[ndist].contents.npoly)+' polymers, Mn='
             #   +floattostrF(polybits.rch.react_dist[ndist].contents.M_n,ffGeneral,5,2)+', Mw='
             #   +floattostrF(polybits.rch.react_dist[ndist].contents.M_w,ffGeneral,5,2)+', br/1000C='
@@ -260,8 +275,8 @@ class BaseTheoryTobitaCSTR:
             rch.react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.Qprint('%d arm records left in memory'%rch.pb_global.arms_left) 
-        self.Qprint('%s'%ndist)
+        self.print_signal.emit('%d arm records left in memory'%rch.pb_global.arms_left) 
+        self.print_signal.emit('%s'%ndist)
         return calc
 
     def destructor(self):

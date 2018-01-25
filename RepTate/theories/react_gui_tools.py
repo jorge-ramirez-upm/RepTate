@@ -19,11 +19,11 @@ def request_more_polymer(parent_theory):
         message = 'Ran out of storage for polymer records. Options to avoid this are:'
         message += '(1) Reduce number of polymers requested'
         message += '(2) Close some other theories'
-        parent_theory.Qprint(message)
+        parent_theory.print_signal.emit(message)
     else:
-        parent_theory.Qprint('Number of polymers was increased')
+        parent_theory.print_signal.emit('Number of polymers was increased')
     
-    return success_increase_memory
+    parent_theory.success_increase_memory = success_increase_memory
 
 def request_more_arm(parent_theory):
     """Generic function called when run out of arms"""
@@ -40,12 +40,12 @@ def request_more_arm(parent_theory):
         message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
         message += '(3) Close some other theories\n'
         message += '(4) Adjust parameters to avoid gelation'
-        parent_theory.Qprint(message)
+        parent_theory.print_signal.emit(message)
         # i = numtomake
         # rch.tCSTR_global.tobitaCSTRerrorflag = True
     else:
-        parent_theory.Qprint('Number of arms was increased')
-    return success_increase_memory
+        parent_theory.print_signal.emit('Number of arms was increased')
+    parent_theory.success_increase_memory = success_increase_memory
 
 def request_more_dist(parent_theory):
     """Generic function called when run out of distributions"""
@@ -58,9 +58,10 @@ def request_more_dist(parent_theory):
     #     success_increase_memory = False
     if success_increase_memory:
         rch.link_react_dist() #re-link the python array with the C array
-        parent_theory.Qprint('Number of dist. was increased. Press \"calculate\"')
+        parent_theory.print_signal.emit('Number of dist. was increased')
+        parent_theory.handle_actionCalculate_Theory()
     else:
-        parent_theory.Qprint('Too many theories open for internal storage.\nPlease close a theory or increase records"')
+        parent_theory.print_signal.emit('Too many theories open for internal storage.\nPlease close a theory or increase records"')
 
 
 def initialise_tool_bar(parent_theory):
@@ -104,7 +105,7 @@ def handle_stop_calulation(parent_theory):
     Raise a flag to kindly notify the thread Calc routine to stop.
     This is relevant in multithread mode only.
     """
-    parent_theory.Qprint("Stop current calculation requested")
+    parent_theory.print_signal.emit("Stop current calculation requested")
     parent_theory.stop_theory_calc_flag = True
     parent_theory.stop_calulation_button.setDisabled(True)
 
@@ -135,7 +136,7 @@ def handle_save_bob_configuration(parent_theory):
         message = stars + '\nSaved %d polymers in %s\n'%(rch.react_dist[ndist].contents.nsaved, out_file[0]) + stars
     else:    
         message = stars + '\nNo simulation performed yet\n' + stars
-    parent_theory.Qprint(message)
+    parent_theory.print_signal.emit(message)
 
 def handle_edit_bob_settings(parent_theory):
     """Launch a dialog and modify the BoB binning settings if the user press "OK", else nothing happend."""
@@ -177,7 +178,6 @@ def handle_increase_records(parent_theory, name):
         size_of = 60097e-6 #size of a 'dist' structure (MB) in C
     else:
         return False 
-
     d = IncreaseRecordsDialog(parent_theory, current_max, name, size_of) #create the dialog
     if d.exec_():
         if d.r1.isChecked():
@@ -188,7 +188,7 @@ def handle_increase_records(parent_theory, name):
             new_max = int(current_max*5)
         success = f(ct.c_int(new_max)) #call C routine to allocate more memory (using 'realloc')
         if not success:
-            parent_theory.Qprint("Allocation of new memory failed\n%d %s records in memory"%(current_max, name))
+            parent_theory.print_signal.emit("Allocation of new memory failed\n%d %s records in memory"%(current_max, name))
         return success
     else:
         return False
@@ -258,9 +258,8 @@ class IncreaseRecordsDialog(QDialog):
     Dialog containing radio buttons to choose a new memory size for the records of "name" 
     """
     def __init__(self, parent_theory, current_max, name, size_of):
-        super().__init__(parent_theory)
+        super().__init__()
         self.createExclusiveGroup(current_max, name, size_of)
-
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
