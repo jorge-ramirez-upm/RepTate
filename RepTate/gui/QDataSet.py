@@ -384,7 +384,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         th_name = self.TheorytabWidget.widget(index).name
         th = self.theories[th_name]
-        th.Qprint("Close theory tab requested")
+        th.print_signal.emit("Close theory tab requested")
         th.stop_theory_calc_flag = True
         self.set_no_limits(th_name)
         self.do_theory_delete(th_name) #call DataSet.do_theory_delete 

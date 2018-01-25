@@ -118,7 +118,7 @@ class BaseTheoryLikhtmanMcLeish2002:
         
         Z=Mw/Me      
         if (Z<3):
-            # self.Qprint("WARNING: Mw of %s is too small"%(f.file_name_short))
+            # self.print_signal.emit("WARNING: Mw of %s is too small"%(f.file_name_short))
             Z=3
         if Z < self.Zarray[0]:
             indZ0 = 0

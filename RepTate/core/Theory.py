@@ -24,6 +24,7 @@ from DataTable import DataTable
 from Parameter import Parameter, ParameterType, OptType
 from DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from PyQt5.QtGui import QTextCursor
+from PyQt5.QtCore import pyqtSignal
 
 from tabulate import tabulate
 
@@ -41,6 +42,8 @@ class Theory(CmdBase):
     """ citations {str} -- Articles that should be cited """
     nfev = 0
     """ nfev {int} -- Number of function evaluations """    
+
+    print_signal = pyqtSignal(str)
 
     def __init__(self, name="Theory", parent_dataset=None, axarr=None):
         """Constructor
@@ -112,6 +115,8 @@ class Theory(CmdBase):
             self.tables[f.file_name_short] = DataTable(axarr, "TH-" + f.file_name_short)
 
         self.do_cite("")
+
+        self.print_signal.connect(self.Qprint) # Asynchronous print when using multithread
             
     def precmd(self, line):
         """Calculations before the theory is calculated
@@ -160,8 +165,7 @@ class Theory(CmdBase):
             self.do_plot(line)
             self.do_error(line)
         if timing:
-            self.Qprint("")
-            self.Qprint("---Calculated in %.3g seconds---" % (time.time() - start_time))
+            self.print_signal.emit("\n---Calculated in %.3g seconds---" % (time.time() - start_time))
         self.calculate_is_busy = False
 
     def do_error(self, line):
@@ -178,9 +182,12 @@ class Theory(CmdBase):
         total_error=0
         npoints=0
         view = self.parent_dataset.parent_application.current_view
-        self.Qprint("")
-        self.Qprint("%14s %10s (%6s)"%("File","Error","# Pts."))
-        self.Qprint("==================================")
+        # self.Qprint("")
+        # self.Qprint("%14s %10s (%6s)"%("File","Error","# Pts."))
+        # self.Qprint("==================================")
+        msg = "\n%14s %10s (%6s)\n"%("File","Error","# Pts.")
+        msg += "=================================="
+        self.print_signal.emit(msg)
         for f in self.parent_dataset.files:
             if f.active:
                 xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
@@ -200,11 +207,11 @@ class Theory(CmdBase):
                 npt=len(yth)
                 total_error+=f_error*npt
                 npoints+=npt
-                self.Qprint("%14s %10.5g (%6d)"%(f.file_name_short,f_error,npt))
+                self.print_signal.emit("%14s %10.5g (%6d)"%(f.file_name_short,f_error,npt))
         if npoints != 0:
-            self.Qprint("%14s %10.5g (%6d)"%("TOTAL",total_error/npoints,npoints))
+            self.print_signal.emit("%14s %10.5g (%6d)"%("TOTAL",total_error/npoints,npoints))
         else:
-            self.Qprint("%14s %10s (%6d)"%("TOTAL", "N/A", npoints))
+            self.print_signal.emit("%14s %10s (%6d)"%("TOTAL", "N/A", npoints))
 
     def func_fit(self, x, *param_in):
         """[summary]
@@ -265,10 +272,10 @@ class Theory(CmdBase):
         self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
-        self.Qprint("")
-        self.Qprint("==================================")
-        self.Qprint("PARAMETER FITTING")
-        self.Qprint("==================================")
+        msg = "\n==================================\n"
+        msg += "PARAMETER FITTING"
+        msg += "\n==================================\n"
+        self.print_signal.emit(msg)
         # Vectors that contain all X and Y in the files & view
         x = []
         y = []
@@ -278,13 +285,13 @@ class Theory(CmdBase):
                 temp = self.xmin
                 self.xmin = self.xmax
                 self.xmax = temp
-            self.Qprint("xrange=[%0.3g, %0.3g]"%(self.xmin, self.xmax))
+            self.print_signal.emit("xrange=[%0.3g, %0.3g]"%(self.xmin, self.xmax))
         if self.yrange.get_visible():
             if self.ymin > self.ymax:
                 temp = self.ymin
                 self.ymin = self.ymax
                 self.ymax = temp
-            self.Qprint("yrange=[%.03g, %0.3g]"%(self.ymin, self.ymax))
+            self.print_signal.emit("yrange=[%.03g, %0.3g]"%(self.ymin, self.ymax))
                 
         for f in self.parent_dataset.files:
             if f.active:
@@ -318,7 +325,7 @@ class Theory(CmdBase):
                 param_min.append(par.min_value) #list of min values for fitting parameters
                 param_max.append(par.max_value) #list of max values for fitting parameters
         if (not param_min) or (not param_max):
-            self.Qprint("No parameter to minimize")
+            self.print_signal.emit("No parameter to minimize")
             self.is_fitting = False
             return
         opt = dict(return_full=True)
@@ -329,7 +336,7 @@ class Theory(CmdBase):
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
         except Exception as e:
             print("In do_fit()", e)
-            self.Qprint("%s"%e)
+            self.print_signal.emit("%s"%e)
             self.is_fitting = False
             return
 
@@ -337,9 +344,9 @@ class Theory(CmdBase):
         fres0 = sum(residuals**2)
         residuals = y - self.func_fit(x, *pars)
         fres1 = sum(residuals**2)
-        self.Qprint('Initial Error = %g -->'%(fres0))
-        self.Qprint('Final Error   = %g'%(fres1))
-        self.Qprint('%g function evaluations'%(self.nfev))
+        self.print_signal.emit('Initial Error = %g -->'%(fres0))
+        self.print_signal.emit('Final Error   = %g'%(fres1))
+        self.print_signal.emit('%g function evaluations'%(self.nfev))
         # fiterror = np.mean((infodict['fvec'])**2)
         # funcev = infodict['nfev']
         # print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
@@ -358,21 +365,19 @@ class Theory(CmdBase):
             par_error.append(sigma*tval)
 
         ind=0
-        self.Qprint("")
-        self.Qprint("%9s = %10s ± %-9s"%("Parameter","Value","Error"))
-        self.Qprint("==================================")
+        self.print_signal.emit("\n%9s = %10s ± %-9s"%("Parameter","Value","Error"))
+        self.print_signal.emit("==================================")
         for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt:
                 par.error=par_error[ind]
                 ind+=1
-                self.Qprint('%9s = %10.4g ± %-9.4g'%(par.name, par.value, par.error))
+                self.print_signal.emit('%9s = %10.4g ± %-9.4g'%(par.name, par.value, par.error))
             else:
-                self.Qprint('%9s = %10.4g'%(par.name, par.value))
+                self.print_signal.emit('%9s = %10.4g'%(par.name, par.value))
         self.is_fitting=False
         self.do_calculate(line, timing=False)
-        self.Qprint("")
-        self.Qprint("---Fitting in %.3g seconds---" % (time.time() - start_time))
+        self.print_signal.emit("\n---Fitting in %.3g seconds---" % (time.time() - start_time))
 
 
     def do_print(self, line):

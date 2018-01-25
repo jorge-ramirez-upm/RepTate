@@ -196,22 +196,22 @@ class BaseTheoryTTSShiftAutomatic:
                     MwUnique[self.Mw[i]][1]+=npt
         
         if (line==""): 
-            self.Qprint("")
-            self.Qprint("%17s %8s (%5s)"%("Mw,Mw2,phi,phi2","Error","#Pts."))
-            self.Qprint("==================================")
+            self.print_signal.emit("")
+            self.print_signal.emit("%17s %8s (%5s)"%("Mw,Mw2,phi,phi2","Error","#Pts."))
+            self.print_signal.emit("==================================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 s = "%gk,%gk,%g,%g"%(o[0], o[1], o[2], o[3])
                 if (MwUnique[o][1]>0):
-                    self.Qprint("%17s %8.3g (%5d)"%(s,MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
+                    self.print_signal.emit("%17s %8.3g (%5d)"%(s,MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
                 else:
-                    self.Qprint("%17s %8s (%5d)"%(s,"-",0))
+                    self.print_signal.emit("%17s %8s (%5d)"%(s,"-",0))
         if (npoints>0):
             total_error/=npoints
         else:
             total_error=1e10;
-        if (line==""): self.Qprint("%17s %8.3g (%5d)"%("TOTAL",total_error,npoints))
+        if (line==""): self.print_signal.emit("%17s %8.3g (%5d)"%("TOTAL",total_error,npoints))
         return total_error
                 
     def func_fitTTS(self, *param_in):
@@ -293,9 +293,9 @@ class BaseTheoryTTSShiftAutomatic:
         Tdesired = self.parameters["T"].value
         #print (self.Tdict)
         for case in self.Tdict.keys():
-            self.Qprint("")
-            self.Qprint('Mw=%g Mw2=%g phi=%g phi2=%g'%(case[0], case[1], case[2], case[3]))
-            self.Qprint('==================================')
+            self.print_signal.emit("")
+            self.print_signal.emit('Mw=%g Mw2=%g phi=%g phi2=%g'%(case[0], case[1], case[2], case[3]))
+            self.print_signal.emit('==================================')
             Temps0=[x[0] for x in self.Tdict[case]]
             Temps=np.abs(np.array([x[0] for x in self.Tdict[case]])-Tdesired)
             Filenames=[x[2] for x in self.Tdict[case]]
@@ -311,8 +311,8 @@ class BaseTheoryTTSShiftAutomatic:
             self.shiftParameters[fname] = (0.0, 0.0)
             #print(self.current_master_curve) #DEBUG
             #print(Temps0[indices[0]], 0.0, 0.0)
-            self.Qprint('%6s %11s %11s'%('T','log(Hshift)','log(Vshift)'))
-            self.Qprint('%6.3g %11.3g %11.3g'%(Temps0[indices[0]], 0.0, 0.0))
+            self.print_signal.emit('%6s %11s %11s'%('T','log(Hshift)','log(Vshift)'))
+            self.print_signal.emit('%6.3g %11.3g %11.3g'%(Temps0[indices[0]], 0.0, 0.0))
             indices=np.delete(indices,0,None)
 
             for i in indices:
@@ -351,7 +351,7 @@ class BaseTheoryTTSShiftAutomatic:
                     #print(initial_guess)
                     res = minimize(self.func_fitTTS_one, initial_guess, method='Nelder-Mead')
                     if (not res['success']):
-                        self.Qprint("Solution not found: %s"%res['message'])
+                        self.print_signal.emit("Solution not found: %s"%res['message'])
                         return
                     XSHIFT=res.x[0]
                     if self.parameters["vert"].value:
@@ -371,7 +371,7 @@ class BaseTheoryTTSShiftAutomatic:
                     self.shiftParameters[fname] = (XSHIFT, YSHIFT)
 
                 #print(Temps0[i], XSHIFT, YSHIFT)
-                self.Qprint('%6.3g %11.3g %11.3g'%(Temps0[i], XSHIFT, YSHIFT))
+                self.print_signal.emit('%6.3g %11.3g %11.3g'%(Temps0[i], XSHIFT, YSHIFT))
 
         self.fitting=False
         self.do_calculate(line)

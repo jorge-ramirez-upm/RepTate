@@ -204,20 +204,20 @@ class BaseTheoryWLFShiftTest:
                     MwUnique[Mw[i]][1]+=npt
         
         if (line==""): 
-            self.Qprint("%5s %5s %5s %5s %10s (%10s)"%("Mw","Mw2","phi","phi2","Error","# Points"))
-            self.Qprint("=====================")
+            self.print_signal.emit("%5s %5s %5s %5s %10s (%10s)"%("Mw","Mw2","phi","phi2","Error","# Points"))
+            self.print_signal.emit("=====================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1]>0):
-                    self.Qprint("%5gk %5gk %5g %5g %10.5g (%10d)"%(o[0], o[1], o[2], o[3],MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
+                    self.print_signal.emit("%5gk %5gk %5g %5g %10.5g (%10d)"%(o[0], o[1], o[2], o[3],MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
                 else:
-                    self.Qprint("%5gk %5gk %5g %5g %10s (%10d)"%(o[0], o[1], o[2], o[3],"-",0))
+                    self.print_signal.emit("%5gk %5gk %5g %5g %10s (%10d)"%(o[0], o[1], o[2], o[3],"-",0))
         if (npoints>0):
             total_error/=npoints
         else:
             total_error=1e10;
-        if (line==""): self.Qprint("%21s %10.5g (%10d)"%("TOTAL",total_error,npoints))
+        if (line==""): self.print_signal.emit("%21s %10.5g (%10d)"%("TOTAL",total_error,npoints))
         return total_error
                 
     def func_fitTTS(self, *param_in):
@@ -264,23 +264,23 @@ class BaseTheoryWLFShiftTest:
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
         
         if (not res['success']):
-            self.Qprint("Solution not found: %s"%res['message'])
+            self.print_signal.emit("Solution not found: %s"%res['message'])
             return
 
-        self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
+        self.print_signal.emit("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
 
         ind=0
         k=list(self.parameters.keys())
         k.sort()
-        self.Qprint("%10s   %10s"%("Parameter","Value"))
-        self.Qprint("===========================")
+        self.print_signal.emit("%10s   %10s"%("Parameter","Value"))
+        self.print_signal.emit("===========================")
         for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt:
                 ind+=1
-                self.Qprint('*%9s = %10.5g'%(par.name, par.value))
+                self.print_signal.emit('*%9s = %10.5g'%(par.name, par.value))
             else:
-                self.Qprint('%10s = %10.5g'%(par.name, par.value))
+                self.print_signal.emit('%10s = %10.5g'%(par.name, par.value))
         self.fitting=False
         self.do_calculate(line)
 

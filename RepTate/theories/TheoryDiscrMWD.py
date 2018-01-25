@@ -22,6 +22,7 @@ from PyQt5.QtGui import QIcon
 from DraggableArtists import DragType, DraggableBinSeries
 from collections import OrderedDict
 
+
 class TheoryDiscrMWD(CmdBase):
     """Discretize a Molecular Weight Distribution
     
@@ -279,7 +280,7 @@ class BaseTheoryDiscrMWD:
         if line == "":
             return Mn/1000, Mw/1000, PDI, Mz/Mw
         else:
-            self.Qprint(
+            self.print_signal.emit(
                 "Characteristics of the %s MWD:\n"
                 "%7s %7s %7s %7s\n"
                 "\n%6.3gk %6.3gk %7.3g %7.3g\n"%(line,
@@ -527,4 +528,4 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         message = stars
         message += "Saved %d bins to \"%s\""%(k, out_file[0])
 
-        self.Qprint(message)
+        self.print_signal.emit(message)

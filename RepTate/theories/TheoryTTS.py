@@ -206,20 +206,20 @@ class BaseTheoryWLFShift:
                     MwUnique[Mw[i]][1]+=npt
         
         if (line==""): 
-            self.Qprint("%4s %4s %4s %4s %8s (%5s)"%("Mw","Mw2","phi","phi2","Error","# Pts."))
-            self.Qprint("==================================")
+            self.print_signal.emit("%4s %4s %4s %4s %8s (%5s)"%("Mw","Mw2","phi","phi2","Error","# Pts."))
+            self.print_signal.emit("==================================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1]>0):
-                    self.Qprint("%4g %4g %4g %4g %8.3g (%5d)"%(o[0], o[1], o[2], o[3],MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
+                    self.print_signal.emit("%4g %4g %4g %4g %8.3g (%5d)"%(o[0], o[1], o[2], o[3],MwUnique[o][0]/MwUnique[o][1],MwUnique[o][1]))
                 else:
-                    self.Qprint("%4g %4g %4g %4g %8s (%5d)"%(o[0], o[1], o[2], o[3],"-",0))
+                    self.print_signal.emit("%4g %4g %4g %4g %8s (%5d)"%(o[0], o[1], o[2], o[3],"-",0))
         if (npoints>0):
             total_error/=npoints
         else:
             total_error=1e10;
-        if (line==""): self.Qprint("%19s %8.3g (%5d)"%("TOTAL",total_error,npoints))
+        if (line==""): self.print_signal.emit("%19s %8.3g (%5d)"%("TOTAL",total_error,npoints))
         return total_error
                 
     def func_fitTTS(self, *param_in):
@@ -266,7 +266,7 @@ class BaseTheoryWLFShift:
             if par.opt_type == OptType.opt: 
                 initial_guess.append(par.value)
         if (not initial_guess):
-            self.Qprint("No parameter to minimize")
+            self.print_signal.emit("No parameter to minimize")
             return
         opt = dict(return_full=True)
         self.nfev = 0
@@ -274,25 +274,25 @@ class BaseTheoryWLFShift:
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
         
         if (not res['success']):
-            self.Qprint("Solution not found: %s"%res['message'])
+            self.print_signal.emit("Solution not found: %s"%res['message'])
             return
 
-        self.Qprint("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
+        self.print_signal.emit("Solution found with %d function evaluations and error %g"%(res['nfev'],res.fun))
 
         ind=0
-        self.Qprint("%10s = %10s"%("Parameter","Value"))
-        self.Qprint("===========================")
+        self.print_signal.emit("%10s = %10s"%("Parameter","Value"))
+        self.print_signal.emit("===========================")
         for p in k:
             par = self.parameters[p] 
             if par.opt_type == OptType.opt:
                 ind+=1
-                self.Qprint('*%9s = %10.5g'%(par.name, par.value))
+                self.print_signal.emit('*%9s = %10.5g'%(par.name, par.value))
             else:
-                self.Qprint('%10s = %10.5g'%(par.name, par.value))
+                self.print_signal.emit('%10s = %10.5g'%(par.name, par.value))
         self.is_fitting=False
         self.do_calculate(line, timing=False)
-        self.Qprint("")
-        self.Qprint("---Fitting in %.3g seconds---" % (time.time() - start_time))
+        self.print_signal.emit("")
+        self.print_signal.emit("---Fitting in %.3g seconds---" % (time.time() - start_time))
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
