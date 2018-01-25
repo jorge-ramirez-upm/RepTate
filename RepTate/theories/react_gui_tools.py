@@ -64,7 +64,7 @@ def request_more_dist(parent_theory):
 
 
 def initialise_tool_bar(parent_theory):
-    """Add icons in theoty toolbar"""
+    """Add icons in theory toolbar"""
     #disable buttons 
     parent_theory.parent_dataset.actionMinimize_Error.setDisabled(True)
     # parent_theory.parent_dataset.actionCalculate_Theory.setDisabled(True)

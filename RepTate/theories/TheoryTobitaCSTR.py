@@ -17,7 +17,7 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtWidgets import QApplication
-
+from collections import OrderedDict
 
 import ctypes as ct
 import react_ctypes_helper as rch
@@ -80,6 +80,7 @@ class BaseTheoryTobitaCSTR:
         self.ndist = 0
         self.has_modes = False # True if the theory has modes
         
+        self.parameters = OrderedDict() # keep the dictionary key in order for the parameter table
         self.parameters['tau'] = Parameter(name='tau', value=1.11e-3, description='tau', 
                                           type=ParameterType.real, opt_type=OptType.const)
         self.parameters['beta'] = Parameter(name='beta', value=9.75e-6, description='beta', 

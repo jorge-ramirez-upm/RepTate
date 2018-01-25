@@ -20,6 +20,7 @@ from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from Parameter import OptType
+from collections import OrderedDict
 
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
@@ -211,8 +212,13 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         """
         #clean table
         self.thParamTable.clear()
+        if isinstance(self.parameters, OrderedDict): #true if parameters are kept in a particular order
+            parameters_ = self.parameters
+        else: #else sort parameters in alphabetic order
+            parameters_ = sorted(self.parameters, key=str.lower) #case insensitive sorting
+
         #populate table
-        for param in sorted(self.parameters): #parameters in alphabetic order
+        for param in parameters_:
             p = self.parameters[param]
             if p.display_flag: #only allowed param enter the table
                 if p.opt_type == OptType.const:

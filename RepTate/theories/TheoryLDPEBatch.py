@@ -23,7 +23,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
-
+from collections import OrderedDict
 
 import ctypes as ct
 import react_ctypes_helper as rch
@@ -86,6 +86,7 @@ class BaseTheoryTobitaBatch():
         self.ndist = 0
         self.has_modes = False # True if the theory has modes
 
+        self.parameters = OrderedDict() # keep the dictionary key in order for the parameter table
         self.parameters['tau'] = Parameter(name='tau', value=0.002, description='tau', 
                                           type=ParameterType.real, opt_type=OptType.const)
         self.parameters['beta'] = Parameter(name='beta', value=0.0, description='beta', 

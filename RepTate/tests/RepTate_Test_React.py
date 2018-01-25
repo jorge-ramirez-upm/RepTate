@@ -57,19 +57,11 @@ def start_RepTate(argv):
                                                    ])
     # Open a theory
     ex.applications["React1"].datasets["Set1"].new_theory("TobitaCSTRTheory")
-
-    print(ex.applications["React1"].multiplots.axarr[0].get_position())
     ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(1)
-    print(ex.applications["React1"].multiplots.axarr[0].get_position())
+    ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(0)
+
     # Calculate the theory
     ex.applications["React1"].datasets["Set1"].handle_actionCalculate_Theory()
-    print(ex.applications["React1"].multiplots.axarr[0].get_position())
-
-    ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(0)
-    print(ex.applications["React1"].multiplots.axarr[0].get_position())
-    ex.applications["React1"].multiplots.plotselecttabWidget.setCurrentIndex(1)
-    print(ex.applications["React1"].multiplots.axarr[0].get_position())
-
     ex.applications["React1"].datasets["Set1"].new_theory("TobitaBatchTheory")
 
 
