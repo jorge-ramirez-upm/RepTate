@@ -18,7 +18,7 @@ More info:
 
 .. _UPM: http://blogs.upm.es/compsoftmatter/software/reptate
 
-.. image:: RepTate/docs/source/images/RepTate_LVE_24012018_.jpeg
+.. image:: RepTate/docs/source/images/RepTate_LVE_24012018_.png
     :width: 400pt
     :align: center
 
