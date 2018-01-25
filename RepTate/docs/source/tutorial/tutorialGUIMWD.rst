@@ -23,7 +23,7 @@ Tutorial MWD Application
     :align: bottom
 
 .. |thparam| image:: GUI_tutorial_images/th_parameters.png
-    :width: 40pt
+    :width: 45pt
     :align: bottom
 
 .. |piggy| image:: GUI_tutorial_images/icons8-money-box.png
@@ -32,7 +32,7 @@ Tutorial MWD Application
     :align: bottom
 
 Discretization of a GPC molecular weight distribution
-*********************************************************
+------------------------------------------------------
 
 #.  Start RepTate and create a new MWD Application |MWDapp|:
     
@@ -60,12 +60,12 @@ Discretization of a GPC molecular weight distribution
     The number average, weight average and polydispersity index, :math:`M_n` , :math:`M_w` and `PDI`, respectively, of the original data are calculated and
     reported into the file parameters panel: |fileparam|.
     
-    The parameter panel shows these values for the discretized distribution: |thparam|.
+    The theory parameters panel shows these values for the discretized distribution: |thparam|.
 
     The area of each bin corresponds to the area under the data curve delimited by the bin edges.
 
 #.  Adjust the number of molecular weight bins by changing the value in the theory panel.
-    By default they are equally spaces on a logarithmic scale:
+    By default they are equally spaced on a logarithmic scale:
 
     .. image:: GUI_tutorial_images/change_bin_number.png
         :width: 400pt
