@@ -5,54 +5,96 @@ Tutorial MWD Application
 .. toctree::
    :maxdepth: 2
 
+.. |MWDapp| image:: GUI_tutorial_images/icons8-MWD.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
 
-Discretisation of a GPC molecular weight distribution
--------------------------------
+.. |einstein| image:: GUI_tutorial_images/icons8-einstein.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
+    
+.. |MWDiscr| image:: GUI_tutorial_images/MWDiscr.png
+    :height: 15pt
+    :align: bottom
+.. |fileparam| image:: GUI_tutorial_images/file_parameters.png
+    :height: 20pt
+    :align: bottom
 
-#. Start Reptate and create MWD Application::
+.. |thparam| image:: GUI_tutorial_images/th_parameters.png
+    :width: 40pt
+    :align: bottom
 
-.. image:: GUI_tutorial_images/open_MWD_app.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+.. |piggy| image:: GUI_tutorial_images/icons8-money-box.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
 
-#. Drag and drop a file with a `.gpc` extension, e.g. data/PS_Linear_Polydisperse/ps2.gpc::
+Discretization of a GPC molecular weight distribution
+*********************************************************
 
-.. image:: GUI_tutorial_images/open_gpc_file.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+#.  Start Reptate and create MWD Application |MWDapp|:
+    
+    .. image:: GUI_tutorial_images/open_MWD_app.png
+        :width: 400pt
+        :align: center
+        :alt: New MWD application
 
-#. Select `MWDiscr` and press `create selected theory`.
-$M_n$, $M_w$ and PDI values of the original data are calculated and
-reported into the file parameters panel.
-The parameter panel shows these values for the discretised distribution.::
+#.  Drag and drop a file with a `.gpc` extension, e.g. `ps2.gpc <../../../../data/PS_Linear_Polydisperse/ps2.gpc>`_ in the `Data` folder.
 
-.. image:: GUI_tutorial_images/create_MWDiscr_theory.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+    The first column should contain the molecular mass :math:`M`, and the second column the relative molecular weight :math:`w(\log(M))`.
+   
+    .. image:: GUI_tutorial_images/open_gpc_file.png
+        :width: 400pt
+        :align: center
+        :alt: Load data
 
-#. Adjust the number of molecular weight bins by changing the value in the theory panel.
-By default they are equally spaces on a logarithmic scale.::
+#.  Select the "Molecular Weight Discretization" theory |MWDiscr| and press |einstein| to create it.
+    
+    .. image:: GUI_tutorial_images/create_MWDiscr_theory.png
+        :width: 400pt
+        :align: center
+        :alt: New MWD theory
+    
+    The number average, weight average and polydispersity index, :math:`M_n` , :math:`M_w` and `PDI`, respectively, of the original data are calculated and
+    reported into the file parameters panel: |fileparam|.
+    
+    The parameter panel shows these values for the discretized distribution: |thparam|.
 
-.. image:: GUI_tutorial_images/change_bin_number.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+    The area of each bin corresponds to the area under the data curve delimited by the bin edges.
 
-#. In the bottom of the plot, the grey tick marks indicate the bin molecular weight.
-It is taken as the $M_w$ value across the bin width. The yellow markers indicate the bin edges, they can be dragged around.::
+#.  Adjust the number of molecular weight bins by changing the value in the theory panel.
+    By default they are equally spaces on a logarithmic scale:
 
-.. image:: GUI_tutorial_images/move_bin_edge.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+    .. image:: GUI_tutorial_images/change_bin_number.png
+        :width: 400pt
+        :align: center
+        :alt: Adjust bin number
 
-#. Click the 'piggy bank' button to save the discretised molecular weight. 
-The file contains a header with the moments and PDI and two columns. 
-The first column is the molecular weight as indicated by the grey tick, 
-the second column is the value of the area of the covered by the bin. 
-The total area being equal to 1.
+#.  In the bottom of the plot, the grey tick marks indicate the bin molecular weight.
+    For each bin :math:`i`, it is taken as the weight-average molecular mass value across the bin width
+
+    .. math::
+        M_{w,i} = \frac{\sum w_j M_j}{\sum w_j}.
+
+    The yellow markers indicate the bin edges, they can be dragged around:
+
+    .. image:: GUI_tutorial_images/move_bin_edge.png
+        :width: 400pt
+        :align: center
+        :alt: Move bin edge
+
+#.  To save the discretized molecular weight.Click the |piggy| button.
+
+    The output file contains a header with the moments  :math:`M_n`, :math:`M_w` and the `PDI`, and two columns.
+    The first column is the molecular weight :math:`M_{w,i}` as indicated by the grey tick, 
+    the second column is the value of the area of the covered by the bin, :math:`\phi_i`. 
+
+    The sum of the area should equal 1:
+
+    .. math::
+       \sum \phi_i = 1.
+
 
 
