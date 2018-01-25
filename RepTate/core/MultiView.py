@@ -44,7 +44,7 @@ class PlotOrganizationType(enum.Enum):
     Specified=4
 
 class MultiView(QWidget):
-    LEFT=0.1
+    LEFT=0.15
     RIGHT=0.98
     BOTTOM=0.15
     TOP=0.98
