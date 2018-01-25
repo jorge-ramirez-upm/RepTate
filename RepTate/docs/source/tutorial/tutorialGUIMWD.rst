@@ -34,7 +34,7 @@ Tutorial MWD Application
 Discretization of a GPC molecular weight distribution
 *********************************************************
 
-#.  Start Reptate and create MWD Application |MWDapp|:
+#.  Start RepTate and create a new MWD Application |MWDapp|:
     
     .. image:: GUI_tutorial_images/open_MWD_app.png
         :width: 400pt
