@@ -6,7 +6,7 @@ Tutorial MWD Application
    :maxdepth: 2
 
 
-Discretisation of a GPC molecular weight distribution weight discretisation
+Discretisation of a GPC molecular weight distribution
 -------------------------------
 
 #. Start Reptate and create MWD Application::
