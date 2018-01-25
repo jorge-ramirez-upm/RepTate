@@ -21,6 +21,7 @@ from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QSt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from DraggableArtists import DragType, DraggableModesSeries
+from collections import OrderedDict
 
 class TheoryMaxwellModesFrequency(CmdBase):
     """Fit Maxwell modes to a frequency dependent relaxation function
@@ -70,7 +71,8 @@ class BaseTheoryMaxwellModesFrequency:
         wmin = self.parent_dataset.minpositivecol(0)
         wmax = self.parent_dataset.maxcol(0)
         nmodes = int(np.round(np.log10(wmax/wmin)))
-        # print(wmin, wmax, nmodes)
+
+        self.parameters = OrderedDict()
         self.parameters["logwmin"] = Parameter("logwmin", np.log10(wmin), "Log of frequency range minimum", ParameterType.real, opt_type=OptType.opt)
         self.parameters["logwmax"] = Parameter("logwmax", np.log10(wmax), "Log of frequency range maximum", ParameterType.real, opt_type=OptType.opt)
         self.parameters["nmodes"] = Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
@@ -394,6 +396,8 @@ class BaseTheoryMaxwellModesTime:
         tmin = self.parent_dataset.minpositivecol(0)
         tmax = self.parent_dataset.maxcol(0)
         nmodes = int(np.round(np.log10(tmax/tmin)))
+
+        self.parameters = OrderedDict()
         self.parameters["logtmin"] = Parameter("logtmin", np.log10(tmin), "Log of time range minimum", ParameterType.real, opt_type=OptType.opt)
         self.parameters["logtmax"] = Parameter("logtmax", np.log10(tmax), "Log of time range maximum", ParameterType.real, opt_type=OptType.opt)
         self.parameters["nmodes"] = Parameter(name="nmodes", value=nmodes, description="Number of Maxwell modes", type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
