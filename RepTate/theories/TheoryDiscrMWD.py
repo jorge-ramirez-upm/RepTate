@@ -125,7 +125,7 @@ class BaseTheoryDiscrMWD:
                 del self.parameters["logM%02d"%i]
             mnew = np.logspace(mminold, mmaxold, new_nbin + 1)
             for i in range(new_nbin + 1):
-                self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
+                self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const, display_flag=False)
             self.do_calculate("")
 
         if (name=='logmmin') or (name=='logmmax'): #make bins equally spaced again
@@ -134,7 +134,7 @@ class BaseTheoryDiscrMWD:
             mmax = self.parameters["logmmax"].value
             mnew = np.logspace(mmin, mmax, nbin + 1)
             for i in range(nbin + 1):
-                self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const)
+                self.parameters["logM%02d"%i] = Parameter("logM%02d"%i, np.log10(mnew[i]),"Log molecular mass %d"%i, ParameterType.real, opt_type=OptType.const, display_flag=False)
             self.do_calculate("")
 
     def setup_graphic_bins(self):
