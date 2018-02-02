@@ -31,8 +31,7 @@ Tutorial MWD Application
     :height: 20pt
     :align: bottom
 
-Discretization of a GPC molecular weight distribution
-------------------------------------------------------
+**Discretization of a GPC molecular weight distribution**
 
 #.  Start RepTate and create a new MWD Application |MWDapp|:
     
