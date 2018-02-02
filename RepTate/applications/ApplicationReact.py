@@ -74,12 +74,18 @@ class BaseApplicationReact:
         self.views["w(M)"]=View(name="w(M)", description="Molecular weight distribution", x_label="M", y_label="w(M)", 
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_wM, n=1, 
                                 snames=["w(M)"], index=0)
-        self.views["g(M)"]=View(name="g(M)", description="g(M)", x_label="M", y_label="g", 
+        self.views["log(w(M))"]=View(name="log(w(M))", description="Molecular weight distribution", x_label="M", y_label="log w(M)", 
+                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_logwM, n=1, 
+                                snames=["w(M)"], index=1)
+        self.views["g(M)"]=View(name="g(M)", description="g(M)", x_label="M", y_label="g(M)", 
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_gM, n=1, 
-                                snames=["g(M)"], index=1)
+                                snames=["g(M)"], index=2)
+        self.views["log(g(M))"]=View(name="log(g(M))", description="log(g(M))", x_label="M", y_label="log g(M)", 
+                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_loggM, n=1, 
+                                snames=["g(M)"], index=3)
         self.views['br/1000C']=View(name="br/1000C", description="br/1000C(M)", x_label="M", y_label="br/1000C(M)", 
                                 x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_br_1000C, n=1, 
-                                snames=["br/1000C(M)"], index=2)
+                                snames=["br/1000C(M)"], index=4)
         
         #set multiviews
         self.multiviews = [self.views["w(M)"], self.views["g(M)"], self.views['br/1000C']] #default view order in multiplot views
@@ -116,6 +122,24 @@ class BaseApplicationReact:
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
+    def view_logwM(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = np.log10(dt.data[:, 1])
+        return x, y, True
+
     def view_gM(self, dt, file_parameters):
         """[summary]
         
@@ -132,6 +156,24 @@ class BaseApplicationReact:
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 2]
+        return x, y, True
+
+    def view_loggM(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            dt {[type]} -- [description]
+            file_parameters {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
     def view_br_1000C(self, dt, file_parameters):
