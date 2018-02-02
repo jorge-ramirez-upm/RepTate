@@ -539,7 +539,7 @@ class DraggableSeries(DraggableArtist):
     
     [description]
     """
-    def __init__(self, artist, mode=DragType.none, logx=False, logy=False):
+    def __init__(self, artist, mode=DragType.none, logx=False, logy=False, xref=0, yref=0):
         """[summary]
         
         [description]
@@ -553,8 +553,11 @@ class DraggableSeries(DraggableArtist):
             logy {[type]} -- [description] (default: {False})
         """
         super(DraggableSeries, self).__init__(artist, mode, function=None)
+        self.note = artist.axes.annotate('', xycoords='axes fraction', xy=(0,0), textcoords='axes fraction', xytext=(0.01, 0.95))
         self.logx = logx
         self.logy = logy
+        self.xref = xref
+        self.yref = yref
 
     def get_data(self):
         """[summary]
@@ -582,10 +585,18 @@ class DraggableSeries(DraggableArtist):
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
         self.artist.set_animated(True)
+        try:
+            self.note.set_visible(False)
+        except ValueError:
+            pass
         canvas.draw()
-        
         self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
         # redraw just the curve
+        try:
+            self.note.set_visible(True)
+        except ValueError:
+            pass
+        axes.draw_artist(self.note)
         axes.draw_artist(self.artist)
         #canvas.blit(axes.bbox)
 
@@ -612,18 +623,24 @@ class DraggableSeries(DraggableArtist):
 
         if (self.mode==DragType.none):   
             self.modify_artist(0, 0)
+            text = ''
         elif (self.mode==DragType.horizontal):
             self.modify_artist(dx, 0)
+            text = '$\Delta x=$%.2e $\Delta y=$%.2e'%(self.data[0][0] - self.xref, 0)
         elif (self.mode==DragType.vertical):
             self.modify_artist(0, dy)
+            text = '$\Delta x=$%.2e $\Delta y=$%.2e'%(0,  self.data[1][0] - self.yref)
         elif (self.mode==DragType.both):
-            self.modify_artist(dx, dy)        
+            self.modify_artist(dx, dy)
+            text = '$\Delta x=$%.2e $\Delta y=$%.2e'%(self.data[0][0] - self.xref,  self.data[1][0] - self.yref)     
         
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
         # restore the background
         canvas.restore_region(self.background)
         # draw the curve only
+        self.note.set_text(text)
+        axes.draw_artist(self.note)
         axes.draw_artist(self.artist)
         canvas.update()
 
@@ -669,6 +686,17 @@ class DraggableSeries(DraggableArtist):
         # canvas.blit(axes.bbox)
         self.background = None
         # self.artist.figure.canvas.draw()
+
+    def disconnect(self):
+        """disconnect all the stored connection ids
+        
+        [description]
+        """
+        try:
+            self.note.remove()
+        except ValueError:
+            pass
+        super().disconnect()
 
 class DraggablePatch(DraggableArtist):
     """[summary]

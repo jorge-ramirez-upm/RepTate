@@ -530,7 +530,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.curves.clear()
 
         for curve in ds.selected_file.data_table.series[0]: #drag allowed on axarr[0] only
-            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y)
+            x, y, success = self.current_view.view_proc(ds.selected_file.data_table, ds.selected_file.file_parameters)
+            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y, xref=x[0], yref=y[0])
             self.curves.append(cur)
 
     def disconnect_curve_drag(self):
