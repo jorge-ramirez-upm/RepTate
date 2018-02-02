@@ -43,7 +43,7 @@ Discretization of a GPC molecular weight distribution
 
 #.  Drag and drop a file with a `.gpc` extension, e.g. `ps2.gpc` in the `data/PS_Linear_Polydisperse/` folder.
 
-    The first column should contain the molecular mass :math:`M`, and the second column the relative molecular weight :math:`w(\log(M))`.
+    The first column of the file should contain the molecular mass :math:`M`, and the second column the relative molecular weight :math:`w(\log(M))`.
    
     .. image:: GUI_tutorial_images/open_gpc_file.png
         :width: 400pt

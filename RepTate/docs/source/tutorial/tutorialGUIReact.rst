@@ -45,7 +45,7 @@ Discretization of a GPC molecular weight distribution
 
 #.  Drag and drop a file with a `.reac` extension, e.g. `out1.reac` in the `data/React/` folder.
 
-    The first column should contain the molecular mass :math:`M`, the second column the 
+    The first column of the file should contain the molecular mass :math:`M`, the second column the 
     relative molecular weight :math:`w(\log(M))`, the third column :math:`g`, 
     and the fourth column the number of branching per 1000 carbon.
    
