@@ -9,3 +9,5 @@ Theories
     React/tobitaLDPE
     React/mixture
     React/MetalloceneCSTR
+    
+    RoliePoly
