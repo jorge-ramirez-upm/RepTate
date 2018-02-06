@@ -3,11 +3,10 @@ Theories
 ============
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    React/tobitaCSTR
-    React/tobitaLDPE
-    React/mixture
-    React/MetalloceneCSTR
+   React/react
+   NLVE/nlve
+   TTS/tts
+   LVE/lve
     
-    RoliePoly
