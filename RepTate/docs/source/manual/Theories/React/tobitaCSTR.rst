@@ -45,4 +45,12 @@ Hence, there are four parameters which control the results of the reaction:
     \lambda &= \dfrac{R_{\mathrm{b}}}{R_{\mathrm{p}}},\\
     \sigma &= \dfrac{R_{\mathrm{s}}}{R_{\mathrm{p}}}.
 
-.. include:: BoB_polymer_storage_and_memory.rst
+**Simulation parameters**
+
+In addition to these parameters, there are four more which control the
+generation of molecules, the way that the data are displayed, and the output
+to a BoB polymer configuration file. There are:
+
+.. include:: simulation_parameters.rst
+
+.. include:: gfactor_BoB_polymer_storage_and_memory.rst

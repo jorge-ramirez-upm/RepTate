@@ -57,4 +57,12 @@ branching and polymerisation rate constants and
 scission and polymerisation rate constants.
 The fifth parameter is the monomer conversion at the end of the reaction.
 
-.. include:: BoB_polymer_storage_and_memory.rst
+**Simulation parameters**
+
+In addition to these parameters, there are four more which control the
+generation of molecules, the way that the data are displayed, and the output
+to a BoB polymer configuration file. There are:
+
+.. include:: simulation_parameters.rst
+
+.. include:: gfactor_BoB_polymer_storage_and_memory.rst
