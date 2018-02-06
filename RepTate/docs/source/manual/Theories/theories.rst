@@ -7,3 +7,4 @@ Theories
 
     React/tobitaCSTR
     React/tobitaLDPE
+    React/mixture

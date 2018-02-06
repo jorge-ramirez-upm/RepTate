@@ -5,15 +5,6 @@ Tobita LDPE
 .. toctree::
    :maxdepth: 2
 
-.. |bob-hat| image:: images/icons8-bob-hat.png
-    :width: 20pt
-    :height: 20pt
-    :align: bottom
-
-.. |piggy| image:: images/icons8-money-box.png
-    :width: 20pt
-    :height: 20pt
-    :align: bottom
 
 The LDPE batch reaction theory uses an algorithm described in the paper by H.
 Tobita 
@@ -47,7 +38,7 @@ Tobita makes the further assumption that the timescale over which a single
 (linear) chain strand is formed within a molecule is much shorter than the
 reactor timescale. This is the "stationary state hypothesis", and under
 these conditions, we balance the rate of creation of free radicals with the
-rate at which they are ``terminated'' and write
+rate at which they are "terminated" and write
 
 .. math::
     R_{\mathrm{I}}=R_{\mathrm{td}}+R_{\mathrm{tc}}.

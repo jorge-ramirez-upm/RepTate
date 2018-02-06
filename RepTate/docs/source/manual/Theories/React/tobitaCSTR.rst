@@ -5,15 +5,6 @@ Tobita CSTR
 .. toctree::
    :maxdepth: 2
 
-.. |bob-hat| image:: images/icons8-bob-hat.png
-    :width: 20pt
-    :height: 20pt
-    :align: bottom
-
-.. |piggy| image:: images/icons8-money-box.png
-    :width: 20pt
-    :height: 20pt
-    :align: bottom
 
 The LDPE CSTR reaction theory uses an algorithm based on the one described in
 the paper by H. Tobita 

@@ -1,3 +1,13 @@
+.. |bob-hat| image:: images/icons8-bob-hat.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
+
+.. |piggy| image:: images/icons8-money-box.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
+
 **Simulation parameters**
 
 In addition to these parameters, there are four more which control the
@@ -25,12 +35,16 @@ to a BoB polymer configuration file. There are:
 
 
 When a molecule is generated, it is straightforward to assess its molecular
-weight and number of branches. The `g`-factor is calculated based on the
-assumption of ideal random walk statistics (as opposed to self-avoiding walk
-statistics). Ideal chain radius of gyration is fast to calculate:
-self-avoiding walk radius is not. It is often found that the `g`-factor
-calculated in these two ways is (somewhat surprisingly) similar, but it is
-still a possible source of error!
+weight and number of branches. 
+
+.. warning::
+    The `g`-factor is calculated based on the
+    assumption of ideal random walk statistics (as opposed to self-avoiding walk
+    statistics). Ideal chain radius of gyration is fast to calculate:
+    self-avoiding walk radius is not. 
+    It is often found that the `g`-factor
+    calculated in these two ways is (somewhat surprisingly) similar, but it is
+    still a possible source of error!
 
 
 **Polymer storage and saving to BoB**
@@ -79,10 +93,13 @@ the BoB documentation.
 
 React stores polymer information (total molecular weight, number of branches
 and `g`-factor) in a polymer record, and connectivity information in arm
-records. There is a fixed amount of computer memory allocated for this. React is designed to
-cope smoothly with running out of memory - it should kindly ask you to allocate more memory!
-The dialog will propose you to increase the amount of computer memory allocated to React
-and give you an estimate the extra amount or RAM needed.
+records. 
+
+.. note::
+    There is a fixed amount of computer memory allocated for this. React is designed to
+    cope smoothly with running out of memory - it should kindly ask you to allocate more memory!
+    The dialog will propose you to increase the amount of computer memory allocated to React
+    and give you an estimate the extra amount or RAM needed.
 
 There are some things that contribute to using a lot of memory:
 
@@ -98,4 +115,4 @@ There are some things that contribute to using a lot of memory:
     (close un-needed theories, or adjust their parameters so they don't use as
     much storage). 
 
-You will get brief hints along these lines in the theory log if you run out of parameters.
+.. note:: You will get brief hints along these lines in the theory log if you run out of parameters.
