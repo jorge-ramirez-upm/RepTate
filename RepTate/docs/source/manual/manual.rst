@@ -7,5 +7,6 @@ User Manual
 
    General/general
    Applications/applications
+   Theories/theories
    Tools/tools
    
