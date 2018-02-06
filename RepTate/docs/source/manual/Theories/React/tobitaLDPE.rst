@@ -55,7 +55,7 @@ where :math:`C_\text{b}` is the ratio of the
 branching and polymerisation rate constants and 
 :math:`C_\text{s}` the ratio of the
 scission and polymerisation rate constants.
-The fifth parameter is the monomer conversion at the end of the reaction.
+The fifth parameter `fin_conv` is the monomer conversion at the end of the reaction.
 
 **Simulation parameters**
 
