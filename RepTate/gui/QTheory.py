@@ -271,12 +271,15 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 self.parameters[param_changed].opt_type = OptType.nopt
             return
         #else, assign the entered value
-        val = item.text(1)
-        success = self.set_param_value(param_changed, val)
+        new_value = item.text(1)
+        message, success = self.set_param_value(param_changed, new_value)
         if (not success):
             msg = QMessageBox()
-            msg.setWindowTitle("Not a valid value")
-            msg.setText("Allowed values are: \n"+", ".join(str(x) for x in self.parameters[param_changed].discrete_values))
+            msg.setWindowTitle("Error")
+            if message != '':
+                msg.setText("Not a valid value\n" + message)
+            else:
+                msg.setText("Not a valid value")
             msg.exec_()
             item.setText(1, str(self.parameters[param_changed].value))
 

@@ -746,34 +746,52 @@ class Theory(CmdBase):
         Returns:
             Success{bool} -- True if the operation was successful
         """
-        if (self.parameters[name].type==ParameterType.real):
-            self.parameters[name].value=float(value)
-            return True
-        elif (self.parameters[name].type==ParameterType.integer):
-            self.parameters[name].value=int(value)
-            return True
-        elif (self.parameters[name].type==ParameterType.discrete_integer):
-            if int(value) in self.parameters[name].discrete_values:
-                self.parameters[name].value=int(value)
-                return True
-            else:
-                print("Values allowed=", self.parameters[name].discrete_values)
-                return False
-        elif (self.parameters[name].type==ParameterType.discrete_real):
-            if float(value) in self.parameters[name].discrete_values:
-                self.parameters[name].value=float(value)
-                return True
-            else:
-                print("Values allowed=", self.parameters[name].discrete_values)
-                return False
-        elif (self.parameters[name].type==ParameterType.boolean):
-            if value in [True, 'true', 'True', '1', 't', 'T', 'y', 'yes']:
-                self.parameters[name].value=True
-            else:
-                self.parameters[name].value=False
-        else:
-            pass
+        try:
+            if (self.parameters[name].type == ParameterType.real):
+                try:
+                    self.parameters[name].value = float(value)
+                    return '', True
+                except ValueError:
+                    return "Value must be a float", False
 
+            elif (self.parameters[name].type == ParameterType.integer):
+                try:
+                    self.parameters[name].value = int(value) #convert to int
+                    return '', True
+                except ValueError:
+                    return "Value must be an integer", False
+
+            elif (self.parameters[name].type == ParameterType.discrete_integer):
+                if int(value) in self.parameters[name].discrete_values:
+                    self.parameters[name].value = int(value)
+                    return '', True
+                else:
+                    message = "Values allowed: " + ', '.join([str(s) for s in self.parameters[name].discrete_values]) 
+                    print(message)
+                    return message, False
+
+            elif (self.parameters[name].type == ParameterType.discrete_real):
+                if float(value) in self.parameters[name].discrete_values:
+                    self.parameters[name].value = float(value)
+                    return '', True
+                else:
+                    message = "Values allowed: " + ', '.join([str(s) for s in self.parameters[name].discrete_values]) 
+                    print(message)
+                    return message, False
+
+            elif (self.parameters[name].type==ParameterType.boolean):
+                if value in [True, 'true', 'True', '1', 't', 'T', 'y', 'yes']:
+                    self.parameters[name].value = True
+                else:
+                    self.parameters[name].value = False
+                return '', True
+
+            else:
+                return '', False
+
+        except ValueError as e:
+            print("In set_param_value:", e)
+            return '', False
 
     def default(self, line):
         """Called when the input command is not recognized
