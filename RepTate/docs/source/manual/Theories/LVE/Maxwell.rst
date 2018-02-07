@@ -23,8 +23,9 @@ Each mode contributes to the linear viscoelastic spectrum through the following 
 
 with :math:`G_i` the modulus and :math:`\tau_i` the characteristic relaxation time of 
 the mode :math:`i` (inverse of the frequency). 
+
 The parameters of the theory are the number of modes (which is fixed by the user and 
-is not minimized), :math:`\omega_\text{min}` and :math:`\omega_\text{max}` 
+is not minimized), :math:`\omega_\text{min}`, :math:`\omega_\text{max}`,
 and a value of :math:`G_i` for each mode. 
 :math:`G_i` is calculated in logarithmic scale.
 
