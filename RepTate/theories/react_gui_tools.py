@@ -2,9 +2,9 @@ import numpy as np
 import ctypes as ct
 import react_ctypes_helper as rch
 #BoB form
-from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton
+from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout,QHBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton, QSpinBox, QGridLayout, QSizePolicy, QSpacerItem, QScrollArea, QWidget
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, Qt
 import psutil
 
 def request_more_polymer(parent_theory):
@@ -194,6 +194,152 @@ def handle_increase_records(parent_theory, name):
         return False
 
 ###################
+
+class ParameterMultiMetCSTR(QDialog):
+    """Create form to input the MultiMetCSTR parameters"""
+
+    def __init__(self, parent_theory):
+        super().__init__(parent_theory)
+        self.parent_theory = parent_theory
+        self.numcat_max = parent_theory.numcat_max #maximum number of catalysts
+        self.make_lines(parent_theory.pvalues)
+        self.createFormGroupBox(parent_theory.numcat)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept_)
+        buttonBox.rejected.connect(self.reject)
+ 
+        hwidget = QGroupBox()
+        hlayout = QHBoxLayout()
+        #set spinBox ncatalyst
+        hlayout.addWidget(QLabel('<b>N. of catalysts</b>') )
+        self.sb_ncatalyst = QSpinBox()
+        self.sb_ncatalyst.setMinimum(1)
+        self.sb_ncatalyst.setMaximum(self.numcat_max)
+        self.sb_ncatalyst.setValue(parent_theory.numcat)
+        self.sb_ncatalyst.valueChanged.connect(self.handle_sb_ncatalyst_valueChanged)
+        hlayout.addWidget(self.sb_ncatalyst)
+        #set time const box
+        hlayout.addStretch()
+        hlayout.addWidget(QLabel('<b>Time constant</b>'))
+        dvalidator = QDoubleValidator() #prevent letters etc.
+        dvalidator.setBottom(0) #minimum allowed value
+        self.time_const = QLineEdit()
+        self.time_const.setValidator(dvalidator)  
+        self.time_const.setText('%s'%parent_theory.time_const)
+        hlayout.addWidget(self.time_const)
+        #set monomer concentration box
+        hlayout.addStretch()
+        hlayout.addWidget(QLabel('<b>Monomer conc.</b>'))
+        dvalidator = QDoubleValidator() #prevent letters etc.
+        dvalidator.setBottom(0) #minimum allowed value
+        self.monomer_conc = QLineEdit()
+        self.monomer_conc.setValidator(dvalidator)  
+        self.monomer_conc.setText('%s'%parent_theory.monomer_conc)
+        hlayout.addWidget(self.monomer_conc)
+        #set horizontal layout
+        hwidget.setLayout(hlayout)
+
+        #insert widgets
+        self.mainLayout = QVBoxLayout()
+        self.mainLayout.addWidget(hwidget)
+        self.mainLayout.addWidget(self.scroll)
+        self.mainLayout.addStretch()
+        self.mainLayout.addWidget(buttonBox)
+        self.setLayout(self.mainLayout)
+        self.setWindowTitle("Enter Metallocene Polymerisation Parameters")
+        # self.opened_react_theories = []
+        # self.list_all_open_react_theories()
+        # self.resize(self.mainLayout.sizeHint())
+    
+    def accept_(self):
+        """
+        Triggered when 'OK' button is pushed. Call 'get_lines()'
+        
+        """
+        self.get_lines()
+        self.accept()
+
+    def make_lines(self, source):
+        """Create the input-parameter-form lines with default parameter values"""
+        dvalidator = QDoubleValidator() #prevent letters etc.
+        dvalidator.setBottom(0) #minimum allowed value
+        qledit = QLineEdit()
+        qledit.setValidator(dvalidator)  
+        qledit.setText('0.0') #new lines contain zeros
+        self.lines = []
+        for i in range(self.numcat_max):
+            line = []
+            for j in range(5):
+                qledit = QLineEdit()
+                qledit.setValidator(dvalidator)  
+                qledit.setText(source[i][j])
+                line.append(qledit)
+            self.lines.append(line)
+
+    def save_lines(self):
+        """Save the current form values.
+        Called when the number of lines in the form is changed.
+        """
+        self.lines_saved = [['0' for j in range(5)] for i in range(self.numcat_max)]
+        for i in range(self.numcat_max):
+            for j in range(5):
+                self.lines_saved[i][j] = self.lines[i][j].text()
+    
+    def get_lines(self):
+        """Save input parameters. Called when 'OK' is pressed"""
+        self.parent_theory.numcat = self.sb_ncatalyst.value()
+        self.parent_theory.time_const = float(self.time_const.text())
+        self.parent_theory.monomer_conc = float(self.monomer_conc.text())
+        for i in range(self.numcat_max):
+            for j in range(5):
+                self.parent_theory.pvalues[i][j] = self.lines[i][j].text()
+
+    def handle_sb_ncatalyst_valueChanged(self, ncatalyst):
+        """Handle a change of the number of catalysts.
+        Destroy the form and create new one with the selected number of line
+        Keep the values previously entered
+        """
+        self.save_lines()
+        self.mainLayout.removeWidget(self.scroll)
+        self.scroll.deleteLater()
+        self.scroll = None
+        self.make_lines(self.lines_saved)
+        self.createFormGroupBox(ncatalyst)
+        self.mainLayout.insertWidget(1, self.scroll) #insert above OK/Cancel buttons
+
+    def createFormGroupBox(self, ncatalyst):
+        """Create a form to set the new values of polymerisation parameters"""
+        self.formGroupBox = QGroupBox()
+
+        layout = QGridLayout()
+        layout.setSpacing(10)
+        
+        layout.addWidget(QLabel('<center><b>Catalyst conc.</center></b>'), 0, 1)
+        layout.addWidget(QLabel('<center><b>K<sub>p</sub></b></center>'), 0, 2)
+        layout.addWidget(QLabel('<center><b>K<sup>=</sup></b></center>'), 0, 3)
+        layout.addWidget(QLabel('<center><b>K<sub>s</sub></b></center>'), 0, 4)
+        layout.addWidget(QLabel('<center><b>K<sub>pLCB</sub></b></center>'), 0, 5)
+        for i in range(ncatalyst):
+            layout.addWidget(QLabel('<b>%d</b>'%(i + 1)), i + 1, 0)
+            for j in range(5):
+                layout.addWidget(self.lines[i][j], i + 1, j + 1)
+        self.formGroupBox.setLayout(layout)
+                
+        #Scroll Area Properties
+        self.scroll = QScrollArea()
+        self.scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.formGroupBox)
+        
+    # def list_all_open_react_theories(self):
+    #     for th in self.parent_theory.parent_dataset.theories: #list theories in the current React app
+    #         self.opened_react_theories.append(th)
+    #     for app in self.parent_theory.parent_dataset.parent_application.parent_manager.applications: #list all opened apps
+    #         print(app.name)
+
+###############################################
 
 
 class EditBobSettingsDialog(QDialog):

@@ -65,6 +65,7 @@ class BaseApplicationReact:
         """
         from TheoryLDPEBatch import TheoryTobitaBatch
         from TheoryTobitaCSTR import TheoryTobitaCSTR
+        from TheoryMultiMetCSTR import TheoryMultiMetCSTR
 
         super().__init__(name, parent, nplots=3, ncols=2) # will call Application.__init__ with these args
 
@@ -100,6 +101,7 @@ class BaseApplicationReact:
         # add the theories related to ApplicationReact to the dictionary, e.g.:
         self.theories[TheoryTobitaBatch.thname] = TheoryTobitaBatch
         self.theories[TheoryTobitaCSTR.thname] = TheoryTobitaCSTR
+        self.theories[TheoryMultiMetCSTR.thname] = TheoryMultiMetCSTR
 
         #set the current view
         self.set_views()

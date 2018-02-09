@@ -8,7 +8,6 @@
 # This software is distributed under the GNU General Public License. 
 """Module TheoryTobitaCSTR
 
-Template file for creating a new theory
 """ 
 import numpy as np
 from CmdBase import CmdBase, CmdMode

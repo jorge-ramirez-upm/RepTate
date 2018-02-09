@@ -154,3 +154,21 @@ tobCSTRstart.restype = None
 
 tobCSTR = react_lib.tobCSTR
 tobCSTR.restype = ct.c_bool
+
+################
+# MultiMetCSTR.c
+################
+
+#struct
+class mulmetCSTR_global(ct.Structure):
+    _fields_ = [("mulmetCSTRnumber", ct.c_int), ("mulmetCSTRerrorflag", ct.c_bool)]
+
+#global variable
+MMCSTR_global = mulmetCSTR_global.in_dll(react_lib, "MMCSTR_global")
+
+#function
+mulmetCSTRstart = react_lib.mulmetCSTRstart
+mulmetCSTRstart.restype = None
+
+mulmetCSTR = react_lib.mulmetCSTR
+mulmetCSTR.restype = ct.c_bool
