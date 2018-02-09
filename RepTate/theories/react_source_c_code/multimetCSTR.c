@@ -19,11 +19,10 @@ static bool init_local_arrays(int n);
 
 /* local variables */
 static int scount, bcount, rlevel, numcats;
-static double *cpM=NULL, *Nx=NULL;             // array [1..10] of double;
-static double **cpU=NULL, **cpD1=NULL, **cpD2=NULL; //array [1..10,1..10] of double;
-static bool local_arrays_initialized = false;
+static double *cpM = NULL, *Nx = NULL;                    // array [1..10] of double;
+static double **cpU = NULL, **cpD1 = NULL, **cpD2 = NULL; //array [1..10,1..10] of double;
 
-void mulmetCSTRstart(double *kp, double *kdb, double *ks, double *kplcb, double *yconc, double tau, double mconc, int n, int ndist)
+void mulmetCSTRstart(double *kp, double *kdb, double *ks, double *kplcb, double *yconc, double tau, double mconc, int n, int ndist, int numcat_max)
 // void mulmetCSTRstart(double tau, double mconc, int n, int ndist)
 {
     double *pM, *hsp, *pconc, *kpM; //array [1..10] of double;
@@ -32,7 +31,7 @@ void mulmetCSTRstart(double *kp, double *kdb, double *ks, double *kplcb, double 
     int i, j;
 
     numcats = n;
-    if (!init_local_arrays(n))
+    if (!init_local_arrays(numcat_max))
     {
         printf("IN FILE 'multimetCSTR.c' IN FUNCTION 'init_local_arrays'");
         printf("ERROR DURRING MEMORY ALLOCATION");
@@ -339,131 +338,48 @@ void getcat(int *catnum)
     }
 }
 
-bool init_local_arrays(int n)
-{   
+bool init_local_arrays(int numcat_max)
+{
     int i, j;
-    static int old_n = -1;
-    if (old_n == n)
+    static bool local_arrays_initialized = false;
+
+    if (local_arrays_initialized) // do nothing if memory already allocated
         return true;
 
-    // realloc double *
+    cpM = (double *)malloc(sizeof(double) * (numcat_max + 1));
+    if (cpM == NULL)
+        return false;
+    Nx = (double *)malloc(sizeof(double) * (numcat_max + 1));
+    if (Nx == NULL)
+        return false;
+    cpU = (double **)malloc(sizeof(double *) * (numcat_max + 1));
+    if (cpU == NULL)
+        return false;
+    cpD1 = (double **)malloc(sizeof(double *) * (numcat_max + 1));
+    if (cpD1 == NULL)
+        return false;
+    cpD2 = (double **)malloc(sizeof(double *) * (numcat_max + 1));
+    if (cpD2 == NULL)
+        return false;
+    for (i = 0; i <= numcat_max; i++)
     {
-        double *temp_p;
-        temp_p = (double *)realloc(cpM, sizeof(double) * (n + 1));
-        if (temp_p == NULL) //failed to allocate new memory
+        cpU[i] = (double *)malloc(sizeof(double) * (numcat_max + 1));
+        if (cpU[i] == NULL)
             return false;
-        else
-            cpM = temp_p;
-    }
-    {
-        double *temp_p;
-        temp_p = (double *)realloc(Nx, sizeof(double) * (n + 1));
-        if (temp_p == NULL) //failed to allocate new memory
+        cpD1[i] = (double *)malloc(sizeof(double) * (numcat_max + 1));
+        if (cpD1[i] == NULL)
             return false;
-        else
-            Nx = temp_p;
-    }
-    if (n < old_n)
-    {
-        //reduce the size
-        for (i = 0; i <= old_n; i++)
-        {
-            {
-                double *temp_p;
-                temp_p = (double *)realloc(cpU[i], sizeof(double) * (n + 1));
-                if (temp_p == NULL) //failed to allocate new memory
-                    return false;
-                else
-                    cpU[i] = temp_p;
-            }
-            {
-                double *temp_p;
-                temp_p = (double *)realloc(cpD1[i], sizeof(double) * (n + 1));
-                if (temp_p == NULL) //failed to allocate new memory
-                    return false;
-                else
-                    cpD1[i] = temp_p;
-            }
-            {
-                double *temp_p;
-                temp_p = (double *)realloc(cpD2[i], sizeof(double) * (n + 1));
-                if (temp_p == NULL) //failed to allocate new memory
-                    return false;
-                else
-                    cpD2[i] = temp_p;
-            }
-        }
+        cpD2[i] = (double *)malloc(sizeof(double) * (numcat_max + 1));
+        if (cpD2[i] == NULL)
+            return false;
     }
 
-    // realloc double **
-    {
-        double **temp_pp;
-        temp_pp = (double **)realloc(cpU, sizeof(double *) * (n + 1));
-        if (temp_pp == NULL) //failed to allocate new memory
-            return false;
-        else
-            cpU = temp_pp;
-    }
-    {
-        double **temp_pp;
-        temp_pp = (double **)realloc(cpD1, sizeof(double *) * (n + 1));
-        if (temp_pp == NULL) //failed to allocate new memory
-            return false;
-        else
-            cpD1 = temp_pp;
-    }
-    {
-        double **temp_pp;
-        temp_pp = (double **)realloc(cpD2, sizeof(double *) * (n + 1));
-        if (temp_pp == NULL) //failed to allocate new memory
-            return false;
-        else
-            cpD2 = temp_pp;
-    }
-    if (n > old_n)
-    {
-        //reallocate (realloc) up to old_size
-        for (i = 0; i <= old_n; i++)
-        {
-            {
-                double *temp_p;
-                temp_p = (double *)realloc(cpU[i], sizeof(double) * (n + 1));
-                if (temp_p == NULL) //failed to allocate new memory
-                    return false;
-                else
-                    cpU[i] = temp_p;
-            }
-            {
-                double *temp_p;
-                temp_p = (double *)realloc(cpD1[i], sizeof(double) * (n + 1));
-                if (temp_p == NULL) //failed to allocate new memory
-                    return false;
-                else
-                    cpD1[i] = temp_p;
-            }
-            {
-                double *temp_p;
-                temp_p = (double *)realloc(cpD2[i], sizeof(double) * (n + 1));
-                if (temp_p == NULL) //failed to allocate new memory
-                    return false;
-                else
-                    cpD2[i] = temp_p;
-            }
-        }
-        for (i = old_n + 1; i <= n; i++)
-        {
-            //allocate (malloc) the new arrays
-            cpU[i] = (double *)malloc(sizeof(double) * (n + 1));
-            cpD1[i] = (double *)malloc(sizeof(double) * (n + 1));
-            cpD2[i] = (double *)malloc(sizeof(double) * (n + 1));
-        }
-    }
     //initialize all values to '0.0'
-    for (i = 0; i <= n; i++)
+    for (i = 0; i <= numcat_max; i++)
     {
         cpM[i] = 0.0;
         Nx[i] = 0.0;
-        for (j = 0; j <= n; j++)
+        for (j = 0; j <= numcat_max; j++)
         {
             cpU[i][j] = 0.0;
             cpD1[i][j] = 0.0;
@@ -471,6 +387,141 @@ bool init_local_arrays(int n)
         }
     }
     local_arrays_initialized = true;
-    old_n = n;
     return true;
 }
+
+// bool init_local_arrays(int n)
+// {
+//     int i, j;
+//     static int old_n = -1;
+//     if (old_n == n)
+//         return true;
+
+//     // realloc double *
+//     {
+//         double *temp_p;
+//         temp_p = (double *)realloc(cpM, sizeof(double) * (n + 1));
+//         if (temp_p == NULL) //failed to allocate new memory
+//             return false;
+//         else
+//             cpM = temp_p;
+//     }
+//     {
+//         double *temp_p;
+//         temp_p = (double *)realloc(Nx, sizeof(double) * (n + 1));
+//         if (temp_p == NULL) //failed to allocate new memory
+//             return false;
+//         else
+//             Nx = temp_p;
+//     }
+//     if (n < old_n)
+//     {
+//         //reduce the size
+//         for (i = 0; i <= old_n; i++)
+//         {
+//             {
+//                 double *temp_p;
+//                 temp_p = (double *)realloc(cpU[i], sizeof(double) * (n + 1));
+//                 if (temp_p == NULL) //failed to allocate new memory
+//                     return false;
+//                 else
+//                     cpU[i] = temp_p;
+//             }
+//             {
+//                 double *temp_p;
+//                 temp_p = (double *)realloc(cpD1[i], sizeof(double) * (n + 1));
+//                 if (temp_p == NULL) //failed to allocate new memory
+//                     return false;
+//                 else
+//                     cpD1[i] = temp_p;
+//             }
+//             {
+//                 double *temp_p;
+//                 temp_p = (double *)realloc(cpD2[i], sizeof(double) * (n + 1));
+//                 if (temp_p == NULL) //failed to allocate new memory
+//                     return false;
+//                 else
+//                     cpD2[i] = temp_p;
+//             }
+//         }
+//     }
+
+//     // realloc double **
+//     {
+//         double **temp_pp;
+//         temp_pp = (double **)realloc(cpU, sizeof(double *) * (n + 1));
+//         if (temp_pp == NULL) //failed to allocate new memory
+//             return false;
+//         else
+//             cpU = temp_pp;
+//     }
+//     {
+//         double **temp_pp;
+//         temp_pp = (double **)realloc(cpD1, sizeof(double *) * (n + 1));
+//         if (temp_pp == NULL) //failed to allocate new memory
+//             return false;
+//         else
+//             cpD1 = temp_pp;
+//     }
+//     {
+//         double **temp_pp;
+//         temp_pp = (double **)realloc(cpD2, sizeof(double *) * (n + 1));
+//         if (temp_pp == NULL) //failed to allocate new memory
+//             return false;
+//         else
+//             cpD2 = temp_pp;
+//     }
+//     if (n > old_n)
+//     {
+//         //reallocate (realloc) up to old_size
+//         for (i = 0; i <= old_n; i++)
+//         {
+//             {
+//                 double *temp_p;
+//                 temp_p = (double *)realloc(cpU[i], sizeof(double) * (n + 1));
+//                 if (temp_p == NULL) //failed to allocate new memory
+//                     return false;
+//                 else
+//                     cpU[i] = temp_p;
+//             }
+//             {
+//                 double *temp_p;
+//                 temp_p = (double *)realloc(cpD1[i], sizeof(double) * (n + 1));
+//                 if (temp_p == NULL) //failed to allocate new memory
+//                     return false;
+//                 else
+//                     cpD1[i] = temp_p;
+//             }
+//             {
+//                 double *temp_p;
+//                 temp_p = (double *)realloc(cpD2[i], sizeof(double) * (n + 1));
+//                 if (temp_p == NULL) //failed to allocate new memory
+//                     return false;
+//                 else
+//                     cpD2[i] = temp_p;
+//             }
+//         }
+//         for (i = old_n + 1; i <= n; i++)
+//         {
+//             //allocate (malloc) the new arrays
+//             cpU[i] = (double *)malloc(sizeof(double) * (n + 1));
+//             cpD1[i] = (double *)malloc(sizeof(double) * (n + 1));
+//             cpD2[i] = (double *)malloc(sizeof(double) * (n + 1));
+//         }
+//     }
+//     //initialize all values to '0.0'
+//     for (i = 0; i <= n; i++)
+//     {
+//         cpM[i] = 0.0;
+//         Nx[i] = 0.0;
+//         for (j = 0; j <= n; j++)
+//         {
+//             cpU[i][j] = 0.0;
+//             cpD1[i][j] = 0.0;
+//             cpD2[i][j] = 0.0;
+//         }
+//     }
+//     local_arrays_initialized = true;
+//     old_n = n;
+//     return true;
+// }
