@@ -14,20 +14,25 @@ reactresults *react_dist;
 // initialises pools - MUST BE CALLED FIRST TO USE THESE ROUTINES
 void react_pool_init(void)
 {
+    static bool is_initialized = false;
     if (!(pb_global.react_pool_initialised))
     {
         int i;
-        arm_pool = (arm *)malloc(sizeof(arm) * (pb_global_const.maxarm + 1));
-        br_poly = (polymer *)malloc(sizeof(polymer) * (pb_global_const.maxpol + 1));
-        react_dist = (reactresults *)malloc(sizeof(reactresults) * (pb_global_const.maxreact + 1));
-        for (i = 1; i <= pb_global_const.maxreact; i++)
+        if (!is_initialized)
         {
-            react_dist[i].wt = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-            react_dist[i].avbr = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-            react_dist[i].wmass = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-            react_dist[i].avg = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-            react_dist[i].lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-            react_dist[i].numinbin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
+            arm_pool = (arm *)malloc(sizeof(arm) * (pb_global_const.maxarm + 1));
+            br_poly = (polymer *)malloc(sizeof(polymer) * (pb_global_const.maxpol + 1));
+            react_dist = (reactresults *)malloc(sizeof(reactresults) * (pb_global_const.maxreact + 1));
+            for (i = 1; i <= pb_global_const.maxreact; i++)
+            {
+                react_dist[i].wt = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+                react_dist[i].avbr = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+                react_dist[i].wmass = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+                react_dist[i].avg = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+                react_dist[i].lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+                react_dist[i].numinbin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
+            }
+            is_initialized = true;
         }
         for (i = 1; i <= pb_global_const.maxarm; i++)
         {
@@ -56,6 +61,7 @@ void react_pool_init(void)
             react_dist[i].boblgmax = 9.0;
             react_dist[i].bobbinmax = 2;
             react_dist[i].simnumber = 0;
+            react_dist[i].polysaved = false;
         }
         react_dist[pb_global_const.maxreact].next = 0;
         pb_global.first_dist_in_pool = 1;
@@ -259,15 +265,15 @@ void armupdown(int m, int m1)
     arm_pool[arm_pool[m1].down].up = m1;
 }
 
-arm *return_arm_pool(int i)
-{
-    return &(arm_pool[i]);
-}
+// arm *return_arm_pool(int i)
+// {
+//     return &(arm_pool[i]);
+// }
 
-polymer *return_br_poly(int i)
-{
-    return &(br_poly[i]);
-}
+// polymer *return_br_poly(int i)
+// {
+//     return &(br_poly[i]);
+// }
 
 reactresults *return_react_dist(int i)
 {
@@ -350,6 +356,7 @@ bool increase_dist_records_in_react_dist(int new_size)
         react_dist[i].boblgmax = 9.0;
         react_dist[i].bobbinmax = 2;
         react_dist[i].simnumber = 0;
+        react_dist[i].polysaved = false;
     }
     react_dist[current_size].next = current_size + 1;
     react_dist[new_size].next = 0;

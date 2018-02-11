@@ -27,5 +27,54 @@ typedef struct
     char *name;
 } reactresults;
 
-extern int this_int;
+typedef struct
+{
+    int maxbobbins;
+    int maxmwdbins;
+    int maxarm; //  maxarm=10000000;
+    int maxpol;
+    int maxreact;
+} polybits_global_const; //these are not really constants, can be changed at runtime
+
+typedef struct
+{
+    int first_in_pool;
+    int first_poly_in_pool;
+    int first_dist_in_pool;
+    int mmax;
+    int num_react;
+    int arms_left;
+    bool react_pool_initialised;
+    bool react_pool_declared;
+    bool arms_avail;  // these flags simply record
+    bool polys_avail; // availability of arms
+    bool dists_avail;
+} polybits_global;
+
+typedef struct
+{
+    double multi_m_w;
+    double multi_m_n;
+    double multi_brav;
+    int multi_nummwdbins;
+} binsandbob_global;
+
+typedef struct
+{
+    int mulmetCSTRnumber;
+    bool mulmetCSTRerrorflag;
+} mulmetCSTR_global;
+
+typedef struct
+{
+    int tobbatchnumber;
+    bool tobitabatcherrorflag;
+} tobitabatch_global;
+
+typedef struct
+{
+    int tobCSTRnumber;
+    bool tobitaCSTRerrorflag;
+} tobitaCSTR_global;
+
 #endif

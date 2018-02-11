@@ -66,6 +66,9 @@ def start_RepTate(argv):
     ex.applications["React1"].datasets["Set1"].handle_actionCalculate_Theory()
 
     # Open a theory
+    ex.applications["React1"].datasets["Set1"].new_theory("ReactMixTheory")
+
+    # Open a theory
     ex.applications["React1"].datasets["Set1"].new_theory("MultiMetCSTRTheory")
 
     ex.show()

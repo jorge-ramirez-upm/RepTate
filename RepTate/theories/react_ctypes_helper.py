@@ -69,11 +69,11 @@ return_dist.restype = None
 request_poly = react_lib.request_poly
 request_poly.restype = ct.c_bool
 
-return_arm_pool = react_lib.return_arm_pool
-return_arm_pool.restype = arm_pointer
+# return_arm_pool = react_lib.return_arm_pool
+# return_arm_pool.restype = arm_pointer
 
-return_br_poly = react_lib.return_br_poly
-return_br_poly.restype = polymer_pointer
+# return_br_poly = react_lib.return_br_poly
+# return_br_poly.restype = polymer_pointer
 
 return_react_dist = react_lib.return_react_dist
 return_react_dist.restype = reactresults_pointer
@@ -129,12 +129,38 @@ tobbatch.restype = ct.c_bool
 # binsandbob.c
 ###############
 
+#struct
+class binsandbob_global(ct.Structure):
+    _fields_ = [("multi_m_w", ct.c_double), ("multi_m_n", ct.c_double), ("multi_brav", ct.c_double), ("multi_nummwdbins", ct.c_int)]
+
+#global variable
+bab_global = binsandbob_global.in_dll(react_lib, "bab_global")
+
 #function
 molbin = react_lib.molbin
 molbin.restype = None
 
 polyconfwrite = react_lib.polyconfwrite
 polyconfwrite.restype = None
+
+multimolbin = react_lib.multimolbin
+multimolbin.restype = None
+
+return_binsandbob_multi_avbr = react_lib.return_binsandbob_multi_avbr
+return_binsandbob_multi_avbr.restype = ct.c_double
+
+return_binsandbob_multi_avg = react_lib.return_binsandbob_multi_avg
+return_binsandbob_multi_avg.restype = ct.c_double
+
+return_binsandbob_multi_lgmid = react_lib.return_binsandbob_multi_lgmid
+return_binsandbob_multi_lgmid.restype = ct.c_double
+
+return_binsandbob_multi_wmass = react_lib.return_binsandbob_multi_wmass
+return_binsandbob_multi_wmass.restype = ct.c_double
+
+return_binsandbob_multi_wt = react_lib.return_binsandbob_multi_wt
+return_binsandbob_multi_wt.restype = ct.c_double
+
 
 
 ###############
@@ -154,6 +180,7 @@ tobCSTRstart.restype = None
 
 tobCSTR = react_lib.tobCSTR
 tobCSTR.restype = ct.c_bool
+
 
 ################
 # MultiMetCSTR.c

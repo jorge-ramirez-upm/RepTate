@@ -2,7 +2,7 @@ import numpy as np
 import ctypes as ct
 import react_ctypes_helper as rch
 #BoB form
-from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout,QHBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton, QSpinBox, QGridLayout, QSizePolicy, QSpacerItem, QScrollArea, QWidget
+from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout,QHBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton, QSpinBox, QGridLayout, QSizePolicy, QSpacerItem, QScrollArea, QWidget, QCheckBox
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PyQt5.QtCore import QSize, Qt
 import psutil
@@ -111,6 +111,33 @@ def handle_stop_calulation(parent_theory):
 
 
 
+def handle_save_mix_configuration(parent_theory):
+    """
+    Launch a dialog to select a filename where to save the polymer configurations.
+    Then call the C routine 'multipolyconfwrite' that the data into the selected file
+    """
+    stars = '*************************'
+    if parent_theory.simexists:
+        ndist = parent_theory.ndist
+        rch.react_dist[ndist].contents.M_e = parent_theory.parameters['Me'].value
+        rch.react_dist[ndist].contents.monmass = parent_theory.parameters['mon_mass'].value
+
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        dir_start = "data/React/polyconf.dat"
+        dilogue_name = "Save"
+        ext_filter = "Data Files (*.dat)"
+        out_file = QFileDialog.getSaveFileName(parent_theory, dilogue_name, dir_start, options=options)
+        if out_file[0] == "":
+            return
+        # output polymers
+        b_out_file = out_file[0].encode('utf-8')
+        rch.polyconfwrite(ct.c_int(ndist), ct.c_char_p(b_out_file))
+        message = stars + '\nSaved %d polymers in %s\n'%(rch.react_dist[ndist].contents.nsaved, out_file[0]) + stars
+    else:    
+        message = stars + '\nNo simulation performed yet\n' + stars
+    parent_theory.print_signal.emit(message)
+
 def handle_save_bob_configuration(parent_theory):
     """
     Launch a dialog to select a filename where to save the polymer configurations.
@@ -195,6 +222,152 @@ def handle_increase_records(parent_theory, name):
 
 ###################
 
+class ParameterReactMix(QDialog):
+    """Create form to input the MultiMetCSTR parameters"""
+
+    def __init__(self, parent_theory):
+        super().__init__(parent_theory)
+        self.parent_theory = parent_theory
+        self.opened_react_theories = []
+        self.list_all_open_react_theories()
+        self.make_lines()
+        self.createFormGroupBox(self.opened_react_theories)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Apply | QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept_)
+        buttonBox.rejected.connect(self.reject)
+        apply_button = buttonBox.button(QDialogButtonBox.Apply)
+        apply_button.clicked.connect(self.handle_apply)
+ 
+        #insert widgets
+        self.mainLayout = QVBoxLayout()
+        self.mainLayout.addWidget(self.scroll)
+        self.mainLayout.addStretch()
+        self.mainLayout.addWidget(buttonBox)
+        self.setLayout(self.mainLayout)
+        self.setWindowTitle("Enter Mix Parameters")
+        self.resize(self.mainLayout.sizeHint())
+    
+    def accept_(self):
+        """
+        Triggered when 'OK' button is pushed. Call 'get_lines()'
+        
+        """
+        self.compute_weights()
+        self.get_lines()
+        self.accept()
+
+    def compute_weights(self):
+        """Update the 'weight' column based on the 'ratio' values"""
+        sum_ratio = 0
+        for i in range (len(self.opened_react_theories)):
+            # IF 'is included?' is checked and Ratio > 0
+            is_checked = self.lines[i][3].isChecked()
+            ratio = float(self.lines[i][4].text())
+            if is_checked and ratio > 0: 
+                sum_ratio += ratio 
+        
+        for i in range (len(self.opened_react_theories)):
+            is_checked = self.lines[i][3].isChecked()
+            ratio = float(self.lines[i][4].text())
+            if is_checked and ratio > 0: 
+                weight = ratio/sum_ratio
+                self.lines[i][5].setText('%.7g'%weight)
+            else:
+                self.lines[i][3].setChecked(False)
+                self.lines[i][5].setText('0')
+
+    def handle_apply(self):
+        """
+        Update the values of 'is checked?' and 'weight' columns.
+        Triggered when 'Apply' button is pushed.
+        
+        """
+        self.compute_weights()
+
+    def make_lines(self):
+        """Create the input-parameter-form lines with default parameter values"""
+        dvalidator = QDoubleValidator() #prevent letters etc.
+        dvalidator.setBottom(0) #minimum allowed value
+        self.lines = []
+        for th in self.opened_react_theories:
+            line = []
+            ndist = th.ndist
+            ds = th.parent_dataset
+            #find theory tab-name
+            th_index = ds.TheorytabWidget.indexOf(th)
+            th_tab_name =  ds.TheorytabWidget.tabText(th_index)
+            #find applicatino tab-name
+            app = ds.parent_application
+            manager = app.parent_manager
+            app_index = manager.ApplicationtabWidget.indexOf(app)
+            app_tab_name =  manager.ApplicationtabWidget.tabText(app_index)
+
+            line.append(QLabel('%s/%s'%(app_tab_name, th_tab_name))) #Name
+            line.append(QLabel('%.4g'%rch.react_dist[ndist].contents.npoly)) #no. generated
+            line.append(QLabel('%.4g'%rch.react_dist[ndist].contents.nsaved)) #no. saved
+            line.append(QCheckBox()) #is included? - unchecked by default
+            qledit = QLineEdit()
+            qledit.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
+            qledit.setValidator(dvalidator)  
+            qledit.setText('0.0')
+            line.append(qledit) #ratio
+            line.append(QLabel('0.0')) #weight
+            self.lines.append(line)
+    
+    def get_lines(self):
+        """Called when 'OK' is pressed"""
+        self.parent_theory.dists = []
+        self.parent_theory.weights = []
+        self.parent_theory.theory_names = []
+        for i in range(len(self.opened_react_theories)):
+            if self.lines[i][3].isChecked():
+                self.parent_theory.dists.append(self.opened_react_theories[i].ndist) #get ndist
+                self.parent_theory.weights.append(self.lines[i][5].text()) #get weight
+                self.parent_theory.theory_names.append(self.lines[i][0].text()) #get theory name
+        self.parent_theory.n_inmix = len(self.parent_theory.weights) #get number of included theories in mix
+
+
+    def createFormGroupBox(self, theory_list):
+        """Create a form to set the new values of mix parameters"""
+        self.formGroupBox = QGroupBox()
+        layout = QGridLayout()
+        layout.setSpacing(10)
+        layout.addWidget(QLabel('<b>App/Theory</b>'), 0, 1)
+        layout.addWidget(QLabel('<b>No. generated</b>'), 0, 2)
+        layout.addWidget(QLabel('<b>No. saved</b>'), 0, 3)
+        layout.addWidget(QLabel('<b>Include?</b>'), 0, 4)
+        layout.addWidget(QLabel('<b>Ratio</b>'), 0, 5)
+        layout.addWidget(QLabel('<b>Weight fraction</b>'), 0, 6)
+
+        for i in range(len(theory_list)):
+            layout.addWidget(QLabel('<b>%d</b>'%(i + 1)), i + 1, 0)
+            for j in range(len(self.lines[0])):
+                layout.addWidget(self.lines[i][j], i + 1, j + 1)
+        self.formGroupBox.setLayout(layout)
+                
+        #Scroll Area Properties
+        self.scroll = QScrollArea()
+        self.scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.formGroupBox)
+        
+    def list_all_open_react_theories(self):
+        """List all oppened React theories in RepTate, excluding the Mix theories"""
+        self.opened_react_theories = []
+        current_manager = self.parent_theory.parent_dataset.parent_application.parent_manager
+
+        for app in current_manager.applications.values(): #list all opened apps
+            if (app.name.rstrip("0123456789") == 'React'): #select only React application
+                for ds in app.datasets.values(): #loop over datasets
+                    for th in ds.theories.values(): #loop over theories
+                        if th.reactname != 'ReactMix' and th.simexists: # exclude React Mix theories
+                            self.opened_react_theories.append(th)
+
+
+###################
+
 class ParameterMultiMetCSTR(QDialog):
     """Create form to input the MultiMetCSTR parameters"""
 
@@ -247,10 +420,7 @@ class ParameterMultiMetCSTR(QDialog):
         self.mainLayout.addWidget(buttonBox)
         self.setLayout(self.mainLayout)
         self.setWindowTitle("Enter Metallocene Polymerisation Parameters")
-        # self.opened_react_theories = []
-        # self.list_all_open_react_theories()
-        # self.resize(self.mainLayout.sizeHint())
-    
+
     def accept_(self):
         """
         Triggered when 'OK' button is pushed. Call 'get_lines()'
@@ -332,12 +502,6 @@ class ParameterMultiMetCSTR(QDialog):
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(self.formGroupBox)
-        
-    # def list_all_open_react_theories(self):
-    #     for th in self.parent_theory.parent_dataset.theories: #list theories in the current React app
-    #         self.opened_react_theories.append(th)
-    #     for app in self.parent_theory.parent_dataset.parent_application.parent_manager.applications: #list all opened apps
-    #         print(app.name)
 
 ###############################################
 

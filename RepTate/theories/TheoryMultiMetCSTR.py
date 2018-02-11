@@ -69,7 +69,7 @@ class BaseTheoryMultiMetCSTR:
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
-        self.reactname = "multi mPE CSTR %d"%(rch.MMCSTR_global.mulmetCSTRnumber)
+        self.reactname = "MultiMetCSTR %d"%(rch.MMCSTR_global.mulmetCSTRnumber)
         rch.MMCSTR_global.mulmetCSTRnumber += 1
         self.function = self.Calc 
         self.simexists = False
@@ -158,9 +158,9 @@ class BaseTheoryMultiMetCSTR:
             rch.return_dist_polys(ct.c_int(ndist))
 
         #launch form
-        self.dialog = rgt.ParameterMultiMetCSTR(self)
+        dialog = rgt.ParameterMultiMetCSTR(self)
 
-        if not self.dialog.exec_(): #TODO: use signal->emit
+        if not dialog.exec_(): #TODO: use signal->emit
             return
 
 

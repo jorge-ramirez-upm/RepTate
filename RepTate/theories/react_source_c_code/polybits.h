@@ -4,33 +4,8 @@
 #include <stdbool.h>
 #include "react_structs.h"
 
-typedef struct
-{
-    int maxbobbins;
-    int maxmwdbins;
-    int maxarm; //  maxarm=10000000;
-    int maxpol;
-    int maxreact;
-} polybits_global_const; //these are not really constants, can be changed at runtime
-
-typedef struct
-{
- int first_in_pool;
- int first_poly_in_pool;
- int first_dist_in_pool;
- int mmax;
- int num_react;
- int arms_left;
- bool react_pool_initialised;
- bool react_pool_declared;
- bool arms_avail;  // these flags simply record
- bool polys_avail; // availability of arms
- bool dists_avail;
-} polybits_global;
-
 extern polybits_global_const pb_global_const;
 extern polybits_global pb_global;
-
 
 extern arm *arm_pool;
 extern polymer *br_poly;
@@ -47,5 +22,6 @@ extern bool request_dist(int *); // returns false if no distributions left
 extern void return_dist(int);
 extern void return_dist_polys(int);
 extern void armupdown(int, int);
+extern reactresults *return_react_dist(int i);
 
 #endif

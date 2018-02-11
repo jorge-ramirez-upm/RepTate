@@ -4,9 +4,10 @@
 #include "polybits.h"
 #include "binsandbob.h"
 
-double *multi_wt, *multi_avbr, *multi_wmass, *multi_avg, *multi_lgmid;
-double multi_m_w, multi_m_n, multi_brav;
-int multi_nummwdbins;
+binsandbob_global bab_global = {.multi_m_w = 0, .multi_m_n = 0, .multi_brav = 0, .multi_nummwdbins = 0};
+
+static double *multi_wt, *multi_avbr, *multi_wmass, *multi_avg, *multi_lgmid;
+static void init_binsandbob_arrays(void);
 
 // call this procedure to calculate current averages
 //  and MWD for polymers made in distribution n
@@ -89,26 +90,27 @@ void molbin(int n)
 //  and MWD for all polymers made in all distributions
 // with weights contained in weights array, and whether "in the mix" contained
 // in inmix array
-void multimolbin(int reqbins, double *weights, bool *inmix)
+// void multimolbin(int reqbins, double *weights, bool *inmix)
+void multimolbin(int reqbins, double *weights, int *dists, int n_inmix)
 {
-    int i, ibin, n;
+    int i, ibin, n, dist;
     double wttot, m_w, m_n, brav, lgstep, lgmin, lgmax, cplen, wtpoly;
 
-    multi_nummwdbins = fmin(reqbins, pb_global_const.maxmwdbins);
+    bab_global.multi_nummwdbins = fmin(reqbins, pb_global_const.maxmwdbins);
 
     // first find largest and smallest polymer
     lgmax = 0.0;
     lgmin = 1.0e80;
 
-    for (n = 1; n <= 10; n++)
+    for (n = 0; n < n_inmix; n++)
     {
-        if (inmix[n - 1] && (weights[n - 1] > 0.0))
+        if (weights[n] > 0.0)
         {
-
-            i = react_dist[n].first_poly;
+            dist = dists[n];
+            i = react_dist[dist].first_poly;
             while (true)
             {
-                cplen = br_poly[i].tot_len * react_dist[n].monmass;
+                cplen = br_poly[i].tot_len * react_dist[dist].monmass;
                 lgmax = fmax(lgmax, cplen);
                 lgmin = fmin(lgmin, cplen);
                 i = br_poly[i].nextpoly;
@@ -122,10 +124,10 @@ void multimolbin(int reqbins, double *weights, bool *inmix)
 
     lgmax = log10(lgmax * 1.01);
     lgmin = log10(lgmin / 1.01);
-    lgstep = (lgmax - lgmin) / multi_nummwdbins;
+    lgstep = (lgmax - lgmin) / bab_global.multi_nummwdbins;
 
     //initialise bins and other counters
-    for (ibin = 1; ibin <= multi_nummwdbins; ibin++)
+    for (ibin = 1; ibin <= bab_global.multi_nummwdbins; ibin++)
     {
         multi_wt[ibin] = 0.0;
         multi_avbr[ibin] = 0.0;
@@ -139,22 +141,22 @@ void multimolbin(int reqbins, double *weights, bool *inmix)
     brav = 0.0;
 
     // the assumption here is that polymers have been created on a weight basis
-
-    for (n = 1; n <= 10; n++)
+    for (n = 0; n < n_inmix; n++)
     {
-        if (inmix[n - 1] && (weights[n - 1] > 0.0))
+        if (weights[n] > 0.0)
         {
-            i = react_dist[n].first_poly;
-            wtpoly = weights[n - 1] / react_dist[n].npoly;
+            dist = dists[n];
+            i = react_dist[dist].first_poly;
+            wtpoly = weights[n] / react_dist[dist].npoly;
             while (true)
             {
-                cplen = br_poly[i].tot_len * react_dist[n].monmass;
+                cplen = br_poly[i].tot_len * react_dist[dist].monmass;
                 ibin = trunc((log10(cplen) - lgmin) / lgstep) + 1;
                 wttot = wttot + wtpoly;
                 m_w = m_w + cplen * wtpoly;
                 m_n = m_n + wtpoly / cplen;
                 brav = brav + br_poly[i].num_br / br_poly[i].tot_len * wtpoly;
-                if ((ibin <= multi_nummwdbins) && (ibin > 0))
+                if ((ibin <= bab_global.multi_nummwdbins) && (ibin > 0))
                 {
                     multi_wt[ibin] = multi_wt[ibin] + wtpoly;
                     multi_avbr[ibin] = multi_avbr[ibin] + br_poly[i].num_br * wtpoly;
@@ -171,7 +173,7 @@ void multimolbin(int reqbins, double *weights, bool *inmix)
     }
 
     // finalise bin data - ready for plotting
-    for (ibin = 1; ibin <= multi_nummwdbins; ibin++)
+    for (ibin = 1; ibin <= bab_global.multi_nummwdbins; ibin++)
     {
         multi_avbr[ibin] = multi_avbr[ibin] / (multi_wmass[ibin] + 1.0e-80) * 500.0;
         multi_avg[ibin] = multi_avg[ibin] / (multi_wt[ibin] + 1.0e-80);
@@ -179,26 +181,38 @@ void multimolbin(int reqbins, double *weights, bool *inmix)
         multi_lgmid[ibin] = lgmin + ibin * lgstep - 0.5 * lgstep;
     }
 
-    multi_m_w = m_w / wttot;
-    multi_m_n = wttot / m_n;
-    multi_brav = brav / wttot * 500.0;
+    bab_global.multi_m_w = m_w / wttot;
+    bab_global.multi_m_n = wttot / m_n;
+    bab_global.multi_brav = brav / wttot * 500.0;
+}
+
+// call this before making any polymers
+void init_binsandbob_arrays()
+{
+    static bool is_initialized = false;
+
+    if (!is_initialized)
+    {
+        multi_wt = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        multi_avbr = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        multi_wmass = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        multi_avg = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        multi_lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        is_initialized = true;
+    }
 }
 
 // call this before making any polymers
 void bobinit(int n)
 {
     int i;
+
+    init_binsandbob_arrays();
     for (i = 1; i <= react_dist[n].numbobbins; i++)
     {
         react_dist[n].numinbin[i] = 0;
     }
     react_dist[n].nsaved = 0;
-
-    multi_wt = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-    multi_avbr = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-    multi_wmass = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-    multi_avg = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
-    multi_lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
 }
 
 // checks to see whether or not to save this polymer (polymer m, from react_dist n)!
@@ -356,7 +370,6 @@ void polyconfwrite(int n, char *fname)
 }
 
 // version for mixtures
-
 void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved_out)
 {
     int i, atally, numarms, anum, n, nmix;
@@ -511,4 +524,29 @@ void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved
     } // end of loop over distributions
 
     fclose(fp);
+}
+
+double return_binsandbob_multi_avbr(int i)
+{
+    return multi_avbr[i];
+}
+
+double return_binsandbob_multi_avg(int i)
+{
+    return multi_avg[i];
+}
+
+double return_binsandbob_multi_lgmid(int i)
+{
+    return multi_lgmid[i];
+}
+
+double return_binsandbob_multi_wmass(int i)
+{
+    return multi_wmass[i];
+}
+
+double return_binsandbob_multi_wt(int i)
+{
+    return multi_wt[i];
 }

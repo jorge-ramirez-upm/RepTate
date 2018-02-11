@@ -1,15 +1,21 @@
 #ifndef BINSANDBOB_H
 #define BINSANDBOB_H
 
+#include <stdbool.h>
+#include "react_structs.h"
+
 extern void molbin(int);
-extern void multimolbin(int reqbins, double *weights, bool *inmix);
+extern void multimolbin(int reqbins, double *weights, int *dist, int ndists);
 extern void bobinit(int n);
 extern void bobcount(int m, int n);
 extern void polyconfwrite(int, char *fname);
 extern void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved_out);
+extern double return_binsandbob_multi_avbr(int i);
+extern double return_binsandbob_multi_avg(int i);
+extern double return_binsandbob_multi_lgmid(int i);
+extern double return_binsandbob_multi_wmass(int i);
+extern double return_binsandbob_multi_wt(int i);
 
-extern double *multi_wt, *multi_avbr, *multi_wmass, *multi_avg, *multi_lgmid;
-extern double multi_m_w, multi_m_n, multi_brav;
-extern int multi_nummwdbins;
+extern binsandbob_global bab_global;
 
 #endif
