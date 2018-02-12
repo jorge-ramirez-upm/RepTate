@@ -232,7 +232,12 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
         self.bob_settings_button.setDisabled(True)
 
     def theory_buttons_disabled(self, state):
-        rgt.theory_buttons_disabled(self, state)
+        """
+        Enable/Disable theory buttons, typically called at the start and stop of a calculation.
+        This is relevant in multithread mode only.
+        """
+        self.save_bob_configuration_button.setDisabled(state)
+        self.stop_calulation_button.setDisabled(not state)
 
     def handle_stop_calulation(self):
         rgt.handle_stop_calulation(self)
