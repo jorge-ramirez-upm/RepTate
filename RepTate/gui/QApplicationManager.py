@@ -94,7 +94,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.verticalLayout.addWidget(self.text_edit)
 
     def handle_doubleClickTab(self, index):
-        """Edit Application name
+        """Edit Application name, tab only, the dictinary key remains unchanged
         
         [description]
         
@@ -111,8 +111,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         new_tab_name = dlg.textValue()
         if (success and new_tab_name!=""):    
             self.ApplicationtabWidget.setTabText(index, new_tab_name)
-            self.applications[old_name].name = new_tab_name
-            self.applications[new_tab_name] = self.applications.pop(old_name)
+            # self.applications[old_name].name = new_tab_name
+            # self.applications[new_tab_name] = self.applications.pop(old_name)
             
 
     def show_about(self):
