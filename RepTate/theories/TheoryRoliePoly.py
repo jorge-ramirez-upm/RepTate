@@ -287,7 +287,7 @@ class BaseTheoryRoliePoly:
         sigma0 = [1.0, 1.0, 0.0] # sxx, syy, sxy 
         beta = self.parameters["beta"].value
         delta = self.parameters["delta"].value
-        gammadot = float(f.file_parameters["frate"])
+        gammadot = float(f.file_parameters["gdot"])
         nmodes = self.parameters["nmodes"].value
         nstretch = self.parameters["nstretch"].value
         for i in range(nmodes):
@@ -440,7 +440,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.data[:,1] = 0
         fparamaux={}
-        fparamaux["frate"]=1e-6;
+        fparamaux["gdot"]=1e-6;
         for i in range(nmodes):
             G = self.parameters["G%02d"%i].value 
             tauD = self.parameters["tauD%02d"%i].value

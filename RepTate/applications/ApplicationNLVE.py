@@ -78,9 +78,9 @@ class BaseApplicationNLVE:
         self.nplots = len(self.multiviews) 
 
         # FILES
-        ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['frate','T'], ['s','Pa$\cdot$s'])
+        ftype=TXTColumnFile("Start-up of shear flow", "shear", "Shear flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])
         self.filetypes[ftype.extension]=ftype
-        ftype=TXTColumnFile("Elongation flow", "elong", "Elongation flow files", ['t','eta'], ['frate','T'], ['s','Pa$\cdot$s'])
+        ftype=TXTColumnFile("Elongation flow", "uext", "Elongation flow files", ['t','eta'], ['gdot','T'], ['s','Pa$\cdot$s'])
         self.filetypes[ftype.extension]=ftype
 
         # THEORIES
@@ -104,7 +104,11 @@ class BaseApplicationNLVE:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(dt.data[:, 1]/float(file_parameters["frate"]))    
+        try:
+            flow_rate = float(file_parameters["gdot"])
+        except:
+            flow_rate = float(file_parameters["edot"])
+        y[:, 0] = np.log10(dt.data[:, 1]/flow_rate)    
         return x, y, True
 
     def viewLogSigmaTime(self, dt, file_parameters):
@@ -139,7 +143,11 @@ class BaseApplicationNLVE:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = np.log10(dt.data[:, 0]*float(file_parameters["frate"])) #compute strain
+        try:
+            flow_rate = float(file_parameters["gdot"])
+        except:
+            flow_rate = float(file_parameters["edot"])
+        x[:, 0] = np.log10(dt.data[:, 0]*flow_rate) #compute strain
         y[:, 0] = np.log10(dt.data[:, 1]) 
         return x, y, True
 
