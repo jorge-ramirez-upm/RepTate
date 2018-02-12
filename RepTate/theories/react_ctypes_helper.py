@@ -143,6 +143,9 @@ molbin.restype = None
 polyconfwrite = react_lib.polyconfwrite
 polyconfwrite.restype = None
 
+multipolyconfwrite = react_lib.multipolyconfwrite
+multipolyconfwrite.restype = ct.c_ulonglong
+
 multimolbin = react_lib.multimolbin
 multimolbin.restype = None
 
@@ -160,6 +163,12 @@ return_binsandbob_multi_wmass.restype = ct.c_double
 
 return_binsandbob_multi_wt = react_lib.return_binsandbob_multi_wt
 return_binsandbob_multi_wt.restype = ct.c_double
+
+set_react_dist_monmass = react_lib.set_react_dist_monmass
+set_react_dist_monmass.restype = ct.c_double
+
+set_react_dist_M_e = react_lib.set_react_dist_M_e
+set_react_dist_M_e.restype = ct.c_double
 
 
 

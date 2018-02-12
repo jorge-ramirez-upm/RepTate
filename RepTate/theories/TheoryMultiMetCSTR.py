@@ -156,6 +156,7 @@ class BaseTheoryMultiMetCSTR:
 
         if self.simexists:
             rch.return_dist_polys(ct.c_int(ndist))
+        self.simexists = False
 
         #launch form
         dialog = rgt.ParameterMultiMetCSTR(self)

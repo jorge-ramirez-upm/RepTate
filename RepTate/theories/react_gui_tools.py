@@ -2,7 +2,7 @@ import numpy as np
 import ctypes as ct
 import react_ctypes_helper as rch
 #BoB form
-from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout,QHBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton, QSpinBox, QGridLayout, QSizePolicy, QSpacerItem, QScrollArea, QWidget, QCheckBox
+from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout,QHBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton, QSpinBox, QGridLayout, QSizePolicy, QSpacerItem, QScrollArea, QWidget, QCheckBox, QMessageBox, QFrame, QPlainTextEdit
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PyQt5.QtCore import QSize, Qt
 import psutil
@@ -117,27 +117,50 @@ def handle_save_mix_configuration(parent_theory):
     Then call the C routine 'multipolyconfwrite' that the data into the selected file
     """
     stars = '*************************'
-    if parent_theory.simexists:
-        ndist = parent_theory.ndist
-        rch.react_dist[ndist].contents.M_e = parent_theory.parameters['Me'].value
-        rch.react_dist[ndist].contents.monmass = parent_theory.parameters['mon_mass'].value
+    if not parent_theory.calcexists:
+        msg = stars + '\nNo calculation performed yet\n' + stars
+        parent_theory.print_signal.emit(msg)
+        return
 
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        dir_start = "data/React/polyconf.dat"
-        dilogue_name = "Save"
-        ext_filter = "Data Files (*.dat)"
-        out_file = QFileDialog.getSaveFileName(parent_theory, dilogue_name, dir_start, options=options)
-        if out_file[0] == "":
-            return
-        # output polymers
-        b_out_file = out_file[0].encode('utf-8')
-        rch.polyconfwrite(ct.c_int(ndist), ct.c_char_p(b_out_file))
-        message = stars + '\nSaved %d polymers in %s\n'%(rch.react_dist[ndist].contents.nsaved, out_file[0]) + stars
-    else:    
-        message = stars + '\nNo simulation performed yet\n' + stars
+    dist_state_check = False
+    for i in range(parent_theory.n_inmix):
+        dist = parent_theory.dists[i]
+        dist_state_check = dist_state_check or (parent_theory.theory_simnumber[i] != rch.react_dist[dist].contents.simnumber)
+    if dist_state_check:
+        message = 'Simulations have changed since last calculation.\nRedo calculation first'
+        msgbox = QMessageBox()
+        msgbox.setWindowTitle("Error")
+        msgbox.setText(message)
+        msgbox.exec_()
+        return
+
+    dialog = EditMixSaveParamDialog(parent_theory)
+    if not dialog.exec_():
+        return
+    
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    dir_start = "data/React/multipolyconf.dat"
+    dilogue_name = "Save"
+    ext_filter = "Data Files (*.dat)"
+    out_file = QFileDialog.getSaveFileName(parent_theory, dilogue_name, dir_start, options=options)
+    if out_file[0] == "":
+        parent_theory.print_signal.emit('Invalid filename')
+        return
+    # output polymers
+    b_out_file = out_file[0].encode('utf-8')
+
+    c_weights = (ct.c_double * parent_theory.n_inmix)()
+    c_dists = (ct.c_int * parent_theory.n_inmix)()
+    for i in range(parent_theory.n_inmix):
+        c_weights[i] = ct.c_double(float(parent_theory.weights[i]))
+        c_dists[i] = ct.c_int(int(parent_theory.dists[i]))
+    n_out = rch.multipolyconfwrite(ct.c_char_p(b_out_file), c_weights, c_dists , ct.c_int(parent_theory.n_inmix))
+
+    message = stars + '\nSaved %d polymers in %s\n'%(n_out, out_file[0]) + stars
     parent_theory.print_signal.emit(message)
 
+        
 def handle_save_bob_configuration(parent_theory):
     """
     Launch a dialog to select a filename where to save the polymer configurations.
@@ -305,13 +328,15 @@ class ParameterReactMix(QDialog):
             line.append(QLabel('%s/%s'%(app_tab_name, th_tab_name))) #Name
             line.append(QLabel('%.4g'%rch.react_dist[ndist].contents.npoly)) #no. generated
             line.append(QLabel('%.4g'%rch.react_dist[ndist].contents.nsaved)) #no. saved
-            line.append(QCheckBox()) #is included? - unchecked by default
+            checkbox = QCheckBox()
+            checkbox.setChecked(True)
+            line.append(checkbox) #is included? - checked by default
             qledit = QLineEdit()
             qledit.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
             qledit.setValidator(dvalidator)  
-            qledit.setText('0.0')
+            qledit.setText('1')
             line.append(qledit) #ratio
-            line.append(QLabel('0.0')) #weight
+            line.append(QLabel('-')) #weight
             self.lines.append(line)
     
     def get_lines(self):
@@ -319,17 +344,22 @@ class ParameterReactMix(QDialog):
         self.parent_theory.dists = []
         self.parent_theory.weights = []
         self.parent_theory.theory_names = []
+        self.parent_theory.theory_simnumber = []
+        
         for i in range(len(self.opened_react_theories)):
             if self.lines[i][3].isChecked():
-                self.parent_theory.dists.append(self.opened_react_theories[i].ndist) #get ndist
+                ndist = self.opened_react_theories[i].ndist
+                self.parent_theory.dists.append(ndist) #get ndist
                 self.parent_theory.weights.append(self.lines[i][5].text()) #get weight
                 self.parent_theory.theory_names.append(self.lines[i][0].text()) #get theory name
+                simnumber = rch.react_dist[ndist].contents.simnumber
+                self.parent_theory.theory_simnumber.append(simnumber) #get theory simulation number
         self.parent_theory.n_inmix = len(self.parent_theory.weights) #get number of included theories in mix
 
 
     def createFormGroupBox(self, theory_list):
         """Create a form to set the new values of mix parameters"""
-        self.formGroupBox = QGroupBox()
+        self.formGroupBox = QWidget()
         layout = QGridLayout()
         layout.setSpacing(10)
         layout.addWidget(QLabel('<b>App/Theory</b>'), 0, 1)
@@ -366,7 +396,98 @@ class ParameterReactMix(QDialog):
                             self.opened_react_theories.append(th)
 
 
+
 ###################
+
+class EditMixSaveParamDialog(QDialog):
+    """Create the form used to set distribution parameters of mix when saving"""
+
+    def __init__(self, parent_theory):
+        super().__init__(parent_theory)
+        self.parent_theory = parent_theory
+        self.createFormGroupBox(parent_theory)
+ 
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept_)
+        buttonBox.rejected.connect(self.reject)
+ 
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.scroll)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)
+        self.setWindowTitle('Distribution parameters check')
+ 
+    def accept_(self):
+        self.get_lines()
+        self.accept()
+
+    def get_lines(self):
+        for i, dist in enumerate(self.parent_theory.dists): #loop over the distributions in mix
+            monmass = float(self.lines[i][1].text()) 
+            Me = float(self.lines[i][2].text()) 
+            rch.set_react_dist_monmass(ct.c_int(dist), ct.c_double(monmass))
+            rch.set_react_dist_M_e(ct.c_int(dist), ct.c_double(Me))
+
+    def createFormGroupBox(self, parent_theory):
+        """Create a form to set the new values of the parameters"""
+
+        self.formGroupBox = QWidget()
+        layout = QGridLayout()
+        layout.setSpacing(10)
+
+        vlayout = QVBoxLayout()
+        qmessage = QLabel(
+            '<p>Please check the values of monomer mass and Me used for each distribution in the mix.</p>\
+<p>Note that BoB is not yet able to deal with mixtures of polymers with different Me.</p>')
+        qmessage.setWordWrap(True)
+        vlayout.addWidget(qmessage)
+        hline = QFrame()
+        hline.setFrameShape(QFrame.HLine)
+        hline.setFrameShadow(QFrame.Sunken)
+        vlayout.addWidget(hline)
+        layout.addLayout(vlayout, 0, 0, 1, -1) #span all the columns
+
+        layout.addWidget(QLabel('<b>App/Theory</b>'), 1, 1)
+        layout.addWidget(QLabel('<b>Monomer Mass</b>'), 1, 2)
+        label = QLabel('<b>M<sub>e</sub></b>')
+        label.setMinimumWidth(100) # prevent too small size of the QLineEdit when resizing
+        layout.addWidget(label, 1, 3)
+
+        self.lines = []
+        dvalidator = QDoubleValidator() #prevent letters etc.
+        dvalidator.setBottom(0) #minimum allowed value
+        for i, dist in enumerate(parent_theory.dists): #loop over the distributions in mix
+            layout.addWidget(QLabel('<b>%d</b>'%(i + 1)), i + 2, 0)
+            line = []
+            
+            line.append(QLabel(parent_theory.theory_names[i]))
+            
+            qline = QLineEdit()
+            qline.setValidator(dvalidator)  
+            qline.setText("%.4g"%rch.react_dist[dist].contents.monmass)
+            line.append(qline)
+            
+            qline = QLineEdit()
+            qline.setValidator(dvalidator)  
+            qline.setText("%.4g"%rch.react_dist[dist].contents.M_e)
+            line.append(qline)
+            
+            self.lines.append(line) #save lines
+            for j in range(3):
+                layout.addWidget(self.lines[i][j], i + 2, j + 1)
+        self.formGroupBox.setLayout(layout)
+                
+        #Scroll Area Properties
+        self.scroll = QScrollArea()
+        # self.scroll.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.formGroupBox)
+
+###########################
+
+
 
 class ParameterMultiMetCSTR(QDialog):
     """Create form to input the MultiMetCSTR parameters"""
@@ -381,10 +502,10 @@ class ParameterMultiMetCSTR(QDialog):
         buttonBox.accepted.connect(self.accept_)
         buttonBox.rejected.connect(self.reject)
  
-        hwidget = QGroupBox()
+        hwidget = QWidget()
         hlayout = QHBoxLayout()
         #set spinBox ncatalyst
-        hlayout.addWidget(QLabel('<b>N. of catalysts</b>') )
+        hlayout.addWidget(QLabel('<b>No. of catalysts</b>') )
         self.sb_ncatalyst = QSpinBox()
         self.sb_ncatalyst.setMinimum(1)
         self.sb_ncatalyst.setMaximum(self.numcat_max)
@@ -479,7 +600,7 @@ class ParameterMultiMetCSTR(QDialog):
 
     def createFormGroupBox(self, ncatalyst):
         """Create a form to set the new values of polymerisation parameters"""
-        self.formGroupBox = QGroupBox()
+        self.formGroupBox = QWidget()
 
         layout = QGridLayout()
         layout.setSpacing(10)

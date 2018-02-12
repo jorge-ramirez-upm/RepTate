@@ -370,10 +370,12 @@ void polyconfwrite(int n, char *fname)
 }
 
 // version for mixtures
-void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved_out)
+// double *weights, int *dists, int n_inmix)
+unsigned long long multipolyconfwrite(char *fname, double *weights, int *dists, int n_inmix)
 {
     int i, atally, numarms, anum, n, nmix;
     int first, tL1, tL2, tR1, tR2, m1, mc, npoly;
+    int dist;
     // F: TextFile;
     double enrich, polywt, armwt, armz, N_e, N_e_av, distwt;
     FILE *fp;
@@ -381,149 +383,147 @@ void multipolyconfwrite(char *fname, double *weights, bool *inmix, int *numsaved
     fp = fopen(fname, "w");
 
     // count polymers over all distributions
-    *numsaved_out = 0;
+    unsigned long long numsaved_out = 0;
     nmix = 0;
     N_e_av = 0;
 
-    for (n = 1; n <= 10; n++)
+    for (n = 0; n < n_inmix; n++)
     {
-        if (inmix[n - 1])
-        {
-            react_dist[n].N_e = react_dist[n].M_e / react_dist[n].monmass;
-            N_e_av = N_e_av + react_dist[n].N_e;
-            nmix++;
-            *numsaved_out = (*numsaved_out) + react_dist[n].nsaved;
-        }
+        dist = dists[n];
+        react_dist[dist].N_e = react_dist[dist].M_e / react_dist[dist].monmass;
+        N_e_av = N_e_av + react_dist[dist].N_e;
+        nmix++;
+        numsaved_out += react_dist[dist].nsaved;
     }
     N_e_av = N_e_av / nmix;
 
     // opening lines
     fprintf(fp, "reactmix\n");
     fprintf(fp, "%g\n", N_e_av);
-    fprintf(fp, "%d\n", *numsaved_out);
+    fprintf(fp, "%llu\n", numsaved_out);
 
     atally = 0;
 
     // now loop through distributions writing output
-    for (n = 1; n <= 10; n++)
+    for (n = 0; n < n_inmix; n++)
     {
-        if (inmix[n - 1])
+        dist = dists[n];
+        distwt = weights[n];
+
+        // loop through polymers, writing output
+        npoly = react_dist[dist].npoly;
+        N_e = react_dist[dist].N_e;
+        i = react_dist[dist].first_poly;
+        while (true)
         {
-            distwt = weights[n - 1];
-
-            // loop through polymers, writing output
-            npoly = react_dist[n].npoly;
-            N_e = react_dist[n].N_e;
-            i = react_dist[n].first_poly;
-            while (true)
+            if (br_poly[i].saved)
             {
-                if (br_poly[i].saved)
+                if (react_dist[dist].numinbin[br_poly[i].bin] <= react_dist[dist].bobbinmax)
                 {
-                    if (react_dist[n].numinbin[br_poly[i].bin] <= react_dist[n].bobbinmax)
-                    {
-                        enrich = 1.0;
-                    }
-                    else
-                    {
-                        enrich = react_dist[n].numinbin[br_poly[i].bin] / react_dist[n].bobbinmax;
-                    }
-                    polywt = enrich / npoly * distwt;
+                    enrich = 1.0;
+                }
+                else
+                {
+                    enrich = react_dist[dist].numinbin[br_poly[i].bin] / react_dist[dist].bobbinmax;
+                }
+                polywt = enrich / npoly * distwt;
 
-                    if (br_poly[i].num_br == 0)
-                    { //it's a linear polymer
-                        fprintf(fp, "2\n");
-                        atally = atally + 2;
-                        first = br_poly[i].first_end;
-                        armwt = 0.5 * arm_pool[first].arm_len / br_poly[i].tot_len * polywt;
-                        armz = 0.5 * arm_pool[first].arm_len / N_e;
-                        fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", -1, -1, 1, -1, armz, armwt);
-                        fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", 0, -1, -1, -1, armz, armwt);
-                    }
-                    else
-                    { // it's a branched polymer
-                        numarms = 2 * br_poly[i].num_br + 1;
-                        fprintf(fp, "%d\n", numarms); //number of arms
-                        atally = atally + numarms;
-                        first = br_poly[i].first_end;
+                if (br_poly[i].num_br == 0)
+                { //it's a linear polymer
+                    fprintf(fp, "2\n");
+                    atally = atally + 2;
+                    first = br_poly[i].first_end;
+                    armwt = 0.5 * arm_pool[first].arm_len / br_poly[i].tot_len * polywt;
+                    armz = 0.5 * arm_pool[first].arm_len / N_e;
+                    fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", -1, -1, 1, -1, armz, armwt);
+                    fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", 0, -1, -1, -1, armz, armwt);
+                }
+                else
+                { // it's a branched polymer
+                    numarms = 2 * br_poly[i].num_br + 1;
+                    fprintf(fp, "%d\n", numarms); //number of arms
+                    atally = atally + numarms;
+                    first = br_poly[i].first_end;
 
-                        //renumber segments starting from zero
-                        m1 = first;
-                        anum = 0;
-                        while (true)
+                    //renumber segments starting from zero
+                    m1 = first;
+                    anum = 0;
+                    while (true)
+                    {
+                        arm_pool[m1].armnum = anum;
+                        m1 = arm_pool[m1].down;
+                        anum = anum + 1;
+                        if (m1 == first)
                         {
-                            arm_pool[m1].armnum = anum;
-                            m1 = arm_pool[m1].down;
-                            anum = anum + 1;
-                            if (m1 == first)
-                            {
-                                break;
-                            }
+                            break;
                         }
-                        // now do output - loop over arms
-                        m1 = first;
-                        while (true)
+                    }
+                    // now do output - loop over arms
+                    m1 = first;
+                    while (true)
+                    {
+                        armwt = arm_pool[m1].arm_len / br_poly[i].tot_len * polywt;
+                        armz = arm_pool[m1].arm_len / N_e;
+                        if (arm_pool[m1].L1 == 0)
                         {
-                            armwt = arm_pool[m1].arm_len / br_poly[i].tot_len * polywt;
-                            armz = arm_pool[m1].arm_len / N_e;
-                            if (arm_pool[m1].L1 == 0)
-                            {
-                                tL1 = -1;
-                            }
-                            else
-                            {
-                                mc = abs(arm_pool[m1].L1);
-                                tL1 = arm_pool[mc].armnum;
-                            }
-                            if (arm_pool[m1].L2 == 0)
-                            {
-                                tL2 = -1;
-                            }
-                            else
-                            {
-                                mc = abs(arm_pool[m1].L2);
-                                tL2 = arm_pool[mc].armnum;
-                            }
-                            if (arm_pool[m1].R1 == 0)
-                            {
-                                tR1 = -1;
-                            }
-                            else
-                            {
-                                mc = abs(arm_pool[m1].R1);
-                                tR1 = arm_pool[mc].armnum;
-                            }
-                            if (arm_pool[m1].R2 == 0)
-                            {
-                                tR2 = -1;
-                            }
-                            else
-                            {
-                                mc = abs(arm_pool[m1].R2);
-                                tR2 = arm_pool[mc].armnum;
-                            }
-                            fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", tL1, tL2, tR1, tR2, armz, armwt);
+                            tL1 = -1;
+                        }
+                        else
+                        {
+                            mc = abs(arm_pool[m1].L1);
+                            tL1 = arm_pool[mc].armnum;
+                        }
+                        if (arm_pool[m1].L2 == 0)
+                        {
+                            tL2 = -1;
+                        }
+                        else
+                        {
+                            mc = abs(arm_pool[m1].L2);
+                            tL2 = arm_pool[mc].armnum;
+                        }
+                        if (arm_pool[m1].R1 == 0)
+                        {
+                            tR1 = -1;
+                        }
+                        else
+                        {
+                            mc = abs(arm_pool[m1].R1);
+                            tR1 = arm_pool[mc].armnum;
+                        }
+                        if (arm_pool[m1].R2 == 0)
+                        {
+                            tR2 = -1;
+                        }
+                        else
+                        {
+                            mc = abs(arm_pool[m1].R2);
+                            tR2 = arm_pool[mc].armnum;
+                        }
+                        fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", tL1, tL2, tR1, tR2, armz, armwt);
 
-                            m1 = arm_pool[m1].down;
+                        m1 = arm_pool[m1].down;
 
-                            if (m1 == first)
-                            {
-                                break;
-                            }
-                        } //end output loop over arms
+                        if (m1 == first)
+                        {
+                            break;
+                        }
+                    } //end output loop over arms
 
-                    } // end of if (it's a linear or branched polymer )
+                } // end of if (it's a linear or branched polymer )
 
-                } //end of "if saved"
-                i = br_poly[i].nextpoly;
-                if (i == 0)
-                {
-                    break;
-                } //end of loop over polymers
-            }
+            } //end of "if saved"
+            i = br_poly[i].nextpoly;
+            if (i == 0)
+            {
+                break;
+            } //end of loop over polymers
         }
+
     } // end of loop over distributions
 
     fclose(fp);
+    return numsaved_out;
 }
 
 double return_binsandbob_multi_avbr(int i)
@@ -549,4 +549,12 @@ double return_binsandbob_multi_wmass(int i)
 double return_binsandbob_multi_wt(int i)
 {
     return multi_wt[i];
+}
+
+void set_react_dist_monmass(int i, double monmass){
+    react_dist[i].monmass = monmass;
+}
+
+void set_react_dist_M_e(int i, double M_e){
+    react_dist[i].M_e = M_e;
 }

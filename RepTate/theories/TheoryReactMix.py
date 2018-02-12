@@ -74,8 +74,10 @@ class BaseTheoryReactMix:
         self.reactname = 'ReactMix'
         self.dists = [] # index of the react_dist array used in mix
         self.weights = [] # weight of the dist
-        self.n_inmix = None # number of theories in mix
-        self.theory_names = None # names of theories in mix
+        self.n_inmix = 0 # number of theories in mix
+        self.theory_names = [] # names of theories in mix
+        self.theory_simnumber = [] # 'react_dist[].simnumber' of theories in mix
+        self.calcexists = False
 
     def Calc(self, f=None):
         """ReactMix function that returns the square of y
@@ -88,6 +90,7 @@ class BaseTheoryReactMix:
         Returns:
             [type] -- [description]
         """
+        self.calcexists = False
         nbins = int(np.round(self.parameters['nbin'].value))
         
         #init theory data table - in case of error and 'return'
@@ -156,8 +159,8 @@ class BaseTheoryReactMix:
         self.print_signal.emit('br/1000C = %.3g'%rch.bab_global.multi_brav)
         self.print_signal.emit('*************************')
 
-        return rch.bab_global.multi_nummwdbins - 1
         self.calcexists = True
+        return rch.bab_global.multi_nummwdbins - 1
 
     def destructor(self):
         """Return arms to pool"""
@@ -227,7 +230,6 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)
         self.bob_settings_button.setDisabled(True)
-        self.save_bob_configuration_button.setDisabled(True)
 
     def theory_buttons_disabled(self, state):
         rgt.theory_buttons_disabled(self, state)
