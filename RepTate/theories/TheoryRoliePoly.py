@@ -549,7 +549,6 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             return
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
-
     def handle_spinboxValueChanged(self, value):
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("nstretch", min(nmodes, value))
