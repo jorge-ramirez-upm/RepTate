@@ -5,12 +5,12 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module TheoryRoliePoly
 
 Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
 
-""" 
+"""
 import numpy as np
 from scipy.integrate import ode, odeint
 from CmdBase import CmdBase, CmdMode
@@ -19,14 +19,14 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSize, QUrl
+from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
 from Theory_rc import *
 
 
 class EditModesDialog(QDialog):
-    def __init__(self, parent = None, times=None, G=None):
+    def __init__(self, parent=None, times=None, G=None):
         super(EditModesDialog, self).__init__(parent)
 
         self.setWindowTitle("Edit Maxwell modes")
@@ -34,9 +34,9 @@ class EditModesDialog(QDialog):
         nmodes = len(times)
 
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, 40) # min and max number of modes
+        self.spinbox.setRange(1, 40)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(nmodes) #initial value
+        self.spinbox.setValue(nmodes)  #initial value
         layout.addWidget(self.spinbox)
 
         self.table = QTableWidget()
@@ -44,10 +44,10 @@ class EditModesDialog(QDialog):
         self.table.setColumnCount(2)
         self.table.setHorizontalHeaderLabels(["tau", "G"])
         for i in range(nmodes):
-            tau = "%g"%times[i]
-            mod = "%g"%G[i]
-            self.table.setItem(i, 0, QTableWidgetItem(tau)) 
-            self.table.setItem(i, 1, QTableWidgetItem(mod)) 
+            tau = "%g" % times[i]
+            mod = "%g" % G[i]
+            self.table.setItem(i, 0, QTableWidgetItem(tau))
+            self.table.setItem(i, 1, QTableWidgetItem(mod))
 
         layout.addWidget(self.table)
         #self.btngrp = QButtonGroup()
@@ -59,19 +59,19 @@ class EditModesDialog(QDialog):
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
-            Qt.Horizontal, self)
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)   
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        layout.addWidget(buttons)
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value):
         nrow_old = self.table.rowCount()
         self.table.setRowCount(value)
-        for i in range(nrow_old, value): #create extra rows with defaut values
-            self.table.setItem(i, 0, QTableWidgetItem("10")) 
-            self.table.setItem(i, 1, QTableWidgetItem("1000")) 
+        for i in range(nrow_old, value):  #create extra rows with defaut values
+            self.table.setItem(i, 0, QTableWidgetItem("10"))
+            self.table.setItem(i, 1, QTableWidgetItem("1000"))
 
     # static method to create the dialog and return (date, time, accepted)
     #@staticmethod
@@ -86,9 +86,9 @@ class TheoryRoliePoly(CmdBase):
     
     [description]
     """
-    thname="RoliePoly"
-    description="RoliePoly"
-    citations="Likhtman, A.E. & Graham, R.S.\n\
+    thname = "RoliePoly"
+    description = "RoliePoly"
+    citations = "Likhtman, A.E. & Graham, R.S.\n\
 Simple constitutive equation for linear polymer melts derived from molecular theory: Rolie-Poly equation\n\
 J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
 
@@ -105,7 +105,10 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         Returns:
             [type] -- [description]
         """
-        return GUITheoryRoliePoly(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryRoliePoly(name, parent_dataset, ax)
+        return GUITheoryRoliePoly(
+            name, parent_dataset,
+            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryRoliePoly(
+                name, parent_dataset, ax)
 
 
 class BaseTheoryRoliePoly:
@@ -113,6 +116,7 @@ class BaseTheoryRoliePoly:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/NLVE/RoliePoly.html'
     single_file = False
 
     def __init__(self, name="ThRoliePoly", parent_dataset=None, axarr=None):
@@ -128,26 +132,65 @@ class BaseTheoryRoliePoly:
         super().__init__(name, parent_dataset, axarr)
         self.function = self.RoliePoly
         self.has_modes = True
-        self.parameters["beta"] = Parameter(name="beta", value=0.5, description="CCR coefficient", 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters["delta"] = Parameter(name="delta", value=-0.5, description="CCR exponent", 
-                                           type=ParameterType.real, opt_type=OptType.const)
-        self.parameters["lmax"] = Parameter(name="lmax", value=10.0, description="Maximum extensibility", 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters["nmodes"] = Parameter(name="nmodes", value=2, description="Number of modes", 
-                                          type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
-        self.parameters["nstretch"] = Parameter(name="nstretch", value=2, description="Number of strecthing modes", 
-                                          type=ParameterType.integer, opt_type=OptType.const, display_flag=False)
+        self.parameters["beta"] = Parameter(
+            name="beta",
+            value=0.5,
+            description="CCR coefficient",
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters["delta"] = Parameter(
+            name="delta",
+            value=-0.5,
+            description="CCR exponent",
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters["lmax"] = Parameter(
+            name="lmax",
+            value=10.0,
+            description="Maximum extensibility",
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters["nmodes"] = Parameter(
+            name="nmodes",
+            value=2,
+            description="Number of modes",
+            type=ParameterType.integer,
+            opt_type=OptType.const,
+            display_flag=False)
+        self.parameters["nstretch"] = Parameter(
+            name="nstretch",
+            value=2,
+            description="Number of strecthing modes",
+            type=ParameterType.integer,
+            opt_type=OptType.const,
+            display_flag=False)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["G%02d"%i] = Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
-                                               type=ParameterType.real, opt_type=OptType.nopt, display_flag=False, 
-                                               bracketed=True, min_value=0)
-            self.parameters["tauD%02d"%i] = Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
-                                                  type=ParameterType.real, opt_type=OptType.nopt, display_flag=False,
-                                                  bracketed=True, min_value=0)
-            self.parameters["tauR%02d"%i] = Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
-                                                  type=ParameterType.real, opt_type=OptType.opt, 
-                                                  bracketed=True, min_value=0)
+            self.parameters["G%02d" % i] = Parameter(
+                name="G%02d" % i,
+                value=1000.0,
+                description="Modulus of mode %02d" % i,
+                type=ParameterType.real,
+                opt_type=OptType.nopt,
+                display_flag=False,
+                bracketed=True,
+                min_value=0)
+            self.parameters["tauD%02d" % i] = Parameter(
+                name="tauD%02d" % i,
+                value=10.0,
+                description="Terminal time of mode %02d" % i,
+                type=ParameterType.real,
+                opt_type=OptType.nopt,
+                display_flag=False,
+                bracketed=True,
+                min_value=0)
+            self.parameters["tauR%02d" % i] = Parameter(
+                name="tauR%02d" % i,
+                value=0.5,
+                description="Rouse time of mode %02d" % i,
+                type=ParameterType.real,
+                opt_type=OptType.opt,
+                bracketed=True,
+                min_value=0)
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label='')
@@ -167,7 +210,7 @@ class BaseTheoryRoliePoly:
         [description]
         """
         self.extra_graphic_visible(False)
-        self.ax.lines.remove(self.LVEenvelopeseries) 
+        self.ax.lines.remove(self.LVEenvelopeseries)
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed
@@ -194,12 +237,12 @@ class BaseTheoryRoliePoly:
         Returns:
             [type] -- [description]
         """
-        nmodes=self.parameters["nmodes"].value
-        tau=np.zeros(nmodes)
-        G=np.zeros(nmodes)
+        nmodes = self.parameters["nmodes"].value
+        tau = np.zeros(nmodes)
+        G = np.zeros(nmodes)
         for i in range(nmodes):
-            tau[i]=self.parameters["tauD%02d"%i].value
-            G[i]=self.parameters["G%02d"%i].value
+            tau[i] = self.parameters["tauD%02d" % i].value
+            G[i] = self.parameters["G%02d" % i].value
         return tau, G
 
     def set_modes(self, tau, G):
@@ -211,14 +254,14 @@ class BaseTheoryRoliePoly:
             tau {[type]} -- [description]
             G {[type]} -- [description]
         """
-        nmodes=len(tau)
+        nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
         self.set_param_value("nstretch", nmodes)
 
         for i in range(nmodes):
-            self.set_param_value("tauD%02d"%i,tau[i])
-            self.set_param_value("G%02d"%i,G[i])
-            self.set_param_value("tauR%02d"%i,0.5)
+            self.set_param_value("tauD%02d" % i, tau[i])
+            self.set_param_value("G%02d" % i, G[i])
+            self.set_param_value("tauR%02d" % i, 0.5)
 
     def sigmadotshear(self, sigma, t, p):
         """Rolie-Poly differential equation under shear flow
@@ -232,13 +275,39 @@ class BaseTheoryRoliePoly:
         """
         sxx, syy, sxy = sigma
         tauD, tauR, beta, delta, gammadot = p
-    
-        # Create the vector with the time derivative of sigma
-        trace_sigma = sxx + 2*syy
-        aux1 = 2*(1-np.sqrt(3./trace_sigma))/tauR
-        aux2 = beta*(trace_sigma/3)**delta
-        return [2*gammadot*sxy - (sxx-1.)/tauD - aux1*(sxx + aux2*(sxx-1.)), -1.0*(syy-1.)/tauD - aux1*(syy + aux2*(syy-1.)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
 
+        # Create the vector with the time derivative of sigma
+        trace_sigma = sxx + 2 * syy
+        aux1 = 2 * (1 - np.sqrt(3. / trace_sigma)) / tauR
+        aux2 = beta * (trace_sigma / 3)**delta
+        return [
+            2 * gammadot * sxy - (sxx - 1.) / tauD - aux1 * (sxx + aux2 *
+                                                             (sxx - 1.)),
+            -1.0 * (syy - 1.) / tauD - aux1 * (syy + aux2 * (syy - 1.)),
+            gammadot * syy - sxy / tauD - aux1 * (sxy + aux2 * sxy)
+        ]
+
+    # def sigmadotuext(self, sigma, t, p):
+    #     """Rolie-Poly differential equation under uniaxial elongational flow
+
+    #     [description]
+
+    #     Arguments:
+    #         sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
+    #         t {float} -- time
+    #         p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
+    #     """
+    #     sxx, syy, sxy = sigma
+    #     tauD, tauR, beta, delta, epsilon_dot = p
+
+    #     # Create the vector with the time derivative of sigma
+    #     trace_sigma = sxx + 2*syy
+    #     aux1 = 2*(1-np.sqrt(3./trace_sigma))/tauR
+    #     aux2 = beta*np.power(trace_sigma/3, delta)
+    #     # return [2*gammadot*sxy - (sxx-1.)/tauD - aux1*(sxx + aux2*(sxx-1.)), -1.0*(syy-1.)/tauD - aux1*(syy + aux2*(syy-1.)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
+    #     dsxx =  2.*epsilon_dot*sxx  - (sxx-1.)/tauD  - aux1 * FENE(l*l) * (sxx + aux2*(sxx-1.))
+    #     dsyy = -epsilon_dot*syy    - (syy-1.)/tauD  - aux1 * FENE(l*l) * (syy + aux2*(syy-1.))
+    #     return [dsxx, dsyy]
 
     def sigmadotshearnostretch(self, sigma, t, p):
         """Rolie-Poly differential equation under shear flow
@@ -252,15 +321,21 @@ class BaseTheoryRoliePoly:
         """
         sxx, syy, sxy = sigma
         tauD, tauR, beta, delta, gammadot = p
-    
+
         # Create the vector with the time derivative of sigma
-        trace_sigma = sxx + 2*syy
-        aux1 = 2*(1-np.sqrt(3/trace_sigma))/tauR
-        aux2 = beta*(trace_sigma/3)**delta
-        return [2*gammadot*sxy - (sxx-1)/tauD - 2.0/3.0*gammadot*sxy*(sxx + beta*(sxx-1)), 
-                -1.0*(syy-1)/tauD - 2.0/3.0*gammadot*sxy*(syy + beta*(syy-1)), 
-                gammadot*syy - sxy/tauD - 2.0/3.0*gammadot*sxy*(sxy + beta*sxy)]
-        
+        trace_sigma = sxx + 2 * syy
+        aux1 = 2 * (1 - np.sqrt(3 / trace_sigma)) / tauR
+        aux2 = beta * (trace_sigma / 3)**delta
+        return [
+            2 * gammadot * sxy -
+            (sxx - 1) / tauD - 2.0 / 3.0 * gammadot * sxy * (sxx + beta *
+                                                             (sxx - 1)), -1.0 *
+            (syy - 1) / tauD - 2.0 / 3.0 * gammadot * sxy * (syy + beta *
+                                                             (syy - 1)),
+            gammadot * syy - sxy / tauD - 2.0 / 3.0 * gammadot * sxy *
+            (sxy + beta * sxy)
+        ]
+
     def RoliePoly(self, f=None):
         """[summary]
         
@@ -272,33 +347,46 @@ class BaseTheoryRoliePoly:
         Returns:
             [type] -- [description]
         """
-        ft=f.data_table
-        tt=self.tables[f.file_name_short]
-        tt.num_columns=ft.num_columns
-        tt.num_rows=ft.num_rows
-        tt.data=np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:,0]=ft.data[:,0]
-        
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+
         # ODE solver parameters
         abserr = 1.0e-8
         relerr = 1.0e-6
-        t = ft.data[:,0]
-        t = np.concatenate([[0],t])
-        sigma0 = [1.0, 1.0, 0.0] # sxx, syy, sxy 
+        t = ft.data[:, 0]
+        t = np.concatenate([[0], t])
+        sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
         beta = self.parameters["beta"].value
         delta = self.parameters["delta"].value
         gammadot = float(f.file_parameters["gdot"])
         nmodes = self.parameters["nmodes"].value
         nstretch = self.parameters["nstretch"].value
         for i in range(nmodes):
-            tauD = self.parameters["tauD%02d"%i].value
-            tauR = self.parameters["tauR%02d"%i].value
+            tauD = self.parameters["tauD%02d" % i].value
+            tauR = self.parameters["tauR%02d" % i].value
             p = [tauD, tauR, beta, delta, gammadot]
-            if i<nstretch:
-                sig = odeint(self.sigmadotshear, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
+            if i < nstretch:
+                sig = odeint(
+                    self.sigmadotshear,
+                    sigma0,
+                    t,
+                    args=(p, ),
+                    atol=abserr,
+                    rtol=relerr)
             else:
-                sig = odeint(self.sigmadotshearnostretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
-            tt.data[:,1] += self.parameters["G%02d"%i].value*np.delete(sig[:,2],[0]) #return sxy
+                sig = odeint(
+                    self.sigmadotshearnostretch,
+                    sigma0,
+                    t,
+                    args=(p, ),
+                    atol=abserr,
+                    rtol=relerr)
+            tt.data[:, 1] += self.parameters["G%02d" % i].value * np.delete(
+                sig[:, 2], [0])  #return sxy
 
     def set_param_value(self, name, value):
         """[summary]
@@ -309,32 +397,52 @@ class BaseTheoryRoliePoly:
             name {[type]} -- [description]
             value {[type]} -- [description]
         """
-        if (name=="nmodes"):
-            oldn=self.parameters["nmodes"].value
+        if (name == "nmodes"):
+            oldn = self.parameters["nmodes"].value
         super(BaseTheoryRoliePoly, self).set_param_value(name, value)
-        if (name=="nmodes"):
+        if (name == "nmodes"):
             for i in range(self.parameters["nmodes"].value):
-                self.parameters["G%02d"%i] = Parameter(name="G%02d"%i, value=1000.0, description="Modulus of mode %02d"%i, 
-                                                   type=ParameterType.real, opt_type=OptType.nopt, display_flag=False, 
-                                                   bracketed=True, min_value=0)
-                self.parameters["tauD%02d"%i] = Parameter(name="tauD%02d"%i, value=10.0, description="Terminal time of mode %02d"%i,
-                                                      type=ParameterType.real, opt_type=OptType.nopt, display_flag=False,
-                                                      bracketed=True, min_value=0)
-                self.parameters["tauR%02d"%i] = Parameter(name="tauR%02d"%i, value=0.5, description="Rouse time of mode %02d"%i,
-                                                      type=ParameterType.real, opt_type=OptType.opt, display_flag=True,
-                                                      bracketed=True, min_value=0)
-            if (oldn>self.parameters["nmodes"].value):
-                for i in range(self.parameters["nmodes"].value,oldn):
-                    del self.parameters["G%02d"%i]
-                    del self.parameters["tauD%02d"%i]
-                    del self.parameters["tauR%02d"%i]
+                self.parameters["G%02d" % i] = Parameter(
+                    name="G%02d" % i,
+                    value=1000.0,
+                    description="Modulus of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.nopt,
+                    display_flag=False,
+                    bracketed=True,
+                    min_value=0)
+                self.parameters["tauD%02d" % i] = Parameter(
+                    name="tauD%02d" % i,
+                    value=10.0,
+                    description="Terminal time of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.nopt,
+                    display_flag=False,
+                    bracketed=True,
+                    min_value=0)
+                self.parameters["tauR%02d" % i] = Parameter(
+                    name="tauR%02d" % i,
+                    value=0.5,
+                    description="Rouse time of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.opt,
+                    display_flag=True,
+                    bracketed=True,
+                    min_value=0)
+            if (oldn > self.parameters["nmodes"].value):
+                for i in range(self.parameters["nmodes"].value, oldn):
+                    del self.parameters["G%02d" % i]
+                    del self.parameters["tauD%02d" % i]
+                    del self.parameters["tauR%02d" % i]
         return True
+
 
 class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
     """[summary]
     
     [description]
     """
+
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
         """[summary]
         
@@ -347,11 +455,13 @@ class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
         """
         super().__init__(name, parent_dataset, ax)
 
+
 class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
     """[summary]
     
     [description]
     """
+
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
         """[summary]
         
@@ -366,13 +476,17 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
 
         # add widgets specific to the theory
         tb = QToolBar()
-        tb.setIconSize(QSize(24,24))
+        tb.setIconSize(QSize(24, 24))
 
         self.tbutflow = QToolButton()
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
-        self.shear_flow_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-garden-shears.png'), "Shear Flow")
-        self.extensional_flow_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-socks.png'), "Extensional Flow")
+        self.shear_flow_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-garden-shears.png'),
+            "Shear Flow")
+        self.extensional_flow_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-socks.png'),
+            "Extensional Flow")
         self.tbutflow.setDefaultAction(self.shear_flow_action)
         self.tbutflow.setMenu(menu)
         tb.addWidget(self.tbutflow)
@@ -380,33 +494,61 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
-        self.get_modes_action = menu.addAction(self.style().standardIcon(getattr(QStyle, 'SP_DialogYesButton')), "Get Modes")
-        self.edit_modes_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'), "Edit Modes")
-        self.plot_modes_action = menu.addAction(QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'), "Plot Modes")
+        self.get_modes_action = menu.addAction(self.style().standardIcon(
+            getattr(QStyle, 'SP_DialogYesButton')), "Get Modes")
+        self.edit_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
+            "Edit Modes")
+        self.plot_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+            "Plot Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
-        self.linearenvelope = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'Show Linear Envelope')
+        self.linearenvelope = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'),
+            'Show Linear Envelope')
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
 
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(0, self.MAX_MODES) # min and max number of modes
+        self.spinbox.setRange(0, self.MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" Rmodes")
         self.spinbox.setToolTip("Number of stretching modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value) #initial value
+        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
         tb.addWidget(self.spinbox)
+        self.show_help_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
+            'Online Manual')
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
-        connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        connection_id = self.shear_flow_action.triggered.connect(
+            self.select_shear_flow)
+        connection_id = self.extensional_flow_action.triggered.connect(
+            self.select_extensional_flow)
+        connection_id = self.get_modes_action.triggered.connect(
+            self.get_modes_reptate)
+        connection_id = self.edit_modes_action.triggered.connect(
+            self.edit_modes_window)
+        connection_id = self.plot_modes_action.triggered.connect(
+            self.plot_modes_graph)
+        connection_id = self.linearenvelope.triggered.connect(
+            self.show_linear_envelope)
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+        connection_id = self.show_help_button.triggered.connect(
+            self.handle_show_help)
+
+    def handle_show_help(self):
+        try:
+            help_file = self.help_file
+        except AttributeError as e:
+            print('in "handle_show_help":', e)
+            return
+        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+
 
     def handle_spinboxValueChanged(self, value):
         nmodes = self.parameters["nmodes"].value
@@ -424,7 +566,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         # self.plot_theory_stuff()
         # self.parent_dataset.parent_application.update_plot()
-       
+
     def plot_theory_stuff(self):
         """[summary]
         
@@ -433,27 +575,27 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
         data_table_tmp.num_rows = 100
-        data_table_tmp.data=np.zeros((100, 2))
-        
-        times=np.logspace(-2, 3, 100)
-        data_table_tmp.data[:,0] = times
+        data_table_tmp.data = np.zeros((100, 2))
+
+        times = np.logspace(-2, 3, 100)
+        data_table_tmp.data[:, 0] = times
         nmodes = self.parameters["nmodes"].value
-        data_table_tmp.data[:,1] = 0
-        fparamaux={}
-        fparamaux["gdot"]=1e-6;
+        data_table_tmp.data[:, 1] = 0
+        fparamaux = {}
+        fparamaux["gdot"] = 1e-6
         for i in range(nmodes):
-            G = self.parameters["G%02d"%i].value 
-            tauD = self.parameters["tauD%02d"%i].value
-            data_table_tmp.data[:,1] += G * tauD * (1-np.exp(-times/tauD)) * 1e-6
+            G = self.parameters["G%02d" % i].value
+            tauD = self.parameters["tauD%02d" % i].value
+            data_table_tmp.data[:, 1] += G * tauD * (
+                1 - np.exp(-times / tauD)) * 1e-6
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, fparamaux)
         except TypeError as e:
             print(e)
             return
-        self.LVEenvelopeseries.set_data(x[:,0], y[:,0])      
+        self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
 
-        
     def select_shear_flow(self):
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
@@ -467,14 +609,16 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         times, G = self.get_modes()
         d = EditModesDialog(self, times, G)
         if d.exec_():
-            nmodes=d.table.rowCount()
+            nmodes = d.table.rowCount()
             self.set_param_value("nmodes", nmodes)
             self.set_param_value("nstretch", nmodes)
 
             for i in range(nmodes):
-                self.set_param_value("tauD%02d"%i,float(d.table.item(i, 0).text()))
-                self.set_param_value("G%02d"%i,float(d.table.item(i, 1).text()))
-                self.set_param_value("tauR%02d"%i,0.5)
+                self.set_param_value("tauD%02d" % i,
+                                     float(d.table.item(i, 0).text()))
+                self.set_param_value("G%02d" % i,
+                                     float(d.table.item(i, 1).text()))
+                self.set_param_value("tauR%02d" % i, 0.5)
                 pass
 
     def plot_modes_graph(self):
