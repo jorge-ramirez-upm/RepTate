@@ -20,9 +20,9 @@ The multiple metallocene CSTR reaction theory uses an algorithm based on the
 reaction scheme given by Read and Soares (`Macromolecules 36,
 10037-10051 (2003) <https://doi.org/10.1021/ma030354l>`_). 
 That paper presented some analytical and semi-analytical
-derviations of molecular weight distributions for the case of two metallocene
+derivations of molecular weight distributions for the case of two metallocene
 catalysts. The present algorithm is a Monte Carlo algorithm for simulating the
-case of up to 10 catalysts. Note that some catalysts behave non-ideally,
+case multiple catalysts. Note that some catalysts behave non-ideally,
 giving broad molecular weight distributions. These will need to be modelled as
 a combination of several catalysts with different rate parameters.
 

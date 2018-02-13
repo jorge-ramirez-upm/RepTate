@@ -39,12 +39,10 @@ opens a form looking like:
         :alt: mixform
 
 Whenever React creates a new Monte Carlo simulation, using one of the other
-theories, it stores the information for that simulation in one of 10 initially available
-memory locations. These memory locations are listed on the far left of this
-form - it might be that not all of them are currently active. Also, when React
-creates a new theory, it gives that theory a unique name (e.g. "LDPE batch
-1") which is shown on the control panel for that theory. This corresponds to
-the name listed on the second column of the above mixture form. This should be
+theories, it stores the information for that simulation.
+The second column of the above mixture lists the theory tab-names and parent application
+tab-name of the currently existing React simulation. 
+This should be
 sufficient information for the user to identify which row of the form
 corresponds to which theory. The form also gives additional information about
 how many polymers were generated within that theory, and how many polymers are
@@ -59,7 +57,7 @@ user needs to decide with what weight ratio to combine these theories.
 
 .. note:: 
     The values in the ratio boxes need not add up to one - the form calculates the
-    effective weight fractions from the ratios (clicking the "Update weights"
+    effective weight fractions from the ratios (clicking the "Apply"
     button shows the result of this - although it is not necessary to do this).
 
 .. warning:: 
@@ -87,7 +85,7 @@ consistent.
     such mixtures is at your own risk! 
 
 On clicking "OK", a save dialogue box is
-openned, which allows you to save the polymer configuration file. All
+opened, which allows you to save the polymer configuration file. All
 "saved" polymers, in all theories included in the mixture, are saved into
 the file, with weight fractions adjusted to reflect the weight fractions in
 the mixture.
