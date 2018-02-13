@@ -5,11 +5,12 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module TheoryTobitaCSTR
 
-""" 
+"""
 import numpy as np
+import time
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
@@ -34,9 +35,9 @@ reactor during free-radical polymerisation.
     
     [description]
     """
-    thname='TobitaCSTRTheory'
-    description='Tobita LDPE CSTR reaction theory'
-    citations='J. Pol. Sci. Part B, 39, 391-403 (2001)'
+    thname = 'TobitaCSTRTheory'
+    description = 'Tobita LDPE CSTR reaction theory'
+    citations = 'J. Pol. Sci. Part B, 39, 391-403 (2001)'
 
     def __new__(cls, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
@@ -51,7 +52,10 @@ reactor during free-radical polymerisation.
         Returns:
             [type] -- [description]
         """
-        return GUITheoryTobitaCSTR(name, parent_dataset, ax) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTobitaCSTR(name, parent_dataset, ax)
+        return GUITheoryTobitaCSTR(
+            name, parent_dataset,
+            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryTobitaCSTR(
+                name, parent_dataset, ax)
 
 
 class BaseTheoryTobitaCSTR:
@@ -59,7 +63,7 @@ class BaseTheoryTobitaCSTR:
     
     [description]
     """
-    single_file = True # False if the theory can be applied to multiple files simultaneously
+    single_file = True  # False if the theory can be applied to multiple files simultaneously
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)
@@ -75,36 +79,70 @@ class BaseTheoryTobitaCSTR:
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-        self.reactname = "LDPE CSTR %d"%(rch.tCSTR_global.tobCSTRnumber)
+        self.reactname = "LDPE CSTR %d" % (rch.tCSTR_global.tobCSTRnumber)
         rch.tCSTR_global.tobCSTRnumber += 1
         self.function = self.Calc
         self.simexists = False
         self.dist_exists = False
         self.ndist = 0
-        self.has_modes = False # True if the theory has modes
-        
-        self.parameters = OrderedDict() # keep the dictionary key in order for the parameter table
-        self.parameters['tau'] = Parameter(name='tau', value=1.11e-3, description='tau', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters['beta'] = Parameter(name='beta', value=9.75e-6, description='beta', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters['lambda'] = Parameter(name='lambda', value=2e-3, description='Cb', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters['sigma'] = Parameter(name='sigma', value=1.8e-4, description='Cs', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters['num_to_make'] = Parameter(name='num_to_make', value=1000, description='number of molecules made in the simulation', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters['mon_mass'] = Parameter(name='mon_mass', value=28, description='this is the mass, in a.m.u., of a monomer (usually set to 28 for PE)', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters['Me'] = Parameter(name='Me', value=1000, description='the entanglement molecular weight', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        self.parameters['nbin'] = Parameter(name='nbin', value=100, description='number of bins', 
-                                          type=ParameterType.real, opt_type=OptType.const)
-        
+        self.has_modes = False  # True if the theory has modes
+
+        self.parameters = OrderedDict(
+        )  # keep the dictionary key in order for the parameter table
+        self.parameters['tau'] = Parameter(
+            name='tau',
+            value=1.11e-3,
+            description='tau',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['beta'] = Parameter(
+            name='beta',
+            value=9.75e-6,
+            description='beta',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['lambda'] = Parameter(
+            name='lambda',
+            value=2e-3,
+            description='Cb',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['sigma'] = Parameter(
+            name='sigma',
+            value=1.8e-4,
+            description='Cs',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['num_to_make'] = Parameter(
+            name='num_to_make',
+            value=1000,
+            description='number of molecules made in the simulation',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['mon_mass'] = Parameter(
+            name='mon_mass',
+            value=28,
+            description=
+            'this is the mass, in a.m.u., of a monomer (usually set to 28 for PE)',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['Me'] = Parameter(
+            name='Me',
+            value=1000,
+            description='the entanglement molecular weight',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['nbin'] = Parameter(
+            name='nbin',
+            value=100,
+            description='number of bins',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+
         self.signal_request_dist.connect(rgt.request_more_dist)
         self.signal_request_polymer.connect(rgt.request_more_polymer)
         self.signal_request_arm.connect(rgt.request_more_arm)
-        
+
     def get_modes(self):
         """[summary]
         
@@ -139,7 +177,7 @@ class BaseTheoryTobitaCSTR:
         Returns:
             [type] -- [description]
         """
-        
+
         # get parameters
         tau = self.parameters['tau'].value
         beta = self.parameters['beta'].value
@@ -149,11 +187,11 @@ class BaseTheoryTobitaCSTR:
         monmass = self.parameters['mon_mass'].value
         Me = self.parameters['Me'].value
         nbins = int(np.round(self.parameters['nbin'].value))
-        
+
         c_ndist = ct.c_int()
 
         #resize theory datatable
-        ft = f.data_table        
+        ft = f.data_table
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -165,19 +203,22 @@ class BaseTheoryTobitaCSTR:
             self.ndist = c_ndist.value
             if not success:
                 #launch dialog asking for more dist
-                self.signal_request_dist.emit(self) #use signal to open QDialog in the main GUI window
+                self.signal_request_dist.emit(
+                    self)  #use signal to open QDialog in the main GUI window
                 return
             else:
                 self.dist_exists = True
         ndist = self.ndist
-        # rch.react_dist[ndist].contents.name = self.reactname #TODO: set the dist name in the C library 
+        # rch.react_dist[ndist].contents.name = self.reactname #TODO: set the dist name in the C library
         rch.react_dist[ndist].contents.polysaved = False
 
         if self.simexists:
             rch.return_dist_polys(ct.c_int(ndist))
 
         # initialise tobita batch
-        rch.tobCSTRstart(ct.c_double(tau), ct.c_double(beta), ct.c_double(sigma), ct.c_double(lambda_), ct.c_int(ndist))
+        rch.tobCSTRstart(
+            ct.c_double(tau), ct.c_double(beta), ct.c_double(sigma),
+            ct.c_double(lambda_), ct.c_int(ndist))
         rch.react_dist[ndist].contents.npoly = 0
 
         rch.react_dist[ndist].contents.M_e = Me
@@ -194,28 +235,39 @@ class BaseTheoryTobitaCSTR:
             # get a polymer
             success = rch.request_poly(ct.byref(c_m))
             m = c_m.value
-            if success: # check availability of polymers
-            # put it in list
-                if rch.react_dist[ndist].contents.npoly == 0:  # case of first polymer made
+            if success:  # check availability of polymers
+                # put it in list
+                if rch.react_dist[
+                        ndist].contents.npoly == 0:  # case of first polymer made
                     rch.react_dist[ndist].contents.first_poly = m
-                    rch.set_br_poly_nextpoly(ct.c_int(m), ct.c_int(0)) #br_poly[m].contents.nextpoly = 0
-                else:           # next polymer, put to top of list
-                    rch.set_br_poly_nextpoly(ct.c_int(m), ct.c_int(rch.react_dist[ndist].contents.first_poly)) #br_poly[m].contents.nextpoly = rch.react_dist[ndist].contents.first_poly
+                    rch.set_br_poly_nextpoly(
+                        ct.c_int(m),
+                        ct.c_int(0))  #br_poly[m].contents.nextpoly = 0
+                else:  # next polymer, put to top of list
+                    rch.set_br_poly_nextpoly(
+                        ct.c_int(m),
+                        ct.c_int(rch.react_dist[ndist].contents.first_poly)
+                    )  #br_poly[m].contents.nextpoly = rch.react_dist[ndist].contents.first_poly
                     rch.react_dist[ndist].contents.first_poly = m
 
                 # make a polymer
-                if rch.tobCSTR(ct.c_int(m), ct.c_int(ndist)): # routine returns false if arms ran out
+                if rch.tobCSTR(ct.c_int(m), ct.c_int(
+                        ndist)):  # routine returns false if arms ran out
                     rch.react_dist[ndist].contents.npoly += 1
                     i += 1
                     # check for error
                     if rch.tCSTR_global.tobitaCSTRerrorflag:
-                        self.print_signal.emit('Polymers too large: gelation occurs for these parameters')
+                        self.print_signal.emit(
+                            'Polymers too large: gelation occurs for these parameters'
+                        )
                         i = numtomake
-                else: # error message if we ran out of arms
+                else:  # error message if we ran out of arms
                     self.success_increase_memory = None
                     self.signal_request_arm.emit(self)
-                    while self.success_increase_memory is None: # wait for the end of QDialog
-                        pass
+                    while self.success_increase_memory is None:  # wait for the end of QDialog
+                        time.sleep(
+                            0.5
+                        )  # TODO: find a better way to wait for the dialog thread to finish
                     if self.success_increase_memory:
                         continue  # back to the start of while loop
                     else:
@@ -223,15 +275,21 @@ class BaseTheoryTobitaCSTR:
                         rch.tCSTR_global.tobitaCSTRerrorflag = True
 
                 # update on number made
-                if rch.react_dist[ndist].contents.npoly % np.trunc(numtomake/20) == 0:
-                    self.print_signal.emit('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
-                    QApplication.processEvents() # needed to use Qprint if in single-thread
+                if rch.react_dist[ndist].contents.npoly % np.trunc(
+                        numtomake / 20) == 0:
+                    self.print_signal.emit(
+                        'Made %d polymers' %
+                        rch.react_dist[ndist].contents.npoly)
+                    QApplication.processEvents(
+                    )  # needed to use Qprint if in single-thread
 
-            else:   # polymer wasn't available
+            else:  # polymer wasn't available
                 self.success_increase_memory = None
                 self.signal_request_polymer.emit(self)
                 while self.success_increase_memory is None:
-                    pass
+                    time.sleep(
+                        0.5
+                    )  # TODO: find a better way to wait for the dialog thread to finish
                 if self.success_increase_memory:
                     continue
                 else:
@@ -240,7 +298,8 @@ class BaseTheoryTobitaCSTR:
 
         calc = 0
         # do analysis of polymers made
-        if (rch.react_dist[ndist].contents.npoly >= 100) and (not rch.tCSTR_global.tobitaCSTRerrorflag):
+        if (rch.react_dist[ndist].contents.npoly >=
+                100) and (not rch.tCSTR_global.tobitaCSTRerrorflag):
             rch.molbin(ndist)
             ft = f.data_table
 
@@ -252,30 +311,32 @@ class BaseTheoryTobitaCSTR:
             tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
             for i in range(1, rch.react_dist[ndist].contents.nummwdbins + 1):
-                tt.data[i - 1, 0] = np.power(10, rch.react_dist[ndist].contents.lgmid[i])
+                tt.data[i - 1, 0] = np.power(
+                    10, rch.react_dist[ndist].contents.lgmid[i])
                 tt.data[i - 1, 1] = rch.react_dist[ndist].contents.wt[i]
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
 
             self.print_signal.emit('*************************')
             # self.print_signal.emit('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
-            self.print_signal.emit('Made %d polymers'%rch.react_dist[ndist].contents.npoly)
-            self.print_signal.emit('Saved %d polymers in memory'%rch.react_dist[ndist].contents.nsaved)
-            self.print_signal.emit('Mn = %.3g'%rch.react_dist[ndist].contents.m_n)
-            self.print_signal.emit('Mw = %.3g'%rch.react_dist[ndist].contents.m_w)
-            self.print_signal.emit('br/1000C = %.3g'%rch.react_dist[ndist].contents.brav)
+            self.print_signal.emit(
+                'Made %d polymers' % rch.react_dist[ndist].contents.npoly)
+            self.print_signal.emit('Saved %d polymers in memory' %
+                                   rch.react_dist[ndist].contents.nsaved)
+            self.print_signal.emit(
+                'Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
+            self.print_signal.emit(
+                'Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
+            self.print_signal.emit(
+                'br/1000C = %.3g' % rch.react_dist[ndist].contents.brav)
             self.print_signal.emit('*************************')
-            # labelout.Caption = 'Made '+inttostr(polybits.rch.react_dist[ndist].contents.npoly)+' polymers, Mn='
-            #   +floattostrF(polybits.rch.react_dist[ndist].contents.M_n,ffGeneral,5,2)+', Mw='
-            #   +floattostrF(polybits.rch.react_dist[ndist].contents.M_w,ffGeneral,5,2)+', br/1000C='
-            #   +floattostrF(polybits.rch.react_dist[ndist].contents.brav,ffGeneral,5,2)
 
             calc = rch.react_dist[ndist].contents.nummwdbins - 1
             rch.react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.print_signal.emit('%d arm records left in memory'%rch.pb_global.arms_left) 
-        self.print_signal.emit('%s'%ndist)
+        self.print_signal.emit(
+            '%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
 
     def destructor(self):
@@ -288,6 +349,7 @@ class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
     
     [description]
     """
+
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
         
@@ -299,7 +361,7 @@ class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-   
+
     # This class usually stays empty
 
 
@@ -308,6 +370,7 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
     
     [description]
     """
+
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
         """[summary]
         
@@ -321,22 +384,14 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
         super().__init__(name, parent_dataset, ax)
         rgt.initialise_tool_bar(self)
 
-    
     def theory_buttons_disabled(self, state):
         rgt.theory_buttons_disabled(self, state)
-
 
     def handle_stop_calulation(self):
         rgt.handle_stop_calulation(self)
 
     def handle_save_bob_configuration(self):
         rgt.handle_save_bob_configuration(self)
-       
 
     def handle_edit_bob_settings(self):
         rgt.handle_edit_bob_settings(self)
-
-    # @pyqtSlot(str)
-    # def handle_increase_memory(self, name):
-    #     """Open a dialog to request more memory for the 'name'-records."""
-    #     self.success_increase_memory = rgt.handle_increase_records(self, name)
