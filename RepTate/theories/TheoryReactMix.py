@@ -9,6 +9,7 @@
 """Module TheoryReactMix
 
 """
+import os
 import numpy as np
 import time
 from CmdBase import CmdBase, CmdMode
@@ -57,6 +58,8 @@ class BaseTheoryReactMix:
     
     [description]
     """
+    # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%smixture.html' % ((os.sep, )*6)
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/React/mixture.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     signal_mix_dialog = pyqtSignal(object)
 
@@ -265,10 +268,17 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
         self.stop_calulation_button.setDisabled(not state)
 
     def handle_stop_calulation(self):
+        """Kindly request the stop of the calculation thread."""
         rgt.handle_stop_calulation(self)
 
     def handle_save_bob_configuration(self):
-        rgt.handle_save_mix_configuration(self)
+        """Save polymer configuraions to a file"""
+        rgt.handle_save_bob_configuration(self)
 
     def handle_edit_bob_settings(self):
+        """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
+
+    def handle_show_help(self):
+        """Open the theory manual"""
+        rgt.handle_show_help(self)

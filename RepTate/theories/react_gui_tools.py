@@ -1,10 +1,11 @@
+import os
 import numpy as np
 import ctypes as ct
 import react_ctypes_helper as rch
 #BoB form
 from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton, QSpinBox, QGridLayout, QSizePolicy, QSpacerItem, QScrollArea, QWidget, QCheckBox, QMessageBox, QFrame, QPlainTextEdit
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon, QDesktopServices
+from PyQt5.QtCore import QSize, Qt, QUrl
 import psutil
 
 
@@ -105,6 +106,9 @@ def initialise_tool_bar(parent_theory):
         QIcon(':/Icon8/Images/new_icons/icons8-road-closure.png'),
         'Stop Current Calulation')
     parent_theory.stop_calulation_button.setDisabled(True)
+    #help button
+    parent_theory.show_help_button = tb.addAction(
+        QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'), 'Online Manual')
 
     #signals
     connection_id = parent_theory.bob_settings_button.triggered.connect(
@@ -113,6 +117,8 @@ def initialise_tool_bar(parent_theory):
         parent_theory.handle_save_bob_configuration)
     connection_id = parent_theory.stop_calulation_button.triggered.connect(
         parent_theory.handle_stop_calulation)
+    connection_id = parent_theory.show_help_button.triggered.connect(
+        parent_theory.handle_show_help)
 
 
 def theory_buttons_disabled(parent_theory, state):
@@ -123,6 +129,19 @@ def theory_buttons_disabled(parent_theory, state):
     parent_theory.bob_settings_button.setDisabled(state)
     parent_theory.save_bob_configuration_button.setDisabled(state)
     parent_theory.stop_calulation_button.setDisabled(not state)
+
+
+def handle_show_help(parent_theory):
+    """
+    Raise a flag to kindly notify the thread Calc routine to stop.
+    This is relevant in multithread mode only.
+    """
+    try:
+        help_file = parent_theory.help_file
+    except AttributeError as e:
+        print('in "handle_show_help":', e)
+        return
+    QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
 
 def handle_stop_calulation(parent_theory):
@@ -674,7 +693,7 @@ class ParameterMultiMetCSTR(QDialog):
             QLabel('<center><b>Catalyst conc.</center></b>'), 0, 1)
         layout.addWidget(QLabel('<center><b>K<sub>p</sub></b></center>'), 0, 2)
         layout.addWidget(QLabel('<center><b>K<sup>=</sup></b></center>'), 0, 3)
-        layout.addWidget(QLabel('<center><b>K<sub>s</sub></b></center>'), 0, 4)
+        layout.addWidget(QLabel('<center><b>K<sup>s</sup></b></center>'), 0, 4)
         layout.addWidget(
             QLabel('<center><b>K<sub>pLCB</sub></b></center>'), 0, 5)
         for i in range(ncatalyst):

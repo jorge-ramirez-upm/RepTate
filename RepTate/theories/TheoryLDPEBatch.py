@@ -11,6 +11,7 @@
 
 TobitaBatch file for creating a new theory
 """
+import os
 import sys
 import numpy as np
 import time
@@ -69,6 +70,8 @@ class BaseTheoryTobitaBatch():
     
     [description]
     """
+    # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/React/tobitaLDPE.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
@@ -391,6 +394,7 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)
 
+
     def theory_buttons_disabled(self, state):
         """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
@@ -406,3 +410,7 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
     def handle_edit_bob_settings(self):
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
+
+    def handle_show_help(self):
+        """Open the theory manual"""
+        rgt.handle_show_help(self)
