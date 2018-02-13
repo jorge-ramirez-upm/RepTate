@@ -641,6 +641,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             tauD = self.parameters["tauD%02d" % i].value
             data_table_tmp.data[:, 1] += G * tauD * (
                 1 - np.exp(-times / tauD)) * 1e-6
+        if self.flow_mode == FlowMode.uext:
+            data_table_tmp.data[:, 1] *= 3.0
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, fparamaux)
