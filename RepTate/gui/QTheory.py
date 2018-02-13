@@ -289,11 +289,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         [description]
         """
         apmng = self.parent_dataset.parent_application.parent_manager
-        G, S = apmng.list_theories_Maxwell()
-        for item in G.keys():
-            if self.name in item:
-                del G[item]
-                break
+        G, S = apmng.list_theories_Maxwell(th_exclude=self)
         if G:
             d = GetModesDialog(self, G)
             if (d.exec_() and d.btngrp.checkedButton() != None):

@@ -93,6 +93,32 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.text_edit.initInterpreter(locals()) 
         #self.verticalLayout.addWidget(self.text_edit)
 
+    def list_theories_Maxwell(self, th_exclude=None):
+        """Redefinition for the GUI mode that lists the tab names.
+        List the theories in the current RepTate instance that provide and need
+        Maxwell modes
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        get_dict={}
+        set_dict={}
+        for app in self.applications.values():
+            app_index = self.ApplicationtabWidget.indexOf(app)
+            app_tab_name = self.ApplicationtabWidget.tabText(app_index)
+            for ds in app.datasets.values():
+                ds_index = app.DataSettabWidget.indexOf(ds)
+                ds_tab_name = app.DataSettabWidget.tabText(ds_index)
+                for th in ds.theories.values():
+                    th_index = ds.TheorytabWidget.indexOf(th)
+                    th_tab_name = ds.TheorytabWidget.tabText(th_index)
+                    if th.has_modes and th != th_exclude:
+                        get_dict["%s.%s.%s"%(app_tab_name, ds_tab_name, th_tab_name)] = th.get_modes
+                        set_dict["%s.%s.%s"%(app_tab_name, ds_tab_name, th_tab_name)] = th.set_modes
+        return get_dict, set_dict
+
     def handle_doubleClickTab(self, index):
         """Edit Application name, tab only, the dictinary key remains unchanged
         
