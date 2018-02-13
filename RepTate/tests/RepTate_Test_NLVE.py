@@ -5,12 +5,12 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module Reptate
 
 Main program that launches the GUI.
 
-""" 
+"""
 import os
 import sys
 import getopt
@@ -27,6 +27,7 @@ from SplashScreen import SplashScreen
 from time import time, sleep
 from CmdBase import CmdBase, CalcMode
 
+
 def start_RepTate(argv):
     """
     Main RepTate application. 
@@ -34,43 +35,65 @@ def start_RepTate(argv):
     :param list argv: Command line parameters passed to Reptate
     """
     GUI = True
-    QApplication.setStyle("Fusion") #comment that line for a native look
+    QApplication.setStyle("Fusion")  #comment that line for a native look
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
-    
+
     app = QApplication(sys.argv)
-    
+
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     CmdBase.calcmode = CalcMode.singlethread
-    
+
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
     ex.show()
-    
+
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
     ex.new_nlve_window()
-    
+
     #####################
     # TEST Rolie-Poly
     # Open a Dataset
 
-    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s"%((os.sep,)*4)
+    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s" % ((
+        os.sep, ) * 4)
     ex.applications["NLVE1"].new_tables_from_files([
-                                                   dow_dir + "My_dow150-160-1 shear.shear",
-                                                   dow_dir + "My_dow150-160-01 shear.shear",
-                                                   dow_dir + "My_dow150-160-001 shear.shear",
-                                                   dow_dir + "My_dow150-160-3 shear.shear",
-                                                   dow_dir + "My_dow150-160-03 shear.shear",
-                                                   dow_dir + "My_dow150-160-003 shear.shear",
-                                                   dow_dir + "My_dow150-160-0003 shear.shear",
-                                                   ])
+        dow_dir + "My_dow150-160-1 shear.shear",
+        dow_dir + "My_dow150-160-01 shear.shear",
+        dow_dir + "My_dow150-160-001 shear.shear",
+        dow_dir + "My_dow150-160-3 shear.shear",
+        dow_dir + "My_dow150-160-03 shear.shear",
+        dow_dir + "My_dow150-160-003 shear.shear",
+        dow_dir + "My_dow150-160-0003 shear.shear",
+    ])
     # Open a theory
     ex.applications["NLVE1"].datasets["Set1"].new_theory("RoliePoly")
     # Minimize the theory
     ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
+    #####################
+    # TEST Rolie-Poly uniaxial extension
+    # Open a Dataset
+    ex.new_nlve_window()
+    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_extension%s" % ((
+        os.sep, ) * 4)
+    ex.applications["NLVE2"].new_tables_from_files([
+        dow_dir + "My_dow150-160-01.uext",
+        dow_dir + "My_dow150-160-001.uext",
+        dow_dir + "My_dow150-160-0001.uext",
+        dow_dir + "My_dow150-160-03.uext",
+        dow_dir + "My_dow150-160-003.uext",
+        dow_dir + "My_dow150-160-0003.uext",
+    ])
+    # Open a theory
+    ex.applications["NLVE2"].datasets["Set1"].new_theory("RoliePoly")
+    #select uniaxial extension
+    ex.applications["NLVE2"].datasets["Set1"].theories[
+        "RoliePoly01"].select_extensional_flow()
+    # Minimize the theory
+    ex.applications["NLVE2"].datasets["Set1"].handle_actionMinimize_Error()
 
     # #####################
     # # TEST Carreau-Yasuda
@@ -85,8 +108,9 @@ def start_RepTate(argv):
     # ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
     # # Minimize the theory
     # ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
-    
+
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     start_RepTate(sys.argv[1:])

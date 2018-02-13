@@ -17,7 +17,6 @@ from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
 import numpy as np
-from TheoryRoliePoly import TheoryRoliePoly
 
 class ApplicationNLVE(CmdBase):
     """Application to Analyze Start up of Non Linear flow

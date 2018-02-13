@@ -23,6 +23,18 @@ from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
 from Theory_rc import *
+from enum import Enum
+
+
+class FlowMode(Enum):
+    """Defines the flow geometry used
+    
+    Parameters can be:
+        shear: Shear flow
+        uext: Uniaxial extension flow
+    """
+    shear = 0
+    uext = 1
 
 
 class EditModesDialog(QDialog):
@@ -203,6 +215,7 @@ class BaseTheoryRoliePoly:
         self.LVEenvelopeseries.set_label('')
 
         self.MAX_MODES = 40
+        self.flow_mode = FlowMode.shear
 
     def destructor(self):
         """Called when the theory tab is closed
@@ -263,7 +276,7 @@ class BaseTheoryRoliePoly:
             self.set_param_value("G%02d" % i, G[i])
             self.set_param_value("tauR%02d" % i, 0.5)
 
-    def sigmadotshear(self, sigma, t, p):
+    def sigmadot_shear(self, sigma, t, p):
         """Rolie-Poly differential equation under shear flow
         
         [description]
@@ -287,30 +300,8 @@ class BaseTheoryRoliePoly:
             gammadot * syy - sxy / tauD - aux1 * (sxy + aux2 * sxy)
         ]
 
-    # def sigmadotuext(self, sigma, t, p):
-    #     """Rolie-Poly differential equation under uniaxial elongational flow
-
-    #     [description]
-
-    #     Arguments:
-    #         sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
-    #         t {float} -- time
-    #         p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
-    #     """
-    #     sxx, syy, sxy = sigma
-    #     tauD, tauR, beta, delta, epsilon_dot = p
-
-    #     # Create the vector with the time derivative of sigma
-    #     trace_sigma = sxx + 2*syy
-    #     aux1 = 2*(1-np.sqrt(3./trace_sigma))/tauR
-    #     aux2 = beta*np.power(trace_sigma/3, delta)
-    #     # return [2*gammadot*sxy - (sxx-1.)/tauD - aux1*(sxx + aux2*(sxx-1.)), -1.0*(syy-1.)/tauD - aux1*(syy + aux2*(syy-1.)), gammadot*syy - sxy/tauD - aux1*(sxy + aux2*sxy)]
-    #     dsxx =  2.*epsilon_dot*sxx  - (sxx-1.)/tauD  - aux1 * FENE(l*l) * (sxx + aux2*(sxx-1.))
-    #     dsyy = -epsilon_dot*syy    - (syy-1.)/tauD  - aux1 * FENE(l*l) * (syy + aux2*(syy-1.))
-    #     return [dsxx, dsyy]
-
-    def sigmadotshearnostretch(self, sigma, t, p):
-        """Rolie-Poly differential equation under shear flow
+    def sigmadot_shear_nostretch(self, sigma, t, p):
+        """Rolie-Poly differential equation under shear flow, without stretching
         
         [description]
         
@@ -324,16 +315,61 @@ class BaseTheoryRoliePoly:
 
         # Create the vector with the time derivative of sigma
         trace_sigma = sxx + 2 * syy
-        aux1 = 2 * (1 - np.sqrt(3 / trace_sigma)) / tauR
-        aux2 = beta * (trace_sigma / 3)**delta
+        aux1 = 2.0 * (1 - np.sqrt(3.0 / trace_sigma)) / tauR
+        aux2 = beta * (trace_sigma / 3.0)**delta
         return [
-            2 * gammadot * sxy -
-            (sxx - 1) / tauD - 2.0 / 3.0 * gammadot * sxy * (sxx + beta *
-                                                             (sxx - 1)), -1.0 *
-            (syy - 1) / tauD - 2.0 / 3.0 * gammadot * sxy * (syy + beta *
-                                                             (syy - 1)),
+            2.0 * gammadot * sxy -
+            (sxx - 1.0) / tauD - 2.0 / 3.0 * gammadot * sxy * (sxx + beta *
+                                                               (sxx - 1)),
+            -(syy - 1.0) / tauD - 2.0 / 3.0 * gammadot * sxy * (syy + beta *
+                                                                (syy - 1)),
             gammadot * syy - sxy / tauD - 2.0 / 3.0 * gammadot * sxy *
             (sxy + beta * sxy)
+        ]
+
+    def sigmadot_uext(self, sigma, t, p):
+        """Rolie-Poly differential equation under uniaxial elongational flow
+
+        [description]
+
+        Arguments:
+            sigma {array} -- vector of state variables, sigma = [sxx, syy]
+            t {float} -- time
+            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
+        """
+        sxx, syy = sigma
+        tauD, tauR, beta, delta, epsilon_dot = p
+
+        # Create the vector with the time derivative of sigma
+        trace_sigma = sxx + 2 * syy
+        aux1 = 2.0 * (1.0 - np.sqrt(3.0 / trace_sigma)) / tauR
+        aux2 = beta * np.power(trace_sigma / 3.0, delta)
+        dsxx = 2.0 * epsilon_dot * sxx - (sxx - 1.0) / tauD - aux1 * (
+            sxx + aux2 * (sxx - 1.0))
+        dsyy = -epsilon_dot * syy - (syy - 1.0) / tauD - aux1 * (syy + aux2 *
+                                                                 (syy - 1.0))
+        return [dsxx, dsyy]
+
+    def sigmadot_uext_nostretch(self, sigma, t, p):
+        """Rolie-Poly differential equation under elongation flow, wihtout stretching
+        
+        [description]
+        
+        Arguments:
+            sigma {array} -- vector of state variables, sigma = [sxx, syy]
+            t {float} -- time
+            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, epsilon_dot]
+        """
+        sxx, syy = sigma
+        tauD, tauR, beta, delta, epsilon_dot = p
+
+        # Create the vector with the time derivative of sigma
+        trace_k_sigma = epsilon_dot * (sxx - syy)
+        aux1 = 2.0 / 3.0 * trace_k_sigma
+        return [
+            2.0 * epsilon_dot * sxx - (sxx - 1.0) / tauD - aux1 *
+            (sxx + beta * (sxx - 1.0)), -epsilon_dot * syy -
+            (syy - 1.0) / tauD - aux1 * (syy + beta * (syy - 1.0))
         ]
 
     def RoliePoly(self, f=None):
@@ -354,12 +390,24 @@ class BaseTheoryRoliePoly:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
+        #flow geometry
+        if self.flow_mode == FlowMode.shear:
+            pde_stretch = self.sigmadot_shear
+            pde_nostretch = self.sigmadot_shear_nostretch
+            sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
+        elif self.flow_mode == FlowMode.uext:
+            pde_stretch = self.sigmadot_uext
+            pde_nostretch = self.sigmadot_uext_nostretch
+            sigma0 = [1.0, 1.0]  # sxx, syy
+        else:
+            return
+
         # ODE solver parameters
         abserr = 1.0e-8
         relerr = 1.0e-6
         t = ft.data[:, 0]
         t = np.concatenate([[0], t])
-        sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
+        # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
         beta = self.parameters["beta"].value
         delta = self.parameters["delta"].value
         gammadot = float(f.file_parameters["gdot"])
@@ -371,7 +419,7 @@ class BaseTheoryRoliePoly:
             p = [tauD, tauR, beta, delta, gammadot]
             if i < nstretch:
                 sig = odeint(
-                    self.sigmadotshear,
+                    pde_stretch,
                     sigma0,
                     t,
                     args=(p, ),
@@ -379,14 +427,20 @@ class BaseTheoryRoliePoly:
                     rtol=relerr)
             else:
                 sig = odeint(
-                    self.sigmadotshearnostretch,
+                    pde_nostretch,
                     sigma0,
                     t,
                     args=(p, ),
                     atol=abserr,
                     rtol=relerr)
-            tt.data[:, 1] += self.parameters["G%02d" % i].value * np.delete(
-                sig[:, 2], [0])  #return sxy
+            if self.flow_mode == FlowMode.shear:
+                sxy = np.delete(sig[:, 2], [0])
+                tt.data[:, 1] += self.parameters["G%02d" % i].value * sxy
+            elif self.flow_mode == FlowMode.uext:
+                sxx = np.delete(sig[:, 0], [0])
+                syy = np.delete(sig[:, 1], [0])
+                tt.data[:, 1] += self.parameters["G%02d" % i].value * (
+                    sxx - syy)
 
     def set_param_value(self, name, value):
         """[summary]
@@ -596,9 +650,11 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
 
     def select_shear_flow(self):
+        self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
     def select_extensional_flow(self):
+        self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
     def get_modes_reptate(self):
