@@ -143,7 +143,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.stop_theory_calc_flag = False #reset flag
         else:
             self.update_parameter_table()
-            for file in self.parent_dataset.files: #copy theory data to the plot series
+            for file in self.theory_files(): #copy theory data to the plot series
                 tt = self.tables[file.file_name_short]
                 for nx in range(self.parent_dataset.nplots):
                     view = self.parent_dataset.parent_application.multiviews[nx]

@@ -289,10 +289,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
                 return
             if th.single_file and (len(self.files) - len(self.inactive_files))>1: 
-                header = "New Theory"
-                message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
+                header = "Calculate"
+                message = "<p>Too many active files: \"%s\" uses only one data file.</p>\
+                    <p>The theory will be apllied to the highlighted file if any or to the first active file.</p>"%((th.name).rstrip("0123456789"))
                 QMessageBox.warning(self, header, message)
-                return
             th.handle_actionCalculate_Theory()
 
     def handle_actionMinimize_Error(self):
@@ -305,10 +305,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy: #do nothing if already busy in do_calculate or do_fit
                 return
             if th.single_file and (len(self.files) - len(self.inactive_files))>1: 
-                header = "New Theory"
-                message = "Theory \"%s\" cannot be applied to multiple data files"%self.current_theory
+                header = "Minimization"
+                message = "<p>Too many active files: \"%s\" uses only one data file.</p>\
+                    <p>The theory will be apllied to the highlighted file if any or to the first active file.</p>"%((th.name).rstrip("0123456789"))
                 QMessageBox.warning(self, header, message)
-                return
             th.handle_actionMinimize_Error()
 
     def handle_thCurrentChanged(self, index):

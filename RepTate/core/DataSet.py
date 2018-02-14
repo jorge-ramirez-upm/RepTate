@@ -346,7 +346,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         x, y, success = view.view_proc(tt, file.file_parameters)
                     except Exception as e:
                         print("in do_plot th", e)
-                        return
+                        continue
                     for i in range(tt.MAX_NUM_SERIES):
                         if (i<view.n and file.active and th.active):
                             tt.series[nx][i].set_data(x[:,i], y[:,i])
@@ -816,14 +816,16 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             th_id = "%s%02d"%(line, self.num_theories)
             th = self.parent_application.theories[line](th_id, self, self.parent_application.axarr)
             self.theories[th.name]=th
-            if (self.mode!=CmdMode.GUI): 
+            self.current_theory = th.name
+            if (self.mode == CmdMode.GUI): 
+                self.handle_actionCalculate_Theory()
+            else:
                 if (self.mode==CmdMode.batch):
                     th.prompt = ''
                 else:
                     th.prompt = self.prompt[:-2]+'/'+th.name+'> '
                 th.do_calculate("")
                 th.cmdloop()
-            th.do_calculate("")
             return th
         else:
             print("Theory \"%s\" does not exists"%line)

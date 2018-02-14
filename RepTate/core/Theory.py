@@ -113,6 +113,12 @@ class Theory(CmdBase):
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
             self.tables[f.file_name_short] = DataTable(axarr, "TH-" + f.file_name_short)
+            #initiallize theory table: important for 'single_file' theories
+            ft = f.data_table
+            tt = self.tables[f.file_name_short]
+            tt.num_columns = ft.num_columns
+            tt.num_rows = ft.num_rows
+            tt.data=np.zeros((tt.num_rows, tt.num_columns))
 
         self.do_cite("")
 
@@ -150,23 +156,29 @@ class Theory(CmdBase):
 
         self.calculate_is_busy = True
         start_time = time.time()
-        if self.single_file: #find the first active file in dataset
-            if len(self.parent_dataset.inactive_files) == len(self.parent_dataset.files): #all files hidden
-                self.function(self.parent_dataset.files[0])
-            else: #find first visible file
-                for f in self.parent_dataset.files:
-                    if f.file_name_short not in self.parent_dataset.inactive_files:
-                        self.function(f)
-                        break
-        else:
-            for f in self.parent_dataset.files:
-                self.function(f)
+        for f in self.theory_files():
+            self.function(f)
         if not self.is_fitting:
             self.do_plot(line)
             self.do_error(line)
         if timing:
             self.print_signal.emit("\n---Calculated in %.3g seconds---" % (time.time() - start_time))
         self.calculate_is_busy = False
+
+    def theory_files(self):
+        if not self.single_file:
+            return self.parent_dataset.files
+        f_list = []
+        selected_file = self.parent_dataset.selected_file
+        if selected_file:
+            if selected_file.active:
+                f_list.append(self.parent_dataset.selected_file) #use the selected/highlighted file if active
+        if not f_list: #there is no selected file or it is inactive
+            for f in self.parent_dataset.files:
+                if f.active:
+                    f_list.append(f)
+                    break
+        return f_list
 
     def do_error(self, line):
         """Report the error of the current theory
@@ -182,32 +194,30 @@ class Theory(CmdBase):
         total_error=0
         npoints=0
         view = self.parent_dataset.parent_application.current_view
-        # self.Qprint("")
-        # self.Qprint("%14s %10s (%6s)"%("File","Error","# Pts."))
-        # self.Qprint("==================================")
         msg = "\n%14s %10s (%6s)\n"%("File","Error","# Pts.")
         msg += "=================================="
         self.print_signal.emit(msg)
-        for f in self.parent_dataset.files:
-            if f.active:
-                xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
-                xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
-                if (self.xrange.get_visible()):
-                    conditionx=(xexp>self.xmin)*(xexp<self.xmax)
-                else:
-                    conditionx=np.ones_like(xexp, dtype=np.bool)
-                if (self.yrange.get_visible()):
-                    conditiony=(yexp>self.ymin)*(yexp<self.ymax)
-                else:
-                    conditiony=np.ones_like(yexp, dtype=np.bool)
-                conditionnaninf=(~np.isnan(xexp))*(~np.isnan(yexp))*(~np.isnan(xth))*(~np.isnan(yth))*(~np.isinf(xexp))*(~np.isinf(yexp))*(~np.isinf(xth))*(~np.isinf(yth))
-                yexp=np.extract(conditionx*conditiony*conditionnaninf, yexp)
-                yth=np.extract(conditionx*conditiony*conditionnaninf, yth)
-                f_error=np.mean((yth-yexp)**2)
-                npt=len(yth)
-                total_error+=f_error*npt
-                npoints+=npt
-                self.print_signal.emit("%14s %10.5g (%6d)"%(f.file_name_short,f_error,npt))
+
+        for f in self.theory_files():
+            xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
+            xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
+            if (self.xrange.get_visible()):
+                conditionx=(xexp>self.xmin)*(xexp<self.xmax)
+            else:
+                conditionx=np.ones_like(xexp, dtype=np.bool)
+            if (self.yrange.get_visible()):
+                conditiony=(yexp>self.ymin)*(yexp<self.ymax)
+            else:
+                conditiony=np.ones_like(yexp, dtype=np.bool)
+            conditionnaninf=(~np.isnan(xexp))*(~np.isnan(yexp))*(~np.isnan(xth))*(~np.isnan(yth))*(~np.isinf(xexp))*(~np.isinf(yexp))*(~np.isinf(xth))*(~np.isinf(yth))
+            yexp=np.extract(conditionx*conditiony*conditionnaninf, yexp)
+            yth=np.extract(conditionx*conditiony*conditionnaninf, yth)
+            f_error=np.mean((yth-yexp)**2)
+            npt=len(yth)
+            total_error+=f_error*npt
+            npoints+=npt
+            self.print_signal.emit("%14s %10.5g (%6d)"%(f.file_name_short,f_error,npt))
+
         if npoints != 0:
             self.print_signal.emit("%14s %10.5g (%6d)"%("TOTAL",total_error/npoints,npoints))
         else:
@@ -236,7 +246,8 @@ class Theory(CmdBase):
         self.do_calculate("", timing=False)
         y = []
         view = self.parent_dataset.parent_application.current_view
-        for f in self.parent_dataset.files:
+        
+        for f in self.theory_files():
             if f.active:
                 xth, yth, success = view.view_proc(self.tables[f.file_name_short], f.file_parameters)
                 xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
@@ -269,6 +280,11 @@ class Theory(CmdBase):
         if len(self.parent_dataset.inactive_files) == len(self.parent_dataset.files): #all files hidden
             self.is_fitting = False
             return
+        th_files = self.theory_files()
+        if not th_files:
+            self.is_fitting = False
+            return
+
         self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
@@ -293,7 +309,7 @@ class Theory(CmdBase):
                 self.ymax = temp
             self.print_signal.emit("yrange=[%.03g, %0.3g]"%(self.ymin, self.ymax))
                 
-        for f in self.parent_dataset.files:
+        for f in th_files:
             if f.active:
                 xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
                 for i in range(view.n):   
