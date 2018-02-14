@@ -40,8 +40,8 @@ opens a form looking like:
 
 Whenever React creates a new Monte Carlo simulation, using one of the other
 theories, it stores the information for that simulation.
-The second column of the above mixture lists the theory tab-names and parent application
-tab-name of the currently existing React simulation. 
+The second column of the above form lists the parent application, dataset, and theory
+tab-names of the currently existing React simulation. 
 This should be
 sufficient information for the user to identify which row of the form
 corresponds to which theory. The form also gives additional information about

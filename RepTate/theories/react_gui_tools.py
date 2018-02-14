@@ -108,7 +108,8 @@ def initialise_tool_bar(parent_theory):
     parent_theory.stop_calulation_button.setDisabled(True)
     #help button
     parent_theory.show_help_button = tb.addAction(
-        QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'), 'Online Manual')
+        QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
+        'Online Manual')
 
     #signals
     connection_id = parent_theory.bob_settings_button.triggered.connect(
@@ -310,7 +311,7 @@ def handle_increase_records(parent_theory, name):
 
 
 class ParameterReactMix(QDialog):
-    """Create form to input the MultiMetCSTR parameters"""
+    """Create form to input the Mix parameters"""
 
     def __init__(self, parent_theory):
         super().__init__(parent_theory)
@@ -330,11 +331,9 @@ class ParameterReactMix(QDialog):
         #insert widgets
         self.mainLayout = QVBoxLayout()
         self.mainLayout.addWidget(self.scroll)
-        self.mainLayout.addStretch()
         self.mainLayout.addWidget(buttonBox)
         self.setLayout(self.mainLayout)
         self.setWindowTitle("Enter Mix Parameters")
-        self.resize(self.mainLayout.sizeHint())
 
     def accept_(self):
         """
@@ -382,16 +381,23 @@ class ParameterReactMix(QDialog):
             line = []
             ndist = th.ndist
             ds = th.parent_dataset
+            app = ds.parent_application
+            manager = app.parent_manager
+
+            #find application tab-name
+            app_index = manager.ApplicationtabWidget.indexOf(app)
+            app_tab_name = manager.ApplicationtabWidget.tabText(app_index)
+            #find dataset tab-name
+            ds_index = app.DataSettabWidget.indexOf(ds)
+            ds_tab_name = app.DataSettabWidget.tabText(ds_index)
             #find theory tab-name
             th_index = ds.TheorytabWidget.indexOf(th)
             th_tab_name = ds.TheorytabWidget.tabText(th_index)
-            #find applicatino tab-name
-            app = ds.parent_application
-            manager = app.parent_manager
-            app_index = manager.ApplicationtabWidget.indexOf(app)
-            app_tab_name = manager.ApplicationtabWidget.tabText(app_index)
 
-            line.append(QLabel('%s/%s' % (app_tab_name, th_tab_name)))  #Name
+            label = QLabel('%s/%s/%s' % (app_tab_name, ds_tab_name,
+                                         th_tab_name))
+            label.setWordWrap(True)
+            line.append(label)
             line.append(QLabel(
                 '%.4g' % rch.react_dist[ndist].contents.npoly))  #no. generated
             line.append(
@@ -401,7 +407,6 @@ class ParameterReactMix(QDialog):
             checkbox.setChecked(True)
             line.append(checkbox)  #is included? - checked by default
             qledit = QLineEdit()
-            qledit.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
             qledit.setValidator(dvalidator)
             qledit.setText('1')
             line.append(qledit)  #ratio
@@ -432,21 +437,39 @@ class ParameterReactMix(QDialog):
 
     def createFormGroupBox(self, theory_list):
         """Create a form to set the new values of mix parameters"""
-        self.formGroupBox = QWidget()
+        inner = QWidget()
         layout = QGridLayout()
         layout.setSpacing(10)
-        layout.addWidget(QLabel('<b>App/Theory</b>'), 0, 1)
-        layout.addWidget(QLabel('<b>No. generated</b>'), 0, 2)
-        layout.addWidget(QLabel('<b>No. saved</b>'), 0, 3)
-        layout.addWidget(QLabel('<b>Include?</b>'), 0, 4)
-        layout.addWidget(QLabel('<b>Ratio</b>'), 0, 5)
-        layout.addWidget(QLabel('<b>Weight fraction</b>'), 0, 6)
+
+        label = QLabel('<b>App/Dataset/Theory</b>')
+        label.setWordWrap(True)
+        layout.addWidget(label, 0, 1)
+
+        label = QLabel('<b>No. generated</b>')
+        label.setWordWrap(True)
+        layout.addWidget(label, 0, 2)
+
+        label = QLabel('<b>No. saved</b>')
+        label.setWordWrap(True)
+        layout.addWidget(label, 0, 3)
+
+        label = QLabel('<b>Include?<</b>')
+        label.setWordWrap(True)
+        layout.addWidget(label, 0, 4)
+
+        label = QLabel('<b>Ratio<</b>')
+        label.setWordWrap(True)
+        layout.addWidget(label, 0, 5)
+
+        label = QLabel('<b>Weight fraction<</b>')
+        label.setWordWrap(True)
+        layout.addWidget(label, 0, 6)
 
         for i in range(len(theory_list)):
             layout.addWidget(QLabel('<b>%d</b>' % (i + 1)), i + 1, 0)
             for j in range(len(self.lines[0])):
                 layout.addWidget(self.lines[i][j], i + 1, j + 1)
-        self.formGroupBox.setLayout(layout)
+        inner.setLayout(layout)
 
         #Scroll Area Properties
         self.scroll = QScrollArea()
@@ -454,7 +477,7 @@ class ParameterReactMix(QDialog):
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setWidget(self.formGroupBox)
+        self.scroll.setWidget(inner)
 
     def list_all_open_react_theories(self):
         """List all oppened React theories in RepTate, excluding the Mix theories"""
@@ -508,7 +531,7 @@ class EditMixSaveParamDialog(QDialog):
     def createFormGroupBox(self, parent_theory):
         """Create a form to set the new values of the parameters"""
 
-        self.formGroupBox = QWidget()
+        inner = QWidget()
         layout = QGridLayout()
         layout.setSpacing(10)
 
@@ -555,7 +578,7 @@ class EditMixSaveParamDialog(QDialog):
             self.lines.append(line)  #save lines
             for j in range(3):
                 layout.addWidget(self.lines[i][j], i + 2, j + 1)
-        self.formGroupBox.setLayout(layout)
+        inner.setLayout(layout)
 
         #Scroll Area Properties
         self.scroll = QScrollArea()
@@ -563,7 +586,7 @@ class EditMixSaveParamDialog(QDialog):
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setWidget(self.formGroupBox)
+        self.scroll.setWidget(inner)
 
 
 ###########################
@@ -684,7 +707,7 @@ class ParameterMultiMetCSTR(QDialog):
 
     def createFormGroupBox(self, ncatalyst):
         """Create a form to set the new values of polymerisation parameters"""
-        self.formGroupBox = QWidget()
+        inner = QWidget()
 
         layout = QGridLayout()
         layout.setSpacing(10)
@@ -700,15 +723,15 @@ class ParameterMultiMetCSTR(QDialog):
             layout.addWidget(QLabel('<b>%d</b>' % (i + 1)), i + 1, 0)
             for j in range(5):
                 layout.addWidget(self.lines[i][j], i + 1, j + 1)
-        self.formGroupBox.setLayout(layout)
+        inner.setLayout(layout)
 
         #Scroll Area Properties
         self.scroll = QScrollArea()
         self.scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setWidget(self.formGroupBox)
+        self.scroll.setWidget(inner)
 
 
 ###############################################
