@@ -5,8 +5,8 @@ Rolie-Poly equation
 .. toctree::
    :maxdepth: 2
 
-The Rolie-Poly (\ **RO**\ use **LI**\ near **E**\ ntangled **POLY**\ mers) :cite:`Likhtman2003` constitutive 
-equation is a single mode formulation of the full microscopic model :cite:`Graham2003`
+The Rolie-Poly (\ **RO**\ use **LI**\ near **E**\ ntangled **POLY**\ mers) :cite:`RP-Likhtman2003` constitutive 
+equation is a single mode formulation of the full microscopic model :cite:`RP-Graham2003`
 for linear entangled polymer chains with chain stretch and convective constraint release.
 
 The equations solved by RepTate, for every stretching mode is:
@@ -36,3 +36,4 @@ and, for non-stretching modes, the equation for each mode is:
 
 .. bibliography:: ../bibliography.bib
     :style: unsrt
+    :keyprefix: RP-
