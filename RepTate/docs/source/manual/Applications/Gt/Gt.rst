@@ -11,4 +11,4 @@
 
 	general
 	tutorial
-	theories
+	../Theories/Gt/Gt

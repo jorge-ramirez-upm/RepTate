@@ -1,9 +1,9 @@
 ==================================
-`G(t)`: Theories
+SANS: Theories
 ==================================
 
-..	toctree::
-   	:maxdepth: 2
-	
+.. toctree::
+   :maxdepth: 2
+
 .. note::
 	Coming soon...

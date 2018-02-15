@@ -11,7 +11,7 @@
 
 	general
 	tutorial
-	theories
+	../Theories/LVE/LVE
 	
 ----------
 Data Files

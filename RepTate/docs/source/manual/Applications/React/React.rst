@@ -11,5 +11,5 @@
 	
 	general
 	tutorial
-	theories
+	../Theories/React/React
 	

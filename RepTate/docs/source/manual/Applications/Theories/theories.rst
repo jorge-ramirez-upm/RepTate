@@ -6,8 +6,10 @@ Theories
    :maxdepth: 2
 
    MWD/MWD
-   React/react
-   NLVE/nlve
-   TTS/tts
-   LVE/lve
+   React/React
+   NLVE/NLVE
+   TTS/TTS
+   LVE/LVE
+   SANS/SANS
+   Gt/Gt
     

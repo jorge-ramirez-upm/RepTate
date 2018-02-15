@@ -1,9 +1,8 @@
 ==================================
-TTS: Theories
+MWD: Theories
 ==================================
 
-..	toctree::
-   	:maxdepth: 2
-	
-.. note::
-	Coming soon...
+.. toctree::
+   :maxdepth: 2
+
+   MWDiscr

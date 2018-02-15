@@ -7,7 +7,7 @@ Carreau-Yasuda equation
 
 .. math::
 
-    \eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^\frac{n-1}{a}
+    \eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^{(n-1)/a}
 
 
 .. warning::

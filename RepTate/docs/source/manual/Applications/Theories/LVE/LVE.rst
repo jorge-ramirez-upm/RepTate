@@ -1,8 +1,10 @@
 ==================================
-MWD: Molecular Weight Distribution
+LVE: Theories
 ==================================
 
 .. toctree::
    :maxdepth: 2
 
-   MWDiscr
+   Maxwell
+   CarreauYasuda
+   LikhtmanMcLeish
