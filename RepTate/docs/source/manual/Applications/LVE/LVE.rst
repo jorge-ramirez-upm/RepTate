@@ -54,4 +54,3 @@ Maxwell Modes
 .. rubric:: References
 
 .. bibliography:: refs.bib
-
