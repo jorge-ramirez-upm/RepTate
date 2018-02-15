@@ -128,10 +128,20 @@ class BaseTheoryMaxwellModesFrequency:
             dy {[type]} -- [description]
         """
         nmodes = self.parameters["nmodes"].value
-        self.set_param_value("logwmin", dx[0])
-        self.set_param_value("logwmax", dx[nmodes - 1])
-        for i in range(nmodes):
-            self.set_param_value("logG%02d" % i, dy[i])
+        if self.parent_dataset.parent_application.current_view.log_x:
+            self.set_param_value("logwmin", np.log10(dx[0]))
+            self.set_param_value("logwmax", np.log10(dx[nmodes - 1]))
+        else:
+            self.set_param_value("logwmin", dx[0])
+            self.set_param_value("logwmax", dx[nmodes - 1])
+
+        if self.parent_dataset.parent_application.current_view.log_y:
+            for i in range(nmodes):
+                self.set_param_value("logG%02d" % i, np.log10(dy[i]))
+        else:
+            for i in range(nmodes):
+                self.set_param_value("logG%02d" % i, dy[i])
+
         self.do_calculate("")
         self.update_parameter_table()
 
@@ -165,8 +175,7 @@ class BaseTheoryMaxwellModesFrequency:
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(
             self.graphicmodes, DragType.special,
-            self.parent_dataset.parent_application.current_view.log_x,
-            self.parent_dataset.parent_application.current_view.log_y,
+            self.parent_dataset.parent_application,
             self.drag_mode)
         self.plot_theory_stuff()
 

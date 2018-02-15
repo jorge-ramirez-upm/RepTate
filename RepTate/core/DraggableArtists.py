@@ -367,7 +367,7 @@ class DraggableModesSeries(DraggableArtist):
     
     [description]
     """
-    def __init__(self, artist, mode=DragType.none, logx=False, logy=False, function=None):
+    def __init__(self, artist, mode=DragType.none, parent_application=None, function=None):
         """[summary]
         
         [description]
@@ -382,9 +382,13 @@ class DraggableModesSeries(DraggableArtist):
             function {[type]} -- [description] (default: {None})
         """
         super(DraggableModesSeries, self).__init__(artist, mode, function)
-        self.logx = logx
-        self.logy = logy
+        self.parent_application = parent_application
+        self.update_logx_logy()
     
+    def update_logx_logy(self):
+        self.logx = self.parent_application.current_view.log_x
+        self.logy = self.parent_application.current_view.log_y
+
     def on_press(self, event):
         """[summary]
         
@@ -432,6 +436,7 @@ class DraggableModesSeries(DraggableArtist):
             return
         if event.inaxes != self.artist.axes: return
         self.xpress, self.ypress = self.press
+        self.update_logx_logy()
         if self.logx:
             dx = np.log10(event.xdata) - np.log10(self.xpress)
         else:
@@ -465,6 +470,7 @@ class DraggableModesSeries(DraggableArtist):
         xdataind = xdata[self.index] 
         ydataind = ydata[self.index] 
         nmodes = len(self.xdata)
+        self.update_logx_logy()
         if self.logx:
             newx = self.xpress*np.power(10, dx)
         else:
@@ -477,17 +483,19 @@ class DraggableModesSeries(DraggableArtist):
         newxdata=xdata
         newydata=ydata
         if self.index==0:
-            newxdata[0] = newx
-            newydata[0] = newy
-            newxdata = np.linspace(newx, newxdata[nmodes-1], nmodes)
-            newxdata=newxdata.reshape(nmodes,1)
+            if self.logx:
+                newxdata = np.power(10, np.linspace(np.log10(newx), np.log10(newxdata[nmodes-1]), nmodes))
+            else:
+                newxdata = np.linspace(newx, newxdata[nmodes-1], nmodes)
+            newxdata = newxdata.reshape(nmodes,1)
         elif self.index==nmodes-1:
-            newxdata[self.index] = newx
-            newydata[self.index] = newy
-            newxdata = np.linspace(newxdata[0], newx, nmodes)
+            if self.logy:
+                newxdata = np.power(10, np.linspace(np.log10(newxdata[0]), np.log10(newx), nmodes))
+            else:    
+                newxdata = np.linspace(newxdata[0], newx, nmodes)
             newxdata=newxdata.reshape(nmodes,1)
-        else:
-            newydata[self.index] = newy
+        
+        newydata[self.index] = newy
 
         self.artist.set_data(newxdata, newydata)
 
@@ -533,6 +541,9 @@ class DraggableModesSeries(DraggableArtist):
         ydata = self.data[1]
         self.function(xdata, ydata)
 
+
+###########################################################
+###########################################################
 
 class DraggableSeries(DraggableArtist):
     """[summary]
