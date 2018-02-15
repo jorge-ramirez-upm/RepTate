@@ -6,3 +6,5 @@ LVE
    :maxdepth: 2
 
    Maxwell
+   CarreauYasuda
+   

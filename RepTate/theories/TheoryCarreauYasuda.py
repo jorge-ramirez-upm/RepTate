@@ -17,6 +17,9 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from collections import OrderedDict
+from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle
+from PyQt5.QtGui import QIcon, QDesktopServices
+from PyQt5.QtCore import QSize, QUrl
 
 class TheoryCarreauYasuda(CmdBase):
     """[summary]
@@ -48,6 +51,7 @@ class BaseTheoryCarreauYasuda:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/LVE/CarreauYasuda.html'
     single_file = False # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):
@@ -137,7 +141,7 @@ class BaseTheoryCarreauYasuda:
         n = self.parameters["n"].value
         a = self.parameters["a"].value
 
-        tt.data[:, 1] = tt.data[:, 2] = 1/np.sqrt(2.0)*(etainf+(eta0-etainf)*np.power(1.0+np.power(lamda*tt.data[:, 0], a), (n-1.0)/a))*tt.data[:, 0]
+        tt.data[:, 1] = tt.data[:, 2] = (etainf+(eta0-etainf)*np.power(1.0+np.power(lamda*tt.data[:, 0], a), (n-1.0)/a))*tt.data[:, 0]
 
 
 class CLTheoryCarreauYasuda(BaseTheoryCarreauYasuda, Theory):
@@ -174,4 +178,21 @@ class GUITheoryCarreauYasuda(BaseTheoryCarreauYasuda, QTheory):
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-       
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.show_help_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
+            'Online Manual')
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.show_help_button.triggered.connect(
+            self.handle_show_help)
+
+    def handle_show_help(self):
+        try:
+            help_file = self.help_file
+        except AttributeError as e:
+            print('in "handle_show_help":', e)
+            return
+        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            
