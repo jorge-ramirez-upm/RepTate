@@ -5,14 +5,14 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module DataSet
 
 Module that describes the basic container for data sets (sets of experimental data
 read from different files), as well as the particular theories that are being applied
 to that data set.
 
-""" 
+"""
 import os
 import glob
 
@@ -27,6 +27,7 @@ from DataTable import DataTable
 import itertools
 from collections import OrderedDict
 
+
 class ColorMode(Enum):
     """[summary]
     
@@ -36,29 +37,58 @@ class ColorMode(Enum):
     variable = 1
     gradient = 2
     modes = ["Fixed color", "Variable color (from palette)", "Color gradient"]
-    color1 = (0, 0, 0, 1) #black RGB
-    color2 =(1, 0, 0, 1) #red RGB
+    color1 = (0, 0, 0, 1)  #black RGB
+    color2 = (1, 0, 0, 1)  #red RGB
     colorpalettes = {
-        "Rainbow": [(0,0,0),(1.0,0,0),(0,1.0,0),(0,0,1.0),(1.0,1.0,0),(1.0,0,1.0),(0,1.0,1.0),(0.5,0,0),(0,0.5,0),(0,0,0.5),(0.5,0.5,0),(0.5,0,0.5),(0,0.5,0.5),(0.25,0,0),(0,0.25,0),(0,0,0.25),(0.25,0.25,0),(0.25,0,0.25),(0,0.25,0.25)], 
-        "Pastel": [(0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604), (0.816, 0.733, 1.0), (1.0, 0.996, 0.639), 
-                   (0.69, 0.878, 0.902), (0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604), (0.816, 0.733, 1.0),
-                   (1.0, 0.996, 0.639), (0.69, 0.878, 0.902), (0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604)],
-        "Bright": [(0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043), (0.541, 0.169, 0.886), (1.0, 0.769, 0.0), 
-                   (0.0, 0.843, 1.0), (0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043), (0.541, 0.169, 0.886), 
-                   (1.0, 0.769, 0.0), (0.0, 0.843, 1.0), (0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043)],
-        "Dark": [(0, 0, 0), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0), (0.463, 0.0, 0.631), (0.722, 0.525, 0.043), 
-                 (0.0, 0.388, 0.455), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0), (0.463, 0.0, 0.631), 
-                 (0.722, 0.525, 0.043), (0.0, 0.388, 0.455), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0)],
-        "ColorBlind": [(0, 0, 0), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), 
-                       (0.941, 0.894, 0.259), (0.337, 0.706, 0.914), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), 
-                       (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), (0.941, 0.894, 0.259), (0.337, 0.706, 0.914), 
-                       (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0)],
-        "Paired": [(0.651, 0.808, 0.890), (0.122, 0.471, 0.706), (0.698, 0.875, 0.541), (0.200, 0.627, 0.173), 
-                   (0.984, 0.604, 0.600), (0.890, 0.102, 0.11), (0.992, 0.749, 0.435), (1.0, 0.498, 0.0), 
-                   (0.792, 0.698, 0.839), (0.416, 0.239, 0.604), (1.0, 1.0, 0.6), (0.694, 0.349, 0.157), 
-                   (0.651, 0.808, 0.890), (0.122, 0.471, 0.706), (0.698, 0.875, 0.541), 
-                   (0.200, 0.627, 0.173)]
+        "Rainbow":
+        [(0, 0, 0), (1.0, 0, 0), (0, 1.0, 0), (0, 0, 1.0), (1.0, 1.0, 0),
+         (1.0, 0, 1.0), (0, 1.0, 1.0), (0.5, 0, 0), (0, 0.5, 0), (0, 0, 0.5),
+         (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5), (0.25, 0, 0),
+         (0, 0.25, 0), (0, 0, 0.25), (0.25, 0.25, 0), (0.25, 0,
+                                                       0.25), (0, 0.25, 0.25)],
+        "Pastel":
+        [(0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604),
+         (0.816, 0.733, 1.0), (1.0, 0.996, 0.639), (0.69, 0.878, 0.902),
+         (0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604),
+         (0.816, 0.733, 1.0), (1.0, 0.996, 0.639), (0.69, 0.878, 0.902),
+         (0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604)],
+        "Bright":
+        [(0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043),
+         (0.541, 0.169, 0.886), (1.0, 0.769, 0.0), (0.0, 0.843,
+                                                    1.0), (0.0, 0.247, 1.0),
+         (0.012, 0.929, 0.227), (0.91, 0.0, 0.043), (0.541, 0.169,
+                                                     0.886), (1.0, 0.769, 0.0),
+         (0.0, 0.843, 1.0), (0.0, 0.247, 1.0), (0.012, 0.929,
+                                                0.227), (0.91, 0.0, 0.043)],
+        "Dark": [(0, 0, 0), (0.0, 0.11, 0.498), (0.004, 0.459,
+                                                 0.09), (0.549, 0.035, 0.0),
+                 (0.463, 0.0, 0.631), (0.722, 0.525,
+                                       0.043), (0.0, 0.388, 0.455), (0.0, 0.11,
+                                                                     0.498),
+                 (0.004, 0.459, 0.09), (0.549, 0.035,
+                                        0.0), (0.463, 0.0,
+                                               0.631), (0.722, 0.525, 0.043),
+                 (0.0, 0.388, 0.455), (0.0, 0.11,
+                                       0.498), (0.004, 0.459,
+                                                0.09), (0.549, 0.035, 0.0)],
+        "ColorBlind":
+        [(0, 0, 0), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451),
+         (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), (0.941, 0.894, 0.259),
+         (0.337, 0.706, 0.914), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451),
+         (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), (0.941, 0.894, 0.259),
+         (0.337, 0.706, 0.914), (0.0, 0.447, 0.698), (0.0, 0.62,
+                                                      0.451), (0.835, 0.369,
+                                                               0.0)],
+        "Paired":
+        [(0.651, 0.808, 0.890), (0.122, 0.471, 0.706), (0.698, 0.875, 0.541),
+         (0.200, 0.627, 0.173), (0.984, 0.604, 0.600), (0.890, 0.102, 0.11),
+         (0.992, 0.749, 0.435), (1.0, 0.498, 0.0), (0.792, 0.698, 0.839),
+         (0.416, 0.239, 0.604), (1.0, 1.0, 0.6), (0.694, 0.349, 0.157),
+         (0.651, 0.808, 0.890), (0.122, 0.471, 0.706), (0.698, 0.875,
+                                                        0.541), (0.200, 0.627,
+                                                                 0.173)]
     }
+
 
 class SymbolMode(Enum):
     """[summary]
@@ -69,13 +99,33 @@ class SymbolMode(Enum):
     fixedfilled = 1
     variable = 2
     variablefilled = 3
-    modes = ["Fixed empty symbol","Fixed filled symbol", "Variable empty symbols", "Variable filled symbols"]
+    modes = [
+        "Fixed empty symbol", "Fixed filled symbol", "Variable empty symbols",
+        "Variable filled symbols"
+    ]
     symbol1 = '.'
     symbol1_name = 'point'
-    allmarkers = ['.','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_']
-    allmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'tri_down', 'tri_up', 'tri_left','tri_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'plus', 'x', 'x (filled)','diamond', 'thin_diamond', 'vline', 'hline']
-    filledmarkers = ['.','o','v','^','<','>','8','s','p','P','*','h','H','X','D','d']
-    filledmarkernames = ['point', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'x (filled)','diamond', 'thin_diamond']
+    allmarkers = [
+        '.', 'o', 'v', '^', '<', '>', '1', '2', '3', '4', '8', 's', 'p', 'P',
+        '*', 'h', 'H', '+', 'x', 'X', 'D', 'd', '|', '_'
+    ]
+    allmarkernames = [
+        'point', 'circle', 'triangle_down', 'triangle_up', 'triangle_left',
+        'triangle_right', 'tri_down', 'tri_up', 'tri_left', 'tri_right',
+        'octagon', 'square', 'pentagon', 'plus (filled)', 'star', 'hexagon1',
+        'hexagon2', 'plus', 'x', 'x (filled)', 'diamond', 'thin_diamond',
+        'vline', 'hline'
+    ]
+    filledmarkers = [
+        '.', 'o', 'v', '^', '<', '>', '8', 's', 'p', 'P', '*', 'h', 'H', 'X',
+        'D', 'd'
+    ]
+    filledmarkernames = [
+        'point', 'circle', 'triangle_down', 'triangle_up', 'triangle_left',
+        'triangle_right', 'octagon', 'square', 'pentagon', 'plus (filled)',
+        'star', 'hexagon1', 'hexagon2', 'x (filled)', 'diamond', 'thin_diamond'
+    ]
+
 
 class ThLineMode(Enum):
     """[summary]
@@ -83,29 +133,27 @@ class ThLineMode(Enum):
     [description]
     """
     linestyles = OrderedDict(
-    [('solid',               (0, ())),
-     ('loosely dotted',      (0, (1, 10))),
-     ('dotted',              (0, (1, 5))),
-     ('densely dotted',      (0, (1, 1))),
-
-     ('loosely dashed',      (0, (5, 10))),
-     ('dashed',              (0, (5, 5))),
-     ('densely dashed',      (0, (5, 1))),
-
-     ('loosely dashdotted',  (0, (3, 10, 1, 10))),
-     ('dashdotted',          (0, (3, 5, 1, 5))),
-     ('densely dashdotted',  (0, (3, 1, 1, 1))),
-
-     ('loosely dashdotdotted', (0, (3, 10, 1, 10, 1, 10))),
-     ('dashdotdotted',         (0, (3, 5, 1, 5, 1, 5))),
-     ('densely dashdotdotted', (0, (3, 1, 1, 1, 1, 1)))])
+        [('solid', (0, ())), ('loosely dotted', (0, (1, 10))), ('dotted',
+                                                                (0, (1, 5))),
+         ('densely dotted', (0, (1, 1))), ('loosely dashed', (0, (5, 10))),
+         ('dashed', (0, (5, 5))), ('densely dashed', (0, (5, 1))),
+         ('loosely dashdotted',
+          (0, (3, 10, 1, 10))), ('dashdotted',
+                                 (0, (3, 5, 1, 5))), ('densely dashdotted',
+                                                      (0, (3, 1, 1, 1))),
+         ('loosely dashdotdotted',
+          (0, (3, 10, 1, 10, 1, 10))), ('dashdotdotted',
+                                        (0, (3, 5, 1, 5, 1,
+                                             5))), ('densely dashdotdotted',
+                                                    (0, (3, 1, 1, 1, 1, 1)))])
 
 
-class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
+class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
     """Abstract class to describe a data set
     
     [description]
     """
+
     def __init__(self, name="DataSet", description="", parent=None):
         """Constructor
         
@@ -115,13 +163,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             name {[type]} -- [description] (default: {"DataSet"})
             parent {[type]} -- [description] (default: {None})
         """
-        super().__init__() 
+        super().__init__()
 
         self.name = name
         self.description = description
         self.parent_application = parent
         self.nplots = self.parent_application.nplots
-        self.files = [] 
+        self.files = []
         self.current_file = None
         self.num_files = 0
         self.marker_size = 12
@@ -139,9 +187,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         self.num_theories = 0
         self.inactive_files = {}
         self.current_theory = None
-        self.table_icon_list = [] #save the file's marker shape, fill and color there
+        self.table_icon_list = [
+        ]  #save the file's marker shape, fill and color there
 
 # DATASET STUFF ##########################################################################################################
+
     def do_list(self, line):
         """List the files in the current dataset
         
@@ -150,19 +200,19 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Arguments:
             line {[type]} -- [description]
         """
-        keylist=list(ds.file_parameters.keys()) 
-        print("File\t",'\t'.join(keylist))
+        keylist = list(ds.file_parameters.keys())
+        print("File\t", '\t'.join(keylist))
         for f in self.files:
             for i, f in enumerate(ds.files):
-                vallist=[]
+                vallist = []
                 for k in keylist:
                     vallist.append(f.file_parameters[k])
-                if (f==ds.current_file):
-                    print("*%s\t%s"%(f.file_name_short,'\t'.join(vallist)))
+                if (f == ds.current_file):
+                    print("*%s\t%s" % (f.file_name_short, '\t'.join(vallist)))
                 else:
-                    print(" %s\t%s"%(f.file_name_short,'\t'.join(vallist)))
+                    print(" %s\t%s" % (f.file_name_short, '\t'.join(vallist)))
             for i, t in enumerate(ds.theories):
-                print("   %s: %s\t %s"%(t.name, t.thname, t.description))
+                print("   %s: %s\t %s" % (t.name, t.thname, t.description))
 
     def change_file_visibility(self, file_name_short, check_state=True):
         """Hide/Show file in the figure
@@ -181,29 +231,32 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         """
         file_matching = []
         for file in self.files:
-            if file.file_name_short == file_name_short: #find changed file
+            if file.file_name_short == file_name_short:  #find changed file
                 file_matching.append(file)
-        if len(file_matching)==0:
-            raise ValueError ('Could not match file \"%s\"'%file_name_short)
+        if len(file_matching) == 0:
+            raise ValueError('Could not match file \"%s\"' % file_name_short)
             return
-        if len(file_matching)>1:
-            raise ValueError ('Too many match for file \"%s\"'%file_name_short)
+        if len(file_matching) > 1:
+            raise ValueError(
+                'Too many match for file \"%s\"' % file_name_short)
             return
 
         file_matching[0].active = check_state
-    
+
         #hide datatable
         dt = file_matching[0].data_table
-        for i in range(dt.MAX_NUM_SERIES): 
-            for nx in range(self.nplots): #loop over the plots
-                dt.series[nx][i].set_visible(check_state) 
+        for i in range(dt.MAX_NUM_SERIES):
+            for nx in range(self.nplots):  #loop over the plots
+                dt.series[nx][i].set_visible(check_state)
         #hide theory table
         for th in self.theories.values():
-            th.set_th_table_visible(file_matching[0].file_name_short, check_state)
+            th.set_th_table_visible(file_matching[0].file_name_short,
+                                    check_state)
 
         #save the check_state to recover it upon change of tab or 'view all' events
-        if check_state==False:
-            self.inactive_files[file_matching[0].file_name_short] = file_matching[0]
+        if check_state == False:
+            self.inactive_files[file_matching[0]
+                                .file_name_short] = file_matching[0]
         else:
             try:
                 del self.inactive_files[file_matching[0].file_name_short]
@@ -221,7 +274,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                 file.active = True
                 dt = file.data_table
                 for i in range(dt.MAX_NUM_SERIES):
-                    for nx in range(self.nplots): #loop over the plots
+                    for nx in range(self.nplots):  #loop over the plots
                         dt.series[nx][i].set_visible(True)
         if self.current_theory:
             self.theories[self.current_theory].do_show()
@@ -235,7 +288,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             file.active = False
             dt = file.data_table
             for i in range(dt.MAX_NUM_SERIES):
-                for nx in range(self.nplots): #loop over the plots
+                for nx in range(self.nplots):  #loop over the plots
                     dt.series[nx][i].set_visible(False)
         for th in self.theories.values():
             th.do_hide()
@@ -249,45 +302,47 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
         self.table_icon_list.clear()
         filled = False
-        if self.symbolmode == SymbolMode.fixed: #single symbol, empty?
+        if self.symbolmode == SymbolMode.fixed:  #single symbol, empty?
             markers = [self.symbol1]
             marker_names = [self.symbol1_name]
-        elif self.symbolmode == SymbolMode.fixedfilled: #single symbol, filled?
+        elif self.symbolmode == SymbolMode.fixedfilled:  #single symbol, filled?
             markers = [self.symbol1]
             marker_names = [self.symbol1_name]
             filled = True
-        elif self.symbolmode == SymbolMode.variable: #variable symbols, empty
+        elif self.symbolmode == SymbolMode.variable:  #variable symbols, empty
             markers = SymbolMode.allmarkers.value
             marker_names = SymbolMode.allmarkernames.value
-        else: #
-            markers = SymbolMode.filledmarkers.value #variable symbols, filled
+        else:  #
+            markers = SymbolMode.filledmarkers.value  #variable symbols, filled
             marker_names = SymbolMode.filledmarkernames.value
             filled = True
 
-        if self.colormode == ColorMode.fixed: #single color?
+        if self.colormode == ColorMode.fixed:  #single color?
             colors = [self.color1]
-        elif self.colormode == ColorMode.variable: #variable colors from palette
+        elif self.colormode == ColorMode.variable:  #variable colors from palette
             colors = ColorMode.colorpalettes.value[self.palette_name]
         else:
-            n = len(self.files) - len(self.inactive_files) #number of files to plot
+            n = len(self.files) - len(
+                self.inactive_files)  #number of files to plot
             if n < 2:
-                colors = [self.color1] # only one color needed
-            else: #interpolate the color1 and color2 
+                colors = [self.color1]  # only one color needed
+            else:  #interpolate the color1 and color2
                 r1, g1, b1, a1 = self.color1
-                r2, g2, b2, a2 =  self.color2
-                dr = (r2 - r1)/(n - 1)
-                dg = (g2 - g1)/(n - 1) 
-                db = (b2 - b1)/(n - 1)
-                da = (a2 - a1)/(n - 1) 
+                r2, g2, b2, a2 = self.color2
+                dr = (r2 - r1) / (n - 1)
+                dg = (g2 - g1) / (n - 1)
+                db = (b2 - b1) / (n - 1)
+                da = (a2 - a1) / (n - 1)
                 colors = []
-                for i in range(n): #create a color palette
-                    colors.append((r1 + i*dr, g1 + i*dg, b1 + i*db, a1 + i*da))
+                for i in range(n):  #create a color palette
+                    colors.append((r1 + i * dr, g1 + i * dg, b1 + i * db,
+                                   a1 + i * da))
 
         linelst = itertools.cycle((':', '-', '-.', '--'))
         palette = itertools.cycle((colors))
         markerlst = itertools.cycle((markers))
         marker_name_lst = itertools.cycle((marker_names))
-        size =  self.marker_size #if file.size is None else file.size
+        size = self.marker_size  #if file.size is None else file.size
         width = self.line_width
         #theory settings
         th_linestyle = ThLineMode.linestyles.value[self.th_linestyle]
@@ -295,14 +350,16 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         for j, file in enumerate(self.files):
             dt = file.data_table
 
-            marker = next(markerlst) #if file.marker is None else file.marker 
-            marker_name = next(marker_name_lst) #if file.marker is None else file.marker 
-            color =  next(palette) #if file.color is None else file.color
+            marker = next(markerlst)  #if file.marker is None else file.marker
+            marker_name = next(
+                marker_name_lst)  #if file.marker is None else file.marker
+            color = next(palette)  #if file.color is None else file.color
             face = color if filled else 'none'
             if CmdBase.mode == CmdMode.GUI:
                 if file.active:
                     #save file name with associated marker shape, fill and color
-                    self.table_icon_list.append((file.file_name_short, marker_name, face, color))
+                    self.table_icon_list.append((file.file_name_short,
+                                                 marker_name, face, color))
 
             for nx in range(self.nplots):
                 view = self.parent_application.multiviews[nx]
@@ -313,8 +370,8 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     return
 
                 for i in range(dt.MAX_NUM_SERIES):
-                    if (i<view.n and file.active):
-                        dt.series[nx][i].set_data(x[:,i], y[:,i])
+                    if (i < view.n and file.active):
+                        dt.series[nx][i].set_data(x[:, i], y[:, i])
                         dt.series[nx][i].set_visible(True)
                         dt.series[nx][i].set_marker(marker)
                         dt.series[nx][i].set_markerfacecolor(face)
@@ -322,14 +379,17 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         dt.series[nx][i].set_markeredgewidth(width)
                         dt.series[nx][i].set_markersize(size)
                         dt.series[nx][i].set_linestyle('')
-                        if (file.active and i==0):
-                            label=""
+                        if (file.active and i == 0):
+                            label = ""
                             for pmt in file.file_type.basic_file_parameters:
                                 try:
-                                    label+=pmt+'='+str(file.file_parameters[pmt])+' ';
-                                except KeyError as e: #if parameter missing from data file
-                                    if CmdBase.mode!=CmdMode.GUI:
-                                        print("Parameter %s not found in data file"%(e))
+                                    label += pmt + '=' + str(
+                                        file.file_parameters[pmt]) + ' '
+                                except KeyError as e:  #if parameter missing from data file
+                                    if CmdBase.mode != CmdMode.GUI:
+                                        print(
+                                            "Parameter %s not found in data file"
+                                            % (e))
                             #dt.series[nx][i].set_label(file.file_name_short)
                             dt.series[nx][i].set_label(label)
                         else:
@@ -337,19 +397,20 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     else:
                         dt.series[nx][i].set_visible(False)
                         dt.series[nx][i].set_label('')
-            
+
                 for th in self.theories.values():
                     if th.active:
                         th.plot_theory_stuff()
                     tt = th.tables[file.file_name_short]
                     try:
-                        x, y, success = view.view_proc(tt, file.file_parameters)
+                        x, y, success = view.view_proc(tt,
+                                                       file.file_parameters)
                     except Exception as e:
                         print("in do_plot th", e)
                         continue
                     for i in range(tt.MAX_NUM_SERIES):
-                        if (i<view.n and file.active and th.active):
-                            tt.series[nx][i].set_data(x[:,i], y[:,i])
+                        if (i < view.n and file.active and th.active):
+                            tt.series[nx][i].set_data(x[:, i], y[:, i])
                             tt.series[nx][i].set_visible(True)
                             tt.series[nx][i].set_marker('')
                             tt.series[nx][i].set_linestyle(th_linestyle)
@@ -359,7 +420,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                         else:
                             tt.series[nx][i].set_visible(False)
                             tt.series[nx][i].set_label('')
-        
+
         self.parent_application.update_plot()
 
     def do_sort(self, line):
@@ -371,24 +432,25 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Arguments:
             line {[type]} -- [description]
         """
-        items=line.split(',')
-        if (len(items)==0):
-            print ("Wrong number of arguments")
-        elif (len(items)==1):
-            fp=items[0]
-            rev=False
-        elif (len(items)==2):
-            fp=items[0]
-            rev=(items[1].strip()=="reverse")
+        items = line.split(',')
+        if (len(items) == 0):
+            print("Wrong number of arguments")
+        elif (len(items) == 1):
+            fp = items[0]
+            rev = False
+        elif (len(items) == 2):
+            fp = items[0]
+            rev = (items[1].strip() == "reverse")
         else:
             print("Wrong number of arguments")
 
         if fp in self.current_file.file_parameters:
-            self.files.sort(key = lambda x: float(x.file_parameters[fp]), reverse=rev)
-        elif fp=="File":
-            self.files.sort(key = lambda x: x.file_name_short, reverse=rev)
+            self.files.sort(
+                key=lambda x: float(x.file_parameters[fp]), reverse=rev)
+        elif fp == "File":
+            self.files.sort(key=lambda x: x.file_name_short, reverse=rev)
         else:
-            print("Parameter %s not found in files"%line)
+            print("Parameter %s not found in files" % line)
 
     def complete_sort(self, text, line, begidx, endidx):
         """Complete with the list of file parameters of the current file in the current dataset
@@ -404,20 +466,18 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Returns:
             [type] -- [description]
         """
-        if (self.current_file==None):
-            print ("A file must be selected first")
+        if (self.current_file == None):
+            print("A file must be selected first")
             return
-        fp_names=list(self.current_file.file_parameters.keys())
+        fp_names = list(self.current_file.file_parameters.keys())
         if not text:
             completions = fp_names[:]
         else:
-            completions = [ f
-                            for f in fp_names
-                            if f.startswith(text)
-                            ]
+            completions = [f for f in fp_names if f.startswith(text)]
         return completions
-            
+
 # FILE STUFF ##########################################################################################################
+
     def do_delete(self, line):
         """Delete file from the data set
         
@@ -428,13 +488,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         """
         done = False
         for index, f in enumerate(self.files):
-            if (f.file_name_short==line):
-                if (self.current_file==f):
+            if (f.file_name_short == line):
+                if (self.current_file == f):
                     self.current_file = None
                 self.files.remove(f)
                 done = True
         if (not done):
-            print("File \"%s\" not found"%line)
+            print("File \"%s\" not found" % line)
 
     def complete_delete(self, text, line, begidx, endidx):
         """[summary]
@@ -450,16 +510,13 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Returns:
             [type] -- [description]
         """
-        f_names=[fl.file_name_short for fl in self.files]
+        f_names = [fl.file_name_short for fl in self.files]
         if not text:
             completions = f_names[:]
         else:
-            completions = [ f
-                            for f in f_names
-                            if f.startswith(text)
-                            ]
+            completions = [f for f in f_names if f.startswith(text)]
         return completions
-    
+
     def do_list(self, line):
         """List the files in the current dataset
         
@@ -469,10 +526,10 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             line {[type]} -- [description]
         """
         for f in self.files:
-            if (f==self.current_file):
-                print("*%s"%f.file_name_short)
+            if (f == self.current_file):
+                print("*%s" % f.file_name_short)
             else:
-                print("%s"%f.file_name_short)
+                print("%s" % f.file_name_short)
 
     def do_list_details(self, line):
         """List the files in the dataset with the file parameters
@@ -483,7 +540,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             line {[type]} -- [description]
         """
         for f in self.files:
-            print(f)            
+            print(f)
 
     def do_new(self, line):
         """Add an empty file of the given type to the current Data Set
@@ -493,34 +550,37 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Arguments:
             line {str} -- TYPE (extension of file) [, NAME (name, optional)]
         """
-        if (line==""): 
+        if (line == ""):
             print("Missing file type")
             return
-        items=line.split(',')
-        if (len(items)==0):
+        items = line.split(',')
+        if (len(items) == 0):
             print("Missing file type")
             return
-        elif (len(items)==1):
-            ext=items[0]
-            fname=os.getcwd()+os.path.sep+"DummyFile%02d"%(self.num_files+1)+"."+ext
-        elif (len(items)==2):
-            ext=items[0]
-            fname=os.getcwd()+os.path.sep+items[1]+"."+ext
+        elif (len(items) == 1):
+            ext = items[0]
+            fname = os.getcwd() + os.path.sep + "DummyFile%02d" % (
+                self.num_files + 1) + "." + ext
+        elif (len(items) == 2):
+            ext = items[0]
+            fname = os.getcwd() + os.path.sep + items[1] + "." + ext
         else:
             print("Wrong number of arguments")
-        
-        if (ext in self.parent_application.filetypes):  
-            self.num_files+=1
-            f = File(fname, self.parent_application.filetypes[ext], self, self.parent_application.axarr)
+
+        if (ext in self.parent_application.filetypes):
+            self.num_files += 1
+            f = File(fname, self.parent_application.filetypes[ext], self,
+                     self.parent_application.axarr)
             self.files.append(f)
-            self.current_file=f
+            self.current_file = f
             #leg=self.current_application.ax.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
             #if leg:
             #    leg.draggable()
             #self.current_application.figure.canvas.draw()
         else:
-            print("File type \"%s\" cannot be read by application %s"%(line,self.parent_application.name))
-    
+            print("File type \"%s\" cannot be read by application %s" %
+                  (line, self.parent_application.name))
+
     def complete_new(self, text, line, begidx, endidx):
         """Complete new file command
         
@@ -535,14 +595,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Returns:
             [type] -- [description]
         """
-        file_types=list(self.parent_application.filetypes.keys())
+        file_types = list(self.parent_application.filetypes.keys())
         if not text:
             completions = file_types[:]
         else:
-            completions = [ f
-                            for f in file_types
-                            if f.startswith(text)
-                            ]
+            completions = [f for f in file_types if f.startswith(text)]
         return completions
 
     def do_open(self, line):
@@ -553,37 +610,38 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Arguments:
             line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed
         """
-        if CmdBase.mode!=CmdMode.GUI:
+        if CmdBase.mode != CmdMode.GUI:
             f_names = glob.glob(line)
             if not f_names:
-                f_names = line.split() #allow to provide multiple file names separated by a space
+                f_names = line.split(
+                )  #allow to provide multiple file names separated by a space
         else:
             f_names = line
         newtables = []
-        if (line=="" or len(f_names)==0): 
+        if (line == "" or len(f_names) == 0):
             message = "No valid file names provided"
-            if CmdBase.mode!=CmdMode.GUI:
+            if CmdBase.mode != CmdMode.GUI:
                 print(message)
                 return
             return (message, None, None)
         f_ext = [os.path.splitext(x)[1].split('.')[-1] for x in f_names]
-        if (f_ext.count(f_ext[0])!=len(f_ext)):
+        if (f_ext.count(f_ext[0]) != len(f_ext)):
             message = "File extensions of files must be equal!"
-            if CmdBase.mode!=CmdMode.GUI:
-                print (message)
-                print (f_names)
+            if CmdBase.mode != CmdMode.GUI:
+                print(message)
+                print(f_names)
                 return
             return (message, None, None)
-        if (f_ext[0] in self.parent_application.filetypes): 
-            ft = self.parent_application.filetypes[f_ext[0]] 
+        if (f_ext[0] in self.parent_application.filetypes):
+            ft = self.parent_application.filetypes[f_ext[0]]
             for f in f_names:
                 if not os.path.isfile(f):
-                    print("File \"%s\" does not exists"%f)
-                    continue # next file name
+                    print("File \"%s\" does not exists" % f)
+                    continue  # next file name
                 df = ft.read_file(f, self, self.parent_application.axarr)
                 unique = True
                 for file in self.files:
-                    if df.file_name_short == file.file_name_short: #check if file already exists in current ds
+                    if df.file_name_short == file.file_name_short:  #check if file already exists in current ds
                         unique = False
                 if unique:
                     self.files.append(df)
@@ -591,17 +649,20 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
                     newtables.append(df)
                     for th_name in self.theories:
                         #add a theory table
-                        self.theories[th_name].tables[df.file_name_short] = DataTable(self.parent_application.axarr, "TH_" + df.file_name_short)
+                        self.theories[th_name].tables[
+                            df.file_name_short] = DataTable(
+                                self.parent_application.axarr,
+                                "TH_" + df.file_name_short)
                         self.theories[th_name].function(df)
-            if CmdBase.mode==CmdMode.GUI:
+            if CmdBase.mode == CmdMode.GUI:
                 return (True, newtables, f_ext[0])
         else:
-            message = "File type \"%s\" does not exists"%f_ext[0]
-            if CmdBase.mode!=CmdMode.GUI:
-                print (message)
+            message = "File type \"%s\" does not exists" % f_ext[0]
+            if CmdBase.mode != CmdMode.GUI:
+                print(message)
                 return
             return (message, None, None)
-    
+
     # def reload_data(self):
     #     paths_to_open = []
     #     for file in self.files:
@@ -611,11 +672,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
     #     for i in len(paths_to_open):
     #         path, ft = paths_to_open[i]
     #         df = ft.read_file(path, self, self.parent_application.axarr[0])
-            
-        
-        
-            
-        
 
     def __listdir(self, root):
         """List directory 'root' appending the path separator to subdirs.
@@ -637,7 +693,6 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             res.append(name)
         return res
 
-
     def __complete_path(self, path=None):
         """Perform completion of filesystem path
         
@@ -651,12 +706,14 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         """
         if not path:
             return self.__listdir('.')
-        
+
         dirname, rest = os.path.split(path)
         tmp = dirname if dirname else '.'
-        res = [os.path.join(dirname, p)
-                for p in self.__listdir(tmp) if p.startswith(rest)]
-                
+        res = [
+            os.path.join(dirname, p) for p in self.__listdir(tmp)
+            if p.startswith(rest)
+        ]
+
         # more than one match, or single match which does not exist (typo)
         if len(res) > 1 or not os.path.exists(path):
             return res
@@ -682,12 +739,12 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
 
         todo:: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION
         """
-        test=line.split()
-        if (len(test)>1):
-            result=self.__complete_path(test[1])
+        test = line.split()
+        if (len(test) > 1):
+            result = self.__complete_path(test[1])
         else:
-            result=self.__complete_path()
-        
+            result = self.__complete_path()
+
         return result
 
         #f_names=[]
@@ -713,11 +770,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             line {[type]} -- [description]
         """
         for f in self.files:
-            if (f.file_name_short==line):
-                self.current_file=f    
-                done=True
+            if (f.file_name_short == line):
+                self.current_file = f
+                done = True
         if (not done):
-            print("File \"%s\" not found"%line)                        
+            print("File \"%s\" not found" % line)
 
     #complete_switch = complete_delete
 
@@ -730,13 +787,20 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             line {[type]} -- [description]
         """
         file = self.current_file
-        print("Path: %s"%file.file_full_path)
+        print("Path: %s" % file.file_full_path)
         print(file.file_parameters)
         print(file.header_lines)
         print(file.data_table.data)
-        print(tabulate(file.data_table.data, tablefmt="grid", floatfmt=".4g", headers=file.data_table.column_names))
+        print(
+            tabulate(
+                file.data_table.data,
+                tablefmt="grid",
+                floatfmt=".4g",
+                headers=file.data_table.column_names))
+
 
 # THEORY STUFF ##########################################################################################################
+
     def do_theory_delete(self, name):
         """Delete a theory from the current dataset
         
@@ -749,14 +813,17 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             try:
                 self.theories[name].destructor()
             except:
-                print("No destructor programmed for %s"%self.theories[name].name)
-            for tt in self.theories[name].tables.values(): # remove matplotlib artist from ax
+                print("No destructor programmed for %s" %
+                      self.theories[name].name)
+            for tt in self.theories[
+                    name].tables.values():  # remove matplotlib artist from ax
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.nplots):
-                        self.parent_application.axarr[nx].lines.remove(tt.series[nx][i])
+                        self.parent_application.axarr[nx].lines.remove(
+                            tt.series[nx][i])
             del self.theories[name]
         else:
-            print("Theory \"%s\" not found"%name)            
+            print("Theory \"%s\" not found" % name)
 
     def complete_theory_delete(self, text, line, begidx, endidx):
         """Complete delete theory command
@@ -772,14 +839,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Returns:
             [type] -- [description]
         """
-        th_names=list(self.theories.keys())
+        th_names = list(self.theories.keys())
         if not text:
             completions = th_names[:]
         else:
-            completions = [ f
-                            for f in th_names
-                            if f.startswith(text)
-                            ]
+            completions = [f for f in th_names if f.startswith(text)]
         return completions
 
     def do_theory_list(self, line):
@@ -791,7 +855,7 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             line {[type]} -- [description]
         """
         for t in self.theories.values():
-            print("   %s: %s\t %s"%(t.name, t.thname, t.description))
+            print("   %s: %s\t %s" % (t.name, t.thname, t.description))
 
     def do_theory_new(self, line):
         """Add a new theory of the type specified to the current Data Set
@@ -807,29 +871,29 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         thtypes = list(self.parent_application.theories.keys())
         if (line in thtypes):
             if (self.current_file is None):
-                print("Current dataset is empty\n"
-                    "%s was not created"%line)
+                print("Current dataset is empty\n" "%s was not created" % line)
                 return
             self.num_theories += 1
             #th_id = "%s%02d"%(line,self.num_theories)
             # th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name
-            th_id = "%s%02d"%(line, self.num_theories)
-            th = self.parent_application.theories[line](th_id, self, self.parent_application.axarr)
-            self.theories[th.name]=th
+            th_id = "%s%02d" % (line, self.num_theories)
+            th = self.parent_application.theories[line](
+                th_id, self, self.parent_application.axarr)
+            self.theories[th.name] = th
             self.current_theory = th.name
-            if (self.mode == CmdMode.GUI): 
+            if (self.mode == CmdMode.GUI):
                 self.handle_actionCalculate_Theory()
             else:
-                if (self.mode==CmdMode.batch):
+                if (self.mode == CmdMode.batch):
                     th.prompt = ''
                 else:
-                    th.prompt = self.prompt[:-2]+'/'+th.name+'> '
+                    th.prompt = self.prompt[:-2] + '/' + th.name + '> '
                 th.do_calculate("")
                 th.cmdloop()
             return th
         else:
-            print("Theory \"%s\" does not exists"%line)
-    
+            print("Theory \"%s\" does not exists" % line)
+
     def complete_theory_new(self, text, line, begidx, endidx):
         """Complete new theory command
         
@@ -844,14 +908,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         Returns:
             [type] -- [description]
         """
-        theory_names=list(self.parent_application.theories.keys())
+        theory_names = list(self.parent_application.theories.keys())
         if not text:
             completions = theory_names[:]
         else:
-            completions = [ f
-                            for f in theory_names
-                            if f.startswith(text)
-                            ]
+            completions = [f for f in theory_names if f.startswith(text)]
         return completions
 
     def do_theory_switch(self, line):
@@ -863,11 +924,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
             line {[type]} -- [description]
         """
         if line in self.theories.keys():
-            th=self.theories[line]
+            th = self.theories[line]
             th.cmdloop()
         else:
-            print("Theory \"%s\" not found"%line)                        
-        
+            print("Theory \"%s\" not found" % line)
+
     def complete_theory_switch(self, text, line, begidx, endidx):
         """Complete the theory switch command
         
@@ -900,11 +961,11 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         [description]
 
         """
-        min=1e100
+        min = 1e100
         for f in self.files:
-            minfile=f.mincol(col)
-            if minfile<min:
-                min=minfile
+            minfile = f.mincol(col)
+            if minfile < min:
+                min = minfile
         return min
 
     def minpositivecol(self, col):
@@ -912,21 +973,21 @@ class DataSet(CmdBase): # cmd.Cmd not using super() is OK for CL mode.
         [description]
 
         """
-        min=1e100
+        min = 1e100
         for f in self.files:
-            minfile=f.minpositivecol(col)
-            if minfile<min:
-                min=minfile
+            minfile = f.minpositivecol(col)
+            if minfile < min:
+                min = minfile
         return min
-        
+
     def maxcol(self, col):
         """Maximum value in table column line of all Files in DataSet
         [description]
 
         """
-        max=-1e100
+        max = -1e100
         for f in self.files:
-            maxfile=f.maxcol(col)
-            if maxfile>max:
-                max=maxfile
+            maxfile = f.maxcol(col)
+            if maxfile > max:
+                max = maxfile
         return max
