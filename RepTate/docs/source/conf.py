@@ -67,8 +67,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'RepTate'
-copyright = '2017, Jorge Ramirez'
-author = 'Jorge Ramirez'
+copyright = '2018, Universidad Politécnica de Madrid, University of Leeds'
+author = 'Jorge Ramirez, Victor Boudara'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
