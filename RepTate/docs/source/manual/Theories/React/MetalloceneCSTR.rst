@@ -17,8 +17,7 @@ Metallocene CSTR
 
 
 The multiple metallocene CSTR reaction theory uses an algorithm based on the
-reaction scheme given by Read and Soares (`Macromolecules 36,
-10037-10051 (2003) <https://doi.org/10.1021/ma030354l>`_). 
+reaction scheme given by Read and Soares :cite:`m-Read2003`. 
 That paper presented some analytical and semi-analytical
 derivations of molecular weight distributions for the case of two metallocene
 catalysts. The present algorithm is a Monte Carlo algorithm for simulating the
@@ -42,7 +41,7 @@ opens a form looking like:
 Here, one can set the total number of catalyst sites to be used in the
 calculation, the reactor time constant (the mean residence time in the CSTR),
 and the reactor monomer concentration. Then, for each catalyst site, there are
-five parameters to be fixed, as described by `Read and Soares <https://doi.org/10.1021/ma030354l>`_:
+five parameters to be fixed, as described in :cite:`Read2003`:
 
 *   The active catalyst site concentration (if catalyst deactivation is
     significant, one should account for this by reducing this parameter).
@@ -68,3 +67,10 @@ five parameters to be fixed, as described by `Read and Soares <https://doi.org/1
     form long-chain-branches, :math:`K_\text{p,LCB}`.
 
 .. include:: gfactor_BoB_polymer_storage_and_memory.rst
+
+
+.. rubric:: References
+
+.. bibliography:: ../bibliography.bib
+    :style: unsrt
+    :keyprefix: m-

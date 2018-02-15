@@ -7,10 +7,7 @@ Tobita LDPE
 
 
 The LDPE batch reaction theory uses an algorithm described in the paper by H.
-Tobita 
-(`J. Pol. Sci. Part B, 39, 391-403 (2001)
-<https://doi.org/10.1002/1099-0488(20010115)39:4\<391::AID-POLB1011\>3.0.CO;2-3>`_).
-It is designed for a batch
+Tobita :cite:`LDPE-Tobita2001`. It is designed for a batch
 reaction - in which the reagents are well mixed at the beginning and monomer
 is consumed as the reaction proceeds. It is equivalent to the "plug-flow"
 approximation for a tubular reactor. One possibility when modelling a real
@@ -66,3 +63,9 @@ to a BoB polymer configuration file. There are:
 .. include:: simulation_parameters.rst
 
 .. include:: gfactor_BoB_polymer_storage_and_memory.rst
+
+.. rubric:: References
+
+.. bibliography:: ../bibliography.bib
+    :style: unsrt
+    :keyprefix: LDPE-

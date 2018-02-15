@@ -7,10 +7,7 @@ Tobita CSTR
 
 
 The LDPE CSTR reaction theory uses an algorithm based on the one described in
-the paper by H. Tobita 
-(`J. Pol. Sci. Part B, 39, 391-403 (2001)
-<https://doi.org/10.1002/1099-0488(20010115)39:4\<391::AID-POLB1011\>3.0.CO;2-3>`_) 
-for batch reactions. 
+the paper by H. Tobita :cite:`CSTR-Tobita2001` for batch reactions. 
 The algorithm is based upon a set of processes occuring in the
 reactor during free-radical polymerisation. 
 These processes are: 
@@ -54,3 +51,10 @@ to a BoB polymer configuration file. There are:
 .. include:: simulation_parameters.rst
 
 .. include:: gfactor_BoB_polymer_storage_and_memory.rst
+
+
+.. rubric:: References
+
+.. bibliography:: ../bibliography.bib
+    :style: unsrt
+    :keyprefix: CSTR-
