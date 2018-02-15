@@ -1,11 +1,35 @@
 # RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
-# http://blogs.upm.es/compsoftmatter/software/reptate/
-# https://github.com/jorge-ramirez-upm/RepTate
-# http://reptate.readthedocs.io
-# Jorge Ramirez, jorge.ramirez@upm.es
-# Victor Boudara, mmvahb@leeds.ac.uk
-# Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License.
+# --------------------------------------------------------------------------------------------------------
+#
+# Authors:
+#     Jorge Ramirez, jorge.ramirez@upm.es
+#     Victor Boudara, victor.boudara@gmail.com
+#
+# Useful links:
+#     http://blogs.upm.es/compsoftmatter/software/reptate/
+#     https://github.com/jorge-ramirez-upm/RepTate
+#     http://reptate.readthedocs.io
+#
+# --------------------------------------------------------------------------------------------------------
+#
+# Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+#
+# This file is part of RepTate.
+#
+# RepTate is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# RepTate is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
+#
+# --------------------------------------------------------------------------------------------------------
 """Module Reptate
 
 Main program that launches the GUI.
@@ -95,19 +119,17 @@ def start_RepTate(argv):
     # Minimize the theory
     ex.applications["NLVE2"].datasets["Set1"].handle_actionMinimize_Error()
 
-    # #####################
-    # # TEST Carreau-Yasuda
-    # # Open a Dataset
-    # ex.new_lve_window()
-    # ex.applications["LVE2"].new_tables_from_files([
-    #                                                pi_dir + "PI_483.1k_T-35.tts",
-    #                                                ])
-    # # Switch the view
-    # ex.applications["LVE2"].view_switch("logetastar")
-    # # Open a theory
-    # ex.applications["LVE2"].datasets["Set1"].new_theory("CarreauYasudaTheory")
-    # # Minimize the theory
-    # ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
+
+    ####################
+    #open linear rheology data to import the Maxwell modes
+    ex.new_lve_window()
+    dow_dir = "data%sDOW%sLinear_Rheology_TTS%s" % ((
+        os.sep, ) * 3)
+    ex.applications["LVE3"].new_tables_from_files([
+        dow_dir + "DOWLDPEL150R_160C.tts",
+    ])
+    ex.applications["LVE3"].datasets["Set1"].new_theory("MaxwellModesFrequency")
+    ex.applications["LVE3"].datasets["Set1"].handle_actionMinimize_Error()
 
     sys.exit(app.exec_())
 

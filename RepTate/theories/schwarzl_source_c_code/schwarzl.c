@@ -1,19 +1,43 @@
-/* RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
-http://blogs.upm.es/compsoftmatter/software/reptate/
-https://github.com/jorge-ramirez-upm/RepTate
-http://reptate.readthedocs.io
-Jorge Ramirez, jorge.ramirez@upm.es
-Victor Boudara, mmvahb@leeds.ac.uk
-Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-This software is distributed under the GNU General Public License. */
+// RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments
+// --------------------------------------------------------------------------------------------------------
 
+// Authors:
+//     Jorge Ramirez, jorge.ramirez@upm.es
+//     Victor Boudara, victor.boudara@gmail.com
 
-// Numerical formulae for calculations of elastic and loss moduli from relaxation
-// modulus using Schwarzl method (1971), Rheologica Acta.
-//
-// compile library for python using
-// gcc -o ../schwarzl_Gt.so -shared -fPIC -O2 schwarzl_Gt.c
+// Useful links:
+//     http://blogs.upm.es/compsoftmatter/software/reptate/
+//     https://github.com/jorge-ramirez-upm/RepTate
+//     http://reptate.readthedocs.io
 
+// --------------------------------------------------------------------------------------------------------
+
+// Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+
+// This file is part of RepTate.
+
+// RepTate is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// RepTate is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
+
+// --------------------------------------------------------------------------------------------------------
+
+/* 
+Numerical formulae for calculations of elastic and loss moduli from relaxation
+modulus using Schwarzl method (1971), Rheologica Acta.
+
+compile library for python using
+gcc -o ../schwarzl_Gt.so -shared -fPIC -O2 schwarzl_Gt.c 
+*/
 #include <stdlib.h>
 #include <math.h>
 
@@ -82,7 +106,7 @@ void schwarzl_gt(int n_data, double *value_G_of_t, double *time_G_of_t, double *
     {
         start++;
     }
-    if (time_G_of_t[n_data-1] == 0.0) //skip t=0 value
+    if (time_G_of_t[n_data - 1] == 0.0) //skip t=0 value
     {
         finish--;
     }
