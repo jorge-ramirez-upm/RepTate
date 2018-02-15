@@ -3,7 +3,7 @@ Applications
 ============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    MWD/MWD
    TTS/TTS
@@ -14,5 +14,7 @@ Applications
    SANS/SANS
    React/React
    
-- Detailed description of all applications, with all views and theories included
-   - Detailed description of theories
+- Detailed description of all applications:
+	- Views and theories included
+	- Tutorials
+	- Theories manual

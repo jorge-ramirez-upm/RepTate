@@ -14,7 +14,6 @@ Contents:
    about
    features
    installation
-   tutorial/tutorial
    manual/manual
    developers/developers
    version
@@ -37,4 +36,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+* :doc:`All Theories <manual/Applications/Theories/theories>`
+* :doc:`All Tutorials <manual/Applications/tutorial/tutorial>`
+
 

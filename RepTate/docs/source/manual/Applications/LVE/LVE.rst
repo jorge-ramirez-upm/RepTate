@@ -1,10 +1,18 @@
 ===========================
-LVE: Linear Viscoelasticity
+|logo| LVE: Linear Viscoelasticity
 ===========================
 
-.. toctree::
-   :maxdepth: 2
+.. |logo| image:: ../app_logo/LVE.png
+	:height: 15pt
+	:align: bottom
 
+..	toctree::
+   	:maxdepth: 2
+
+	general
+	tutorial
+	theories
+	
 ----------
 Data Files
 ----------
