@@ -121,7 +121,8 @@ class BaseApplicationNLVE:
 
         # THEORIES
         self.theories[TheoryRoliePoly.thname] = TheoryRoliePoly
-
+        self.add_common_theories()
+        
         #set the current view
         self.set_views()
 

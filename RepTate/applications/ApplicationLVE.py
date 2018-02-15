@@ -278,6 +278,7 @@ class BaseApplicationLVE:
         self.theories[
             TheoryLikhtmanMcLeish2002.thname] = TheoryLikhtmanMcLeish2002
         self.theories[TheoryCarreauYasuda.thname] = TheoryCarreauYasuda
+        self.add_common_theories()
         #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
 

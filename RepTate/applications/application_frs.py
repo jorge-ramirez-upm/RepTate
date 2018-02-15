@@ -70,6 +70,9 @@ class ApplicationFRS_I(Application):
                               ['s', 'Pa'])
         self.filetypes[ftype.extension] = ftype
 
+        #Theories
+        self.add_common_theories()
+
     def viewIt(self, dt, file_parameters):
         """[summary]
         

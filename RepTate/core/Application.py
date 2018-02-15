@@ -71,11 +71,13 @@ class Application(CmdBase):
 
         self.artists_clicked = []
         self.autoscale = True
+
         # Theories available everywhere
-        # self.theories[TheoryPolynomial.thname]=TheoryPolynomial
-        # self.theories[TheoryPowerLaw.thname]=TheoryPowerLaw
-        # self.theories[TheoryExponential.thname]=TheoryExponential
-        # self.theories[TheoryExponential2.thname]=TheoryExponential2
+        self.common_theories = OrderedDict()  # keep theory combobox in order
+        # self.common_theories[TheoryPolynomial.thname]=TheoryPolynomial
+        # self.common_theories[TheoryPowerLaw.thname]=TheoryPowerLaw
+        # self.common_theories[TheoryExponential.thname]=TheoryExponential
+        # self.common_theories[TheoryExponential2.thname]=TheoryExponential2
 
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
@@ -94,6 +96,10 @@ class Application(CmdBase):
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
             self.multiplots.show()
+
+    def add_common_theories(self):
+        for th in self.common_theories.values():
+            self.theories[th.thname] = th
 
     def onrelease(self, event):
         """Called when releasing mouse"""

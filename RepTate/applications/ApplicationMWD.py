@@ -111,6 +111,7 @@ class BaseApplicationMWD:
         # THEORIES
         self.theories[TheoryDiscrMWD.thname] = TheoryDiscrMWD
         #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
+        self.add_common_theories()
 
         #set the current view
         self.set_views()

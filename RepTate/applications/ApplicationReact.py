@@ -160,6 +160,7 @@ class BaseApplicationReact:
         self.theories[TheoryTobitaCSTR.thname] = TheoryTobitaCSTR
         self.theories[TheoryMultiMetCSTR.thname] = TheoryMultiMetCSTR
         self.theories[TheoryReactMix.thname] = TheoryReactMix
+        self.add_common_theories()
 
         #set the current view
         self.set_views()

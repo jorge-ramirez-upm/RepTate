@@ -121,7 +121,8 @@ class BaseApplicationGt:
 
         # THEORIES
         self.theories[TheoryMaxwellModesTime.thname] = TheoryMaxwellModesTime
-
+        self.add_common_theories()
+        
         #set the current view
         self.set_views()
 
