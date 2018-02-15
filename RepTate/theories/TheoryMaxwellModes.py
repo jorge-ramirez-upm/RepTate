@@ -21,7 +21,6 @@ from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QSt
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from DraggableArtists import DragType, DraggableModesSeries
-from collections import OrderedDict
 
 
 class TheoryMaxwellModesFrequency(CmdBase):
@@ -78,7 +77,6 @@ class BaseTheoryMaxwellModesFrequency:
         wmax = self.parent_dataset.maxcol(0)
         nmodes = int(np.round(np.log10(wmax / wmin)))
 
-        self.parameters = OrderedDict()
         self.parameters["logwmin"] = Parameter(
             "logwmin",
             np.log10(wmin),
@@ -175,8 +173,7 @@ class BaseTheoryMaxwellModesFrequency:
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(
             self.graphicmodes, DragType.special,
-            self.parent_dataset.parent_application,
-            self.drag_mode)
+            self.parent_dataset.parent_application, self.drag_mode)
         self.plot_theory_stuff()
 
     def destructor(self):
@@ -481,7 +478,6 @@ class BaseTheoryMaxwellModesTime:
         tmax = self.parent_dataset.maxcol(0)
         nmodes = int(np.round(np.log10(tmax / tmin)))
 
-        self.parameters = OrderedDict()
         self.parameters["logtmin"] = Parameter(
             "logtmin",
             np.log10(tmin),

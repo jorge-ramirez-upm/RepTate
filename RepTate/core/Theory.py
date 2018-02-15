@@ -27,7 +27,7 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
 
 from tabulate import tabulate
-
+from collections import OrderedDict
 
 class Theory(CmdBase):
     """Abstract class to describe a theory
@@ -71,7 +71,7 @@ class Theory(CmdBase):
         self.parent_dataset = parent_dataset
         self.axarr = axarr
         self.ax = axarr[0] #theory calculation only on this plot
-        self.parameters={}
+        self.parameters= OrderedDict() # keep the dictionary key in order for the parameter table
         self.tables={}
         self.function=None
         self.active = True #defines if the theorie is plotted

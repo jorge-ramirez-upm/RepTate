@@ -5,12 +5,12 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module QTheory
 
 Module that defines the GUI counterpart of the class Theory.
 
-""" 
+"""
 #from PyQt5.QtCore import *
 import sys
 from PyQt5.uic import loadUiType
@@ -20,11 +20,9 @@ from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from Parameter import OptType
-from collections import OrderedDict
 
 PATH = dirname(abspath(__file__))
-Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
-
+Ui_TheoryTab, QWidget = loadUiType(join(PATH, 'theorytab.ui'))
 
 # def trap_exc_during_debug(*args):
 #     # when app raises uncaught exception, print info
@@ -32,6 +30,7 @@ Ui_TheoryTab, QWidget = loadUiType(join(PATH,'theorytab.ui'))
 
 # # install exception hook: without this, uncaught exception would cause application to exit
 # sys.excepthook = trap_exc_during_debug
+
 
 class CalculationThread(QObject):
     sig_done = pyqtSignal()
@@ -47,12 +46,12 @@ class CalculationThread(QObject):
 
 
 class GetModesDialog(QDialog):
-    def __init__(self, parent = None, th_dict = {}):
+    def __init__(self, parent=None, th_dict={}):
         super(GetModesDialog, self).__init__(parent)
 
         self.setWindowTitle("Get Maxwell modes")
         layout = QVBoxLayout(self)
-        
+
         self.btngrp = QButtonGroup()
 
         for item in th_dict.keys():
@@ -62,12 +61,11 @@ class GetModesDialog(QDialog):
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
-            Qt.Horizontal, self)
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)    
-        
+        layout.addWidget(buttons)
+
     # static method to create the dialog and return (date, time, accepted)
     #@staticmethod
     #def getMaxwellModesProvider(self, parent = None, th_dict = {}):
@@ -75,11 +73,13 @@ class GetModesDialog(QDialog):
     #    result = dialog.exec_()
     #    return (self.btngrp.checkedButton().text(), result == QDialog.Accepted)
 
+
 class QTheory(Ui_TheoryTab, QWidget, Theory):
     """[summary]
     
     [description]
     """
+
     def __init__(self, name="QTheory", parent_dataset=None, axarr=None):
         """[summary]
         
@@ -95,23 +95,26 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
         #build the therory widget
         self.thParamTable.setIndentation(0)
-        self.thParamTable.setColumnCount(3) 
-        self.thParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value", "Error"]))
+        self.thParamTable.setColumnCount(3)
+        self.thParamTable.setHeaderItem(
+            QTreeWidgetItem(["Parameter", "Value", "Error"]))
         # self.thParamTable.header().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
         self.thParamTable.setAlternatingRowColors(True)
         self.thParamTable.setFrameShape(QFrame.NoFrame)
         self.thParamTable.setFrameShadow(QFrame.Plain)
-        self.thParamTable.setEditTriggers(self.thParamTable.NoEditTriggers) 
-    
+        self.thParamTable.setEditTriggers(self.thParamTable.NoEditTriggers)
+
         self.thTextBox.setReadOnly(True)
 
-        self.stop_theory_calc_flag = False 
+        self.stop_theory_calc_flag = False
         self.thread_calc_busy = False
         self.thread_fit_busy = False
 
-        connection_id = self.thParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
-        connection_id = self.thParamTable.itemChanged.connect(self.handle_parameterItemChanged)
+        connection_id = self.thParamTable.itemDoubleClicked.connect(
+            self.onTreeWidgetItemDoubleClicked)
+        connection_id = self.thParamTable.itemChanged.connect(
+            self.handle_parameterItemChanged)
 
     def handle_actionCalculate_Theory(self):
         self.thread_calc_busy = True
@@ -119,11 +122,15 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.parent_dataset.actionCalculate_Theory.setDisabled(True)
         self.parent_dataset.actionNew_Theory.setDisabled(True)
         try:
-            self.theory_buttons_disabled(True) # TODO: Add that function to all theories
-        except AttributeError: #the function is not defined in the current theory
+            self.theory_buttons_disabled(
+                True)  # TODO: Add that function to all theories
+        except AttributeError:  #the function is not defined in the current theory
             pass
         if CmdBase.calcmode == CalcMode.multithread:
-            self.worker = CalculationThread(self.do_calculate, "", )
+            self.worker = CalculationThread(
+                self.do_calculate,
+                "",
+            )
             self.worker.sig_done.connect(self.end_thread_calc)
             self.thread_calc = QThread()
             self.worker.moveToThread(self.thread_calc)
@@ -132,26 +139,28 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         elif CmdBase.calcmode == CalcMode.singlethread:
             self.do_calculate("")
             self.end_thread_calc()
-    
+
     def end_thread_calc(self):
         if CmdBase.calcmode == CalcMode.multithread:
             try:
                 self.thread_calc.quit()
             except:
                 pass
-        if self.stop_theory_calc_flag: #calculation stopped by user
-            self.stop_theory_calc_flag = False #reset flag
+        if self.stop_theory_calc_flag:  #calculation stopped by user
+            self.stop_theory_calc_flag = False  #reset flag
         else:
             self.update_parameter_table()
-            for file in self.theory_files(): #copy theory data to the plot series
+            for file in self.theory_files(
+            ):  #copy theory data to the plot series
                 tt = self.tables[file.file_name_short]
                 for nx in range(self.parent_dataset.nplots):
-                    view = self.parent_dataset.parent_application.multiviews[nx]
+                    view = self.parent_dataset.parent_application.multiviews[
+                        nx]
                     x, y, success = view.view_proc(tt, file.file_parameters)
                     for i in range(tt.MAX_NUM_SERIES):
-                        if (i<view.n):
-                            tt.series[nx][i].set_data(x[:,i], y[:,i]) 
-        
+                        if (i < view.n):
+                            tt.series[nx][i].set_data(x[:, i], y[:, i])
+
             self.parent_dataset.parent_application.update_Qplot()
 
         self.thread_calc_busy = False
@@ -159,8 +168,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.parent_dataset.actionCalculate_Theory.setDisabled(False)
         self.parent_dataset.actionNew_Theory.setDisabled(False)
         try:
-            self.theory_buttons_disabled(False) # TODO: Add that function to all theories
-        except AttributeError: #the function is not defined in the current theory
+            self.theory_buttons_disabled(
+                False)  # TODO: Add that function to all theories
+        except AttributeError:  #the function is not defined in the current theory
             pass
 
     def handle_actionMinimize_Error(self):
@@ -173,11 +183,15 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.parent_dataset.actionMinimize_Error.setDisabled(True)
         self.parent_dataset.actionNew_Theory.setDisabled(True)
         try:
-            self.theory_buttons_disabled(True) # TODO: Add that function to all theories
-        except AttributeError: #the function is not defined in the current theory
+            self.theory_buttons_disabled(
+                True)  # TODO: Add that function to all theories
+        except AttributeError:  #the function is not defined in the current theory
             pass
         if CmdBase.calcmode == CalcMode.multithread:
-            self.worker = CalculationThread(self.do_fit, "", )
+            self.worker = CalculationThread(
+                self.do_fit,
+                "",
+            )
             self.worker.sig_done.connect(self.end_thread_fit)
             self.thread_fit = QThread()
             self.worker.moveToThread(self.thread_fit)
@@ -200,10 +214,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.parent_dataset.actionMinimize_Error.setDisabled(False)
         self.parent_dataset.actionNew_Theory.setDisabled(False)
         try:
-            self.theory_buttons_disabled(False) # TODO: Add that function to all theories
-        except AttributeError: #the function is not defined in the current theory
+            self.theory_buttons_disabled(
+                False)  # TODO: Add that function to all theories
+        except AttributeError:  #the function is not defined in the current theory
             pass
-
 
     def update_parameter_table(self):
         """Update the theory parameter table
@@ -212,33 +226,32 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         """
         #clean table
         self.thParamTable.clear()
-        if isinstance(self.parameters, OrderedDict): #true if parameters are kept in a particular order
-            parameters_ = self.parameters
-        else: #else sort parameters in alphabetic order
-            parameters_ = sorted(self.parameters, key=str.lower) #case insensitive sorting
 
         #populate table
-        for param in parameters_:
+        for param in self.parameters:
             p = self.parameters[param]
-            if p.display_flag: #only allowed param enter the table
+            if p.display_flag:  #only allowed param enter the table
                 if p.opt_type == OptType.const:
-                    item = QTreeWidgetItem(self.thParamTable, [p.name, "%0.3g"%p.value, "N/A"])
+                    item = QTreeWidgetItem(
+                        self.thParamTable,
+                        [p.name, "%0.3g" % p.value, "N/A"])
                     item.setCheckState(0, Qt.PartiallyChecked)
                     item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
                 else:
                     try:
-                        err = "%0.3g"%p.error
+                        err = "%0.3g" % p.error
                     except:
-                        err = "-"    
-                    item = QTreeWidgetItem(self.thParamTable, [p.name, "%0.3g"%p.value, err])
+                        err = "-"
+                    item = QTreeWidgetItem(
+                        self.thParamTable,
+                        [p.name, "%0.3g" % p.value, err])
                     if p.opt_type == OptType.opt:
                         item.setCheckState(0, Qt.Checked)
                     elif p.opt_type == OptType.nopt:
                         item.setCheckState(0, Qt.Unchecked)
-                    
+
                 item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
-
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked
@@ -264,7 +277,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             column {[type]} -- [description]
         """
         param_changed = item.text(0)
-        if column == 0: #param was checked/unchecked
+        if column == 0:  #param was checked/unchecked
             if item.checkState(0) == Qt.Checked:
                 self.parameters[param_changed].opt_type = OptType.opt
             elif item.checkState(0) == Qt.Unchecked:
@@ -298,11 +311,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 tauinds = (-tau).argsort()
                 tau = tau[tauinds]
                 G0 = G0[tauinds]
-                self.set_modes(tau,G0)
-            
+                self.set_modes(tau, G0)
+
             #item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)
             #print(item)
-            
+
             #d = QDialog(self, )
             #layout = QVBoxLayout(d)
             #d.setLayout(layout)

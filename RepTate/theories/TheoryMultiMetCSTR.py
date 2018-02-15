@@ -18,7 +18,6 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtCore import pyqtSignal
-from collections import OrderedDict
 from PyQt5.QtWidgets import QApplication
 
 import ctypes as ct
@@ -59,7 +58,8 @@ class BaseTheoryMultiMetCSTR:
     
     [description]
     """
-    help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%sMetalloceneCSTR.html' % ((os.sep, )*6)
+    help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%sMetalloceneCSTR.html' % (
+        (os.sep, ) * 6)
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/React/MetalloceneCSTR.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     signal_request_dist = pyqtSignal(object)
@@ -87,8 +87,6 @@ class BaseTheoryMultiMetCSTR:
         self.ndist = 0
         self.has_modes = False  # True if the theory has modes
 
-        self.parameters = OrderedDict(
-        )  # keep the dictionary key in order for the parameter table
         self.parameters['num_to_make'] = Parameter(
             name='num_to_make',
             value=1000,

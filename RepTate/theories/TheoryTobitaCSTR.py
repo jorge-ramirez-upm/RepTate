@@ -19,7 +19,6 @@ from QTheory import QTheory
 from DataTable import DataTable
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import pyqtSignal
-from collections import OrderedDict
 
 import ctypes as ct
 import react_ctypes_helper as rch
@@ -90,8 +89,6 @@ class BaseTheoryTobitaCSTR:
         self.ndist = 0
         self.has_modes = False  # True if the theory has modes
 
-        self.parameters = OrderedDict(
-        )  # keep the dictionary key in order for the parameter table
         self.parameters['tau'] = Parameter(
             name='tau',
             value=1.11e-3,
@@ -402,7 +399,7 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
     def handle_edit_bob_settings(self):
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
-    
+
     def handle_show_help(self):
         """Open the theory manual"""
         rgt.handle_show_help(self)

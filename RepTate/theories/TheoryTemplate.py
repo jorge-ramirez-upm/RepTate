@@ -5,11 +5,11 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module TheoryTemplate
 
 Template file for creating a new theory
-""" 
+"""
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
@@ -23,9 +23,9 @@ class TheoryTemplate(CmdBase):
     
     [description]
     """
-    thname='TemplateTheory'
-    description='Template Theory'
-    citations=''
+    thname = 'TemplateTheory'
+    description = 'Template Theory'
+    citations = ''
 
     def __new__(cls, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
@@ -40,7 +40,10 @@ class TheoryTemplate(CmdBase):
         Returns:
             [type] -- [description]
         """
-        return GUITheoryTemplate(name, parent_dataset, axarr) if (CmdBase.mode==CmdMode.GUI) else CLTheoryTemplate(name, parent_dataset, axarr)
+        return GUITheoryTemplate(
+            name, parent_dataset,
+            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryTemplate(
+                name, parent_dataset, axarr)
 
 
 class BaseTheoryTemplate:
@@ -48,7 +51,7 @@ class BaseTheoryTemplate:
     
     [description]
     """
-    single_file = False # False if the theory can be applied to multiple files simultaneously
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
@@ -61,10 +64,14 @@ class BaseTheoryTemplate:
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
-        self.function = self.function_template # main theory function
-        self.has_modes = False # True if the theory has modes
-        self.parameters['param1'] = Parameter(name='param1', value=1, description='parameter 1', 
-                                          type=ParameterType.real, opt_type=OptType.const)
+        self.function = self.function_template  # main theory function
+        self.has_modes = False  # True if the theory has modes
+        self.parameters['param1'] = Parameter(
+            name='param1',
+            value=1,
+            description='parameter 1',
+            type=ParameterType.real,
+            opt_type=OptType.const)
 
     def get_modes(self):
         """[summary]
@@ -85,7 +92,7 @@ class BaseTheoryTemplate:
 
         """
         pass
-        
+
     def function_template(self, f=None):
         """Template function that returns the square of y
         
@@ -111,6 +118,7 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
     
     [description]
     """
+
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
         
@@ -122,7 +130,7 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
-   
+
     # This class usually stays empty
 
 
@@ -131,6 +139,7 @@ class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
     
     [description]
     """
+
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
         """[summary]
         
@@ -144,4 +153,3 @@ class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:
-       

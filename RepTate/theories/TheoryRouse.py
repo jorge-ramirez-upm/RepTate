@@ -5,12 +5,12 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module TheoryRouseTime
 
 Module for the Rouse theory for the relaxation modulus.
 
-""" 
+"""
 from Theory import Theory
 from Parameter import OptType
 
@@ -20,9 +20,9 @@ class TheoryRouseTime(Theory, CmdBase):
     
     [description]
     """
-    thname="RouseTime"
-    description="Fit Rouse modes to time dependent function"
-    citations=""
+    thname = "RouseTime"
+    description = "Fit Rouse modes to time dependent function"
+    citations = ""
 
     def __init__(self, name="ThRouseTime", parent_dataset=None, ax=None):
         """[summary]
@@ -45,17 +45,19 @@ class TheoryRouseTime(Theory, CmdBase):
         Keyword Arguments:
             f {[type]} -- [description] (default: {None})
         """
-        pass   
+        pass
+
 
 class TheoryRouseFrequency(Theory, CmdBase):
     """Fit Rouse modes to a frequency depenendent relaxation function
     
     [description]
     """
-    thname="RouseFrequency"
-    description="Fit Maxwell modes to frequency dependent function"
+    thname = "RouseFrequency"
+    description = "Fit Maxwell modes to frequency dependent function"
 
-    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
+                 ax=None):
         """[summary]
         
         [description]
@@ -68,11 +70,31 @@ class TheoryRouseFrequency(Theory, CmdBase):
         super(TheoryRouseFrequency, self).__init__(name, parent_dataset, ax)
         self.function = self.RouseFrequency
         self.has_modes = True
-        self.parameters["logwmin"] = Parameter("logwmin", -5, "Log of frequency range minimum", ParameterType.real, opt_type=OptType.nopt)
-        self.parameters["logwmax"] = Parameter("logwmax", 4, "Log of frequency range maximum", ParameterType.real, opt_type=OptType.nopt)
-        self.parameters["nmodes"] = Parameter("nmodes", 5, "Number of Rouse modes", ParameterType.integer, opt_type=OptType.const)
+        self.parameters["logwmin"] = Parameter(
+            "logwmin",
+            -5,
+            "Log of frequency range minimum",
+            ParameterType.real,
+            opt_type=OptType.nopt)
+        self.parameters["logwmax"] = Parameter(
+            "logwmax",
+            4,
+            "Log of frequency range maximum",
+            ParameterType.real,
+            opt_type=OptType.nopt)
+        self.parameters["nmodes"] = Parameter(
+            "nmodes",
+            5,
+            "Number of Rouse modes",
+            ParameterType.integer,
+            opt_type=OptType.const)
         for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%d"%i] = Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
+            self.parameters["logG%d" % i] = Parameter(
+                "logG%d" % i,
+                5.0,
+                "Log of Mode %d amplitude" % i,
+                ParameterType.real,
+                opt_type=OptType.opt)
 
     def set_param_value(self, name, value):
         """[summary]
@@ -83,15 +105,20 @@ class TheoryRouseFrequency(Theory, CmdBase):
             name {[type]} -- [description]
             value {[type]} -- [description]
         """
-        if (name=="nmodes"):
+        if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
         super(TheoryRouseFrequency, self).set_param_value(name, value)
-        if (name=="nmodes"):
+        if (name == "nmodes"):
             for i in range(self.parameters["nmodes"].value):
-                self.parameters["logG%d"%i] = Parameter("logG%d"%i,5.0,"Log of Mode %d amplitude"%i, ParameterType.real, opt_type=OptType.opt)
-            if (oldn>self.parameters["nmodes"].value):
-                for i in range(self.parameters["nmodes"].value,oldn):
-                    del self.parameters["logG%d"%i]
+                self.parameters["logG%d" % i] = Parameter(
+                    "logG%d" % i,
+                    5.0,
+                    "Log of Mode %d amplitude" % i,
+                    ParameterType.real,
+                    opt_type=OptType.opt)
+            if (oldn > self.parameters["nmodes"].value):
+                for i in range(self.parameters["nmodes"].value, oldn):
+                    del self.parameters["logG%d" % i]
 
     def get_modes(self):
         """[summary]
@@ -101,12 +128,13 @@ class TheoryRouseFrequency(Theory, CmdBase):
         Returns:
             [type] -- [description]
         """
-        nmodes=self.parameters["nmodes"].value
-        freq=np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
-        tau=1.0/freq
-        G=np.zeros(nmodes)
+        nmodes = self.parameters["nmodes"].value
+        freq = np.logspace(self.parameters["logwmin"].value,
+                           self.parameters["logwmax"].value, nmodes)
+        tau = 1.0 / freq
+        G = np.zeros(nmodes)
         for i in range(nmodes):
-            G[i]=np.power(10, self.parameters["logG%d"%i].value)
+            G[i] = np.power(10, self.parameters["logG%d" % i].value)
         return tau, G
 
     def set_modes(self, tau, G):
@@ -118,4 +146,4 @@ class TheoryRouseFrequency(Theory, CmdBase):
             tau {[type]} -- [description]
             G {[type]} -- [description]
         """
-        print("set_modes not allowed in this theory (%s)"%self.name)
+        print("set_modes not allowed in this theory (%s)" % self.name)
