@@ -21,18 +21,17 @@ import numpy as np
 from schwarzl_ctypes_helper import *
 from ctypes import *
 
-# from TheoryMaxwellModes import TheoryMaxwellModesTime
 
 class ApplicationGt(CmdBase):
     """Application to analyze the relaxation modulus
     
     [description]
     """
-    name="Gt"
-    description="Relaxation modulus"
-    extension="gt"
-    
-    def __new__(cls, name="Gt", parent = None):
+    name = "Gt"
+    description = "Relaxation modulus"
+    extension = "gt"
+
+    def __new__(cls, name="Gt", parent=None):
         """[summary]
         
         [description]
@@ -44,14 +43,19 @@ class ApplicationGt(CmdBase):
         Returns:
             [type] -- [description]
         """
-        return GUIApplicationGt(name, parent) if (CmdBase.mode==CmdMode.GUI) else CLApplicationGt(name, parent)
+        return GUIApplicationGt(
+            name,
+            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationGt(
+                name, parent)
+
 
 class BaseApplicationGt:
     """[summary]
     
     [description]
     """
-    def __init__(self, name = "Gt", parent = None):
+
+    def __init__(self, name="Gt", parent=None):
         """[summary]
         
         [description]
@@ -62,31 +66,65 @@ class BaseApplicationGt:
         """
         from TheoryMaxwellModes import TheoryMaxwellModesTime
 
-        super().__init__(name, parent, nplots=2, ncols=2) # will call Application.__init__ with these args
+        super().__init__(
+            name, parent, nplots=2,
+            ncols=2)  # will call Application.__init__ with these args
 
         # VIEWS
-        self.views["log[G(t)]"]=View(name="log[G(t)]", description="log Relaxation modulus", x_label="log(t)", 
-                                     y_label="log(G(t))", x_units="s", y_units="Pa", log_x=False, log_y=False, 
-                                     view_proc=self.viewLogGt, n=1, snames=["log(G(t))"], index=0)
-        self.views["G(t)"]=View(name="G(t)", description="Relaxation modulus", x_label="t", y_label="G(t)", 
-                                x_units="s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewGt, 
-                                n=1, snames=["G(t)"], index=1)
-        self.views["Schwarzl G',G''"]=View(name="Schwarzl G',G''", description="G', G'' from Schwarzl transformation of G(t)", x_label="$\omega$", y_label="G',G''", 
-                                x_units="rad/s", y_units="Pa", log_x=True, log_y=True, view_proc=self.viewSchwarzl_Gt, 
-                                n=2, snames=["G',G''"], index=2)
-
+        self.views["log[G(t)]"] = View(
+            name="log[G(t)]",
+            description="log Relaxation modulus",
+            x_label="log(t)",
+            y_label="log(G(t))",
+            x_units="s",
+            y_units="Pa",
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewLogGt,
+            n=1,
+            snames=["log(G(t))"],
+            index=0)
+        self.views["G(t)"] = View(
+            name="G(t)",
+            description="Relaxation modulus",
+            x_label="t",
+            y_label="G(t)",
+            x_units="s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewGt,
+            n=1,
+            snames=["G(t)"],
+            index=1)
+        self.views["Schwarzl G',G''"] = View(
+            name="Schwarzl G',G''",
+            description="G', G'' from Schwarzl transformation of G(t)",
+            x_label="$\omega$",
+            y_label="G',G''",
+            x_units="rad/s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewSchwarzl_Gt,
+            n=2,
+            snames=["G',G''"],
+            index=2)
 
         #set multiviews
-        self.multiviews = [self.views["log[G(t)]"], self.views["Schwarzl G',G''"]] #default view order in multiplot views, set only one item for single view
-        self.nplots = len(self.multiviews) 
+        self.multiviews = [
+            self.views["log[G(t)]"], self.views["Schwarzl G',G''"]
+        ]  #default view order in multiplot views, set only one item for single view
+        self.nplots = len(self.multiviews)
 
         # FILES
-        ftype=TXTColumnFile("G(t) files", "gt", "Relaxation modulus", ['t','Gt'], ['Mw','ncontri'], ['s', 'Pa'])
-        self.filetypes[ftype.extension]=ftype
+        ftype = TXTColumnFile("G(t) files", "gt", "Relaxation modulus",
+                              ['t', 'Gt'], ['Mw', 'ncontri'], ['s', 'Pa'])
+        self.filetypes[ftype.extension] = ftype
 
         # THEORIES
-        self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
-        
+        self.theories[TheoryMaxwellModesTime.thname] = TheoryMaxwellModesTime
+
         #set the current view
         self.set_views()
 
@@ -105,7 +143,7 @@ class BaseApplicationGt:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[: ,0] = dt.data[:, 1]
+        y[:, 0] = dt.data[:, 1]
         return x, y, True
 
     def viewLogGt(self, dt, file_parameters):
@@ -120,18 +158,14 @@ class BaseApplicationGt:
         Returns:
             [type] -- [description]
         """
-        #validindex = np.logical_and(dt.data[:, 0]>0, dt.data[:, 1]>0)
-        #x = np.zeros((np.sum(validindex), 1))
-        #y = np.zeros((np.sum(validindex), 1))
-        #x[:, 0] = np.log10(dt.data[validindex, 0])
-        #y[:, 0] = np.log10(dt.data[validindex, 1])
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[: ,0] = np.log10(dt.data[:, 1])
+        y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewSchwarzl_Gt(self, dt, file_parameters): #TODO: code the Schwarzl transform. 
+    def viewSchwarzl_Gt(self, dt,
+                        file_parameters):  #TODO: code the Schwarzl transform.
         """[summary]
         
         [description]
@@ -146,20 +180,23 @@ class BaseApplicationGt:
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
 
-        wp, Gp, wpp, Gpp = do_schwarzl_gt(dt.num_rows, dt.data[:, 1], dt.data[:, 0]) #call the C function
+        wp, Gp, wpp, Gpp = do_schwarzl_gt(dt.num_rows, dt.data[:, 1],
+                                          dt.data[:, 0])  #call the C function
 
         x[:, 0] = wp[:]
         x[:, 1] = wpp[:]
-        y[: ,0] = Gp[:]
-        y[: ,1] = Gpp[:]
+        y[:, 0] = Gp[:]
+        y[:, 1] = Gpp[:]
         return x, y, True
+
 
 class CLApplicationGt(BaseApplicationGt, Application):
     """[summary]
     
     [description]
     """
-    def __init__(self, name="Gt", parent = None):
+
+    def __init__(self, name="Gt", parent=None):
         """[summary]
         
         [description]
@@ -169,14 +206,15 @@ class CLApplicationGt(BaseApplicationGt, Application):
             parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
-        
+
 
 class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
     """[summary]
     
     [description]
     """
-    def __init__(self, name="Gt", parent = None):
+
+    def __init__(self, name="Gt", parent=None):
         """[summary]
         
         [description]
@@ -186,4 +224,3 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
             parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
-

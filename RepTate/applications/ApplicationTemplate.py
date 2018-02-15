@@ -5,22 +5,18 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module ApplicationTemplate
 
 Template file for the definition of a new Application Module
 
-""" 
+"""
 from CmdBase import CmdBase, CmdMode
 from Application import Application
 from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
 import numpy as np
-
-# IMPORT THEORIES
-# Import theories specific to the Application e.g.:
-# from TheoryTemplate import TheoryA
 
 
 class ApplicationTemplate(CmdBase):
@@ -29,7 +25,7 @@ class ApplicationTemplate(CmdBase):
     [description]
     """
     name = 'Template'
-    description = 'Template Application' #used in the command-line Reptate
+    description = 'Template Application'  #used in the command-line Reptate
 
     def __new__(cls, name='Template', parent=None):
         """[summary]
@@ -43,13 +39,17 @@ class ApplicationTemplate(CmdBase):
         Returns:
             [type] -- [description]
         """
-        return GUIApplicationTemplate(name, parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationTemplate(name, parent)
+        return GUIApplicationTemplate(name, parent) if (
+            CmdBase.mode == CmdMode.GUI) else CLApplicationTemplate(
+                name, parent)
+
 
 class BaseApplicationTemplate:
     """[summary]
     
     [description]
     """
+
     def __init__(self, name='Template', parent=None, nplots=1, ncols=2):
         """[summary]
         
@@ -59,29 +59,52 @@ class BaseApplicationTemplate:
             name {[type]} -- [description] (default: {'Template'})
             parent {[type]} -- [description] (default: {None})
         """
+        # IMPORT THEORIES
+        # Import theories specific to the Application e.g.:
+        # from TheoryTemplate import TheoryA
+
         super().__init__(name, parent)
 
         # VIEWS
         # set the views that can be selected in the view combobox
         # the order is defined by the index, index 0 is the defaut view
-        self.views['y(x)'] = View(name='y(x)', description='y as a function of x', x_label='x', y_label='y(x)', x_units='-', y_units='-', log_x=False, log_y=False, view_proc=self.viewyx, n=1, snames=['y(x)'], index=0)
+        self.views['y(x)'] = View(
+            name='y(x)',
+            description='y as a function of x',
+            x_label='x',
+            y_label='y(x)',
+            x_units='-',
+            y_units='-',
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewyx,
+            n=1,
+            snames=['y(x)'],
+            index=0)
 
         #set multiviews
         #default view order in multiplot views, set only one item for single view
         #if more than one item, modify the 'nplots' in the super().__init__ call
-        self.multiviews = [self.views['y(x)']] 
-        self.nplots = len(self.multiviews) 
-
+        self.multiviews = [self.views['y(x)']]
+        self.nplots = len(self.multiviews)
 
         # FILES
         # set the type of files that ApplicationTemplate can open
-        ftype = TXTColumnFile(name='content of files', extension='txt', description='description of the file type', col_names=['col1','col2'], basic_file_parameters=['param1','param2'], col_units=['units_col1','units_col2'])
-        self.filetypes[ftype.extension] = ftype #add each the file type to dictionary
+        ftype = TXTColumnFile(
+            name='content of files',
+            extension='txt',
+            description='description of the file type',
+            col_names=['col1', 'col2'],
+            basic_file_parameters=['param1', 'param2'],
+            col_units=['units_col1', 'units_col2'])
+        self.filetypes[
+            ftype.extension] = ftype  #add each the file type to dictionary
 
         # THEORIES
         # add the theories related to ApplicationTemplate to the dictionary, e.g.:
         # self.theories[TheoryA.thname] = TheoryA
-        
+        # self.theories[TheoryB.thname] = TheoryB
+
         #set the current view
         self.set_views()
 
@@ -109,6 +132,7 @@ class CLApplicationTemplate(BaseApplicationTemplate, Application):
     
     [description]
     """
+
     def __init__(self, name='Template', parent=None):
         """[summary]
         
@@ -121,11 +145,13 @@ class CLApplicationTemplate(BaseApplicationTemplate, Application):
         super().__init__(name, parent)
         #usually this class stays empty
 
+
 class GUIApplicationTemplate(BaseApplicationTemplate, QApplicationWindow):
     """[summary]
     
     [description]
     """
+
     def __init__(self, name='Template', parent=None):
         """[summary]
         

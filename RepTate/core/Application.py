@@ -26,6 +26,8 @@ from MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
 from PyQt5.QtGui import QCursor, QImage
 
+from collections import OrderedDict
+
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -52,7 +54,7 @@ class Application(CmdBase):
         self.logger = logging.getLogger('ReptateLogger')
         self.views={}
         self.filetypes={}
-        self.theories={}
+        self.theories=OrderedDict() # keep theory combobox in order
         self.datasets={}
         self.current_view=0
         self.num_datasets=0

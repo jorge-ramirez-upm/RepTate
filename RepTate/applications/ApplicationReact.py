@@ -5,12 +5,12 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module ApplicationReact
 
 React module
 
-""" 
+"""
 from CmdBase import CmdBase, CmdMode
 from Application import Application
 from QApplicationWindow import QApplicationWindow
@@ -21,10 +21,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-# IMPORT THEORIES
-# Import theories specific to the Application e.g.:
-# from TheoryLDPEBatch import TheoryTobitaBatch
-
 
 class ApplicationReact(CmdBase):
     """[summary]
@@ -32,8 +28,8 @@ class ApplicationReact(CmdBase):
     [description]
     """
     name = 'React'
-    description = 'React Application' #used in the command-line Reptate
-    extension= 'reac'
+    description = 'React Application'  #used in the command-line Reptate
+    extension = 'reac'
 
     def __new__(cls, name='React', parent=None):
         """[summary]
@@ -47,13 +43,18 @@ class ApplicationReact(CmdBase):
         Returns:
             [type] -- [description]
         """
-        return GUIApplicationReact(name, parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationReact(name, parent)
+        return GUIApplicationReact(
+            name,
+            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationReact(
+                name, parent)
+
 
 class BaseApplicationReact:
     """[summary]
     
     [description]
     """
+
     def __init__(self, name='React', parent=None, **kwargs):
         """[summary]
         
@@ -68,35 +69,96 @@ class BaseApplicationReact:
         from TheoryMultiMetCSTR import TheoryMultiMetCSTR
         from TheoryReactMix import TheoryReactMix
 
-        super().__init__(name, parent, nplots=3, ncols=2) # will call Application.__init__ with these args
+        super().__init__(
+            name, parent, nplots=3,
+            ncols=2)  # will call Application.__init__ with these args
 
         # VIEWS
         # set the views that can be selected in the view combobox
         # the order is defined by the index, index 0 is the defaut view
-        self.views["w(M)"]=View(name="w(M)", description="Molecular weight distribution", x_label="M", y_label="w(M)", 
-                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_wM, n=1, 
-                                snames=["w(M)"], index=0)
-        self.views["log(w(M))"]=View(name="log(w(M))", description="Molecular weight distribution", x_label="M", y_label="log w(M)", 
-                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_logwM, n=1, 
-                                snames=["w(M)"], index=1)
-        self.views["g(M)"]=View(name="g(M)", description="g(M)", x_label="M", y_label="g(M)", 
-                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_gM, n=1, 
-                                snames=["g(M)"], index=2)
-        self.views["log(g(M))"]=View(name="log(g(M))", description="log(g(M))", x_label="M", y_label="log g(M)", 
-                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_loggM, n=1, 
-                                snames=["g(M)"], index=3)
-        self.views['br/1000C']=View(name="br/1000C", description="br/1000C(M)", x_label="M", y_label="br/1000C(M)", 
-                                x_units="g/mol", y_units="-", log_x=True, log_y=False, view_proc=self.view_br_1000C, n=1, 
-                                snames=["br/1000C(M)"], index=4)
-        
+        self.views["w(M)"] = View(
+            name="w(M)",
+            description="Molecular weight distribution",
+            x_label="M",
+            y_label="w(M)",
+            x_units="g/mol",
+            y_units="-",
+            log_x=True,
+            log_y=False,
+            view_proc=self.view_wM,
+            n=1,
+            snames=["w(M)"],
+            index=0)
+        self.views["log(w(M))"] = View(
+            name="log(w(M))",
+            description="Molecular weight distribution",
+            x_label="M",
+            y_label="log w(M)",
+            x_units="g/mol",
+            y_units="-",
+            log_x=True,
+            log_y=False,
+            view_proc=self.view_logwM,
+            n=1,
+            snames=["w(M)"],
+            index=1)
+        self.views["g(M)"] = View(
+            name="g(M)",
+            description="g(M)",
+            x_label="M",
+            y_label="g(M)",
+            x_units="g/mol",
+            y_units="-",
+            log_x=True,
+            log_y=False,
+            view_proc=self.view_gM,
+            n=1,
+            snames=["g(M)"],
+            index=2)
+        self.views["log(g(M))"] = View(
+            name="log(g(M))",
+            description="log(g(M))",
+            x_label="M",
+            y_label="log g(M)",
+            x_units="g/mol",
+            y_units="-",
+            log_x=True,
+            log_y=False,
+            view_proc=self.view_loggM,
+            n=1,
+            snames=["g(M)"],
+            index=3)
+        self.views['br/1000C'] = View(
+            name="br/1000C",
+            description="br/1000C(M)",
+            x_label="M",
+            y_label="br/1000C(M)",
+            x_units="g/mol",
+            y_units="-",
+            log_x=True,
+            log_y=False,
+            view_proc=self.view_br_1000C,
+            n=1,
+            snames=["br/1000C(M)"],
+            index=4)
+
         #set multiviews
-        self.multiviews = [self.views["w(M)"], self.views["g(M)"], self.views['br/1000C']] #default view order in multiplot views
+        self.multiviews = [
+            self.views["w(M)"], self.views["g(M)"], self.views['br/1000C']
+        ]  #default view order in multiplot views
         self.nplots = len(self.multiviews)
 
         # FILES
         # set the type of files that ApplicationReact can open
-        ftype = TXTColumnFile(name='React files', extension='reac', description='Reatc file', col_names=['M', 'w(M)', 'g', 'br/1000C'], basic_file_parameters=[], col_units=['g/mol', '-', '-', '-'])
-        self.filetypes[ftype.extension] = ftype #add each the file type to dictionary
+        ftype = TXTColumnFile(
+            name='React files',
+            extension='reac',
+            description='Reatc file',
+            col_names=['M', 'w(M)', 'g', 'br/1000C'],
+            basic_file_parameters=[],
+            col_units=['g/mol', '-', '-', '-'])
+        self.filetypes[
+            ftype.extension] = ftype  #add each the file type to dictionary
 
         # THEORIES
         # add the theories related to ApplicationReact to the dictionary, e.g.:
@@ -204,6 +266,7 @@ class CLApplicationReact(BaseApplicationReact, Application):
     
     [description]
     """
+
     def __init__(self, name='React', parent=None):
         """[summary]
         
@@ -216,11 +279,13 @@ class CLApplicationReact(BaseApplicationReact, Application):
         super().__init__(name, parent)
         #usually this class stays empty
 
+
 class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
     """[summary]
     
     [description]
     """
+
     def __init__(self, name='React', parent=None):
         """[summary]
         
@@ -230,9 +295,7 @@ class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
             name {[type]} -- [description] (default: {'React'})
             parent {[type]} -- [description] (default: {None})
         """
-        
+
         super().__init__(name, parent)
 
         #add the GUI-specific objects here:
-
-        

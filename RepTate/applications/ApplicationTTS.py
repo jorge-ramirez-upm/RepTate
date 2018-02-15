@@ -18,9 +18,7 @@ from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
 import numpy as np
-# from TheoryTTS import TheoryWLFShift
-# from TheoryTTS_Test import TheoryWLFShiftTest
-# from TheoryTTS_Automatic import TheoryTTSShiftAutomatic
+
 
 class ApplicationTTS(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
@@ -48,11 +46,13 @@ class ApplicationTTS(CmdBase):
         else:
             return CLApplicationTTS(name, parent)
 
+
 class BaseApplicationTTS:
     """[summary]
 
     [description]
     """
+
     def __init__(self, name="TTS", parent=None):
         """[summary]
 
@@ -68,33 +68,89 @@ class BaseApplicationTTS:
         super().__init__(name, parent)
 
         # VIEWS
-        self.views["log(G',G''(w))"] = View(name="log(G',G''(w))", 
-                                            description="log Storage,Loss moduli", x_label="log($\omega$)", 
-                                            y_label="log(G'($\omega$),G''($\omega$))", x_units="rad/s", y_units="Pa", 
-                                            log_x=False, log_y=False, view_proc=self.viewLogG1G2, n=2, 
-                                            snames=["G'(w)","G''(w)"], index=0)
-        self.views["G',G''(w)"] = View("G',G''(w)", "Storage,Loss moduli", "$\omega$", "G'($\omega$),G''($\omega$)", "rad/s", "Pa", True, True, self.viewG1G2, 2, ["G'(w)","G''(w)"], index=1)
-        self.views["etastar"] = View("etastar", "Complex Viscosity", "$\omega$", "$|\eta^*(\omega)|$", "rad/s", "Pa.s", True, True, self.viewEtaStar, 1, ["eta*(w)"], index=2)
-        self.views["delta"] = View("delta", "delta", "$\omega$", "$\delta(\omega)$", "rad/s", "-", True, True, self.viewDelta, 1, ["delta(w)"], index=3)
-        self.views["tan(delta)"] = View("tan(delta)", "tan(delta)", "$\omega$", "tan($\delta$)", "rad/s", "-", True, True, self.viewTanDelta, 1, ["tan(delta((w))"], index=4)
+        self.views["log(G',G''(w))"] = View(
+            name="log(G',G''(w))",
+            description="log Storage,Loss moduli",
+            x_label="log($\omega$)",
+            y_label="log(G'($\omega$),G''($\omega$))",
+            x_units="rad/s",
+            y_units="Pa",
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewLogG1G2,
+            n=2,
+            snames=["G'(w)", "G''(w)"],
+            index=0)
+        self.views["G',G''(w)"] = View(
+            "G',G''(w)",
+            "Storage,Loss moduli",
+            "$\omega$",
+            "G'($\omega$),G''($\omega$)",
+            "rad/s",
+            "Pa",
+            True,
+            True,
+            self.viewG1G2,
+            2, ["G'(w)", "G''(w)"],
+            index=1)
+        self.views["etastar"] = View(
+            "etastar",
+            "Complex Viscosity",
+            "$\omega$",
+            "$|\eta^*(\omega)|$",
+            "rad/s",
+            "Pa.s",
+            True,
+            True,
+            self.viewEtaStar,
+            1, ["eta*(w)"],
+            index=2)
+        self.views["delta"] = View(
+            "delta",
+            "delta",
+            "$\omega$",
+            "$\delta(\omega)$",
+            "rad/s",
+            "-",
+            True,
+            True,
+            self.viewDelta,
+            1, ["delta(w)"],
+            index=3)
+        self.views["tan(delta)"] = View(
+            "tan(delta)",
+            "tan(delta)",
+            "$\omega$",
+            "tan($\delta$)",
+            "rad/s",
+            "-",
+            True,
+            True,
+            self.viewTanDelta,
+            1, ["tan(delta((w))"],
+            index=4)
 
         #set multiviews
-        self.multiviews = [self.views["log(G',G''(w))"]] #default view order in multiplot views, set only one item for single view
-        self.nplots = len(self.multiviews) 
-        
+        self.multiviews = [
+            self.views["log(G',G''(w))"]
+        ]  #default view order in multiplot views, set only one item for single view
+        self.nplots = len(self.multiviews)
+
         # FILES
-        ftype=TXTColumnFile("OSC files", "osc", 
-                            "Small-angle oscillatory masurements from the Rheometer", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
+        ftype = TXTColumnFile(
+            "OSC files", "osc",
+            "Small-angle oscillatory masurements from the Rheometer",
+            ['w', 'G\'', 'G\'\''], ['Mw', 'T'], ['rad/s', 'Pa', 'Pa'])
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
-        self.theories[TheoryWLFShift.thname]=TheoryWLFShift
-        self.theories[TheoryWLFShiftTest.thname]=TheoryWLFShiftTest
-        self.theories[TheoryTTSShiftAutomatic.thname]=TheoryTTSShiftAutomatic
-        
+        self.theories[TheoryTTSShiftAutomatic.thname] = TheoryTTSShiftAutomatic
+        self.theories[TheoryWLFShift.thname] = TheoryWLFShift
+        self.theories[TheoryWLFShiftTest.thname] = TheoryWLFShiftTest
+
         #set the current view
         self.set_views()
-        
+
     def viewLogG1G2(self, dt, file_parameters):
         """[summary]
 
@@ -111,8 +167,8 @@ class BaseApplicationTTS:
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = np.log10(dt.data[:, 0])
         x[:, 1] = np.log10(dt.data[:, 0])
-        y[: ,0] = np.log10(dt.data[:, 1])
-        y[: ,1] = np.log10(dt.data[:, 2])
+        y[:, 0] = np.log10(dt.data[:, 1])
+        y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
     def viewG1G2(self, dt, file_parameters):
@@ -131,8 +187,8 @@ class BaseApplicationTTS:
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
         x[:, 1] = dt.data[:, 0]
-        y[: ,0] = dt.data[:, 1]
-        y[: ,1] = dt.data[:, 2]
+        y[:, 0] = dt.data[:, 1]
+        y[:, 1] = dt.data[:, 2]
         return x, y, True
 
     def viewEtaStar(self, dt, file_parameters):
@@ -150,8 +206,8 @@ class BaseApplicationTTS:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[: ,0] = np.sqrt(dt.data[:, 1]**2 + dt.data[:, 2]**2)/dt.data[:, 0]
-        return x, y, True        
+        y[:, 0] = np.sqrt(dt.data[:, 1]**2 + dt.data[:, 2]**2) / dt.data[:, 0]
+        return x, y, True
 
     def viewDelta(self, dt, file_parameters):
         """[summary]
@@ -168,9 +224,9 @@ class BaseApplicationTTS:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[: ,0] = np.arctan2(dt.data[:, 2], dt.data[:, 1])*180/np.pi
+        y[:, 0] = np.arctan2(dt.data[:, 2], dt.data[:, 1]) * 180 / np.pi
         return x, y, True
-    
+
     def viewTanDelta(self, dt, file_parameters):
         """[summary]
         
@@ -186,15 +242,17 @@ class BaseApplicationTTS:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[: ,0] = dt.data[:, 2]/dt.data[:, 1]
+        y[:, 0] = dt.data[:, 2] / dt.data[:, 1]
         return x, y, True
+
 
 class CLApplicationTTS(BaseApplicationTTS, Application):
     """[summary]
     
     [description]
     """
-    def __init__(self, name="TTS", parent = None):
+
+    def __init__(self, name="TTS", parent=None):
         """[summary]
         
         [description]
@@ -204,14 +262,15 @@ class CLApplicationTTS(BaseApplicationTTS, Application):
             parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
-        
+
 
 class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
     """[summary]
     
     [description]
     """
-    def __init__(self, name="TTS", parent = None):
+
+    def __init__(self, name="TTS", parent=None):
         """[summary]
         
         [description]
