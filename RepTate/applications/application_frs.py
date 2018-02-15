@@ -45,8 +45,7 @@ class ApplicationFRS_I(Application):
             log_y=True,
             view_proc=self.viewIt,
             n=1,
-            snames=["I(t)"],
-            index=0)
+            snames=["I(t)"])
         self.views["log[I(t)]"] = View(
             name="log[I(t)]",
             description="log FRS Intensity decay",
@@ -58,8 +57,7 @@ class ApplicationFRS_I(Application):
             log_y=False,
             view_proc=self.viewLogIt,
             n=1,
-            snames=["log(I(t))"],
-            index=1)
+            snames=["log(I(t))"])
 
         #set multiviews
         self.multiviews = [self.views['I(t)']]

@@ -79,8 +79,7 @@ class BaseApplicationLVE:
             log_y=False,
             view_proc=self.viewLogG1G2,
             n=2,
-            snames=["G'(w)", "G''(w)"],
-            index=0)
+            snames=["G'(w)", "G''(w)"])
         self.views["G',G''(w)"] = View(
             "G',G''(w)",
             "Storage,Loss moduli",
@@ -91,8 +90,7 @@ class BaseApplicationLVE:
             True,
             True,
             self.viewG1G2,
-            2, ["G'(w)", "G''(w)"],
-            index=1)
+            2, ["G'(w)", "G''(w)"])
         self.views["etastar"] = View(
             "etastar",
             "Complex Viscosity",
@@ -103,8 +101,7 @@ class BaseApplicationLVE:
             True,
             True,
             self.viewEtaStar,
-            1, ["eta*(w)"],
-            index=2)
+            1, ["eta*(w)"])
         self.views["logetastar"] = View(
             "logetastar",
             "log Complex Viscosity",
@@ -115,8 +112,7 @@ class BaseApplicationLVE:
             False,
             False,
             self.viewLogEtaStar,
-            1, ["eta*(w)"],
-            index=3)
+            1, ["eta*(w)"])
         self.views["delta"] = View(
             "delta",
             "delta",
@@ -127,8 +123,7 @@ class BaseApplicationLVE:
             True,
             True,
             self.viewDelta,
-            1, ["delta(w)"],
-            index=4)
+            1, ["delta(w)"])
         self.views["tan(delta)"] = View(
             "tan(delta)",
             "tan(delta)",
@@ -139,8 +134,7 @@ class BaseApplicationLVE:
             True,
             True,
             self.viewTanDelta,
-            1, ["tan(delta((w))"],
-            index=5)
+            1, ["tan(delta((w))"])
         self.views["log(tan(delta))"] = View(
             "log(tan(delta))",
             "log(tan(delta))",
@@ -151,8 +145,7 @@ class BaseApplicationLVE:
             False,
             False,
             self.viewLogTanDelta,
-            1, ["log(tan(delta((w)))"],
-            index=6)
+            1, ["log(tan(delta((w)))"])
         self.views["log(G*)"] = View(
             "log(G*)",
             "log(G*(omega))",
@@ -163,8 +156,7 @@ class BaseApplicationLVE:
             False,
             False,
             self.viewLogGstar,
-            1, ["log(G*)"],
-            index=7)
+            1, ["log(G*)"])
         self.views["log(tan(delta),G*)"] = View(
             "log(tan(delta),G*)",
             "log(tan($\delta)(G*))",
@@ -175,8 +167,7 @@ class BaseApplicationLVE:
             False,
             False,
             self.viewLogtandeltaGstar,
-            1, ["log(tan($\delta)(G*))"],
-            index=8)
+            1, ["log(tan($\delta)(G*))"])
         self.views["delta(G*)"] = View(
             "delta(G*)",
             "$\delta$(G*))",
@@ -187,8 +178,7 @@ class BaseApplicationLVE:
             False,
             False,
             self.viewdeltatanGstar,
-            1, ["delta(G*)"],
-            index=9)
+            1, ["delta(G*)"])
         self.views["J',J''(w)"] = View(
             "J',J''(w)",
             "J moduli",
@@ -199,8 +189,7 @@ class BaseApplicationLVE:
             True,
             True,
             self.viewJ1J2,
-            2, ["J'(w)", "J''(w)"],
-            index=10)
+            2, ["J'(w)", "J''(w)"])
         self.views["Cole-Cole"] = View(
             "Cole-Cole",
             "Cole-Cole plot",
@@ -211,8 +200,7 @@ class BaseApplicationLVE:
             False,
             False,
             self.viewColeCole,
-            1, ["$eta'$"],
-            index=11)
+            1, ["$eta'$"])
         self.views["log(G')"] = View(
             name="log(G')",
             description="log Storage modulus",
@@ -224,8 +212,7 @@ class BaseApplicationLVE:
             log_y=False,
             view_proc=self.viewLogG1,
             n=1,
-            snames=["G'(w)"],
-            index=12)
+            snames=["G'(w)"])
         self.views["G'"] = View(
             "G'",
             "Storage modulus",
@@ -236,8 +223,7 @@ class BaseApplicationLVE:
             True,
             True,
             self.viewG1,
-            1, ["G'(w)"],
-            index=13)
+            1, ["G'(w)"])
         self.views["log(G'')"] = View(
             name="log(G'')",
             description="log Loss modulus",
@@ -249,8 +235,7 @@ class BaseApplicationLVE:
             log_y=False,
             view_proc=self.viewLogG2,
             n=1,
-            snames=["G''(w)"],
-            index=14)
+            snames=["G''(w)"])
         self.views["G''"] = View(
             "G''",
             "Loss modulus",
@@ -261,8 +246,7 @@ class BaseApplicationLVE:
             True,
             True,
             self.viewG2,
-            1, ["G''(w)"],
-            index=15)
+            1, ["G''(w)"])
         self.views["log(G',G''(w),tan(delta))"] = View(
             name="log(G',G''(w),tan(delta))",
             description="log Storage,Loss moduli, tan(delta)",
@@ -274,8 +258,7 @@ class BaseApplicationLVE:
             log_y=False,
             view_proc=self.viewLogG1G2tandelta,
             n=3,
-            snames=["G'(w)", "G''(w),tan(delta)"],
-            index=16)
+            snames=["G'(w)", "G''(w),tan(delta)"])
 
         #set multiviews
         self.multiviews = [

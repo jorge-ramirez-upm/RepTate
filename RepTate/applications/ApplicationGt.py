@@ -82,8 +82,7 @@ class BaseApplicationGt:
             log_y=False,
             view_proc=self.viewLogGt,
             n=1,
-            snames=["log(G(t))"],
-            index=0)
+            snames=["log(G(t))"])
         self.views["G(t)"] = View(
             name="G(t)",
             description="Relaxation modulus",
@@ -95,8 +94,7 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewGt,
             n=1,
-            snames=["G(t)"],
-            index=1)
+            snames=["G(t)"])
         self.views["Schwarzl G',G''"] = View(
             name="Schwarzl G',G''",
             description="G', G'' from Schwarzl transformation of G(t)",
@@ -108,8 +106,7 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewSchwarzl_Gt,
             n=2,
-            snames=["G',G''"],
-            index=2)
+            snames=["G',G''"])
 
         #set multiviews
         self.multiviews = [

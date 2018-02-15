@@ -79,8 +79,7 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG1G2,
             n=2,
-            snames=["G'(w)", "G''(w)"],
-            index=0)
+            snames=["G'(w)", "G''(w)"])
         self.views["G',G''(w)"] = View(
             "G',G''(w)",
             "Storage,Loss moduli",
@@ -91,8 +90,7 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewG1G2,
-            2, ["G'(w)", "G''(w)"],
-            index=1)
+            2, ["G'(w)", "G''(w)"])
         self.views["etastar"] = View(
             "etastar",
             "Complex Viscosity",
@@ -103,8 +101,7 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewEtaStar,
-            1, ["eta*(w)"],
-            index=2)
+            1, ["eta*(w)"])
         self.views["delta"] = View(
             "delta",
             "delta",
@@ -115,8 +112,7 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewDelta,
-            1, ["delta(w)"],
-            index=3)
+            1, ["delta(w)"])
         self.views["tan(delta)"] = View(
             "tan(delta)",
             "tan(delta)",
@@ -127,8 +123,7 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewTanDelta,
-            1, ["tan(delta((w))"],
-            index=4)
+            1, ["tan(delta((w))"])
 
         #set multiviews
         self.multiviews = [

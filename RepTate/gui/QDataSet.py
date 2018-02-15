@@ -140,7 +140,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         # self.cbtheory.addItem("Select Theory")
         # self.cbtheory.model().item(0).setEnabled(False)
 
-        for th_name in sorted(self.parent_application.theories):
+        for th_name in self.parent_application.theories:
              self.cbtheory.addItem(th_name)
         self.cbtheory.setCurrentIndex(0)
         

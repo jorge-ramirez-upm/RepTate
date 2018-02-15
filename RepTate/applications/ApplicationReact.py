@@ -75,7 +75,6 @@ class BaseApplicationReact:
 
         # VIEWS
         # set the views that can be selected in the view combobox
-        # the order is defined by the index, index 0 is the defaut view
         self.views["w(M)"] = View(
             name="w(M)",
             description="Molecular weight distribution",
@@ -87,8 +86,7 @@ class BaseApplicationReact:
             log_y=False,
             view_proc=self.view_wM,
             n=1,
-            snames=["w(M)"],
-            index=0)
+            snames=["w(M)"])
         self.views["log(w(M))"] = View(
             name="log(w(M))",
             description="Molecular weight distribution",
@@ -100,8 +98,7 @@ class BaseApplicationReact:
             log_y=False,
             view_proc=self.view_logwM,
             n=1,
-            snames=["w(M)"],
-            index=1)
+            snames=["w(M)"])
         self.views["g(M)"] = View(
             name="g(M)",
             description="g(M)",
@@ -113,8 +110,7 @@ class BaseApplicationReact:
             log_y=False,
             view_proc=self.view_gM,
             n=1,
-            snames=["g(M)"],
-            index=2)
+            snames=["g(M)"])
         self.views["log(g(M))"] = View(
             name="log(g(M))",
             description="log(g(M))",
@@ -126,8 +122,7 @@ class BaseApplicationReact:
             log_y=False,
             view_proc=self.view_loggM,
             n=1,
-            snames=["g(M)"],
-            index=3)
+            snames=["g(M)"])
         self.views['br/1000C'] = View(
             name="br/1000C",
             description="br/1000C(M)",
@@ -139,8 +134,7 @@ class BaseApplicationReact:
             log_y=False,
             view_proc=self.view_br_1000C,
             n=1,
-            snames=["br/1000C(M)"],
-            index=4)
+            snames=["br/1000C(M)"])
 
         #set multiviews
         self.multiviews = [

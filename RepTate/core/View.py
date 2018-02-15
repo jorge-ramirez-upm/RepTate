@@ -5,7 +5,7 @@
 # Jorge Ramirez, jorge.ramirez@upm.es
 # Victor Boudara, mmvahb@leeds.ac.uk
 # Copyright (2017) Universidad Politécnica de Madrid, University of Leeds
-# This software is distributed under the GNU General Public License. 
+# This software is distributed under the GNU General Public License.
 """Module View
 
 Module that defines the basic properties of a View, that will be used to represent
@@ -13,13 +13,27 @@ the data graphically.
 
 """
 
+
 class View(object):
     """Abstract class to describe a view
  
     [description]
     """
 
-    def __init__(self, name="", description="", x_label="", y_label="", x_units="", y_units="", log_x=False, log_y=False, view_proc=None, n=1, snames=[], inverse_view_proc=None, index=0):
+    def __init__(self,
+                 name="",
+                 description="",
+                 x_label="",
+                 y_label="",
+                 x_units="",
+                 y_units="",
+                 log_x=False,
+                 log_y=False,
+                 view_proc=None,
+                 n=1,
+                 snames=[],
+                 inverse_view_proc=None,
+                 index=0):
         """Constructor
         
         [description]
@@ -37,18 +51,16 @@ class View(object):
             inverse_view_proc {func} -- Function that inverses the view: From the n values of the view, returns the data table values (default: {None})
             n {int} -- Number of series that the view represents (default: {1})
             snames {list of str} -- Names of the series represented by the view
-            index {int} -- Position in View Combobox
         """
-        self.name=name
-        self.description=description
-        self.x_label=x_label
-        self.y_label=y_label
-        self.x_units=x_units
-        self.y_units=y_units
-        self.log_x=log_x
-        self.log_y=log_y
-        self.view_proc=view_proc
-        self.inverse_view_proc=inverse_view_proc
-        self.n=n
-        self.snames=snames
-        self.index = index
+        self.name = name
+        self.description = description
+        self.x_label = x_label
+        self.y_label = y_label
+        self.x_units = x_units
+        self.y_units = y_units
+        self.log_x = log_x
+        self.log_y = log_y
+        self.view_proc = view_proc
+        self.inverse_view_proc = inverse_view_proc
+        self.n = n
+        self.snames = snames

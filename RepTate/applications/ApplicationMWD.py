@@ -77,8 +77,7 @@ class BaseApplicationMWD:
             log_y=False,
             view_proc=self.viewWM,
             n=1,
-            snames=["W(M)"],
-            index=0)
+            snames=["W(M)"])
         self.views["LogW(M)"] = View(
             name="W(M)",
             description="Molecular weight distribution",
@@ -90,8 +89,7 @@ class BaseApplicationMWD:
             log_y=False,
             view_proc=self.viewlogWM,
             n=1,
-            snames=["W(M)"],
-            index=1)
+            snames=["W(M)"])
 
         #set multiviews
         self.multiviews = [

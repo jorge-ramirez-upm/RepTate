@@ -77,8 +77,7 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewLogeta,
             n=1,
-            snames=["$\eta$(t)"],
-            index=0)
+            snames=["$\eta$(t)"])
         self.views["log(sigma(t))-gamma"] = View(
             name="log(sigma(t))",
             description="log transient shear stress vs gamma",
@@ -90,8 +89,7 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewLogSigmaGamma,
             n=1,
-            snames=["$\sigma_{xy}$($\gamma$)"],
-            index=1)
+            snames=["$\sigma_{xy}$($\gamma$)"])
         self.views["log(sigma(t))-t"] = View(
             name="log(sigma(t))",
             description="log transient shear stress vs time",
@@ -103,8 +101,7 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewLogSigmaTime,
             n=1,
-            snames=["$\sigma_{xy}$($\gamma$)"],
-            index=2)
+            snames=["$\sigma_{xy}$($\gamma$)"])
 
         #set multiviews
         self.multiviews = [

@@ -67,7 +67,6 @@ class BaseApplicationTemplate:
 
         # VIEWS
         # set the views that can be selected in the view combobox
-        # the order is defined by the index, index 0 is the defaut view
         self.views['y(x)'] = View(
             name='y(x)',
             description='y as a function of x',
@@ -79,8 +78,7 @@ class BaseApplicationTemplate:
             log_y=False,
             view_proc=self.viewyx,
             n=1,
-            snames=['y(x)'],
-            index=0)
+            snames=['y(x)'])
 
         #set multiviews
         #default view order in multiplot views, set only one item for single view
