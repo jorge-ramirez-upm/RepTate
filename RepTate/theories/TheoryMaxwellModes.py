@@ -588,8 +588,7 @@ class BaseTheoryMaxwellModesTime:
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(
             self.graphicmodes, DragType.special,
-            self.parent_dataset.parent_application.current_view.log_x,
-            self.parent_dataset.parent_application.current_view.log_y,
+            self.parent_dataset.parent_application,
             self.drag_mode)
         self.plot_theory_stuff()
 
