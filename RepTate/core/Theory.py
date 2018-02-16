@@ -865,49 +865,71 @@ class Theory(CmdBase):
         Returns:
             Success{bool} -- True if the operation was successful
         """
+        p = self.parameters[name]
         try:
-            if (self.parameters[name].type == ParameterType.real):
+            if (p.type == ParameterType.real):
                 try:
-                    self.parameters[name].value = float(value)
-                    return '', True
+                    val = float(value)
                 except ValueError:
                     return "Value must be a float", False
-
-            elif (self.parameters[name].type == ParameterType.integer):
-                try:
-                    self.parameters[name].value = int(value)  #convert to int
+                if val < p.min_value:
+                    p.value = p.min_value
+                    return 'Value must be greater than %.4g' % p.min_value, False
+                elif val > p.max_value:
+                    p.value = p.max_value
+                    return 'Value must be smaller than %.4g' % p.max_value, False
+                else:
+                    p.value = val
                     return '', True
+
+            elif (p.type == ParameterType.integer):
+                try:
+                    val = int(value)  #convert to int
                 except ValueError:
                     return "Value must be an integer", False
+                if val < p.min_value:
+                    p.value = p.min_value
+                    return 'Value must be greater than %d' % p.min_value, False
+                elif val > p.max_value:
+                    p.value = p.max_value
+                    return 'Value must be smaller than %d' % p.max_value, False
+                else:
+                    p.value = val
+                    return '', True
 
-            elif (self.parameters[name].type == ParameterType.discrete_integer
-                  ):
-                if int(value) in self.parameters[name].discrete_values:
-                    self.parameters[name].value = int(value)
+            elif (p.type == ParameterType.discrete_integer):
+                try:
+                    val = int(value)  #convert to int
+                except ValueError:
+                    return "Value must be an integer", False
+                if val in p.discrete_values:
+                    p.value = val
                     return '', True
                 else:
-                    message = "Values allowed: " + ', '.join([
-                        str(s) for s in self.parameters[name].discrete_values
-                    ])
+                    message = "Values allowed: " + ', '.join(
+                        [str(s) for s in p.discrete_values])
                     print(message)
                     return message, False
 
-            elif (self.parameters[name].type == ParameterType.discrete_real):
-                if float(value) in self.parameters[name].discrete_values:
-                    self.parameters[name].value = float(value)
+            elif (p.type == ParameterType.discrete_real):
+                try:
+                    val = float(value)
+                except ValueError:
+                    return "Value must be a float", False
+                if val in p.discrete_values:
+                    p.value = val
                     return '', True
                 else:
-                    message = "Values allowed: " + ', '.join([
-                        str(s) for s in self.parameters[name].discrete_values
-                    ])
+                    message = "Values allowed: " + ', '.join(
+                        [str(s) for s in p.discrete_values])
                     print(message)
                     return message, False
 
-            elif (self.parameters[name].type == ParameterType.boolean):
+            elif (p.type == ParameterType.boolean):
                 if value in [True, 'true', 'True', '1', 't', 'T', 'y', 'yes']:
-                    self.parameters[name].value = True
+                    p.value = True
                 else:
-                    self.parameters[name].value = False
+                    p.value = False
                 return '', True
 
             else:
