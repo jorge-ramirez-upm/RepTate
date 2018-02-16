@@ -48,6 +48,7 @@ from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
 from Theory_rc import *
 from enum import Enum
+from math import sqrt
 
 
 class FlowMode(Enum):
@@ -59,6 +60,17 @@ class FlowMode(Enum):
     """
     shear = 0
     uext = 1
+
+
+class FeneMode(Enum):
+    """Defines the finite extensibility function
+    
+    Parameters can be:
+        none: No finite extensibility
+        with_fene: With finite extensibility
+    """
+    none = 0
+    with_fene = 1
 
 
 class EditModesDialog(QDialog):
@@ -173,19 +185,21 @@ class BaseTheoryRoliePoly:
             value=0.5,
             description="CCR coefficient",
             type=ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.nopt)
         self.parameters["delta"] = Parameter(
             name="delta",
             value=-0.5,
             description="CCR exponent",
             type=ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.nopt)
         self.parameters["lmax"] = Parameter(
             name="lmax",
             value=10.0,
             description="Maximum extensibility",
             type=ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.nopt,
+            display_flag=False,
+            min_value=1.01)
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -200,6 +214,7 @@ class BaseTheoryRoliePoly:
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False)
+
         for i in range(self.parameters["nmodes"].value):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
@@ -240,6 +255,7 @@ class BaseTheoryRoliePoly:
 
         self.MAX_MODES = 40
         self.flow_mode = FlowMode.shear
+        self.with_fene = FeneMode.none
 
     def destructor(self):
         """Called when the theory tab is closed
@@ -301,7 +317,8 @@ class BaseTheoryRoliePoly:
             self.set_param_value("tauR%02d" % i, 0.5)
 
     def sigmadot_shear(self, sigma, t, p):
-        """Rolie-Poly differential equation under shear flow
+        """Rolie-Poly differential equation under *shear* flow
+        with stretching and finite extensibility if selected
         
         [description]
         
@@ -311,12 +328,18 @@ class BaseTheoryRoliePoly:
             p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
         sxx, syy, sxy = sigma
-        tauD, tauR, beta, delta, gammadot = p
+        lmax, tauD, tauR, beta, delta, gammadot = p
 
         # Create the vector with the time derivative of sigma
         trace_sigma = sxx + 2 * syy
-        aux1 = 2 * (1 - np.sqrt(3. / trace_sigma)) / tauR
-        aux2 = beta * (trace_sigma / 3)**delta
+        l_sq = trace_sigma / 3.0  # stretch^2
+        if self.with_fene == FeneMode.with_fene:
+            fene = self.calculate_fene(l_sq, lmax)
+            aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR * fene
+        else:
+            aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR
+        aux2 = beta * (l_sq**delta)
+
         return [
             2 * gammadot * sxy - (sxx - 1.) / tauD - aux1 * (sxx + aux2 *
                                                              (sxx - 1.)),
@@ -335,12 +358,9 @@ class BaseTheoryRoliePoly:
             p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
         sxx, syy, sxy = sigma
-        tauD, tauR, beta, delta, gammadot = p
+        _, tauD, _, beta, _, gammadot = p
 
         # Create the vector with the time derivative of sigma
-        trace_sigma = sxx + 2 * syy
-        aux1 = 2.0 * (1 - np.sqrt(3.0 / trace_sigma)) / tauR
-        aux2 = beta * (trace_sigma / 3.0)**delta
         return [
             2.0 * gammadot * sxy -
             (sxx - 1.0) / tauD - 2.0 / 3.0 * gammadot * sxy * (sxx + beta *
@@ -352,7 +372,8 @@ class BaseTheoryRoliePoly:
         ]
 
     def sigmadot_uext(self, sigma, t, p):
-        """Rolie-Poly differential equation under uniaxial elongational flow
+        """Rolie-Poly differential equation under *uniaxial elongational* flow
+        with stretching and finite extensibility if selecter
 
         [description]
 
@@ -362,12 +383,18 @@ class BaseTheoryRoliePoly:
             p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
         sxx, syy = sigma
-        tauD, tauR, beta, delta, epsilon_dot = p
+        lmax, tauD, tauR, beta, delta, epsilon_dot = p
 
         # Create the vector with the time derivative of sigma
         trace_sigma = sxx + 2 * syy
-        aux1 = 2.0 * (1.0 - np.sqrt(3.0 / trace_sigma)) / tauR
-        aux2 = beta * np.power(trace_sigma / 3.0, delta)
+        l_sq = trace_sigma / 3.0  # stretch^2
+        if self.with_fene == FeneMode.with_fene:
+            fene = self.calculate_fene(l_sq, lmax)
+            aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR * fene
+        else:
+            aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR
+        aux2 = beta * (l_sq**delta)
+
         dsxx = 2.0 * epsilon_dot * sxx - (sxx - 1.0) / tauD - aux1 * (
             sxx + aux2 * (sxx - 1.0))
         dsyy = -epsilon_dot * syy - (syy - 1.0) / tauD - aux1 * (syy + aux2 *
@@ -385,7 +412,7 @@ class BaseTheoryRoliePoly:
             p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, epsilon_dot]
         """
         sxx, syy = sigma
-        tauD, tauR, beta, delta, epsilon_dot = p
+        _, tauD, tauR, beta, delta, epsilon_dot = p
 
         # Create the vector with the time derivative of sigma
         trace_k_sigma = epsilon_dot * (sxx - syy)
@@ -395,6 +422,12 @@ class BaseTheoryRoliePoly:
             (sxx + beta * (sxx - 1.0)), -epsilon_dot * syy -
             (syy - 1.0) / tauD - aux1 * (syy + beta * (syy - 1.0))
         ]
+
+    def calculate_fene(self, l_square, lmax):
+        """calculate finite extensibility function value"""
+        ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
+        l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
+        return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
 
     def RoliePoly(self, f=None):
         """[summary]
@@ -414,15 +447,15 @@ class BaseTheoryRoliePoly:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        #flow geometry
+        #flow geometry and finite extensibility
         if self.flow_mode == FlowMode.shear:
-            pde_stretch = self.sigmadot_shear
-            pde_nostretch = self.sigmadot_shear_nostretch
             sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
+            pde_nostretch = self.sigmadot_shear_nostretch
+            pde_stretch = self.sigmadot_shear
         elif self.flow_mode == FlowMode.uext:
-            pde_stretch = self.sigmadot_uext
-            pde_nostretch = self.sigmadot_uext_nostretch
             sigma0 = [1.0, 1.0]  # sxx, syy
+            pde_nostretch = self.sigmadot_uext_nostretch
+            pde_stretch = self.sigmadot_uext
         else:
             return
 
@@ -434,13 +467,14 @@ class BaseTheoryRoliePoly:
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
         beta = self.parameters["beta"].value
         delta = self.parameters["delta"].value
-        gammadot = float(f.file_parameters["gdot"])
+        lmax = self.parameters["lmax"].value
+        flow_rate = float(f.file_parameters["gdot"])
         nmodes = self.parameters["nmodes"].value
         nstretch = self.parameters["nstretch"].value
         for i in range(nmodes):
             tauD = self.parameters["tauD%02d" % i].value
             tauR = self.parameters["tauR%02d" % i].value
-            p = [tauD, tauR, beta, delta, gammadot]
+            p = [lmax, tauD, tauR, beta, delta, flow_rate]
             if i < nstretch:
                 sig = odeint(
                     pde_stretch,
@@ -457,14 +491,23 @@ class BaseTheoryRoliePoly:
                     args=(p, ),
                     atol=abserr,
                     rtol=relerr)
+
+            sxx = np.delete(sig[:, 0], [0])
+            syy = np.delete(sig[:, 1], [0])
             if self.flow_mode == FlowMode.shear:
                 sxy = np.delete(sig[:, 2], [0])
                 tt.data[:, 1] += self.parameters["G%02d" % i].value * sxy
             elif self.flow_mode == FlowMode.uext:
-                sxx = np.delete(sig[:, 0], [0])
-                syy = np.delete(sig[:, 1], [0])
                 tt.data[:, 1] += self.parameters["G%02d" % i].value * (
                     sxx - syy)
+
+            if self.with_fene == FeneMode.with_fene:
+                ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
+                l_sq_arr = (sxx + 2.0 * syy) / 3.0  # array lambda^2
+                l2_lm2_arr = l_sq_arr * ilm2  # array (lambda/lambda_max)^2
+                fene_arr = (3.0 - l2_lm2_arr) / (1.0 - l2_lm2_arr) * (
+                    1.0 - ilm2) / (3.0 - ilm2)  # fene array
+                tt.data[:, 1] *= fene_arr
 
     def set_param_value(self, name, value):
         """[summary]
@@ -477,7 +520,10 @@ class BaseTheoryRoliePoly:
         """
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
-        super(BaseTheoryRoliePoly, self).set_param_value(name, value)
+        message, success = super(BaseTheoryRoliePoly, self).set_param_value(
+            name, value)
+        if not success:
+            return message, success
         if (name == "nmodes"):
             for i in range(self.parameters["nmodes"].value):
                 self.parameters["G%02d" % i] = Parameter(
@@ -512,7 +558,7 @@ class BaseTheoryRoliePoly:
                     del self.parameters["G%02d" % i]
                     del self.parameters["tauD%02d" % i]
                     del self.parameters["tauR%02d" % i]
-        return True
+        return '', True
 
 
 class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
@@ -583,19 +629,25 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
-
+        #Show LVE button
         self.linearenvelope = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-visible.png'),
             'Show Linear Envelope')
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
-
+        #Finite extensibility button
+        self.with_fene_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'),
+            'Finite Extensibility')
+        self.with_fene_button.setCheckable(True)
+        #SpinBox "nmodes"
         self.spinbox = QSpinBox()
         self.spinbox.setRange(0, self.MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" Rmodes")
         self.spinbox.setToolTip("Number of stretching modes")
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
         tb.addWidget(self.spinbox)
+        #Show theory manual
         self.show_help_button = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
             'Online Manual')
@@ -616,8 +668,25 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.show_linear_envelope)
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged)
+        connection_id = self.with_fene_button.triggered.connect(
+            self.handle_with_fene_button)
         connection_id = self.show_help_button.triggered.connect(
             self.handle_show_help)
+
+    def handle_with_fene_button(self, checked):
+        if checked:
+            self.with_fene = FeneMode.with_fene
+            self.with_fene_button.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-facebook-f.png'))
+            self.parameters["lmax"].display_flag = True
+            self.parameters["lmax"].opt_type = OptType.nopt
+        else:
+            self.with_fene = FeneMode.none
+            self.with_fene_button.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
+            self.parameters["lmax"].display_flag = False
+            self.parameters["lmax"].opt_type = OptType.const
+        self.parent_dataset.handle_actionCalculate_Theory()
 
     def handle_show_help(self):
         try:
@@ -685,6 +754,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
 
     def get_modes_reptate(self):
         self.Qcopy_modes()
+        self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
         times, G = self.get_modes()
