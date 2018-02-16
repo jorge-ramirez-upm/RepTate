@@ -186,7 +186,9 @@ class BaseTheoryDiscrMWD:
         """
         if (name == "nbin"):
             nbinold = self.parameters["nbin"].value
-        super().set_param_value(name, new_value)
+        message, success = super().set_param_value(name, new_value)
+        if not success:
+            return message, success
         if (name == "nbin"):
             new_nbin = self.parameters["nbin"].value
             mminold = self.parameters["logmmin"].value
@@ -203,6 +205,7 @@ class BaseTheoryDiscrMWD:
                     opt_type=OptType.const,
                     display_flag=False)
             self.do_calculate("")
+        return '', True
 
         if (name == 'logmmin') or (
                 name == 'logmmax'):  #make bins equally spaced again

@@ -131,7 +131,9 @@ class TheoryRouseFrequency(Theory, CmdBase):
         """
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
-        super(TheoryRouseFrequency, self).set_param_value(name, value)
+        message, success = super(TheoryRouseFrequency, self).set_param_value(name, value)
+        if not success:
+            return message, success
         if (name == "nmodes"):
             for i in range(self.parameters["nmodes"].value):
                 self.parameters["logG%d" % i] = Parameter(
@@ -143,6 +145,7 @@ class TheoryRouseFrequency(Theory, CmdBase):
             if (oldn > self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["logG%d" % i]
+        return '', True
 
     def get_modes(self):
         """[summary]
