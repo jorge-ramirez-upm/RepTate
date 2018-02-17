@@ -35,12 +35,13 @@
 Module for the main Graphical User Interface of RepTate. It is the GUI counterpart of
 ApplicationManager.
 
-""" 
+"""
 import logging
 from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QInputDialog,QLineEdit
+from PyQt5.QtGui import QIcon, QDesktopServices
+from PyQt5.QtCore import QUrl
+from PyQt5.QtWidgets import QApplication, QInputDialog, QLineEdit, QMenu, QAction, QToolButton
 
 from CmdBase import CmdBase, CmdMode, CalcMode
 from QApplicationWindow import QApplicationWindow
@@ -48,14 +49,15 @@ from ApplicationManager import ApplicationManager
 from QAboutReptate import AboutWindow
 
 PATH = dirname(abspath(__file__))
-Ui_MainWindow, QMainWindow = loadUiType(join(PATH,'ReptateMainWindow.ui'))
+Ui_MainWindow, QMainWindow = loadUiType(join(PATH, 'ReptateMainWindow.ui'))
+
 
 class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     """Main Reptate window and application manager
     
     [description]
     """
-    # count = 0
+    help_file = 'http://reptate.readthedocs.io/en/latest/index.html'
     reptatelogger = logging.getLogger('ReptateLogger')
     reptatelogger.setLevel(logging.DEBUG)
 
@@ -70,26 +72,43 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         super().__init__()
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
-        CmdBase.mode = CmdMode.GUI #set GUI mode
+        CmdBase.mode = CmdMode.GUI  #set GUI mode
         self.setupUi(self)
 
         if CmdBase.calcmode == CalcMode.singlethread:
-            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date + ' - SINGLE THREAD!!');
+            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date +
+                                ' - SINGLE THREAD!!')
         else:
-            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date);
+            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date)
+
+        #help button
+        icon = QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png')
+        self.show_reptate_help = QAction(icon, 'RepTate Manual')
+        self.show_app_help = QAction(icon, 'Application Manual')
+        self.show_th_help = QAction(icon, 'Theory Manual')
+        tbut = QToolButton()
+        tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut.setDefaultAction(self.show_reptate_help)
+        menu = QMenu()
+        menu.addAction(self.show_app_help)
+        menu.addAction(self.show_th_help)
+        tbut.setMenu(menu)
+        self.toolBar.insertWidget(self.actionQuit, tbut)
+        self.toolBar.insertSeparator(self.actionQuit)
+        self.toolBar.insertSeparator(self.actionQuit)
+
+
 
         # App tabs behaviour
         self.ApplicationtabWidget.setMovable(True)
         self.ApplicationtabWidget.setTabsClosable(True)
         self.ApplicationtabWidget.setUsesScrollButtons(True)
 
-
         # log file
         log_file_name = 'Qreptate.log'
         handler = logging.handlers.RotatingFileHandler(
             log_file_name, maxBytes=20000, backupCount=2)
         self.reptatelogger.addHandler(handler)
-        
 
         # Connect actions
         # Generate action buttons from dict of available applications
@@ -101,21 +120,56 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.actionCreep.triggered.connect(self.new_creep_window)
         #self.actionSANS.triggered.connect(self.new_sans_window)
         self.actionReact.triggered.connect(self.new_React_window)
-        self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)        
+        self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)
         #self.Projecttree.itemSelectionChanged.connect(self.treeChanged)
-        
+
         self.actionAbout_Qt.triggered.connect(QApplication.aboutQt)
         self.actionAbout.triggered.connect(self.show_about)
-        
 
-        connection_id = self.ApplicationtabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
+        connection_id = self.ApplicationtabWidget.tabBarDoubleClicked.connect(
+            self.handle_doubleClickTab)
+        # help buttons
+        self.show_reptate_help.triggered.connect(self.handle_show_reptate_help)
+        self.show_app_help.triggered.connect(self.handle_show_app_help)
+        self.show_th_help.triggered.connect(self.handle_show_th_help)
 
         # CONSOLE WINDOW (need to integrate it with cmd commands)
         #self.text_edit = Console(self)
         #this is how you pass in locals to the interpreter
-        #self.text_edit.initInterpreter(locals()) 
+        #self.text_edit.initInterpreter(locals())
         #self.verticalLayout.addWidget(self.text_edit)
+    def handle_show_reptate_help(self):
+        """Show RepTate documentation"""
+        try:
+            help_file = self.help_file
+        except AttributeError as e:
+            print('in "handle_show_help":', e)
+            return
+        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            
+    def handle_show_app_help(self):
+        """Show RepTate current application (if any) manual, or all applications"""
+        try:
+            help_file = self.ApplicationtabWidget.currentWidget().help_file
+        except AttributeError as e:
+            print('in "handle_show_help":', e)
+            help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/applications.html'
+        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            
+    def handle_show_th_help(self):
+        """Show RepTate current theory (if any) manual, or all theories"""
+        try:
+            app = self.ApplicationtabWidget.currentWidget()
+            ds = app.DataSettabWidget.currentWidget()
+            th = ds.theories[ds.current_theory]
+            help_file = th.help_file
+        except Exception as e:
+            print('in "handle_show_help":', e)
+            help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/All_Theories/All_Theories.html'
+        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            
+
 
     def list_theories_Maxwell(self, th_exclude=None):
         """Redefinition for the GUI mode that lists the tab names.
@@ -127,8 +181,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         Returns:
             [type] -- [description]
         """
-        get_dict={}
-        set_dict={}
+        get_dict = {}
+        set_dict = {}
         for app in self.applications.values():
             app_index = self.ApplicationtabWidget.indexOf(app)
             app_tab_name = self.ApplicationtabWidget.tabText(app_index)
@@ -139,8 +193,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
                     if th.has_modes and th != th_exclude:
-                        get_dict["%s.%s.%s"%(app_tab_name, ds_tab_name, th_tab_name)] = th.get_modes
-                        set_dict["%s.%s.%s"%(app_tab_name, ds_tab_name, th_tab_name)] = th.set_modes
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name,
+                                               th_tab_name)] = th.get_modes
+                        set_dict["%s.%s.%s" % (app_tab_name, ds_tab_name,
+                                               th_tab_name)] = th.set_modes
         return get_dict, set_dict
 
     def handle_doubleClickTab(self, index):
@@ -156,14 +212,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         dlg.setWindowTitle("Change Application Name")
         dlg.setLabelText("New Application Name:")
         dlg.setTextValue(old_name)
-        dlg.resize(400,100)
+        dlg.resize(400, 100)
         success = dlg.exec()
         new_tab_name = dlg.textValue()
-        if (success and new_tab_name!=""):    
+        if (success and new_tab_name != ""):
             self.ApplicationtabWidget.setTabText(index, new_tab_name)
             # self.applications[old_name].name = new_tab_name
             # self.applications[new_tab_name] = self.applications.pop(old_name)
-            
 
     def show_about(self):
         """Show about window
@@ -171,7 +226,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         """
         dlg = AboutWindow(self, self.version + ' ' + self.date)
-        dlg.show()        
+        dlg.show()
 
     def tab_changed(self, index):
         """Capture when the active application has changed
@@ -208,8 +263,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             icon {[type]} -- [description]
         """
         newapp = self.new(app_name)
-        newapp.createNew_Empty_Dataset() #populate with empty dataset at app opening
-        app_id = "%s%d"%(app_name, self.application_counter)
+        newapp.createNew_Empty_Dataset(
+        )  #populate with empty dataset at app opening
+        app_id = "%s%d" % (app_name, self.application_counter)
         ind = self.ApplicationtabWidget.addTab(newapp, QIcon(icon), app_id)
         self.ApplicationtabWidget.setCurrentIndex(ind)
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
@@ -219,8 +275,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """
         Open a new application window from name
         """
-        self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-%s.png'%app_name)
-        
+        self.Qopen_app(app_name,
+                       ':/Icons/Images/new_icons/icons8-%s.png' % app_name)
 
     def new_mwd_window(self):
         """Open a new MWD application window
@@ -229,7 +285,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """
         app_name = 'MWD'
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-MWD.png')
-
 
     def new_tts_window(self):
         """Open a new TTS application window
@@ -262,7 +317,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """
         app_name = "NLVE"
         self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-NLVE.png')
-    
+
     def new_creep_window(self):
         """Open a new Creep application window
         
@@ -285,4 +340,5 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         """
         app_name = "React"
-        return self.Qopen_app(app_name, ':/Icons/Images/new_icons/icons8-test-tube.png')
+        return self.Qopen_app(app_name,
+                              ':/Icons/Images/new_icons/icons8-test-tube.png')
