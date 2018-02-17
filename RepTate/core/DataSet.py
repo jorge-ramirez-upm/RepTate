@@ -906,13 +906,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             self.theories[th.name] = th
             self.current_theory = th.name
             if (self.mode == CmdMode.GUI):
-                self.handle_actionCalculate_Theory()
+                th.do_calculate('')
             else:
                 if (self.mode == CmdMode.batch):
                     th.prompt = ''
                 else:
                     th.prompt = self.prompt[:-2] + '/' + th.name + '> '
-                th.do_calculate("")
+                th.do_calculate('')
                 th.cmdloop()
             return th
         else:

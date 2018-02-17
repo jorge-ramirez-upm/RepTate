@@ -659,10 +659,18 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 c for c in th_tab_id
                 if c.isupper())  #get the upper case letters of th_name
             th_tab_id = "%s%d" % (th_tab_id, self.num_theories)  #append number
-        index = self.TheorytabWidget.addTab(newth, th_tab_id)  #add theory tab
+
+        #hide all theory curves
+        ntab = self.TheorytabWidget.count()
+        for i in range(ntab):
+            th_to_hide = self.TheorytabWidget.widget(i)
+            th_to_hide.do_hide()
+        #add theory tab
+        self.TheorytabWidget.blockSignals(True) #avoid trigger handle_thCurrentChanged()
+        index = self.TheorytabWidget.addTab(newth, th_tab_id)
         self.TheorytabWidget.setCurrentIndex(
             index)  #set new theory tab as curent tab
         self.TheorytabWidget.setTabToolTip(index,
                                            th_name)  #set new-tab tool tip
-        #self.handle_thCurrentChanged(index)
+        self.TheorytabWidget.blockSignals(False)
         newth.update_parameter_table()
