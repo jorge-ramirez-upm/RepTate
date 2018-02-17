@@ -303,7 +303,3 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
     def handle_edit_bob_settings(self):
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
-
-    def handle_show_help(self):
-        """Open the theory manual"""
-        rgt.handle_show_help(self)

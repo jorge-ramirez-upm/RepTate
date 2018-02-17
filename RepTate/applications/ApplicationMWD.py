@@ -75,6 +75,7 @@ class BaseApplicationMWD:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/MWD.html'
 
     def __init__(self, name="MWD", parent=None):
         """[summary]

@@ -73,6 +73,7 @@ class BaseApplicationTemplate:
     
     [description]
     """
+    #help_file = ''
 
     def __init__(self, name='Template', parent=None, nplots=1, ncols=2):
         """[summary]

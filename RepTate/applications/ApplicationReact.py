@@ -78,6 +78,7 @@ class BaseApplicationReact:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/React.html'
 
     def __init__(self, name='React', parent=None, **kwargs):
         """[summary]

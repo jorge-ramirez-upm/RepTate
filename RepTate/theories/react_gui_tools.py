@@ -138,10 +138,7 @@ def initialise_tool_bar(parent_theory):
         QIcon(':/Icon8/Images/new_icons/icons8-road-closure.png'),
         'Stop Current Calulation')
     parent_theory.stop_calulation_button.setDisabled(True)
-    #help button
-    parent_theory.show_help_button = tb.addAction(
-        QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
-        'Online Manual')
+
 
     #signals
     connection_id = parent_theory.bob_settings_button.triggered.connect(
@@ -150,8 +147,6 @@ def initialise_tool_bar(parent_theory):
         parent_theory.handle_save_bob_configuration)
     connection_id = parent_theory.stop_calulation_button.triggered.connect(
         parent_theory.handle_stop_calulation)
-    connection_id = parent_theory.show_help_button.triggered.connect(
-        parent_theory.handle_show_help)
 
 
 def theory_buttons_disabled(parent_theory, state):
@@ -162,20 +157,6 @@ def theory_buttons_disabled(parent_theory, state):
     parent_theory.bob_settings_button.setDisabled(state)
     parent_theory.save_bob_configuration_button.setDisabled(state)
     parent_theory.stop_calulation_button.setDisabled(not state)
-
-
-def handle_show_help(parent_theory):
-    """
-    Raise a flag to kindly notify the thread Calc routine to stop.
-    This is relevant in multithread mode only.
-    """
-    try:
-        help_file = parent_theory.help_file
-    except AttributeError as e:
-        print('in "handle_show_help":', e)
-        return
-    QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
-
 
 def handle_stop_calulation(parent_theory):
     """

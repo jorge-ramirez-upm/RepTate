@@ -75,6 +75,7 @@ class BaseApplicationLVE:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html'
 
     def __init__(self, name="LVE", parent=None):
         """[summary]

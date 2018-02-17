@@ -368,24 +368,11 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
-        self.show_help_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
-            'Online Manual')
 
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(
             self.modesaction_change)
-        connection_id = self.show_help_button.triggered.connect(
-            self.handle_show_help)
-
-    def handle_show_help(self):
-        try:
-            help_file = self.help_file
-        except AttributeError as e:
-            print('in "handle_show_help":', e)
-            return
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed
@@ -754,24 +741,11 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
-        self.show_help_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
-            'Online Manual')
 
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(
             self.modesaction_change)
-        connection_id = self.show_help_button.triggered.connect(
-            self.handle_show_help)
-
-    def handle_show_help(self):
-        try:
-            help_file = self.help_file
-        except AttributeError as e:
-            print('in "handle_show_help":', e)
-            return
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed

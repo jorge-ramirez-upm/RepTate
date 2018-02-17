@@ -228,18 +228,3 @@ class GUITheoryCarreauYasuda(BaseTheoryCarreauYasuda, QTheory):
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
-        self.show_help_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
-            'Online Manual')
-        self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.show_help_button.triggered.connect(
-            self.handle_show_help)
-
-    def handle_show_help(self):
-        try:
-            help_file = self.help_file
-        except AttributeError as e:
-            print('in "handle_show_help":', e)
-            return
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
-            

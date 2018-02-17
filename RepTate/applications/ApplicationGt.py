@@ -79,7 +79,8 @@ class BaseApplicationGt:
     
     [description]
     """
-
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Gt.html'
+    
     def __init__(self, name="Gt", parent=None):
         """[summary]
         

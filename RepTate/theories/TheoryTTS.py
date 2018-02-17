@@ -82,6 +82,7 @@ class BaseTheoryWLFShift:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/WLFShift.html'
     single_file = False
 
     def __init__(self, name="ThWLFShift", parent_dataset=None, ax=None):

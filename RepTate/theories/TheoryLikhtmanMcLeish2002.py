@@ -82,6 +82,7 @@ class BaseTheoryLikhtmanMcLeish2002:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/LikhtmanMcLeish.html'
     single_file = False
 
     def __init__(self,

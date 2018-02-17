@@ -647,10 +647,6 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.spinbox.setToolTip("Number of stretching modes")
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
         tb.addWidget(self.spinbox)
-        #Show theory manual
-        self.show_help_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png'),
-            'Online Manual')
 
         self.thToolsLayout.insertWidget(0, tb)
 
@@ -670,8 +666,6 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.handle_spinboxValueChanged)
         connection_id = self.with_fene_button.triggered.connect(
             self.handle_with_fene_button)
-        connection_id = self.show_help_button.triggered.connect(
-            self.handle_show_help)
 
     def handle_with_fene_button(self, checked):
         if checked:
@@ -687,14 +681,6 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
         self.parent_dataset.handle_actionCalculate_Theory()
-
-    def handle_show_help(self):
-        try:
-            help_file = self.help_file
-        except AttributeError as e:
-            print('in "handle_show_help":', e)
-            return
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
     def handle_spinboxValueChanged(self, value):
         nmodes = self.parameters["nmodes"].value

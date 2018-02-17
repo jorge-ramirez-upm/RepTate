@@ -81,6 +81,7 @@ class BaseTheoryTTSShiftAutomatic:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/TTSAutomatic.html'
     single_file = False
 
     def __init__(self,
