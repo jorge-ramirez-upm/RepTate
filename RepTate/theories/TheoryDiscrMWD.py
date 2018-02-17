@@ -154,26 +154,25 @@ class BaseTheoryDiscrMWD:
 
     def set_equally_spaced_bins(self):
         """Find the first active file in the dataset and setup the bins"""
-        for f in self.parent_dataset.files:
-            if f.file_name_short not in self.parent_dataset.inactive_files:
-                ft = f.data_table.data
-                mmin = min(ft[:, 0])
-                mmax = max(ft[:, 0])
-                self.parameters["logmmin"].value = np.log10(mmin)
-                self.parameters["logmmax"].value = np.log10(mmax)
-                nbin = self.parameters["nbin"].value
-                bins_edges = np.logspace(
-                    np.log10(mmin), np.log10(mmax), nbin + 1)
-                for i in range(nbin + 1):
-                    self.parameters["logM%02d" % i] = Parameter(
-                        "logM%02d" % i,
-                        np.log10(bins_edges[i]),
-                        "Log of molecular mass",
-                        ParameterType.real,
-                        opt_type=OptType.const,
-                        display_flag=False)
-                self.current_file = f
-                break
+        for f in self.theory_files():
+            ft = f.data_table.data
+            m_arr = ft[:, 0]
+            w_arr = ft[:, 1]
+            mmin = min(m_arr[np.nonzero(w_arr)])
+            mmax = max(m_arr[np.nonzero(w_arr)])
+            self.parameters["logmmin"].value = np.log10(mmin)
+            self.parameters["logmmax"].value = np.log10(mmax)
+            nbin = self.parameters["nbin"].value
+            bins_edges = np.logspace(np.log10(mmin), np.log10(mmax), nbin + 1)
+            for i in range(nbin + 1):
+                self.parameters["logM%02d" % i] = Parameter(
+                    "logM%02d" % i,
+                    np.log10(bins_edges[i]),
+                    "Log of molecular mass",
+                    ParameterType.real,
+                    opt_type=OptType.const,
+                    display_flag=False)
+            self.current_file = f
 
     def set_param_value(self, name, new_value):
         """[summary]
@@ -214,13 +213,7 @@ class BaseTheoryDiscrMWD:
             mmax = self.parameters["logmmax"].value
             mnew = np.logspace(mmin, mmax, nbin + 1)
             for i in range(nbin + 1):
-                self.parameters["logM%02d" % i] = Parameter(
-                    "logM%02d" % i,
-                    np.log10(mnew[i]),
-                    "Log molecular mass %d" % i,
-                    ParameterType.real,
-                    opt_type=OptType.const,
-                    display_flag=False)
+                self.parameters["logM%02d" % i].value = np.log10(mnew[i])
             self.do_calculate("")
 
     def setup_graphic_bins(self):
@@ -240,7 +233,7 @@ class BaseTheoryDiscrMWD:
         self.Mw_bin.set_markersize(14)
         self.Mw_bin.set_alpha(0.5)
 
-        #setup the movable edge bin
+        #setup the movable edge bins
         self.bins = np.logspace(self.parameters["logmmin"].value,
                                 self.parameters["logmmax"].value, nbin + 1)
         self.graphic_bins = self.ax.plot(
@@ -305,13 +298,9 @@ class BaseTheoryDiscrMWD:
         """
         nbin = self.parameters["nbin"].value
         newx = np.sort(newx)
-        #check if point was dragged out of the limits
-        # if yes put it 1% away from boundary
-        if newx[0] < np.power(10, self.parameters["logmmin"].value):
-            newx[1] *= 1.01
-        if newx[-1] > np.power(10, self.parameters["logmmax"].value):
-            newx[-2] /= 1.01
-        for i in range(1, nbin):  # exclude the min and max edges
+        self.parameters["logmmin"].value = np.log10(newx[0])
+        self.parameters["logmmax"].value = np.log10(newx[nbin])
+        for i in range(nbin + 1):
             self.set_param_value("logM%02d" % i, np.log10(newx[i]))
         self.do_calculate("")
         self.update_parameter_table()
@@ -413,15 +402,15 @@ class BaseTheoryDiscrMWD:
         #each M-bin is the Mw value of along the bin width
         out_mbins = np.zeros(nbin)  #output M bins
         for i in range(nbin):
-            x = []
-            y = []
+            x = []  # list of M containing bin edges and data point in between
+            y = []  # list of weight containg interpolated values at bin edges and data points
             w_interp = np.interp(
                 [edge_bins[i], edge_bins[i + 1]],
                 ft[:, 0],
                 ft[:, 1],
                 left=0,
                 right=0)  #interpolate out of range values to zero
-            x.append(edge_bins[i])
+            x.append(edge_bins[i]) 
             y.append(w_interp[0])
             for j in range(n):
                 if edge_bins[i] <= ft[j, 0] and ft[j, 0] < edge_bins[i + 1]:
@@ -431,8 +420,11 @@ class BaseTheoryDiscrMWD:
             y.append(w_interp[1])
             tempM = 0
             for j in range(len(x)):
-                tempM += x[j] * y[j]
-            out_mbins[i] = tempM / np.sum(y)
+                tempM += x[j] * y[j] # w * M(w) 
+            out_mbins[i] = tempM
+            s = np.sum(y)
+            if s != 0:
+                out_mbins[i] /= s
 
         #add area inder the curve to w_out and normalize by bin width
         w_out = np.zeros(nbin)
@@ -470,11 +462,13 @@ class BaseTheoryDiscrMWD:
         self.bin_edges = edge_bins
 
         #compute moments of discretized distribution
-        self.saved_th = np.zeros((nbin, 2))
-        self.saved_th[:, 0] = out_mbins
-        for i in range(nbin):
+        arg_nonzero = np.flatnonzero(w_out)
+        nbin_out = len(arg_nonzero)
+        self.saved_th = np.zeros((nbin_out, 2))
+        self.saved_th[:, 0] = out_mbins[arg_nonzero]
+        for i, arg in enumerate(arg_nonzero):
             self.saved_th[i, 1] = (
-                np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i])) * w_out[i]
+                np.log10(edge_bins[arg + 1]) - np.log10(edge_bins[arg])) * w_out[arg]
         self.saved_th[:, 1] /= np.sum(self.saved_th[:, 1])
         self.calculate_moments(self.saved_th, "discretized")
 
@@ -641,12 +635,11 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         fout.write("Mn=%.3g;Mw=%.3g;PDI=%.3g;Mz/Mw=%.3g\n" % (Mn, Mw, PDI,
                                                               Mz_Mw))
         fout.write("%-10s %12s\n" % ("M", "phi(M)"))
-        k = 0
-        for i in range(len(self.saved_th[:, 0])):
+        nbin_out = len(self.saved_th[:, 0])
+        for i in range(nbin_out):
             fout.write("%-10.3e %12.6e\n" % (self.saved_th[i, 0],
                                              self.saved_th[i, 1]))
-            k += 1
         message = stars
-        message += "Saved %d bins to \"%s\"" % (k, out_file[0])
+        message += "Saved %d bins to \"%s\"" % (nbin_out, out_file[0])
 
         self.print_signal.emit(message)
