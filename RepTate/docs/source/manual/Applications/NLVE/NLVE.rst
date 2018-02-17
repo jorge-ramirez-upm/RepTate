@@ -2,7 +2,7 @@
 |logo| NLVE: Start-up of Flow
 =============================
 
-.. |logo| image:: ../app_logo/NLVE.png
+.. |logo| image:: /app_logo/NLVE.png
 	:height: 15pt
 	:align: bottom
 
@@ -11,5 +11,5 @@
 	
 	general
 	tutorial
-	../Theories/NLVE/NLVE
+	theory
 	

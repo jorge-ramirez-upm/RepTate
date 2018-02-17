@@ -1,5 +1,5 @@
 ==================================
-`G(t)`: General description
+G(t): General description
 ==================================
 
 ..	toctree::
