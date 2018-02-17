@@ -41,6 +41,7 @@ from View import View
 from FileType import TXTColumnFile
 from QApplicationWindow import QApplicationWindow
 import numpy as np
+from scipy import interpolate
 
 from schwarzl_ctypes_helper import *
 from ctypes import *
@@ -131,7 +132,20 @@ class BaseApplicationGt:
             view_proc=self.viewSchwarzl_Gt,
             n=2,
             snames=["G',G''"])
-
+#        self.views["i-Rheo G',G''"] = View(
+#            name="i-Rheo G',G''",
+#            description="G', G'' from i-Rheo transformation of G(t)",
+#            x_label="$\omega$",
+#            y_label="G',G''",
+#            x_units="rad/s",
+#            y_units="Pa",
+#            log_x=True,
+#            log_y=True,
+#            view_proc=self.viewiRheo,
+#            n=2,
+#            snames=["G',G''"])
+        
+            
         #set multiviews
         self.multiviews = [
             self.views["log[G(t)]"], self.views["Schwarzl G',G''"]
@@ -211,6 +225,32 @@ class BaseApplicationGt:
         y[:, 1] = Gpp[:]
         return x, y, True
 
+    def viewiRheo (self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+        """
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        f = interpolate.interp1d(dt.data[:,0], dt.data[:,1], kind='cubic', assume_sorted=True, fill_value='extrapolate')
+        g0 = f(0)
+        ind1 = np.argmax(dt.data[:,0]>0)
+        t1 = dt.data[ind1,0]
+        g1 = dt.data[ind1,1]
+        tinf = np.max(dt.data[:,0])
+        wp = np.logspace(np.log10(1/tinf), np.log10(1/t1), dt.num_rows)
+        x[:, 0] = wp[:]
+        x[:, 1] = wp[:]
+
+        coeff=(dt.data[ind1+1:,1]-dt.data[ind1:-1,1])/(dt.data[ind1+1:,0]-dt.data[ind1:-1,0])
+        for i, w in enumerate(wp):
+            y[i, 0]=((1-np.cos(w*t1))*(g1-g0)/t1+np.dot(coeff,np.cos(w*dt.data[ind1:-1,0])-np.cos(w*dt.data[ind1+1:,0])))/(-w*w)
+            y[i, 1]=(w*g0+np.sin(w*t1)*(g1-g0)/t1+np.dot(coeff,-np.sin(w*dt.data[ind1:-1,0])+np.sin(w*dt.data[ind1+1:,0])))/(-w*w)
+        
+        return x, y, True
+        
 
 class CLApplicationGt(BaseApplicationGt, Application):
     """[summary]
