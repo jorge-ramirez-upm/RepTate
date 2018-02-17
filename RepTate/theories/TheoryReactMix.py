@@ -84,7 +84,7 @@ class BaseTheoryReactMix:
     [description]
     """
     # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%smixture.html' % ((os.sep, )*6)
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/React/mixture.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/mixture.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     signal_mix_dialog = pyqtSignal(object)
 

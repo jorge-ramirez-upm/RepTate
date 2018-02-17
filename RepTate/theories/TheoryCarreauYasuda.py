@@ -78,7 +78,7 @@ class BaseTheoryCarreauYasuda:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/LVE/CarreauYasuda.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/CarreauYasuda.html'
     single_file = False # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):

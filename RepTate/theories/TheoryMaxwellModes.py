@@ -78,7 +78,7 @@ class BaseTheoryMaxwellModesFrequency:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/LVE/Maxwell.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Maxwell.html'
     single_file = True
 
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
@@ -480,7 +480,7 @@ class BaseTheoryMaxwellModesTime:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Theories/LVE/Maxwell.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Maxwell.html'
     single_file = True
 
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
