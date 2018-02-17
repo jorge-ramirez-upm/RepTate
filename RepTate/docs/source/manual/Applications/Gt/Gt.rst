@@ -1,8 +1,8 @@
-===========================
-|logo| `G(t)`: Stress Relaxation
-===========================
+==============================
+|logo| G(t): Stress Relaxation
+==============================
 
-.. |logo| image:: ../app_logo/Gt.png
+.. |logo| image:: /app_logo/Gt.png
 	:height: 15pt
 	:align: bottom
 
@@ -11,4 +11,4 @@
 
 	general
 	tutorial
-	../Theories/Gt/Gt
+	theory

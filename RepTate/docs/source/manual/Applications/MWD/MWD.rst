@@ -1,8 +1,8 @@
-==================================
+=========================================
 |logo| MWD: Molecular Weight Distribution
-==================================
+=========================================
 
-.. |logo| image:: ../app_logo/MWD.png
+.. |logo| image:: /app_logo/MWD.png
 	:height: 15pt
 	:align: bottom
 
@@ -11,5 +11,5 @@
 	
 	general
 	tutorial
-	../Theories/MWD/MWD
+	theory
 	

@@ -2,7 +2,7 @@
 |logo| Creep Experiments
 ==============================================
 
-.. |logo| image:: ../app_logo/Creep.png
+.. |logo| image:: /app_logo/Creep.png
 	:height: 15pt
 	:align: bottom
 	
@@ -11,5 +11,4 @@
 	
 	general
 	tutorial
-	../Theories/Creep/Creep
-	
+	theory

@@ -1,8 +1,8 @@
-===================================
+===========================================
 |logo| TTS: Time-Temperature Superposition
-===================================
+===========================================
 
-.. |logo| image:: ../app_logo/TTS.png
+.. |logo| image:: /app_logo/TTS.png
 	:height: 15pt
 	:align: bottom
 
@@ -11,5 +11,5 @@
 	
 	general
 	tutorial
-	../Theories/TTS/TTS
+	theory
 	

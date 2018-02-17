@@ -5,5 +5,5 @@ TTS: Tutorial
 ..	toctree::
    	:maxdepth: 2
 	
-	../tutorial/tutorialGUITTS
-	../tutorial/tutorialCLTTS
+	Tutorial/tutorialGUITTS
+	Tutorial/tutorialCLTTS

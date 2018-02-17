@@ -5,5 +5,5 @@ LVE: Tutorial
 ..	toctree::
    	:maxdepth: 2
 	
-	../tutorial/tutorialGUILVE
-	../tutorial/tutorialCLLVE
+	Tutorial/tutorialGUILVE
+	Tutorial/tutorialCLLVE

@@ -5,5 +5,5 @@ Creep: Tutorial
 ..	toctree::
    	:maxdepth: 2
 	
-	../tutorial/tutorialGUICreep
-	../tutorial/tutorialCLCreep
+	Tutorial/tutorialGUICreep
+	Tutorial/tutorialCLCreep

@@ -1,8 +1,8 @@
-====================================
+===========================================
 |logo| SANS: Small-Angle Neutron Scattering
-====================================
+===========================================
 
-.. |logo| image:: ../app_logo/SANS.png
+.. |logo| image:: /app_logo/SANS.png
 	:height: 15pt
 	:align: bottom
 
@@ -11,5 +11,5 @@
 	
 	general
 	tutorial
-	../Theories/SANS/SANS
+	theory
 	

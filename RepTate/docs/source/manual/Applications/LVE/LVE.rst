@@ -1,8 +1,8 @@
-===========================
+===================================
 |logo| LVE: Linear Viscoelasticity
-===========================
+===================================
 
-.. |logo| image:: ../app_logo/LVE.png
+.. |logo| image:: /app_logo/LVE.png
 	:height: 15pt
 	:align: bottom
 
@@ -11,7 +11,7 @@
 
 	general
 	tutorial
-	../Theories/LVE/LVE
+	theory
 	
 ----------
 Data Files
@@ -54,11 +54,14 @@ Carreau-Yasuda
 Likhtman-McLeish
 ----------------
 
-See :cite:`Likhtman_2002` for more details 
+See :cite:`LVE-Likhtman2002` for more details 
 
 Maxwell Modes
 -------------
 
 .. rubric:: References
 
-.. bibliography:: refs.bib
+.. bibliography:: bibliography.bib
+    :style: unsrt
+    :keyprefix: LVE-
+    
