@@ -48,7 +48,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinxcontrib.bibtex',
-    'sphinx.ext.graphviz'
+    'sphinx.ext.graphviz',
+    'sphinx.ext.autosectionlabel'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
