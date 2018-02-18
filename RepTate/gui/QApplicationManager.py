@@ -83,9 +83,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
         #help button
         icon = QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png')
-        self.show_reptate_help = QAction(icon, 'RepTate Manual')
-        self.show_app_help = QAction(icon, 'Application Manual')
-        self.show_th_help = QAction(icon, 'Theory Manual')
+        self.show_reptate_help = QAction(icon, 'RepTate Manual', self)
+        self.show_app_help = QAction(icon, 'Application Manual', self)
+        self.show_th_help = QAction(icon, 'Theory Manual', self)
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.show_reptate_help)
