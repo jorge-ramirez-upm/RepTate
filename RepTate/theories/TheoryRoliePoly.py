@@ -254,8 +254,20 @@ class BaseTheoryRoliePoly:
         self.LVEenvelopeseries.set_label('')
 
         self.MAX_MODES = 40
-        self.flow_mode = FlowMode.shear
         self.with_fene = FeneMode.none
+        self.init_flow_mode()
+
+    def init_flow_mode(self):
+        """Find if data files are shear or extension"""
+        try:
+            f = self.theory_files()[0]
+            if f.file_type.extension == 'shear':
+                self.flow_mode = FlowMode.shear
+            else:
+                self.flow_mode = FlowMode.uext
+        except Exception as e:
+            print("in RP init:", e)
+            self.flow_mode = FlowMode.shear  #default mode: shear
 
     def destructor(self):
         """Called when the theory tab is closed
@@ -611,15 +623,19 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.extensional_flow_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-socks.png'),
             "Extensional Flow")
-        self.tbutflow.setDefaultAction(self.shear_flow_action)
+        if self.flow_mode == FlowMode.shear:
+            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        else:
+            self.tbutflow.setDefaultAction(self.extensional_flow_action)
         self.tbutflow.setMenu(menu)
         tb.addWidget(self.tbutflow)
 
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
-        self.get_modes_action = menu.addAction(self.style().standardIcon(
-            getattr(QStyle, 'SP_DialogYesButton')), "Get Modes")
+        self.get_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
+            "Get Modes")
         self.edit_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
             "Edit Modes")
@@ -643,7 +659,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         #SpinBox "nmodes"
         self.spinbox = QSpinBox()
         self.spinbox.setRange(0, self.MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" Rmodes")
+        self.spinbox.setSuffix(" stretch")
         self.spinbox.setToolTip("Number of stretching modes")
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
         tb.addWidget(self.spinbox)
