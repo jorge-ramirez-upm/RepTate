@@ -106,8 +106,9 @@ Tutorial Rolie-Poly
           then select the number of modes, enter the values and click "OK", then 
           minimize |fit|.
 
-        - Obtain the Maxwell modes from a different RepTate application.
-          **This is the method we choose to use in this tutorial.**
+        - Obtain the Maxwell modes from a different RepTate application (LVE, TTS, 
+          G(t)).
+          **In this tutorial we will import Maxwell modes from a LVE application.**
 
 #.  Create a new LVE Application |logoLVE| (see :ref:`Tutorial LVE Application` for 
     more details)
