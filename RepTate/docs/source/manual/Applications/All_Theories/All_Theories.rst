@@ -7,7 +7,7 @@ All RepTate Theories
 
     ../MWD/Theory/theory
     ../React/Theory//theory
-    ../NLVE/theory
+    ../NLVE/Theory/theory
     ../TTS/theory
     ../LVE/Theory/theory
     ../SANS/theory

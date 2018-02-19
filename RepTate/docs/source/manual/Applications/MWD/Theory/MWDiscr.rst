@@ -1,6 +1,6 @@
-==================
+------------------
 MWD Discretization
-==================
+------------------
 
 .. |piggy| image:: /gui_icons/icons8-money-box.png
     :width: 20pt

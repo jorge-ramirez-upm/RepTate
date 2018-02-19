@@ -1,6 +1,6 @@
-=========================
-Tutorial NLVE Application
-=========================
+=======================================
+NLVE Tutorial: Graphical User Interface
+=======================================
 
 .. toctree::
    :maxdepth: 2

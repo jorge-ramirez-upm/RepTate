@@ -2,7 +2,10 @@
 MWD: Theories
 =============
 
+.. contents:: Contents
+    :local:
+
 .. toctree::
    :maxdepth: 2
 
-   MWDiscr
+.. include:: MWDiscr.rst

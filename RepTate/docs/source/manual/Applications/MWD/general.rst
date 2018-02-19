@@ -21,19 +21,20 @@ Text files with ``.gpc`` extension should be organised as follows:
 
 - ``.gpc`` files should provide parameter values for
 
-	#. number-average molar mass, :math:`M_n'`
-	#. weight-average molar mass, :math:`M_w'`
-	#. polydispersity index, :math:`\text{PDI}'`
+	#. number-average molar mass, :math:`M_n`
+	#. weight-average molar mass, :math:`M_w`
+	#. polydispersity index, :math:`\text{PDI}`
 
 - 2 columns separated by **spaces** or **tabs** containing respectively:
 
   #. molar mass, :math:`M`,
-  #. weight associated, :math:`w(M)'`,
+  #. weight associated, :math:`w(M)`,
 
 A correct ``.gpc`` file looks like:
 
 .. code-block:: none
-  
+
+  Mn=100;Mw=250;PDI=2.5
   0.1148E+03 0.5000E-03
   0.1514E+03 0.1500E-02
   0.1995E+03 0.1667E-02
@@ -53,7 +54,7 @@ Text files with ``.reac`` extension should be organised as follows:
 - 4 columns separated by **spaces** or **tabs** containing respectively:
 
   #. molar mass, :math:`M`,
-  #. weight associated, :math:`w(M)'`,
+  #. weight associated, :math:`w(M)`,
   #. the `g`-factor, :math:`g(M)` 
   #. number of branch per 1000 carbon, :math:`\log_{10}(g(M))`.
 

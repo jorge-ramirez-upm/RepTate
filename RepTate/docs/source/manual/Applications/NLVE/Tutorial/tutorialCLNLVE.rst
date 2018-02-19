@@ -1,13 +1,13 @@
-======================================
-Tutorial NLVE Application Command Line
-======================================
+===========================
+NLVE Tutorial: Command Line
+===========================
 
 .. toctree::
    :maxdepth: 2
 
 
 .. hint::
-	.. include:: /manual/Applications/All_Tutorials/tutorialCL_instructions.rst
+    .. include:: /manual/Applications/All_Tutorials/tutorialCL_instructions.rst
 
 
 **Rolie-Poly start-up flow**

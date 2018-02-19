@@ -27,7 +27,7 @@ Text files with ``.reac`` extension should be organised as follows:
 - 4 columns separated by **spaces** or **tabs** containing respectively:
 
   #. molar mass, :math:`M`,
-  #. weight associated, :math:`w(M)'`,
+  #. weight associated, :math:`w(M)`,
   #. the `g`-factor, :math:`g(M)` 
   #. number of branch per 1000 carbon, :math:`\log_{10}(g(M))`.
 
