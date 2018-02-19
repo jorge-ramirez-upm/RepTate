@@ -1,5 +1,5 @@
 ==================================
-LVE: General description
+General Description
 ==================================
 
 .. contents:: Contents

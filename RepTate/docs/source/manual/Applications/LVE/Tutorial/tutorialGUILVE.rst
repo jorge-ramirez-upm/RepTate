@@ -1,6 +1,6 @@
-========================
-Tutorial LVE Application
-========================
+===============================
+Tutorial: Graphic User Interface
+===============================
 
 .. contents:: Contents
     :local:

@@ -1,5 +1,5 @@
 =====================================
-Tutorial LVE Application Command Line
+Tutorial: Command Line
 =====================================
 
 .. contents:: Contents

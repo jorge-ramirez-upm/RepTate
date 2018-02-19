@@ -1,5 +1,5 @@
 ===================================
-|logo| LVE: Linear Viscoelasticity
+|logo| LVE: Linear ViscoElasticity
 ===================================
 
 .. |logo| image:: /app_logo/LVE.png
