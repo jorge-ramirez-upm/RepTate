@@ -1,6 +1,6 @@
-======================================
-React Tutorial: Graphic User Interface
-======================================
+========================================
+React Tutorial: Graphical User Interface
+========================================
 
 .. |logo| image:: /app_logo/React.png
     :width: 20pt
@@ -29,8 +29,6 @@ React Tutorial: Graphic User Interface
 .. |TobitaBatchTh| image:: images/TobitaBatchTh.png
     :height: 15pt
     :align: bottom
-
-
 
 
 

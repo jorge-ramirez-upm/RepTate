@@ -5,8 +5,8 @@ All RepTate Theories
 .. toctree::
     :maxdepth: 2
 
-    ../MWD/theory
-    ../React/theory
+    ../MWD/Theory/theory
+    ../React/Theory//theory
     ../NLVE/theory
     ../TTS/theory
     ../LVE/Theory/theory
