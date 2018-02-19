@@ -2,7 +2,10 @@
 NLVE: Theories
 ================
 
+.. contents:: Contents
+    :local:
+
 .. toctree::
    :maxdepth: 2
 
-   Theory/RoliePoly
+.. include:: RoliePoly.rst

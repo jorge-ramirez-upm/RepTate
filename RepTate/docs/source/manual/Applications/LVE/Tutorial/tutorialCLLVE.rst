@@ -1,6 +1,9 @@
 =====================================
-Tutorial LVE Application Command Line
+LVE Tutorial: Command Line
 =====================================
+
+.. contents:: Contents
+    :local:
 
 .. toctree::
    :maxdepth: 2
@@ -8,7 +11,7 @@ Tutorial LVE Application Command Line
 .. hint::
 	.. include:: /manual/Applications/All_Tutorials/tutorialCL_instructions.rst
 
-
+-----------------------
 Likhtman-McLeish theory
 -----------------------
 
@@ -108,7 +111,8 @@ Prediction of LVE data of linear polymer melts
 #. Exit Reptate (the y answer is needed)::
     
     quit
-    
+
+------------------------
 Fit Maxwell modes to LVE
 ------------------------
 

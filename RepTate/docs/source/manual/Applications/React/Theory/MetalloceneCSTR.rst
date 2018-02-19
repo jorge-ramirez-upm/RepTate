@@ -2,9 +2,6 @@
 Metallocene CSTR
 ========================
 
-.. toctree::
-   :maxdepth: 2
-
 .. |piggy| image:: images/icons8-money-box.png
     :width: 20pt
     :height: 20pt
@@ -15,6 +12,12 @@ Metallocene CSTR
     :height: 20pt
     :align: bottom
 
+.. contents:: Contents
+  :local:
+
+
+Reaction theory
+---------------
 
 The multiple metallocene CSTR reaction theory uses an algorithm based on the
 reaction scheme given by Read and Soares :cite:`m-Read2003`. 
@@ -24,6 +27,9 @@ catalysts. The present algorithm is a Monte Carlo algorithm for simulating the
 case multiple catalysts. Note that some catalysts behave non-ideally,
 giving broad molecular weight distributions. These will need to be modelled as
 a combination of several catalysts with different rate parameters.
+
+Simulation parameters
+---------------------
 
 On opening the theory, one is presented with (apparently) only four
 parameters, which are:

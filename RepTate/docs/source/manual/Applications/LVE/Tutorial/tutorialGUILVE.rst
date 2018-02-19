@@ -1,6 +1,9 @@
-========================
-Tutorial LVE Application
-========================
+======================================
+LVE Tutorial: Graphical User Interface
+======================================
+
+.. contents:: Contents
+    :local:
 
 .. toctree::
    :maxdepth: 2

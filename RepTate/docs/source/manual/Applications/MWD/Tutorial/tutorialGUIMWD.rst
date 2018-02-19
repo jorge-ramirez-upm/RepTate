@@ -1,10 +1,6 @@
-========================
-Tutorial MWD Application
-========================
-
-.. toctree::
-   :maxdepth: 2
-   
+======================================
+MWD Tutorial: Graphical User Interface
+======================================
 
 .. |logo| image:: /app_logo/MWD.png
     :width: 20pt
@@ -43,7 +39,7 @@ Tutorial MWD Application
         :align: center
         :alt: New MWD application
 
-#.  Drag and drop a file with a `.gpc` extension, e.g. `ps2.gpc` in the `data/PS_Linear_Polydisperse/` folder.
+#.  Drag and drop a file with a ``.gpc`` extension, e.g. ``ps2.gpc`` in the ``data/PS_Linear_Polydisperse/`` folder.
 
     The first column of the file should contain the molecular mass :math:`M`, and the second column the relative molecular weight :math:`w(\log(M))`.
    
@@ -59,7 +55,7 @@ Tutorial MWD Application
         :align: center
         :alt: New MWD theory
     
-    The number average, weight average and polydispersity index, :math:`M_n` , :math:`M_w` and `PDI`, respectively, of the original data are calculated and
+    The number average, weight average and polydispersity index, :math:`M_n` , :math:`M_w` and :math:`\text{PDI}`, respectively, of the original data are calculated and
     reported into the file parameters panel: |fileparam|.
     
     The theory parameters panel shows these values for the discretized distribution: |thparam|.

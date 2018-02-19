@@ -1,9 +1,6 @@
-=====================================
-Tutorial MWD Application Command Line
-=====================================
-
-.. toctree::
-   :maxdepth: 2
+==========================
+MWD Tutorial: Command Line
+==========================
 
 .. hint::
 	.. include:: /manual/Applications/All_Tutorials/tutorialCL_instructions.rst

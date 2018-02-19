@@ -6,10 +6,11 @@
 	:height: 15pt
 	:align: bottom
 
-..	toctree::
-   	:maxdepth: 2
+.. toctree::
+    :maxdepth: 3
 	
-	general
-	tutorial
-	theory
+    general
+    Theory/theory
+    Tutorial/tutorialGUIMWD
+    Tutorial/tutorialCLMWD
 	

@@ -3,13 +3,13 @@ All RepTate Theories
 ========================
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   ../MWD/theory
-   ../React/theory
-   ../NLVE/theory
-   ../TTS/theory
-   ../LVE/theory
-   ../SANS/theory
-   ../Gt/theory
+    ../MWD/Theory/theory
+    ../React/Theory//theory
+    ../NLVE/Theory/theory
+    ../TTS/theory
+    ../LVE/Theory/theory
+    ../SANS/theory
+    ../Gt/theory
     
