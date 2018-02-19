@@ -21,7 +21,8 @@ weight and number of branches.
     still a possible source of error!
 
 
-**Polymer storage and saving to BoB**
+Polymer storage and saving to BoB
+---------------------------------
 
 When a molecule is generated using the algorithm, the theory makes a decision
 as to whether to "save" the molecule (that is, to store a complete record of
@@ -63,7 +64,8 @@ format of this file, and the use of it within a BoB calculation, is given in
 the BoB documentation.
 
 
-**Memory issues**
+Memory issues
+-------------
 
 React stores polymer information (total molecular weight, number of branches
 and `g`-factor) in a polymer record, and connectivity information in arm
@@ -74,6 +76,7 @@ records.
     cope smoothly with running out of memory - it should kindly ask you to allocate more memory!
     The dialog will propose you to increase the amount of computer memory allocated to React
     and give you an estimate the extra amount or RAM needed.
+
 .. tip::
 	There are some things that contribute to using a lot of memory:
 

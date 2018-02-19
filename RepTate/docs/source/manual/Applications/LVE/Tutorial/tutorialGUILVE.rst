@@ -1,5 +1,5 @@
 ===============================
-Tutorial: Graphic User Interface
+LVE Tutorial: Graphic User Interface
 ===============================
 
 .. contents:: Contents

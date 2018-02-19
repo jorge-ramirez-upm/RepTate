@@ -2,9 +2,12 @@
 Tobita CSTR
 ========================
 
-.. toctree::
-   :maxdepth: 2
+.. contents:: Contents
+  :local:
 
+
+Reaction theory
+---------------
 
 The LDPE CSTR reaction theory uses an algorithm based on the one described in
 the paper by H. Tobita :cite:`CSTR-Tobita2001` for batch reactions. 
@@ -42,7 +45,8 @@ Hence, there are four parameters which control the results of the reaction:
     \lambda &= \dfrac{R_{\mathrm{b}}}{R_{\mathrm{p}}},\\
     \sigma &= \dfrac{R_{\mathrm{s}}}{R_{\mathrm{p}}}.
 
-**Simulation parameters**
+Simulation parameters
+---------------------
 
 In addition to these parameters, there are four more which control the
 generation of molecules, the way that the data are displayed, and the output

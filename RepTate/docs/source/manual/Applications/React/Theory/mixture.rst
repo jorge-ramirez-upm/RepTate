@@ -2,9 +2,6 @@
 React mixture
 ========================
 
-.. toctree::
-   :maxdepth: 2
-
 .. |piggy| image:: images/icons8-money-box.png
     :width: 20pt
     :height: 20pt
@@ -14,6 +11,13 @@ React mixture
     :width: 20pt
     :height: 20pt
     :align: bottom
+
+.. contents:: Contents
+  :local:
+
+
+Mixture theory
+--------------
 
 The "mixture" theory allows you to combine the molecules and molecular
 weight distributions from other active React theories, and to output the
@@ -67,7 +71,8 @@ user needs to decide with what weight ratio to combine these theories.
 Clicking "OK" results in calculation of the MWDs.
 
 
-**Saving to BoB**
+Saving to BoB
+-------------
 
 To save a BoB polymer configuration file corresponding to the mixture, click
 the |piggy| button.

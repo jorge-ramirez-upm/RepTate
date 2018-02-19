@@ -2,9 +2,11 @@
 Tobita LDPE
 ========================
 
-.. toctree::
-   :maxdepth: 2
+.. contents:: Contents
+  :local:
 
+Reaction theory
+---------------
 
 The LDPE batch reaction theory uses an algorithm described in the paper by H.
 Tobita :cite:`LDPE-Tobita2001`. It is designed for a batch
@@ -54,7 +56,8 @@ branching and polymerisation rate constants and
 scission and polymerisation rate constants.
 The fifth parameter `fin_conv` is the monomer conversion at the end of the reaction.
 
-**Simulation parameters**
+Simulation parameters
+---------------------
 
 In addition to these parameters, there are four more which control the
 generation of molecules, the way that the data are displayed, and the output

@@ -1,9 +1,9 @@
 ==================================
-React: Tutorial
+LVE: Tutorial
 ==================================
 
 ..	toctree::
    	:maxdepth: 2
 	
-	Tutorial/tutorialGUIReact
-	Tutorial/tutorialCLReact
+	Tutorial/tutorialGUILVE
+	Tutorial/tutorialCLLVE

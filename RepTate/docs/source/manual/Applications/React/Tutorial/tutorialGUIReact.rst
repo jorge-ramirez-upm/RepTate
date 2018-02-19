@@ -1,9 +1,6 @@
-==========================
-Tutorial React Application
-==========================
-
-.. toctree::
-   :maxdepth: 2
+======================================
+React Tutorial: Graphic User Interface
+======================================
 
 .. |logo| image:: /app_logo/React.png
     :width: 20pt
@@ -61,7 +58,8 @@ three-graphs display with the view of the relevant graph changed.
         :align: center
         :alt: New React application
 
-#.  Drag and drop a file with a `.reac` extension, e.g. `out1.reac` in the `data/React/` folder.
+#.  Drag and drop a file with a ``.reac`` extension, e.g. ``out1.reac`` in the ``data/React/`` folder. 
+    See :ref:`React: General description` for more information on the expected data file format.
 
     The 4 columns of the file should contain (1) the molecular mass :math:`M`, (2) the 
     relative molecular weight :math:`w(\log(M))`, (3) the :math:`g`-factor, 

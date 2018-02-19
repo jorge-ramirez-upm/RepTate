@@ -1,10 +1,6 @@
 =======================================
-Tutorial React Application Command Line
+React Tutorial: Command Line
 =======================================
-
-.. toctree::
-   :maxdepth: 2
-
 
 .. hint::
 	.. include:: /manual/Applications/All_Tutorials/tutorialCL_instructions.rst
