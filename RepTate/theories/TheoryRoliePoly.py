@@ -42,7 +42,7 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
@@ -766,14 +766,14 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             nmodes = d.table.rowCount()
             self.set_param_value("nmodes", nmodes)
             self.set_param_value("nstretch", nmodes)
-
+            success = True
             for i in range(nmodes):
-                self.set_param_value("tauD%02d" % i,
-                                     float(d.table.item(i, 0).text()))
-                self.set_param_value("G%02d" % i,
-                                     float(d.table.item(i, 1).text()))
-                self.set_param_value("tauR%02d" % i, 0.5)
-                pass
+                msg, success1 = self.set_param_value("tauD%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("G%02d" % i, d.table.item(i, 1).text())
+                msg, success3 = self.set_param_value("tauR%02d" % i, 0.5)
+                success *= success1 * success2 * success3
+            if not success:
+                QMessageBox.warning(self, 'Error', 'Some parameter(s) could not be updated.\nPlease try again.')
 
     def plot_modes_graph(self):
         pass

@@ -97,13 +97,18 @@ class SpreadsheetWidget(QTableWidget):
         [description]
         """
         text = QApplication.clipboard().text()
-        if text == "":
+        if text == '':
             return
-        rows = text.split("\r") #this is Excel's carriage return...
+        # Replace commas if any
+        text = text.replace(',', ' ')
+
+        rows = text.splitlines() # split on newlines
         for i in range(len(rows)):
-            cols = rows[i].split("\t")
+            cols = rows[i].split() # split on whitespaces
             for j in range(len(cols)):
                 try:
                     self.item(i, j).setText(cols[j])
                 except AttributeError:
-                    pass #index out of range
+                    #index out of range
+                    #more data to paste than table entries
+                    pass 

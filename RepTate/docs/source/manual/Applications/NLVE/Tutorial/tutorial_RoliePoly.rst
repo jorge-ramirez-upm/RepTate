@@ -105,6 +105,9 @@ Tutorial Rolie-Poly
 	  
           then select the number of modes, enter the values and click "OK", then 
           minimize |fit|.
+        
+        - Alternatively, it is possible to copy the values from a file or spreadsheet
+          and paste the values into the "Edit Modes" table.
 
         - Obtain the Maxwell modes from a different RepTate application (LVE, TTS, 
           G(t)).
