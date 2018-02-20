@@ -106,7 +106,8 @@ RepTate's ``ApplicationManager``, so it knows it exists. To do so:
 
        self.available_applications[ApplicationXY.name] = ApplicationXY
 
-Our new application is ready to be used in Command Line RepTate!
+.. note::
+    Our new application is ready to be used in Command Line RepTate!
 
 Edit RepTate's ``QApplicationManager``
 --------------------------------------
@@ -160,7 +161,7 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
         return self.Qopen_app(app_name,
                                 ':/Icons/Images/new_icons/icons8-scatter-plot.png')
 
-    .. note::
+    .. warning::
         The ``app_name`` must be identical to the ``name`` defined
         in the file ``applications/ApplicationXY.py``, i.e., it should match
 
@@ -174,7 +175,8 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
                 """
                 name = 'XY'
 
-Our new application is ready to be used in GUI RepTate!
+.. note:: 
+    Our new application is ready to be used in GUI RepTate!
 
 
 --------------
@@ -208,6 +210,116 @@ as follows:
 New views
 ---------
 
+About the "old" view
+--------------------
+
+At the moment, only one view is allowed in our ``ApplicationXY``. 
+It can be seen in ``applications/ApplicationXY.py``:
+
+    .. code-block:: python
+       :lineno-start: 96
+
+        # VIEWS
+        # set the views that can be selected in the view combobox
+        self.views['y(x)'] = View(
+            name='y(x)',
+            description='y as a function of x',
+            x_label='x',
+            y_label='y(x)',
+            x_units='-',
+            y_units='-',
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewyx,
+            n=1,
+            snames=['y(x)'])
+
+The important attributes of the view called "y(x)" are: 
+
+- the x- and y-label to be used in the plot,
+- the units that are appened to the x- and y-labels,
+- the ``log_x`` and ``log_y`` define whther the axes should be in
+    in log-scale (base 10)
+- ``self.viewyx`` is the function that defines what operations
+    are done on the data before plotting them (see below),
+- ``n`` defines the number of series the view is plotting.
+
+The definition of the funtion ``self.viewyx`` is 
+
+    .. code-block:: python
+       :lineno-start: 138
+        
+        def viewyx(self, dt, file_parameters):
+            """[summary]
+            
+            [description]
+            
+            Arguments:
+                dt {[type]} -- [description]
+                file_parameters {[type]} -- [description]
+            
+            Returns:
+                [type] -- [description]
+            """
+            x = np.zeros((dt.num_rows, 1))
+            y = np.zeros((dt.num_rows, 1))
+            x[:, 0] = dt.data[:, 0]
+            y[:, 0] = dt.data[:, 1]
+            return x, y, True
+
+The two lines ``x[:, 0] = dt.data[:, 0]`` and ``y[:, 0] = dt.data[:, 1]``
+tell us that this function does not perform any operations on the data.
+It simply copies the input data into ``x`` and ``y`` arrays.
+
+Definition of a new view
+------------------------
+
+To define a new view that shows :math:`x` vs :math:`\sqrt{y}`, as 
+requested in the :ref:`goals_section` section, we add a view to
+``self.views`` dictionary. The new view is called "sqrt(y)"
+
+    .. code-block:: python
+       :lineno-start: 111
+
+        self.views['sqrt(y)'] = View(
+            name='sqrt(y)',
+            description='sqrt(y) as a function of x',
+            x_label='x',
+            y_label='$y^{1/2}$',
+            x_units='-',
+            y_units='-',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sqrt_y,
+            n=1,
+            snames=['sqrt(y)'])
+
+We also new to define the function ``self.view_sqrt_y``
+    
+    .. code-block:: python
+       :lineno-start: 169
+        
+        def view_sqrt_y(self, dt, file_parameters):
+            """[summary]
+            
+            [description]
+            
+            Arguments:
+                dt {[type]} -- [description]
+                file_parameters {[type]} -- [description]
+            
+            Returns:
+                [type] -- [description]
+            """
+            x = np.zeros((dt.num_rows, 1))
+            y = np.zeros((dt.num_rows, 1))
+            x[:, 0] = dt.data[:, 0]
+            y[:, 0] = (dt.data[:, 1])**0.5
+            return x, y, True
+
+.. note::
+    The new view is ready!
+
 ------------
 New theories
 ------------
@@ -219,4 +331,33 @@ New theories
 New Icons
 ---------
 
+Application icons are stored in compiled resource files in the ``gui/`` folder
+``MainWindow_rc.py``.
+In order to add a new icon to this resource file, that can later be used as
+a button icon for instance, we need to
 
+#.  Modify the file ``gui/MainWindow.qrc`` by opening it in a text editor
+    for example and add the relative path of the new image/icon we want to 
+    have in the resource file.
+    For instance: 
+    
+    - copy and paste you favourite icon ``my_favourite_icon.png`` 
+      in the ``gui/Images/new_icons/`` folder.
+    - add the line ``<file>Images/new_icons/my_favourite_icon.png</file>``
+      to the file  ``gui/MainWindow_rc.py``
+
+#.  Compile the file ``gui/MainWindow_rc.py`` into a resource file
+    by running the following command in a terminal (assuming the current
+    working dirrectory is ``gui/``)
+    
+    ..  code-block:: bash
+        
+        pyrcc5 MainWindow.qrc -o MainWindow_rc.py
+
+.. note::
+    You new icon ``my_favourite_icon.png`` is now ready to be used
+    by Qt:
+
+    ::
+    
+      icon = QIcon(':/Icons/Images/new_icons/my_favourite_icon.png')
