@@ -29,7 +29,6 @@ As an example, let us say that we want to create a new RepTate application that:
 #. allows to view the data:
     
    - without transformation
-   - without transformation in log-log scale
    - :math:`x` vs :math:`\sqrt{y}`
 
 #. has a theory [...]
@@ -99,7 +98,7 @@ RepTate's ``ApplicationManager``, so it knows it exists. To do so:
 
        from ApplicationXY import ApplicationXY
 
-    and add this line to add an entry to the ``ApplicationManager`` dictionary
+#.  Insert the following line to add an entry to the ``ApplicationManager`` dictionary
 
     .. code-block:: python
        :lineno-start: 104
