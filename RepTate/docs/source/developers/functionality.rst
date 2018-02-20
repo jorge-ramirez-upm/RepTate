@@ -28,16 +28,15 @@ As an example, let us say that we want to create a new RepTate application that:
 
 #. allows to view the data:
     
-   - without transformation
+   - without transformation, :math:`x` vs :math:`y`
    - :math:`x` vs :math:`\sqrt{y}`
 
 #. has a theory [...]
 
 
-
-----------------
-New applications
-----------------
+---------------
+New application
+---------------
 
 Create a new application file
 -----------------------------
@@ -51,7 +50,7 @@ application file ``ApplicationTemplate.py`` that can be found in the
     :ref:`goals_section` section, we name it ``ApplicationXY.py``.
 
 #.  Open ``ApplicationXY.py`` with your favourite text editor and
-    replace **all** the occurences of "Template" by "XY". For example, 
+    replace **all** the occurrences of "Template" by "XY". For example, 
     
     .. code-block:: python
        :lineno-start: 46
@@ -67,7 +66,7 @@ application file ``ApplicationTemplate.py`` that can be found in the
 
 
 #.  Give a brief description of the purpose of the application, 
-    e.g. "Application reading general text files".
+    e.g. "Application reading XY files".
     The first lines of ``ApplicationXY.py`` should now look like
 
     .. code-block:: python
@@ -75,7 +74,7 @@ application file ``ApplicationTemplate.py`` that can be found in the
 
        """Module ApplicationXY
 
-       Application reading general text files
+       Application reading XY files
 
        """
 
@@ -117,9 +116,9 @@ Command-Line version of RepTate), we need to create a new "button"
 that will launch our new application when clicked.
 We will edit the file ``gui/QApplicationManager.py`` in this purpose.
 
-#.  Add a button in the main RepTate tool-bar by inserting these line in 
+#.  Add a button in the main RepTate tool-bar by inserting these lines in 
     ``gui/QApplicationManager.py``. The icon we choose is 
-    "icons8-scatter-plot.png" which is readily part of RepTate.
+    "icons8-scatter-plot.png" which is readily part of RepTate icons database.
     To add a new custom icon to RepTate icon database, see 
     the section  :ref:`new_icons`.
 
@@ -134,7 +133,7 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
         #insert the new button before the "MWD" button
         self.toolBar.insertAction(self.actionMWD, self.actionXY)
 
-#.  The new button has been succefuly inserted into the application tool bar.
+#.  The new button has been successfully inserted into the application tool bar.
     However, if we click on it, nothing happens because it is not linked to any action.
     We need to "wire" (connect) this new button to a "function".
     In the same file ``gui/QApplicationManager.py``, below the previous lines,
@@ -152,13 +151,13 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
        :lineno-start: 352
 
         def new_xy_window(self):
-        """Open a new XY application window
-        
-        [description]
-        """
-        app_name = "XY" 
-        return self.Qopen_app(app_name,
-                                ':/Icons/Images/new_icons/icons8-scatter-plot.png')
+            """Open a new XY application window
+            
+            [description]
+            """
+            app_name = "XY" 
+            return self.Qopen_app(app_name,
+                                    ':/Icons/Images/new_icons/icons8-scatter-plot.png')
 
     .. warning::
         The ``app_name`` must be identical to the ``name`` defined
@@ -183,11 +182,10 @@ New file types
 --------------
 
 RepTate applications are designed to accept a only a 
-predifine file extension. As defined in the :ref:`goals_section` section,
+predefined file extension. As defined in the :ref:`goals_section` section,
 we want our new application ``ApplicationXY.py`` to accept ``.xy`` files.
 To do so, we modify ``class BaseApplicationXY`` of ``ApplicationXY.py`` 
 as follows:
-
 
     .. code-block:: python
        :lineno-start: 53
@@ -200,10 +198,11 @@ as follows:
         ftype = TXTColumnFile(
             name='XY data',  # name the type of data
             extension='xy',  # file extension
-            description='XY data from XY-experimemt',
+            description='XY data from XY-experiment',
             col_names=['X', 'Y'],  # name the variables for legend
             basic_file_parameters=['date', 'T'],  # parameter in file header
             col_units=['-', '-'])  # units of X and Y (here none)
+
 
 ---------
 New views
@@ -236,14 +235,14 @@ It can be seen in ``applications/ApplicationXY.py``:
 The important attributes of the view called "y(x)" are: 
 
 - the x- and y-label to be used in the plot,
-- the units that are appened to the x- and y-labels,
-- the ``log_x`` and ``log_y`` define whther the axes should be in
-    in log-scale (base 10)
+- the units that are appended to the x- and y-labels,
+- the ``log_x`` and ``log_y`` define whether the axes should be in
+  in log-scale (base 10)
 - ``self.viewyx`` is the function that defines what operations
-    are done on the data before plotting them (see below),
+  are done on the data before plotting them (see below),
 - ``n`` defines the number of series the view is plotting.
 
-The definition of the funtion ``self.viewyx`` is 
+The definition of the function ``self.viewyx`` is 
 
     .. code-block:: python
        :lineno-start: 138
@@ -268,7 +267,8 @@ The definition of the funtion ``self.viewyx`` is
 
 The two lines ``x[:, 0] = dt.data[:, 0]`` and ``y[:, 0] = dt.data[:, 1]``
 tell us that this function does not perform any operations on the data.
-It simply copies the input data into ``x`` and ``y`` arrays.
+It simply copies the input data into ``x`` and ``y`` arrays. It means that 
+we already have one of the views required from the :ref:`goals_section` section.
 
 Definition of a new view
 ------------------------
@@ -293,7 +293,10 @@ requested in the :ref:`goals_section` section, we add a view to
             n=1,
             snames=['sqrt(y)'])
 
-We also new to define the function ``self.view_sqrt_y``
+.. tip::
+    The ``x_label`` and ``y_label`` support LaTeX-like syntax.
+
+We also need to define the function ``self.view_sqrt_y``
     
     .. code-block:: python
        :lineno-start: 169
@@ -324,37 +327,38 @@ New theories
 ------------
 
 
+
 .. _new_icons:
 
 ---------
 New Icons
 ---------
 
-Application icons are stored in compiled resource files in the ``gui/`` folder
-``MainWindow_rc.py``.
+Application icons are stored in a compiled resource file
+``gui/MainWindow_rc.py``.
 In order to add a new icon to this resource file, that can later be used as
 a button icon for instance, we need to
 
 #.  Modify the file ``gui/MainWindow.qrc`` by opening it in a text editor
-    for example and add the relative path of the new image/icon we want to 
+    and add the relative path of the new image or icon we want to 
     have in the resource file.
     For instance: 
     
     - copy and paste you favourite icon ``my_favourite_icon.png`` 
       in the ``gui/Images/new_icons/`` folder.
     - add the line ``<file>Images/new_icons/my_favourite_icon.png</file>``
-      to the file  ``gui/MainWindow_rc.py``
+      to the file ``gui/MainWindow.qrc``
 
-#.  Compile the file ``gui/MainWindow_rc.py`` into a resource file
-    by running the following command in a terminal (assuming the current
-    working dirrectory is ``gui/``)
+#.  Re-compile the file ``MainWindow_rc.py`` into a resource file
+    ``gui/MainWindow_rc.py`` by running the following command in a
+    terminal (assuming the current working directory is ``gui/``)
     
     ..  code-block:: bash
         
         pyrcc5 MainWindow.qrc -o MainWindow_rc.py
 
 .. note::
-    You new icon ``my_favourite_icon.png`` is now ready to be used
+    Your new icon ``my_favourite_icon.png`` is now ready to be used
     by Qt:
 
     ::
