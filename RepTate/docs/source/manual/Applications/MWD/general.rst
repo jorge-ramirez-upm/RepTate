@@ -21,9 +21,9 @@ Text files with ``.gpc`` extension should be organised as follows:
 
 - ``.gpc`` files should provide parameter values for
 
-	#. number-average molar mass, :math:`M_n`
-	#. weight-average molar mass, :math:`M_w`
-	#. polydispersity index, :math:`\text{PDI}`
+  #. number-average molar mass, :math:`M_n`
+  #. weight-average molar mass, :math:`M_w`
+  #. polydispersity index, :math:`\text{PDI}`
 
 - 2 columns separated by **spaces** or **tabs** containing respectively:
 
@@ -48,7 +48,7 @@ A correct ``.gpc`` file looks like:
 
 Text files with ``.reac`` extension should be organised as follows:
 
-- Any parameters in the first line. ``.reac`` files are not expected
+- ``.reac`` files are not expected
   to provide any specific parameter values.
 
 - 4 columns separated by **spaces** or **tabs** containing respectively:

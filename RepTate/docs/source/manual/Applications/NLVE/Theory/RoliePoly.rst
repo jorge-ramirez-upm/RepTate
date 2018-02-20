@@ -19,7 +19,7 @@ The evolution equations for the conformation tensor, :math:`\boldsymbol{A}`, sol
     }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
     (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2(1 - \lambda^{-1})}{\tau_\mathrm{R}} \left(  \boldsymbol{A}+ \beta \lambda^{2\delta}(\boldsymbol{A
     }- \boldsymbol{I}) \right),
-    :label: classic-RP
+
     
 where the stretch ratio, :math:`\lambda`, is 
 
@@ -50,10 +50,9 @@ for finite extensibility of polymer chains, can be written in the following form
 .. math::
     \dfrac{\text d \boldsymbol{A}}{\text dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
     }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
-    (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2(1 - \sqrt{3/\mathrm{tr}\,
-    \boldsymbol{A}})}{\tau_\mathrm{R}} \text{fene}(\lambda) \left(  \boldsymbol{A}+ \beta\left(
-    \dfrac{\mathrm{tr}\, \boldsymbol{A}}{3} \right) ^{\delta}(\boldsymbol{A
-    }- \boldsymbol{I}) \right).
+    (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2(1 - \lambda^{-1})}{\tau_\mathrm{R}} 
+    \text{fene}(\lambda) \left( \boldsymbol{A}+ \beta \lambda^{2\delta}(\boldsymbol{A
+    }- \boldsymbol{I}) \right),
 
 The nonlinear spring coefficient, :math:`\text{fene}(\lambda)`, is
 approximated by the normalized Padé inverse Langevin function :cite:`RP-Cohen1991`

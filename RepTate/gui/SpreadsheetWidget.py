@@ -30,7 +30,7 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
-"""Module InspectorTableWidget
+"""Module SpreadsheetWidget
 
 Module that defines a QTableWidget that allows copy/paste of data.
 
@@ -39,7 +39,7 @@ import sys
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QTableWidget, QApplication
 
-class InspectorTableWidget(QTableWidget):
+class SpreadsheetWidget(QTableWidget):
     """Subclass of QTableWidget
 
     Subclass of QTableWidget that enables (i) to copy selected QTableWidget items to the clipboard

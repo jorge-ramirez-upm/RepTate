@@ -49,6 +49,7 @@ from PyQt5.QtCore import Qt
 from Theory_rc import *
 from enum import Enum
 from math import sqrt
+from SpreadsheetWidget import SpreadsheetWidget
 
 
 class FlowMode(Enum):
@@ -87,7 +88,7 @@ class EditModesDialog(QDialog):
         self.spinbox.setValue(nmodes)  #initial value
         layout.addWidget(self.spinbox)
 
-        self.table = QTableWidget()
+        self.table = SpreadsheetWidget()  #allows copy/paste
         self.table.setRowCount(nmodes)
         self.table.setColumnCount(2)
         self.table.setHorizontalHeaderLabels(["tau", "G"])

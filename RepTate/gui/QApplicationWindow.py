@@ -56,7 +56,7 @@ from DraggableArtists import DragType, DraggableSeries, DraggableNote
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
 from markerSettings import Ui_Dialog
 
-from InspectorTableWidget import InspectorTableWidget
+from SpreadsheetWidget import SpreadsheetWidget
 
 # I think the following lines are not needed anymore
 #try:
@@ -120,7 +120,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionShiftHorizontally)
         self.LayoutDataInspector.insertWidget(0, tb)
         #custom QTable to have the copy/pastefeature
-        self.inspector_table = InspectorTableWidget(self)
+        self.inspector_table = SpreadsheetWidget(self)
         self.LayoutDataInspector.insertWidget(-1, self.inspector_table)
 
         # Dataset Toolbar
