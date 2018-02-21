@@ -8,7 +8,7 @@ Maxwell modes
 Summary
 -------
 
-.. autoclass:: TheoryMaxwellModes.TheoryMaxwellModesFrequency
+.. autoclass:: TheoryMaxwellModes.TheoryMaxwellModesFrequency()
 
 Description
 -----------

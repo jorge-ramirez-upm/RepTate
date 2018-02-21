@@ -8,4 +8,4 @@ User Manual
    General/general
    Applications/applications
    Tools/tools
-   
+   All_Theories/All_Theories

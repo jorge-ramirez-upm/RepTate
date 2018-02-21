@@ -36,7 +36,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-* :doc:`All Theories <manual/Applications/All_Theories/All_Theories>`
+* :doc:`All Theories <manual/All_Theories/All_Theories>`
 * :doc:`All Tutorials <manual/Applications/All_Tutorials/All_Tutorials>`
 
 
