@@ -70,6 +70,7 @@ class TheoryPolynomial(CmdBase):
 
 
 class BaseTheoryPolynomial:
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#polynomial'
     single_file = True
 
     def __init__(self, name="ThPolynomial", parent_dataset=None, ax=None):
@@ -264,6 +265,7 @@ class BaseTheoryPowerLaw:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#power-law'
     single_file = True
 
     def __init__(self, name="PowerLaw", parent_dataset=None, ax=None):
@@ -382,6 +384,7 @@ class BaseTheoryExponential:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#exponential'
     single_file = True
 
     def __init__(self, name="Exponential", parent_dataset=None, ax=None):
@@ -504,6 +507,7 @@ class BaseTheoryTwoExponentials:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#double-exponential'
     single_file = True
 
     def __init__(self, name="TwoExponentials", parent_dataset=None, ax=None):
