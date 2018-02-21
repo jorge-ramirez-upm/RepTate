@@ -31,8 +31,14 @@ As an example, let us say that we want to create a new RepTate application that:
    - without transformation, :math:`x` vs :math:`y`
    - :math:`x` vs :math:`\sqrt{y}`
 
-#. has a theory [...]
+#. has a theory: a simple line fitting with two parameters :math:`a` and :math:`b` such that
+   :math:`y = ax+b`.
 
+.. tip::
+    Each time we need to modify or add some line of Python code, the line number is indicated
+    on the left hand side for information. 
+    This should correspond to the same line numbering for the "template" files, but might
+    be different for the files in the ``core/`` or ``gui/`` folders.
 
 ---------------
 New application
@@ -178,7 +184,7 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
 
 
 --------------
-New file types
+New file type
 --------------
 
 RepTate applications are designed to accept a only a 
@@ -205,7 +211,7 @@ as follows:
 
 
 ---------
-New views
+New view
 ---------
 
 About the "old" view
@@ -322,11 +328,150 @@ We also need to define the function ``self.view_sqrt_y``
 .. note::
     The new view is ready!
 
-------------
-New theories
-------------
+----------
+New theory
+----------
+
+Create a new theory file
+------------------------
+
+To create a new RepTate application, we will use the template
+application file ``TheoryTemplate.py`` that can be found in the
+``theories/`` folder.
+
+#.  Make a copy of this file and rename it with a sensible name that 
+    relates to the theory purpose. According to the 
+    :ref:`goals_section` section, we name it ``TheoryLine.py``.
+
+#.  Open ``TheoryLine.py`` with your favourite text editor and
+    replace **all** the occurrences of "Template" by "Line". For example, 
+    
+    .. code-block:: python
+       :lineno-start: 46
+
+        class TheoryTemplate(CmdBase):
+    
+    becomes
+
+    .. code-block:: python
+       :lineno-start: 46
+
+        class TheoryLine(CmdBase):
+
+#.  Give a brief description of the purpose of the application, 
+    e.g. " Theory fitting a line to the data".
+    The first lines of ``TheoryLine.py`` should now look like
+
+    .. code-block:: python
+       :lineno-start: 33
+
+       """Module TheoryLine
+
+       Theory fitting a line to the data
+
+       """
+
+The file ``TheoryLine.py`` is ready for the next round of modifications
+that are (i) define the parameters, (ii) define the theory function.
+But first, we have to let ApplicationXY (developped just above) know about 
+our new theory.
+
+Edit ``ApplicationXY.py``
+-------------------------------------
+
+We need to add a reference to this new theory into 
+``ApplicationXY.py``, so it knows it exists. To do so:
+
+#.  Insert this line in ``applications/ApplicationXY.py``,
+    e.g.
+
+    .. code-block:: python
+       :lineno-start: 92
+
+        from TheoryLine import TheoryLine
+
+#.  Insert the following line to add an entry to the ``theories`` dictionary
+
+    .. code-block:: python
+       :lineno-start: 144
+
+        self.theories[TheoryLine.thname] = TheoryLine
+
+Edit the theory 
+---------------
+According to the :ref:`goals_section` section, the theory should define a straight line
+:math:`y=ax+b`, hence there are two paramters. We will (i) write a short documentation of
+our new theory, (ii) define the parameters, and (iii) write the main function that
+calculates the theory values.
+  
+#.  Add a docstring to (auto)-document the theory. Place some description of the goal of the theory
+    as well as a description of the paramters. This will help future reader of the file understand
+    the purpose of the theory and it will be automatically integrated to the
+    online RepTate documentation (`reptate.readthedocs <http://reptate.readthedocs.io/>`_).
+
+    .. code-block:: python
+       :lineno-start: 46
+
+        class TheoryLine(CmdBase):
+            """Fit a straigth line. 
+            
+            * **Function**
+                .. math::
+                    y = a x + b
+            
+            * **Parameters**
+            - :math:`a`: slope of the line
+            - :math:`b`: the :math:`y`:-intercept
+
+            """
+
+#.  To define the theory parameters, :math:`a` and :math:`b`, we modify the
+    ``__init__`` function of ``TheoryLine.py``
+
+    .. code-block:: python
+       :lineno-start: 101
+
+        self.parameters['a'] = Parameter(
+            name='a',
+            value=1,
+            description='parameter a',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['b'] = Parameter(
+            name='b',
+            value=0,
+            description='parameter b',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+    
+    The important attributes of the paramters are:
+    
+    - ``value``: the initial value of the parameter
+    - ``type``: defines if he parameter is real, integer or discrete
+    - ``opt_type``: optimization type is either ``const`` for constant parameter
+      (cannot be optiized),
+      ``opt`` if the parameter is optimized by default, 
+      ``nopt`` if the parameter can
+      be optimized but is not by default.
 
 
+#.  Modify the main function ``calculate`` of ``TheoryLine.py``
+
+    .. code-block:: python
+       :lineno-start: 145
+
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        a = self.parameters['a'].value
+        b = self.parameters['b'].value
+        tt.data[:, 0] = ft.data[:, 0]  # x values
+        tt.data[:, 1] = a * ft.data[:, 0] + b  # y values
+
+.. note::
+    The new "Line" theory is ready to be used in our new ApplicationXY!
 
 .. _new_icons:
 
