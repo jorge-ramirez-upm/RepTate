@@ -5,7 +5,14 @@ Maxwell modes
 .. toctree::
    :maxdepth: 2
 
+Summary
+-------
 
+.. autoclass:: TheoryMaxwellModes.TheoryMaxwellModesFrequency
+
+Description
+-----------
+      
 Fit of linear viscoelastic data with a set of :math:`N` discrete equidistant Maxwell modes. 
 The number of modes can be selected by pressing the Up/Down arrows in the theory window. 
 The frequencies of the Maxwell modes are equally distributed in logarithmic scale between 

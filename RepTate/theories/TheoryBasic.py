@@ -98,10 +98,8 @@ class BaseTheoryPolynomial:
     def polynomial(self, f=None):
         """Actual polynomial function.
         
-        .. math:: 
-        
-            (a + b)^2  &=  (a + b)(a + b) \\
-              &=  a^2 + 2ab + b^2
+        .. math::
+            (a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2
         
         Keyword Arguments:
             f {[type]} -- [description] (default: {None})

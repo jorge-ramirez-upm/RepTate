@@ -48,9 +48,21 @@ from DraggableArtists import DragType, DraggableModesSeries
 
 
 class TheoryMaxwellModesFrequency(CmdBase):
-    """Fit Maxwell modes to a frequency dependent relaxation function
+    """Fit a generalized Maxwell model to a frequency dependent relaxation function. 
     
-    [description]
+    * **Function**
+        .. math::
+            \\begin{eqnarray}
+            G'(\\omega) & = & \\sum_{1}^{n_{modes}} G_i \\frac{(\\omega\\tau_i)^2}{1+(\\omega\\tau_i)^2} \\\\
+            G''(\\omega) & = & \\sum_{1}^{n_{modes}} G_i \\frac{\\omega\\tau_i}{1+(\\omega\\tau_i)^2}
+            \\end{eqnarray}
+    
+    * **Parameters**
+       - :math:`n_{modes}`: number of Maxwell modes equally distributed in logarithmic scale between :math:`\\omega_{min}` and :math:`\\omega_{max}`.
+       - logwmin = :math:`\\log(\\omega_{min})`: decimal logarithm of the minimum frequency.
+       - logwmax = :math:`\\log(\\omega_{max})`: decimal logarithm of the maximum frequency.
+       - logGi = :math:`\\log(G_{i})`: decimal logarithm of the amplitude of Maxwell mode :math:`i`.
+    
     """
     thname = "MaxwellModesFrequency"
     description = "Fit Maxwell modes to frequency dependent function"
@@ -74,9 +86,14 @@ class TheoryMaxwellModesFrequency(CmdBase):
 
 
 class BaseTheoryMaxwellModesFrequency:
-    """[summary]
+    """[summary] :math:`a^2`.
     
-    [description]
+    .. math::
+        \\eta^*(\\omega) = \\eta_\\infty + (\\eta_0-\\eta_\\infty)\\left( 1 + (\\lambda\\omega)^a \\right)^{(n-1)/a}
+
+    .. math::
+        (a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2
+        
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Maxwell.html'
     single_file = True
@@ -84,9 +101,7 @@ class BaseTheoryMaxwellModesFrequency:
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
                  ax=None):
         """[summary]
-        
-        [description]
-        
+                
         Keyword Arguments:
             name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
             parent_dataset {[type]} -- [description] (default: {None})
