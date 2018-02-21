@@ -373,7 +373,7 @@ application file ``TheoryTemplate.py`` that can be found in the
 
 The file ``TheoryLine.py`` is ready for the next round of modifications
 that are (i) define the parameters, (ii) define the theory function.
-But first, we have to let ApplicationXY (developped just above) know about 
+But first, we have to let ApplicationXY (developed just above) know about 
 our new theory.
 
 Edit ``ApplicationXY.py``
@@ -400,12 +400,12 @@ We need to add a reference to this new theory into
 Edit the theory 
 ---------------
 According to the :ref:`goals_section` section, the theory should define a straight line
-:math:`y=ax+b`, hence there are two paramters. We will (i) write a short documentation of
+:math:`y=ax+b`, hence there are two parameters. We will (i) write a short documentation of
 our new theory, (ii) define the parameters, and (iii) write the main function that
 calculates the theory values.
   
-#.  Add a docstring to (auto)-document the theory. Place some description of the goal of the theory
-    as well as a description of the paramters. This will help future reader of the file understand
+#.  Add a Python docstring to (auto)-document the theory. Place some description of the goal of the theory
+    as well as a description of the parameters. This will help future reader of the file understand
     the purpose of the theory and it will be automatically integrated to the
     online RepTate documentation (`reptate.readthedocs <http://reptate.readthedocs.io/>`_).
 
@@ -444,15 +444,15 @@ calculates the theory values.
             type=ParameterType.real,
             opt_type=OptType.opt)
     
-    The important attributes of the paramters are:
+    The important attributes of the parameters are:
     
     - ``value``: the initial value of the parameter
     - ``type``: defines if he parameter is real, integer or discrete
-    - ``opt_type``: optimization type is either ``const`` for constant parameter
-      (cannot be optiized),
-      ``opt`` if the parameter is optimized by default, 
+    - ``opt_type``: optimisation type is either ``const`` for constant parameter
+      (cannot be optimised),
+      ``opt`` if the parameter is optimised by default, 
       ``nopt`` if the parameter can
-      be optimized but is not by default.
+      be optimised but is not by default.
 
 
 #.  Modify the main function ``calculate`` of ``TheoryLine.py``
