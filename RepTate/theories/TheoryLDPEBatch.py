@@ -238,7 +238,7 @@ class BaseTheoryTobitaBatch():
         i = 0
         while i < numtomake:
             if self.stop_theory_calc_flag:
-                self.print_signal.emit('Polymer creation stopped by user')
+                self.Qprint('Polymer creation stopped by user')
                 break
             # get a polymer
             success = rch.request_poly(ct.byref(c_m))
@@ -266,7 +266,7 @@ class BaseTheoryTobitaBatch():
                     i += 1
                     # check for error
                     if rch.tb_global.tobitabatcherrorflag:
-                        self.print_signal.emit(
+                        self.Qprint(
                             'Polymers too large: gelation occurs for these parameters'
                         )
                         i = numtomake
@@ -286,7 +286,7 @@ class BaseTheoryTobitaBatch():
                 # update on number made
                 if rch.react_dist[ndist].contents.npoly % np.trunc(
                         numtomake / 20) == 0:
-                    self.print_signal.emit(
+                    self.Qprint(
                         'Made %d polymers' %
                         rch.react_dist[ndist].contents.npoly)
                     QApplication.processEvents(
@@ -325,25 +325,25 @@ class BaseTheoryTobitaBatch():
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
 
-            self.print_signal.emit('*************************')
-            # self.print_signal.emit('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
-            self.print_signal.emit(
+            self.Qprint('*************************')
+            # self.Qprint('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
+            self.Qprint(
                 'Made %d polymers' % rch.react_dist[ndist].contents.npoly)
-            self.print_signal.emit('Saved %d polymers in memory' %
+            self.Qprint('Saved %d polymers in memory' %
                                    rch.react_dist[ndist].contents.nsaved)
-            self.print_signal.emit(
+            self.Qprint(
                 'Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
-            self.print_signal.emit(
+            self.Qprint(
                 'Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
-            self.print_signal.emit(
+            self.Qprint(
                 'br/1000C = %.3g' % rch.react_dist[ndist].contents.brav)
-            self.print_signal.emit('*************************')
+            self.Qprint('*************************')
 
             calc = rch.react_dist[ndist].contents.nummwdbins - 1
             rch.react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.print_signal.emit(
+        self.Qprint(
             '%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
 

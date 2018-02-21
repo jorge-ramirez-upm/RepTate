@@ -91,7 +91,8 @@ class Theory(CmdBase):
             parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})
             ax {matplotlib axes} -- matplotlib graph (default: {None})
         """
-        super(Theory, self).__init__()
+        super().__init__()
+
         self.name = name
         self.parent_dataset = parent_dataset
         self.axarr = axarr
@@ -174,8 +175,8 @@ class Theory(CmdBase):
 
         self.do_cite("")
 
-        self.print_signal.connect(
-            self.Qprint)  # Asynchronous print when using multithread
+        if CmdBase.mode == CmdMode.GUI:
+            self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
 
     def precmd(self, line):
         """Calculations before the theory is calculated
@@ -215,7 +216,7 @@ class Theory(CmdBase):
             self.do_plot(line)
             self.do_error(line)
         if timing:
-            self.print_signal.emit("\n---Calculated in %.3g seconds---" %
+            self.Qprint("\n---Calculated in %.3g seconds---" %
                                    (time.time() - start_time))
         self.calculate_is_busy = False
 
@@ -251,7 +252,7 @@ class Theory(CmdBase):
         view = self.parent_dataset.parent_application.current_view
         msg = "\n%14s %10s (%6s)\n" % ("File", "Error", "# Pts.")
         msg += "=================================="
-        self.print_signal.emit(msg)
+        self.Qprint(msg)
 
         for f in self.theory_files():
             xexp, yexp, success = view.view_proc(f.data_table,
@@ -275,14 +276,14 @@ class Theory(CmdBase):
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt
-            self.print_signal.emit("%14s %10.5g (%6d)" % (f.file_name_short,
+            self.Qprint("%14s %10.5g (%6d)" % (f.file_name_short,
                                                           f_error, npt))
 
         if npoints != 0:
-            self.print_signal.emit("%14s %10.5g (%6d)" %
+            self.Qprint("%14s %10.5g (%6d)" %
                                    ("TOTAL", total_error / npoints, npoints))
         else:
-            self.print_signal.emit("%14s %10s (%6d)" % ("TOTAL", "N/A",
+            self.Qprint("%14s %10s (%6d)" % ("TOTAL", "N/A",
                                                         npoints))
 
     def func_fit(self, x, *param_in):
@@ -361,7 +362,7 @@ class Theory(CmdBase):
         msg = "\n==================================\n"
         msg += "PARAMETER FITTING"
         msg += "\n==================================\n"
-        self.print_signal.emit(msg)
+        self.Qprint(msg)
         # Vectors that contain all X and Y in the files & view
         x = []
         y = []
@@ -371,14 +372,14 @@ class Theory(CmdBase):
                 temp = self.xmin
                 self.xmin = self.xmax
                 self.xmax = temp
-            self.print_signal.emit("xrange=[%0.3g, %0.3g]" % (self.xmin,
+            self.Qprint("xrange=[%0.3g, %0.3g]" % (self.xmin,
                                                               self.xmax))
         if self.yrange.get_visible():
             if self.ymin > self.ymax:
                 temp = self.ymin
                 self.ymin = self.ymax
                 self.ymax = temp
-            self.print_signal.emit("yrange=[%.03g, %0.3g]" % (self.ymin,
+            self.Qprint("yrange=[%.03g, %0.3g]" % (self.ymin,
                                                               self.ymax))
 
         for f in th_files:
@@ -422,7 +423,7 @@ class Theory(CmdBase):
                 param_max.append(
                     par.max_value)  #list of max values for fitting parameters
         if (not param_min) or (not param_max):
-            self.print_signal.emit("No parameter to minimize")
+            self.Qprint("No parameter to minimize")
             self.is_fitting = False
             return
         opt = dict(return_full=True)
@@ -439,7 +440,7 @@ class Theory(CmdBase):
             #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
         except Exception as e:
             print("In do_fit()", e)
-            self.print_signal.emit("%s" % e)
+            self.Qprint("%s" % e)
             self.is_fitting = False
             return
 
@@ -447,9 +448,9 @@ class Theory(CmdBase):
         fres0 = sum(residuals**2)
         residuals = y - self.func_fit(x, *pars)
         fres1 = sum(residuals**2)
-        self.print_signal.emit('Initial Error = %g -->' % (fres0))
-        self.print_signal.emit('Final Error   = %g' % (fres1))
-        self.print_signal.emit('%g function evaluations' % (self.nfev))
+        self.Qprint('Initial Error = %g -->' % (fres0))
+        self.Qprint('Final Error   = %g' % (fres1))
+        self.Qprint('%g function evaluations' % (self.nfev))
         # fiterror = np.mean((infodict['fvec'])**2)
         # funcev = infodict['nfev']
         # print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
@@ -468,21 +469,21 @@ class Theory(CmdBase):
             par_error.append(sigma * tval)
 
         ind = 0
-        self.print_signal.emit("\n%9s = %10s ± %-9s" % ("Parameter", "Value",
+        self.Qprint("\n%9s = %10s ± %-9s" % ("Parameter", "Value",
                                                         "Error"))
-        self.print_signal.emit("==================================")
+        self.Qprint("==================================")
         for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 par.error = par_error[ind]
                 ind += 1
-                self.print_signal.emit('%9s = %10.4g ± %-9.4g' %
+                self.Qprint('%9s = %10.4g ± %-9.4g' %
                                        (par.name, par.value, par.error))
             else:
-                self.print_signal.emit('%9s = %10.4g' % (par.name, par.value))
+                self.Qprint('%9s = %10.4g' % (par.name, par.value))
         self.is_fitting = False
         self.do_calculate(line, timing=False)
-        self.print_signal.emit("\n---Fitting in %.3g seconds---" %
+        self.Qprint("\n---Fitting in %.3g seconds---" %
                                (time.time() - start_time))
 
     def do_print(self, line):
@@ -1017,9 +1018,13 @@ class Theory(CmdBase):
             msg {[type]} -- [description]
         """
         if CmdBase.mode == CmdMode.GUI:
-            self.thTextBox.append(msg)
-            self.thTextBox.verticalScrollBar().setValue(
-                self.thTextBox.verticalScrollBar().maximum())
-            self.thTextBox.moveCursor(QTextCursor.End)
+            self.print_signal.emit(msg)
         else:
             print(msg)
+
+    def print_qtextbox(self, msg):
+        """Print message in the GUI log text box"""
+        self.thTextBox.append(msg)
+        self.thTextBox.verticalScrollBar().setValue(
+            self.thTextBox.verticalScrollBar().maximum())
+        self.thTextBox.moveCursor(QTextCursor.End)

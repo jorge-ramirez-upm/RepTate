@@ -147,7 +147,7 @@ class BaseTheoryReactMix:
         for i in range(rch.pb_global_const.maxreact):
             distscheck = distscheck or rch.react_dist[i].contents.polysaved
         if not distscheck:  #no distributions have polymers in
-            self.print_signal.emit(
+            self.Qprint(
                 'No polymers made in other theories yet!  Make some polymers.')
             return
 
@@ -159,12 +159,12 @@ class BaseTheoryReactMix:
                 0.5
             )  # TODO: find a better way to wait for the dialog thread to finish
         if not self.success_dialog:
-            self.print_signal.emit('Mixture canceled')
+            self.Qprint('Mixture canceled')
             return
 
         #check mix settings
         if (self.n_inmix == 0):
-            self.print_signal.emit('Mixture not defined')
+            self.Qprint('Mixture not defined')
             return
 
         #do multiple binning based on form results
@@ -190,27 +190,27 @@ class BaseTheoryReactMix:
 
         totpoly = 0
         totsaved = 0
-        self.print_signal.emit('*************************')
-        self.print_signal.emit('End of mixture calculation')
+        self.Qprint('*************************')
+        self.Qprint('End of mixture calculation')
         # for i in range (1, rch.pb_global_const.maxreact):
         #     if mixtureform.inmix[i]:
 
         for i, dist in enumerate(self.dists):
             totpoly = totpoly + rch.react_dist[dist].contents.npoly
             totsaved = totsaved + rch.react_dist[dist].contents.nsaved
-            self.print_signal.emit(
+            self.Qprint(
                 'Used distribution %s' % self.theory_names[i])
-            self.print_signal.emit(
+            self.Qprint(
                 'Containing %d polymers' % rch.react_dist[dist].contents.npoly)
-            self.print_signal.emit('Including %d saved polymers' %
+            self.Qprint('Including %d saved polymers' %
                                    rch.react_dist[dist].contents.nsaved)
 
-        self.print_signal.emit('Total polymers: %d' % totpoly)
-        self.print_signal.emit('Total saved polymers: %d' % totsaved)
-        self.print_signal.emit('Mn = %.3g' % rch.bab_global.multi_m_n)
-        self.print_signal.emit('Mw = %.3g' % rch.bab_global.multi_m_w)
-        self.print_signal.emit('br/1000C = %.3g' % rch.bab_global.multi_brav)
-        self.print_signal.emit('*************************')
+        self.Qprint('Total polymers: %d' % totpoly)
+        self.Qprint('Total saved polymers: %d' % totsaved)
+        self.Qprint('Mn = %.3g' % rch.bab_global.multi_m_n)
+        self.Qprint('Mw = %.3g' % rch.bab_global.multi_m_w)
+        self.Qprint('br/1000C = %.3g' % rch.bab_global.multi_brav)
+        self.Qprint('*************************')
 
         self.calcexists = True
         return rch.bab_global.multi_nummwdbins - 1

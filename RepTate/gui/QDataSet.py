@@ -147,7 +147,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         Ui_DataSet.__init__(self)
 
         self.setupUi(self)
-        self.selected_file = None
 
         self.DataSettreeWidget = DataSetWidget(self)
         self.splitter.insertWidget(0, self.DataSettreeWidget)
@@ -440,7 +439,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         th_name = self.TheorytabWidget.widget(index).name
         th = self.theories[th_name]
-        th.print_signal.emit("Close theory tab requested")
+        th.Qprint("Close theory tab requested")
         th.stop_theory_calc_flag = True
         self.set_no_limits(th_name)
         self.do_theory_delete(th_name)  #call DataSet.do_theory_delete
@@ -666,7 +665,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th_to_hide = self.TheorytabWidget.widget(i)
             th_to_hide.do_hide()
         #add theory tab
-        self.TheorytabWidget.blockSignals(True) #avoid trigger handle_thCurrentChanged()
+        self.TheorytabWidget.blockSignals(
+            True)  #avoid trigger handle_thCurrentChanged()
         index = self.TheorytabWidget.addTab(newth, th_tab_id)
         self.TheorytabWidget.setCurrentIndex(
             index)  #set new theory tab as curent tab

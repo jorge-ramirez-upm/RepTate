@@ -358,7 +358,7 @@ class BaseTheoryDiscrMWD:
         if line == "":
             return Mn / 1000, Mw / 1000, PDI, Mz / Mw
         else:
-            self.print_signal.emit("Characteristics of the %s MWD:\n"
+            self.Qprint("Characteristics of the %s MWD:\n"
                                    "%7s %7s %7s %7s\n"
                                    "\n%6.3gk %6.3gk %7.3g %7.3g\n" %
                                    (line, "Mn", "Mw", "Mw/Mn", "Mz/Mw",
@@ -643,4 +643,4 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         message = stars
         message += "Saved %d bins to \"%s\"" % (nbin_out, out_file[0])
 
-        self.print_signal.emit(message)
+        self.Qprint(message)

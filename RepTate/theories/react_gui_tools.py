@@ -68,9 +68,9 @@ def request_more_polymer(parent_theory):
         message = 'Ran out of storage for polymer records. Options to avoid this are:'
         message += '(1) Reduce number of polymers requested'
         message += '(2) Close some other theories'
-        parent_theory.print_signal.emit(message)
+        parent_theory.Qprint(message)
     else:
-        parent_theory.print_signal.emit(
+        parent_theory.Qprint(
             'Number of polymers was increased to %.4g' % new_max)
 
     parent_theory.success_increase_memory = success_increase_memory
@@ -87,11 +87,11 @@ def request_more_arm(parent_theory):
         message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
         message += '(3) Close some other theories\n'
         message += '(4) Adjust parameters to avoid gelation'
-        parent_theory.print_signal.emit(message)
+        parent_theory.Qprint(message)
         # i = numtomake
         # rch.tCSTR_global.tobitaCSTRerrorflag = True
     else:
-        parent_theory.print_signal.emit(
+        parent_theory.Qprint(
             'Number of arms was increased to %.4g' % new_max)
     parent_theory.success_increase_memory = success_increase_memory
 
@@ -103,11 +103,11 @@ def request_more_dist(parent_theory):
         parent_theory, 'dist')
     if success_increase_memory:
         rch.link_react_dist()  #re-link the python array with the C array
-        parent_theory.print_signal.emit(
+        parent_theory.Qprint(
             'Number of dist. was increased to %.4g' % new_max)
         parent_theory.handle_actionCalculate_Theory()
     else:
-        parent_theory.print_signal.emit(
+        parent_theory.Qprint(
             'Too many theories open for internal storage.\nPlease close a theory or increase records"'
         )
 
@@ -163,7 +163,7 @@ def handle_stop_calulation(parent_theory):
     Raise a flag to kindly notify the thread Calc routine to stop.
     This is relevant in multithread mode only.
     """
-    parent_theory.print_signal.emit("Stop current calculation requested")
+    parent_theory.Qprint("Stop current calculation requested")
     parent_theory.stop_theory_calc_flag = True
     parent_theory.stop_calulation_button.setDisabled(True)
 
@@ -176,7 +176,7 @@ def handle_save_mix_configuration(parent_theory):
     stars = '*************************'
     if not parent_theory.calcexists:
         msg = stars + '\nNo calculation performed yet\n' + stars
-        parent_theory.print_signal.emit(msg)
+        parent_theory.Qprint(msg)
         return
 
     dist_state_check = False
@@ -205,7 +205,7 @@ def handle_save_mix_configuration(parent_theory):
     out_file = QFileDialog.getSaveFileName(
         parent_theory, dilogue_name, dir_start, options=options)
     if out_file[0] == "":
-        parent_theory.print_signal.emit('Invalid filename')
+        parent_theory.Qprint('Invalid filename')
         return
     # output polymers
     b_out_file = out_file[0].encode('utf-8')
@@ -221,7 +221,7 @@ def handle_save_mix_configuration(parent_theory):
 
     message = stars + '\nSaved %d polymers in %s\n' % (n_out,
                                                        out_file[0]) + stars
-    parent_theory.print_signal.emit(message)
+    parent_theory.Qprint(message)
 
 
 def handle_save_bob_configuration(parent_theory):
@@ -253,7 +253,7 @@ def handle_save_bob_configuration(parent_theory):
             rch.react_dist[ndist].contents.nsaved, out_file[0]) + stars
     else:
         message = stars + '\nNo simulation performed yet\n' + stars
-    parent_theory.print_signal.emit(message)
+    parent_theory.Qprint(message)
 
 
 def handle_edit_bob_settings(parent_theory):
@@ -312,7 +312,7 @@ def handle_increase_records(parent_theory, name):
             ct.c_int(new_max)
         )  #call C routine to allocate more memory (using 'realloc')
         if not success:
-            parent_theory.print_signal.emit(
+            parent_theory.Qprint(
                 "Allocation of new memory failed\n%d %s records in memory" %
                 (current_max, name))
         return new_max, success

@@ -213,6 +213,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         self.current_theory = None
         self.table_icon_list = [
         ]  #save the file's marker shape, fill and color there
+        self.selected_file = None
 
 # DATASET STUFF ##########################################################################################################
 
