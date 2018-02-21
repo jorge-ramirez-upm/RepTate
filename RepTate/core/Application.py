@@ -51,6 +51,7 @@ from PyQt5.QtWidgets import QMenu, QApplication
 from PyQt5.QtGui import QCursor, QImage
 
 from collections import OrderedDict
+from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
 
 
 class Application(CmdBase):
@@ -98,10 +99,10 @@ class Application(CmdBase):
 
         # Theories available everywhere
         self.common_theories = OrderedDict()  # keep theory combobox in order
-        # self.common_theories[TheoryPolynomial.thname]=TheoryPolynomial
-        # self.common_theories[TheoryPowerLaw.thname]=TheoryPowerLaw
-        # self.common_theories[TheoryExponential.thname]=TheoryExponential
-        # self.common_theories[TheoryExponential2.thname]=TheoryExponential2
+        self.common_theories[TheoryPolynomial.thname] = TheoryPolynomial
+        self.common_theories[TheoryPowerLaw.thname] = TheoryPowerLaw
+        self.common_theories[TheoryExponential.thname] = TheoryExponential
+        self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
 
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
