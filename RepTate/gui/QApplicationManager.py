@@ -97,7 +97,15 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.toolBar.insertSeparator(self.actionQuit)
         self.toolBar.insertSeparator(self.actionQuit)
 
-
+        # # ApplicationXY button
+        # #choose the button icon
+        # icon = QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png')
+        # tool_tip = 'XY'  # text that appear on hover
+        # self.actionXY = QAction(icon, tool_tip, self)
+        # #insert the new button before the "MWD" button
+        # self.toolBar.insertAction(self.actionMWD, self.actionXY)
+        # #connect button
+        # self.actionXY.triggered.connect(self.new_xy_window)
 
         # App tabs behaviour
         self.ApplicationtabWidget.setMovable(True)
@@ -147,7 +155,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             print('in "handle_show_help":', e)
             return
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
-            
+
     def handle_show_app_help(self):
         """Show RepTate current application (if any) manual, or all applications"""
         try:
@@ -156,7 +164,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             print('in "handle_show_help":', e)
             help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/applications.html'
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
-            
+
     def handle_show_th_help(self):
         """Show RepTate current theory (if any) manual, or all theories"""
         try:
@@ -168,8 +176,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             print('in "handle_show_help":', e)
             help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/All_Theories/All_Theories.html'
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
-            
-
 
     def list_theories_Maxwell(self, th_exclude=None):
         """Redefinition for the GUI mode that lists the tab names.
@@ -342,3 +348,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_name = "React"
         return self.Qopen_app(app_name,
                               ':/Icons/Images/new_icons/icons8-test-tube.png')
+
+    # def new_xy_window(self):
+    #     """Open a new XY application window
+        
+    #     [description]
+    #     """
+    #     app_name = "XY" 
+    #     return self.Qopen_app(app_name,
+    #                           ':/Icons/Images/new_icons/icons8-scatter-plot.png')
