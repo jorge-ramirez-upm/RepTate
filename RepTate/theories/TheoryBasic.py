@@ -154,7 +154,8 @@ class BaseTheoryPolynomial:
         tt.data[:, 0] = ft.data[:, 0]
         for i in range(self.parameters["n"].value + 1):
             a = self.parameters["A%02d" % i].value
-            tt.data[:, 1] += a * tt.data[:, 0]**i
+            for j in range (1, tt.num_columns):
+                tt.data[:, j] += a * tt.data[:, 0]**i
 
 
 class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
@@ -299,8 +300,8 @@ class BaseTheoryPowerLaw:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = self.parameters[
-            "a"].value * tt.data[:, 0]**self.parameters["b"].value
+        for j in range (1, tt.num_columns):
+            tt.data[:, j] = self.parameters["a"].value * tt.data[:, 0]**self.parameters["b"].value
 
 
 class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
@@ -422,8 +423,9 @@ class BaseTheoryExponential:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = self.parameters["a"].value * np.exp(
-            -tt.data[:, 0] / self.parameters["T"].value)
+        for j in range (1, tt.num_columns):
+            tt.data[:, j] = self.parameters["a"].value * np.exp(
+                -tt.data[:, 0] / self.parameters["T"].value)
 
 
 class CLTheoryExponential(BaseTheoryExponential, Theory):
@@ -557,8 +559,9 @@ class BaseTheoryTwoExponentials:
         a2 = self.parameters["a2"].value
         T1 = self.parameters["T1"].value
         T2 = self.parameters["T2"].value
-        tt.data[:, 1] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(
-            -tt.data[:, 0] / T2)
+        for j in range (1, tt.num_columns):
+            tt.data[:, j] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(
+                -tt.data[:, 0] / T2)
 
 
 class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
