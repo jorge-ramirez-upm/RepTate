@@ -22,11 +22,14 @@ for file in glob.glob("g*.dat"):
     m = int(n[0][1:])
     flist[m]=file
 
-Z=np.asarray(list(flist.keys()))
+
+p = list(flist.keys())
+p.sort()
+Z=np.asarray(p)
 cnu=np.asarray([0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10])
 
 data=[]    
-for k in flist.keys():
+for k in p:
     data.append(np.loadtxt(flist[k]))
 
 np.savez_compressed("linlin.npz",Z=Z, cnu=cnu, data=data)
