@@ -1,6 +1,6 @@
-===================================
-Adding new functionality to RepTate
-===================================
+=============================================
+Tutorial: Adding new functionality to RepTate
+=============================================
 
 .. contents:: Contents
     :local:
