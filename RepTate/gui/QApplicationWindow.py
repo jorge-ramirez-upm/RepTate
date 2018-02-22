@@ -231,11 +231,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.populate_cbTheoryLine()
         self.color1 = None
         self.color2 = None
+        self.color_th = None
         # self.populate_markers() 
         self.fparam_backup = [] #temporary storage of the file parameters
         self.dialog.ui.spinBox.setSingleStep(3) #increment in the marker size dialog
         connection_id = self.dialog.ui.pickColor1.clicked.connect(self.handle_pickColor1)
         connection_id = self.dialog.ui.pickColor2.clicked.connect(self.handle_pickColor2)
+        connection_id = self.dialog.ui.pickThColor.clicked.connect(self.handle_pickThColor)
         connection_id = self.dialog.ui.rbEmpty.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
@@ -395,6 +397,17 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if color:
             self.dialog.ui.labelPickedColor2.setStyleSheet("background: %s"%color.name())
             self.color2 = color.getRgbF()
+    
+    def handle_pickThColor(self):
+        """Call the color picker and save the selected theory line color in 
+        RGB format used for gradient color type
+        
+        [description]
+        """
+        color = self.showColorDialog()
+        if color:
+            self.dialog.ui.labelThPickedColor.setStyleSheet("background: %s"%color.name())
+            self.color_th = color.getRgbF()
 
     def showColorDialog(self):
         """Show the color picker and return the picked QtColor or `None`
@@ -431,6 +444,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s"%col.name())
         col = QColor(ds.color2[0]*255, ds.color2[1]*255, ds.color2[2]*255)
         self.dialog.ui.labelPickedColor2.setStyleSheet("background: %s"%col.name())
+        col = QColor(ds.th_color[0]*255, ds.th_color[1]*255, ds.th_color[2]*255)
+        self.dialog.ui.labelThPickedColor.setStyleSheet("background: %s"%col.name())
         #preset the spinbox
         self.dialog.ui.spinBox.setValue(ds.marker_size)
         self.dialog.ui.spinBoxLineW.setValue(ds.line_width)
@@ -444,17 +459,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #preset the color combobox
         ind = self.dialog.ui.cbPalette.findText(ds.palette_name)
         self.dialog.ui.cbPalette.setCurrentIndex(ind)
+        #preset radiobutton theory
+        if ds.th_line_mode == ThLineMode.as_data:
+            self.dialog.ui.rbThSameColor.click()
+        else:
+            self.dialog.ui.rbThFixedColor.click()
+
 
             #colors
         # self.dialog.ui.rbFixedColor.setChecked(False)
         # self.dialog.ui.rbGradientColor.setChecked(False)
         # self.dialog.ui.rbPalette.setChecked(False)
         if ds.colormode == ColorMode.fixed:
-            self.dialog.ui.rbFixedColor.setChecked(True)
+            self.dialog.ui.rbFixedColor.click()
         elif ds.colormode == ColorMode.gradient:
-            self.dialog.ui.rbGradientColor.setChecked(True)
+            self.dialog.ui.rbGradientColor.click()
         else:
-            self.dialog.ui.rbPalette.setChecked(True)
+            self.dialog.ui.rbPalette.click()
         
         success = self.dialog.exec_() #this blocks the rest of the app as opposed to .show()
         if success == 1:
@@ -482,6 +503,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 ds.color1 = self.color1 if self.color1 else ColorMode.color1.value
                 ds.color2 = self.color2 if self.color2 else ColorMode.color2.value
             
+            #find Theory color mode
+            if self.dialog.ui.rbThSameColor.isChecked():
+                ds.th_line_mode = ThLineMode.as_data
+            else:
+                ds.th_line_mode = ThLineMode.fixed
+                ds.th_color = self.color_th if self.color_th else ThLineMode.color.value
+
             #find the shape mode
             if self.dialog.ui.rbVariableSymbol.isChecked(): #variable symbols?
                 if self.dialog.ui.rbFilled.isChecked(): #filled?

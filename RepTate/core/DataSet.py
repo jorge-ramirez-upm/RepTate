@@ -156,6 +156,9 @@ class ThLineMode(Enum):
     
     [description]
     """
+    as_data = 0
+    fixed = 1
+    color = (0, 0, 0, 1)  #black RGB
     linestyles = OrderedDict(
         [('solid', (0, ())), ('loosely dotted', (0, (1, 10))), ('dotted',
                                                                 (0, (1, 5))),
@@ -201,6 +204,8 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         self.colormode = ColorMode.variable
         self.color1 = ColorMode.color1.value
         self.color2 = ColorMode.color2.value
+        self.th_line_mode = ThLineMode.as_data
+        self.th_color = ThLineMode.color.value
         self.palette_name = 'ColorBlind'
         self.symbolmode = SymbolMode.fixed
         self.symbol1 = SymbolMode.symbol1.value
@@ -380,6 +385,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 marker_name_lst)  #if file.marker is None else file.marker
             color = next(palette)  #if file.color is None else file.color
             face = color if filled else 'none'
+            if self.th_line_mode == ThLineMode.as_data:
+                th_color = color
+            else:
+                th_color = self.th_color
             if CmdBase.mode == CmdMode.GUI:
                 if file.active:
                     #save file name with associated marker shape, fill and color
@@ -440,7 +449,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                             tt.series[nx][i].set_marker('')
                             tt.series[nx][i].set_linestyle(th_linestyle)
                             tt.series[nx][i].set_linewidth(self.th_line_width)
-                            tt.series[nx][i].set_color(color)
+                            tt.series[nx][i].set_color(th_color)
                             tt.series[nx][i].set_label('')
                         else:
                             tt.series[nx][i].set_visible(False)
