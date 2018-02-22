@@ -2,6 +2,9 @@
 Tutorial: Interfacing Python and C code
 =======================================
 
+.. contents:: Contents
+    :local:
+    
 -----
 Goals
 -----
