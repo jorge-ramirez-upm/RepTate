@@ -197,8 +197,8 @@ class BaseTheoryLikhtmanMcLeish2002:
         table = np.zeros((len(vec), 3))
         table[:, 0] = vec
         w1 = (Z-self.Zarray[indZ0])/(self.Zarray[indZ1]-self.Zarray[indZ0])
-        table[:, 1] = w1 * interp(vec, table0[:, 0], table0[:, indcnu1]) + (1.0-w1)*interp(vec, table1[:, 0], table1[:, indcnu1])
-        table[:, 2] = w1 * interp(vec, table0[:, 0], table0[:, indcnu2]) + (1.0-w1)*interp(vec, table1[:, 0], table1[:, indcnu2])
+        table[:, 1] = (1.0-w1) * interp(vec, table0[:, 0], table0[:, indcnu1]) + w1*interp(vec, table1[:, 0], table1[:, indcnu1])
+        table[:, 2] = (1.0-w1) * interp(vec, table0[:, 0], table0[:, indcnu2]) + w1*interp(vec, table1[:, 0], table1[:, indcnu2])
 
         tt.data[:, 1] = interp(tt.data[:, 0], table[:, 0] / taue,
                                Ge * table[:, 1])
