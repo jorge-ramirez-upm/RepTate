@@ -18,11 +18,11 @@ More info:
 
 .. _UPM: http://blogs.upm.es/compsoftmatter/software/reptate
 
-.. image:: RepTate/docs/source/images/RepTate_LVE_24012018_.png
+.. image:: RepTate/docs/source/images/RepTate_LVE_2018-02-23.png
     :width: 400pt
     :align: center
 
-.. image:: RepTate/docs/source/images/RepTate_React_24012018_.png
+.. image:: RepTate/docs/source/images/RepTate_React_2018-02-23.png
     :width: 400pt
     :align: center
 
