@@ -75,6 +75,7 @@ class BaseTheoryTemplate:
     
     [description]
     """
+    #help_file = ''
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
@@ -88,7 +89,7 @@ class BaseTheoryTemplate:
             ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
-        self.function = self.function_template  # main theory function
+        self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
         self.parameters['param1'] = Parameter(
             name='param1',
@@ -116,8 +117,18 @@ class BaseTheoryTemplate:
 
         """
         pass
+    
+    def destructor(self):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
 
-    def function_template(self, f=None):
+        """
+        pass
+
+    def calculate(self, f=None):
         """Template function that returns the square of y
         
         [description]

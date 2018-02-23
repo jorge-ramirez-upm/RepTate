@@ -129,7 +129,7 @@ class BaseApplicationTemplate:
         # add the theories related to ApplicationTemplate to the dictionary, e.g.:
         # self.theories[TheoryA.thname] = TheoryA
         # self.theories[TheoryB.thname] = TheoryB
-        # self.add_common_theories()
+        self.add_common_theories()  # Add basic theories to the application
 
         #set the current view
         self.set_views()
