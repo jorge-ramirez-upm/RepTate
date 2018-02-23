@@ -172,9 +172,14 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         for th_name in self.parent_application.theories:
             if th_name not in self.parent_application.common_theories:
                 self.cbtheory.addItem(th_name)
-        self.cbtheory.insertSeparator(self.cbtheory.count())
-        for th_name in self.parent_application.common_theories:
-            self.cbtheory.addItem(th_name)
+        flag_first = True
+        for th_name in self.parent_application.theories:
+            if th_name in self.parent_application.common_theories:
+                if flag_first:
+                    # add separator if common theories are added
+                    self.cbtheory.insertSeparator(self.cbtheory.count())
+                    flag_first = False
+                self.cbtheory.addItem(th_name)
         self.cbtheory.setCurrentIndex(0)
 
         ###
