@@ -23,6 +23,6 @@ Each theory has a code pointing to the application where the theory can be found
 
 Graphical User Interface
 ========================
-- Export the figure to PDS, PNG, ...
+- Export the figure to PDF, PNG, ...
 - Flexibility to choose symbols and colors for the data
 - Inspection of the experiment and theory data
