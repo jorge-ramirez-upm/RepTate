@@ -40,7 +40,7 @@ import logging
 from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QDesktopServices
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtWidgets import QApplication, QInputDialog, QLineEdit, QMenu, QAction, QToolButton
 
 from CmdBase import CmdBase, CmdMode, CalcMode
@@ -93,10 +93,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         menu.addAction(self.show_app_help)
         menu.addAction(self.show_th_help)
         tbut.setMenu(menu)
-        self.toolBar.insertWidget(self.actionQuit, tbut)
-        self.toolBar.insertSeparator(self.actionQuit)
-        self.toolBar.insertSeparator(self.actionQuit)
-
+        self.toolBarHelp.insertWidget(self.actionAbout_Qt, tbut)
+        self.toolBarHelp.insertSeparator(self.actionAbout_Qt)
+        #self.toolBar.insertSeparator(self.actionQuit)
+        self.toolBarApps.setContextMenuPolicy(Qt.PreventContextMenu);
+        self.toolBarHelp.setContextMenuPolicy(Qt.PreventContextMenu);
+        self.toolBarTools.setContextMenuPolicy(Qt.PreventContextMenu);
+        
         # # ApplicationXY button
         # #choose the button icon
         # icon = QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png')
