@@ -91,6 +91,7 @@ class BaseApplicationLVE:
         from TheoryTTS import TheoryWLFShift
         from TheoryCarreauYasuda import TheoryCarreauYasuda
         from TheoryRouse import TheoryRouseFrequency
+        from TheoryDTDStars import TheoryDTDStars
         super().__init__(name, parent)
 
         # VIEWS
@@ -306,6 +307,7 @@ class BaseApplicationLVE:
         self.theories[TheoryCarreauYasuda.thname] = TheoryCarreauYasuda
         #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
+        self.theories[TheoryDTDStars.thname]=TheoryDTDStars
         self.add_common_theories()
 
         #set the current view
