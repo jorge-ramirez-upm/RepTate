@@ -177,7 +177,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             help_file = th.help_file
         except Exception as e:
             print('in "handle_show_help":', e)
-            help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/All_Theories/All_Theories.html'
+            help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/All_Theories.html'
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
     def list_theories_Maxwell(self, th_exclude=None):
