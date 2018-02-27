@@ -220,12 +220,19 @@ class BaseTheoryRouseTime:
         except ValueError:
             self.Qprint("Invalid Mw value")
             return
-        N = int(np.ceil(Mw / M0))
+        N0 = int(np.floor(Mw / M0))
+        N1 = int(np.ceil(Mw / M0))
         t = ft.data[:, 0]
-        params = [G0, tau0, N, t]
+        params0 = [G0, tau0, N0, t]
+        params1 = [G0, tau0, N1, t]
 
         tt.data[:, 0] = t
-        tt.data[:, 1] = self.approx_rouse(params)
+        if (N0==N1):
+            tt.data[:, 1] = self.approx_rouse(params0)
+        else:
+            w = (Mw/M0-N0)/(N1-N0)
+            tt.data[:, 1] = (1.0-w)*self.approx_rouse(params0) + w*self.approx_rouse(params1)
+
 
 
 class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):
@@ -444,14 +451,24 @@ class BaseTheoryRouseFrequency:
         except ValueError:
             self.Qprint("Invalid Mw value")
             return
-        N = int(np.ceil(Mw / M0))
+        N0 = int(np.floor(Mw / M0))
+        N1 = int(np.ceil(Mw / M0))
         omega = ft.data[:, 0]
-        params = [G0, tau0, N, omega]
+        params0 = [G0, tau0, N0, omega]
+        params1 = [G0, tau0, N1, omega]
 
-        gp, gpp = self.approx_rouse_frequency(params)
         tt.data[:, 0] = omega
-        tt.data[:, 1] = gp
-        tt.data[:, 2] = gpp
+        if (N0==N1):
+            gp, gpp = self.approx_rouse_frequency(params0)
+            tt.data[:, 1] = gp
+            tt.data[:, 2] = gpp
+        else:
+            w = (Mw/M0-N0)/(N1-N0)
+            gp0, gpp0 = self.approx_rouse_frequency(params0)
+            gp1, gpp1 = self.approx_rouse_frequency(params1)
+            tt.data[:, 1] = (1.0-w)*gp0 + w*gp1
+            tt.data[:, 2] = (1.0-w)*gpp0 + w*gpp1
+
 
 
 class CLTheoryRouseFrequency(BaseTheoryRouseFrequency, Theory):
