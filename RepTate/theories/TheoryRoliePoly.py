@@ -91,7 +91,7 @@ class EditModesDialog(QDialog):
         self.table = SpreadsheetWidget()  #allows copy/paste
         self.table.setRowCount(nmodes)
         self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["tau", "G"])
+        self.table.setHorizontalHeaderLabels(["tauD", "G"])
         for i in range(nmodes):
             tau = "%g" % times[i]
             mod = "%g" % G[i]
