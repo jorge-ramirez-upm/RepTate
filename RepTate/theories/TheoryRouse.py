@@ -32,120 +32,125 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryRouseTime
 
-Module for the Rouse theory for the relaxation modulus.
-
+RouseTime file for creating a new theory
 """
+import numpy as np
+from CmdBase import CmdBase, CmdMode
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
-from Parameter import OptType
+from QTheory import QTheory
+from DataTable import DataTable
 
 
-class TheoryRouseTime(Theory, CmdBase):
-    """Fit Rouse modes to a time depenendent relaxation function
+class TheoryRouseTime(CmdBase):
+    """Fit Rouse modes to a time dependent relaxation function
     
-    [description]
+    * **Function**
+        Continuous Rouse model (valid for "large" :math:`N`):
+        
+        .. math::
+            G(t) = G_0 \\dfrac 1 N \\sum_{p=1}^N \\exp\\left(\\dfrac{-2p^2t}{N^2\\tau_0}\\right)
+    
+    * **Parameters**
+        - :math:`G_0 = ck_\\mathrm  B T`: "modulus"
+        - :math:`\\tau_0`: relaxation time of an elementary segment
+        - :math:`M_0`: molar mass of an elementary segment
+        
+        where
+            - :math:`c`: number of segments per unit volume
+            - :math:`k_\\mathrm  B`: Boltzmann constant
+            - :math:`T`: temperature
+            - :math:`N=M_w/M_0`: number of segments par chain
+            - :math:`M_w`: weight-average molecular mass
     """
     thname = "RouseTime"
     description = "Fit Rouse modes to time dependent function"
     citations = ""
 
-    def __init__(self, name="ThRouseTime", parent_dataset=None, ax=None):
+    def __new__(cls, name='ThRouseTime', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThRouseTime"})
+            name {[type]} -- [description] (default: {'ThRouseTime'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
-        """
-        super(TheoryRouseTime, self).__init__(name, parent_dataset, ax)
-        self.function = self.RouseTime
-
-    def RouseTime(self, f=None):
-        """[summary]
         
-        [description]
-        
-        Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+        Returns:
+            [type] -- [description]
         """
-        pass
+        return GUITheoryRouseTime(
+            name, parent_dataset,
+            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryRouseTime(
+                name, parent_dataset, axarr)
 
 
-class TheoryRouseFrequency(Theory, CmdBase):
-    """Fit Rouse modes to a frequency depenendent relaxation function
+class BaseTheoryRouseTime:
+    """[summary]
     
     [description]
     """
-    thname = "RouseFrequency"
-    description = "Fit Maxwell modes to frequency dependent function"
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Theory/theory.html#rouse-time'
+    single_file = True  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            name {[type]} -- [description] (default: {'ThRouseTime'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
-        super(TheoryRouseFrequency, self).__init__(name, parent_dataset, ax)
-        self.function = self.RouseFrequency
-        self.has_modes = True
-        self.parameters["logwmin"] = Parameter(
-            "logwmin",
-            -5,
-            "Log of frequency range minimum",
+        super().__init__(name, parent_dataset, axarr)
+        self.function = self.calculate  # main theory function
+        self.has_modes = False  # True if the theory has modes
+        self.parameters["G0"] = Parameter(
+            "G0",
+            1e6,
+            "Modulus c*kB*T/N",
             ParameterType.real,
-            opt_type=OptType.nopt)
-        self.parameters["logwmax"] = Parameter(
-            "logwmax",
-            4,
-            "Log of frequency range maximum",
+            opt_type=OptType.opt,
+            min_value=0)
+        self.parameters["tau0"] = Parameter(
+            "tau0",
+            1e-3,
+            "segment relaxation time",
             ParameterType.real,
-            opt_type=OptType.nopt)
-        self.parameters["nmodes"] = Parameter(
-            "nmodes",
-            5,
-            "Number of Rouse modes",
-            ParameterType.integer,
-            opt_type=OptType.const)
-        for i in range(self.parameters["nmodes"].value):
-            self.parameters["logG%d" % i] = Parameter(
-                "logG%d" % i,
-                5.0,
-                "Log of Mode %d amplitude" % i,
-                ParameterType.real,
-                opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=0)
+        self.parameters["M0"] = Parameter(
+            "M0",
+            0.2,
+            "segment molar mass",
+            ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0.01)
 
-    def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
-        """
-        if (name == "nmodes"):
-            oldn = self.parameters["nmodes"].value
-        message, success = super(TheoryRouseFrequency, self).set_param_value(name, value)
-        if not success:
-            return message, success
-        if (name == "nmodes"):
-            for i in range(self.parameters["nmodes"].value):
-                self.parameters["logG%d" % i] = Parameter(
-                    "logG%d" % i,
-                    5.0,
-                    "Log of Mode %d amplitude" % i,
-                    ParameterType.real,
-                    opt_type=OptType.opt)
-            if (oldn > self.parameters["nmodes"].value):
-                for i in range(self.parameters["nmodes"].value, oldn):
-                    del self.parameters["logG%d" % i]
-        return '', True
+        # f = self.theory_files()[0]
+        # t_data = f.data_table.data[:, 0]
+        # tmin = min(t_data[np.nonzero(t_data)])
+        # tmax = max(t_data)
+        # self.parameters["logtmin"] = Parameter(
+        #     "logtmin",
+        #     np.log10(tmin),
+        #     "Log of time range minimum",
+        #     ParameterType.real,
+        #     opt_type=OptType.const)
+        # self.parameters["logtmax"] = Parameter(
+        #     "logtmax",
+        #     np.log10(tmax),
+        #     "Log of time range maximum",
+        #     ParameterType.real,
+        #     opt_type=OptType.const)
+        # self.parameters["points"] = Parameter(
+        #     "points",
+        #     20,
+        #     "number of theory points per decade",
+        #     ParameterType.real,
+        #     opt_type=OptType.const)
 
     def get_modes(self):
         """[summary]
@@ -155,14 +160,231 @@ class TheoryRouseFrequency(Theory, CmdBase):
         Returns:
             [type] -- [description]
         """
-        nmodes = self.parameters["nmodes"].value
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
-        tau = 1.0 / freq
-        G = np.zeros(nmodes)
-        for i in range(nmodes):
-            G[i] = np.power(10, self.parameters["logG%d" % i].value)
-        return tau, G
+        pass
+
+    def set_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+
+        """
+        pass
+
+    def destructor(self):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+
+        """
+        pass
+
+    def approx_rouse(self, params):
+        G0, tau0, N, t = params
+
+        sum_ = np.zeros(len(t))
+        aux = -2.0 * t / (N * N * tau0)
+        for p in range(1, N + 1):
+            sum_ += np.exp(p * p * aux)
+
+        return G0 * sum_ / N
+
+    def calculate(self, f=None):
+        """RouseTime function that returns the square of y
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        # logtmin = self.parameters["logtmin"].value
+        # logtmax = self.parameters["logtmax"].value
+        # points = self.parameters["points"].value
+        # t = np.logspace(logtmin, logtmax, points*(logtmax - logtmin))
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        G0 = self.parameters["G0"].value
+        tau0 = self.parameters["tau0"].value
+        M0 = self.parameters["M0"].value
+        try:
+            Mw = float(f.file_parameters["Mw"])
+        except ValueError:
+            self.Qprint("Invalid Mw value")
+            return
+        N = int(np.ceil(Mw / M0))
+        t = ft.data[:, 0]
+        params = [G0, tau0, N, t]
+
+        tt.data[:, 0] = t
+        tt.data[:, 1] = self.approx_rouse(params)
+
+
+class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):
+    """[summary]
+    
+    [description]
+    """
+
+    def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThRouseTime'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+
+    # This class usually stays empty
+
+
+class GUITheoryRouseTime(BaseTheoryRouseTime, QTheory):
+    """[summary]
+    
+    [description]
+    """
+
+    def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThRouseTime'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+
+    # add widgets specific to the theory here:
+
+
+####################################################################
+####################################################################
+
+
+class TheoryRouseFrequency(CmdBase):
+    """Fit Rouse modes to a frequency dependent relaxation function
+    
+    * **Function**
+        Continuous Rouse model (valid for "large" :math:`N`):
+        
+        .. math::
+          G'(\\omega) &= G_0 \\dfrac 1 N \\sum_{p=1}^N \\dfrac{(\\omega\\tau_p)^2} {1 +  (\\omega\\tau_p)^2}\\\\
+          G''(\\omega) &= G_0 \\dfrac 1 N \\sum_{p=1}^N \\dfrac{\\omega\\tau_p} {1 +  (\\omega\\tau_p)^2}\\\\
+          \\tau_p &= \\dfrac{N^2 \\tau_0 }{ 2 p^2}
+
+    * **Parameters**
+        - :math:`G_0 = ck_\\mathrm  B T`: "modulus"
+        - :math:`\\tau_0`: relaxation time of an elementary segment
+        - :math:`M_0`: molar mass of an elementary segment
+        
+        where
+            - :math:`c`: number of segments per unit volume
+            - :math:`k_\\mathrm  B`: Boltzmann constant
+            - :math:`T`: temperature
+            - :math:`N=M_w/M_0`: number of segments par chain
+            - :math:`M_w`: weight-average molecular mass
+    """
+    thname = "RouseFrequency"
+    description = "Fit Maxwell modes to frequency dependent function"
+
+    def __new__(cls, name='ThRouseFrequency', parent_dataset=None, axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        return GUITheoryRouseFrequency(name, parent_dataset, axarr) if (
+            CmdBase.mode == CmdMode.GUI) else CLTheoryRouseFrequency(
+                name, parent_dataset, axarr)
+
+
+class BaseTheoryRouseFrequency:
+    """[summary]
+    
+    [description]
+    """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
+    single_file = True  # False if the theory can be applied to multiple files simultaneously
+
+    def __init__(self,
+                 name='ThRouseFrequency',
+                 parent_dataset=None,
+                 axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+        self.function = self.calculate
+        self.has_modes = True
+        # self.parameters["logwmin"] = Parameter(
+        #     "logwmin",
+        #     -5,
+        #     "Log of frequency range minimum",
+        #     ParameterType.real,
+        #     opt_type=OptType.nopt)
+        # self.parameters["logwmax"] = Parameter(
+        #     "logwmax",
+        #     4,
+        #     "Log of frequency range maximum",
+        #     ParameterType.real,
+        #     opt_type=OptType.nopt)
+        self.parameters["G0"] = Parameter(
+            "G0",
+            1e6,
+            "Modulus c*kB*T/N",
+            ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0)
+        self.parameters["tau0"] = Parameter(
+            "tau0",
+            1e-3,
+            "segment relaxation time",
+            ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0)
+        self.parameters["M0"] = Parameter(
+            "M0",
+            0.2,
+            "segment molar mass",
+            ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0)
+
+    def get_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+        pass
 
     def set_modes(self, tau, G):
         """[summary]
@@ -173,4 +395,108 @@ class TheoryRouseFrequency(Theory, CmdBase):
             tau {[type]} -- [description]
             G {[type]} -- [description]
         """
-        print("set_modes not allowed in this theory (%s)" % self.name)
+        pass
+
+    def destructor(self):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+
+        """
+        pass
+
+    def approx_rouse_frequency(self, params):
+        G0, tau0, N, w = params
+
+        sum_ = np.zeros(len(w))
+        sum__ = np.zeros(len(w))
+        aux = (w * N * N * tau0) / 2.0
+        for p in range(1, N + 1):
+            temp = np.square(aux / p / p)
+            sum_ += temp / (1.0 + temp)
+            sum__ += (aux / p / p) / (1.0 + temp)
+
+        return [G0 * sum_ / N, G0 * sum__ / N]
+
+    def calculate(self, f=None):
+        """RouseFrequency function that returns the square of y
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        G0 = self.parameters["G0"].value
+        tau0 = self.parameters["tau0"].value
+        M0 = self.parameters["M0"].value
+        try:
+            Mw = float(f.file_parameters["Mw"])
+        except ValueError:
+            self.Qprint("Invalid Mw value")
+            return
+        N = int(np.ceil(Mw / M0))
+        omega = ft.data[:, 0]
+        params = [G0, tau0, N, omega]
+
+        gp, gpp = self.approx_rouse_frequency(params)
+        tt.data[:, 0] = omega
+        tt.data[:, 1] = gp
+        tt.data[:, 2] = gpp
+
+
+class CLTheoryRouseFrequency(BaseTheoryRouseFrequency, Theory):
+    """[summary]
+    
+    [description]
+    """
+
+    def __init__(self,
+                 name='ThRouseFrequency',
+                 parent_dataset=None,
+                 axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+
+    # This class usually stays empty
+
+
+class GUITheoryRouseFrequency(BaseTheoryRouseFrequency, QTheory):
+    """[summary]
+    
+    [description]
+    """
+
+    def __init__(self,
+                 name='ThRouseFrequency',
+                 parent_dataset=None,
+                 axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+
+    # add widgets specific to the theory here:
