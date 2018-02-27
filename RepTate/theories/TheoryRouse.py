@@ -92,7 +92,7 @@ class BaseTheoryRouseTime:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Theory/theory.html#rouse-time'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
         """[summary]
@@ -331,7 +331,7 @@ class BaseTheoryRouseFrequency:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self,
                  name='ThRouseFrequency',
