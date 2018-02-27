@@ -2,8 +2,10 @@
 Stress Relaxation: Theories
 ==================================
 
+.. contents:: Contents
+    :local:
+
 .. toctree::
    :maxdepth: 2
 
-.. note::
-	Coming soon...
+.. include:: Rouse.rst

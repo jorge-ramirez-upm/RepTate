@@ -11,3 +11,4 @@ LVE Theories
 .. include:: Maxwell.rst
 .. include:: CarreauYasuda.rst
 .. include:: LikhtmanMcLeish.rst
+.. include:: Rouse_frequency.rst

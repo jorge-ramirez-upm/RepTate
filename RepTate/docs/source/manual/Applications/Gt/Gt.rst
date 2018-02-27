@@ -10,5 +10,5 @@
    	:maxdepth: 2
 
 	general
-	tutorial
-	theory
+	Theory/theory
+	Tutorial/tutorial
