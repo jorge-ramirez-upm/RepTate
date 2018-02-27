@@ -91,6 +91,7 @@ class BaseApplicationGt:
             parent {[type]} -- [description] (default: {None})
         """
         from TheoryMaxwellModes import TheoryMaxwellModesTime
+        from TheoryRouse import TheoryRouseTime
 
         super().__init__(
             name, parent, nplots=2,
@@ -160,6 +161,8 @@ class BaseApplicationGt:
 
         # THEORIES
         self.theories[TheoryMaxwellModesTime.thname] = TheoryMaxwellModesTime
+        self.theories[TheoryRouseTime.thname] = TheoryRouseTime
+        
         self.add_common_theories()
         
         #set the current view
