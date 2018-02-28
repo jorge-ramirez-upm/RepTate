@@ -40,6 +40,7 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
+import rouse_ctypes_helper as rh
 
 
 class TheoryRouseTime(CmdBase):
@@ -92,7 +93,7 @@ class BaseTheoryRouseTime:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Theory/theory.html#rouse-time'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
         """[summary]
@@ -182,16 +183,6 @@ class BaseTheoryRouseTime:
         """
         pass
 
-    def approx_rouse(self, params):
-        G0, tau0, N, t = params
-
-        sum_ = np.zeros(len(t))
-        aux = -2.0 * t / (N * N * tau0)
-        for p in range(1, N + 1):
-            sum_ += np.exp(p * p * aux)
-
-        return G0 * sum_ / N
-
     def calculate(self, f=None):
         """RouseTime function that returns the square of y
         
@@ -227,12 +218,12 @@ class BaseTheoryRouseTime:
         params1 = [G0, tau0, N1, t]
 
         tt.data[:, 0] = t
-        if (N0==N1):
-            tt.data[:, 1] = self.approx_rouse(params0)
+        if (N0 == N1):
+            tt.data[:, 1] = rh.approx_rouse_time(params0)
         else:
-            w = (Mw/M0-N0)/(N1-N0)
-            tt.data[:, 1] = (1.0-w)*self.approx_rouse(params0) + w*self.approx_rouse(params1)
-
+            w = (Mw / M0 - N0) / (N1 - N0)
+            tt.data[:, 1] = (1.0 - w) * rh.approx_rouse_time(
+                params0) + w * rh.approx_rouse_time(params1)
 
 
 class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):
@@ -331,7 +322,7 @@ class BaseTheoryRouseFrequency:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self,
                  name='ThRouseFrequency',
@@ -414,19 +405,6 @@ class BaseTheoryRouseFrequency:
         """
         pass
 
-    def approx_rouse_frequency(self, params):
-        G0, tau0, N, w = params
-
-        sum_ = np.zeros(len(w))
-        sum__ = np.zeros(len(w))
-        aux = (w * N * N * tau0) / 2.0
-        for p in range(1, N + 1):
-            temp = np.square(aux / p / p)
-            sum_ += temp / (1.0 + temp)
-            sum__ += (aux / p / p) / (1.0 + temp)
-
-        return [G0 * sum_ / N, G0 * sum__ / N]
-
     def calculate(self, f=None):
         """RouseFrequency function that returns the square of y
         
@@ -458,17 +436,16 @@ class BaseTheoryRouseFrequency:
         params1 = [G0, tau0, N1, omega]
 
         tt.data[:, 0] = omega
-        if (N0==N1):
-            gp, gpp = self.approx_rouse_frequency(params0)
+        if (N0 == N1):
+            gp, gpp = rh.approx_rouse_frequency(params0)
             tt.data[:, 1] = gp
             tt.data[:, 2] = gpp
         else:
-            w = (Mw/M0-N0)/(N1-N0)
-            gp0, gpp0 = self.approx_rouse_frequency(params0)
-            gp1, gpp1 = self.approx_rouse_frequency(params1)
-            tt.data[:, 1] = (1.0-w)*gp0 + w*gp1
-            tt.data[:, 2] = (1.0-w)*gpp0 + w*gpp1
-
+            w = (Mw / M0 - N0) / (N1 - N0)
+            gp0, gpp0 = rh.approx_rouse_frequency(params0)
+            gp1, gpp1 = rh.approx_rouse_frequency(params1)
+            tt.data[:, 1] = (1.0 - w) * gp0 + w * gp1
+            tt.data[:, 2] = (1.0 - w) * gpp0 + w * gpp1
 
 
 class CLTheoryRouseFrequency(BaseTheoryRouseFrequency, Theory):
