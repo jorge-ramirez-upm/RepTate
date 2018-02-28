@@ -86,7 +86,9 @@
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="theories\TheoryCarreauYasuda.py" />
     <Compile Include="theories\TheoryDiscrMWD.py" />
+    <Compile Include="theories\TheoryDTDStars.py" />
     <Compile Include="theories\TheoryLikhtmanMcLeish2002.py" />
     <Compile Include="theories\TheoryMaxwellModes.py">
       <SubType>Code</SubType>
