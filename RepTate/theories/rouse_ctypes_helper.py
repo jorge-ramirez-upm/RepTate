@@ -11,14 +11,15 @@ try:
 except:
     print('OS %s not recognized' % (sys.platform))
 
-continuous_rouse_freq = rouse_lib.continuous_rouse_freq
-continuous_rouse_freq.restype = None
+continuous_rouse_freq_interp = rouse_lib.continuous_rouse_freq_interp
+continuous_rouse_freq_interp.restype = None
 
-continuous_rouse_time = rouse_lib.continuous_rouse_time
-continuous_rouse_time.restype = None
+continuous_rouse_time_interp = rouse_lib.continuous_rouse_time_interp
+continuous_rouse_time_interp.restype = None
 
 
 def approx_rouse_frequency(params):
+    """Continuous Rouse frequency with interpolation for N"""
     G0, tau0, N, w = params
     n = len(w)
 
@@ -28,12 +29,17 @@ def approx_rouse_frequency(params):
     w_arr[:] = w[:]
     gp_arr[:] = np.zeros(n)[:]
     gpp_arr[:] = np.zeros(n)[:]
-    continuous_rouse_freq(
-        c_int(n), c_double(G0), c_double(tau0), c_int(N), w_arr, gp_arr,
+
+    continuous_rouse_freq_interp(
+        c_int(n), c_double(G0), c_double(tau0), c_double(N), w_arr, gp_arr,
         gpp_arr)
-    return(np.asarray(gp_arr[:]), np.asarray(gpp_arr[:]))
+
+    # convert ctypes array to numpy
+    return (np.asarray(gp_arr[:]), np.asarray(gpp_arr[:]))
+
 
 def approx_rouse_time(params):
+    """Continuous Rouse time with interpolation for N"""
     G0, tau0, N, t = params
     n = len(t)
 
@@ -42,6 +48,8 @@ def approx_rouse_time(params):
     t_arr[:] = t[:]
     gt_arr[:] = np.zeros(n)[:]
 
-    continuous_rouse_time(
-        c_int(n), c_double(G0), c_double(tau0), c_int(N), t_arr, gt_arr)
-    return(np.asarray(gt_arr[:]))
+    continuous_rouse_time_interp(
+        c_int(n), c_double(G0), c_double(tau0), c_double(N), t_arr, gt_arr)
+    
+    # convert ctypes array to numpy
+    return (np.asarray(gt_arr[:]))

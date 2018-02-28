@@ -31,46 +31,136 @@
 
 // --------------------------------------------------------------------------------------------------------
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
-void continuous_rouse_freq(int n, double G, double tau, int N, double *w, double *gp, double *gpp)
-{ //Continuous Rouse model in frequency domain
+void continuous_rouse_freq_interp(int n, double G, double tau, double N, double *w, double *gp, double *gpp)
+{ //Continuous Rouse model in frequency domain with interpolation
     double aux, temp, temp2;
     int i, p;
+    int N1, N2;
 
     if (N == 0)
         return;
-    for (p = 1; p <= N; p++)
+
+    N1 = floorf(N);
+    N2 = ceilf(N);
+    if (N1 == N2)
     {
-        aux = N * N * tau / (2.0 * p * p);
+        for (p = 1; p <= N; p++)
+        {
+            aux = N * N * tau / (2.0 * p * p);
+            for (i = 0; i < n; i++)
+            {
+                temp = w[i] * aux;
+                temp2 = temp * temp;
+                gp[i] += temp2 / (1.0 + temp2);
+                gpp[i] += temp / (1.0 + temp2);
+            }
+        }
         for (i = 0; i < n; i++)
         {
-            temp = w[i] * aux;
-            temp2 = temp * temp;
-            gp[i] += temp2 / (1.0 + temp2);
-            gpp[i] += temp / (1.0 + temp2);
+            gp[i] *= G / N;
+            gpp[i] *= G / N;
         }
     }
-    for (i = 0; i < n; i++)
+    else
     {
-        gp[i] *= G / N;
-        gpp[i] *= G / N;
+        double temp1sq, temp2sq;
+        double sum1p[n];
+        double sum1pp[n];
+        double sum2p[n];
+        double sum2pp[n];
+        for (i = 0; i < n; i++)
+        {
+            sum1p[i] = 0.0;
+            sum2p[i] = 0.0;
+            sum1pp[i] = 0.0;
+            sum2pp[i] = 0.0;
+        }
+        for (p = 1; p <= N1; p++)
+        {
+
+            aux = tau / (2.0 * p * p);
+            for (i = 0; i < n; i++)
+            {
+                temp = w[i] * aux;
+                temp1sq = temp * N1 * N1;
+                temp1sq *= temp1sq;
+                temp2sq = temp * N2 * N2;
+                temp2sq *= temp2sq;
+
+                sum1p[i] += temp1sq / (1.0 + temp1sq);
+                sum2p[i] += temp2sq / (1.0 + temp2sq);
+
+                sum1pp[i] += temp * N1 * N1 / (1.0 + temp1sq);
+                sum2pp[i] += temp * N2 * N2 / (1.0 + temp2sq);
+            }
+        }
+        // case p = N2 (= N1+1)
+        for (i = 0; i < n; i++)
+        {
+            aux = w[i] * tau;
+            aux *= aux;
+            sum2p[i] += aux / (1.0 + aux);
+            sum2pp[i] += w[i] * tau / (1.0 + aux);
+        }
+
+        aux = (double)(N - N1) / (double)(N2 - N1);
+        for (i = 0; i < n; i++) // interpolate
+        {
+            gp[i] = G * ((1.0 - aux) * sum1p[i] / N1 + aux * sum2p[i] / N2);
+            gpp[i] = G * ((1.0 - aux) * sum1pp[i] / N1 + aux * sum2pp[i] / N2);
+        }
     }
 }
 
-void continuous_rouse_time(int n, double G, double tau, int N, double *t, double *gt)
-{ //Continuous Rouse model in time domain
+void continuous_rouse_time_interp(int n, double G, double tau, double N, double *t, double *gt)
+{ //Continuous Rouse model in time domain with interpolation
     double aux;
     int i, p;
+    int N1, N2;
 
     if (N == 0)
         return;
-    for (p = 1; p <= N; p++)
+
+    N1 = floorf(N);
+    N2 = ceilf(N);
+    if (N1 == N2)
     {
-        aux = -2.0 * p * p / (N * N * tau);
+        for (p = 1; p <= N; p++)
+        {
+            aux = -2.0 * p * p / (N * N * tau);
+            for (i = 0; i < n; i++)
+                gt[i] += exp(aux * t[i]);
+        }
         for (i = 0; i < n; i++)
-            gt[i] += exp(aux * t[i]);
+            gt[i] *= G / N;
     }
-    for (i = 0; i < n; i++)
-        gt[i] *= G / N;
+    else
+    {
+        double sum1[n];
+        double sum2[n];
+        for (i = 0; i < n; i++)
+        {
+            sum1[i] = 0.0;
+            sum2[i] = 0.0;
+        }
+        for (p = 1; p <= N1; p++)
+        {
+            aux = -2.0 * p * p / tau;
+            for (i = 0; i < n; i++)
+            {
+                sum1[i] += exp(t[i] * aux / (N1 * N1));
+                sum2[i] += exp(t[i] * aux / (N2 * N2));
+            }
+        }
+        // case p = N2 (= N1+1)
+        for (i = 0; i < n; i++)
+            sum2[i] += exp(-2.0 * t[i] / tau);
+
+        aux = (double)(N - N1) / (double)(N2 - N1);
+        for (i = 0; i < n; i++) // interpolate
+            gt[i] = G * ((1.0 - aux) * sum1[i] / N1 + aux * sum2[i] / N2);
+    }
 }
