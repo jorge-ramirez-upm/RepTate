@@ -92,7 +92,7 @@ double GppRouse(double w)
     return exp(-1.0 / (w * z * z * tau_e)) * sqrt(tau_e * w);
 }
 
-bool dynamic_tube_dilution_interp(double G0, double a0, double tau_e0, double z, int n, double *omega, double *gp, double *gpp)
+bool dynamic_tube_dilution_interp(double G0, double a0, double tau_e0, double z0, int n, double *omega, double *gp, double *gpp)
 {
     double y;
     int i;
