@@ -64,7 +64,7 @@ def start_RepTate(argv):
     app = QApplication(sys.argv)
     
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
-    CmdBase.calcmode = CalcMode.singlethread
+    # CmdBase.calcmode = CalcMode.singlethread
     
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
@@ -92,6 +92,11 @@ def start_RepTate(argv):
                                                    ])
     # Open a theory
     ex.applications["LVE1"].datasets["Set1"].new_theory("Likhtman-McLeish")
+    # Minimize the theory
+    ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
+
+    # Open a theory
+    ex.applications["LVE1"].datasets["Set1"].new_theory("RouseFrequency")
     # Minimize the theory
     ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
