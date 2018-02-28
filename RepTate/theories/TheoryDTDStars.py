@@ -226,7 +226,7 @@ class BaseTheoryDTDStars:
         for i,w in enumerate(omega):
             self.w = w
             y, err = quad(self.Gp, 0, 1) 
-            tt.data[i,1] = (1+self.alpha)*self.G0*y
+            tt.data[i,1] = (1+self.alpha)*self.G0*y + self.G0*self.GppRouse(w)
             y, err = quad(self.Gpp, 0, 1)
             tt.data[i,2] = (1+self.alpha)*self.G0*y + self.G0*self.GppRouse(w)
 
