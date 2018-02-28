@@ -42,7 +42,9 @@ from QTheory import QTheory
 from DataTable import DataTable
 from scipy.integrate import quad
 from scipy.special import gammaln
- 
+
+import dtd_ctypes_helper as dtdh
+
 class TheoryDTDStars(CmdBase):
     """Fit DTD Theory for stars
     
@@ -139,56 +141,56 @@ class BaseTheoryDTDStars:
         """
         pass
 
-    def Ueff(self, s):
-        """
-        Effective potential
-        """
-        return 3 * self.Z * (1 - (1 - s)**(1 + self.alpha) * (1 + (1 + self.alpha) * s)) / (1 + self.alpha) / (2 + self.alpha)
+    # def Ueff(self, s):
+    #     """
+    #     Effective potential
+    #     """
+    #     return 3 * self.Z * (1 - (1 - s)**(1 + self.alpha) * (1 + (1 + self.alpha) * s)) / (1 + self.alpha) / (2 + self.alpha)
         
-    def tau_early(self, s):
-        """
-        Relaxation time early
-        """
-        return 9 * np.pi**3 / 16 * self.tau_e * s**4 * self.Z**4
+    # def tau_early(self, s):
+    #     """
+    #     Relaxation time early
+    #     """
+    #     return 9 * np.pi**3 / 16 * self.tau_e * s**4 * self.Z**4
     
-    def tau_late(self, s):
-        """
-        Relaxation time arm
-        """
-        return self.tau_e * self.Z**1.5 * np.sqrt(np.pi**5 / 6) * np.exp(self.Ueff(s))/ np.sqrt(s**2 * (1-s)**(2*self.alpha) + 
-                    ((1 + self.alpha) / self.Z / 3)**(2 * self.alpha / (self.alpha + 1)) / (np.exp(gammaln(1 / (self.alpha + 1))))**2)
+    # def tau_late(self, s):
+    #     """
+    #     Relaxation time arm
+    #     """
+    #     return self.tau_e * self.Z**1.5 * np.sqrt(np.pi**5 / 6) * np.exp(self.Ueff(s))/ np.sqrt(s**2 * (1-s)**(2*self.alpha) + 
+    #                 ((1 + self.alpha) / self.Z / 3)**(2 * self.alpha / (self.alpha + 1)) / (np.exp(gammaln(1 / (self.alpha + 1))))**2)
 
-    def tau(self, s):
-        """
-        Relaxation time for segment s
-        """
-        eUe = np.exp(self.Ueff(s))
-        te = self.tau_early(s)
-        tl = self.tau_late(s)
-        return te * eUe / (1 + eUe * te / tl)
+    # def tau(self, s):
+    #     """
+    #     Relaxation time for segment s
+    #     """
+    #     eUe = np.exp(self.Ueff(s))
+    #     te = self.tau_early(s)
+    #     tl = self.tau_late(s)
+    #     return te * eUe / (1 + eUe * te / tl)
 
-    def Gp(self, s):
-        """
-        Integrand of the G'(w) function
-        """
-        sqrtau = self.tau(s)**2
-        sqrw = self.w**2
-        return (1 - s)**self.alpha * sqrw * sqrtau / (1 + sqrw * sqrtau)
+    # def Gp(self, s):
+    #     """
+    #     Integrand of the G'(w) function
+    #     """
+    #     sqrtau = self.tau(s)**2
+    #     sqrw = self.w**2
+    #     return (1 - s)**self.alpha * sqrw * sqrtau / (1 + sqrw * sqrtau)
     
-    def Gpp(self, s):
-        """
-        Integrand of the G''(w) function
-        """
-        t = self.tau(s)
-        sqrtau = t**2
-        sqrw = self.w**2
-        return (1 - s)**self.alpha * self.w * t / (1 + sqrw * sqrtau)
+    # def Gpp(self, s):
+    #     """
+    #     Integrand of the G''(w) function
+    #     """
+    #     t = self.tau(s)
+    #     sqrtau = t**2
+    #     sqrw = self.w**2
+    #     return (1 - s)**self.alpha * self.w * t / (1 + sqrw * sqrtau)
 
-    def GppRouse(self, w):
-        """
-        G''(w) due to fast Rouse modes
-        """
-        return np.exp(-1 / w / self.Z**2 / self.tau_e) * np.sqrt(self.tau_e * w)
+    # def GppRouse(self, w):
+    #     """
+    #     G''(w) due to fast Rouse modes
+    #     """
+    #     return np.exp(-1 / w / self.Z**2 / self.tau_e) * np.sqrt(self.tau_e * w)
     
     def calculate(self, f=None):
         """DTDStars function that returns the square of y
@@ -210,25 +212,21 @@ class BaseTheoryDTDStars:
         self.tau_e = self.parameters["tau_e"].value
         self.Me = self.parameters["Me"].value
         self.alpha = self.parameters["alpha"].value
-        
         try:
             Mw = float(f.file_parameters["Mw"])
         except ValueError:
             self.Qprint("Invalid Mw value")
             return
-        
-            
-        self.Z = int(np.rint(Mw / self.Me))
+        # self.Z = int(np.rint(Mw / self.Me))
         omega = ft.data[:, 0]
-
+        params = [self.G0, self.alpha, self.tau_e, Mw / self.Me, omega]
+        gp, gpp, success = dtdh.calculate_dtd(params)
+        if not success:
+            self.Qprint("Too many steps in routine qtrap")
+            return
         tt.data[:, 0] = omega
-
-        for i,w in enumerate(omega):
-            self.w = w
-            y, err = quad(self.Gp, 0, 1) 
-            tt.data[i,1] = (1+self.alpha)*self.G0*y + self.G0*self.GppRouse(w)
-            y, err = quad(self.Gpp, 0, 1)
-            tt.data[i,2] = (1+self.alpha)*self.G0*y + self.G0*self.GppRouse(w)
+        tt.data[:, 1] = gp[:]
+        tt.data[:, 2] = gpp[:]
 
 
 class CLTheoryDTDStars(BaseTheoryDTDStars, Theory):
