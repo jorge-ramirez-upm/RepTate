@@ -96,7 +96,7 @@ bool dynamic_tube_dilution(double G0, double a0, double tau_e0, double z0, int n
 {
     double y;
     int i;
-    bool success=true;
+    bool success = true;
 
     a = a0;
     tau_e = tau_e0;
@@ -106,12 +106,14 @@ bool dynamic_tube_dilution(double G0, double a0, double tau_e0, double z0, int n
     {
         w = omega[i];
         y = qtrap(Gp, 0, 1, &success);
-        if (!success){
+        if (!success)
+        {
             return false;
         }
         gp[i] = (1 + a) * G0 * y + G0 * GppRouse(w);
         y = qtrap(Gpp, 0, 1, &success);
-        if (!success){
+        if (!success)
+        {
             return false;
         }
         gpp[i] = (1 + a) * G0 * y + G0 * GppRouse(w);

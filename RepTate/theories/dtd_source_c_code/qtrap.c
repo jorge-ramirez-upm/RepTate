@@ -37,21 +37,24 @@
 #define EPS 1.0e-5
 #define JMAX 20
 
-double qtrap(double (*func)(double), double a, double b, bool* success)
+double qtrap(double (*func)(double), double a, double b, bool *success)
 {
 	int j;
-	double s,olds=0.0;
+	double s, olds = 0.0;
 
-	for (j=1;j<=JMAX;j++) {
-		s=trapzd(func,a,b,j);
+	for (j = 1; j <= JMAX; j++)
+	{
+		s = trapzd(func, a, b, j);
 		if (j > 5)
-			if (fabs(s-olds) < EPS*fabs(olds) ||
-				(s == 0.0 && olds == 0.0)) {
-                    *success = true;
-                    return s;}
-		olds=s;
+			if (fabs(s - olds) < EPS * fabs(olds) ||
+				(s == 0.0 && olds == 0.0))
+			{
+				*success = true;
+				return s;
+			}
+		olds = s;
 	}
-    *success = false;
+	*success = false;
 	return 0.0;
 }
 #undef EPS
