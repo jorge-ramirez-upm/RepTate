@@ -120,6 +120,21 @@ def start_RepTate(argv):
     # Minimize the theory
     ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
     
+
+    #####################
+    # TEST DTD
+    # Open a Dataset
+    ex.new_lve_window()
+    pi_dir = "data%sPI_STAR%s"%((os.sep,)*2)
+    ex.applications["LVE3"].new_tables_from_files([
+                                                   pi_dir + "S6Z8.1T40.tts",
+                                                   pi_dir + "S6Z12T40.tts",
+                                                   pi_dir + "S6Z16T40.tts",
+                                                   ])
+
+    ex.applications["LVE3"].datasets["Set1"].new_theory("DTDStars")
+    ex.applications["LVE3"].datasets["Set1"].handle_actionMinimize_Error()
+
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
