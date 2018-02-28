@@ -141,6 +141,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.handle_parameterItemChanged)
 
     def handle_actionCalculate_Theory(self):
+        if self.thread_calc_busy:
+            return
         self.thread_calc_busy = True
         #disable buttons
         self.parent_dataset.actionCalculate_Theory.setDisabled(True)
@@ -202,6 +204,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         
         [description]
         """
+        if self.thread_fit_busy:
+            return
         self.thread_fit_busy = True
         #disable buttons
         self.parent_dataset.actionMinimize_Error.setDisabled(True)

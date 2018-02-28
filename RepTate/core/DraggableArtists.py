@@ -189,9 +189,10 @@ class DraggableArtist(object):
         self.background = None
         self.artist.figure.canvas.draw()
         try:
+            self.parent_theory.handle_actionMinimize_Error()
+        except AttributeError:
             self.parent_theory.do_fit("")
-        except Exception as e:
-            print(e)
+
 
     def disconnect(self):
         """disconnect all the stored connection ids
