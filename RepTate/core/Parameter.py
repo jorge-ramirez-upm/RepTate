@@ -127,7 +127,6 @@ class Parameter(object):
         self.bracketed = bracketed
         self.min_value = min_value
         self.max_value= max_value
-        self.min_allowed = opt_type
         self.display_flag = display_flag
         self.discrete_values = discrete_values
 

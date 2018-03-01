@@ -41,10 +41,11 @@ from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
 from Theory import Theory
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup
+from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
-from Parameter import OptType
-
+from PyQt5.QtGui import QDoubleValidator
+from Parameter import OptType, ParameterType, ShiftType
+import ast
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH, 'theorytab.ui'))
 
@@ -54,6 +55,98 @@ Ui_TheoryTab, QWidget = loadUiType(join(PATH, 'theorytab.ui'))
 
 # # install exception hook: without this, uncaught exception would cause application to exit
 # sys.excepthook = trap_exc_during_debug
+
+
+class EditThParametersDialog(QDialog):
+    """Create the form that is used to modify the theorys parameters"""
+
+    def __init__(self, parent, p_name):
+        super().__init__(parent)
+        self.parent_theory = parent
+        self.tabs = QTabWidget()
+        self.all_pattr = {}
+        for pname in self.parent_theory.parameters:
+            tab = self.create_param_tab(pname)
+            self.tabs.addTab(tab, pname)
+            if pname == p_name:
+                index = self.tabs.indexOf(tab)
+        self.tabs.setCurrentIndex(index)
+
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok
+                                     | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.tabs)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Theory Parameters")
+
+    def create_param_tab(self, p_name):
+        """Create a form to set the new values of the file parameters"""
+        tab = QWidget()
+        layout = QFormLayout()
+
+        p = self.parent_theory.parameters[p_name]
+        p_attributes = p.__dict__
+        attr_dict = {}
+        a_new = []
+        i = 0
+        for attr_name in p_attributes:  #loop over the Parameters attributes
+            if attr_name == 'type':
+                cb = QComboBox()
+                cb.addItem('real')
+                cb.addItem('integer')
+                cb.addItem('discrete_real')
+                cb.addItem('discrete_integer')
+                cb.addItem('boolean')
+                # cb.setCurrentText('%s'.split(".")[-1] % p_attributes[attr_name])
+                s = '%s' % p_attributes[attr_name]
+                cb.setCurrentText(s.split(".")[-1])
+                a_new.append(cb)
+            elif attr_name == 'opt_type':
+                cb = QComboBox()
+                cb.addItem('opt')
+                cb.addItem('nopt')
+                cb.addItem('const')
+                # cb.setCurrentText('%s'.split(".")[-1] % p_attributes[attr_name])
+                s = '%s' % p_attributes[attr_name]
+                cb.setCurrentText(s.split(".")[-1])
+                a_new.append(cb)
+            elif attr_name == 'shift_type':
+                cb = QComboBox()
+                cb.addItem('linear')
+                cb.addItem('log')
+                s = '%s' % p_attributes[attr_name]
+                cb.setCurrentText(s.split(".")[-1])
+                a_new.append(cb)
+            elif attr_name == 'bracketed':
+                cb = QComboBox()
+                cb.addItem('True')
+                cb.addItem('False')
+                cb.setCurrentText('%s' % p_attributes[attr_name])
+                a_new.append(cb)
+            elif attr_name == 'display_flag':
+                cb = QComboBox()
+                cb.addItem('True')
+                cb.addItem('False')
+                cb.setCurrentText('%s' % p_attributes[attr_name])
+                a_new.append(cb)
+            elif attr_name in ['value', 'error']:
+                continue
+            else:
+                qline = QLineEdit()
+                if attr_name in ['name', 'description']:
+                    qline.setReadOnly(True)
+                a_new.append(qline)
+                a_new[i].setText("%s" % p_attributes[attr_name])
+            layout.addRow("%s:" % attr_name, a_new[i])
+            attr_dict[attr_name] = a_new[i]
+            i += 1
+        tab.setLayout(layout)
+        self.all_pattr[p_name] = attr_dict
+        return tab
 
 
 class CalculationThread(QObject):
@@ -283,6 +376,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked
+        Or edit all parameters dialog if parameter name is double clicked
         
         [description]
         
@@ -290,7 +384,44 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             item {[type]} -- [description]
             column {[type]} -- [description]
         """
-        if (column == 1):
+        if column == 0:
+            p_name = item.text(0)
+            d = EditThParametersDialog(self, p_name)
+            if d.exec_():
+                for pname in self.parameters:
+                    p = self.parameters[pname]
+                    attr_dict = d.all_pattr[pname]
+                    for attr_name in attr_dict:
+                        if attr_name == 'type':
+                            val = attr_dict[attr_name].currentText()
+                            setattr(p, attr_name, ParameterType[val])
+                        elif attr_name == 'opt_type':
+                            val = attr_dict[attr_name].currentText()
+                            setattr(p, attr_name, OptType[val])
+                        elif attr_name == 'shift_type':
+                            val = attr_dict[attr_name].currentText()
+                            setattr(p, attr_name, ShiftType[val])
+                        elif attr_name == 'bracketed':
+                            val = ast.literal_eval(
+                                attr_dict[attr_name].currentText())  # bool
+                            setattr(p, attr_name, val)
+                        elif attr_name == 'display_flag':
+                            val = ast.literal_eval(
+                                attr_dict[attr_name].currentText())  # bool
+                            setattr(p, attr_name, val)
+                        elif attr_name == 'discrete_values':
+                            val = attr_dict[attr_name].text()
+                            l = ast.literal_eval(val)
+                            if isinstance(l, list):
+                                setattr(p, attr_name, l)
+                        elif attr_name in ['name', 'description']:
+                            continue
+                        else:
+                            val = attr_dict[attr_name].text()
+                            setattr(p, attr_name, val)
+                self.update_parameter_table()
+
+        elif column == 1:
             self.thParamTable.editItem(item, column)
             # thcurrent = self.parent_dataset.TheorytabWidget.currentWidget()
             # thcurrent.editItem(item, column)
