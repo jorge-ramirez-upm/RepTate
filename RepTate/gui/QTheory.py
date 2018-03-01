@@ -417,7 +417,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                         elif attr_name in ['name', 'description']:
                             continue
                         else:
-                            val = attr_dict[attr_name].text()
+                            val = float(attr_dict[attr_name].text())
                             setattr(p, attr_name, val)
                 self.update_parameter_table()
 
