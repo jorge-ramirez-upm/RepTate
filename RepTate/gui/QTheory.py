@@ -114,7 +114,7 @@ class EditThParametersDialog(QDialog):
                 s = '%s' % p_attributes[attr_name]
                 cb.setCurrentText(s.split(".")[-1])
                 a_new.append(cb)
-            elif attr_name == 'shift_type':
+            elif attr_name == 'min_shift_type':
                 cb = QComboBox()
                 cb.addItem('linear')
                 cb.addItem('log')
@@ -398,7 +398,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                         elif attr_name == 'opt_type':
                             val = attr_dict[attr_name].currentText()
                             setattr(p, attr_name, OptType[val])
-                        elif attr_name == 'shift_type':
+                        elif attr_name == 'min_shift_type':
                             val = attr_dict[attr_name].currentText()
                             setattr(p, attr_name, ShiftType[val])
                         elif attr_name == 'bracketed':
