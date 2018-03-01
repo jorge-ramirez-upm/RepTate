@@ -35,7 +35,7 @@
 #include <math.h>
 #include "qtrap.h"
 
-static double a, tau_e, z, w;
+static double a, tau_e, z, w, t;
 
 double Ueff(double s)
 {
@@ -92,12 +92,13 @@ double GppRouse(double w)
     return exp(-1.0 / (w * z * z * tau_e)) * sqrt(tau_e * w);
 }
 
-bool dynamic_tube_dilution(double G0, double a0, double tau_e0, double z0, int n, double *omega, double *gp, double *gpp)
+bool dynamic_tube_dilution_freq(double G0, double a0, double tau_e0, double z0, int n, double *omega, double *gp, double *gpp, double EPS)
 {
     double y;
     int i;
     bool success = true;
 
+    // define global variables
     a = a0;
     tau_e = tau_e0;
     z = z0;
@@ -105,18 +106,48 @@ bool dynamic_tube_dilution(double G0, double a0, double tau_e0, double z0, int n
     for (i = 0; i < n; i++)
     {
         w = omega[i];
-        y = qtrap(Gp, 0, 1, &success);
+        y = qtrap(Gp, 0, 1, &success, EPS);
         if (!success)
         {
             return false;
         }
         gp[i] = (1 + a) * G0 * y + G0 * GppRouse(w);
-        y = qtrap(Gpp, 0, 1, &success);
+        y = qtrap(Gpp, 0, 1, &success, EPS);
         if (!success)
         {
             return false;
         }
         gpp[i] = (1 + a) * G0 * y + G0 * GppRouse(w);
+    }
+    return true;
+}
+
+double Gt(double s)
+{
+    // Integrand of the G(t) function
+    return pow(1 - s, a) * exp(-t / tau(s));
+}
+
+bool dynamic_tube_dilution_time(double G0, double a0, double tau_e0, double z0, int n, double *times, double *gt, double EPS)
+{
+    double y;
+    int i;
+    bool success = true;
+
+    // define global variables
+    a = a0;
+    tau_e = tau_e0;
+    z = z0;
+
+    for (i = 0; i < n; i++)
+    {
+        t = times[i];
+        y = qtrap(Gt, 0, 1, &success, EPS);
+        if (!success)
+        {
+            return false;
+        }
+        gt[i] = (1 + a) * G0 * y;
     }
     return true;
 }

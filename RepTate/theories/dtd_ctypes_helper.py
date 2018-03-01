@@ -11,12 +11,15 @@ try:
 except:
     print('OS %s not recognized' % (sys.platform))
 
-dynamic_tube_dilution = dtd_lib.dynamic_tube_dilution
-dynamic_tube_dilution.restype = c_bool
+dynamic_tube_dilution_freq = dtd_lib.dynamic_tube_dilution_freq
+dynamic_tube_dilution_freq.restype = c_bool
+
+dynamic_tube_dilution_time = dtd_lib.dynamic_tube_dilution_time
+dynamic_tube_dilution_time.restype = c_bool
 
 
-def calculate_dtd(params):
-    """Calculate dynamic tube dilution"""
+def calculate_dtd_freq(params, EPS):
+    """Calculate dynamic tube dilution in frequency domain"""
     G0, a, tau_e, z, w = params
     n = len(w)
 
@@ -27,9 +30,27 @@ def calculate_dtd(params):
     gp_arr[:] = np.zeros(n)[:]
     gpp_arr[:] = np.zeros(n)[:]
 
-    success = dynamic_tube_dilution(
+    success = dynamic_tube_dilution_freq(
         c_double(G0), c_double(a), c_double(tau_e), c_double(z), c_int(n),
-        w_arr, gp_arr, gpp_arr)
+        w_arr, gp_arr, gpp_arr, c_double(EPS))
 
     # convert ctypes array to numpy
     return (np.asarray(gp_arr[:]), np.asarray(gpp_arr[:]), success)
+
+
+def calculate_dtd_time(params, EPS):
+    """Calculate dynamic tube dilution in time domain"""
+    G0, a, tau_e, z, t = params
+    n = len(t)
+
+    t_arr = (c_double * n)()
+    gt_arr = (c_double * n)()
+    t_arr[:] = t[:]
+    gt_arr[:] = np.zeros(n)[:]
+
+    success = dynamic_tube_dilution_time(
+        c_double(G0), c_double(a), c_double(tau_e), c_double(z), c_int(n),
+        t_arr, gt_arr, c_double(EPS))
+
+    # convert ctypes array to numpy
+    return (np.asarray(gt_arr[:]), success)

@@ -45,42 +45,44 @@ from scipy.special import gammaln
 
 import dtd_ctypes_helper as dtdh
 
-class TheoryDTDStars(CmdBase):
+class TheoryDTDStarsFreq(CmdBase):
     """Fit DTD Theory for stars
     
 
-    """
-    thname = "DTDStars"
-    description = "Fit Dynamic Tube Dilution theory for stars"
 
-    def __new__(cls, name='ThDTDStars', parent_dataset=None, axarr=None):
+
+    """
+    thname = "DTDStarsFreq"
+    description = "Fit Dynamic Tube Dilution theory for stars, frequency domain"
+
+    def __new__(cls, name='ThDTDStarsFreq', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStars'})
+            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         
         Returns:
             [type] -- [description]
         """
-        return GUITheoryDTDStars(name, parent_dataset, axarr) if (
-            CmdBase.mode == CmdMode.GUI) else CLTheoryDTDStars(
+        return GUITheoryDTDStarsFreq(name, parent_dataset, axarr) if (
+            CmdBase.mode == CmdMode.GUI) else CLTheoryDTDStarsFreq(
                 name, parent_dataset, axarr)
 
 
-class BaseTheoryDTDStars:
+class BaseTheoryDTDStarsFreq:
     """[summary]
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#dtdstars'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#dtdstarsFreq'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self,
-                 name='ThDTDStars',
+                 name='ThDTDStarsFreq',
                  parent_dataset=None,
                  axarr=None):
         """[summary]
@@ -88,7 +90,7 @@ class BaseTheoryDTDStars:
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStars'})
+            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
@@ -105,7 +107,7 @@ class BaseTheoryDTDStars:
         self.parameters["tau_e"] = Parameter(
             "tau_e",
             2e-6,
-            "entanglement relaxation time",
+            "Entanglement relaxation time",
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0)
@@ -141,59 +143,8 @@ class BaseTheoryDTDStars:
         """
         pass
 
-    # def Ueff(self, s):
-    #     """
-    #     Effective potential
-    #     """
-    #     return 3 * self.Z * (1 - (1 - s)**(1 + self.alpha) * (1 + (1 + self.alpha) * s)) / (1 + self.alpha) / (2 + self.alpha)
-        
-    # def tau_early(self, s):
-    #     """
-    #     Relaxation time early
-    #     """
-    #     return 9 * np.pi**3 / 16 * self.tau_e * s**4 * self.Z**4
-    
-    # def tau_late(self, s):
-    #     """
-    #     Relaxation time arm
-    #     """
-    #     return self.tau_e * self.Z**1.5 * np.sqrt(np.pi**5 / 6) * np.exp(self.Ueff(s))/ np.sqrt(s**2 * (1-s)**(2*self.alpha) + 
-    #                 ((1 + self.alpha) / self.Z / 3)**(2 * self.alpha / (self.alpha + 1)) / (np.exp(gammaln(1 / (self.alpha + 1))))**2)
-
-    # def tau(self, s):
-    #     """
-    #     Relaxation time for segment s
-    #     """
-    #     eUe = np.exp(self.Ueff(s))
-    #     te = self.tau_early(s)
-    #     tl = self.tau_late(s)
-    #     return te * eUe / (1 + eUe * te / tl)
-
-    # def Gp(self, s):
-    #     """
-    #     Integrand of the G'(w) function
-    #     """
-    #     sqrtau = self.tau(s)**2
-    #     sqrw = self.w**2
-    #     return (1 - s)**self.alpha * sqrw * sqrtau / (1 + sqrw * sqrtau)
-    
-    # def Gpp(self, s):
-    #     """
-    #     Integrand of the G''(w) function
-    #     """
-    #     t = self.tau(s)
-    #     sqrtau = t**2
-    #     sqrw = self.w**2
-    #     return (1 - s)**self.alpha * self.w * t / (1 + sqrw * sqrtau)
-
-    # def GppRouse(self, w):
-    #     """
-    #     G''(w) due to fast Rouse modes
-    #     """
-    #     return np.exp(-1 / w / self.Z**2 / self.tau_e) * np.sqrt(self.tau_e * w)
-    
     def calculate(self, f=None):
-        """DTDStars function that returns the square of y
+        """DTDStarsFreq function that returns the square of y
         
         [description]
         
@@ -214,13 +165,13 @@ class BaseTheoryDTDStars:
         self.alpha = self.parameters["alpha"].value
         try:
             Mw = float(f.file_parameters["Mw"])
-        except ValueError:
+        except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
         # self.Z = int(np.rint(Mw / self.Me))
         omega = ft.data[:, 0]
         params = [self.G0, self.alpha, self.tau_e, Mw / self.Me, omega]
-        gp, gpp, success = dtdh.calculate_dtd(params)
+        gp, gpp, success = dtdh.calculate_dtd_freq(params, self.eps)
         if not success:
             self.Qprint("Too many steps in routine qtrap")
             return
@@ -229,14 +180,14 @@ class BaseTheoryDTDStars:
         tt.data[:, 2] = gpp[:]
 
 
-class CLTheoryDTDStars(BaseTheoryDTDStars, Theory):
+class CLTheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, Theory):
     """[summary]
     
     [description]
     """
 
     def __init__(self,
-                 name='ThDTDStars',
+                 name='ThDTDStarsFreq',
                  parent_dataset=None,
                  axarr=None):
         """[summary]
@@ -244,7 +195,7 @@ class CLTheoryDTDStars(BaseTheoryDTDStars, Theory):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStars'})
+            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """
@@ -253,14 +204,14 @@ class CLTheoryDTDStars(BaseTheoryDTDStars, Theory):
     # This class usually stays empty
 
 
-class GUITheoryDTDStars(BaseTheoryDTDStars, QTheory):
+class GUITheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, QTheory):
     """[summary]
     
     [description]
     """
 
     def __init__(self,
-                 name='ThDTDStars',
+                 name='ThDTDStarsFreq',
                  parent_dataset=None,
                  axarr=None):
         """[summary]
@@ -268,7 +219,189 @@ class GUITheoryDTDStars(BaseTheoryDTDStars, QTheory):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStars'})
+            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+
+    # add widgets specific to the theory here:
+
+
+#############################################################################################
+#############################################################################################
+
+
+class TheoryDTDStarsTime(CmdBase):
+    """Fit DTD Theory for stars
+    
+
+    """
+    thname = "DTDStarsTime"
+    description = "Fit Dynamic Tube Dilution theory for stars, time domain"
+
+    def __new__(cls, name='ThDTDStarsTime', parent_dataset=None, axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        return GUITheoryDTDStarsTime(name, parent_dataset, axarr) if (
+            CmdBase.mode == CmdMode.GUI) else CLTheoryDTDStarsTime(
+                name, parent_dataset, axarr)
+
+
+class BaseTheoryDTDStarsTime:
+    """[summary]
+    
+    [description]
+    """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#dtdstarsTime'
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
+
+    def __init__(self,
+                 name='ThDTDStarsTime',
+                 parent_dataset=None,
+                 axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+        self.function = self.calculate
+        self.has_modes = True
+        self.parameters["G0"] = Parameter(
+            "G0",
+            1e1,
+            "Modulus c*kB*T/N",
+            ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0)
+        self.parameters["tau_e"] = Parameter(
+            "tau_e",
+            2e-6,
+            "Entanglement relaxation time",
+            ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0)
+        self.parameters["Me"] = Parameter(
+            "Me",
+            5.0,
+            "Entanglement Molecular Weight",
+            ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0)
+        self.parameters["alpha"] = Parameter(
+            "alpha",
+            1.0,
+            "Dilution parameter",
+            ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0)
+            
+        self.G0 = self.parameters["G0"].value
+        self.tau_e = self.parameters["tau_e"].value
+        self.Me = self.parameters["Me"].value
+        self.alpha = self.parameters["alpha"].value
+
+    def destructor(self):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+
+        """
+        pass
+
+    def calculate(self, f=None):
+        """DTDStarsTime function that returns the square of y
+        
+        [description]
+        
+        Keyword Arguments:
+            f {[type]} -- [description] (default: {None})
+        
+        Returns:
+            [type] -- [description]
+        """
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        self.G0 = self.parameters["G0"].value
+        self.tau_e = self.parameters["tau_e"].value
+        self.Me = self.parameters["Me"].value
+        self.alpha = self.parameters["alpha"].value
+        try:
+            Mw = float(f.file_parameters["Mw"])
+        except (ValueError, KeyError):
+            self.Qprint("Invalid Mw value")
+            return
+        # self.Z = int(np.rint(Mw / self.Me))
+        times = ft.data[:, 0]
+        params = [self.G0, self.alpha, self.tau_e, Mw / self.Me, times]
+        gt, success = dtdh.calculate_dtd_time(params, self.eps)
+        if not success:
+            self.Qprint("Too many steps in routine qtrap")
+            return
+        tt.data[:, 0] = times
+        tt.data[:, 1] = gt[:]
+
+
+class CLTheoryDTDStarsTime(BaseTheoryDTDStarsTime, Theory):
+    """[summary]
+    
+    [description]
+    """
+
+    def __init__(self,
+                 name='ThDTDStarsTime',
+                 parent_dataset=None,
+                 axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
+            parent_dataset {[type]} -- [description] (default: {None})
+            ax {[type]} -- [description] (default: {None})
+        """
+        super().__init__(name, parent_dataset, axarr)
+
+    # This class usually stays empty
+
+
+class GUITheoryDTDStarsTime(BaseTheoryDTDStarsTime, QTheory):
+    """[summary]
+    
+    [description]
+    """
+
+    def __init__(self,
+                 name='ThDTDStarsTime',
+                 parent_dataset=None,
+                 axarr=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
             parent_dataset {[type]} -- [description] (default: {None})
             ax {[type]} -- [description] (default: {None})
         """

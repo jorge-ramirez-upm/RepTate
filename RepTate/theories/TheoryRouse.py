@@ -208,7 +208,7 @@ class BaseTheoryRouseTime:
         M0 = self.parameters["M0"].value
         try:
             Mw = float(f.file_parameters["Mw"])
-        except ValueError:
+        except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
         
@@ -419,7 +419,7 @@ class BaseTheoryRouseFrequency:
         M0 = self.parameters["M0"].value
         try:
             Mw = float(f.file_parameters["Mw"])
-        except ValueError:
+        except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
 

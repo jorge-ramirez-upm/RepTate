@@ -132,7 +132,7 @@ def start_RepTate(argv):
                                                    pi_dir + "S6Z16T40.tts",
                                                    ])
 
-    ex.applications["LVE3"].datasets["Set1"].new_theory("DTDStars")
+    ex.applications["LVE3"].datasets["Set1"].new_theory("DTDStarsFreq")
     ex.applications["LVE3"].datasets["Set1"].handle_actionMinimize_Error()
 
     sys.exit(app.exec_())

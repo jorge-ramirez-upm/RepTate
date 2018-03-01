@@ -34,6 +34,6 @@
 #ifndef QTRAP_H
 #define QTRAP_H
 
-double qtrap(double (*func)(double), double a, double b, bool *success);
+double qtrap(double (*func)(double), double a, double b, bool *success, double EPS);
 
 #endif

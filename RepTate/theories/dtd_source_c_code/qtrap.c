@@ -34,10 +34,10 @@
 #include <stdbool.h>
 #include <math.h>
 #include "trapz.h"
-#define EPS 1.0e-5
+// #define EPS 1.0e-5
 #define JMAX 20
 
-double qtrap(double (*func)(double), double a, double b, bool *success)
+double qtrap(double (*func)(double), double a, double b, bool *success, double EPS)
 {
 	int j;
 	double s, olds = 0.0;
