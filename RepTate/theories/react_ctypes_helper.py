@@ -35,32 +35,80 @@ Define the C-variables and functions from the C-files that are needed in Python
 """
 import ctypes as ct
 import sys
+import os
 
-lib_path = 'theories/react_lib_%s.so'%(sys.platform)
+dir_path = os.path.dirname(
+    os.path.realpath(__file__))  # get the directory path of current file
+lib_path = dir_path + os.sep + 'react_lib_%s.so' % (sys.platform)
 try:
     react_lib = ct.CDLL(lib_path)
 except:
-    print('OS %s not recognized'%(sys.platform))
+    print('OS %s not recognized in React CH module' % (sys.platform))
 
 ###############
 # polybits.c
 ###############
 
+
 #struct
 class polybits_global_const(ct.Structure):
-    _fields_ = [("maxbobbins", ct.c_int), ("maxmwdbins", ct.c_int), ("maxarm", ct.c_int), ("maxpol", ct.c_int), ("maxreact", ct.c_int)]
+    _fields_ = [("maxbobbins", ct.c_int), ("maxmwdbins", ct.c_int),
+                ("maxarm", ct.c_int), ("maxpol", ct.c_int), ("maxreact",
+                                                             ct.c_int)]
+
 
 class polybits_global(ct.Structure):
-    _fields_ = [("first_in_pool", ct.c_int), ("first_poly_in_pool", ct.c_int), ("first_dist_in_pool", ct.c_int), ("mmax", ct.c_int), ("num_react", ct.c_int), ("arms_left", ct.c_int), ("react_pool_initialised", ct.c_bool), ("react_pool_declared", ct.c_bool), ("arms_avail", ct.c_bool), ("polys_avail", ct.c_bool), ("dists_avail", ct.c_bool)]
+    _fields_ = [("first_in_pool", ct.c_int), ("first_poly_in_pool", ct.c_int),
+                ("first_dist_in_pool",
+                 ct.c_int), ("mmax", ct.c_int), ("num_react", ct.c_int),
+                ("arms_left", ct.c_int), ("react_pool_initialised", ct.c_bool),
+                ("react_pool_declared", ct.c_bool), ("arms_avail", ct.c_bool),
+                ("polys_avail", ct.c_bool), ("dists_avail", ct.c_bool)]
+
 
 class arm(ct.Structure):
-    _fields_ = [("arm_len", ct.c_double), ("arm_conv", ct.c_double), ("arm_time", ct.c_double), ("arm_tm", ct.c_double), ("arm_tddb", ct.c_double), ("L1", ct.c_int),("L2", ct.c_int), ("R1", ct.c_int), ("R2", ct.c_int), ("up", ct.c_int), ("down", ct.c_int), ("armnum", ct.c_int), ("armcat", ct.c_int),("ended", ct.c_int), ("endfin", ct.c_int), ("scission", ct.c_int)]   
+    _fields_ = [("arm_len", ct.c_double), ("arm_conv", ct.c_double),
+                ("arm_time", ct.c_double), ("arm_tm", ct.c_double),
+                ("arm_tddb", ct.c_double), ("L1", ct.c_int), ("L2", ct.c_int),
+                ("R1", ct.c_int), ("R2", ct.c_int), ("up", ct.c_int),
+                ("down", ct.c_int), ("armnum", ct.c_int), ("armcat", ct.c_int),
+                ("ended", ct.c_int), ("endfin", ct.c_int), ("scission",
+                                                            ct.c_int)]
+
 
 class polymer(ct.Structure):
-    _fields_ = [("first_end", ct.c_int), ("num_br", ct.c_int), ("bin", ct.c_int), ("num_sat", ct.c_int), ("num_unsat", ct.c_int), ("armnum", ct.c_int), ("nextpoly", ct.c_int), ("tot_len", ct.c_double), ("gfactor", ct.c_double), ("saved", ct.c_bool)]
+    _fields_ = [("first_end", ct.c_int), ("num_br", ct.c_int),
+                ("bin", ct.c_int), ("num_sat", ct.c_int),
+                ("num_unsat", ct.c_int), ("armnum", ct.c_int), ("nextpoly",
+                                                                ct.c_int),
+                ("tot_len", ct.c_double), ("gfactor",
+                                           ct.c_double), ("saved", ct.c_bool)]
+
 
 class reactresults(ct.Structure):
-     _fields_ = [("wt", ct.POINTER(ct.c_double)), ("avbr", ct.POINTER(ct.c_double)), ("wmass", ct.POINTER(ct.c_double)), ("avg", ct.POINTER(ct.c_double)), ("lgmid", ct.POINTER(ct.c_double)), ("numinbin", ct.POINTER(ct.c_int)), ("monmass", ct.c_double), ("M_e", ct.c_double), ("N_e", ct.c_double), ("boblgmin", ct.c_double), ("boblgmax", ct.c_double), ("m_w", ct.c_double), ("m_n", ct.c_double), ("brav", ct.c_double), ("first_poly", ct.c_int), ("next", ct.c_int), ("nummwdbins", ct.c_int), ("numbobbins", ct.c_int), ("bobbinmax", ct.c_int), ("nsaved", ct.c_int), ("npoly", ct.c_int), ("simnumber", ct.c_int), ("polysaved", ct.c_bool), ("name", ct.c_char_p)]
+    _fields_ = [("wt", ct.POINTER(ct.c_double)), ("avbr",
+                                                  ct.POINTER(ct.c_double)),
+                ("wmass", ct.POINTER(ct.c_double)), ("avg",
+                                                     ct.POINTER(ct.c_double)),
+                ("lgmid", ct.POINTER(ct.c_double)), ("numinbin",
+                                                     ct.POINTER(ct.c_int)),
+                ("monmass", ct.c_double), ("M_e", ct.c_double), ("N_e",
+                                                                 ct.c_double),
+                ("boblgmin", ct.c_double), ("boblgmax",
+                                            ct.c_double), ("m_w", ct.c_double),
+                ("m_n", ct.c_double), ("brav",
+                                       ct.c_double), ("first_poly",
+                                                      ct.c_int), ("next",
+                                                                  ct.c_int),
+                ("nummwdbins", ct.c_int), ("numbobbins",
+                                           ct.c_int), ("bobbinmax", ct.c_int),
+                ("nsaved",
+                 ct.c_int), ("npoly",
+                             ct.c_int), ("simnumber",
+                                         ct.c_int), ("polysaved",
+                                                     ct.c_bool), ("name",
+                                                                  ct.c_char_p)]
+
 
 #global variable
 pb_global_const = polybits_global_const.in_dll(react_lib, "pb_global_const")
@@ -75,7 +123,6 @@ polymer_pointers = polymer_pointer * (pb_global_const.maxpol + 1)
 
 reactresults_pointer = ct.POINTER(reactresults)
 reactresults_pointers = reactresults_pointer * (pb_global_const.maxreact + 1)
-
 
 #function
 react_pool_init = react_lib.react_pool_init
@@ -114,28 +161,35 @@ increase_polymer_records_in_br_poly.restype = ct.c_bool
 increase_dist_records_in_react_dist = react_lib.increase_dist_records_in_react_dist
 increase_dist_records_in_react_dist.restype = ct.c_bool
 
-
 #initialise lists
 react_dist = None
+
 
 def link_react_dist():
     """link the Python list react_dist with the C array react_dist"""
     global reactresults_pointers
     global react_dist
-    reactresults_pointers = reactresults_pointer * (pb_global_const.maxreact + 1)
-    react_dist =  reactresults_pointers(*list([return_react_dist(ct.c_int(i)) for i in range(pb_global_const.maxreact + 1)]))
-    
+    reactresults_pointers = reactresults_pointer * (
+        pb_global_const.maxreact + 1)
+    react_dist = reactresults_pointers(*list([
+        return_react_dist(ct.c_int(i))
+        for i in range(pb_global_const.maxreact + 1)
+    ]))
+
+
 react_pool_init()
 link_react_dist()
-
 
 ###############
 # tobitabatch.c
 ###############
 
+
 #struct
 class tobitabatch_global(ct.Structure):
-    _fields_ = [("tobbatchnumber", ct.c_int), ("tobitabatcherrorflag", ct.c_bool)]
+    _fields_ = [("tobbatchnumber", ct.c_int), ("tobitabatcherrorflag",
+                                               ct.c_bool)]
+
 
 #global variable
 tb_global = tobitabatch_global.in_dll(react_lib, "tb_global")
@@ -147,15 +201,16 @@ tobbatchstart.restype = None
 tobbatch = react_lib.tobbatch
 tobbatch.restype = ct.c_bool
 
-
-
 ###############
 # binsandbob.c
 ###############
 
+
 #struct
 class binsandbob_global(ct.Structure):
-    _fields_ = [("multi_m_w", ct.c_double), ("multi_m_n", ct.c_double), ("multi_brav", ct.c_double), ("multi_nummwdbins", ct.c_int)]
+    _fields_ = [("multi_m_w", ct.c_double), ("multi_m_n", ct.c_double),
+                ("multi_brav", ct.c_double), ("multi_nummwdbins", ct.c_int)]
+
 
 #global variable
 bab_global = binsandbob_global.in_dll(react_lib, "bab_global")
@@ -194,15 +249,16 @@ set_react_dist_monmass.restype = ct.c_double
 set_react_dist_M_e = react_lib.set_react_dist_M_e
 set_react_dist_M_e.restype = ct.c_double
 
-
-
 ###############
 # tobitaCSTR.c
 ###############
 
+
 #struct
 class tobitaCSTR_global(ct.Structure):
-    _fields_ = [("tobCSTRnumber", ct.c_int), ("tobitaCSTRerrorflag", ct.c_bool)]
+    _fields_ = [("tobCSTRnumber", ct.c_int), ("tobitaCSTRerrorflag",
+                                              ct.c_bool)]
+
 
 #global variable
 tCSTR_global = tobitaCSTR_global.in_dll(react_lib, "tCSTR_global")
@@ -214,14 +270,16 @@ tobCSTRstart.restype = None
 tobCSTR = react_lib.tobCSTR
 tobCSTR.restype = ct.c_bool
 
-
 ################
 # MultiMetCSTR.c
 ################
 
+
 #struct
 class mulmetCSTR_global(ct.Structure):
-    _fields_ = [("mulmetCSTRnumber", ct.c_int), ("mulmetCSTRerrorflag", ct.c_bool)]
+    _fields_ = [("mulmetCSTRnumber", ct.c_int), ("mulmetCSTRerrorflag",
+                                                 ct.c_bool)]
+
 
 #global variable
 MMCSTR_global = mulmetCSTR_global.in_dll(react_lib, "MMCSTR_global")

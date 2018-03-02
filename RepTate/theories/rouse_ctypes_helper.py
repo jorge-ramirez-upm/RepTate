@@ -4,12 +4,15 @@ Define the C-variables and functions from the C-files that are needed in Python
 import numpy as np
 from ctypes import c_double, c_int, CDLL
 import sys
+import os
 
-lib_path = 'theories/rouse_lib_%s.so' % (sys.platform)
+dir_path = os.path.dirname(
+    os.path.realpath(__file__))  # get the directory path of current file
+lib_path = dir_path + os.sep + 'rouse_lib_%s.so' % (sys.platform)
 try:
     rouse_lib = CDLL(lib_path)
 except:
-    print('OS %s not recognized' % (sys.platform))
+    print('OS %s not recognized in Rouse CH module' % (sys.platform))
 
 continuous_rouse_freq_interp = rouse_lib.continuous_rouse_freq_interp
 continuous_rouse_freq_interp.restype = None

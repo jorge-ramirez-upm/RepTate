@@ -35,15 +35,19 @@ Define the C-variables and functions from the C-files that are needed in Python
 """
 from ctypes import *
 import sys
+import os
 
-lib_path = 'theories/schwarzl_lib_%s.so'%(sys.platform)
+dir_path = os.path.dirname(
+    os.path.realpath(__file__))  # get the directory path of current file
+lib_path = dir_path + os.sep + 'schwarzl_lib_%s.so' % (sys.platform)
 try:
     schwarzl_lib = CDLL(lib_path)
 except:
-    print('OS %s not recognized'%(sys.platform))
+    print('OS %s not recognized in Schwarzl CH module' % (sys.platform))
 
 schwarzl_gt = schwarzl_lib.schwarzl_gt
 schwarzl_gt.restype = None
+
 
 def do_schwarzl_gt(n_data, value_g_of_t, time_g_of_t):
 
@@ -58,10 +62,6 @@ def do_schwarzl_gt(n_data, value_g_of_t, time_g_of_t):
         c_gt[i] = c_double(value_g_of_t[i])
         c_time[i] = c_double(time_g_of_t[i])
 
-    omega_Gp_omega_Gpp = (c_double * n_data * n_data)()
     schwarzl_gt(c_int(n_data), c_gt, c_time, out_wp, out_Gp, out_wpp, out_Gpp)
-    # print("%9s %9s %9s %9s"%("wp", "G'", "wpp", "G''") )
-    # for i in range(n_data):
-    #     print("%9.4e %9.4e %9.4e %9.4e"%(out_wp[i], out_Gp[i], out_wpp[i], out_Gpp[i]) )
-    return out_wp, out_Gp, out_wpp, out_Gpp
 
+    return out_wp, out_Gp, out_wpp, out_Gpp
