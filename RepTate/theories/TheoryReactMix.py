@@ -65,12 +65,12 @@ class TheoryReactMix(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThReactMix'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryReactMix(
             name, parent_dataset,
@@ -89,14 +89,13 @@ class BaseTheoryReactMix:
     signal_mix_dialog = pyqtSignal(object)
 
     def __init__(self, name='ThReactMix', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThReactMix'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.Calc
@@ -127,10 +126,10 @@ class BaseTheoryReactMix:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         self.calcexists = False
         nbins = int(np.round(self.parameters['nbin'].value))
@@ -228,7 +227,7 @@ class BaseTheoryReactMix:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         pass
 
@@ -250,14 +249,13 @@ class CLTheoryReactMix(BaseTheoryReactMix, Theory):
     """
 
     def __init__(self, name='ThReactMix', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThReactMix'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -271,14 +269,13 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
     """
 
     def __init__(self, name='ThReactMix', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThReactMix'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)

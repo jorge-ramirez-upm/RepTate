@@ -47,13 +47,12 @@ class ApplicationFRS_I(Application):
     description = "FRS Intensity"
 
     def __init__(self, name="FRS_I", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"FRS_I"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"FRS_I"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super(ApplicationFRS_I, self).__init__(name, parent)
 
@@ -103,11 +102,11 @@ class ApplicationFRS_I(Application):
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -121,11 +120,11 @@ class ApplicationFRS_I(Application):
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

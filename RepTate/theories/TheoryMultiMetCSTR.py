@@ -65,12 +65,12 @@ class TheoryMultiMetCSTR(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryMultiMetCSTR(
             name, parent_dataset,
@@ -93,14 +93,13 @@ class BaseTheoryMultiMetCSTR:
     signal_mulmet_dialog = pyqtSignal(object)
 
     def __init__(self, name='ThMultiMetCSTR', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.reactname = "MultiMetCSTR %d" % (
@@ -170,10 +169,10 @@ class BaseTheoryMultiMetCSTR:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
 
         # get parameters
@@ -372,7 +371,7 @@ class BaseTheoryMultiMetCSTR:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         pass
 
@@ -394,14 +393,13 @@ class CLTheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, Theory):
     """
 
     def __init__(self, name='ThMultiMetCSTR', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -415,14 +413,13 @@ class GUITheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, QTheory):
     """
 
     def __init__(self, name='ThMultiMetCSTR', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)

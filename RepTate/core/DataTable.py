@@ -46,12 +46,13 @@ class DataTable(object):
     MAX_NUM_SERIES=3
 
     def __init__(self, axarr=None, aname=''):
-        """Constructor
+        """
+        **Constructor**
         
         [description]
         
         Keyword Arguments:
-            ax {[type]} -- [description] (default: {None})
+            - axarr {[type]} -- [description] (default: {None})
         """
         self.num_columns=0
         self.num_rows=0
@@ -82,6 +83,7 @@ class DataTable(object):
         
     def mincol(self, col):
         """Minimum value in table column col
+        
         [description]
 
         """
@@ -89,6 +91,7 @@ class DataTable(object):
         
     def minpositivecol(self, col):
         """Minimum positive value in table column col
+        
         [description]
 
         """
@@ -96,6 +99,7 @@ class DataTable(object):
 
     def maxcol(self, col):
         """Maximum value in table column col
+        
         [description]
 
         """

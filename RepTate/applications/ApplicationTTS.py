@@ -59,11 +59,11 @@ class ApplicationTTS(CmdBase):
         [description]
 
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"TTS"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"TTS"})
+            - parent {[type]} -- [description] (default: {None})
 
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         if CmdBase.mode == CmdMode.GUI:
             return GUIApplicationTTS(name, parent)
@@ -79,13 +79,12 @@ class BaseApplicationTTS:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/TTS.html'
 
     def __init__(self, name="TTS", parent=None):
-        """[summary]
-
-        [description]
+        """
+        **Constructor**
 
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"TTS"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"TTS"})
+            - parent {[type]} -- [description] (default: {None})
         """
         from TheoryTTS import TheoryWLFShift
         from TheoryTTS_Test import TheoryWLFShiftTest
@@ -178,11 +177,11 @@ class BaseApplicationTTS:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -198,11 +197,11 @@ class BaseApplicationTTS:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -218,11 +217,11 @@ class BaseApplicationTTS:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -236,11 +235,11 @@ class BaseApplicationTTS:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -254,11 +253,11 @@ class BaseApplicationTTS:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -274,13 +273,12 @@ class CLApplicationTTS(BaseApplicationTTS, Application):
     """
 
     def __init__(self, name="TTS", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"TTS"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"TTS"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
 
@@ -292,12 +290,11 @@ class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
     """
 
     def __init__(self, name="TTS", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"TTS"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"TTS"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)

@@ -74,12 +74,12 @@ class TheoryRouseTime(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryRouseTime(
             name, parent_dataset,
@@ -96,14 +96,13 @@ class BaseTheoryRouseTime:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -159,7 +158,7 @@ class BaseTheoryRouseTime:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         pass
 
@@ -189,10 +188,10 @@ class BaseTheoryRouseTime:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -231,9 +230,9 @@ class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -247,14 +246,13 @@ class GUITheoryRouseTime(BaseTheoryRouseTime, QTheory):
     """
 
     def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -297,12 +295,12 @@ class TheoryRouseFrequency(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseFrequency'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryRouseFrequency(name, parent_dataset, axarr) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryRouseFrequency(
@@ -321,14 +319,13 @@ class BaseTheoryRouseFrequency:
                  name='ThRouseFrequency',
                  parent_dataset=None,
                  axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseFrequency'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -373,7 +370,7 @@ class BaseTheoryRouseFrequency:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         pass
 
@@ -383,8 +380,8 @@ class BaseTheoryRouseFrequency:
         [description]
         
         Arguments:
-            tau {[type]} -- [description]
-            G {[type]} -- [description]
+            - tau {[type]} -- [description]
+            - G {[type]} -- [description]
         """
         pass
 
@@ -404,10 +401,10 @@ class BaseTheoryRouseFrequency:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -447,9 +444,9 @@ class CLTheoryRouseFrequency(BaseTheoryRouseFrequency, Theory):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseFrequency'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -471,9 +468,9 @@ class GUITheoryRouseFrequency(BaseTheoryRouseFrequency, QTheory):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThRouseFrequency'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 

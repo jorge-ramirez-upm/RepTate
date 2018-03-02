@@ -64,12 +64,12 @@ class TheoryWLFShiftTest(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryWLFShiftTest(
             name, parent_dataset,
@@ -85,14 +85,13 @@ class BaseTheoryWLFShiftTest:
     single_file = False
 
     def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShiftTest
@@ -161,7 +160,7 @@ class BaseTheoryWLFShiftTest:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -219,7 +218,7 @@ class BaseTheoryWLFShiftTest:
         Total error is the mean square of the residual, averaged over all points considered in all files.
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         total_error = 0
         npoints = 0
@@ -314,10 +313,10 @@ class BaseTheoryWLFShiftTest:
         [description]
         
         Arguments:
-            *param_in {[type]} -- [description]
+            - \*param_in {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ind = 0
         k = list(self.parameters.keys())
@@ -337,7 +336,7 @@ class BaseTheoryWLFShiftTest:
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.fitting = True
         view = self.parent_dataset.parent_application.current_view
@@ -380,7 +379,7 @@ class BaseTheoryWLFShiftTest:
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if line in self.tables:
             print(self.tables[line].data)
@@ -393,13 +392,13 @@ class BaseTheoryWLFShiftTest:
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         file_names = list(self.tables.keys())
         if not text:
@@ -414,7 +413,7 @@ class BaseTheoryWLFShiftTest:
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         print('Saving prediction of ' + self.thname + ' theory')
         nfiles = len(self.parent_dataset.files)
@@ -491,14 +490,13 @@ class CLTheoryWLFShiftTest(BaseTheoryWLFShiftTest, Theory):
     """
 
     def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -510,14 +508,13 @@ class GUITheoryWLFShiftTest(BaseTheoryWLFShiftTest, QTheory):
     """
 
     def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThWLFShiftTest"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 

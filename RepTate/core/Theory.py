@@ -71,25 +71,26 @@ class Theory(CmdBase):
     print_signal = pyqtSignal(str)
 
     def __init__(self, name="Theory", parent_dataset=None, axarr=None):
-        """Constructor
+        """
+        **Constructor**
         
         The following variables should be set by the particular realization of the theory:
-        parameters     (dict): Parameters of the theory
-        function       (func): Function that calculates the theory
-        min            (real): min for integration/calculation
-        max            (real): max
-        npoints         (int): Number of points to calculate
-        point_distribution   : all_points, linear, log
-        dt             (real): default time step
-        dt_min         (real): minimum time step for adaptive algorithms
-        eps            (real): precision for adaptive algorithms
-        integration_method   : Euler, RungeKutta5, AdaptiveDt
-        stop_steady    (bool): Stop calculation if steady state of component 0 is attained
+            - parameters     (dict): Parameters of the theory
+            - function       (func): Function that calculates the theory
+            - min            (real): min for integration/calculation
+            - max            (real): max
+            - npoints         (int): Number of points to calculate
+            - point_distribution   : all_points, linear, log
+            - dt             (real): default time step
+            - dt_min         (real): minimum time step for adaptive algorithms
+            - eps            (real): precision for adaptive algorithms
+            - integration_method   : Euler, RungeKutta5, AdaptiveDt
+            - stop_steady    (bool): Stop calculation if steady state of component 0 is attained
         
         Keyword Arguments:
-            name {str} -- Name of theory (default: {"Theory"})
-            parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})
-            ax {matplotlib axes} -- matplotlib graph (default: {None})
+            - name {str} -- Name of theory (default: {"Theory"})
+            - parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})
+            - ax {matplotlib axes} -- matplotlib graph (default: {None})
         """
         super().__init__()
 
@@ -187,10 +188,10 @@ class Theory(CmdBase):
         before execution (for example, variable substitution) do it here.
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         super(Theory, self).precmd(line)
         return line
@@ -239,13 +240,14 @@ class Theory(CmdBase):
     def do_error(self, line):
         """Report the error of the current theory
         
-        Report the error of the current theory on all the files, taking into account \
-        the current selected xrange and yrange.\n\
-        File error is calculated as the mean square of the residual, averaged over all points in the file.\n\
+        Report the error of the current theory on all the files, taking into account
+        the current selected xrange and yrange.
+
+        File error is calculated as the mean square of the residual, averaged over all points in the file.
         Total error is the mean square of the residual, averaged over all points in all files.
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         total_error = 0
         npoints = 0
@@ -292,11 +294,11 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            x {[type]} -- [description]
-            *param_in {[type]} -- [description]
+            - x {[type]} -- [description]
+            - \*param_in {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ind = 0
         k = list(self.parameters.keys())
@@ -342,7 +344,7 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if not self.tables:
             self.is_fitting = False
@@ -492,7 +494,7 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if line in self.tables:
             print(self.tables[line].data)
@@ -505,10 +507,10 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
             [type] -- [description]
@@ -564,13 +566,13 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         parameter_names = list(self.parameters.keys())
         if not text:
@@ -594,7 +596,7 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         print('Saving prediction of ' + self.thname + ' theory')
         for f in self.parent_dataset.files:
@@ -637,8 +639,8 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         try:
             self.xmin += dx
@@ -654,8 +656,8 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         try:
             self.xmax += dx
@@ -671,8 +673,8 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         self.ymin += dy
         self.yminline.set_data([0, 1], [self.ymin, self.ymin])
@@ -685,8 +687,8 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         self.ymax += dy
         self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
@@ -699,7 +701,7 @@ class Theory(CmdBase):
         With no arguments: switches ON/OFF the horizontal span
         
         Arguments:
-            line {[xmin xmax]} -- Sets the limits of the span
+            - line {[xmin xmax]} -- Sets the limits of the span
         """
         if (line == ""):
             """.. todo:: Set range to current view limits"""
@@ -735,7 +737,7 @@ class Theory(CmdBase):
         With no arguments: switches ON/OFF the vertical span
         
         Arguments:
-            line {[ymin ymax]} -- Sets the limits of the span
+            - line {[ymin ymax]} -- Sets the limits of the span
         """
         if (line == ""):
             self.yrange.set_visible(not self.yrange.get_visible())
@@ -806,7 +808,7 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.copy_modes()
 
@@ -816,7 +818,7 @@ class Theory(CmdBase):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         tau = np.ones(1)
         G = np.ones(1)
@@ -828,8 +830,8 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            tau {[type]} -- [description]
-            G {[type]} -- [description]
+            - tau {[type]} -- [description]
+            - G {[type]} -- [description]
         """
         pass
 
@@ -839,7 +841,7 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         print(self.citations)
 
@@ -849,7 +851,7 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.parent_dataset.do_plot(line)
         #self.plot_theory_stuff()
@@ -860,11 +862,11 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
+            - name {[type]} -- [description]
+            - value {[type]} -- [description]
 
         Returns:
-            Success{bool} -- True if the operation was successful
+            - Success{bool} -- True if the operation was successful
         """
         p = self.parameters[name]
         try:
@@ -948,7 +950,7 @@ class Theory(CmdBase):
         Else, we execute the line as Python code.
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if "=" in line:
             par = line.split("=")
@@ -1015,7 +1017,7 @@ class Theory(CmdBase):
         [description]
         
         Arguments:
-            msg {[type]} -- [description]
+            - msg {[type]} -- [description]
         """
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.emit(msg)

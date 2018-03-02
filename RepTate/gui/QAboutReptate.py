@@ -48,13 +48,12 @@ class AboutWindow(QDialog, Ui_AboutReptateWindow):
     [description]
     """
     def __init__(self, parent, version):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Arguments:
-            parent {[type]} -- [description]
-            version {[type]} -- [description]
+            - parent {[type]} -- [description]
+            - version {[type]} -- [description]
         """
         super(AboutWindow, self).__init__(parent)
         self.setupUi(self)

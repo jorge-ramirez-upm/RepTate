@@ -60,8 +60,8 @@ class TheoryDTDStarsFreq(CmdBase):
          Entanglement equilibration time
        - ``Me`` :math:`\\equiv M_\mathrm e^\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
        - ``alpha``: Dilution exponent
-       where:
 
+       where:
          - :math:`\\rho`: polymer density
          - :math:`\\zeta`: monomeric friction coefficient
          - :math:`b`: monomer-based segment length
@@ -77,12 +77,12 @@ class TheoryDTDStarsFreq(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryDTDStarsFreq(name, parent_dataset, axarr) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryDTDStarsFreq(
@@ -101,14 +101,13 @@ class BaseTheoryDTDStarsFreq:
                  name='ThDTDStarsFreq',
                  parent_dataset=None,
                  axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -165,10 +164,10 @@ class BaseTheoryDTDStarsFreq:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -211,9 +210,9 @@ class CLTheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, Theory):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -230,14 +229,13 @@ class GUITheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, QTheory):
                  name='ThDTDStarsFreq',
                  parent_dataset=None,
                  axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsFreq'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -262,8 +260,8 @@ class TheoryDTDStarsTime(CmdBase):
          Entanglement equilibration time
        - ``Me`` :math:`\\equiv M_\mathrm e^\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
        - ``alpha``: Dilution exponent
+       
        where:
-
          - :math:`\\rho`: polymer density
          - :math:`\\zeta`: monomeric friction coefficient
          - :math:`b`: monomer-based segment length
@@ -279,12 +277,12 @@ class TheoryDTDStarsTime(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryDTDStarsTime(name, parent_dataset, axarr) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryDTDStarsTime(
@@ -303,14 +301,13 @@ class BaseTheoryDTDStarsTime:
                  name='ThDTDStarsTime',
                  parent_dataset=None,
                  axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -365,10 +362,10 @@ class BaseTheoryDTDStarsTime:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -405,14 +402,13 @@ class CLTheoryDTDStarsTime(BaseTheoryDTDStarsTime, Theory):
                  name='ThDTDStarsTime',
                  parent_dataset=None,
                  axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -429,14 +425,13 @@ class GUITheoryDTDStarsTime(BaseTheoryDTDStarsTime, QTheory):
                  name='ThDTDStarsTime',
                  parent_dataset=None,
                  axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThDTDStarsTime'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThDTDStarsTime'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 

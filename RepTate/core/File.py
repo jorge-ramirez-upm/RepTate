@@ -45,15 +45,16 @@ class File(object):
     """
 
     def __init__(self, file_name="", file_type=None, parent_dataset=None, axarr=None):
-        """Constructor
+        """
+        **Constructor**
         
         [description]
         
         Keyword Arguments:
-            file_name {str} -- Full path
-            file_type {[type]} -- [description] (default: {None})
-            parent_dataset {[type]} -- [description] (default: {None})
-            axarr {[type]} -- [description] (default: {None})
+            - file_name {str} -- Full path
+            - file_type {[type]} -- [description] (default: {None})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - axarr {[type]} -- [description] (default: {None})
         """
         self.file_full_path = os.path.abspath(file_name)
         tmpname = self.file_full_path.split(os.sep)

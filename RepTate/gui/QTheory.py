@@ -198,14 +198,13 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     """
 
     def __init__(self, name="QTheory", parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"QTheory"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            axarr {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"QTheory"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - axarr {[type]} -- [description] (default: {None})
         """
         super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
         self.setupUi(self)
@@ -381,8 +380,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         [description]
         
         Arguments:
-            item {[type]} -- [description]
-            column {[type]} -- [description]
+            - - item {[type]} -- [description]
+            - - column {[type]} -- [description]
         """
         if column == 0:
             p_name = item.text(0)
@@ -432,8 +431,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         [description]
         
         Arguments:
-            item {[type]} -- [description]
-            column {[type]} -- [description]
+            - item {[type]} -- [description]
+            - column {[type]} -- [description]
         """
         param_changed = item.text(0)
         if column == 0:  #param was checked/unchecked

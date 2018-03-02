@@ -57,7 +57,6 @@ from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, The
 class Application(CmdBase):
     """Main abstract class that represents an application
     
-    [description]
     """
     name = "Template"
     description = "Abstract class that defines basic functionality"
@@ -69,13 +68,12 @@ class Application(CmdBase):
                  nplots=1,
                  ncols=1,
                  **kwargs):
-        """Constructor of Application
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ApplicationTemplate"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ApplicationTemplate"})
+            - parent {[type]} -- [description] (default: {None})
         """
 
         super().__init__()
@@ -182,7 +180,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            evt {[type]} -- [description]
+            - evt {[type]} -- [description]
         
         Returns:
             [type] -- [description]
@@ -197,7 +195,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         # get the current x and y limits
         base_scale = 1.1
@@ -235,10 +233,10 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         self.num_datasets += 1
         if (line == ""):
@@ -276,7 +274,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            ds_name {[type]} -- [description]
+            - ds_name {[type]} -- [description]
         """
         if ds_name in self.datasets.keys():
             self.remove_ds_ax_lines(ds_name)
@@ -297,7 +295,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            ds_name {[type]} -- [description]
+            - ds_name {[type]} -- [description]
         """
         try:
             ds = self.datasets[ds_name]
@@ -319,7 +317,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         self.delete(name)
 
@@ -329,13 +327,13 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         dataset_names = list(self.datasets.keys())
         if not text:
@@ -358,7 +356,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.list()
 
@@ -368,7 +366,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         done = False
         if name in self.datasets.keys():
@@ -383,13 +381,13 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ds_names = list(self.datasets.keys())
         if not text:
@@ -416,7 +414,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.filetype_available()
 
@@ -457,7 +455,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.view_available()
 
@@ -467,7 +465,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         if name in list(self.views.keys()):
             self.current_view = self.views[name]
@@ -498,7 +496,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         self.view_switch(name)
 
@@ -508,13 +506,13 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         view_names = list(self.views.keys())
         if not text:
@@ -560,7 +558,7 @@ class Application(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.legend()
 

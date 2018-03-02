@@ -58,11 +58,11 @@ class ApplicationMWD(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUIApplicationMWD(
             name,
@@ -78,13 +78,12 @@ class BaseApplicationMWD:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/MWD.html'
 
     def __init__(self, name="MWD", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"MWD"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"MWD"})
+            - parent {[type]} -- [description] (default: {None})
         """
         from TheoryDiscrMWD import TheoryDiscrMWD
 
@@ -159,11 +158,11 @@ class BaseApplicationMWD:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -180,13 +179,12 @@ class CLApplicationMWD(BaseApplicationMWD, Application):
     """
 
     def __init__(self, name="MWD", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"MWD"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"MWD"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
 
@@ -198,12 +196,11 @@ class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):
     """
 
     def __init__(self, name="MWD", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"MWD"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"MWD"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)

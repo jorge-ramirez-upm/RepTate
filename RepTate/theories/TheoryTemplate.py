@@ -57,12 +57,12 @@ class TheoryTemplate(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryTemplate(
             name, parent_dataset,
@@ -79,14 +79,13 @@ class BaseTheoryTemplate:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -104,7 +103,7 @@ class BaseTheoryTemplate:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         pass
 
@@ -134,10 +133,10 @@ class BaseTheoryTemplate:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -155,14 +154,13 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
     """
 
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -176,14 +174,13 @@ class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
     """
 
     def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 

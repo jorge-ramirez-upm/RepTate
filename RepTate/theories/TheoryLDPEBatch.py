@@ -59,11 +59,11 @@ class TheoryTobitaBatch(CmdBase):
     """LDPE batch reaction theory
     
     The LDPE batch reaction theory uses an algorithm described in the paper by H.
-Tobita (J. Pol. Sci. Part B, 39, 391-403 (2001)). It is designed for a batch
-reaction - in which the reagents are well mixed at the beginning and monomer
-is consumed as the reaction proceeds. It is equivalent to the "plug-flow"
-approximation for a tubular reactor. One possibility when modelling a real
-tubular reactor is to mix several batch reactions with different conversions.
+    Tobita (J. Pol. Sci. Part B, 39, 391-403 (2001)). It is designed for a batch
+    reaction - in which the reagents are well mixed at the beginning and monomer
+    is consumed as the reaction proceeds. It is equivalent to the "plug-flow"
+    approximation for a tubular reactor. One possibility when modelling a real
+    tubular reactor is to mix several batch reactions with different conversions.
     """
     thname = 'TobitaBatchTheory'
     description = 'The LDPE batch reaction theory'
@@ -75,12 +75,12 @@ tubular reactor is to mix several batch reactions with different conversions.
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTobitaBatch'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryTobitaBatch(
             name, parent_dataset,
@@ -101,14 +101,13 @@ class BaseTheoryTobitaBatch():
     signal_request_arm = pyqtSignal(object)
 
     def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
+        """
+        **Constructor**
+
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTobitaBatch'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -360,7 +359,7 @@ class BaseTheoryTobitaBatch():
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         pass
 
@@ -382,14 +381,13 @@ class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
     """
 
     def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
+        """
+        **Constructor**
+
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTobitaBatch'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
@@ -403,14 +401,13 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
     """
 
     def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTobitaBatch'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)

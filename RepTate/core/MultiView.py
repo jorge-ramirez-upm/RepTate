@@ -52,26 +52,27 @@ class PlotOrganizationType(enum.Enum):
     """[summary]
     
     For Vertical and Horizontal, the number of columns is discarded
+    
     Vertical:
-    -------
-    -------
-    -------
-    ...
-    -------
+        -------
+        -------
+        -------
+        ...
+        -------
 
     Horizontal:
-    |  |  | ... |
+        |  |  | ... |
 
     OptimalRow:
-    The plots are organized in nplots/ncols X ncols giving more importance to the first plot, 
-    which will occupy as much space as available from the first row
+        The plots are organized in nplots/ncols X ncols giving more importance to the first plot, 
+        which will occupy as much space as available from the first row
 
     OptimalColumn:
-    The plots are organized in nplots/ncols X ncols giving more importance to the first plot, 
-    which will occupy as much space as available from the first column
+        The plots are organized in nplots/ncols X ncols giving more importance to the first plot, 
+        which will occupy as much space as available from the first column
 
     Specified:
-    The user must provide a GridSpec with the desired organization of plots
+        The user must provide a GridSpec with the desired organization of plots
 
     """
     Vertical=0

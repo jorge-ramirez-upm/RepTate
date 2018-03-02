@@ -61,12 +61,12 @@ class TheoryDiscrMWD(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"MWDiscr"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"MWDiscr"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryDiscrMWD(
             name, parent_dataset,
@@ -83,14 +83,13 @@ class BaseTheoryDiscrMWD:
     single_file = True
 
     def __init__(self, name="ThDiscrMWD", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThDiscrMWD"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThDiscrMWD"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.discretise_mwd
@@ -181,8 +180,8 @@ class BaseTheoryDiscrMWD:
         [description]
         
         Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
+            - name {[type]} -- [description]
+            - value {[type]} -- [description]
         """
         if (name == "nbin"):
             nbinold = self.parameters["nbin"].value
@@ -294,8 +293,8 @@ class BaseTheoryDiscrMWD:
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         nbin = self.parameters["nbin"].value
         newx = np.sort(newx)
@@ -322,7 +321,7 @@ class BaseTheoryDiscrMWD:
         [description]
         
         Arguments:
-            f {[type]} -- [description]
+            - f {[type]} -- [description]
         """
         n = f[:, 0].size
         Mw = 0
@@ -370,7 +369,7 @@ class BaseTheoryDiscrMWD:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
 
         # sort M, w with M increasing in ft
@@ -522,14 +521,13 @@ class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
     """
 
     def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"MWDiscr"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"MWDiscr"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -541,14 +539,13 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
     """
 
     def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"MWDiscr"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"MWDiscr"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 

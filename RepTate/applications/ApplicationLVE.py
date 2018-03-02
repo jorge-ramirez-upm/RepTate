@@ -58,11 +58,11 @@ class ApplicationLVE(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUIApplicationLVE(
             name,
@@ -78,13 +78,12 @@ class BaseApplicationLVE:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html'
 
     def __init__(self, name="LVE", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         """
         from TheoryMaxwellModes import TheoryMaxwellModesFrequency
         from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
@@ -319,11 +318,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -339,11 +338,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -359,11 +358,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -377,11 +376,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -396,11 +395,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -414,11 +413,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -432,11 +431,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -450,11 +449,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -469,11 +468,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -488,11 +487,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -507,11 +506,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -529,11 +528,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -547,11 +546,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -565,11 +564,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -583,11 +582,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -601,11 +600,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -619,11 +618,11 @@ class BaseApplicationLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 3))
         y = np.zeros((dt.num_rows, 3))
@@ -643,13 +642,12 @@ class CLApplicationLVE(BaseApplicationLVE, Application):
     """
 
     def __init__(self, name="LVE", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
 
@@ -661,12 +659,11 @@ class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
     """
 
     def __init__(self, name="LVE", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)

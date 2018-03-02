@@ -73,12 +73,12 @@ class TheoryMaxwellModesFrequency(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryMaxwellModesFrequency(
@@ -86,13 +86,7 @@ class TheoryMaxwellModesFrequency(CmdBase):
 
 
 class BaseTheoryMaxwellModesFrequency:
-    """[summary] :math:`a^2`.
-    
-    .. math::
-        \\eta^*(\\omega) = \\eta_\\infty + (\\eta_0-\\eta_\\infty)\\left( 1 + (\\lambda\\omega)^a \\right)^{(n-1)/a}
-
-    .. math::
-        (a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2
+    """[summary] 
         
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Maxwell.html'
@@ -100,12 +94,13 @@ class BaseTheoryMaxwellModesFrequency:
 
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
                  ax=None):
-        """[summary]
+        """
+        **Constructor**
                 
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesFrequency
@@ -161,8 +156,8 @@ class BaseTheoryMaxwellModesFrequency:
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         nmodes = self.parameters["nmodes"].value
         if self.parent_dataset.parent_application.current_view.log_x:
@@ -252,7 +247,7 @@ class BaseTheoryMaxwellModesFrequency:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         nmodes = self.parameters["nmodes"].value
         freq = np.logspace(self.parameters["logwmin"].value,
@@ -269,8 +264,8 @@ class BaseTheoryMaxwellModesFrequency:
         [description]
         
         Arguments:
-            tau {[type]} -- [description]
-            G {[type]} -- [description]
+            - tau {[type]} -- [description]
+            - G {[type]} -- [description]
         """
         print("set_modes not allowed in this theory (%s)" % self.name)
 
@@ -280,7 +275,7 @@ class BaseTheoryMaxwellModesFrequency:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -339,14 +334,13 @@ class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
 
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -359,14 +353,13 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
 
     def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -412,7 +405,7 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         [description]
         
         Arguments:
-            value {[type]} -- [description]
+            - value {[type]} -- [description]
         """
         """Handle a change of the parameter 'nmode'"""
         nmodesold = self.parameters["nmodes"].value
@@ -464,12 +457,12 @@ class TheoryMaxwellModesTime(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellTime"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryMaxwellModesTime(
             name, parent_dataset,
@@ -486,14 +479,13 @@ class BaseTheoryMaxwellModesTime:
     single_file = True
 
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellTime"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesTime
@@ -549,8 +541,8 @@ class BaseTheoryMaxwellModesTime:
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("logtmin", dx[0])
@@ -631,7 +623,7 @@ class BaseTheoryMaxwellModesTime:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         nmodes = self.parameters["nmodes"].value
         tau = np.logspace(self.parameters["logtmin"].value,
@@ -647,8 +639,8 @@ class BaseTheoryMaxwellModesTime:
         [description]
         
         Arguments:
-            tau {[type]} -- [description]
-            G {[type]} -- [description]
+            - tau {[type]} -- [description]
+            - G {[type]} -- [description]
         """
         print("set_modes not allowed in this theory (%s)" % self.name)
 
@@ -658,7 +650,7 @@ class BaseTheoryMaxwellModesTime:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -713,14 +705,13 @@ class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
     """
 
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellTime"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -732,14 +723,13 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
     """
 
     def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellTime"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -784,14 +774,11 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         # self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
-        """[summary]
-        
-        [description]
+        """Handle a change of the parameter 'nmode'
         
         Arguments:
-            value {[type]} -- [description]
+            - value {[type]} -- [description]
         """
-        """Handle a change of the parameter 'nmode'"""
         nmodesold = self.parameters["nmodes"].value
         tminold = self.parameters["logtmin"].value
         tmaxold = self.parameters["logtmax"].value

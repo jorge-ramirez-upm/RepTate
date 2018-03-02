@@ -56,8 +56,8 @@ class FlowMode(Enum):
     """Defines the flow geometry used
     
     Parameters can be:
-        shear: Shear flow
-        uext: Uniaxial extension flow
+        - shear: Shear flow
+        - uext: Uniaxial extension flow
     """
     shear = 0
     uext = 1
@@ -67,8 +67,8 @@ class FeneMode(Enum):
     """Defines the finite extensibility function
     
     Parameters can be:
-        none: No finite extensibility
-        with_fene: With finite extensibility
+        - none: No finite extensibility
+        - with_fene: With finite extensibility
     """
     none = 0
     with_fene = 1
@@ -147,12 +147,12 @@ J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryRoliePoly(
             name, parent_dataset,
@@ -169,14 +169,13 @@ class BaseTheoryRoliePoly:
     single_file = False
 
     def __init__(self, name="ThRoliePoly", parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThRoliePoly"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThRoliePoly"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.RoliePoly
@@ -301,7 +300,7 @@ class BaseTheoryRoliePoly:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         nmodes = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
@@ -317,8 +316,8 @@ class BaseTheoryRoliePoly:
         [description]
         
         Arguments:
-            tau {[type]} -- [description]
-            G {[type]} -- [description]
+            - - tau {[type]} -- [description]
+            - - G {[type]} -- [description]
         """
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
@@ -336,9 +335,9 @@ class BaseTheoryRoliePoly:
         [description]
         
         Arguments:
-            sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
-            t {float} -- time
-            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
+            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
+            - t {float} -- time
+            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
         sxx, syy, sxy = sigma
         lmax, tauD, tauR, beta, delta, gammadot = p
@@ -366,9 +365,9 @@ class BaseTheoryRoliePoly:
         [description]
         
         Arguments:
-            sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
-            t {float} -- time
-            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
+            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
+            - t {float} -- time
+            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
         sxx, syy, sxy = sigma
         _, tauD, _, beta, _, gammadot = p
@@ -391,9 +390,9 @@ class BaseTheoryRoliePoly:
         [description]
 
         Arguments:
-            sigma {array} -- vector of state variables, sigma = [sxx, syy]
-            t {float} -- time
-            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
+            - sigma {array} -- vector of state variables, sigma = [sxx, syy]
+            - t {float} -- time
+            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
         sxx, syy = sigma
         lmax, tauD, tauR, beta, delta, epsilon_dot = p
@@ -420,9 +419,9 @@ class BaseTheoryRoliePoly:
         [description]
         
         Arguments:
-            sigma {array} -- vector of state variables, sigma = [sxx, syy]
-            t {float} -- time
-            p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, epsilon_dot]
+            - sigma {array} -- vector of state variables, sigma = [sxx, syy]
+            - t {float} -- time
+            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, epsilon_dot]
         """
         sxx, syy = sigma
         _, tauD, tauR, beta, delta, epsilon_dot = p
@@ -448,10 +447,10 @@ class BaseTheoryRoliePoly:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -528,8 +527,8 @@ class BaseTheoryRoliePoly:
         [description]
         
         Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
+            - name {[type]} -- [description]
+            - value {[type]} -- [description]
         """
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
@@ -581,14 +580,13 @@ class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
     """
 
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -600,14 +598,13 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
     """
 
     def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 

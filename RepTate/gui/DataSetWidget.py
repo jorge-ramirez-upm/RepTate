@@ -45,12 +45,11 @@ class DataSetWidget(QTreeWidget):
     by clicking in the white area of the DataSet, and allows to delete a data table item
     """
     def __init__(self, parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(parent)
         self.parent_dataset = parent
@@ -61,7 +60,7 @@ class DataSetWidget(QTreeWidget):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         self.clearSelection()
         QTreeWidget.mousePressEvent(self, event)
@@ -72,7 +71,7 @@ class DataSetWidget(QTreeWidget):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if event.key() == Qt.Key_Backspace or event.key() == Qt.Key_Delete:
             self.delete()

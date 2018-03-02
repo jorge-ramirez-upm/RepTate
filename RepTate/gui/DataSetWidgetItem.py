@@ -46,36 +46,33 @@ class DataSetWidgetItem(QTreeWidgetItem):
     series=0
 
     def __init__(self, parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
         """
         QTreeWidgetItem.__init__(self, parent)
 
     def __init__(self, parent=None, itemlist=[], type=0):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
-            type {[type]} -- [description] (default: {0})
+            - parent {[type]} -- [description] (default: {None})
+            - type {[type]} -- [description] (default: {0})
         """
         QTreeWidgetItem.__init__(self, parent, itemlist, type)
 
     def __init__(self, parent=None, itemlist=[], type=0, file_name_short="dummy", file_type=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
-            type {[type]} -- [description] (default: {0})
-            file_name_short {[type]} -- [description] (default: {"dummy"})
-            file_type {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
+            - type {[type]} -- [description] (default: {0})
+            - file_name_short {[type]} -- [description] (default: {"dummy"})
+            - file_type {[type]} -- [description] (default: {None})
         """
         QTreeWidgetItem.__init__(self, parent, itemlist, type)
         # self.file_name_short = file_name_short
@@ -88,10 +85,10 @@ class DataSetWidgetItem(QTreeWidgetItem):
         value of the cells, not the strig value
         
         Arguments:
-            otherItem {[type]} -- [description]
+            - otherItem {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         column = self.treeWidget().sortColumn()
         try:

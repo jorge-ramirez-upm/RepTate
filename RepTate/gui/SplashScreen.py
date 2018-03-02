@@ -46,7 +46,8 @@ class SplashScreen(QSplashScreen):
     [description]
     """
     def __init__(self):
-        """[summary]
+        """
+        **Constructor**
         
         [description]
         """
@@ -61,7 +62,7 @@ class SplashScreen(QSplashScreen):
         [description]
         
         Arguments:
-            msg {[type]} -- [description]
+            - msg {[type]} -- [description]
         """
         align = Qt.Alignment(Qt.AlignBottom |
                              Qt.AlignRight |

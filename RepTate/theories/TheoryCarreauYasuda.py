@@ -48,7 +48,9 @@ from PyQt5.QtCore import QSize, QUrl
 class TheoryCarreauYasuda(CmdBase):
     """[summary]
     
-    [description]
+        .. math::
+            \\eta^*(\\omega) = \\eta_\\infty + (\\eta_0-\\eta_\\infty)\\left( 1 + (\\lambda\\omega)^a \\right)^{(n-1)/a}
+
     """
     thname = 'CarreauYasudaTheory'
     description = 'Carreau-Yasuda Theory'
@@ -60,12 +62,12 @@ class TheoryCarreauYasuda(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThCarreauYasuda'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryCarreauYasuda(
             name, parent_dataset,
@@ -82,14 +84,13 @@ class BaseTheoryCarreauYasuda:
     single_file = False # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThCarreauYasuda'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.function_CarreauYasuda  # main theory function
@@ -168,10 +169,10 @@ class BaseTheoryCarreauYasuda:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -196,14 +197,13 @@ class CLTheoryCarreauYasuda(BaseTheoryCarreauYasuda, Theory):
     """
 
     def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThCarreauYasuda'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -215,14 +215,13 @@ class GUITheoryCarreauYasuda(BaseTheoryCarreauYasuda, QTheory):
     """
 
     def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThCarreauYasuda'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         # add widgets specific to the theory

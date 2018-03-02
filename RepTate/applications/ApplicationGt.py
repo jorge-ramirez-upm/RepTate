@@ -61,11 +61,11 @@ class ApplicationGt(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"Gt"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"Gt"})
+            - parent {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUIApplicationGt(
             name,
@@ -81,13 +81,12 @@ class BaseApplicationGt:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Gt.html'
 
     def __init__(self, name="Gt", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"Gt"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"Gt"})
+            - parent {[type]} -- [description] (default: {None})
         """
         from TheoryMaxwellModes import TheoryMaxwellModesTime
         from TheoryRouse import TheoryRouseTime
@@ -174,11 +173,11 @@ class BaseApplicationGt:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -192,11 +191,11 @@ class BaseApplicationGt:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -210,11 +209,11 @@ class BaseApplicationGt:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -275,13 +274,12 @@ class CLApplicationGt(BaseApplicationGt, Application):
     """
 
     def __init__(self, name="Gt", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"Gt"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"Gt"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
 
@@ -293,12 +291,11 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
     """
 
     def __init__(self, name="Gt", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"Gt"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"Gt"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)

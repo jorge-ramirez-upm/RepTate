@@ -58,11 +58,11 @@ class ApplicationTemplate(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'Template'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'Template'})
+            - parent {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUIApplicationTemplate(name, parent) if (
             CmdBase.mode == CmdMode.GUI) else CLApplicationTemplate(
@@ -78,13 +78,12 @@ class BaseApplicationTemplate:
     #help_file = ''
 
     def __init__(self, name='Template', parent=None, nplots=1, ncols=2):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'Template'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'Template'})
+            - parent {[type]} -- [description] (default: {None})
         """
         # IMPORT THEORIES
         # Import theories specific to the Application e.g.:
@@ -140,11 +139,11 @@ class BaseApplicationTemplate:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -160,13 +159,12 @@ class CLApplicationTemplate(BaseApplicationTemplate, Application):
     """
 
     def __init__(self, name='Template', parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'Template'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'Template'})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
         #usually this class stays empty
@@ -179,13 +177,12 @@ class GUIApplicationTemplate(BaseApplicationTemplate, QApplicationWindow):
     """
 
     def __init__(self, name='Template', parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'Template'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'Template'})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
 

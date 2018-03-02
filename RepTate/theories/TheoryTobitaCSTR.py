@@ -70,12 +70,12 @@ reactor during free-radical polymerisation.
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryTobitaCSTR(
             name, parent_dataset,
@@ -96,14 +96,13 @@ class BaseTheoryTobitaCSTR:
     signal_request_arm = pyqtSignal(object)
 
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.reactname = "LDPE CSTR %d" % (rch.tCSTR_global.tobCSTRnumber)
@@ -174,7 +173,7 @@ class BaseTheoryTobitaCSTR:
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         pass
 
@@ -197,10 +196,10 @@ class BaseTheoryTobitaCSTR:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
 
         # get parameters
@@ -376,14 +375,13 @@ class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
     """
 
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -397,14 +395,13 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
     """
 
     def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'ThTemplate'})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         rgt.initialise_tool_bar(self)

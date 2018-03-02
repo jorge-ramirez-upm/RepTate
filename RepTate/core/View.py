@@ -58,23 +58,24 @@ class View(object):
                  snames=[],
                  inverse_view_proc=None,
                  index=0):
-        """Constructor
+        """
+        **Constructor**
         
         [description]
         
         Keyword Arguments:
-            name {str} -- View name
-            description {str} -- Description of the view
-            x_label {str} -- Label of the x axis
-            y_label {str} -- Label of the y axis
-            x_units {str} -- Default units of the x axis
-            y_units {str} -- Default units of the y axis
-            log_x {bool} -- X axis logarithmic? (default: {False})
-            log_y {bool} -- Y axis logarithmic? (default: {False})
-            view_proc {func} -- Function that creates the X, Y1, Y2 values of the view (default: {None})
-            inverse_view_proc {func} -- Function that inverses the view: From the n values of the view, returns the data table values (default: {None})
-            n {int} -- Number of series that the view represents (default: {1})
-            snames {list of str} -- Names of the series represented by the view
+            - name {str} -- View name
+            - description {str} -- Description of the view
+            - x_label {str} -- Label of the x axis
+            - y_label {str} -- Label of the y axis
+            - x_units {str} -- Default units of the x axis
+            - y_units {str} -- Default units of the y axis
+            - log_x {bool} -- X axis logarithmic? (default: {False})
+            - log_y {bool} -- Y axis logarithmic? (default: {False})
+            - view_proc {func} -- Function that creates the X, Y1, Y2 values of the view (default: {None})
+            - inverse_view_proc {func} -- Function that inverses the view: From the n values of the view, returns the data table values (default: {None})
+            - n {int} -- Number of series that the view represents (default: {1})
+            - snames {list of str} -- Names of the series represented by the view
         """
         self.name = name
         self.description = description

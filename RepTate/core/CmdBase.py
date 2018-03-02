@@ -92,7 +92,7 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__()
 
@@ -106,7 +106,7 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         print("running shell command:", line)
         output = os.popen(line).read()
@@ -119,7 +119,7 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if os.path.isdir(line):
             os.chdir(line)
@@ -132,10 +132,10 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            root {[type]} -- [description]
+            - root {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         res = []
         for name in os.listdir(root):
@@ -153,10 +153,10 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Keyword Arguments:
-            path {[type]} -- [description] (default: {None})
+            - path {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         if not path:
             return self.__listdir('.')
@@ -181,13 +181,13 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         test=line.split()
         if (len(test)>1):
@@ -203,7 +203,7 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         dirs=os.listdir()
         for d in dirs:
@@ -216,7 +216,7 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         print(os.getcwd())
     do_cwd = do_pwd
@@ -234,10 +234,10 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            args {[type]} -- [description]
+            - args {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         print("")
         return True
@@ -249,7 +249,7 @@ class CmdBase(cmd.Cmd):
         [description]
         
         Arguments:
-            args {[type]} -- [description]
+            - args {[type]} -- [description]
         """
         if (CmdBase.mode==CmdMode.batch):
             print ("Exiting RepTate...")
@@ -265,12 +265,12 @@ class CmdBase(cmd.Cmd):
     
     def default(self, line):
         """Called on an input line when the command prefix is not recognized.
-           In that case we execute the line as Python code.
+        In that case we execute the line as Python code.
         
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         try:
             exec(line) #in self._locals, self._globals
@@ -280,12 +280,12 @@ class CmdBase(cmd.Cmd):
     def do_console(self, line):
         """Print/Set current & available Console modes
         
-           console --> print current mode
-           console available --> print available modes
-           console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
+           - console --> print current mode
+           - console available --> print available modes
+           - console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if (line==""):
             print("Current console mode: %s"%CmdMode.modes.value[CmdBase.mode.value])

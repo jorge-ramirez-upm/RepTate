@@ -44,57 +44,66 @@ class TXTColumnFile(object):
     """Basic class for text-column based data files
     
     Columns should be separated by espaces or tabs
-    BASIC Structure of FILE:
-    LINE    CONTENTS
-    0       Param1=434;Param2=4355;
-    1       # Header line and/or comments [OPTIONAL, ANY NUMBER OF HEADER LINES IS POSSIBLE]
-    2       col1 col2 col3 [NAMES OF COLUMNS, OPTIONAL]
-    3       4343 434.5 535e-434 [DATA, ONLY NUMBERS ALLOWED]
 
-    The following examples can be declared with the line:
-    ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
+    BASIC Structure of FILE::
     
-    EXAMPLE 1: columns line, no header lines
-    C1=8.77210163229153;C2=114.03;Rho0=0.928;C3=0.61;T=-35;CTg=14.65;dx12=0;isof=true;Mw=634.5;chem=PI;PDI=1.03;
-    w                           G'                          G''                        T                            g
-    4.29882628773180E-0008      1.44001856995549E+0002      3.70207627600662E+0003     -3.30000000000000E-0003      0.00000000000000E+0000     
-    6.30767835406968E-0008      2.56947504513849E+0002      5.39032089470917E+0003      3.14760000000000E-0004      0.00000000000000E+0000     
-    9.25946098215800E-0008      4.87031807130633E+0002      7.86538338583378E+0003     -1.01000000000000E-0002      0.00000000000000E+0000     
+        LINE    CONTENTS
+        0       Param1=434;Param2=4355;
+        1       # Header line and/or comments [OPTIONAL, ANY NUMBER OF HEADER LINES IS POSSIBLE]
+        2       col1 col2 col3 [NAMES OF COLUMNS, OPTIONAL]
+        3       4343 434.5 535e-434 [DATA, ONLY NUMBERS ALLOWED]
 
-    EXAMPLE 2: Neither columns line nor header lines
-    C1=8.77210163229153;C2=114.03;Rho0=0.928;C3=0.61;T=-35;CTg=14.65;dx12=0;isof=true;Mw=23.4;chem=PI;PDI=1.03;
-    2.42782390212358E-0003      2.11182193155015E+0001      1.72559181398615E+0003      1.25000000000000E-0003      0.00000000000000E+0000     
-    3.56351666244471E-0003      4.30476548641552E+0001      2.53490824331357E+0003      1.48400000000000E-0002      0.00000000000000E+0000     
+    The following examples can be declared with the line::
 
-    EXAMPLE 3: 2 Header lines, no column line 
-    T=160;chem=PE;
-    # Header 1
-    # Header 2
-    4.23333e-05 1.05E+00 2.96E+01
-    6.7e-05 2.02E+00 3.97E+01 
+        ftype=TXTColumnFile("LVE files", "tts", "LVE files", ['w','G\'','G\'\''], ['Mw','T'], ['rad/s','Pa','Pa'])
     
-    EXAMPLE 4: 2 Header lines + column line
-    T=160;chem=PE;
-    # Header 1
-    # Header 2
-    w G' G''
-    4.23333e-05 1.05E+00 2.96E+01
-    6.7e-05 2.02E+00 3.97E+01 
+    EXAMPLE 1: columns line, no header lines::
+
+        C1=8.77210163229153;C2=114.03;Rho0=0.928;C3=0.61;T=-35;CTg=14.65;dx12=0;isof=true;Mw=634.5;chem=PI;PDI=1.03;
+        w                           G'                          G''                        T                            g
+        4.29882628773180E-0008      1.44001856995549E+0002      3.70207627600662E+0003     -3.30000000000000E-0003      0.00000000000000E+0000     
+        6.30767835406968E-0008      2.56947504513849E+0002      5.39032089470917E+0003      3.14760000000000E-0004      0.00000000000000E+0000     
+        9.25946098215800E-0008      4.87031807130633E+0002      7.86538338583378E+0003     -1.01000000000000E-0002      0.00000000000000E+0000     
+
+    EXAMPLE 2: Neither columns line nor header lines::
+
+        C1=8.77210163229153;C2=114.03;Rho0=0.928;C3=0.61;T=-35;CTg=14.65;dx12=0;isof=true;Mw=23.4;chem=PI;PDI=1.03;
+        2.42782390212358E-0003      2.11182193155015E+0001      1.72559181398615E+0003      1.25000000000000E-0003      0.00000000000000E+0000     
+        3.56351666244471E-0003      4.30476548641552E+0001      2.53490824331357E+0003      1.48400000000000E-0002      0.00000000000000E+0000     
+
+    EXAMPLE 3: 2 Header lines, no column line::
+        
+        T=160;chem=PE;
+        # Header 1
+        # Header 2
+        4.23333e-05 1.05E+00 2.96E+01
+        6.7e-05 2.02E+00 3.97E+01 
+    
+    EXAMPLE 4: 2 Header lines + column line::
+
+        T=160;chem=PE;
+        # Header 1
+        # Header 2
+        w G' G''
+        4.23333e-05 1.05E+00 2.96E+01
+        6.7e-05 2.02E+00 3.97E+01
+
     """    
     def __init__(self, name='TXTColumn', extension='txt', 
                  description='Generic text file with columns', 
                  col_names=[], basic_file_parameters=[], col_units=[]):
-        """Constructor
+        """
+        **Constructor**
     
         [description]
 
         Keyword Arguments:
-            name {str} -- Name of file type
-            extension {str} -- File extension
-            description {str} -- Description of file contents
-            col_names {list of str}: list with names of columns to read
-            basic_file_parameters {list of str}: list with file parameters that should always be included in the header line
-            col_units {list of str}: Default units of columns
+            - name {str} -- Name of file type
+            - extension {str} -- File extension
+            - description {str} -- Description of file contents
+            - col_names {list of str}: list with names of columns to read
+            - basic_file_parameters {list of str}: list with file parameters that should always be included in the header line
+            - col_units {list of str}: Default units of columns
         """
         self.name=name
         self.extension=extension
@@ -113,10 +122,10 @@ class TXTColumnFile(object):
         [description]
         
         Arguments:
-            s {[type]} -- [description]
+            - s {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         try:
             float(s)
@@ -130,8 +139,8 @@ class TXTColumnFile(object):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
-            file {[type]} -- [description]
+            - line {[type]} -- [description]
+            - file {[type]} -- [description]
         """
         items=line.split(';')
         file.file_parameters={}
@@ -149,11 +158,11 @@ class TXTColumnFile(object):
         [description]
         
         Arguments:
-            lines {[type]} -- [description]
-            file {[type]} -- [description]
+            - lines {[type]} -- [description]
+            - file {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - - [type] -- [description]
         """
         colnameline=0
         firstdata=0
@@ -176,12 +185,12 @@ class TXTColumnFile(object):
         [description]
         
         Arguments:
-            filename {[type]} -- [description]
-            parent_dataset {[type]} -- [description]
-            ax {[type]} -- [description]
+            - filename {[type]} -- [description]
+            - parent_dataset {[type]} -- [description]
+            - ax {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         if not os.path.isfile(filename):
             print("File \"%s\" does not exists"%f)

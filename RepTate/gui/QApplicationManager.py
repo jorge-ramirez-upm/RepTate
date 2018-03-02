@@ -62,12 +62,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     reptatelogger.setLevel(logging.DEBUG)
 
     def __init__(self, parent=None):
-        """[summary]
-        
-        [description]
-        
+        """
+        **Constructor**
+
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__()
         QMainWindow.__init__(self)
@@ -188,7 +187,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         get_dict = {}
         set_dict = {}
@@ -214,7 +213,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         old_name = self.ApplicationtabWidget.tabText(index)
         dlg = QInputDialog(self)
@@ -243,7 +242,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         #appname = self.ApplicationtabWidget.widget(index).windowTitle
         #items = self.Projecttree.findItems(appname, Qt.MatchContains)
@@ -256,7 +255,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         app_name = self.ApplicationtabWidget.widget(index).name
         self.ApplicationtabWidget.removeTab(index)
@@ -268,8 +267,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         
         Arguments:
-            app_name {[type]} -- [description]
-            icon {[type]} -- [description]
+            - app_name {[type]} -- [description]
+            - icon {[type]} -- [description]
         """
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset(

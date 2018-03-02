@@ -64,11 +64,11 @@ class DraggableArtist(object):
         [description]
         
         Arguments:
-            artist {matplotlib artist} -- rectangle,line,patch,series to move.
+            - artist {matplotlib artist} -- rectangle,line,patch,series to move.
         
         Keyword Arguments:
-            mode {Dragtype} -- vertical,horizontal,all,none. (default: {DragType.none})
-            function -- function that should interpret the final coordinates of the artist moved (default: {None})
+            - mode {Dragtype} -- vertical,horizontal,all,none. (default: {DragType.none})
+            - function -- function that should interpret the final coordinates of the artist moved (default: {None})
         """
         self.parent_theory = parent_theory
         self.artist = artist
@@ -94,7 +94,7 @@ class DraggableArtist(object):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -118,7 +118,7 @@ class DraggableArtist(object):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self:
             return
@@ -149,8 +149,8 @@ class DraggableArtist(object):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         pass
 
@@ -218,13 +218,13 @@ class DraggableBinSeries(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            logx {[type]} -- [description] (default: {False})
-            logy {[type]} -- [description] (default: {False})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - logx {[type]} -- [description] (default: {False})
+            - logy {[type]} -- [description] (default: {False})
+            - function {[type]} -- [description] (default: {None})
         """
         super().__init__(artist, mode, function)
         self.logx = logx
@@ -236,7 +236,7 @@ class DraggableBinSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if event.inaxes != self.artist.axes: return
         # if DraggableArtist.lock is not None: return 
@@ -273,7 +273,7 @@ class DraggableBinSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self:
             return
@@ -305,8 +305,8 @@ class DraggableBinSeries(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         xdata = self.xdata_at_press
         ydata = self.ydata_at_press
@@ -347,7 +347,7 @@ class DraggableBinSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
@@ -398,13 +398,13 @@ class DraggableModesSeries(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            logx {[type]} -- [description] (default: {False})
-            logy {[type]} -- [description] (default: {False})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - logx {[type]} -- [description] (default: {False})
+            - logy {[type]} -- [description] (default: {False})
+            - function {[type]} -- [description] (default: {None})
         """
         super(DraggableModesSeries, self).__init__(artist, mode, function)
         self.parent_application = parent_application
@@ -420,7 +420,7 @@ class DraggableModesSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -455,7 +455,7 @@ class DraggableModesSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self:
             return
@@ -487,8 +487,8 @@ class DraggableModesSeries(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         xdata = self.xdata_at_press
         ydata = self.ydata_at_press
@@ -530,7 +530,7 @@ class DraggableModesSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
@@ -581,12 +581,12 @@ class DraggableSeries(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            logx {[type]} -- [description] (default: {False})
-            logy {[type]} -- [description] (default: {False})
+            - mode {[type]} -- [description] (default: {DragType})
+            - logx {[type]} -- [description] (default: {False})
+            - logy {[type]} -- [description] (default: {False})
         """
         super(DraggableSeries, self).__init__(artist, mode, function=None)
         self.note = artist.axes.annotate('', xycoords='axes fraction', xy=(0,0), textcoords='axes fraction', xytext=(0.01, 0.95))
@@ -608,7 +608,7 @@ class DraggableSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -642,7 +642,7 @@ class DraggableSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self:
             return
@@ -686,8 +686,8 @@ class DraggableSeries(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         if self.logx:
             newx = [x*np.power(10, dx) for x in self.data[0]]
@@ -705,7 +705,7 @@ class DraggableSeries(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self: return
         self.press = None
@@ -745,11 +745,11 @@ class DraggablePatch(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - function {[type]} -- [description] (default: {None})
         """
         super(DraggablePatch, self).__init__(artist, mode, function)
 
@@ -766,8 +766,8 @@ class DraggablePatch(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         self.artist.center = (self.data[0]+dx, self.data[1]+dy)
 
@@ -782,11 +782,11 @@ class DraggableRectangle(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - function {[type]} -- [description] (default: {None})
         """
         super(DraggableRectangle, self).__init__(artist, mode, function)
 
@@ -803,8 +803,8 @@ class DraggableRectangle(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         self.artist.set_x(self.data[0]+dx)
         self.artist.set_y(self.data[1]+dy)
@@ -820,11 +820,11 @@ class DraggableVLine(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - function {[type]} -- [description] (default: {None})
         """
         super(DraggableVLine, self).__init__(artist, mode, function, parent_theory)
     
@@ -834,7 +834,7 @@ class DraggableVLine(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -865,8 +865,8 @@ class DraggableVLine(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         self.artist.set_data([self.data[0][0] + dx, self.data[0][1] + dx], [0, 1])
 
@@ -882,11 +882,11 @@ class DraggableHLine(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - function {[type]} -- [description] (default: {None})
         """
         super(DraggableHLine, self).__init__(artist, mode, function, parent_theory)
     
@@ -896,7 +896,7 @@ class DraggableHLine(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -927,8 +927,8 @@ class DraggableHLine(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         self.artist.set_data([0, 1], [self.data[1][0] + dy, self.data[1][1] + dy])
 
@@ -943,11 +943,11 @@ class DraggableVSpan(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - function {[type]} -- [description] (default: {None})
         """
         super(DraggableVSpan, self).__init__(artist, mode, function)
 
@@ -964,8 +964,8 @@ class DraggableVSpan(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         xmin = self.data[0][0]
         xmax = self.data[2][0]
@@ -982,11 +982,11 @@ class DraggableHSpan(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            function {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - function {[type]} -- [description] (default: {None})
         """
         super(DraggableHSpan, self).__init__(artist, mode, function)
 
@@ -1003,8 +1003,8 @@ class DraggableHSpan(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         ymin = self.data[0][1]
         ymax = self.data[1][1]
@@ -1021,12 +1021,12 @@ class DraggableNote(DraggableArtist):
         [description]
         
         Arguments:
-            artist {[type]} -- [description]
+            - artist {[type]} -- [description]
         
         Keyword Arguments:
-            mode {[type]} -- [description] (default: {DragType})
-            function {[type]} -- [description] (default: {None})
-            function2 {[type]} -- [description] (default: {None})
+            - mode {[type]} -- [description] (default: {DragType})
+            - function {[type]} -- [description] (default: {None})
+            - function2 {[type]} -- [description] (default: {None})
         """
         super(DraggableNote, self).__init__(artist, mode, function)
         self.function2=function2
@@ -1044,8 +1044,8 @@ class DraggableNote(DraggableArtist):
         [description]
         
         Arguments:
-            dx {[type]} -- [description]
-            dy {[type]} -- [description]
+            - dx {[type]} -- [description]
+            - dy {[type]} -- [description]
         """
         self.artist.set_position([self.press[0]+dx, self.press[1]+dy])
 
@@ -1055,7 +1055,7 @@ class DraggableNote(DraggableArtist):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press

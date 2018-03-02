@@ -64,12 +64,12 @@ class TheoryTTSShiftAutomatic(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryTTSShiftAutomatic(name, parent_dataset, ax) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryTTSShiftAutomatic(
@@ -88,14 +88,13 @@ class BaseTheoryTTSShiftAutomatic:
                  name="ThTTSShiftAutomatic",
                  parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryTTSShiftAutomatic
@@ -129,7 +128,7 @@ class BaseTheoryTTSShiftAutomatic:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -191,7 +190,7 @@ class BaseTheoryTTSShiftAutomatic:
         Total error is the mean square of the residual, averaged over all points considered in all files.
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         total_error = 0
         npoints = 0
@@ -270,10 +269,10 @@ class BaseTheoryTTSShiftAutomatic:
         [description]
         
         Arguments:
-            *param_in {[type]} -- [description]
+            - \*param_in {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ind = 0
         k = list(self.parameters.keys())
@@ -293,10 +292,10 @@ class BaseTheoryTTSShiftAutomatic:
         [description]
         
         Arguments:
-            *param_in {[type]} -- [description]
+            - \*param_in {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         H = param_in[0][0]
         V = 0
@@ -336,7 +335,7 @@ class BaseTheoryTTSShiftAutomatic:
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.fitting = True
         #view = self.parent_dataset.parent_application.current_view
@@ -451,7 +450,7 @@ class BaseTheoryTTSShiftAutomatic:
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if line in self.tables:
             print(self.tables[line].data)
@@ -464,13 +463,13 @@ class BaseTheoryTTSShiftAutomatic:
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         file_names = list(self.tables.keys())
         if not text:
@@ -485,7 +484,7 @@ class BaseTheoryTTSShiftAutomatic:
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         print('Saving prediction of ' + self.thname + ' theory')
         nfiles = len(self.parent_dataset.files)
@@ -548,14 +547,13 @@ class CLTheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, Theory):
                  name="ThTTSShiftAutomatic",
                  parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -570,14 +568,13 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
                  name="ThTTSShiftAutomatic",
                  parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 

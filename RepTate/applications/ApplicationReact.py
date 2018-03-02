@@ -61,11 +61,11 @@ class ApplicationReact(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'React'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'React'})
+            - parent {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUIApplicationReact(
             name,
@@ -81,13 +81,12 @@ class BaseApplicationReact:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/React.html'
 
     def __init__(self, name='React', parent=None, **kwargs):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'React'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'React'})
+            - parent {[type]} -- [description] (default: {None})
         """
         from TheoryLDPEBatch import TheoryTobitaBatch
         from TheoryTobitaCSTR import TheoryTobitaCSTR
@@ -196,11 +195,11 @@ class BaseApplicationReact:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -214,11 +213,11 @@ class BaseApplicationReact:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -232,11 +231,11 @@ class BaseApplicationReact:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -250,11 +249,11 @@ class BaseApplicationReact:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -268,11 +267,11 @@ class BaseApplicationReact:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -288,13 +287,12 @@ class CLApplicationReact(BaseApplicationReact, Application):
     """
 
     def __init__(self, name='React', parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'React'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'React'})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
         #usually this class stays empty
@@ -307,13 +305,12 @@ class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
     """
 
     def __init__(self, name='React', parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {'React'})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {'React'})
+            - parent {[type]} -- [description] (default: {None})
         """
 
         super().__init__(name, parent)

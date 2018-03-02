@@ -58,11 +58,11 @@ class ApplicationNLVE(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"NLVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"NLVE"})
+            - parent {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUIApplicationNLVE(
             name,
@@ -78,13 +78,12 @@ class BaseApplicationNLVE:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/NLVE.html'
 
     def __init__(self, name="NLVE", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         """
         from TheoryRoliePoly import TheoryRoliePoly
 
@@ -157,11 +156,11 @@ class BaseApplicationNLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -179,11 +178,11 @@ class BaseApplicationNLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -197,11 +196,11 @@ class BaseApplicationNLVE:
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -221,13 +220,12 @@ class CLApplicationNLVE(BaseApplicationNLVE, Application):
     """
 
     def __init__(self, name="NLVE", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
 
@@ -239,12 +237,11 @@ class GUIApplicationNLVE(BaseApplicationNLVE, QApplicationWindow):
     """
 
     def __init__(self, name="NLVE", parent=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"LVE"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"LVE"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)

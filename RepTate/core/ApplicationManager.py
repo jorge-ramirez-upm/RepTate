@@ -55,8 +55,7 @@ import Version
 
 class ApplicationManager(CmdBase):
     """Main Reptate container of applications
-    
-    [description]
+
     """
 
     version = Version.VERSION
@@ -66,12 +65,13 @@ class ApplicationManager(CmdBase):
         version, date)
 
     def __init__(self, parent=None):
-        """Constructor
+        """
+        **Constructor**
         
         [description]
         
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__()
 
@@ -112,7 +112,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         L = [
             "%s: %s" % (app.name, app.description)
@@ -126,7 +126,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         L = self.available()
         for app in L:
@@ -138,7 +138,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         if name in self.applications.keys():
             del self.applications[name]
@@ -151,7 +151,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         self.delete(name)
 
@@ -161,13 +161,13 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         app_names = list(self.applications.keys())
         if not text:
@@ -182,7 +182,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         L = [
             "%s: %s" % (app.name, app.description)
@@ -196,7 +196,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         L = self.list()
         for app in L:
@@ -208,10 +208,10 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         if (name in self.available_applications):
             self.application_counter += 1
@@ -231,7 +231,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         newapp = self.new(name)
         if (newapp != None):
@@ -249,13 +249,13 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         app_names = list(self.available_applications.keys())
         if not text:
@@ -270,7 +270,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         if name in self.applications.keys():
             app = self.applications[name]
@@ -284,13 +284,13 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         completions = self.complete_delete(text, line, begidx, endidx)
         return completions
@@ -301,10 +301,10 @@ class ApplicationManager(CmdBase):
         """Copy maxwell modes from one theory to another.
         
         Both theories may live inside different applications and/or datasets
-           copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj
+        copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         apps = line.split()
         if len(apps) < 2:
@@ -351,7 +351,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         get_dict = {}
         set_dict = {}
@@ -376,7 +376,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         L, S = self.list_theories_Maxwell()
         print(list(L.keys()))
@@ -398,7 +398,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         pass
 
@@ -408,7 +408,7 @@ class ApplicationManager(CmdBase):
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         print("##AVAILABLE APPLICATIONS:")
         self.do_available(line)

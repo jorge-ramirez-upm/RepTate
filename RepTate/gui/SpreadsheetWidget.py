@@ -51,7 +51,7 @@ class SpreadsheetWidget(QTableWidget):
         [description]
 
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(parent)
 

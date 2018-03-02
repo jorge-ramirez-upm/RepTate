@@ -182,13 +182,14 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
     """
 
     def __init__(self, name="DataSet", description="", parent=None):
-        """Constructor
+        """
+        **Constructor**
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"DataSet"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"DataSet"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__()
 
@@ -228,7 +229,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         keylist = list(ds.file_parameters.keys())
         print("File\t", '\t'.join(keylist))
@@ -250,14 +251,14 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            file_name_short {[type]} -- [description]
+            - file_name_short {[type]} -- [description]
         
         Keyword Arguments:
-            check_state {[type]} -- [description] (default: {True})
+            - check_state {[type]} -- [description] (default: {True})
         
         Raises:
-            ValueError -- [description]
-            ValueError -- [description]
+            - ValueError -- [description]
+            - ValueError -- [description]
         """
         file_matching = []
         for file in self.files:
@@ -459,12 +460,12 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter
-           sort Mw [,reverse]
+        sort Mw [,reverse]
         
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         items = line.split(',')
         if (len(items) == 0):
@@ -492,13 +493,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         if (self.current_file == None):
             print("A file must be selected first")
@@ -518,7 +519,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         done = False
         for index, f in enumerate(self.files):
@@ -536,13 +537,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         f_names = [fl.file_name_short for fl in self.files]
         if not text:
@@ -557,7 +558,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         for f in self.files:
             if (f == self.current_file):
@@ -571,7 +572,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         for f in self.files:
             print(f)
@@ -582,7 +583,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {str} -- TYPE (extension of file) [, NAME (name, optional)]
+            - line {str} -- TYPE (extension of file) [, NAME (name, optional)]
         """
         if (line == ""):
             print("Missing file type")
@@ -621,13 +622,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         file_types = list(self.parent_application.filetypes.keys())
         if not text:
@@ -642,7 +643,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed
+            - line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed
         """
         if CmdBase.mode != CmdMode.GUI:
             f_names = glob.glob(line)
@@ -713,10 +714,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            root {[type]} -- [description]
+            - root {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         res = []
         for name in os.listdir(root):
@@ -733,10 +734,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Keyword Arguments:
-            path {[type]} -- [description] (default: {None})
+            - path {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         if not path:
             return self.__listdir('.')
@@ -763,10 +764,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
             [type] -- [description]
@@ -801,7 +802,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         for f in self.files:
             if (f.file_name_short == line):
@@ -818,7 +819,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         file = self.current_file
         print("Path: %s" % file.file_full_path)
@@ -841,7 +842,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            name {[type]} -- [description]
+            - name {[type]} -- [description]
         """
         if name in self.theories.keys():
             try:
@@ -865,13 +866,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         th_names = list(self.theories.keys())
         if not text:
@@ -886,7 +887,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         for t in self.theories.values():
             print("   %s: %s\t %s" % (t.name, t.thname, t.description))
@@ -897,10 +898,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - - [type] -- [description]
         """
         thtypes = list(self.parent_application.theories.keys())
         if (line in thtypes):
@@ -934,13 +935,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         theory_names = list(self.parent_application.theories.keys())
         if not text:
@@ -955,7 +956,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         if line in self.theories.keys():
             th = self.theories[line]
@@ -969,13 +970,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            text {[type]} -- [description]
-            line {[type]} -- [description]
-            begidx {[type]} -- [description]
-            endidx {[type]} -- [description]
+            - text {[type]} -- [description]
+            - line {[type]} -- [description]
+            - begidx {[type]} -- [description]
+            - endidx {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         completions = self.complete_theory_delete(text, line, begidx, endidx)
         return completions
@@ -986,12 +987,13 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         [description]
         
         Arguments:
-            line {[type]} -- [description]
+            - line {[type]} -- [description]
         """
         self.parent_application.do_legend(line)
 
     def mincol(self, col):
         """Minimum value in table column line of all Files in DataSet
+        
         [description]
 
         """
@@ -1004,6 +1006,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
     def minpositivecol(self, col):
         """Minimum positive value in table column line of all Files in DataSet
+        
         [description]
 
         """
@@ -1016,6 +1019,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
     def maxcol(self, col):
         """Maximum value in table column line of all Files in DataSet
+        
         [description]
 
         """

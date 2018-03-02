@@ -65,12 +65,12 @@ Macromolecules 2002, 35, 6332-6343"
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryLikhtmanMcLeish2002(name, parent_dataset, ax) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryLikhtmanMcLeish2002(
@@ -89,14 +89,13 @@ class BaseTheoryLikhtmanMcLeish2002:
                  name="ThLikhtmanMcLeish2002",
                  parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002
@@ -157,7 +156,7 @@ class BaseTheoryLikhtmanMcLeish2002:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -216,14 +215,13 @@ class CLTheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, Theory):
                  name="ThLikhtmanMcLeish2002",
                  parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
-        
+        """
+        **Constructor**
+
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -238,14 +236,13 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
                  name="ThLikhtmanMcLeish2002",
                  parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         #print("GUITheoryLikhtmanMcLeish2002")

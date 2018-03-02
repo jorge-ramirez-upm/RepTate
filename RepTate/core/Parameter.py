@@ -39,9 +39,11 @@ import enum
 import numpy as np
 
 class ShiftType(enum.Enum):
-    """[summary]
+    """Type of shift during minimization
     
-    [description]
+    Parameters can be:
+        - linear: linear shift
+        - log: logatithmic shift
     """
     linear=0
     log=1
@@ -50,11 +52,11 @@ class ParameterType(enum.Enum):
     """Types of parameters that can be used in a Theory
     
     Parameters can be:
-        real: Any real number
-        integer: Any integer number
-        discrete_real: It can take a value only from a discrete set of prescribed real values
-        discrete_integer: It can take a value only from a discrete set of prescribed integer values
-        bool: The parameter is a flag
+        - real: Any real number
+        - integer: Any integer number
+        - discrete_real: It can take a value only from a discrete set of prescribed real values
+        - discrete_integer: It can take a value only from a discrete set of prescribed integer values
+        - bool: The parameter is a flag
     """
     real = 0
     integer = 1
@@ -66,9 +68,9 @@ class OptType(enum.Enum):
     """Store the optimization type that can be used in a Theory
     
     Parameters can be:
-        opt: Optimized at the next minimization
-        nopt: Not optimized at the next minimization
-        const: Not allowed to be minimized
+        - opt: Optimized at the next minimization
+        - nopt: Not optimized at the next minimization
+        - const: Not allowed to be minimized
     """
     opt = 1 
     nopt = 2
@@ -83,23 +85,22 @@ class Parameter(object):
                  opt_type=OptType.opt, min_factor=1.0, min_shift_type=ShiftType.linear, 
                  bracketed = False, min_value=-np.inf, max_value=np.inf, 
                  display_flag=True, discrete_values=[]):
-        """Constructor
-        
-        [description]
+        """
+        **Constructor**
 
         Arguments:
-            name {str} -- Parameter name
-            value {real} -- Value of parameter
-            description {str} -- Meaning of parameter
-            type {enum} -- Type of parameter (real, integer, discrete_real, discrete_integer)
-            opt_type {enum} -- Is this parameter optimized at the next minimization (opt, nopt, const)?
-            min_factor {real} -- Factor to scale this parameter during minimization
-            min_shift_type {user} -- How do we shift this parameter during minimization
-            bracketed {bool} -- Is the parameter bracketed?
-            min_value {real} -- Minimum allowed value for the parameter
-            max_value {real} -- Maximum allowed value
-            display_flag {bool} -- This parameter will be shown in the Theory table
-            discrete_values {list} -- Allowed values that the parameter can take
+            - name {str} -- Parameter name
+            - value {real} -- Value of parameter
+            - description {str} -- Meaning of parameter
+            - type {enum} -- Type of parameter (real, integer, discrete_real, discrete_integer)
+            - opt_type {enum} -- Is this parameter optimized at the next minimization (opt, nopt, const)?
+            - min_factor {real} -- Factor to scale this parameter during minimization
+            - min_shift_type {user} -- How do we shift this parameter during minimization
+            - bracketed {bool} -- Is the parameter bracketed?
+            - min_value {real} -- Minimum allowed value for the parameter
+            - max_value {real} -- Maximum allowed value
+            - display_flag {bool} -- This parameter will be shown in the Theory table
+            - discrete_values {list} -- Allowed values that the parameter can take
         """
         self.name=name
         self.description=description
@@ -136,7 +137,7 @@ class Parameter(object):
         [description]
         
         Arguments:
-            par2 {[type]} -- [description]
+            - par2 {[type]} -- [description]
         """
         self.name=par2.name
         self.description=par2.description
@@ -155,7 +156,7 @@ class Parameter(object):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
 
         .. todo:: Refine this.
         """
@@ -167,7 +168,7 @@ class Parameter(object):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
 
         .. todo:: Refine this.
         """

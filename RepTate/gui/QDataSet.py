@@ -134,13 +134,14 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
     """
 
     def __init__(self, name="QDataSet", parent=None):
-        """Constructor
+        """
+        **Constructor**
         
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"QDataSet"})
-            parent {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"QDataSet"})
+            - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name=name, parent=parent)
         QWidget.__init__(self)
@@ -241,7 +242,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            table_icon_list {[type]} -- [description]
+            - table_icon_list {[type]} -- [description]
         """
         self.DataSettreeWidget.blockSignals(
             True
@@ -278,7 +279,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            state {[type]} -- [description]
+            - state {[type]} -- [description]
         """
         self.actionCalculate_Theory.setDisabled(state)
         self.actionMinimize_Error.setDisabled(state)
@@ -312,7 +313,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            th_name {[type]} -- [description]
+            - th_name {[type]} -- [description]
         """
         if th_name in self.theories:
             self.theories[self.current_theory].set_xy_limits_visible(
@@ -378,7 +379,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         th = self.TheorytabWidget.widget(index)
         if th:
@@ -418,7 +419,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         Two tabs can share the same name
 
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         old_name = self.TheorytabWidget.tabText(index)
         dlg = QInputDialog(self)
@@ -440,7 +441,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         th_name = self.TheorytabWidget.widget(index).name
         th = self.theories[th_name]
@@ -525,8 +526,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            item {[type]} -- [description]
-            column {[type]} -- [description]
+            - item {[type]} -- [description]
+            - column {[type]} -- [description]
         """
         if column == 0:
             self.change_file_visibility(
@@ -539,8 +540,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            column {[type]} -- [description]
-            order {[type]} -- [description]
+            - column {[type]} -- [description]
+            - order {[type]} -- [description]
         """
         # if column == 0: #do not sort file name
         #     return
@@ -571,7 +572,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Keyword Arguments:
-            evt {[type]} -- [description] (default: {None})
+            - evt {[type]} -- [description] (default: {None})
         """
         hd = self.DataSettreeWidget.header()
         w = self.DataSettreeWidget.width()
@@ -586,8 +587,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            item {[type]} -- [description]
-            column {[type]} -- [description]
+            - item {[type]} -- [description]
+            - column {[type]} -- [description]
         """
         # if column>0:
         #     param = self.DataSettreeWidget.headerItem().text(column) #retrive parameter name
@@ -646,7 +647,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         [description]
         
         Arguments:
-            th_name {[type]} -- [description]
+            - th_name {[type]} -- [description]
         """
         if not self.files:
             return

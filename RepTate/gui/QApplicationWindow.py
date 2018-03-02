@@ -73,15 +73,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     [description]
     """
     def __init__(self, name='Application Template', parent=None, **kwargs):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            parent {[type]} -- [description] (default: {None})
+            - parent {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
 
         super().__init__(name, parent, **kwargs)
@@ -263,7 +262,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            state {[type]} -- [description]
+            - state {[type]} -- [description]
         """
         self.actionMarkerSettings.setDisabled(state)
         self.viewComboBox.setDisabled(state)
@@ -284,7 +283,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         if not self.handle_annotation.checked:
             return
@@ -296,7 +295,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            checked {[type]} -- [description]
+            - checked {[type]} -- [description]
         """
         if self.current_viewtab == 0:
             ax = self.axarr[0]
@@ -415,7 +414,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         ds = self.DataSettabWidget.currentWidget()
         if ds:
@@ -428,7 +427,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def handle_actionMarkerSettings(self):
         """Show the dialog box where the user can change
-          the marker properties: size, shape, color, fill
+        the marker properties: size, shape, color, fill
         
         [description]
         """
@@ -548,7 +547,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            visible {[type]} -- [description]
+            - visible {[type]} -- [description]
         """
         self.actionInspect_Data.setChecked(visible)
         if visible:
@@ -620,10 +619,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            ds {[type]} -- [description]
+            - ds {[type]} -- [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         file_paths_cleaned = []
         th_cleaned = []
@@ -660,7 +659,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            checked {[type]} -- [description]
+            - checked {[type]} -- [description]
         """
         if len(self.datasets) < 2:
             return
@@ -680,7 +679,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         if self.actionView_All_Sets.isChecked():
             return
@@ -710,7 +709,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         Two datasets can share the sae name.
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         old_name = self.DataSettabWidget.tabText(index)
         dlg = QInputDialog(self)
@@ -731,7 +730,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            index {[type]} -- [description]
+            - index {[type]} -- [description]
         """
         ds = self.DataSettabWidget.widget(index)
         if index == self.DataSettabWidget.currentIndex():
@@ -765,7 +764,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            e {[type]} -- [description]
+            - e {[type]} -- [description]
         """
         if e.mimeData().hasUrls():
             e.accept()
@@ -778,7 +777,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            e {[type]} -- [description]
+            - e {[type]} -- [description]
         """
         reptatelogger = logging.getLogger('ReptateLogger')
         paths_to_open = []
@@ -808,8 +807,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            dt {[type]} -- [description]
-            ext {[type]} -- [description]
+            - dt {[type]} -- [description]
+            - ext {[type]} -- [description]
         """
         ds = self.DataSettabWidget.currentWidget()
         lnew = []
@@ -886,7 +885,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            paths_to_open {[type]} -- [description]
+            - paths_to_open {[type]} -- [description]
         """
         if (self.DataSettabWidget.count()==0):
                 self.createNew_Empty_Dataset()
@@ -910,8 +909,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            newtables {[type]} -- [description]
-            ext {[type]} -- [description]
+            - newtables {[type]} -- [description]
+            - ext {[type]} -- [description]
         """
         for dt in newtables:
             e_list = []
@@ -933,7 +932,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         # file browser window  
         options = QFileDialog.Options()
@@ -949,7 +948,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            checked {[type]} -- [description]
+            - checked {[type]} -- [description]
         """
         if checked:
             self.DataInspectordockWidget.show()
@@ -985,7 +984,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         [description]
         
         Arguments:
-            event {[type]} -- [description]
+            - event {[type]} -- [description]
         """
         pass
         

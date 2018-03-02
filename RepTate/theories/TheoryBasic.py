@@ -74,14 +74,13 @@ class BaseTheoryPolynomial:
     single_file = True
 
     def __init__(self, name="ThPolynomial", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"Polynomial"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"Polynomial"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.MAX_DEGREE = 10
@@ -107,8 +106,8 @@ class BaseTheoryPolynomial:
         [description]
 
         Arguments:
-            name {[type]} -- [description]
-            value {[type]} -- [description]
+            - name {[type]} -- [description]
+            - value {[type]} -- [description]
         """
         if name == 'n':
             nold = self.parameters["n"].value
@@ -144,7 +143,7 @@ class BaseTheoryPolynomial:
             (a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -167,14 +166,13 @@ class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
     """
 
     def __init__(self, name="ThPolynomial", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -189,14 +187,13 @@ class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
                  name="ThMaxwellFrequencyPolynomial",
                  parent_dataset=None,
                  ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -214,14 +211,11 @@ class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
             self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value):
-        """[summary]
-        
-        [description]
+        """Handle a change of the parameter 'nmode'
         
         Arguments:
-            value {[type]} -- [description]
+            - value {[type]} -- [description]
         """
-        """Handle a change of the parameter 'nmode'"""
         self.set_param_value("n", value)
 
 
@@ -250,12 +244,12 @@ class TheoryPowerLaw(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryPowerLaw(
             name, parent_dataset,
@@ -272,14 +266,13 @@ class BaseTheoryPowerLaw:
     single_file = True
 
     def __init__(self, name="PowerLaw", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"PowerLaw"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"PowerLaw"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.powerlaw
@@ -294,7 +287,7 @@ class BaseTheoryPowerLaw:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -320,9 +313,9 @@ class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -334,14 +327,13 @@ class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
     """
 
     def __init__(self, name="ThPowerLaw", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -371,12 +363,12 @@ class TheoryExponential(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryExponential(
             name, parent_dataset,
@@ -393,14 +385,13 @@ class BaseTheoryExponential:
     single_file = True
 
     def __init__(self, name="Exponential", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"Exponential"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"Exponential"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.exponential
@@ -419,7 +410,7 @@ class BaseTheoryExponential:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -441,14 +432,13 @@ class CLTheoryExponential(BaseTheoryExponential, Theory):
     """
 
     def __init__(self, name="ThExponential", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -460,14 +450,13 @@ class GUITheoryExponential(BaseTheoryExponential, QTheory):
     """
 
     def __init__(self, name="ThExponential", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -497,12 +486,12 @@ class TheoryTwoExponentials(CmdBase):
         [description]
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         
         Returns:
-            [type] -- [description]
+            - [type] -- [description]
         """
         return GUITheoryTwoExponentials(
             name, parent_dataset,
@@ -519,14 +508,13 @@ class BaseTheoryTwoExponentials:
     single_file = True
 
     def __init__(self, name="TwoExponentials", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"TwoExponentials"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"TwoExponentials"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.two_exponentials
@@ -553,7 +541,7 @@ class BaseTheoryTwoExponentials:
         [description]
         
         Keyword Arguments:
-            f {[type]} -- [description] (default: {None})
+            - f {[type]} -- [description] (default: {None})
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -579,14 +567,13 @@ class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
     """
 
     def __init__(self, name="ThTwoExponentials", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellTime"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
@@ -598,14 +585,13 @@ class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
     """
 
     def __init__(self, name="ThTwoExponentials", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
+        """
+        **Constructor**
         
         Keyword Arguments:
-            name {[type]} -- [description] (default: {"ThMaxwellTime"})
-            parent_dataset {[type]} -- [description] (default: {None})
-            ax {[type]} -- [description] (default: {None})
+            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - parent_dataset {[type]} -- [description] (default: {None})
+            - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
