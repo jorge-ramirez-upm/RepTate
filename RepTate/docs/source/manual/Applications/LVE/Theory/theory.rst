@@ -12,3 +12,4 @@ LVE Theories
 .. include:: CarreauYasuda.rst
 .. include:: LikhtmanMcLeish.rst
 .. include:: Rouse_frequency.rst
+.. include:: DTD_stars.rst

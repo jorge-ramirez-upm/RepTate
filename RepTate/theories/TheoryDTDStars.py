@@ -46,11 +46,27 @@ from scipy.special import gammaln
 import dtd_ctypes_helper as dtdh
 
 class TheoryDTDStarsFreq(CmdBase):
-    """Fit DTD Theory for stars
+    """Fit DTD Theory for stars.
+    Theory of stress relaxation in star polymer melts with no adjustable parameters beyond those measurable in linear melts
     
+    * **Function**
+        See `Milner-McLeish (1997) <http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf>`_
+        and
+        `Larson et al. (2003) <http://www.personal.reading.ac.uk/~sms06al2/papers/definit.pdf>`_ for details.
 
+    * **Parameters**
+       - ``G0`` :math:`\\equiv G_N^0`: Plateau modulus
+       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`: 
+         Entanglement equilibration time
+       - ``Me`` :math:`\\equiv M_\mathrm e^\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
+       - ``alpha``: Dilution exponent
+       where:
 
-
+         - :math:`\\rho`: polymer density
+         - :math:`\\zeta`: monomeric friction coefficient
+         - :math:`b`: monomer-based segment length
+         - :math:`k_\\mathrm B T`: thermal energy
+         - :math:`M_0`: molar mass of an elementary segment
     """
     thname = "DTDStarsFreq"
     description = "Fit Dynamic Tube Dilution theory for stars, frequency domain"
@@ -235,7 +251,24 @@ class GUITheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, QTheory):
 class TheoryDTDStarsTime(CmdBase):
     """Fit DTD Theory for stars
     
+    * **Function**
+        See `Milner-McLeish (1997) <http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf>`_
+        and
+        `Larson et al. (2003) <http://www.personal.reading.ac.uk/~sms06al2/papers/definit.pdf>`_ for details.
 
+    * **Parameters**
+       - ``G0`` :math:`\\equiv G_N^0`: Plateau modulus
+       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`: 
+         Entanglement equilibration time
+       - ``Me`` :math:`\\equiv M_\mathrm e^\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
+       - ``alpha``: Dilution exponent
+       where:
+
+         - :math:`\\rho`: polymer density
+         - :math:`\\zeta`: monomeric friction coefficient
+         - :math:`b`: monomer-based segment length
+         - :math:`k_\\mathrm B T`: thermal energy
+         - :math:`M_0`: molar mass of an elementary segment
     """
     thname = "DTDStarsTime"
     description = "Fit Dynamic Tube Dilution theory for stars, time domain"
