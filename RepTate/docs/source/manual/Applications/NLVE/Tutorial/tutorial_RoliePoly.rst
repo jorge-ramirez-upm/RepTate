@@ -61,11 +61,6 @@ Tutorial Rolie-Poly
     :height: 15pt
     :align: bottom
 
-.. |edit_modes| image:: images/edit_modes.png
-    :width: 50pt
-    :align: center
-    :alt: Edit modes
-	
 	
 **Non-Linear flow prediction**
 

@@ -1,6 +1,6 @@
-==================================
+=========================
 NLVE: General description
-==================================
+=========================
 
 .. contents:: Contents
     :local:
@@ -76,11 +76,11 @@ Views
 log transient viscosity
 
 :math:`\log(sigma(t))-gamma` (log-linear)
-------------------------------------
+-----------------------------------------
 
 log transient shear stress vs strain
 
 :math:`\log(sigma(t))-t` (log-linear)
--------------------------
+-------------------------------------
 
 log transient shear stress vs time

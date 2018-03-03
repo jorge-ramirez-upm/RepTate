@@ -165,7 +165,7 @@ class BaseTheoryRoliePoly:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/RoliePoly.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#rolie-poly-equation'
     single_file = False
 
     def __init__(self, name="ThRoliePoly", parent_dataset=None, axarr=None):
