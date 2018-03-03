@@ -75,7 +75,7 @@ class FeneMode(Enum):
 
 
 class EditModesDialog(QDialog):
-    def __init__(self, parent=None, times=None, G=None):
+    def __init__(self, parent=None, times=None, G=None, MAX_MODES=0):
         super(EditModesDialog, self).__init__(parent)
 
         self.setWindowTitle("Edit Maxwell modes")
@@ -83,7 +83,7 @@ class EditModesDialog(QDialog):
         nmodes = len(times)
 
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, 40)  # min and max number of modes
+        self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(nmodes)  #initial value
         layout.addWidget(self.spinbox)
@@ -532,6 +532,7 @@ class BaseTheoryRoliePoly:
         """
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
+            self.spinbox.setMaximum(int(value))
         message, success = super(BaseTheoryRoliePoly, self).set_param_value(
             name, value)
         if not success:
@@ -656,7 +657,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.with_fene_button.setCheckable(True)
         #SpinBox "nmodes"
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(0, self.MAX_MODES)  # min and max number of modes
+        self.spinbox.setRange(0, self.parameters["nmodes"].value)  # min and max number of modes
         self.spinbox.setSuffix(" stretch")
         self.spinbox.setToolTip("Number of stretching modes")
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
@@ -699,6 +700,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
     def handle_spinboxValueChanged(self, value):
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("nstretch", min(nmodes, value))
+        self.handle_actionCalculate_Theory()
 
     def Qhide_theory_extras(self, state):
         """Uncheck the LVE button. Called when curent theory is changed
@@ -758,7 +760,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
 
     def edit_modes_window(self):
         times, G = self.get_modes()
-        d = EditModesDialog(self, times, G)
+        d = EditModesDialog(self, times, G, self.MAX_MODES)
         if d.exec_():
             nmodes = d.table.rowCount()
             self.set_param_value("nmodes", nmodes)
@@ -771,6 +773,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
                 success *= success1 * success2 * success3
             if not success:
                 QMessageBox.warning(self, 'Error', 'Some parameter(s) could not be updated.\nPlease try again.')
+            else:
+                self.handle_actionCalculate_Theory()
 
     def plot_modes_graph(self):
         pass

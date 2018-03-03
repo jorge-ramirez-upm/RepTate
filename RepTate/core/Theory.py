@@ -201,6 +201,9 @@ class Theory(CmdBase):
         Added so that Maxwell modes works in CL
         """
         pass
+    def handle_actionCalculate_Theory(self):
+        """Used only in non GUI mode"""
+        self.do_calculate("")
 
     def do_calculate(self, line, timing=True):
         """Calculate the theory"""

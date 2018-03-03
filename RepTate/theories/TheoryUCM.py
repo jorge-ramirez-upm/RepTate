@@ -64,7 +64,7 @@ class FlowMode(Enum):
 
 
 class EditModesDialog(QDialog):
-    def __init__(self, parent=None, times=None, G=None):
+    def __init__(self, parent=None, times=None, G=None, MAX_MODES=0):
         super(EditModesDialog, self).__init__(parent)
 
         self.setWindowTitle("Edit Maxwell modes")
@@ -72,7 +72,7 @@ class EditModesDialog(QDialog):
         nmodes = len(times)
 
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, 40)  # min and max number of modes
+        self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(nmodes)  #initial value
         layout.addWidget(self.spinbox)
@@ -107,20 +107,27 @@ class EditModesDialog(QDialog):
 
 
 class TheoryUCM(CmdBase):
-    """Upper Convected Maxwell model
+    """Multi-mode Upper Convected Maxwell model (see Chapter 1 of :cite:`NLVE-Larson1988`):
     
-    * **Function**
-        Shear
+    .. math::
+        \\boldsymbol \\sigma &= \\sum_{i=1}^n G_i \\boldsymbol A_i\\\\
+        \\dfrac {\\mathrm D \\boldsymbol  A_i} {\\mathrm D t} &=  \\boldsymbol \\kappa \\cdot \\boldsymbol A_i
+        + \\boldsymbol A_i\\cdot \\boldsymbol \\kappa ^T 
+         - \dfrac 1 {\\tau_i} (\\boldsymbol A_i - \\boldsymbol I)
+    
+    * **Functions**
+        - Analytical solution in shear
         
-        .. math::
+          .. math::
             \\eta^+(t) = \\sum_{i=1}^n G_i \\tau_i (1 - \\exp(-t/\\tau_i))
-
-        Uniaxial Elongation
         
-        .. math::
-            \\eta^+_\\mathrm E (t) = \\sum_{i=1}^n G_i (A_{xx, i}(t) - A_{yy, i}(t))
+        - Analytical solution in uniaxial extension
         
-        with
+          .. math::
+            \\eta^+_\\mathrm E (t) = \\dfrac 1 {\\dot\\varepsilon}
+            \\sum_{i=1}^n G_i (A_{xx, i}(t) - A_{yy, i}(t))
+        
+          with
 
             .. math::
                 A_{xx, i}(t) &= \\dfrac{ 1 - 2 \\dot\\varepsilon\\tau_i 
@@ -462,7 +469,7 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
 
     def edit_modes_window(self):
         times, G = self.get_modes()
-        d = EditModesDialog(self, times, G)
+        d = EditModesDialog(self, times, G, self.MAX_MODES)
         if d.exec_():
             nmodes = d.table.rowCount()
             self.set_param_value("nmodes", nmodes)
@@ -478,6 +485,8 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
                     self, 'Error',
                     'Some parameter(s) could not be updated.\nPlease try again.'
                 )
+            else:
+                self.handle_actionCalculate_Theory()
 
     def plot_modes_graph(self):
         pass
