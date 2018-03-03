@@ -87,6 +87,7 @@ class BaseApplicationNLVE:
         """
         from TheoryRoliePoly import TheoryRoliePoly
         from TheoryUCM import TheoryUCM
+        from TheoryGiesekus import TheoryGiesekus
 
         super().__init__(name, parent)
 
@@ -136,17 +137,18 @@ class BaseApplicationNLVE:
 
         # FILES
         ftype = TXTColumnFile("Start-up of shear flow", "shear",
-                              "Shear flow files", ['t', 'eta'], ['gdot', 'T'],
+                              "Shear flow files", ['t', 'sigma_xy'], ['gdot', 'T'],
                               ['s', 'Pa$\cdot$s'])
         self.filetypes[ftype.extension] = ftype
         ftype = TXTColumnFile("Elongation flow", "uext",
-                              "Elongation flow files", ['t', 'eta'],
+                              "Elongation flow files", ['t', 'N1'],
                               ['gdot', 'T'], ['s', 'Pa$\cdot$s'])
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
         self.theories[TheoryRoliePoly.thname] = TheoryRoliePoly
         self.theories[TheoryUCM.thname] = TheoryUCM
+        self.theories[TheoryGiesekus.thname] = TheoryGiesekus
         self.add_common_theories()
         
         #set the current view

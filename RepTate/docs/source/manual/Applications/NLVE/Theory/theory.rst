@@ -10,3 +10,10 @@ NLVE: Theories
 
 .. include:: RoliePoly.rst
 .. include:: UCM.rst
+.. include:: Giesekus.rst
+
+.. rubric:: References
+
+.. bibliography:: ../bibliography.bib
+    :style: unsrt
+    :keyprefix: NLVE-
