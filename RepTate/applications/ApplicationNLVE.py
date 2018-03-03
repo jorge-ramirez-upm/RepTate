@@ -86,6 +86,7 @@ class BaseApplicationNLVE:
             - parent {[type]} -- [description] (default: {None})
         """
         from TheoryRoliePoly import TheoryRoliePoly
+        from TheoryUCM import TheoryUCM
 
         super().__init__(name, parent)
 
@@ -145,6 +146,7 @@ class BaseApplicationNLVE:
 
         # THEORIES
         self.theories[TheoryRoliePoly.thname] = TheoryRoliePoly
+        self.theories[TheoryUCM.thname] = TheoryUCM
         self.add_common_theories()
         
         #set the current view
