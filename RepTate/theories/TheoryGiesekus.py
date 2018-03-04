@@ -150,7 +150,7 @@ class BaseTheoryGiesekus:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#giesekus'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
     single_file = False
 
     def __init__(self, name="ThGiesekus", parent_dataset=None, axarr=None):
