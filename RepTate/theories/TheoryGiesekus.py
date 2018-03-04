@@ -32,7 +32,7 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryGiesekus
 
-Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
+Module for the Giesekus model for the non-linear flow of entangled polymers.
 
 """
 import numpy as np
@@ -202,7 +202,7 @@ class BaseTheoryGiesekus:
             self.parameters["alpha%02d" % i] = Parameter(
                 name="alpha%02d" % i,
                 value=0.5,
-                description="Constant of proportionality of mode %02d" % i,
+                description="Dimensionless mobility factor of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.opt,
                 bracketed=True,
