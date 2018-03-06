@@ -118,6 +118,8 @@ def start_RepTate(argv):
         "RoliePoly01"].select_extensional_flow()
     # Minimize the theory
     ex.applications["NLVE2"].datasets["Set1"].handle_actionMinimize_Error()
+    # Open a theory
+    ex.applications["NLVE2"].datasets["Set1"].new_theory("PomPom")
 
 
     ####################

@@ -11,6 +11,7 @@ NLVE: Theories
 .. include:: RoliePoly.rst
 .. include:: UCM.rst
 .. include:: Giesekus.rst
+.. include:: PomPom.rst
 
 .. rubric:: References
 
