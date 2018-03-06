@@ -135,11 +135,12 @@ class TheoryUCM(CmdBase):
                 A_{yy, i}(t) &= \\dfrac{ 1 + \\dot\\varepsilon\\tau_i 
                 \\exp(-(1 + \\dot\\varepsilon\\tau_i)t/\\tau_i) } { 1+ \\dot\\varepsilon\\tau_i}
 
-    * **Parameters**
-        For each mode :math:`i`:
+        where for each mode :math:`i`:
             - :math:`G_i`: weight of mode :math:`i`
             - :math:`\\tau_i`: relaxation time of mode :math:`i`
 
+    * **Parameters**
+        [none]
 
     """
     thname = "UCM"

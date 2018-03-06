@@ -105,21 +105,24 @@ class EditModesDialog(QDialog):
             self.table.setItem(i, 0, QTableWidgetItem("10"))
             self.table.setItem(i, 1, QTableWidgetItem("1000"))
 
+
 class TheoryGiesekus(CmdBase):
     """Multi-mode Giesekus Model (see Chapter 6 of :cite:`NLVE-Larson1988`):
     
     .. math::
-        \\boldsymbol \\sigma &= \\sum_{i=1}^n G_i \\boldsymbol  {A_i}\\\\
+        \\boldsymbol \\sigma &= \\sum_{i=1}^n G_i \\boldsymbol  {A_i},\\\\
         \\dfrac {\\mathrm D \\boldsymbol  A_i} {\\mathrm D t} &=  \\boldsymbol \\kappa \\cdot \\boldsymbol A_i
         + \\boldsymbol A_i\\cdot \\boldsymbol \\kappa ^T 
         - \dfrac {1} {\\tau_i}  (\\boldsymbol A_i - \\boldsymbol I)
-        -  \dfrac {\\alpha_i} {\\tau_i} (\\boldsymbol A_i - \\boldsymbol I)^2
+        -  \dfrac {\\alpha_i} {\\tau_i} (\\boldsymbol A_i - \\boldsymbol I)^2,
 
+    where for each mode :math:`i`:
+        - :math:`G_i`: weight of mode :math:`i`
+        - :math:`\\tau_i`: relaxation time of mode :math:`i`
+        - :math:`\\alpha_i`: constant of proportionality mode :math:`i`
+   
    * **Parameters**
-        For each mode :math:`i`:
-            - :math:`G_i`: weight of mode :math:`i`
-            - :math:`\\tau_i`: relaxation time of mode :math:`i`
-            - :math:`\\alpha_i`: constant of proportionality mode :math:`i`
+        - ``alpha_i`` :math:`\\equiv \\alpha_i`
 
     """
     thname = "Giesekus"
@@ -263,7 +266,6 @@ class BaseTheoryGiesekus:
         for i in range(nmodes):
             self.set_param_value("tauD%02d" % i, tau[i])
             self.set_param_value("G%02d" % i, G[i])
-            self.set_param_value("alpha%02d" % i, 0.5)
 
     def n1_uext(self, p, times):
         """Upper Convected Maxwell model in uniaxial extension.
@@ -296,18 +298,17 @@ class BaseTheoryGiesekus:
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
-
     def sigmadot_shear(self, sigma, times, p):
         """Giesekus model in shear"""
         alpha, _, tau, gdot = p
         sxx, syy, sxy = sigma
-        
-        dsxx = 2 * gdot * sxy + (alpha - 1)*(sxx - 1) / tau - alpha / tau*(
+
+        dsxx = 2 * gdot * sxy + (alpha - 1) * (sxx - 1) / tau - alpha / tau * (
             sxx * sxx + sxy * sxy - sxx)
-  
-        dsyy = (alpha - 1) * (syy - 1) / tau - alpha / tau*(
+
+        dsyy = (alpha - 1) * (syy - 1) / tau - alpha / tau * (
             sxy * sxy + syy * syy - syy)
-  
+
         dsxy = gdot * syy + (alpha - 1) * sxy / tau - alpha / tau * (
             sxx * sxy + sxy * syy - sxy)
 
@@ -317,19 +318,20 @@ class BaseTheoryGiesekus:
         """Giesekus model in uniaxial extension"""
         alpha, _, tau, edot = p
         sxx, syy = sigma
-        
-        dsxx = 2 * edot * sxx + (alpha - 1)*(sxx - 1) / tau - alpha / tau*(
+
+        dsxx = 2 * edot * sxx + (alpha - 1) * (sxx - 1) / tau - alpha / tau * (
             sxx * sxx - sxx)
-        dsyy = -edot * syy + (alpha - 1) * (syy - 1) / tau - alpha / tau*(
-             syy * syy - syy)
-        
+            
+        dsyy = -edot * syy + (alpha - 1) * (syy - 1) / tau - alpha / tau * (
+            syy * syy - syy)
+
         return [dsxx, dsyy]
 
     # def sigmadot_uext(self, sigma, times, p):
     #     """Giesekus model in uniaxial extension"""
     #     alpha, _, tau, gdot = p
     #     sxx, syy = sigma
-        
+
     #     dsxx = 2 * gdot * sxx - (sxx - 1) / tau - alpha / tau * sxx * (sxx - 1)
     #     dsyy = -gdot * syy - (syy - 1) / tau - alpha / tau * syy * (syy - 1)
     #     return [dsxx, dsyy]
@@ -352,7 +354,7 @@ class BaseTheoryGiesekus:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        #flow geometry and finite extensibility
+        #flow geometry
         if self.flow_mode == FlowMode.shear:
             sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
             pde_stretch = self.sigmadot_shear
@@ -372,7 +374,7 @@ class BaseTheoryGiesekus:
         nmodes = self.parameters["nmodes"].value
         nstretch = self.parameters["nstretch"].value
         for i in range(nmodes):
-            G = self.parameters["G%02d" % i].value 
+            G = self.parameters["G%02d" % i].value
             tauD = self.parameters["tauD%02d" % i].value
             alpha = self.parameters["alpha%02d" % i].value
             p = [alpha, G, tauD, flow_rate]
@@ -524,9 +526,10 @@ class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
-        #SpinBox "nmodes"
+        #SpinBox "n-stretch modes"
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(0, self.parameters["nmodes"].value)  # min and max number of modes
+        self.spinbox.setRange(
+            0, self.parameters["nmodes"].value)  # min and max number of modes
         self.spinbox.setSuffix(" stretch")
         self.spinbox.setToolTip("Number of stretching modes")
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
@@ -577,8 +580,7 @@ class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
                                                      d.table.item(i, 0).text())
                 msg, success2 = self.set_param_value("G%02d" % i,
                                                      d.table.item(i, 1).text())
-                msg, success3 = self.set_param_value("alpha%02d" % i, 0.5)
-                success *= success1 * success2 * success3
+                success *= success1 * success2
             if not success:
                 QMessageBox.warning(
                     self, 'Error',

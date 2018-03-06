@@ -326,7 +326,6 @@ class BaseTheoryRoliePoly:
         for i in range(nmodes):
             self.set_param_value("tauD%02d" % i, tau[i])
             self.set_param_value("G%02d" % i, G[i])
-            self.set_param_value("tauR%02d" % i, 0.5)
 
     def sigmadot_shear(self, sigma, t, p):
         """Rolie-Poly differential equation under *shear* flow
@@ -769,8 +768,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             for i in range(nmodes):
                 msg, success1 = self.set_param_value("tauD%02d" % i, d.table.item(i, 0).text())
                 msg, success2 = self.set_param_value("G%02d" % i, d.table.item(i, 1).text())
-                msg, success3 = self.set_param_value("tauR%02d" % i, 0.5)
-                success *= success1 * success2 * success3
+                success *= success1 * success2
             if not success:
                 QMessageBox.warning(self, 'Error', 'Some parameter(s) could not be updated.\nPlease try again.')
             else:
