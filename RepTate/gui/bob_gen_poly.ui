@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>375</width>
-    <height>543</height>
+    <width>422</width>
+    <height>568</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,14 +15,14 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QWidget" name="inp_param_widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_9">
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="tab_2">
+        <widget class="QWidget" name="Chemistry">
          <attribute name="title">
           <string>Chemistry</string>
          </attribute>
@@ -37,8 +37,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>279</width>
-               <height>404</height>
+               <width>326</width>
+               <height>429</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -266,7 +266,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab">
+        <widget class="QWidget" name="Memory">
          <attribute name="title">
           <string>Memory</string>
          </attribute>
@@ -344,6 +344,32 @@
           </item>
          </layout>
         </widget>
+        <widget class="QWidget" name="Result">
+         <attribute name="title">
+          <string>Result</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <widget class="QTextBrowser" name="text_box">
+            <property name="undoRedoEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="lineWrapMode">
+             <enum>QTextEdit::NoWrap</enum>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+            <property name="acceptRichText">
+             <bool>false</bool>
+            </property>
+            <property name="openLinks">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
       <item>
@@ -352,7 +378,10 @@
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="standardButtons">
-         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+         <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+        </property>
+        <property name="centerButtons">
+         <bool>false</bool>
         </property>
        </widget>
       </item>

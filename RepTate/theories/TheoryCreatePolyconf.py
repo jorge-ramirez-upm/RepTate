@@ -34,6 +34,7 @@
 
 CreatePolyconf file for creating a polymer configuration file using BoB
 """
+import os
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from enum import Enum
@@ -43,9 +44,11 @@ from QTheory import QTheory
 from DataTable import DataTable
 from collections import OrderedDict
 
-import bob_gen_poly
-from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox
-from PyQt5.QtGui import QIntValidator, QDoubleValidator
+import bob_gen_poly # dialog
+import bob_ctypes_helper as bch
+from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog
+from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
+from PyQt5.QtCore import QUrl
 
 
 class DistributionType(Enum):
@@ -226,15 +229,8 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         self.ncomponent = 1
         self.trash_indices = []
         self.dict_component = OrderedDict()
-
         self.setup_dialog()
 
-    # def do_calculate(self, line=''):
-    #     """Redefinition of 'do_calculate()' """
-    #     if self.dialog.exec_():
-    #         print("SUCCESS")
-    #     print("DONE")
-    
     def setup_dialog(self):
         """Create the dialog to setup the polymer configuration"""
         # create form
@@ -245,13 +241,104 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         self.d.polymer_tab.setTabsClosable(True)
         # connect close tab
         self.d.polymer_tab.tabCloseRequested.connect(self.handle_close_polymer_tab)
-        # connect button
+        # connect button Apply
+        self.d.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(self.handle_apply_button)
+        # connect button Help
+        self.d.buttonBox.button(QDialogButtonBox.Help).clicked.connect(self.handle_help_button)
+        # connect button OK
+        # self.d.buttonBox.accepted.connect(self.accept_)
+        # connect button Add component
         self.d.add_button.clicked.connect(self.handle_add_component)
         # connect combobox architecture type
         self.d.cb_type.currentTextChanged.connect(self.handle_architecture_type_changed)
         # fill combobox
         for e in ArchitectureType:
             self.d.cb_type.addItem(e.name)
+
+    def handle_apply_button(self):
+        """When Apply button of dialog box is clicked"""
+        tb = self.d.text_box
+        # remove all current text
+        tb.clear()
+        #1 memory line
+        tb.append("%s %s" % (self.d.n_polymers.text(), self.d.n_segments.text()))
+        #2 alpha (not used)
+        tb.append("1.0")
+        #3 "1" for BoB 'compatibility'
+        tb.append("1")
+        #4 M0, Ne, (density not used)
+        tb.append("%s %s 0" % (self.d.m0.text(), self.d.ne.text()))
+        #5 tau_e, T (not used)
+        tb.append("0 0")
+        #6 number of component(s) in blend
+        tb.append("%s" % len(self.dict_component))
+        
+        #7.. the rest of the lines is specific to the architecture
+        tot_ratio = self.sum_ratios() # summ all components ratios to define weights
+
+        for pol_dict in self.dict_component.values():
+            pol_type_list = ArchitectureType[pol_dict["type"]].value  # architecture type value
+            #8.. weight
+            try:
+                w = float(pol_dict["Ratio"].text()) / tot_ratio
+            except:
+                w = "ERROR"
+            tb.append("%s" % w)
+            #9.. num. polymer and type
+            npol = pol_dict["Num. of polymers"].text()
+            type_number = pol_type_list[0]
+            tb.append("%s %s" % (npol, type_number))
+
+            if type_number in [10, 11, 12]:  # Cayley tree: handle varible number of generations
+                ngen = pol_dict["Num. generation"]
+                text = "%s\n" % ngen
+                for i in range(ngen + 1):
+                    text += self.poly_param_text(pol_dict, "Dist gen%d" % i)
+                    text += self.poly_param_text(pol_dict, "Mw gen%d (g/mol)" % i)
+                    text += self.poly_param_text(pol_dict, "PDI gen%d" % i).rstrip()  # remove whitespace on right side
+                    if i < ngen:
+                        text += "\n"
+            else:
+                text = ""
+                for attr in pol_type_list[1:]:  # go over all attributes of the architecture type
+                    text += self.poly_param_text(pol_dict, attr)
+
+            tb.append(text.rstrip())  # remove whitespace on right side
+        
+        # set current tab to the Text box "result"
+        self.d.tabWidget.setCurrentIndex(2)
+
+    def poly_param_text(self, pol_dict, attr):
+        if attr == "":
+            text = "\n"
+        else:
+            try:
+                val =  pol_dict[attr].text()  # for QLineEdit (Mw, PDI, narm)
+            except:
+                val =  DistributionType[pol_dict[attr].currentText()].value  # for Dist QComboBox
+            text = "%s " % val
+        return text
+
+    def sum_ratios(self):
+        s = 0.0
+        for pol_dict in self.dict_component.values():
+            try: 
+                s += float(pol_dict["Ratio"].text())
+            except ValueError:
+                print("ERROR in Ratio conversion")
+        if s == 0.0:
+            s = 1.0
+        return s
+
+
+    def handle_help_button(self):
+        """When Help button of dialog box is clicked"""
+        bob_manual_pdf = 'docs%ssource%smanual%sApplications%sReact%sbob2.3.pdf' % ((os.sep,) * 5)
+        QDesktopServices.openUrl(QUrl.fromLocalFile(bob_manual_pdf))
+
+    # def accept_(self):
+    #     """When OK button of dialog box is clicked"""
+    #     pass
 
     def handle_architecture_type_changed(self, current_name):
         """Called when the combobox 'Architecture' is changed"""
@@ -280,7 +367,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         """Create a form to set the new values of the BoB binning parameters"""
         widget = QWidget(self)
         layout = QFormLayout()
-        lines = []
+        pol_dict = OrderedDict([("type", pol_type),])  # Arch. type number
 
         val_double = QDoubleValidator()
         val_double.setBottom(0)  #set smalled double allowed in the form
@@ -290,76 +377,76 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         e1.setMaxLength(6)
         e1.setText(self.d.ratio.text())
         layout.addRow(QLabel("Ratio"), e1)
-        lines.append(e1)
+        pol_dict["Ratio"] = e1
         
         e2 = QLineEdit()
         e2.setValidator(val_double)
         e2.setText(self.d.number.text())
         layout.addRow(QLabel("Num. of polymers"), e2)
-        lines.append(e2)
+        pol_dict["Num. of polymers"] = e2
         
-        self.set_extra_lines(pol_type, layout, lines)
-        self.dict_component[pol_id] = lines
+        self.set_extra_lines(pol_type, layout, pol_dict)
+        self.dict_component[pol_id] = pol_dict
 
         widget.setLayout(layout)
         return widget
 
-    def set_extra_lines(self, pol_type, layout, lines):
+    def set_extra_lines(self, pol_type, layout, pol_dict):
         """Extra parameters related to the polymer architecture"""
 
         pol_attr = ArchitectureType[pol_type].value # return a list with the expected input parameters
         for attr in pol_attr[1:]: 
-            if "generation" in attr:
+            if "Num. generation" in attr:
                 ngen = self.d.sb_ngeneration.value()
+                pol_dict["Num. generation"] = ngen
                 for i in range(ngen + 1):
-                    self.add_new_qline("Mw gen%d (g/mol)" % i, "1e4", layout, lines)
-                    self.add_new_qline("PDI gen%d" % i, "1.2", layout, lines)
-                    self.add_cb_distribution("Dist gen%d" % i, layout, lines)
+                    self.add_new_qline("Mw gen%d (g/mol)" % i, "1e4", layout, pol_dict)
+                    self.add_new_qline("PDI gen%d" % i, "1.2", layout, pol_dict)
+                    self.add_cb_distribution("Dist gen%d" % i, layout, pol_dict)
                 break
             elif "arm" in attr:
                 if pol_attr[0] in [4, 6]:
                     # comb Poisson distribution (double)
-                    self.add_new_qline(attr, "4.2", layout, lines)
+                    self.add_new_qline(attr, "4.2", layout, pol_dict)
                 else:
                     #star or comb with fixed number of arms (integer)
-                    self.add_new_qline(attr, "3", layout, lines, QIntValidator())
+                    self.add_new_qline(attr, "3", layout, pol_dict, QIntValidator())
             if "Mw" in attr:
                 # add Mw line
-                self.add_new_qline(attr, "1e4", layout, lines)
+                self.add_new_qline(attr, "1e4", layout, pol_dict)
             elif "PDI" in attr:
                 #add PDI line
-                self.add_new_qline(attr, "1.2", layout, lines)
+                self.add_new_qline(attr, "1.2", layout, pol_dict)
             elif "Dist" in attr:
                 # add distribution combobox
-                self.add_cb_distribution(attr, layout, lines)
+                self.add_cb_distribution(attr, layout, pol_dict)
             elif "/mol" in attr:
                 # add branch/molecule line
-                self.add_new_qline(attr, "0.1", layout, lines)
+                self.add_new_qline(attr, "0.1", layout, pol_dict)
             elif "proba" in attr:
                 # add branching proba line
-                self.add_new_qline(attr, "0.2", layout, lines)
+                self.add_new_qline(attr, "0.2", layout, pol_dict)
             elif attr == '':
                 continue
 
 
-    def add_new_qline(self, name, default_val, layout, lines, validator=QDoubleValidator()):
+    def add_new_qline(self, name, default_val, layout, pol_dict, validator=QDoubleValidator()):
         """Add a new line with a QLabel in form"""
         validator.setBottom(0)  #set smalled double allowed in the form
         e = QLineEdit()
         e.setValidator(validator)
         e.setText("%s" % default_val)
         layout.addRow(QLabel(name), e)
-        lines.append(e)
+        pol_dict[name] = e
 
-
-    def add_cb_distribution(self, name, layout, lines):
+    def add_cb_distribution(self, name, layout, pol_dict):
         """Add a new line with a QComboBox in form"""
         cb = QComboBox()
         for dtype in DistributionType: # list the distribution names
             cb.addItem(dtype.name)
         cb.setCurrentIndex(2) # log-normal by default
         layout.addRow(QLabel(name), cb)
-        lines.append(cb)
+        pol_dict[name] = cb
     
     def handle_close_polymer_tab(self, index):
         """Close a tab and delete dictionary entry"""
@@ -372,5 +459,34 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
     def handle_actionCalculate_Theory(self):
         """Overides QTheory method to avoid multithread"""
         if self.dialog.exec_():
-            print("SUCCESS")
+            self.handle_apply_button()
+            # create temporary file for BoB input
+            dir_path = os.path.dirname(
+                os.path.realpath(__file__))  # get the directory path of current file
+            temp_file = dir_path + '%stemp%sbob_inp.dat' % ((os.sep,) * 2)
+            self.create_input_param_file(temp_file)
+            # ask where to save the polymer config file
+            polyconf_file_out = self.get_file_name()
+            # run BoB main
+            argv = ["./bob", "-i", temp_file, "-c", polyconf_file_out]
+            bch.run_bob_main(argv)
+            self.Qprint("Polymer configuration written in %s" % polyconf_file_out)
+
+    def create_input_param_file(self, temp_file):
+        with open(temp_file, 'w') as tmp:
+            tmp.write(str(self.d.text_box.toPlainText()))
+
         
+    def get_file_name(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        dir_start = "data/React/"
+        dilogue_name = "Save BoB Polymer Configuration"
+        ext_filter = "Data Files (*.dat)"
+        out_file = QFileDialog.getSaveFileName(
+            self, dilogue_name, dir_start, options=options)
+        if out_file[0] == "":
+            self.Qprint('Invalid filename')
+            return None
+        else:
+            return out_file[0]
