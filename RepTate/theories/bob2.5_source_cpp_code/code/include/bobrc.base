@@ -1,0 +1,50 @@
+----------------------------------------------------------------
+*** rc file bob.rc                                          ****
+*** an equal sign in the line denotes option                ****
+*** without the equal sign things are treated as comments   ****
+----------------------------------------------------------------
+
+*** For nonlinear calculation
+* Step 1: CalcNlin -> no, NlinPrep-> yes, FlowTime-> time, FlowPriority-> no
+* Step 2:             yes            yes             time                 yes
+
+**** For linear rheology
+*** NlinPrep=no,    CalcNlin=no
+****
+
+GenPolyOnly = no
+OutMode=0
+
+** Relaxation scheme **
+PSquare=0.0250
+Alpha=1.0
+TStart=1.0e-4
+DtMult=1.0050
+
+** Limits on frequency for G', G'' **
+FreqMax = 1.e8
+FreqMin = 1.e-6
+FreqInterval = 1.20
+
+** Nonlinear calculation **
+
+PrioMode=entangled
+StretchBinWidth=1.25
+NumNlinStretch=20
+NlinAvDt=1.10
+
+** Maxwell modes **
+
+DefinedMaxwellmodes=no
+MaxwellInterval=2.0
+NlinAvInterval=1.02
+
+
+CalcGPCLS = no
+GPCNumBin=100
+
+** Better don't change this **
+PrefMode=1
+ReptScheme=1
+RetLim=0.0
+ReptAmount=1.0

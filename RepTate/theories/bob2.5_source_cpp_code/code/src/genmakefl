@@ -1,0 +1,35 @@
+touch obj/mk_UI
+rm obj/mk_UI
+touch obj/fl_UI
+rm obj/fl_UI
+echo -n "UI_obj = ">> obj/fl_UI
+for i in `ls UI`
+do
+for j in `ls UI/${i}`
+do
+for k in `echo ${j} | cut -d. -f1,1`
+do
+echo -n "${k}.o " >> obj/fl_UI
+echo "${k}.o : ../UI/${i}/${k}.cpp" >> obj/mk_UI
+echo "	\$(cpp) -c ../UI/${i}/${k}.cpp" >> obj/mk_UI
+done
+done
+done 
+
+touch obj/mk_Util
+touch obj/fl_Util
+rm obj/mk_Util
+rm obj/fl_Util
+echo -n "Util_obj = ">> obj/fl_Util
+for i in `ls Util`
+do
+for j in `ls Util/${i}`
+do
+for k in `echo ${j} | cut -d. -f1,1`
+do
+echo -n "${k}.o " >> obj/fl_Util
+echo "${k}.o : ../Util/${i}/${k}.cpp" >> obj/mk_Util
+echo "	\$(cpp) -c ../Util/${i}/${k}.cpp" >> obj/mk_Util
+done
+done
+done 
