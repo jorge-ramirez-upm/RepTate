@@ -92,6 +92,7 @@ class BaseApplicationReact:
         from TheoryTobitaCSTR import TheoryTobitaCSTR
         from TheoryMultiMetCSTR import TheoryMultiMetCSTR
         from TheoryReactMix import TheoryReactMix
+        from TheoryCreatePolyconf import TheoryCreatePolyconf
 
         super().__init__(
             name, parent, nplots=3,
@@ -184,6 +185,7 @@ class BaseApplicationReact:
         self.theories[TheoryTobitaCSTR.thname] = TheoryTobitaCSTR
         self.theories[TheoryMultiMetCSTR.thname] = TheoryMultiMetCSTR
         self.theories[TheoryReactMix.thname] = TheoryReactMix
+        self.theories[TheoryCreatePolyconf.thname] = TheoryCreatePolyconf
         self.add_common_theories()
 
         #set the current view
