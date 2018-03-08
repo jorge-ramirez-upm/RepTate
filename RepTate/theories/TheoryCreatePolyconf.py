@@ -43,12 +43,13 @@ from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
 from collections import OrderedDict
+import time
 
 import bob_gen_poly # dialog
 import bob_ctypes_helper as bch
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, pyqtSignal
 
 
 class DistributionType(Enum):
@@ -112,6 +113,7 @@ class BaseTheoryCreatePolyconf:
     """
     #help_file = ''
     single_file = False  # False if the theory can be applied to multiple files simultaneously
+    signal_param_dialog = pyqtSignal(object)
 
     def __init__(self,
                  name='ThCreatePolyconf',
@@ -128,14 +130,19 @@ class BaseTheoryCreatePolyconf:
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
-        self.parameters['param1'] = Parameter(
-            name='param1',
-            value=1,
-            description='parameter 1',
-            type=ParameterType.real,
-            opt_type=OptType.const)
+        self.signal_param_dialog.connect(self.launch_param_dialog)
 
     def get_modes(self):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        pass
+
+    def do_error(self, line=""):
         """[summary]
         
         [description]
@@ -181,6 +188,16 @@ class BaseTheoryCreatePolyconf:
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        #show form
+        self.success_dialog = None
+        self.signal_param_dialog.emit(self)
+        while self.success_dialog is None:  # wait for the end of QDialog
+            time.sleep(
+                0.5
+            )  # TODO: find a better way to wait for the dialog thread to finish
+        if not self.success_dialog:
+            self.Qprint('Operation canceled')
+            return
 
 
 
@@ -341,7 +358,8 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
     #     pass
 
     def handle_architecture_type_changed(self, current_name):
-        """Called when the combobox 'Architecture' is changed"""
+        """Activate/Desactivate the ngeneration widgets.
+        Called when the combobox 'Architecture' is changed"""
         is_cayley = "Cayley" in current_name
         self.d.ngeneration_label.setDisabled(not is_cayley)
         self.d.sb_ngeneration.setDisabled(not is_cayley)
@@ -456,7 +474,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         self.d.polymer_tab.removeTab(index)
         self.trash_indices.append(ind)
 
-    def handle_actionCalculate_Theory(self):
+    def launch_param_dialog(self):
         """Overides QTheory method to avoid multithread"""
         if self.dialog.exec_():
             self.handle_apply_button()
@@ -473,12 +491,16 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
             
             # ask where to save the polymer config file
             polyconf_file_out = self.get_file_name()
-            
-            # run BoB main
-            argv = ["./bob", "-i", temp_file, "-c", polyconf_file_out]
-            bch.run_bob_main(argv)
+            if polyconf_file_out is not None:
+                # run BoB main
+                argv = ["./bob", "-i", temp_file, "-c", polyconf_file_out]
+                bch.run_bob_main(argv)
 
-            self.Qprint("Polymer configuration written in %s" % polyconf_file_out)
+                self.Qprint("Polymer configuration written in %s" % polyconf_file_out)
+                self.success_dialog = True
+                return
+
+        self.success_dialog = False
 
     def create_input_param_file(self, temp_file):
         with open(temp_file, 'w') as tmp:
