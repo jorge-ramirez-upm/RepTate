@@ -460,16 +460,28 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         """Overides QTheory method to avoid multithread"""
         if self.dialog.exec_():
             self.handle_apply_button()
+            
             # create temporary file for BoB input
-            dir_path = os.path.dirname(
-                os.path.realpath(__file__))  # get the directory path of current file
-            temp_file = dir_path + '%stemp%sbob_inp.dat' % ((os.sep,) * 2)
+            # get the directory path of current file
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            temp_dir = dir_path + '%stemp%s' % ((os.sep,)*2)
+            #create temp folder if does not exist
+            if not os.path.exists(temp_dir):
+                os.makedirs(temp_dir)
+            temp_file = temp_dir + 'bob_inp.dat'
             self.create_input_param_file(temp_file)
+            
             # ask where to save the polymer config file
             polyconf_file_out = self.get_file_name()
+            
             # run BoB main
             argv = ["./bob", "-i", temp_file, "-c", polyconf_file_out]
             bch.run_bob_main(argv)
+            
+            # delete temp file
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
+
             self.Qprint("Polymer configuration written in %s" % polyconf_file_out)
 
     def create_input_param_file(self, temp_file):
