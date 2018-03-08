@@ -477,10 +477,6 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
             # run BoB main
             argv = ["./bob", "-i", temp_file, "-c", polyconf_file_out]
             bch.run_bob_main(argv)
-            
-            # delete temp file
-            if os.path.exists(temp_file):
-                os.remove(temp_file)
 
             self.Qprint("Polymer configuration written in %s" % polyconf_file_out)
 
