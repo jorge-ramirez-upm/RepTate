@@ -69,7 +69,11 @@ class BobCtypesHelper:
     def free_lib(self):
         """Unload the library. This is equivalent to closing BoB"""
         import _ctypes
-        _ctypes.dlclose(self.bob_lib._handle)
+        if sys.platform in ['darwin', 'linux']:
+            _ctypes.dlclose(self.bob_lib._handle)
+        else:
+            # Windows platform
+            _ctypes.FreeLibrary(self.bob_lib._handle)
 
     def reload_lib(self):
         """Unload and load the shared library. 
