@@ -48,7 +48,7 @@ import time
 
 import bob_gen_poly  # dialog
 from BobCtypesHelper import BobCtypesHelper
-from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
 from PyQt5.QtCore import QUrl, pyqtSignal
 
@@ -102,7 +102,7 @@ class ArchitectureType(Enum):
     MPE_numav = [20, 'Mw (g/mol)', 'Branch/molecule']
     MPE_wtav = [21, 'Mw (g/mol)', 'Branch/molecule']
     GEL_wtav = [25, 'Mn (g/mol)', 'Up Branch. proba.']
-    # Prototype = [40,]
+    Prototype = [40, 'Go to "Result" tab']
     From_file = [60, 'From file']
 
 
@@ -299,6 +299,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         self.trash_indices = []
         self.dict_component = OrderedDict()
         self.setup_dialog()
+        self.flag_prototype = 0
 
     def setup_dialog(self):
         """Create the dialog to setup the polymer configuration"""
@@ -342,6 +343,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         tb = self.d.text_box
         # remove all current text
         tb.clear()
+
         #1 memory line
         tb.append("%d %d" % (float(self.d.n_polymers.text()),
                              float(self.d.n_segments.text())))
@@ -390,6 +392,9 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                         i).rstrip()  # remove whitespace on right side
                     if i < ngen:
                         text += "\n"
+            elif type_number == 40:
+                #prototype polymer
+                continue
             else:
                 text = ""
                 for attr in pol_type_list[
@@ -490,8 +495,8 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         e2.setText(self.d.number.text())
         layout.addRow(QLabel("Num. of polymers"), e2)
         pol_dict["Num. of polymers"] = e2
-
         success = self.set_extra_lines(pol_type, layout, pol_dict)
+
         self.dict_component[pol_id] = pol_dict
         widget.setLayout(layout)
         if success:
@@ -515,6 +520,15 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                                    pol_dict)
                 self.add_new_qline("PDI gen%d" % i, "1.2", layout, pol_dict)
                 self.add_cb_distribution("Dist gen%d" % i, layout, pol_dict)
+        
+        elif pol_attr[0] == 40:
+            #type 40: give a text box that must be saved to a temp file
+            label = pol_attr[1]
+            layout.addRow(QLabel(''), QLabel(label))
+            pol_dict[label] = label
+            self.flag_prototype += 1
+            self.d.proto_text.setDisabled(False)
+            self.d.proto_label.setDisabled(False)
 
         elif pol_attr[0] == 60:
             #handle the "from file" type
@@ -590,10 +604,15 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         """Close a tab and delete dictionary entry
         Called when the close-tab button is clicked"""
         name = self.d.polymer_tab.tabText(index)
-        ind = int(''.join(c for c in name if c.isdigit()))  #get the number
+        ind = int(''.join(c for c in name if c.isdigit()))  #get the tab number
         del self.dict_component[name]
         self.d.polymer_tab.removeTab(index)
         self.trash_indices.append(ind)
+        if "Prototype" in name:
+            self.flag_prototype -= 1
+            if self.flag_prototype == 0:
+                self.d.proto_text.setDisabled(True)
+                self.d.proto_label.setDisabled(True)
 
     def launch_param_dialog(self):
         """Show the dialog to set-up number of the polymer components in the mix
@@ -607,15 +626,18 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                 return
 
             # create temporary file for BoB input
-            # get the directory path of current file
+            # get the cwd path
             temp_dir = os.path.join(os.getcwd(), 'theories', 'temp')
             #create temp folder if does not exist
             if not os.path.exists(temp_dir):
                 os.makedirs(temp_dir)
             # path to 'bob_inp.dat'
             temp_file = os.path.join(temp_dir, 'bob_inp.dat')
-            self.create_input_param_file(temp_file)
-
+            self.create_input_param_file(temp_file, self.d.text_box)
+            if self.flag_prototype > 0:
+                # path to 'poly.proto'
+                temp_file2 = os.path.join(temp_dir, 'poly.proto')
+                self.create_input_param_file(temp_file2, self.d.proto_text)    
             # ask where to save the polymer config file
             polyconf_file_out = self.get_file_name()
             if polyconf_file_out is not None:
@@ -623,18 +645,21 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                 self.argv = [
                     "./bob", "-i", temp_file, "-c", polyconf_file_out, "-p"
                 ]
+                if self.flag_prototype > 0:
+                    self.argv.append('-x')
+                    self.argv.append(temp_file2)
                 self.success_dialog = True
                 return
 
         self.success_dialog = False
 
-    def create_input_param_file(self, temp_file):
+    def create_input_param_file(self, temp_file, text_widget):
         """Dump the content of the "result" tab of the dialog box
         into a file ``temp_file``"""
         with open(temp_file, 'w') as tmp:
-            tmp.write(str(self.d.text_box.toPlainText()))
+            tmp.write(str(text_widget.toPlainText()))
 
-    def get_file_name(self, relative=False):
+    def get_file_name(self):
         """Launch a dialog for selecting a file where to save the
         result of the polymer configuration created by BoB.
         Return a string with a filename"""

@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(422, 568)
+        Dialog.resize(373, 533)
         self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.inp_param_widget = QtWidgets.QWidget(Dialog)
@@ -28,7 +28,7 @@ class Ui_Dialog(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 326, 429))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 277, 394))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
@@ -189,16 +189,49 @@ class Ui_Dialog(object):
         self.tabWidget.addTab(self.Memory, "")
         self.Result = QtWidgets.QWidget()
         self.Result.setObjectName("Result")
-        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.Result)
-        self.verticalLayout_10.setObjectName("verticalLayout_10")
-        self.text_box = QtWidgets.QTextBrowser(self.Result)
-        self.text_box.setUndoRedoEnabled(True)
-        self.text_box.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
-        self.text_box.setReadOnly(False)
+        self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.Result)
+        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        self.splitter = QtWidgets.QSplitter(self.Result)
+        self.splitter.setOrientation(QtCore.Qt.Vertical)
+        self.splitter.setObjectName("splitter")
+        self.text_box = QtWidgets.QTextBrowser(self.splitter)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(3)
+        sizePolicy.setHeightForWidth(self.text_box.sizePolicy().hasHeightForWidth())
+        self.text_box.setSizePolicy(sizePolicy)
         self.text_box.setAcceptRichText(False)
-        self.text_box.setOpenLinks(False)
         self.text_box.setObjectName("text_box")
-        self.verticalLayout_10.addWidget(self.text_box)
+        self.proto_widget = QtWidgets.QWidget(self.splitter)
+        self.proto_widget.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(2)
+        sizePolicy.setHeightForWidth(self.proto_widget.sizePolicy().hasHeightForWidth())
+        self.proto_widget.setSizePolicy(sizePolicy)
+        self.proto_widget.setObjectName("proto_widget")
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.proto_widget)
+        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_10.setObjectName("verticalLayout_10")
+        self.proto_label = QtWidgets.QLabel(self.proto_widget)
+        self.proto_label.setEnabled(False)
+        self.proto_label.setObjectName("proto_label")
+        self.verticalLayout_10.addWidget(self.proto_label)
+        self.proto_text = QtWidgets.QTextBrowser(self.proto_widget)
+        self.proto_text.setEnabled(False)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(2)
+        sizePolicy.setHeightForWidth(self.proto_text.sizePolicy().hasHeightForWidth())
+        self.proto_text.setSizePolicy(sizePolicy)
+        self.proto_text.setReadOnly(False)
+        self.proto_text.setAcceptRichText(False)
+        self.proto_text.setObjectName("proto_text")
+        self.verticalLayout_10.addWidget(self.proto_text)
+        self.verticalLayout_11.addLayout(self.verticalLayout_10)
+        self.verticalLayout_12.addWidget(self.splitter)
         self.tabWidget.addTab(self.Result, "")
         self.verticalLayout_9.addWidget(self.tabWidget)
         self.buttonBox = QtWidgets.QDialogButtonBox(self.inp_param_widget)
@@ -239,5 +272,23 @@ class Ui_Dialog(object):
         self.label_7.setText(_translate("Dialog", "Max. num. of segments"))
         self.n_segments.setText(_translate("Dialog", "1e6"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Memory), _translate("Dialog", "Memory"))
+        self.proto_label.setText(_translate("Dialog", "Enter Polymer Prototype:"))
+        self.proto_text.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">FunStar</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-1 -1 1 2 0 10000 1.0</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">0 2 -1 -1 2 12000 1.4</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">0 1 -1 -1 4 18000 2.0</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">FunH</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-1 -1 1 2 2 10000 1.2</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-1 -1 0 2 2 12000 1.01</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">0 1 3 4   2 25000 1.4</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2 4 -1 -1 2 11000 1.1</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2 3 -1 -1 2 13000 1.05</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Result), _translate("Dialog", "Result"))
 
