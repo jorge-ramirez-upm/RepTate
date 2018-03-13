@@ -87,6 +87,8 @@ class ArchitectureType(Enum):
         6, 'Dist backbone', 'Mw backbone (g/mol)', 'PDI backbone', '',
         'Dist side', 'Mw side (g/mol)', 'PDI side', '', 'Num. arm'
     ]
+    ##########################
+    #Caylay type is handled in a special way. The strings below are not actually used.
     Cayley_tree = [
         10, 'Num. generation', '', 'Dist gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
     ]
@@ -96,11 +98,12 @@ class ArchitectureType(Enum):
     Cayley_star4 = [
         12, 'Num. generation', '', 'Dist gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
     ]
+    ###########################
     MPE_numav = [20, 'Mw (g/mol)', 'Branch/molecule']
     MPE_wtav = [21, 'Mw (g/mol)', 'Branch/molecule']
     GEL_wtav = [25, 'Mn (g/mol)', 'Up Branch. proba.']
     # Prototype = [40,]
-    # From_file = [60, 'file name']
+    From_file = [60, 'From file']
 
 
 class TheoryCreatePolyconf(CmdBase):
@@ -318,7 +321,8 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
             self.d.cb_type.addItem(e.name)
 
     def handle_apply_button(self):
-        """When Apply button of dialog box is clicked"""
+        """When Apply button of dialog box is clicked,
+        fill the "Result" widget with the data expected by BoB"""
         ncomponents = self.d.polymer_tab.count()
         if ncomponents < 1:
             QMessageBox.warning(
@@ -359,14 +363,14 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                 w = "ERROR"
             tb.append("%f" % w)
             #9.. num. polymer and type
-            npol = pol_dict["Num. of polymers"].text()
+            # float -> int conversion needed for e.g. "1e6"
+            npol = int(float(pol_dict["Num. of polymers"].text()))
             type_number = pol_type_list[0]
-            tb.append("%d %d" % (float(npol), float(type_number)))
-            self.npol_tot += int(npol)
+            tb.append("%d %d" % (npol, type_number))
+            self.npol_tot += npol
 
-            if type_number in [
-                    10, 11, 12
-            ]:  # Cayley tree: handle varible number of generations
+            if type_number in [10, 11, 12]:
+                # Cayley tree type: handle varible number of generations
                 ngen = pol_dict["Num. generation"]
                 text = "%s\n" % ngen
                 for i in range(ngen + 1):
@@ -383,8 +387,9 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                 for attr in pol_type_list[
                         1:]:  # go over all attributes of the architecture type
                     text += self.poly_param_text(pol_dict, attr)
-
-            tb.append(text.rstrip())  # remove whitespace on right side
+            
+            text = text.rstrip() + "\n"
+            tb.append(text)  # remove whitespace on right side
 
         # set current tab to the Text box "result"
         self.d.tabWidget.setCurrentIndex(2)
@@ -444,10 +449,13 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
             pol_id = "%s%s" % (pol_type, self.ncomponent)
             self.ncomponent += 1
         # define a new tab widget
-        tab_widget = self.create_new_tab(pol_id, pol_type)
+        tab_widget, success = self.create_new_tab(pol_id, pol_type)
         index = self.d.polymer_tab.addTab(tab_widget, pol_id)
-        # set new tab as active one
-        self.d.polymer_tab.setCurrentIndex(index)
+        if success:
+            # if success, set new tab as active one
+            self.d.polymer_tab.setCurrentIndex(index)
+        else:
+            self.handle_close_polymer_tab(index)
 
     def create_new_tab(self, pol_id, pol_type):
         """Return a new widget containing a form with all the parameters
@@ -460,7 +468,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         ])  # Arch. type number
 
         val_double = QDoubleValidator()
-        val_double.setBottom(0)  #set smalled double allowed in the form
+        val_double.setBottom(0)  #set smallest double allowed in the form
 
         e1 = QLineEdit()
         e1.setValidator(val_double)
@@ -475,56 +483,75 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         layout.addRow(QLabel("Num. of polymers"), e2)
         pol_dict["Num. of polymers"] = e2
 
-        self.set_extra_lines(pol_type, layout, pol_dict)
-        self.dict_component[pol_id] = pol_dict
-
-        widget.setLayout(layout)
-        return widget
+        success = self.set_extra_lines(pol_type, layout, pol_dict)
+        if success:
+            self.dict_component[pol_id] = pol_dict
+            widget.setLayout(layout)
+            return widget, True
+        else:
+            return widget, False
 
     def set_extra_lines(self, pol_type, layout, pol_dict):
-        """Extra parameters related to the polymer architecture ``pol_type``
+        """Add extra parameter lines related to the polymer architecture ``pol_type``
         to the form layout
         """
+        # return a list with the expected input parameters
+        pol_attr = ArchitectureType[pol_type].value
 
-        pol_attr = ArchitectureType[
-            pol_type].value  # return a list with the expected input parameters
-        for attr in pol_attr[1:]:
-            if "Num. generation" in attr:
-                ngen = self.d.sb_ngeneration.value()
-                pol_dict["Num. generation"] = ngen
-                for i in range(ngen + 1):
-                    self.add_new_qline("Mw gen%d (g/mol)" % i, "1e4", layout,
-                                       pol_dict)
-                    self.add_new_qline("PDI gen%d" % i, "1.2", layout,
-                                       pol_dict)
-                    self.add_cb_distribution("Dist gen%d" % i, layout,
-                                             pol_dict)
-                break
-            elif "arm" in attr:
-                if pol_attr[0] in [4, 6]:
-                    # comb Poisson distribution (double)
-                    self.add_new_qline(attr, "4.2", layout, pol_dict)
-                else:
-                    #star or comb with fixed number of arms (integer)
-                    self.add_new_qline(attr, "3", layout, pol_dict,
-                                       QIntValidator())
-            if "Mw" in attr:
-                # add Mw line
-                self.add_new_qline(attr, "1e4", layout, pol_dict)
-            elif "PDI" in attr:
-                #add PDI line
-                self.add_new_qline(attr, "1.2", layout, pol_dict)
-            elif "Dist" in attr:
-                # add distribution combobox
-                self.add_cb_distribution(attr, layout, pol_dict)
-            elif "/mol" in attr:
-                # add branch/molecule line
-                self.add_new_qline(attr, "0.1", layout, pol_dict)
-            elif "proba" in attr:
-                # add branching proba line
-                self.add_new_qline(attr, "0.2", layout, pol_dict)
-            elif attr == '':
-                continue
+        if pol_attr[0] in [10, 11, 12]:
+            #handle the Cayley tree types
+            ngen = self.d.sb_ngeneration.value()
+            pol_dict["Num. generation"] = ngen
+            for i in range(ngen + 1):
+                self.add_new_qline("Mw gen%d (g/mol)" % i, "1e4", layout,
+                                   pol_dict)
+                self.add_new_qline("PDI gen%d" % i, "1.2", layout, pol_dict)
+                self.add_cb_distribution("Dist gen%d" % i, layout, pol_dict)
+
+        elif pol_attr[0] == 60:
+            #handle the "from file" type
+            attr = pol_attr[1]
+            fpath = self.get_file_path()
+            if fpath is None:
+                return False
+            self.add_new_qline(attr, fpath, layout, pol_dict)
+        else:
+            for attr in pol_attr[1:]:
+                if "arm" in attr:
+                    if pol_attr[0] in [4, 6]:
+                        # comb Poisson distribution (double)
+                        self.add_new_qline(attr, "4.2", layout, pol_dict)
+                    else:
+                        #star or comb with fixed number of arms (integer)
+                        self.add_new_qline(attr, "3", layout, pol_dict,
+                                           QIntValidator())
+                if "Mw" in attr:
+                    # add Mw line
+                    self.add_new_qline(attr, "1e4", layout, pol_dict)
+                elif "PDI" in attr:
+                    #add PDI line
+                    self.add_new_qline(attr, "1.2", layout, pol_dict)
+                elif "Dist" in attr:
+                    # add distribution combobox
+                    self.add_cb_distribution(attr, layout, pol_dict)
+                elif "/mol" in attr:
+                    # add branch/molecule line
+                    self.add_new_qline(attr, "0.1", layout, pol_dict)
+                elif "proba" in attr:
+                    # add branching proba line
+                    self.add_new_qline(attr, "0.2", layout, pol_dict)
+                elif attr == '':
+                    continue
+        return True # success
+    
+    def get_file_path(self):
+        # file browser window  
+        options = QFileDialog.Options()
+        dir_start = "data/React/"
+        dilogue_name = "Select a Polymer Configuration File"
+        ext_filter = "Data Files (*.dat)"
+        selected_file, _ = QFileDialog.getOpenFileName(self, dilogue_name, dir_start, ext_filter, options=options)
+        return selected_file
 
     def add_new_qline(self,
                       name,
@@ -534,7 +561,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                       validator=QDoubleValidator()):
         """Add a new line to the form layout containing a QLabel widget
         for the parameter name and a QLineEdit to change the parameter value"""
-        validator.setBottom(0)  #set smalled double allowed in the form
+        validator.setBottom(0)  #set smallest double allowed in the form
         e = QLineEdit()
         e.setValidator(validator)
         e.setText("%s" % default_val)
@@ -572,16 +599,19 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                 return
             # create temporary file for BoB input
             # get the directory path of current file
-            dir_path = os.path.dirname(os.path.realpath(__file__))
-            temp_dir = dir_path + '%stemp%s' % ((os.sep, ) * 2)
+            temp_dir = os.path.join('theories', 'temp')
+            print("temp_dir", temp_dir)
             #create temp folder if does not exist
             if not os.path.exists(temp_dir):
                 os.makedirs(temp_dir)
-            temp_file = temp_dir + 'bob_inp.dat'
+            # path to 'bob_inp.dat' relative to the folder where the .so file is (theories/)
+            temp_file = os.path.join(temp_dir, 'bob_inp.dat')
+            print("temp_file", temp_file)
             self.create_input_param_file(temp_file)
 
             # ask where to save the polymer config file
             polyconf_file_out = self.get_file_name()
+            print("polyconf_file_out", polyconf_file_out)
             if polyconf_file_out is not None:
                 # run BoB main
                 argv = [
@@ -604,12 +634,12 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         with open(temp_file, 'w') as tmp:
             tmp.write(str(self.d.text_box.toPlainText()))
 
-    def get_file_name(self):
+    def get_file_name(self, relative=True):
         """Launch a dialog for selecting a file where to save the
         result of the polymer configuration created by BoB.
         Return a string with a filename"""
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
+        # options |= QFileDialog.DontUseNativeDialog
         dir_start = "data/React/BoB_polyconf.dat"
         dilogue_name = "Save BoB Polymer Configuration"
         ext_filter = "Data Files (*.dat)"
@@ -619,4 +649,10 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
             self.Qprint('Invalid filename')
             return None
         else:
-            return out_file[0]
+            if relative:
+                #return relative path
+                cwd = os.getcwd()
+                fout = out_file[0].replace(os.getcwd() + os.sep, '')
+                return fout
+            else:
+                return out_file[0]
