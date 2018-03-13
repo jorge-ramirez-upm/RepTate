@@ -604,7 +604,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
             #create temp folder if does not exist
             if not os.path.exists(temp_dir):
                 os.makedirs(temp_dir)
-            # path to 'bob_inp.dat' relative to the folder where the .so file is (theories/)
+            # path to 'bob_inp.dat' relative to the Reptate*.py file
             temp_file = os.path.join(temp_dir, 'bob_inp.dat')
             print("temp_file", temp_file)
             self.create_input_param_file(temp_file)
