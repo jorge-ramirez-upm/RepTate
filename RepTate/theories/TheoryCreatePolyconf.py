@@ -158,7 +158,6 @@ class BaseTheoryCreatePolyconf:
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
         self.signal_param_dialog.connect(self.launch_param_dialog)
-        self.gpc_out = None
         self.parameters["nbin"] = Parameter(
             name="nbin",
             value=50,
@@ -234,8 +233,17 @@ class BaseTheoryCreatePolyconf:
             self.Qprint('Operation canceled')
             return
 
-        if self.gpc_out:
-            lgmid_out, wtbin_out, brbin_out, gbin_out = self.gpc_out
+        # Run BoB C++ code
+        bch = BobCtypesHelper(self)
+        gpc_out = []
+        mn, mw, gpc_out = bch.run_bob_main(self.argv, self.npol_tot)
+
+        #copy results to RepTate data file
+        if gpc_out:
+            self.Qprint("Polymer configuration written in \"%s\"" %
+                        self.argv[4])
+            self.Qprint("\nMn=%.3g, Mw=%.3g, PDI=%.3g" % (mn, mw, mw / mn))
+            lgmid_out, wtbin_out, brbin_out, gbin_out = gpc_out
             tt.num_columns = ft.num_columns
             tt.num_rows = len(lgmid_out)
             tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -610,18 +618,11 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
 
             # ask where to save the polymer config file
             polyconf_file_out = self.get_file_name()
-            print("polyconf_file_out", polyconf_file_out)
             if polyconf_file_out is not None:
-                # run BoB main
-                argv = [
+                # BoB main arguments
+                self.argv = [
                     "./bob", "-i", temp_file, "-c", polyconf_file_out, "-p"
                 ]
-                bch = BobCtypesHelper(self)
-                mn, mw, self.gpc_out = bch.run_bob_main(argv, self.npol_tot)
-
-                self.Qprint("Polymer configuration written in \"%s\"" %
-                            polyconf_file_out)
-                self.Qprint("\nMn=%.3g, Mw=%.3g, PDI=%.3g" % (mn, mw, mw / mn))
                 self.success_dialog = True
                 return
 
