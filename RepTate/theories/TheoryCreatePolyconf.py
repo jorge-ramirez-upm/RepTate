@@ -492,9 +492,9 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         pol_dict["Num. of polymers"] = e2
 
         success = self.set_extra_lines(pol_type, layout, pol_dict)
+        self.dict_component[pol_id] = pol_dict
+        widget.setLayout(layout)
         if success:
-            self.dict_component[pol_id] = pol_dict
-            widget.setLayout(layout)
             return widget, True
         else:
             return widget, False
@@ -520,7 +520,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
             #handle the "from file" type
             attr = pol_attr[1]
             fpath = self.get_file_path()
-            if fpath is None:
+            if fpath == '':
                 return False
             self.add_new_qline(attr, fpath, layout, pol_dict)
         else:
