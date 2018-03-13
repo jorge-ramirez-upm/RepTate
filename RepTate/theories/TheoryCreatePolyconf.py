@@ -238,8 +238,8 @@ class BaseTheoryCreatePolyconf:
             tt.data = np.zeros((tt.num_rows, tt.num_columns))
             tt.data[:, 0] = lgmid_out[:]
             tt.data[:, 1] = wtbin_out[:]
-            tt.data[:, 2] = brbin_out[:]
-            tt.data[:, 3] = gbin_out[:]
+            tt.data[:, 2] = gbin_out[:]
+            tt.data[:, 3] = brbin_out[:]
 
 
 class CLTheoryCreatePolyconf(BaseTheoryCreatePolyconf, Theory):
