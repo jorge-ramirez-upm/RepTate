@@ -328,6 +328,21 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         # fill combobox
         for e in ArchitectureType:
             self.d.cb_type.addItem(e.name)
+        # pre-fill the prototype text box
+        self.d.proto_text.append("""FunStar
+3
+-1 -1 1 2 0 10000 1.0
+0 2 -1 -1 2 12000 1.4
+0 1 -1 -1 4 18000 2.0
+FunH
+5
+-1 -1 1 2 2 10000 1.2
+-1 -1 0 2 2 12000 1.01
+0 1 3 4   2 25000 1.4
+2 4 -1 -1 2 11000 1.1
+2 3 -1 -1 2 13000 1.05
+"""
+)
 
     def handle_apply_button(self):
         """When Apply button of dialog box is clicked,
@@ -400,10 +415,9 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                 for attr in pol_type_list[
                         1:]:  # go over all attributes of the architecture type
                     text += self.poly_param_text(pol_dict, attr)
-            
-            text = text.rstrip() + "\n"
+            text = text.rstrip()
             tb.append(text)  # remove whitespace on right side
-
+        tb.append("\n")
         # set current tab to the Text box "result"
         self.d.tabWidget.setCurrentIndex(2)
         return True
