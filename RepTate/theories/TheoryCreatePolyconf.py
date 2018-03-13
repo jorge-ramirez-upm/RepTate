@@ -597,16 +597,15 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
                 # there is no polymer component in the mix
                 self.success_dialog = False
                 return
+
             # create temporary file for BoB input
             # get the directory path of current file
-            temp_dir = os.path.join('theories', 'temp')
-            print("temp_dir", temp_dir)
+            temp_dir = os.path.join(os.getcwd(), 'theories', 'temp')
             #create temp folder if does not exist
             if not os.path.exists(temp_dir):
                 os.makedirs(temp_dir)
-            # path to 'bob_inp.dat' relative to the Reptate*.py file
+            # path to 'bob_inp.dat'
             temp_file = os.path.join(temp_dir, 'bob_inp.dat')
-            print("temp_file", temp_file)
             self.create_input_param_file(temp_file)
 
             # ask where to save the polymer config file
@@ -634,25 +633,19 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         with open(temp_file, 'w') as tmp:
             tmp.write(str(self.d.text_box.toPlainText()))
 
-    def get_file_name(self, relative=True):
+    def get_file_name(self, relative=False):
         """Launch a dialog for selecting a file where to save the
         result of the polymer configuration created by BoB.
         Return a string with a filename"""
         options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        dir_start = "data/React/BoB_polyconf.dat"
-        dilogue_name = "Save BoB Polymer Configuration"
-        ext_filter = "Data Files (*.dat)"
+        dir_start = os.path.join('data', 'React', 'BoB_polyconf.dat')
+        dilogue_name = 'Save BoB Polymer Configuration'
+        ext_filter = 'Data Files (*.dat)'
         out_file = QFileDialog.getSaveFileName(
-            self, dilogue_name, dir_start, options=options)
-        if out_file[0] == "":
+            self, dilogue_name, dir_start, ext_filter, options=options)
+        if out_file[0] == '':
             self.Qprint('Invalid filename')
             return None
         else:
-            if relative:
-                #return relative path
-                cwd = os.getcwd()
-                fout = out_file[0].replace(os.getcwd() + os.sep, '')
-                return fout
-            else:
-                return out_file[0]
+            return out_file[0]
