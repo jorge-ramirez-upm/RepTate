@@ -213,7 +213,8 @@ class BaseTheoryUCM:
                 display_flag=False,
                 bracketed=True,
                 min_value=0)
-
+        
+        self.MAX_MODES = 40
         self.init_flow_mode()
 
     def init_flow_mode(self):
