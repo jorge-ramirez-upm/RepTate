@@ -51,6 +51,7 @@ from BobCtypesHelper import BobCtypesHelper
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
 from PyQt5.QtCore import QUrl, pyqtSignal
+from shutil import copy2
 
 
 class DistributionType(Enum):
@@ -165,6 +166,7 @@ class BaseTheoryCreatePolyconf:
             type=ParameterType.integer,
             opt_type=OptType.const,
             min_value=1)
+        self.polyconf_file_out = None  # full path of target polyconf file
 
     def get_modes(self):
         """[summary]
@@ -240,8 +242,14 @@ class BaseTheoryCreatePolyconf:
 
         #copy results to RepTate data file
         if gpc_out:
+            if not self.is_ascii(self.polyconf_file_out):
+                #copy file to selected loaction
+                temp_polyconf = os.path.join('theories', 'temp',
+                                             'temp_polyconf.dat')
+                copy2(temp_polyconf, self.polyconf_file_out)
+            
             self.Qprint("Polymer configuration written in \"%s\"" %
-                        self.argv[4])
+                        self.polyconf_file_out)
             self.Qprint("\nMn=%.3g, Mw=%.3g, PDI=%.3g" % (mn, mw, mw / mn))
             lgmid_out, wtbin_out, brbin_out, gbin_out = gpc_out
             tt.num_columns = ft.num_columns
@@ -341,8 +349,7 @@ FunH
 0 1 3 4   2 25000 1.4
 2 4 -1 -1 2 11000 1.1
 2 3 -1 -1 2 13000 1.05
-"""
-)
+""")
 
     def handle_apply_button(self):
         """When Apply button of dialog box is clicked,
@@ -534,7 +541,7 @@ FunH
                                    pol_dict)
                 self.add_new_qline("PDI gen%d" % i, "1.2", layout, pol_dict)
                 self.add_cb_distribution("Dist gen%d" % i, layout, pol_dict)
-        
+
         elif pol_attr[0] == 40:
             #type 40: give a text box that must be saved to a temp file
             label = pol_attr[1]
@@ -550,6 +557,11 @@ FunH
             fpath = self.get_file_path()
             if fpath == '':
                 return False
+            if not self.is_ascii(fpath):
+                # copy file
+                ok_path = os.path.join('theories', 'temp', 'my_polyconf.dat')
+                copy2(fpath, ok_path)
+                fpath = ok_path
             self.add_new_qline(attr, fpath, layout, pol_dict)
         else:
             for attr in pol_attr[1:]:
@@ -578,15 +590,16 @@ FunH
                     self.add_new_qline(attr, "0.2", layout, pol_dict)
                 elif attr == '':
                     continue
-        return True # success
-    
+        return True  # success
+
     def get_file_path(self):
-        # file browser window  
+        # file browser window
         options = QFileDialog.Options()
         dir_start = "data/React/"
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
-        selected_file, _ = QFileDialog.getOpenFileName(self, dilogue_name, dir_start, ext_filter, options=options)
+        selected_file, _ = QFileDialog.getOpenFileName(
+            self, dilogue_name, dir_start, ext_filter, options=options)
         return selected_file
 
     def add_new_qline(self,
@@ -640,34 +653,36 @@ FunH
                 return
 
             # create temporary file for BoB input
-            # get the cwd path
-            temp_dir = os.path.join(os.getcwd(), 'theories', 'temp')
+            temp_dir = os.path.join('theories', 'temp')
             #create temp folder if does not exist
             if not os.path.exists(temp_dir):
                 os.makedirs(temp_dir)
+
             # path to 'bob_inp.dat'
-            temp_file = os.path.join(temp_dir, 'bob_inp.dat')
-            self.create_input_param_file(temp_file, self.d.text_box)
+            temp_inp = os.path.join(temp_dir, 'bob_inp.dat')
+            self.dump_text_to_file(temp_inp, self.d.text_box)
+
             if self.flag_prototype > 0:
                 # path to 'poly.proto'
-                temp_file2 = os.path.join(temp_dir, 'poly.proto')
-                self.create_input_param_file(temp_file2, self.d.proto_text)    
+                temp_proto = os.path.join(temp_dir, 'poly.proto')
+                self.dump_text_to_file(temp_proto, self.d.proto_text)
+
             # ask where to save the polymer config file
-            polyconf_file_out = self.get_file_name()
-            if polyconf_file_out is not None:
+            out_file = self.polyconf_file_out = self.get_file_name()
+            if self.polyconf_file_out is not None:
+                if not self.is_ascii(self.polyconf_file_out):
+                    # to avoid path name troubles
+                    out_file = os.path.join(temp_dir, 'temp_polyconf.dat')
                 # BoB main arguments
-                self.argv = [
-                    "./bob", "-i", temp_file, "-c", polyconf_file_out, "-p"
-                ]
+                self.argv = ["./bob", "-i", temp_inp, "-c", out_file, "-p"]
                 if self.flag_prototype > 0:
                     self.argv.append('-x')
-                    self.argv.append(temp_file2)
+                    self.argv.append(temp_proto)
                 self.success_dialog = True
                 return
-
         self.success_dialog = False
 
-    def create_input_param_file(self, temp_file, text_widget):
+    def dump_text_to_file(self, temp_file, text_widget):
         """Dump the content of the "result" tab of the dialog box
         into a file ``temp_file``"""
         with open(temp_file, 'w') as tmp:
@@ -689,3 +704,11 @@ FunH
             return None
         else:
             return out_file[0]
+
+    def is_ascii(self, s):
+        """Check if `s` contains non ASCII characters"""
+        try:
+            s.encode('ascii')
+            return True
+        except UnicodeEncodeError:
+            return False
