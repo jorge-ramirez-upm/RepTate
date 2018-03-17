@@ -1014,7 +1014,7 @@ class Theory(CmdBase):
             pass
         self.parent_dataset.do_plot("")
 
-    def Qprint(self, msg):
+    def Qprint(self, msg, end='\n'):
         """[summary]
         
         [description]
@@ -1023,13 +1023,13 @@ class Theory(CmdBase):
             - msg {[type]} -- [description]
         """
         if CmdBase.mode == CmdMode.GUI:
-            self.print_signal.emit(msg)
+            self.print_signal.emit(msg + end)
         else:
-            print(msg)
+            print(msg, end=end)
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""
-        self.thTextBox.append(msg)
+        self.thTextBox.insertPlainText(msg)
         self.thTextBox.verticalScrollBar().setValue(
             self.thTextBox.verticalScrollBar().maximum())
         self.thTextBox.moveCursor(QTextCursor.End)
