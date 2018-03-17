@@ -365,7 +365,6 @@ class BaseTheoryBlendRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
-        print("shear", len(sigma), t, self)
         tmax = p[-1]
         if t >= tmax * self.count:
             self.Qprint("--", end='')
@@ -438,8 +437,6 @@ class BaseTheoryBlendRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
-        print("uext", len(sigma), t, self)
-
         tmax = p[-1]
         if t >= tmax * self.count:
             self.Qprint("--", end='')
