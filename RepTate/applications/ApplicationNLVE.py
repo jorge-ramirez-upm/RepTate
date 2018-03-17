@@ -89,6 +89,7 @@ class BaseApplicationNLVE:
         from TheoryUCM import TheoryUCM
         from TheoryGiesekus import TheoryGiesekus
         from TheoryPomPom import TheoryPomPom
+        from TheoryBlendRoliePoly import TheoryBlendRoliePoly
 
         super().__init__(name, parent)
 
@@ -151,6 +152,7 @@ class BaseApplicationNLVE:
         self.theories[TheoryUCM.thname] = TheoryUCM
         self.theories[TheoryGiesekus.thname] = TheoryGiesekus
         self.theories[TheoryPomPom.thname] = TheoryPomPom
+        self.theories[TheoryBlendRoliePoly.thname] = TheoryBlendRoliePoly
         self.add_common_theories()
         
         #set the current view
