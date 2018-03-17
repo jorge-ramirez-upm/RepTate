@@ -101,7 +101,6 @@ class DataSetWidget(QTreeWidget):
                     break
 
             for th in self.parent_dataset.theories.values(): #remove corresponding theory lines
-                print(th.tables)
                 try:
                     tt = th.tables[file_name_short]
                     for i in range(tt.MAX_NUM_SERIES):
