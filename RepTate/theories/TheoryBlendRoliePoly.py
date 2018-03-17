@@ -85,7 +85,7 @@ class EditModesDialog(QDialog):
                  MAX_MODES=0):
         super(EditModesDialog, self).__init__(parent)
 
-        self.setWindowTitle("Edit Maxwell modes")
+        self.setWindowTitle("Edit volume fractions and relaxation times")
         layout = QVBoxLayout(self)
         nmodes = len(phi)
 
