@@ -1,0 +1,196 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tutorial Rolie-Poly &#8212; RepTate 0.8.0 20180215 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.8.0 20180215',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="NLVE Tutorial: Command Line" href="tutorialCLNLVE.html" />
+    <link rel="prev" title="NLVE Tutorial: Graphical User Interface" href="tutorialGUINLVE.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLNLVE.html" title="NLVE Tutorial: Command Line"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorialGUINLVE.html" title="NLVE Tutorial: Graphical User Interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="tutorialGUINLVE.html" accesskey="U">NLVE Tutorial: Graphical User Interface</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorialGUINLVE.html"
+                        title="previous chapter">NLVE Tutorial: Graphical User Interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorialCLNLVE.html"
+                        title="next chapter">NLVE Tutorial: Command Line</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/NLVE/Tutorial/tutorial_RoliePoly.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial-rolie-poly">
+<h1>Tutorial Rolie-Poly<a class="headerlink" href="#tutorial-rolie-poly" title="Permalink to this headline">¶</a></h1>
+<p><strong>Non-Linear flow prediction</strong></p>
+<ol class="arabic">
+<li><p class="first">Start RepTate and create a new NLVE Application <a class="reference internal" href="../../../../_images/NLVE.png"><img alt="logo" class="align-bottom" src="../../../../_images/NLVE.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<a class="reference internal image-reference" href="../../../../_images/new_NLVE.png"><img alt="New application" class="align-center" src="../../../../_images/new_NLVE.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">Drag and drop shear (<cite>.shear</cite>) or uniaxial extension (<cite>.uext</cite>) data files, e.g. all the <cite>.uext</cite> files from the <cite>data/DOW/Non-Linear_Rheology/Start-up_extension/</cite> folder.</p>
+<p>The first column of the file should contain the time and the second column the viscosity (shear or tensile stress growth coefficient).</p>
+<a class="reference internal image-reference" href="../../../../_images/load_uext_data.png"><img alt="Load data" class="align-center" src="../../../../_images/load_uext_data.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">Select the “RoliePoly” theory <a class="reference internal" href="../../../../_images/RP_theory.png"><img alt="th_select" class="align-bottom" src="../../../../_images/RP_theory.png" style="height: 15pt;" /></a> and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
+<a class="reference internal image-reference" href="../../../../_images/new_RP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_RP_th.png" style="width: 400pt;" /></a>
+<p>At this point, you need to setup the relaxation times, <span class="math">\(\tau_i\)</span>, and
+weights, <span class="math">\(g_i\)</span>, for each mode <span class="math">\(i\)</span>.
+You can:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Input them manually by clicking:</p>
+<a class="reference internal image-reference" href="../../../../_images/edit_modes.png"><img alt="Edit modes" class="align-center" src="../../../../_images/edit_modes.png" style="width: 100pt;" /></a>
+<p>then select the number of modes, enter the values and click “OK”, then
+minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
+</li>
+<li><p class="first">Alternatively, it is possible to copy the values from a file or spreadsheet
+and paste the values into the “Edit Modes” table.</p>
+</li>
+<li><p class="first">Obtain the Maxwell modes from a different RepTate application (LVE, TTS,
+G(t)).
+<strong>In this tutorial we will import Maxwell modes from a LVE application.</strong></p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Create a new LVE Application <a class="reference internal" href="../../../../_images/LVE.png"><img alt="logoLVE" class="align-bottom" src="../../../../_images/LVE.png" style="width: 20pt; height: 20pt;" /></a> (see <span class="xref std std-ref">Tutorial LVE Application</span> for
+more details)
+and open the linear viscoelastic data file corresponding to the <strong>same sample</strong> at
+the <strong>same temperature</strong>.
+Then create a new Maxwell theory <a class="reference internal" href="../../../../_images/select_Maxwell.png"><img alt="maxwell" class="align-bottom" src="../../../../_images/select_Maxwell.png" style="height: 15pt;" /></a> and minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<a class="reference internal image-reference" href="../../../../_images/LVE_for_NLVE.png"><img alt="LVE for NLVE" class="align-center" src="../../../../_images/LVE_for_NLVE.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">Return to the NLVE application and now click <a class="reference internal" href="../../../../_images/icons8-broadcasting.png"><img alt="import_modes" class="align-bottom" src="../../../../_images/icons8-broadcasting.png" style="width: 20pt; height: 20pt;" /></a> and select from which
+theory you want to import the modes <a class="reference internal" href="../../../../_images/get_modes.png"><img alt="get_modes" class="align-bottom" src="../../../../_images/get_modes.png" style="height: 45pt;" /></a> and click “OK” and minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../../../../_images/RP_predictions.png"><img alt="Theory prediction" class="align-center" src="../../../../_images/RP_predictions.png" style="width: 400pt;" /></a>
+</div></blockquote>
+</li>
+<li><p class="first">Click the <a class="reference internal" href="../../../../_images/icons8-visible.png"><img alt="eye" class="align-bottom" src="../../../../_images/icons8-visible.png" style="width: 20pt; height: 20pt;" /></a> button to show (or hide) the linear viscoelastic envelope
+prediction:</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../../../../_images/with_LVE.png"><img alt="Show LVE" class="align-center" src="../../../../_images/with_LVE.png" style="width: 400pt;" /></a>
+</div></blockquote>
+</li>
+<li><p class="first">The number of stretching modes is given by <a class="reference internal" href="../../../../_images/nstretch.png"><img alt="nstretch" class="align-bottom" src="../../../../_images/nstretch.png" style="height: 15pt;" /></a>. <span class="math">\(N_\text{stretch}=0\)</span>
+means that the non-stretching version of the Rolie-Poly model will be used for all
+modes.
+So far, the calculations were done using “infinitely stretching chains” <a class="reference internal" href="../../../../_images/icons8-infinite.png"><img alt="no_fene" class="align-bottom" src="../../../../_images/icons8-infinite.png" style="height: 15pt;" /></a>.
+Click that button to use finite extensibility <a class="reference internal" href="../../../../_images/icons8-facebook-f.png"><img alt="fene" class="align-bottom" src="../../../../_images/icons8-facebook-f.png" style="height: 15pt;" /></a>. The maximum extensibility
+parameter <em>lmax</em> is now present in the parameter table.
+You can change its value and click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory
+predictions</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../../../../_images/with_fene.png"><img alt="With fene" class="align-center" src="../../../../_images/with_fene.png" style="width: 400pt;" /></a>
+</div></blockquote>
+</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLNLVE.html" title="NLVE Tutorial: Command Line"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorialGUINLVE.html" title="NLVE Tutorial: Graphical User Interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="tutorialGUINLVE.html" >NLVE Tutorial: Graphical User Interface</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,173 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>React Tutorial: Graphical User Interface &#8212; RepTate 0.8.0 20180215 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.8.0 20180215',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="React Tutorial: Command Line" href="tutorialCLReact.html" />
+    <link rel="prev" title="Metallocene CSTR" href="../Theory/MetalloceneCSTR.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLReact.html" title="React Tutorial: Command Line"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../Theory/MetalloceneCSTR.html" title="Metallocene CSTR"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../React.html" accesskey="U"> React: Monte-Carlo polymerisation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../Theory/MetalloceneCSTR.html"
+                        title="previous chapter">Metallocene CSTR</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorialCLReact.html"
+                        title="next chapter">React Tutorial: Command Line</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/React/Tutorial/tutorialGUIReact.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="react-tutorial-graphical-user-interface">
+<h1>React Tutorial: Graphical User Interface<a class="headerlink" href="#react-tutorial-graphical-user-interface" title="Permalink to this headline">¶</a></h1>
+<p><strong>The React module</strong></p>
+<p>The React module allows the viewing of experimental gpc-light scattering data. It also
+provides theories for the modelling of such data. At present, all the theories
+in the module are based on the use of Monte Carlo reaction simulations, which
+produce a representative set of molecules and which are then statistically
+analysed to produce molecular weight distributions. These simulations can then be
+mixed together, in a “Mixture” theory, to produce new distributions. The
+molecules, once generated, can be saved into a polymer configuration file
+suitable for rheology prediction using the “BoB” software.</p>
+<p>The React module provides a number of different ways of plotting the data, and
+also the possibility of viewing several graphs at once. To change the view of
+a particular graph, click on the relevant tab on the side of the graphs panel.
+Then change its view. Now, clicking the “All” tab should return to the
+three-graphs display with the view of the relevant graph changed.</p>
+<ol class="arabic">
+<li><p class="first">Start RepTate and create a new React Application <a class="reference internal" href="../../../../_images/React.png"><img alt="logo" class="align-bottom" src="../../../../_images/React.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<a class="reference internal image-reference" href="../../../../_images/open_React_app.png"><img alt="New React application" class="align-center" src="../../../../_images/open_React_app.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">Drag and drop a file with a <code class="docutils literal"><span class="pre">.reac</span></code> extension, e.g. <code class="docutils literal"><span class="pre">out1.reac</span></code> in the <code class="docutils literal"><span class="pre">data/React/</span></code> folder.
+See <span class="xref std std-ref">React: General description</span> for more information on the expected data file format.</p>
+<p>The 4 columns of the file should contain (1) the molecular mass <span class="math">\(M\)</span>, (2) the
+relative molecular weight <span class="math">\(w(\log(M))\)</span>, (3) the <span class="math">\(g\)</span>-factor,
+and (4) the number of branching per 1000 carbon.
+The <span class="math">\(g\)</span>-factor is defined as</p>
+<div class="math">
+\[g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}},\]</div>
+<p>where <span class="math">\(\langle R^2_g \rangle_\text{linear}\)</span> is the radius of
+gyration squared of a linear molecule of the same chemistry and molecular
+weight as a given branched molecule.</p>
+<a class="reference internal image-reference" href="../../../../_images/open_react_file.png"><img alt="Load data" class="align-center" src="../../../../_images/open_react_file.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">Select a theory, e.g. the “Tobita Batch” theory <a class="reference internal" href="../../../../_images/TobitaBatchTh.png"><img alt="TobitaBatchTh" class="align-bottom" src="../../../../_images/TobitaBatchTh.png" style="height: 15pt;" /></a>, and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
+<p>Note that automatic “minimisation” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="minimisation" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="height: 20pt;" /></a> is disabled for all theories
+in the React application because they are based on Monte Carlo simulations.
+Hence, minimisation seems a risky and time-consuming business.</p>
+<a class="reference internal image-reference" href="../../../../_images/create_tobita_batch_theory.png"><img alt="New TobitaBatch theory" class="align-center" src="../../../../_images/create_tobita_batch_theory.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">To adjust the BoB binning settings, click the <a class="reference internal" href="../../../../_images/icons8-bob-hat1.png"><img alt="bob-hat" class="align-bottom" src="../../../../_images/icons8-bob-hat1.png" style="width: 20pt; height: 20pt;" /></a> button.</p>
+</li>
+<li><p class="first">To save the polymer configuration for BoB, click the <a class="reference internal" href="../../../../_images/icons8-money-box.png"><img alt="piggy" class="align-bottom" src="../../../../_images/icons8-money-box.png" style="width: 20pt; height: 20pt;" /></a> button.</p>
+</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLReact.html" title="React Tutorial: Command Line"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../Theory/MetalloceneCSTR.html" title="Metallocene CSTR"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../React.html" > React: Monte-Carlo polymerisation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

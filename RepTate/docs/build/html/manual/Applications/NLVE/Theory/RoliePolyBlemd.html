@@ -1,0 +1,148 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Rolie-Poly Blend equation &#8212; RepTate 0.8.0 20180215 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.8.0 20180215',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rolie-Poly Blend equation</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/NLVE/Theory/RoliePolyBlemd.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rolie-poly-blend-equation">
+<h1>Rolie-Poly Blend equation<a class="headerlink" href="#rolie-poly-blend-equation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryBlendRoliePoly.TheoryBlendRoliePoly">
+<em class="property">class </em><code class="descclassname">TheoryBlendRoliePoly.</code><code class="descname">TheoryBlendRoliePoly</code><a class="reference internal" href="../../../../_modules/TheoryBlendRoliePoly.html#TheoryBlendRoliePoly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBlendRoliePoly.TheoryBlendRoliePoly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rolie-Poly
+* <strong>Function</strong></p>
+<blockquote>
+<div><div class="math">
+\[\boldsymbol \sigma = G_N^0 \sum_i \phi_i \text{fene}(\lambda_i) \boldsymbol A_i\]</div>
+<p>where
+.. math:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>\<span class="n">boldsymbol</span> <span class="n">A_i</span> <span class="o">&amp;=</span> \<span class="n">sum_j</span> \<span class="n">phi_j</span> \<span class="n">boldsymbol</span> <span class="n">A_</span><span class="p">{</span><span class="n">ij</span><span class="p">}</span>\\
+\<span class="n">lambda_i</span> <span class="o">&amp;=</span> \<span class="n">left</span><span class="p">(</span> \<span class="n">dfrac</span><span class="p">{</span>\<span class="n">text</span><span class="p">{</span><span class="n">Tr</span> <span class="n">A_i</span><span class="p">}}{</span><span class="mi">3</span><span class="p">}</span>  \<span class="n">right</span><span class="p">)</span><span class="o">^</span><span class="p">{</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">}</span>\            \<span class="n">stackrel</span><span class="p">{</span>\<span class="n">nabla</span><span class="p">}{</span>\<span class="n">boldsymbol</span> <span class="n">A_</span><span class="p">{</span><span class="n">ij</span><span class="p">}}</span> <span class="o">=</span> \<span class="n">dfrac</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span>\<span class="n">tau_</span><span class="p">{</span>\<span class="n">mathrm</span> <span class="n">d</span><span class="p">,</span><span class="n">i</span><span class="p">}}</span> <span class="p">(</span>\<span class="n">boldsymbol</span> <span class="n">A_</span><span class="p">{</span><span class="n">ij</span><span class="p">}</span> <span class="o">-</span> \<span class="n">boldsymbol</span> <span class="n">I</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last">
+<li><span class="math">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
+<li>logwmin = <span class="math">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
+<li>logwmax = <span class="math">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
+<li>logGi = <span class="math">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math">\(i\)</span>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

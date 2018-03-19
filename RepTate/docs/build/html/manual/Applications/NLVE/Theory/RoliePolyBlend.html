@@ -1,0 +1,159 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Rolie-Poly Blend equations &#8212; RepTate 0.8.0 20180215 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.8.0 20180215',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rolie-Poly Blend equations</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/NLVE/Theory/RoliePolyBlend.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rolie-poly-blend-equations">
+<h1>Rolie-Poly Blend equations<a class="headerlink" href="#rolie-poly-blend-equations" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryBlendRoliePoly.TheoryBlendRoliePoly">
+<em class="property">class </em><code class="descclassname">TheoryBlendRoliePoly.</code><code class="descname">TheoryBlendRoliePoly</code><a class="reference internal" href="../../../../_modules/TheoryBlendRoliePoly.html#TheoryBlendRoliePoly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBlendRoliePoly.TheoryBlendRoliePoly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blend of Rolie-Poly equations for the nonlinear predictions of polydisperse melts</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Function</strong></dt>
+<dd><div class="first math">
+\[\boldsymbol \sigma = G_N^0 \sum_i \text{fene}(\lambda_i) \phi_i \boldsymbol A_i\]</div>
+<dl class="last docutils">
+<dt>where</dt>
+<dd><div class="first last math">
+\[\begin{split}\boldsymbol A_i &amp;= \sum_j \phi_j \boldsymbol A_{ij}\\
+\lambda_i &amp;= \left( \dfrac{\text{Tr}  \boldsymbol A_i}{3}  \right)^{1/2}\\
+\stackrel{\nabla}{\boldsymbol  A_{ij}} &amp;=
+-\dfrac{1}{2\tau_{\mathrm d,i}} (\boldsymbol A_{ij} - \boldsymbol I)
+-\dfrac{2}{\tau_{\mathrm s,i}} \dfrac{\lambda_i - 1}{\lambda_i} \boldsymbol A_{ij}
+-\left( \dfrac{\beta_\text{th}}{2\tau_{\mathrm d,j}} 
++ \beta_\text{CCR}\dfrac{2}{\tau_{\mathrm s,j}} \dfrac{\lambda_j - 1}{\lambda_j}\lambda_i^{2\delta} \right)
+(\boldsymbol A_{ij} - \boldsymbol I)\end{split}\]</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">GN0</span></code> <span class="math">\(\equiv G_N^0\)</span>: Plateau modulus</li>
+<li><code class="docutils literal"><span class="pre">beta</span></code> <span class="math">\(\equiv\beta_\text{CCR}\)</span>: Rolie-Poly CCR parameter</li>
+<li><code class="docutils literal"><span class="pre">delta</span></code> <span class="math">\(\equiv\delta\)</span>: Rolie-Poly CCR exponent</li>
+<li><code class="docutils literal"><span class="pre">phi_i</span></code> <span class="math">\(\equiv\phi_i\)</span>: Volume fraction of species <span class="math">\(i\)</span></li>
+<li><code class="docutils literal"><span class="pre">tauD_i</span></code> <span class="math">\(\equiv\tau_{\mathrm d,i}\)</span>: Maxwell relaxation times for the stress of species <span class="math">\(i\)</span> (includes both reptation and constraint release mechamisms)</li>
+<li><code class="docutils literal"><span class="pre">tauR_i</span></code> <span class="math">\(\equiv\tau_{\mathrm s,i}\)</span>: Stretch relaxation time of species <span class="math">\(i\)</span></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

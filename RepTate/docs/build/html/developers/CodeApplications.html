@@ -1,0 +1,1017 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Applications &#8212; RepTate 0.8.0 20180215 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.8.0 20180215',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Theories" href="CodeTheories.html" />
+    <link rel="prev" title="Core classes (Graphical User Interface)" href="CodeCoreGUI.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CodeTheories.html" title="Theories"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CodeCoreGUI.html" title="Core classes (Graphical User Interface)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of Reptate</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Applications</a><ul>
+<li><a class="reference internal" href="#module-ApplicationGt">ApplicationGt</a></li>
+<li><a class="reference internal" href="#module-ApplicationLVE">ApplicationLVE</a></li>
+<li><a class="reference internal" href="#module-ApplicationMWD">ApplicationMWD</a></li>
+<li><a class="reference internal" href="#module-ApplicationNLVE">ApplicationNLVE</a></li>
+<li><a class="reference internal" href="#module-ApplicationTTS">ApplicationTTS</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="CodeCoreGUI.html"
+                        title="previous chapter">Core classes (Graphical User Interface)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CodeTheories.html"
+                        title="next chapter">Theories</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developers/CodeApplications.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="applications">
+<h1>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-ApplicationGt">
+<span id="applicationgt"></span><h2>ApplicationGt<a class="headerlink" href="#module-ApplicationGt" title="Permalink to this headline">¶</a></h2>
+<p>Module ApplicationGt</p>
+<p>Module for the analysis of stress relaxation data from simulations and experiments.</p>
+<dl class="class">
+<dt id="ApplicationGt.ApplicationGt">
+<em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">ApplicationGt</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#ApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.ApplicationGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<p>Application to analyze the relaxation modulus</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationGt.ApplicationGt.description">
+<code class="descname">description</code><em class="property"> = 'Relaxation modulus'</em><a class="headerlink" href="#ApplicationGt.ApplicationGt.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationGt.ApplicationGt.extension">
+<code class="descname">extension</code><em class="property"> = 'gt'</em><a class="headerlink" href="#ApplicationGt.ApplicationGt.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationGt.ApplicationGt.name">
+<code class="descname">name</code><em class="property"> = 'Gt'</em><a class="headerlink" href="#ApplicationGt.ApplicationGt.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationGt.BaseApplicationGt">
+<em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">BaseApplicationGt</code><span class="sig-paren">(</span><em>name='Gt'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>[summary]</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationGt.BaseApplicationGt.help_file">
+<code class="descname">help_file</code><em class="property"> = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Gt.html'</em><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ApplicationGt.BaseApplicationGt.viewGt">
+<code class="descname">viewGt</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationGt.BaseApplicationGt.viewLogGt">
+<code class="descname">viewLogGt</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewLogGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewLogGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt">
+<code class="descname">viewSchwarzl_Gt</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewSchwarzl_Gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationGt.BaseApplicationGt.viewiRheo">
+<code class="descname">viewiRheo</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewiRheo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewiRheo" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<p>Arguments:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationGt.CLApplicationGt">
+<em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">CLApplicationGt</code><span class="sig-paren">(</span><em>name='Gt'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#CLApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.CLApplicationGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationGt.BaseApplicationGt" title="ApplicationGt.BaseApplicationGt"><code class="xref py py-class docutils literal"><span class="pre">ApplicationGt.BaseApplicationGt</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationGt.GUIApplicationGt">
+<em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">GUIApplicationGt</code><span class="sig-paren">(</span><em>name='Gt'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#GUIApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.GUIApplicationGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationGt.BaseApplicationGt" title="ApplicationGt.BaseApplicationGt"><code class="xref py py-class docutils literal"><span class="pre">ApplicationGt.BaseApplicationGt</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ApplicationLVE">
+<span id="applicationlve"></span><h2>ApplicationLVE<a class="headerlink" href="#module-ApplicationLVE" title="Permalink to this headline">¶</a></h2>
+<p>Module ApplicationLVE</p>
+<p>Module for the analysis of small angle oscillatory shear data - Master curves</p>
+<dl class="class">
+<dt id="ApplicationLVE.ApplicationLVE">
+<em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">ApplicationLVE</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#ApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.ApplicationLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<p>Application to Analyze Linear Viscoelastic Data</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationLVE.ApplicationLVE.description">
+<code class="descname">description</code><em class="property"> = 'Linear Viscoelasticity'</em><a class="headerlink" href="#ApplicationLVE.ApplicationLVE.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationLVE.ApplicationLVE.extension">
+<code class="descname">extension</code><em class="property"> = 'tts'</em><a class="headerlink" href="#ApplicationLVE.ApplicationLVE.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationLVE.ApplicationLVE.name">
+<code class="descname">name</code><em class="property"> = 'LVE'</em><a class="headerlink" href="#ApplicationLVE.ApplicationLVE.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationLVE.BaseApplicationLVE">
+<em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">BaseApplicationLVE</code><span class="sig-paren">(</span><em>name='LVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>[summary]</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationLVE.BaseApplicationLVE.help_file">
+<code class="descname">help_file</code><em class="property"> = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html'</em><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewColeCole">
+<code class="descname">viewColeCole</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewColeCole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewColeCole" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewDelta">
+<code class="descname">viewDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewEtaStar">
+<code class="descname">viewEtaStar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewEtaStar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewEtaStar" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewG1">
+<code class="descname">viewG1</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewG1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewG1" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewG1G2">
+<code class="descname">viewG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewG1G2" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewG2">
+<code class="descname">viewG2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewG2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewG2" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewJ1J2">
+<code class="descname">viewJ1J2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewJ1J2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewJ1J2" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogEtaStar">
+<code class="descname">viewLogEtaStar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogEtaStar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogEtaStar" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogG1">
+<code class="descname">viewLogG1</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG1" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogG1G2">
+<code class="descname">viewLogG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG1G2" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta">
+<code class="descname">viewLogG1G2tandelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG1G2tandelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogG2">
+<code class="descname">viewLogG2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG2" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogGstar">
+<code class="descname">viewLogGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogGstar" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogTanDelta">
+<code class="descname">viewLogTanDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogTanDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogTanDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar">
+<code class="descname">viewLogtandeltaGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogtandeltaGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewTanDelta">
+<code class="descname">viewTanDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewTanDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewTanDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar">
+<code class="descname">viewdeltatanGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewdeltatanGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationLVE.CLApplicationLVE">
+<em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">CLApplicationLVE</code><span class="sig-paren">(</span><em>name='LVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#CLApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.CLApplicationLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationLVE.BaseApplicationLVE" title="ApplicationLVE.BaseApplicationLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationLVE.BaseApplicationLVE</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationLVE.GUIApplicationLVE">
+<em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">GUIApplicationLVE</code><span class="sig-paren">(</span><em>name='LVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#GUIApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.GUIApplicationLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationLVE.BaseApplicationLVE" title="ApplicationLVE.BaseApplicationLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationLVE.BaseApplicationLVE</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ApplicationMWD">
+<span id="applicationmwd"></span><h2>ApplicationMWD<a class="headerlink" href="#module-ApplicationMWD" title="Permalink to this headline">¶</a></h2>
+<p>Module ApplicationMWD</p>
+<p>Module for handling Molecular weight distributions from GPC experiments.</p>
+<dl class="class">
+<dt id="ApplicationMWD.ApplicationMWD">
+<em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">ApplicationMWD</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#ApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.ApplicationMWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<p>Application to analyze Molecular Weight distributions</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationMWD.ApplicationMWD.description">
+<code class="descname">description</code><em class="property"> = 'Experimental Molecular weight distributions'</em><a class="headerlink" href="#ApplicationMWD.ApplicationMWD.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationMWD.ApplicationMWD.extension">
+<code class="descname">extension</code><em class="property"> = 'gpc'</em><a class="headerlink" href="#ApplicationMWD.ApplicationMWD.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationMWD.ApplicationMWD.name">
+<code class="descname">name</code><em class="property"> = 'MWD'</em><a class="headerlink" href="#ApplicationMWD.ApplicationMWD.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationMWD.BaseApplicationMWD">
+<em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">BaseApplicationMWD</code><span class="sig-paren">(</span><em>name='MWD'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#BaseApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.BaseApplicationMWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>[summary]</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationMWD.BaseApplicationMWD.help_file">
+<code class="descname">help_file</code><em class="property"> = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/MWD.html'</em><a class="headerlink" href="#ApplicationMWD.BaseApplicationMWD.help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ApplicationMWD.BaseApplicationMWD.view_WM">
+<code class="descname">view_WM</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#BaseApplicationMWD.view_WM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.BaseApplicationMWD.view_WM" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationMWD.CLApplicationMWD">
+<em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">CLApplicationMWD</code><span class="sig-paren">(</span><em>name='MWD'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#CLApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.CLApplicationMWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationMWD.BaseApplicationMWD" title="ApplicationMWD.BaseApplicationMWD"><code class="xref py py-class docutils literal"><span class="pre">ApplicationMWD.BaseApplicationMWD</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationMWD.GUIApplicationMWD">
+<em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">GUIApplicationMWD</code><span class="sig-paren">(</span><em>name='MWD'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#GUIApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.GUIApplicationMWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationMWD.BaseApplicationMWD" title="ApplicationMWD.BaseApplicationMWD"><code class="xref py py-class docutils literal"><span class="pre">ApplicationMWD.BaseApplicationMWD</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ApplicationNLVE">
+<span id="applicationnlve"></span><h2>ApplicationNLVE<a class="headerlink" href="#module-ApplicationNLVE" title="Permalink to this headline">¶</a></h2>
+<p>Module ApplicationNLVE</p>
+<p>Module for handling data from start up of shear and extensional flow experiments.</p>
+<dl class="class">
+<dt id="ApplicationNLVE.ApplicationNLVE">
+<em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">ApplicationNLVE</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#ApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.ApplicationNLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<p>Application to Analyze Start up of Non Linear flow</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationNLVE.ApplicationNLVE.description">
+<code class="descname">description</code><em class="property"> = 'Non-Linear Flow'</em><a class="headerlink" href="#ApplicationNLVE.ApplicationNLVE.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationNLVE.ApplicationNLVE.extension">
+<code class="descname">extension</code><em class="property"> = 'shear'</em><a class="headerlink" href="#ApplicationNLVE.ApplicationNLVE.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationNLVE.ApplicationNLVE.name">
+<code class="descname">name</code><em class="property"> = 'NLVE'</em><a class="headerlink" href="#ApplicationNLVE.ApplicationNLVE.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationNLVE.BaseApplicationNLVE">
+<em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">BaseApplicationNLVE</code><span class="sig-paren">(</span><em>name='NLVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>[summary]</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationNLVE.BaseApplicationNLVE.help_file">
+<code class="descname">help_file</code><em class="property"> = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/NLVE.html'</em><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma">
+<code class="descname">viewLogSigmaGamma</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewLogSigmaGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime">
+<code class="descname">viewLogSigmaTime</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewLogSigmaTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationNLVE.BaseApplicationNLVE.viewLogeta">
+<code class="descname">viewLogeta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewLogeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewLogeta" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationNLVE.CLApplicationNLVE">
+<em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">CLApplicationNLVE</code><span class="sig-paren">(</span><em>name='NLVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#CLApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.CLApplicationNLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationNLVE.BaseApplicationNLVE" title="ApplicationNLVE.BaseApplicationNLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationNLVE.BaseApplicationNLVE</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationNLVE.GUIApplicationNLVE">
+<em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">GUIApplicationNLVE</code><span class="sig-paren">(</span><em>name='NLVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#GUIApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.GUIApplicationNLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationNLVE.BaseApplicationNLVE" title="ApplicationNLVE.BaseApplicationNLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationNLVE.BaseApplicationNLVE</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ApplicationTTS">
+<span id="applicationtts"></span><h2>ApplicationTTS<a class="headerlink" href="#module-ApplicationTTS" title="Permalink to this headline">¶</a></h2>
+<p>Module ApplicationTTS</p>
+<p>Module for handling small angle oscillatory shear experiments and applying the
+time-temperature superposition principle.</p>
+<dl class="class">
+<dt id="ApplicationTTS.ApplicationTTS">
+<em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">ApplicationTTS</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#ApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.ApplicationTTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<p>Application to Analyze Linear Viscoelastic Data</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationTTS.ApplicationTTS.description">
+<code class="descname">description</code><em class="property"> = 'Linear Viscoelasticity'</em><a class="headerlink" href="#ApplicationTTS.ApplicationTTS.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationTTS.ApplicationTTS.extension">
+<code class="descname">extension</code><em class="property"> = 'osc'</em><a class="headerlink" href="#ApplicationTTS.ApplicationTTS.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ApplicationTTS.ApplicationTTS.name">
+<code class="descname">name</code><em class="property"> = 'TTS'</em><a class="headerlink" href="#ApplicationTTS.ApplicationTTS.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationTTS.BaseApplicationTTS">
+<em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">BaseApplicationTTS</code><span class="sig-paren">(</span><em>name='TTS'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>[summary]</p>
+<p>[description]</p>
+<dl class="attribute">
+<dt id="ApplicationTTS.BaseApplicationTTS.help_file">
+<code class="descname">help_file</code><em class="property"> = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/TTS.html'</em><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ApplicationTTS.BaseApplicationTTS.viewDelta">
+<code class="descname">viewDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationTTS.BaseApplicationTTS.viewEtaStar">
+<code class="descname">viewEtaStar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewEtaStar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewEtaStar" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationTTS.BaseApplicationTTS.viewG1G2">
+<code class="descname">viewG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewG1G2" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationTTS.BaseApplicationTTS.viewLogG1G2">
+<code class="descname">viewLogG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogG1G2" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ApplicationTTS.BaseApplicationTTS.viewTanDelta">
+<code class="descname">viewTanDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewTanDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewTanDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<p>[description]</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><ul class="first last simple">
+<li>dt {[type]} – [description]</li>
+<li>file_parameters {[type]} – [description]</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>[type] – [description]</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationTTS.CLApplicationTTS">
+<em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">CLApplicationTTS</code><span class="sig-paren">(</span><em>name='TTS'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#CLApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.CLApplicationTTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationTTS.BaseApplicationTTS" title="ApplicationTTS.BaseApplicationTTS"><code class="xref py py-class docutils literal"><span class="pre">ApplicationTTS.BaseApplicationTTS</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ApplicationTTS.GUIApplicationTTS">
+<em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">GUIApplicationTTS</code><span class="sig-paren">(</span><em>name='TTS'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#GUIApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.GUIApplicationTTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationTTS.BaseApplicationTTS" title="ApplicationTTS.BaseApplicationTTS"><code class="xref py py-class docutils literal"><span class="pre">ApplicationTTS.BaseApplicationTTS</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CodeTheories.html" title="Theories"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CodeCoreGUI.html" title="Core classes (Graphical User Interface)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of Reptate</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>
