@@ -57,8 +57,14 @@ class BobCtypesHelper:
 
     def link_c_functions(self):
         """Declare the Python functions equivalents to the C functions"""
-        self.reptate_save_polyconf_and_return_gpc = self.bob_lib.reptate_save_polyconf_and_return_gpc
-        self.reptate_save_polyconf_and_return_gpc.restype = None
+        self.bob_save_polyconf_and_return_gpc = self.bob_lib.reptate_save_polyconf_and_return_gpc
+        self.bob_save_polyconf_and_return_gpc.restype = None
+
+        self.run_bob_lve = self.bob_lib.run_bob_lve
+        self.run_bob_lve.restype = None
+
+        self.get_bob_lve = self.bob_lib.get_bob_lve
+        self.get_bob_lve.restype = None
 
         self.set_GPCNumBin = self.bob_lib.set_GPCNumBin
         self.set_GPCNumBin.restype = None
@@ -84,7 +90,7 @@ class BobCtypesHelper:
         self.link_c_functions()
         # self.do_rcread() # create default values of global C variables
 
-    def run_bob_main(self, arg_list, npol_tot):
+    def save_polyconf_and_return_gpc(self, arg_list, npol_tot):
         """Run BoB asking for a polyconf file only (no relaxation etc) and
         output the characteristics of the polymer configuration"""
         # reset the library
@@ -108,7 +114,7 @@ class BobCtypesHelper:
         mn = c_double()
         mw = c_double()
         #call C function
-        self.reptate_save_polyconf_and_return_gpc(
+        self.bob_save_polyconf_and_return_gpc(
             c_int(n_arg), argv, c_int(nbin), ncomp, ni, nf, byref(mn),
             byref(mw), lgmid_arr, wtbin_arr, brbin_arr, gbin_arr)
         #unload the library
@@ -116,3 +122,27 @@ class BobCtypesHelper:
         # return results
         arrs = [lgmid_arr[:], wtbin_arr[:], brbin_arr[:], gbin_arr[:]]
         return [mn.value, mw.value, arrs]
+
+    def return_bob_lve(self, arg_list):
+        """Run BoB LVE and copy results to arrays"""
+        # reset the library
+        self.reload_lib() 
+        # prepare the arguments for bob_main function
+        n_arg = len(arg_list)
+        argv = (c_char_p * n_arg)()
+        for i in range(n_arg):
+            argv[i] = arg_list[i].encode('utf-8')
+
+        # run bob LVE and get size of results
+        out_size = c_int()
+        self.run_bob_lve(c_int(n_arg), argv, byref(out_size))
+
+        #allocate Python memory for results and copy bob results  
+        omega = (c_double * out_size.value)()
+        g_p = (c_double * out_size.value)()
+        g_pp = (c_double * out_size.value)()
+        self.get_bob_lve(omega, g_p, g_pp)
+        #unload the library
+        self.free_lib()
+        return [omega[:], g_p[:], g_pp[:]]
+
