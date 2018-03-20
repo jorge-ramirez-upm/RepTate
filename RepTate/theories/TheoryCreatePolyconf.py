@@ -140,7 +140,7 @@ class BaseTheoryCreatePolyconf:
     [description]
     """
     #help_file = ''
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+    single_file = True  # False if the theory can be applied to multiple files simultaneously
     signal_param_dialog = pyqtSignal(object)
 
     def __init__(self,
@@ -238,7 +238,7 @@ class BaseTheoryCreatePolyconf:
         # Run BoB C++ code
         bch = BobCtypesHelper(self)
         gpc_out = []
-        mn, mw, gpc_out = bch.run_bob_main(self.argv, self.npol_tot)
+        mn, mw, gpc_out = bch.save_polyconf_and_return_gpc(self.argv, self.npol_tot)
 
         #copy results to RepTate data file
         if gpc_out:
@@ -374,7 +374,7 @@ FunH
         #3 "1" for BoB 'compatibility'
         tb.append("1")
         #4 M0, Ne, (density not used)
-        tb.append("%f %d 0" % (float(self.d.m0.text()),
+        tb.append("%f %f 0" % (float(self.d.m0.text()),
                                float(self.d.ne.text())))
         #5 tau_e, T (not used)
         tb.append("0 0")
