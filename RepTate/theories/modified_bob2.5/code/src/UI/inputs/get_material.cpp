@@ -14,30 +14,40 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <stdio.h>
 void get_material(void)
 {
-extern double N_e, unit_time, temp, mass_mono, rho_poly;
-extern int runmode;
-if(runmode == 2) { printf("\n");
-printf("Mass of a monomer (in atomic unit, ex.:PE->28.0) ?  ");
- scanf("%le",&mass_mono);
-printf("Number of monomers in an entanglement length ?  "); scanf("%le",&N_e);
-printf("mass-density of the polymer (in g/cc) ?  "); scanf("%le",&rho_poly);
-printf("Entanglement time tau_e (s) ?  "); scanf("%le", &unit_time);
-printf("Temperature (Kelvin) ? ");  scanf("%le", &temp); printf("\n"); }
-else {
-  extern FILE * inpfl;
-  fscanf(inpfl, "%le %le %le", &mass_mono, &N_e, &rho_poly);
-  fscanf(inpfl, "%le %le ",&unit_time, &temp); }
+  extern double N_e, unit_time, temp, mass_mono, rho_poly;
+  extern int runmode;
+  if (runmode == 2)
+  {
+    printf("\n");
+    printf("Mass of a monomer (in atomic unit, ex.:PE->28.0) ?  ");
+    scanf("%le", &mass_mono);
+    printf("Number of monomers in an entanglement length ?  ");
+    scanf("%le", &N_e);
+    printf("mass-density of the polymer (in g/cc) ?  ");
+    scanf("%le", &rho_poly);
+    printf("Entanglement time tau_e (s) ?  ");
+    scanf("%le", &unit_time);
+    printf("Temperature (Kelvin) ? ");
+    scanf("%le", &temp);
+    printf("\n");
+  }
+  else
+  {
+    extern FILE *inpfl;
+    fscanf(inpfl, "%le %le %le", &mass_mono, &N_e, &rho_poly);
+    fscanf(inpfl, "%le %le ", &unit_time, &temp);
+  }
 
-if(rho_poly < 2.0){// the input is in g/cc : convert to kg/m^3
- rho_poly=1000.0 * rho_poly; }
+  if (rho_poly < 2.0)
+  { // the input is in g/cc : convert to kg/m^3
+    rho_poly = 1000.0 * rho_poly;
+  }
 
-extern double FreqMin, FreqMax;
-FreqMin=FreqMin*unit_time;
-FreqMax=FreqMax*unit_time;
-
+  extern double FreqMin, FreqMax;
+  FreqMin = FreqMin * unit_time;
+  FreqMax = FreqMax * unit_time;
 }
-

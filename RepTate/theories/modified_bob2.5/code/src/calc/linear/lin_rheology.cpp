@@ -14,34 +14,38 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <stdio.h>
 #include <math.h>
 #include "./lin_rheo.h"
 void lin_rheology(int ndata)
 {
-FILE * phifl;
-phifl=fopen("supertube.dat","r");
-double * tp = new double[ndata]; double * phip = new double[ndata];
-double * phip_ST = new double[ndata];
-double jnk;
-for (int i=0; i<ndata; i++)
- fscanf(phifl,"%le %le %le %le", &tp[i], &jnk, &phip_ST[i], &phip[i]);
-fclose(phifl);
+  FILE *phifl;
+  phifl = fopen("supertube.dat", "r");
+  double *tp = new double[ndata];
+  double *phip = new double[ndata];
+  double *phip_ST = new double[ndata];
+  double jnk;
+  for (int i = 0; i < ndata; i++)
+    fscanf(phifl, "%le %le %le %le", &tp[i], &jnk, &phip_ST[i], &phip[i]);
+  fclose(phifl);
 
-
-// Call routines to calculate response
-lin_time_resp(ndata, tp, phip, phip_ST);
-lin_freq_resp(ndata, tp, phip, phip_ST);
-calc_viscosity(ndata, tp, phip, phip_ST);
-extern double CalcEtaStar(double);
-extern FILE * infofl;
-fprintf(infofl,"|complex-viscosity|(1.0e-6) = %e \n",CalcEtaStar(1.0e-6));
+  // Call routines to calculate response
+  lin_time_resp(ndata, tp, phip, phip_ST);
+  lin_freq_resp(ndata, tp, phip, phip_ST);
+  calc_viscosity(ndata, tp, phip, phip_ST);
+  extern double CalcEtaStar(double);
+  extern FILE *infofl;
+  fprintf(infofl, "|complex-viscosity|(1.0e-6) = %e \n", CalcEtaStar(1.0e-6));
 #ifdef NBETA
-extern int DefinedMaxwellModes;
-if(DefinedMaxwellModes != 0){
-resolve_maxwell_modes(ndata, tp, phip, phip_ST);}
+  extern int DefinedMaxwellModes;
+  if (DefinedMaxwellModes != 0)
+  {
+    resolve_maxwell_modes(ndata, tp, phip, phip_ST);
+  }
 #endif
 
-delete [] tp; delete [] phip; delete [] phip_ST;
+  delete[] tp;
+  delete[] phip;
+  delete[] phip_ST;
 }

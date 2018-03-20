@@ -14,36 +14,40 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <stdio.h>
 #include <math.h>
 void user_interface(void)
 {
-//First initialize a few things
-extern double gamma1,phi,phi_true, phi_ST;
-double pi=4.0*atan(1.0);
-gamma1=9.0* pow(pi,(double)3)/16.0;
-phi=1.0;phi_true=1.0; phi_ST=1.0;
+  //First initialize a few things
+  extern double gamma1, phi, phi_true, phi_ST;
+  double pi = 4.0 * atan(1.0);
+  gamma1 = 9.0 * pow(pi, (double)3) / 16.0;
+  phi = 1.0;
+  phi_true = 1.0;
+  phi_ST = 1.0;
 
-// Now time for input
+  // Now time for input
 
-extern void get_sys_size(void); // allocate arm and polymers
-get_sys_size();
+  extern void get_sys_size(void); // allocate arm and polymers
+  get_sys_size();
 
-extern void get_dyn_mode(void); // assumptions and parameters about relaxation
-get_dyn_mode();
+  extern void get_dyn_mode(void); // assumptions and parameters about relaxation
+  get_dyn_mode();
 
-extern void get_material(void); // chemistry : M_e, \tau_e ...
-get_material();
+  extern void get_material(void); // chemistry : M_e, \tau_e ...
+  get_material();
 
-extern void print_io(void); // dump input to output
-print_io();
+  extern void print_io(void); // dump input to output
+  print_io();
 
-// Ready to generate /read polymer configuration
+  // Ready to generate /read polymer configuration
 
-extern void get_poly(void); // find out the polymer to use
-get_poly();
+  extern void get_poly(void); // find out the polymer to use
+  get_poly();
 
-extern void create_phi_hist(void); create_phi_hist();
-extern void topoan(void); topoan();
+  extern void create_phi_hist(void);
+  create_phi_hist();
+  extern void topoan(void);
+  topoan();
 }
