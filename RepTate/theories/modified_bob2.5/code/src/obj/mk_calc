@@ -1,0 +1,82 @@
+calc_viscosity.o : ../calc/linear/calc_viscosity.cpp
+	$(cpp) -c ../calc/linear/calc_viscosity.cpp
+graceheadergtp.o : ../calc/linear/graceheadergtp.cpp
+	$(cpp) -c ../calc/linear/graceheadergtp.cpp
+lin_time_resp.o : ../calc/linear/lin_time_resp.cpp
+	$(cpp) -c ../calc/linear/lin_time_resp.cpp
+fast_four_hist.o : ../calc/linear/fast_four_hist.cpp
+	$(cpp) -c ../calc/linear/fast_four_hist.cpp
+lin_freq_resp.o : ../calc/linear/lin_freq_resp.cpp
+	$(cpp) -c ../calc/linear/lin_freq_resp.cpp
+fast_real_hist.o : ../calc/linear/fast_real_hist.cpp
+	$(cpp) -c ../calc/linear/fast_real_hist.cpp
+reptateheadergtp.o : ../calc/linear/reptateheadergtp.cpp
+	$(cpp) -c ../calc/linear/reptateheadergtp.cpp
+graceheadergt.o : ../calc/linear/graceheadergt.cpp
+	$(cpp) -c ../calc/linear/graceheadergt.cpp
+lin_rheology.o : ../calc/linear/lin_rheology.cpp
+	$(cpp) -c ../calc/linear/lin_rheology.cpp
+resolve_maxwell_modes.o : ../calc/linear/resolve_maxwell_modes.cpp
+	$(cpp) -c ../calc/linear/resolve_maxwell_modes.cpp
+calc_free_arm_phi_held.o : ../calc/nlin/calc_free_arm_phi_held.cpp
+	$(cpp) -c ../calc/nlin/calc_free_arm_phi_held.cpp
+reptate_nlin.o : ../calc/nlin/reptate_nlin.cpp
+	$(cpp) -c ../calc/nlin/reptate_nlin.cpp
+calc_nlin_phi_held.o : ../calc/nlin/calc_nlin_phi_held.cpp
+	$(cpp) -c ../calc/nlin/calc_nlin_phi_held.cpp
+reptate_nlin_sngl_arm.o : ../calc/nlin/reptate_nlin_sngl_arm.cpp
+	$(cpp) -c ../calc/nlin/reptate_nlin_sngl_arm.cpp
+find_rate_indx.o : ../calc/nlin/find_rate_indx.cpp
+	$(cpp) -c ../calc/nlin/find_rate_indx.cpp
+nlin_relaxing_arm.o : ../calc/nlin/nlin_relaxing_arm.cpp
+	$(cpp) -c ../calc/nlin/nlin_relaxing_arm.cpp
+sample_eff_arm_len.o : ../calc/nlin/sample_eff_arm_len.cpp
+	$(cpp) -c ../calc/nlin/sample_eff_arm_len.cpp
+init_var_nlin.o : ../calc/nlin/init_var_nlin.cpp
+	$(cpp) -c ../calc/nlin/init_var_nlin.cpp
+nlin_retraction.o : ../calc/nlin/nlin_retraction.cpp
+	$(cpp) -c ../calc/nlin/nlin_retraction.cpp
+startup_nlin.o : ../calc/nlin/startup_nlin.cpp
+	$(cpp) -c ../calc/nlin/startup_nlin.cpp
+interp_rouse_time.o : ../calc/nlin/interp_rouse_time.cpp
+	$(cpp) -c ../calc/nlin/interp_rouse_time.cpp
+output_nlin.o : ../calc/nlin/output_nlin.cpp
+	$(cpp) -c ../calc/nlin/output_nlin.cpp
+calc_pompom.o : ../calc/pompom/calc_pompom.cpp
+	$(cpp) -c ../calc/pompom/calc_pompom.cpp
+odeint.o : ../calc/pompom/odeint.cpp
+	$(cpp) -c ../calc/pompom/odeint.cpp
+pm_uext.o : ../calc/pompom/pm_uext.cpp
+	$(cpp) -c ../calc/pompom/pm_uext.cpp
+rkck.o : ../calc/pompom/rkck.cpp
+	$(cpp) -c ../calc/pompom/rkck.cpp
+graceheadernlin.o : ../calc/pompom/graceheadernlin.cpp
+	$(cpp) -c ../calc/pompom/graceheadernlin.cpp
+pm_shear.o : ../calc/pompom/pm_shear.cpp
+	$(cpp) -c ../calc/pompom/pm_shear.cpp
+pompom.o : ../calc/pompom/pompom.cpp
+	$(cpp) -c ../calc/pompom/pompom.cpp
+rkqs.o : ../calc/pompom/rkqs.cpp
+	$(cpp) -c ../calc/pompom/rkqs.cpp
+calc_priority.o : ../calc/topology/calc_priority.cpp
+	$(cpp) -c ../calc/topology/calc_priority.cpp
+create_phi_hist.o : ../calc/topology/create_phi_hist.cpp
+	$(cpp) -c ../calc/topology/create_phi_hist.cpp
+poly_stat.o : ../calc/topology/poly_stat.cpp
+	$(cpp) -c ../calc/topology/poly_stat.cpp
+calc_seniority.o : ../calc/topology/calc_seniority.cpp
+	$(cpp) -c ../calc/topology/calc_seniority.cpp
+iscomb.o : ../calc/topology/iscomb.cpp
+	$(cpp) -c ../calc/topology/iscomb.cpp
+topoan.o : ../calc/topology/topoan.cpp
+	$(cpp) -c ../calc/topology/topoan.cpp
+gpcls.o : ../calc/topology/gpcls.cpp
+	$(cpp) -c ../calc/topology/gpcls.cpp
+gpclsutil.o : ../calc/topology/gpclsutil.cpp
+	$(cpp) -c ../calc/topology/gpclsutil.cpp
+gpchist.o : ../calc/topology/gpchist.cpp
+	$(cpp) -c ../calc/topology/gpchist.cpp
+dumpgpcres.o : ../calc/topology/dumpgpcres.cpp
+	$(cpp) -c ../calc/topology/dumpgpcres.cpp
+CalcEtaStar.o : ../calc/linear/CalcEtaStar.cpp
+	$(cpp) -c ../calc/linear/CalcEtaStar.cpp

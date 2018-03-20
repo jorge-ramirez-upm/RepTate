@@ -1,0 +1,94 @@
+touch mk_polygen
+rm mk_polygen
+touch fl_polygen
+rm fl_polygen
+echo -n "polygen_obj = get_poly_component.o " >> fl_polygen
+echo "get_poly_component.o : ../polygen/get_poly_component.cpp" >> mk_polygen
+echo "	\$(cpp) -c ../polygen/get_poly_component.cpp" >> mk_polygen
+for i in `ls files/polygen`
+do
+for j in `cat files/polygen/${i}`
+do
+for k in `echo ${j} | cut -d. -f1,1`
+do
+echo -n " ${k}.o " >> fl_polygen
+echo "${k}.o : ../polygen/${i}/${k}.cpp" >> mk_polygen
+echo "	\$(cpp) -c ../polygen/${i}/${k}.cpp" >> mk_polygen
+done
+done
+done
+
+touch mk_calc
+rm mk_calc
+touch fl_calc
+rm fl_calc
+echo -n "calc_obj = " >> fl_calc
+for i in `ls files/calc`
+do
+for j in `cat files/calc/${i}`
+do
+for k in `echo ${j} | cut -d. -f1,1`
+do
+echo -n " ${k}.o " >> fl_calc
+echo "${k}.o : ../calc/${i}/${k}.cpp" >> mk_calc
+echo "	\$(cpp) -c ../calc/${i}/${k}.cpp" >> mk_calc
+done
+done
+done
+
+touch mk_relax
+rm mk_relax
+touch fl_relax
+rm fl_relax
+echo -n "relax_obj = time_step.o " >> fl_relax
+echo "time_step.o : ../relax/time_step.cpp" >> mk_relax
+echo "	\$(cpp) -c ../relax/time_step.cpp" >> mk_relax
+for i in `ls files/relax`
+do
+for j in `cat files/relax/${i}`
+do
+for k in `echo ${j} | cut -d. -f1,1`
+do
+echo -n " ${k}.o " >> fl_relax
+echo "${k}.o : ../relax/${i}/${k}.cpp" >> mk_relax
+echo "	\$(cpp) -c ../relax/${i}/${k}.cpp" >> mk_relax
+done
+done
+done
+
+touch mk_Util
+rm mk_Util
+touch fl_Util
+rm fl_Util
+echo -n "Util_obj = " >> fl_Util
+for i in `ls files/Util`
+do
+for j in `cat files/Util/${i}`
+do
+for k in `echo ${j} | cut -d. -f1,1`
+do
+echo -n " ${k}.o " >> fl_Util
+echo "${k}.o : ../Util/${i}/${k}.cpp" >> mk_Util
+echo "	\$(cpp) -c ../Util/${i}/${k}.cpp" >> mk_Util
+done
+done
+done
+
+touch mk_UI
+rm mk_UI
+touch fl_UI
+rm fl_UI
+echo -n "UI_obj = " >> fl_UI
+for i in `ls files/UI`
+do
+for j in `cat files/UI/${i}`
+do
+for k in `echo ${j} | cut -d. -f1,1`
+do
+echo -n " ${k}.o " >> fl_UI
+echo "${k}.o : ../UI/${i}/${k}.cpp" >> mk_UI
+echo "	\$(cpp) -c ../UI/${i}/${k}.cpp" >> mk_UI
+done
+done
+done
+

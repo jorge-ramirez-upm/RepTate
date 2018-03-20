@@ -1,0 +1,36 @@
+time_step.o : ../relax/time_step.cpp
+	$(cpp) -c ../relax/time_step.cpp
+arm_len_end_extend.o : ../relax/extend_arm/arm_len_end_extend.cpp
+	$(cpp) -c ../relax/extend_arm/arm_len_end_extend.cpp
+gobble_arm.o : ../relax/extend_arm/gobble_arm.cpp
+	$(cpp) -c ../relax/extend_arm/gobble_arm.cpp
+semiconstrained_extend_arm.o : ../relax/extend_arm/semiconstrained_extend_arm.cpp
+	$(cpp) -c ../relax/extend_arm/semiconstrained_extend_arm.cpp
+collapse_star_arm.o : ../relax/extend_arm/collapse_star_arm.cpp
+	$(cpp) -c ../relax/extend_arm/collapse_star_arm.cpp
+inner_arm_compound.o : ../relax/extend_arm/inner_arm_compound.cpp
+	$(cpp) -c ../relax/extend_arm/inner_arm_compound.cpp
+share_arm.o : ../relax/extend_arm/share_arm.cpp
+	$(cpp) -c ../relax/extend_arm/share_arm.cpp
+del_ghost.o : ../relax/extend_arm/del_ghost.cpp
+	$(cpp) -c ../relax/extend_arm/del_ghost.cpp
+mk_ghost.o : ../relax/extend_arm/mk_ghost.cpp
+	$(cpp) -c ../relax/extend_arm/mk_ghost.cpp
+uncollapsed_extend.o : ../relax/extend_arm/uncollapsed_extend.cpp
+	$(cpp) -c ../relax/extend_arm/uncollapsed_extend.cpp
+extend_arm.o : ../relax/extend_arm/extend_arm.cpp
+	$(cpp) -c ../relax/extend_arm/extend_arm.cpp
+prune_chain.o : ../relax/extend_arm/prune_chain.cpp
+	$(cpp) -c ../relax/extend_arm/prune_chain.cpp
+check_linearity.o : ../relax/rept/check_linearity.cpp
+	$(cpp) -c ../relax/rept/check_linearity.cpp
+rept_sv_mass.o : ../relax/rept/rept_sv_mass.cpp
+	$(cpp) -c ../relax/rept/rept_sv_mass.cpp
+try_reptate.o : ../relax/rept/try_reptate.cpp
+	$(cpp) -c ../relax/rept/try_reptate.cpp
+arm_retraction.o : ../relax/retraction/arm_retraction.cpp
+	$(cpp) -c ../relax/retraction/arm_retraction.cpp
+calc_eff_fric.o : ../relax/retraction/calc_eff_fric.cpp
+	$(cpp) -c ../relax/retraction/calc_eff_fric.cpp
+quad_solve_spl.o : ../relax/retraction/quad_solve_spl.cpp
+	$(cpp) -c ../relax/retraction/quad_solve_spl.cpp

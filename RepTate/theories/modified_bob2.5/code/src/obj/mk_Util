@@ -1,0 +1,32 @@
+armutil.o : ../Util/armpool/armutil.cpp
+	$(cpp) -c ../Util/armpool/armutil.cpp
+bobutil.o : ../Util/armpool/bobutil.cpp
+	$(cpp) -c ../Util/armpool/bobutil.cpp
+errmsg.o : ../Util/help/errmsg.cpp
+	$(cpp) -c ../Util/help/errmsg.cpp
+warnmsgs.o : ../Util/help/warnmsgs.cpp
+	$(cpp) -c ../Util/help/warnmsgs.cpp
+armlen_gaussian.o : ../Util/random/armlen_gaussian.cpp
+	$(cpp) -c ../Util/random/armlen_gaussian.cpp
+armlen_semiliving.o : ../Util/random/armlen_semiliving.cpp
+	$(cpp) -c ../Util/random/armlen_semiliving.cpp
+flory_distb.o : ../Util/random/flory_distb.cpp
+	$(cpp) -c ../Util/random/flory_distb.cpp
+poisson.o : ../Util/random/poisson.cpp
+	$(cpp) -c ../Util/random/poisson.cpp
+armlen_lognormal.o : ../Util/random/armlen_lognormal.cpp
+	$(cpp) -c ../Util/random/armlen_lognormal.cpp
+gasdev.o : ../Util/random/gasdev.cpp
+	$(cpp) -c ../Util/random/gasdev.cpp
+rand_on_line.o : ../Util/random/rand_on_line.cpp
+	$(cpp) -c ../Util/random/rand_on_line.cpp
+frac_unrelaxed.o : ../Util/vol_frac/frac_unrelaxed.cpp
+	$(cpp) -c ../Util/vol_frac/frac_unrelaxed.cpp
+set_vol_frac.o : ../Util/vol_frac/set_vol_frac.cpp
+	$(cpp) -c ../Util/vol_frac/set_vol_frac.cpp
+sv_mass.o : ../Util/vol_frac/sv_mass.cpp
+	$(cpp) -c ../Util/vol_frac/sv_mass.cpp
+free_arm_relax_amount.o : ../Util/vol_frac/free_arm_relax_amount.cpp
+	$(cpp) -c ../Util/vol_frac/free_arm_relax_amount.cpp
+set_vol_frac_wtav.o : ../Util/vol_frac/set_vol_frac_wtav.cpp
+	$(cpp) -c ../Util/vol_frac/set_vol_frac_wtav.cpp

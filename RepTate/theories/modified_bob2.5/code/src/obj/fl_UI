@@ -1,0 +1,1 @@
+UI_obj =  get_dyn_mode.o  get_name.o  get_sys_size.o  user_interface.o  get_material.o  get_poly.o  print_io.o  parser.o  print_help.o  print_usage.o  print_version.o  rcdecide.o  rcdefault.o  rcread.o  rcutil.o print_short_license.o

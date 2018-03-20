@@ -1,0 +1,32 @@
+get_dyn_mode.o : ../UI/inputs/get_dyn_mode.cpp
+	$(cpp) -c ../UI/inputs/get_dyn_mode.cpp
+get_name.o : ../UI/inputs/get_name.cpp
+	$(cpp) -c ../UI/inputs/get_name.cpp
+get_sys_size.o : ../UI/inputs/get_sys_size.cpp
+	$(cpp) -c ../UI/inputs/get_sys_size.cpp
+user_interface.o : ../UI/inputs/user_interface.cpp
+	$(cpp) -c ../UI/inputs/user_interface.cpp
+get_material.o : ../UI/inputs/get_material.cpp
+	$(cpp) -c ../UI/inputs/get_material.cpp
+get_poly.o : ../UI/inputs/get_poly.cpp
+	$(cpp) -c ../UI/inputs/get_poly.cpp
+print_io.o : ../UI/inputs/print_io.cpp
+	$(cpp) -c ../UI/inputs/print_io.cpp
+parser.o : ../UI/parser/parser.cpp
+	$(cpp) -c ../UI/parser/parser.cpp
+print_help.o : ../UI/parser/print_help.cpp
+	$(cpp) -c ../UI/parser/print_help.cpp
+print_usage.o : ../UI/parser/print_usage.cpp
+	$(cpp) -c ../UI/parser/print_usage.cpp
+print_version.o : ../UI/parser/print_version.cpp
+	$(cpp) -c ../UI/parser/print_version.cpp
+print_short_license.o : ../UI/parser/print_short_license.cpp
+	$(cpp) -c ../UI/parser/print_short_license.cpp
+rcdecide.o : ../UI/rc/rcdecide.cpp
+	$(cpp) -c ../UI/rc/rcdecide.cpp
+rcdefault.o : ../UI/rc/rcdefault.cpp
+	$(cpp) -c ../UI/rc/rcdefault.cpp
+rcread.o : ../UI/rc/rcread.cpp
+	$(cpp) -c ../UI/rc/rcread.cpp
+rcutil.o : ../UI/rc/rcutil.cpp
+	$(cpp) -c ../UI/rc/rcutil.cpp

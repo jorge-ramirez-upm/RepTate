@@ -1,0 +1,100 @@
+get_poly_component.o : ../polygen/get_poly_component.cpp
+	$(cpp) -c ../polygen/get_poly_component.cpp
+genGEL_wtav.o : ../polygen/gel/genGEL_wtav.cpp
+	$(cpp) -c ../polygen/gel/genGEL_wtav.cpp
+genstargel.o : ../polygen/gel/genstargel.cpp
+	$(cpp) -c ../polygen/gel/genstargel.cpp
+polygenstargel.o : ../polygen/gel/polygenstargel.cpp
+	$(cpp) -c ../polygen/gel/polygenstargel.cpp
+genCayley4.o : ../polygen/model/genCayley4.cpp
+	$(cpp) -c ../polygen/model/genCayley4.cpp
+gencoupledComb.o : ../polygen/model/gencoupledComb.cpp
+	$(cpp) -c ../polygen/model/gencoupledComb.cpp
+polygenasH.o : ../polygen/model/polygenasH.cpp
+	$(cpp) -c ../polygen/model/polygenasH.cpp
+polygenComb_fxd.o : ../polygen/model/polygenComb_fxd.cpp
+	$(cpp) -c ../polygen/model/polygenComb_fxd.cpp
+polygenStar.o : ../polygen/model/polygenStar.cpp
+	$(cpp) -c ../polygen/model/polygenStar.cpp
+genCayley.o : ../polygen/model/genCayley.cpp
+	$(cpp) -c ../polygen/model/genCayley.cpp
+genH.o : ../polygen/model/genH.cpp
+	$(cpp) -c ../polygen/model/genH.cpp
+polygenCayley4.o : ../polygen/model/polygenCayley4.cpp
+	$(cpp) -c ../polygen/model/polygenCayley4.cpp
+polygencoupledComb.o : ../polygen/model/polygencoupledComb.cpp
+	$(cpp) -c ../polygen/model/polygencoupledComb.cpp
+genCayleyLIN.o : ../polygen/model/genCayleyLIN.cpp
+	$(cpp) -c ../polygen/model/genCayleyLIN.cpp
+genLin.o : ../polygen/model/genLin.cpp
+	$(cpp) -c ../polygen/model/genLin.cpp
+polygenCayley.o : ../polygen/model/polygenCayley.cpp
+	$(cpp) -c ../polygen/model/polygenCayley.cpp
+polygenH.o : ../polygen/model/polygenH.cpp
+	$(cpp) -c ../polygen/model/polygenH.cpp
+genComb.o : ../polygen/model/genComb.cpp
+	$(cpp) -c ../polygen/model/genComb.cpp
+genStar_asym.o : ../polygen/model/genStar_asym.cpp
+	$(cpp) -c ../polygen/model/genStar_asym.cpp
+polygenCayleyLIN.o : ../polygen/model/polygenCayleyLIN.cpp
+	$(cpp) -c ../polygen/model/polygenCayleyLIN.cpp
+polygenLin.o : ../polygen/model/polygenLin.cpp
+	$(cpp) -c ../polygen/model/polygenLin.cpp
+genComb_fxd.o : ../polygen/model/genComb_fxd.cpp
+	$(cpp) -c ../polygen/model/genComb_fxd.cpp
+genStar.o : ../polygen/model/genStar.cpp
+	$(cpp) -c ../polygen/model/genStar.cpp
+polygenComb.o : ../polygen/model/polygenComb.cpp
+	$(cpp) -c ../polygen/model/polygenComb.cpp
+polygenStar_asym.o : ../polygen/model/polygenStar_asym.cpp
+	$(cpp) -c ../polygen/model/polygenStar_asym.cpp
+genMPE.o : ../polygen/mpe/genMPE.cpp
+	$(cpp) -c ../polygen/mpe/genMPE.cpp
+genMPE_wtav.o : ../polygen/mpe/genMPE_wtav.cpp
+	$(cpp) -c ../polygen/mpe/genMPE_wtav.cpp
+polygenMPE.o : ../polygen/mpe/polygenMPE.cpp
+	$(cpp) -c ../polygen/mpe/polygenMPE.cpp
+polygen_wtav.o : ../polygen/mpe/polygen_wtav.cpp
+	$(cpp) -c ../polygen/mpe/polygen_wtav.cpp
+genTobita.o : ../polygen/tobita/genTobita.cpp
+	$(cpp) -c ../polygen/tobita/genTobita.cpp
+polygenTobita.o : ../polygen/tobita/polygenTobita.cpp
+	$(cpp) -c ../polygen/tobita/polygenTobita.cpp
+tobita_arm_clean.o : ../polygen/tobita/tobita_arm_clean.cpp
+	$(cpp) -c ../polygen/tobita/tobita_arm_clean.cpp
+tobita_clean.o : ../polygen/tobita/tobita_clean.cpp
+	$(cpp) -c ../polygen/tobita/tobita_clean.cpp
+tobita_grow.o : ../polygen/tobita/tobita_grow.cpp
+	$(cpp) -c ../polygen/tobita/tobita_grow.cpp
+tobitautil.o : ../polygen/tobita/tobitautil.cpp
+	$(cpp) -c ../polygen/tobita/tobitautil.cpp
+genUDF.o : ../polygen/user/genUDF.cpp
+	$(cpp) -c ../polygen/user/genUDF.cpp
+polygenUDF.o : ../polygen/user/polygenUDF.cpp
+	$(cpp) -c ../polygen/user/polygenUDF.cpp
+genfromfile.o : ../polygen/user/genfromfile.cpp
+	$(cpp) -c ../polygen/user/genfromfile.cpp
+arm_start.o : ../polygen/util/arm_start.cpp
+	$(cpp) -c ../polygen/util/arm_start.cpp
+genProto.o : ../polygen/util/genProto.cpp
+	$(cpp) -c ../polygen/util/genProto.cpp
+polyout.o : ../polygen/util/polyout.cpp
+	$(cpp) -c ../polygen/util/polyout.cpp
+polywrite.o : ../polygen/util/polywrite.cpp
+	$(cpp) -c ../polygen/util/polywrite.cpp
+attach_arm.o : ../polygen/util/attach_arm.cpp
+	$(cpp) -c ../polygen/util/attach_arm.cpp
+polygenProto.o : ../polygen/util/polygenProto.cpp
+	$(cpp) -c ../polygen/util/polygenProto.cpp
+polyread.o : ../polygen/util/polyread.cpp
+	$(cpp) -c ../polygen/util/polyread.cpp
+print_arm_type.o : ../polygen/util/print_arm_type.cpp
+	$(cpp) -c ../polygen/util/print_arm_type.cpp
+fold_rd.o : ../polygen/util/fold_rd.cpp
+	$(cpp) -c ../polygen/util/fold_rd.cpp
+poly_get_arm.o : ../polygen/util/poly_get_arm.cpp
+	$(cpp) -c ../polygen/util/poly_get_arm.cpp
+poly_start.o : ../polygen/util/poly_start.cpp
+	$(cpp) -c ../polygen/util/poly_start.cpp
+user_get_arm_type.o : ../polygen/util/user_get_arm_type.cpp
+	$(cpp) -c ../polygen/util/user_get_arm_type.cpp

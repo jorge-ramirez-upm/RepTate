@@ -1,0 +1,5 @@
+genCayley4.cpp    gencoupledComb.cpp  polygenasH.cpp        polygenComb_fxd.cpp     polygenStar.cpp
+genCayley.cpp     genH.cpp            polygenCayley4.cpp    polygencoupledComb.cpp
+genCayleyLIN.cpp  genLin.cpp          polygenCayley.cpp     polygenH.cpp
+genComb.cpp       genStar_asym.cpp    polygenCayleyLIN.cpp  polygenLin.cpp
+genComb_fxd.cpp   genStar.cpp         polygenComb.cpp       polygenStar_asym.cpp
