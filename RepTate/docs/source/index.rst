@@ -12,6 +12,9 @@
 RepTate documentation
 =====================
 
+RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory & Experiment)
+is a software package for viewing, exchanging and analysing experimental data. 
+
 |img1| |img2|
 
 Contents:
@@ -35,7 +38,7 @@ More info on:
 Authors:
 
 - Jorge Ramirez (jorge.ramirez@upm.es)
-- Victor Boudara (mmvahb@leeds.ac.uk)
+- Victor Boudara (v.a.boudara@leeds.ac.uk)
    
 
 Indices and tables
