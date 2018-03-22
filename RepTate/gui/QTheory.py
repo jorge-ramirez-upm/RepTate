@@ -183,13 +183,6 @@ class GetModesDialog(QDialog):
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
 
-    # static method to create the dialog and return (date, time, accepted)
-    #@staticmethod
-    #def getMaxwellModesProvider(self, parent = None, th_dict = {}):
-    #    dialog = GetModesDialog(parent, th_dict)
-    #    result = dialog.exec_()
-    #    return (self.btngrp.checkedButton().text(), result == QDialog.Accepted)
-
 
 class QTheory(Ui_TheoryTab, QWidget, Theory):
     """[summary]

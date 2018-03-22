@@ -513,6 +513,11 @@ class BaseTheoryDiscrMWD:
                 edgecolor='black',
                 alpha=0.5)
 
+    def get_mwd(self):
+        m = self.saved_th[:, 0]
+        phi = self.saved_th[:, 1]
+        return m, phi
+
 
 class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
     """[summary]

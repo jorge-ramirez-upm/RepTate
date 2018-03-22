@@ -42,9 +42,9 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup
 from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices
+from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
 from PyQt5.QtCore import Qt
 from Theory_rc import *
 from enum import Enum
@@ -64,6 +64,16 @@ class FlowMode(Enum):
     shear = 0
     uext = 1
 
+class GcorrMode(Enum):
+    """Primitive path fluctuations reduce the terminal modulus due to shortened tube.
+    Defines if we include that correction.
+
+    Parameters can be:
+        - none: No finite extensibility
+        - with_gcorr: With finite extensibility
+    """
+    none = 0
+    with_gcorr = 1
 
 class FeneMode(Enum):
     """Defines the finite extensibility function
@@ -75,6 +85,107 @@ class FeneMode(Enum):
     none = 0
     with_fene = 1
 
+class GetMwdRepate(QDialog):
+    def __init__(self, parent=None, th_dict={}, title="title"):
+        super().__init__(parent)
+
+        self.setWindowTitle(title)
+        layout = QVBoxLayout(self)
+        
+        validator = QDoubleValidator()
+        hlayout = QHBoxLayout()
+        hlayout.addWidget(QLabel("Me"))
+        self.Me_text = QLineEdit("%.3g" % parent.parameters["Me"].value)
+        self.Me_text.setValidator(validator)
+        hlayout.addWidget(self.Me_text)
+
+        hlayout.addWidget(QLabel("taue"))
+        self.taue_text = QLineEdit("%.3g" % parent.parameters["tau_e"].value)
+        self.taue_text.setValidator(validator)
+        hlayout.addWidget(self.taue_text)
+
+        layout.addLayout(hlayout)
+
+        self.btngrp = QButtonGroup()
+
+        for item in th_dict.keys():
+            rb = QRadioButton(item, self)
+            layout.addWidget(rb)
+            self.btngrp.addButton(rb)
+
+        # OK and Cancel buttons
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
+
+class EditMWDDialog(QDialog):
+    def __init__(self,
+                 parent=None,
+                 m=None,
+                 phi=None,
+                 MAX_MODES=0):
+        super().__init__(parent)
+
+        self.setWindowTitle("Input Molecular weight distribution")
+        layout = QVBoxLayout(self)
+        
+        validator = QDoubleValidator()
+        hlayout = QHBoxLayout()
+        hlayout.addWidget(QLabel("Me"))
+        self.Me_text = QLineEdit("%.3g" % parent.parameters["Me"].value)
+        self.Me_text.setValidator(validator)
+        hlayout.addWidget(self.Me_text)
+
+        hlayout.addWidget(QLabel("taue"))
+        self.taue_text = QLineEdit("%.3g" % parent.parameters["tau_e"].value)
+        self.taue_text.setValidator(validator)
+        hlayout.addWidget(self.taue_text)
+
+        layout.addLayout(hlayout)
+        nmodes = len(phi)
+
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
+        self.spinbox.setSuffix(" modes")
+        self.spinbox.setValue(nmodes)  #initial value
+        layout.addWidget(self.spinbox)
+
+        self.table = SpreadsheetWidget()  #allows copy/paste
+        self.table.setRowCount(nmodes)
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(["M", "phi"])
+        for i in range(nmodes):
+            self.table.setItem(i, 0, QTableWidgetItem("%g" % m[i]))
+            self.table.setItem(i, 1, QTableWidgetItem("%g" % phi[i]))
+
+        layout.addWidget(self.table)
+
+        # OK and Cancel buttons
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
+        buttons.accepted.connect(self.accept_)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+
+    def accept_(self):
+        sum = 0
+        for i in range(self.table.rowCount()):
+            sum += float(self.table.item(i, 1).text())
+        if abs(sum - 1) < 0.02:
+            self.accept()
+        else:
+            QMessageBox.warning(self, 'Error', 'phi must add up to 1')
+
+    def handle_spinboxValueChanged(self, value):
+        nrow_old = self.table.rowCount()
+        self.table.setRowCount(value)
+        for i in range(nrow_old, value):  #create extra rows with defaut values
+            self.table.setItem(i, 0, QTableWidgetItem("0"))
+            self.table.setItem(i, 1, QTableWidgetItem("1000"))
 
 class EditModesDialog(QDialog):
     def __init__(self,
@@ -83,7 +194,7 @@ class EditModesDialog(QDialog):
                  taud=None,
                  taur=None,
                  MAX_MODES=0):
-        super(EditModesDialog, self).__init__(parent)
+        super().__init__(parent)
 
         self.setWindowTitle("Edit volume fractions and relaxation times")
         layout = QVBoxLayout(self)
@@ -207,7 +318,7 @@ class BaseTheoryBlendRoliePoly:
         self.has_modes = True
         self.parameters["beta"] = Parameter(
             name="beta",
-            value=0.5,
+            value=1,
             description="CCR coefficient",
             type=ParameterType.real,
             opt_type=OptType.nopt)
@@ -240,6 +351,24 @@ class BaseTheoryBlendRoliePoly:
             opt_type=OptType.const,
             bracketed=True,
             min_value=0)
+        self.parameters["Me"] = Parameter(
+            name="Me",
+            value=1e4,
+            description="Entanglement molecular mass",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            bracketed=True,
+            min_value=0,
+            display_flag=False)
+        self.parameters["tau_e"] = Parameter(
+            name="tau_e",
+            value=0.01,
+            description="Entanglement relaxation time",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            bracketed=True,
+            min_value=0,
+            display_flag=False)
         nmode = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
@@ -281,6 +410,8 @@ class BaseTheoryBlendRoliePoly:
 
         self.MAX_MODES = 40
         self.with_fene = FeneMode.none
+        self.with_gcorr = GcorrMode.none
+        self.Zeff = []
         self.init_flow_mode()
 
     def init_flow_mode(self):
@@ -337,6 +468,30 @@ class BaseTheoryBlendRoliePoly:
         #     G[i] = self.parameters["G%02d" % i].value
         # return tau, G
 
+    def set_modes_from_mwd(self, m, phi):
+        """[summary]
+        
+        [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        Me = self.parameters["Me"].value
+        taue = self.parameters["tau_e"].value
+        res = self.relax_times_from_mwd(m, phi, taue, Me)
+        if res[0] == False:
+            self.Qprint("Could not set modes from MDW")
+            return
+        _, phi, taus, taud = res
+        nmodes = len(phi)
+        self.set_param_value("nmodes", nmodes)
+        for i in range(nmodes):
+            self.set_param_value("phi%02d" % i, phi[i])
+            self.set_param_value("tauR%02d" % i, taus[i])
+            self.set_param_value("tauD%02d" % i, taud[i])
+        self.Qprint("Got %d modes from MWD" % nmodes)
+        self.Qprint("Press calculate to update theory")
+
     def set_modes(self, tau, G):
         """[summary]
         
@@ -353,6 +508,154 @@ class BaseTheoryBlendRoliePoly:
         for i in range(nmodes):
             self.set_param_value("tauD%02d" % i, tau[i])
             self.set_param_value("phi%02d" % i, G[i] / sum_G)
+
+    def fZ(self, z):
+        """CLF correction function Likthman-McLeish (2002)"""
+        return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
+
+    def find_down_indx(self, tauseff, taud):
+        """Find index i such that taud[i] < tauseff < taud[i+1]
+        or returns -1 if tauseff < taud[0]
+        or returns n-1 if tauseff > taud[n-1] (should not happen)
+        """
+        n = len(taud)
+        down = n - 1
+        while tauseff < taud[down]:
+            if down == 0:
+                down = -1
+                break
+            down -= 1
+        return down
+
+    def find_dilution(self, phi, taud, taus):
+        """Find the dilution factor phi_dil for a chain with bare stretch relax time `taus`"""
+        n = len(phi)
+        temp = -1
+        phi_dil = 1
+        tauseff = taus / phi_dil
+        #m[0] < m[1] <  ... < m[n]
+        while True:
+            down = self.find_down_indx(tauseff, taud)
+            if down == -1:
+                #case tauseff < taud[0]
+                phi_dil = 1
+                break
+            elif down == n - 1:
+                #(just in case) tauseff > taud[n-1] 
+                phi_dil = phi[n - 1]
+                break
+            else:
+                #change tauseff and check if 'down' is still the same
+                if (temp == down):
+                    break
+                temp = down
+                phi_dil = 1.0
+                for k in range(down):
+                    phi_dil -= phi[k]
+                # x=0 if tauseff close to td[down], x=1 if tauseff close to td[down+1]
+                x = (tauseff - taud[down]) / (taud[down + 1] - taud[down])
+                # linear interpolation of phi_dil
+                phi_dil = phi_dil - x * phi[down]
+            tauseff = taus / phi_dil
+        return phi_dil
+
+    def sort_list(self, m, phi):
+        """Ensure m[0] <= m[1] <=  ... <= m[n]"""
+        if all(m[i] <= m[i + 1] for i in range(len(m) - 1)):
+            #list aready sorted
+            return
+        args = np.argsort(m)
+        m = list(np.array(m)[args])
+        phi = list(np.array(phi)[args])
+
+    def relax_times_from_mwd(self, m, phi, taue, Me):
+        """Guess relaxation times of linear rheology (taud) from molecular weight distribution.
+        (i) Count short chains (M < 2*Me) as solvent
+        (ii) The effective dilution at a given timescale t is equal to the sum of
+        the volume fractions of all chains with relaxation time greater than t
+        (iii) CLF makes use of the most diluted tube available at the CLF timescale
+        """
+        #m[0] < m[1] <  ... < m[n]
+        self.sort_list(m, phi)
+        
+        taus = []
+        taus_short = []
+        taud = []
+        phi_short = []
+        m_short = []
+        phi_u = 0
+        nshort = 0
+
+        n = len(m)
+        for i in range(n):
+            z = m[i] / Me
+            ts = z * z * taue
+            if m[i] < 2. * Me:
+                #short chains not entangled: use upper-convected Maxwell model
+                nshort += 1
+                phi_u += phi[i]
+                taus_short.append(ts)
+                phi_short.append(phi[i])
+                m_short.append(m[i])
+            else:
+                taus.append(ts)
+
+        #remove the short chains from the list of M and phi
+        m = m[nshort:]
+        phi = phi[nshort:]
+
+        n = len(m)  # new size
+        if n == 0:
+            self.Qprint("All chains as solvent")
+            return [False]
+        if n == 1:
+            return [True, phi, taus, [3 * z * ts * 0.5]]
+
+        Zeff = [0] * n
+        #renormalize the fraction of entangled chains
+        Me /= (1 - phi_u)
+        taue /= ((1 - phi_u) * (1 - phi_u))
+        for i in range(n):
+            phi[i] /= (1 - phi_u)
+            z = m[i] / Me
+            taud.append(3. * z * z * z * taue)
+
+        vphi = []
+        for i in range(n):
+            #find dillution for the entangled chains
+            if i == 0:
+                phi_dil = 1
+            else:
+                phi_dil = self.find_dilution(phi, taud, taus[i])
+            vphi.append(phi_dil)
+
+        for i in range(n):
+            z = m[i] / Me
+            if z * vphi[i] < 1 and z > 1:
+                # case where long chains are effectively untentangled
+                # CR-Rouse approximated as last taud having z*vphi > 1
+                taud_sticky_rep = taud[i - 1]
+                for j in range(i, n):
+                    taud[j] = taud_sticky_rep
+                    Zeff[j] = 1.0
+                break
+            taud[i] = taud[i] * self.fZ(z * vphi[i])
+            Zeff[i] = z * vphi[i]
+        self.Zeff = np.array(Zeff)
+
+        # print("%8s %8s %8s %8s %8s %8s" % ("i", "M", "taud", "zphie", "phie",
+        #                                    "taud0"))
+        # for i in range(n):
+        #     z = m[i] / Me
+        #     print("%8d %8.3g %8.3g %8.3g %8.3g %8.3g" %
+        #           (i, m[i], taud[i], z * vphi[i], vphi[i],
+        #            3. * z * z * z * taue))
+
+        for i in range(n):
+            #factor 0.5 cf. G(t)~mu^2 (Likthman2002)
+            taud[i] = 0.5 * taud[i]
+
+        return [True, phi, taus, taud]
 
     def sigmadot_shear(self, sigma, t, p):
         """Rolie-Poly differential equation under *shear* flow
@@ -522,7 +825,7 @@ class BaseTheoryBlendRoliePoly:
 
         # ODE solver parameters
         abserr = 1.0e-8
-        relerr = 1.0e-6
+        relerr = 1.0e-8
         t = ft.data[:, 0]
         t = np.concatenate([[0], t])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
@@ -562,16 +865,12 @@ class BaseTheoryBlendRoliePoly:
         self.Qprint(' 100%')
         # sig.shape is (len(t), 3*n^2) in shear
         if self.flow_mode == FlowMode.shear:
-            # every 3 component we find xx, yy, xy, starting at 0, 1, or 2; and remove t=0
-            # sxx_t = sig[1:, 0::3] # len(t) - 1 rows and n^2 cols
-            # syy_t = sig[1:, 1::3] # len(t) - 1 rows and n^2 cols
-            # sxy_t = sig[1:, 2::3] # len(t) - 1 rows and n^2 cols
-            # nt = len(sxx_t)
             c = 3
             sig = sig[1:, :]
             nt = len(sig)
             lsq = np.zeros((nt, nmodes))
             if self.with_fene == FeneMode.with_fene:
+                #calculate lambda^2
                 for i in range(nmodes):
                     I = c * nmodes * i
                     trace_arr = np.zeros(nt)
@@ -583,14 +882,15 @@ class BaseTheoryBlendRoliePoly:
 
             for i in range(nmodes):
                 I = c * nmodes * i
-                temp_arr = np.zeros(nt)
+                sig_i = np.zeros(nt)
                 for j in range(nmodes):
-                    temp_arr += phi_arr[j] * sig[:, I + c * j + 2]
+                    sig_i += phi_arr[j] * sig[:, I + c * j + 2]
+                
                 if self.with_fene == FeneMode.with_fene:
-                    tt.data[:, 1] += phi_arr[i] * self.calculate_fene(
-                        lsq[:, i], lmax) * temp_arr
-                else:
-                    tt.data[:, 1] += phi_arr[i] * temp_arr
+                    sig_i *= self.calculate_fene(lsq[:, i], lmax)
+                if self.with_gcorr == GcorrMode.with_gcorr:
+                    sig_i *= sqrt(self.fZ(self.Zeff[i]))
+                tt.data[:, 1] += phi_arr[i] * sig_i
             tt.data[:, 1] *= self.parameters["GN0"].value
 
         if self.flow_mode == FlowMode.uext:
@@ -614,15 +914,17 @@ class BaseTheoryBlendRoliePoly:
 
             for i in range(nmodes):
                 I = c * nmodes * i
-                temp_arr = np.zeros(nt)
+                sig_i = np.zeros(nt)
                 for j in range(nmodes):
-                    temp_arr += phi_arr[j] * (
+                    sig_i += phi_arr[j] * (
                         sig[:, I + c * j] - sig[:, I + c * j + 1])
+
                 if self.with_fene == FeneMode.with_fene:
-                    tt.data[:, 1] += phi_arr[i] * self.calculate_fene(
-                        lsq[:, i], lmax) * temp_arr
-                else:
-                    tt.data[:, 1] += phi_arr[i] * temp_arr
+                    sig_i *= self.calculate_fene(lsq[:, i], lmax)
+                if self.with_gcorr == GcorrMode.with_gcorr:
+                    sig_i *= sqrt(self.fZ(self.Zeff[i]))
+                tt.data[:, 1] += phi_arr[i] * sig_i
+
             tt.data[:, 1] *= self.parameters["GN0"].value
 
     def set_param_value(self, name, value):
@@ -738,7 +1040,10 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         menu = QMenu()
         self.get_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes")
+            "Get Modes (MWD app)")
+        self.get_modes_data_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
+            "Get Modes (MWD data)")
         self.edit_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
             "Edit Modes")
@@ -759,6 +1064,11 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'),
             'Finite Extensibility')
         self.with_fene_button.setCheckable(True)
+        #Modulus correction button
+        self.with_gcorr_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
+            'Modulus Correction')
+        self.with_gcorr_button.setCheckable(True)
         # #SpinBox "nmodes"
         # self.spinbox = QSpinBox()
         # self.spinbox.setRange(0, self.parameters["nmodes"].value)  # min and max number of modes
@@ -775,6 +1085,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(
             self.get_modes_reptate)
+        connection_id = self.get_modes_data_action.triggered.connect(
+            self.edit_mwd_modes)
         connection_id = self.edit_modes_action.triggered.connect(
             self.edit_modes_window)
         connection_id = self.plot_modes_action.triggered.connect(
@@ -785,7 +1097,22 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         #     self.handle_spinboxValueChanged)
         connection_id = self.with_fene_button.triggered.connect(
             self.handle_with_fene_button)
+        connection_id = self.with_gcorr_button.triggered.connect(
+            self.handle_with_gcorr_button)
 
+    def handle_with_gcorr_button(self, checked):
+        if checked:
+            if len(self.Zeff) > 0:
+                # if Zeff contains something
+                self.with_gcorr = GcorrMode.with_gcorr
+            else:
+                self.Qprint("Modulus correction needs Z from MWD")
+                self.with_gcorr_button.setChecked(False)
+                return
+        else:
+            self.with_gcorr = GcorrMode.none
+        self.Qprint("Press calculate to update theory")
+            
     def handle_with_fene_button(self, checked):
         if checked:
             self.with_fene = FeneMode.with_fene
@@ -799,7 +1126,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
-        self.parent_dataset.handle_actionCalculate_Theory()
+        self.Qprint("Press calculate to update theory")
+        # self.parent_dataset.handle_actionCalculate_Theory()
 
     # def handle_spinboxValueChanged(self, value):
     #     nmodes = self.parameters["nmodes"].value
@@ -828,8 +1156,33 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
     def get_modes_reptate(self):
-        self.Qcopy_modes()
-        self.parent_dataset.handle_actionCalculate_Theory()
+        apmng = self.parent_dataset.parent_application.parent_manager
+        get_dict = {}
+        for app in apmng.applications.values():
+            app_index = apmng.ApplicationtabWidget.indexOf(app)
+            app_tab_name = apmng.ApplicationtabWidget.tabText(app_index)
+            for ds in app.datasets.values():
+                ds_index = app.DataSettabWidget.indexOf(ds)
+                ds_tab_name = app.DataSettabWidget.tabText(ds_index)
+                for th in ds.theories.values():
+                    th_index = ds.TheorytabWidget.indexOf(th)
+                    th_tab_name = ds.TheorytabWidget.tabText(th_index)
+                    if "MWDiscr" in th.name:
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name,
+                                               th_tab_name)] = th.get_mwd
+
+        if get_dict:
+            d = GetMwdRepate(self, get_dict, 'Select Discretized MWD')
+            if (d.exec_() and d.btngrp.checkedButton() != None):
+                _, success1 = self.set_param_value("tau_e", d.taue_text.text())
+                _, success2 = self.set_param_value("Me", d.Me_text.text())
+                if not success1 * success2:
+                    self.Qprint("Could not understand Me or taue, try again")
+                    return
+                item = d.btngrp.checkedButton().text()
+                m, phi = get_dict[item]()
+                self.set_modes_from_mwd(m, phi)
+        # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
         nmodes = self.parameters["nmodes"].value
@@ -861,6 +1214,30 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 )
             else:
                 self.handle_actionCalculate_Theory()
+    
+    def edit_mwd_modes(self):
+        nmodes = self.parameters["nmodes"].value
+        phi = np.ones(nmodes) / nmodes
+        m = np.arange(1, nmodes+1) * 1e3
+
+        d = EditMWDDialog(self, m, phi, 200)
+        if d.exec_():
+            nmodes = d.table.rowCount()
+            m = []
+            phi = []
+            _, success1 = self.set_param_value("tau_e", d.taue_text.text())
+            _, success2 = self.set_param_value("Me", d.Me_text.text())
+            if not success1 * success2:
+                self.Qprint("Could not understand Me or taue, try again")
+                return
+            for i in range(nmodes):
+                try:
+                    m.append(float(d.table.item(i, 0).text()))
+                    phi.append(float(d.table.item(i, 1).text()))
+                except ValueError:
+                    self.Qprint("Could not understand line %d, try again" % (i + 1))
+                    return
+            self.set_modes_from_mwd(m, phi)
 
     def plot_modes_graph(self):
         pass

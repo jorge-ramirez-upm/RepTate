@@ -24,6 +24,7 @@
         <file>Images/new_icons/icons8-user-manual.png</file>
         <file>Images/new_icons/icons8-facebook-f.png</file>
         <file>Images/new_icons/icons8-infinite.png</file>
-		<file>Images/new_icons/icons8-broadcasting.png</file>
+        <file>Images/new_icons/icons8-broadcasting.png</file>
+        <file>Images/new_icons/icons8-circled-g-filled.png</file>
     </qresource>
 </RCC>
