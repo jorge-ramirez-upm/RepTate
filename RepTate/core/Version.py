@@ -35,6 +35,6 @@
 Module that sets the current version and date of RepTate.
 
 """ 
-VERSION='0.8.0'
+VERSION='0.9.0'
 # Date in the format YYYY-MM-DD
-DATE='20180215'
+DATE='20180327'
