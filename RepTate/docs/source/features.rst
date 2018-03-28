@@ -9,17 +9,26 @@ Applications
 - Linear Viscoelastic data analysis (LVE)
 - Start-up of shear and extensional flow (NLVE)
 - Stress relaxation experiments (Gt)
+- Creep experiments (Creep)
+- Monte Carlo polymerisation (React)
 
 Theories
 ========
-Each theory has a code pointing to the application where the theory can be found.
-
 - Discretize a Molecular Weight Distribution (MW)
 - Williams-Landel-Ferry shift (TTS)
 - Maxwell modes fitting (LVE, Gt)
+- Retardation modes fitting (Creep)
 - Likhtman-McLeish 2002 theory (LVE)
-- Rolie-Poly equation for linear polymer melts (NLVE)
+- Dynamic-tube dilution for stars (LVE, Gt)
+- Rheology of Branch-on-branch polymers (LVE)
+- Rolie-Poly equation for linear polymer melts and binary blends (NLVE)
+- Rouse model (LVE, Gt)
+- Pom-pom model (NLVE)
+- Upper-Convected Maxwell constitutive equation (NLVE)
+- Giesekus constitutive equation (NLVE)
 - Basic theories (polynomial, power law, exponential decay, etc, available in all applications)
+
+Each theory is associated to the application (MW, TTS, etc.) where the theory can be found.
 
 Graphical User Interface
 ========================
