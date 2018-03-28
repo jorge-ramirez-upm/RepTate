@@ -141,9 +141,7 @@ class BaseTheoryMaxwellModesFrequency:
                 np.log10(G[i]),
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt,
-                min_value=0.0,
-                max_value=np.inf)
+                opt_type=OptType.opt)
 
         # GRAPHIC MODES
         self.graphicmodes = []
@@ -429,9 +427,7 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
                 Gnew[i],
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt,
-                min_value=0.0,
-                max_value=np.inf)
+                opt_type=OptType.opt)
 
         self.do_calculate("")
         self.update_parameter_table()
@@ -526,9 +522,7 @@ class BaseTheoryMaxwellModesTime:
                 np.log10(G[i]),
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt,
-                min_value=0.0,
-                max_value=np.inf)
+                opt_type=OptType.opt)
 
         # GRAPHIC MODES
         self.graphicmodes = None
@@ -800,9 +794,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
                 Gnew[i],
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt,
-                min_value=0.0,
-                max_value=np.inf)
+                opt_type=OptType.opt)
 
         self.do_calculate("")
         self.update_parameter_table()
