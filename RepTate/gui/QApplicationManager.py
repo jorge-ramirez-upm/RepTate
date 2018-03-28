@@ -128,7 +128,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionNLVE.triggered.connect(self.new_nlve_window)
         self.actionGt.triggered.connect(self.new_gt_window)
         self.actionCreep.triggered.connect(self.new_creep_window)
-        #self.actionSANS.triggered.connect(self.new_sans_window)
+        self.actionSANS.triggered.connect(self.new_sans_window)
         self.actionReact.triggered.connect(self.new_React_window)
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)

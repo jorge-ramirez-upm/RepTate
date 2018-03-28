@@ -48,6 +48,7 @@ from ApplicationNLVE import ApplicationNLVE
 from ApplicationMWD import ApplicationMWD
 from ApplicationGt import ApplicationGt
 from ApplicationCreep import ApplicationCreep
+from ApplicationSANS import ApplicationSANS
 from ApplicationReact import ApplicationReact
 # from ApplicationXY import ApplicationXY
 #from ApplicationFRS_I import *
@@ -102,6 +103,7 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationNLVE.name] = ApplicationNLVE
         self.available_applications[ApplicationGt.name] = ApplicationGt
         self.available_applications[ApplicationCreep.name] = ApplicationCreep
+        self.available_applications[ApplicationSANS.name] = ApplicationSANS
         self.available_applications[ApplicationReact.name] = ApplicationReact
         # self.available_applications[ApplicationXY.name] = ApplicationXY
         #self.available_applications[ApplicationFRS_I.name]=ApplicationFRS_I
