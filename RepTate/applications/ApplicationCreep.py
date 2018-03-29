@@ -93,7 +93,7 @@ class BaseApplicationCreep:
             name="log(gamma(t))",
             description="log strain",
             x_label="log(t)",
-            y_label="log($\gamma$(t)",
+            y_label="log($\gamma$(t))",
             x_units="s",
             y_units="-",
             log_x=False,

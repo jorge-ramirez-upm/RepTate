@@ -3,7 +3,7 @@ LVE Theories
 ============
 
 .. contents:: Contents
-    :local:
+   :local:
 
 .. toctree::
    :maxdepth: 2

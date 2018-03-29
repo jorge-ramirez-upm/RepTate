@@ -439,9 +439,20 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
 
 
 class TheoryMaxwellModesTime(CmdBase):
-    """Fit Maxwell modes to a time depenendent relaxation function
+    """Fit a generalized Maxwell model to a time dependent relaxation function. 
     
-    [description]
+    * **Function**
+        .. math::
+            \\begin{eqnarray}
+            G(t) & = & \\sum_{i=1}^{n_{modes}} G_i \\exp (-t/\\tau_i)
+            \\end{eqnarray}
+    
+    * **Parameters**
+       - :math:`n_{modes}`: number of Maxwell modes equally distributed in logarithmic scale between :math:`\\omega_{min}` and :math:`\\omega_{max}`.
+       - logtmin = :math:`\\log(t_{min})`: decimal logarithm of the minimum time.
+       - logtmax = :math:`\\log(t_{max})`: decimal logarithm of the maximum time.
+       - logGi = :math:`\\log(G_{i})`: decimal logarithm of the amplitude of Maxwell mode :math:`i`.
+    
     """
     thname = "MaxwellModesTime"
     description = "Fit Maxwell modes to time dependent function"

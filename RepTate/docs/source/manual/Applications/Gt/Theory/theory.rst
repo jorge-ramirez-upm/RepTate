@@ -8,4 +8,5 @@ Stress Relaxation: Theories
 .. toctree::
    :maxdepth: 2
 
+.. include:: Maxwell.rst
 .. include:: Rouse.rst

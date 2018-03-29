@@ -46,10 +46,18 @@ from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import QSize, QUrl
 
 class TheoryCarreauYasuda(CmdBase):
-    """[summary]
+    """Fit the complex viscosity with the Carreau-Yasuda equation.
     
+    * **Function**
         .. math::
             \\eta^*(\\omega) = \\eta_\\infty + (\\eta_0-\\eta_\\infty)\\left( 1 + (\\lambda\\omega)^a \\right)^{(n-1)/a}
+
+    * **Parameters**
+        - :math:`\\eta_0`: Viscosity at zero shear rate.
+        - :math:`\\eta_\\infty`: Viscosity at infinite shear rate.
+        - :math:`\\lambda`: Relaxation time.
+        - :math:`n`: Power law index.
+        - :math:`a`: Dimensionless parameter (2 in most cases)
 
     """
     thname = 'CarreauYasudaTheory'

@@ -10,6 +10,7 @@ Applications
 - Start-up of shear and extensional flow (NLVE)
 - Stress relaxation experiments (Gt)
 - Creep experiments (Creep)
+- Neutron scattering experiments (SANS)
 - Monte Carlo polymerisation (React)
 
 Theories
@@ -26,6 +27,7 @@ Theories
 - Pom-pom model (NLVE)
 - Upper-Convected Maxwell constitutive equation (NLVE)
 - Giesekus constitutive equation (NLVE)
+- Debye theory for neutron scattering from ideal polymer chains (SANS)
 - Basic theories (polynomial, power law, exponential decay, etc, available in all applications)
 
 Each theory is associated to the application (MW, TTS, etc.) where the theory can be found.
