@@ -27,7 +27,7 @@
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="SANS: Tutorial" href="tutorial.html" />
+    <link rel="next" title="SANS: Theories" href="Theory/theory.html" />
     <link rel="prev" title="SANS: Small-Angle Neutron Scattering" href="SANS.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -45,7 +45,7 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.html" title="SANS: Tutorial"
+          <a href="Theory/theory.html" title="SANS: Theories"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="SANS.html" title="SANS: Small-Angle Neutron Scattering"
@@ -61,12 +61,30 @@
             <p class="logo"><a href="../../../index.html">
               <img class="logo" src="../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SANS: General description</a><ul>
+<li><a class="reference internal" href="#data-files">Data Files</a><ul>
+<li><a class="reference internal" href="#sans-extension"><code class="docutils literal"><span class="pre">.sans</span></code> extension</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#views">Views</a><ul>
+<li><a class="reference internal" href="#id1"><span class="math">\(\log (I) \ \mathrm{vs} \ \log(q)\)</span></a></li>
+<li><a class="reference internal" href="#id2"><span class="math">\(I \ \mathrm{vs} \ q\)</span></a></li>
+<li><a class="reference internal" href="#zimm-plot"><span class="math">\(I^{-1} \ \mathrm{vs} \ q^2\)</span>   (Zimm plot)</a></li>
+<li><a class="reference internal" href="#kratky-plot"><span class="math">\(q^2\cdot I \ \mathrm{vs} \ q\)</span>  (Kratky plot)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="SANS.html"
                         title="previous chapter"> SANS: Small-Angle Neutron Scattering</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorial.html"
-                        title="next chapter">SANS: Tutorial</a></p>
+  <p class="topless"><a href="Theory/theory.html"
+                        title="next chapter">SANS: Theories</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -94,11 +112,72 @@
             
   <div class="section" id="sans-general-description">
 <h1>SANS: General description<a class="headerlink" href="#sans-general-description" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#data-files" id="id3">Data Files</a><ul>
+<li><a class="reference internal" href="#sans-extension" id="id4"><code class="docutils literal"><span class="pre">.sans</span></code> extension</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#views" id="id5">Views</a><ul>
+<li><a class="reference internal" href="#id1" id="id6"><span class="math">\(\log (I) \ \mathrm{vs} \ \log(q)\)</span></a></li>
+<li><a class="reference internal" href="#id2" id="id7"><span class="math">\(I \ \mathrm{vs} \ q\)</span></a></li>
+<li><a class="reference internal" href="#zimm-plot" id="id8"><span class="math">\(I^{-1} \ \mathrm{vs} \ q^2\)</span>   (Zimm plot)</a></li>
+<li><a class="reference internal" href="#kratky-plot" id="id9"><span class="math">\(q^2\cdot I \ \mathrm{vs} \ q\)</span>  (Kratky plot)</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <div class="toctree-wrapper compound">
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Coming soon…</p>
+<div class="section" id="data-files">
+<h2><a class="toc-backref" href="#id3">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal"><span class="pre">;</span></code>).
+It may contain any number of parameters which will be read and saved as file-parameter in RepTate.</li>
+<li>Then the data columns should appear, separated by <strong>spaces</strong> or <strong>tabs</strong>.</li>
+</ul>
+<div class="section" id="sans-extension">
+<h3><a class="toc-backref" href="#id4"><code class="docutils literal"><span class="pre">.sans</span></code> extension</a><a class="headerlink" href="#sans-extension" title="Permalink to this headline">¶</a></h3>
+<p>Text files with <code class="docutils literal"><span class="pre">.sans</span></code> extension should be organised as follows:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">.sans</span></code> files should <strong>at least</strong> the value parameter values for the:<ol class="arabic">
+<li>Sample molecular weight <code class="docutils literal"><span class="pre">Mw</span></code>,</li>
+<li>Volume fraction of deuterated chains <code class="docutils literal"><span class="pre">Phi</span></code>.</li>
+</ol>
+</li>
+<li>2 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:<ol class="arabic">
+<li>scattering vector, <span class="math">\(q\)</span>,</li>
+<li>scattered intensity, <span class="math">\(I(q)\)</span>,</li>
+</ol>
+</li>
+</ul>
+<p>A correct <code class="docutils literal"><span class="pre">.sans</span></code> file looks like:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Mw=407;Phi=0.964;
+0.0098083         24.9121
+0.010647          22.9176
+0.011486          21.7702
+0.012325          20.0757
+0.013164          18.6836
+...               ...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="views">
+<h2><a class="toc-backref" href="#id5">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id6"><span class="math">\(\log (I) \ \mathrm{vs} \ \log(q)\)</span></a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id7"><span class="math">\(I \ \mathrm{vs} \ q\)</span></a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="zimm-plot">
+<h3><a class="toc-backref" href="#id8"><span class="math">\(I^{-1} \ \mathrm{vs} \ q^2\)</span>   (Zimm plot)</a><a class="headerlink" href="#zimm-plot" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="kratky-plot">
+<h3><a class="toc-backref" href="#id9"><span class="math">\(q^2\cdot I \ \mathrm{vs} \ q\)</span>  (Kratky plot)</a><a class="headerlink" href="#kratky-plot" title="Permalink to this headline">¶</a></h3>
+</div>
 </div>
 </div>
 
@@ -118,7 +197,7 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.html" title="SANS: Tutorial"
+          <a href="Theory/theory.html" title="SANS: Theories"
              >next</a> |</li>
         <li class="right" >
           <a href="SANS.html" title="SANS: Small-Angle Neutron Scattering"

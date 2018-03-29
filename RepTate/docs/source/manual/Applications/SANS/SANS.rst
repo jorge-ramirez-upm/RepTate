@@ -3,13 +3,14 @@
 ===========================================
 
 .. |logo| image:: /app_logo/SANS.png
-	:height: 15pt
-	:align: bottom
+    :height: 15pt
+    :align: bottom
 
 ..	toctree::
-   	:maxdepth: 2
+    :maxdepth: 2
 	
-	general
-	tutorial
-	theory
+    general
+    Theory/theory
+    Tutorial/tutorialCLSANS
+    Tutorial/tutorialGUISANS
 	

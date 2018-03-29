@@ -45,9 +45,31 @@ from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 
 class TheoryDebye(CmdBase):
-    """[summary]
+    """Fit a Debye function to the small angle neutron scattering data of ideal polymer chains. 
     
-    [description]
+    * **Function**
+        .. math::
+            I(q) = \\frac {(b_H-b_D)^2}{V} N \\phi(1-\\phi) g_D(R_g,q) + \\mathrm{Bckgrnd}
+        
+        where:
+          - :math:`N=M_w/M_\\mathrm{mono}` is the degree of polymerization of the chain (:math:`M_w` is a parameter of the experimental data)
+          - :math:`\\phi` is the volume fraction of deuterated chains (read from the file)
+          - :math:`g_D(R_g,q)` is the Debye function, given by
+          
+          .. math::
+              g_D(R_g,q) = \\frac{2}{(q^2R_g^2)^2}\\left( q^2R_g^2 + exp(-q^2R_g^2) -1 \\right)
+    
+    * **Parameters**
+       - Contrast: This sets the magnitude of the scattering and is equal to :math:`(b_H-b_D)^2/V` where :math:`b_{H/D}` is the scattering cross-section of the hydrogenous/deuterated monomer and :math:`V` is the monomer volume. 
+       - :math:`C_{gyr}`: This sets the scale of the radius of gyration of the chain. For a given molecular weight, the radius of gyration is :math:`R_g^2=C_{gyr}M_w`. For many polymers, this value is available in the literature, but small adjustments may still be necessary to optimize the agreement with the experimental data.
+       - :math:`M_\\mathrm{mono}`: The molecular weight of a single monomer (should be known from the chain chemistry).
+       - Bckgrnd: This sets the level of the background scattering. It can, in principle, be computed from known incoherent scattering cross sections but, in practice, there are often many other unknown contributions and therefore fitting is necessary.
+       - :math:`\\lambda`: It applies a simple strain measure by shifting the radius of gyration by a constant factor for all :math:`q` values, :math:`R_g\\to \\lambda R_g` (the **Stretched** button must be checked). This can be used to compare the microscopic deformation with the effect of a fully affine bulk deformation or to fit to the low :math:`q` data to produce an effective radius of gyration under flow. Compression perpendicular to the flow direction can be modelled by setting :math:`\\lambda<1`.
+       - :math:`\\chi`: Parameter to model the effect of a weak interaction between the hydrogenous and the deuterated monomers on the scattering, modelled within the random phase approximation [3] (the **Non-Ideal Mix** button must be checked). The scattered intensity is calculated according to the function below, in which :math:`\\chi` is independent of :math:`M_w` and :math:`\\phi` but is expected to change with temperature. Typically, the effect of :math:`\\chi` is small, but this depends upon the temperature, degree of polymerization and deuterated fraction. For deuterated/hydrogenated polystyrene :math:`\\chi\\approx 1.7\cdot 10^{-4}` at 160 degrees C, and it is expected to be smaller with increasing temperature.
+         
+         .. math::
+             I(q) = \\frac {(b_H-b_D)^2}{V} \\left( \\frac{1}{N \\phi(1-\\phi) g_D(R_g,q)}-2\\chi \\right)^{-1} + \\mathrm{Bckgrnd}     
+    
     """
     thname = 'DebyeTheory'
     description = 'Debye theory for neutron scattering from ideal polymer chains'
