@@ -48,9 +48,23 @@ from DraggableArtists import DragType, DraggableModesSeries
 
 
 class TheoryRetardationModesTime(CmdBase):
-    """Fit Retardation modes to time depenendent creep data
+    """Fit a discrete Retardation spectrum to time dependent creep data
     
-    [description]
+    * **Function**
+        .. math::
+            \\gamma(t) = \\sigma_0 \\left( J_0 + \\sum_{1}^{n_{modes}} J_i \\left[ 1 - \\exp\\left(\\frac{-t}{\\tau_i}\\right) \\right] + \\frac{t}{\\eta_0} \\right)
+    
+        where:
+          - :math:`\\sigma_0`: constant stress applied during the creep experiment.
+    
+    * **Parameters**
+       - :math:`J_0`: Instantaneous compliance (``logJini``, in logarithmic scale).
+       - :math:`\\eta_0`: Terminal viscosity (``logeta0``, in logarithmic scale).
+       - :math:`n_{modes}`: number of Retardation modes equally distributed in logarithmic scale between :math:`t_{min}` and :math:`t_{max}`.
+       - logtmin = :math:`\\log(t_{min})`: decimal logarithm of the minimum time range for the modes.
+       - logtmax = :math:`\\log(t_{max})`: decimal logarithm of the maximum time.
+       - logJi = :math:`\\log(J_{i})`: decimal logarithm of the compliance of Retardation mode :math:`i`.
+    
     """
     thname = "RetardationModesTime"
     description = "Fit Retardation modes to time dependent creep data"
@@ -101,6 +115,18 @@ class BaseTheoryRetardationModesTime:
         tmax = self.parent_dataset.maxcol(0)
         nmodes = int(np.round(np.log10(tmax / tmin)))
 
+        self.parameters["logJini"] = Parameter(
+            "logJini",
+            -4.0,
+            "Log of Instantaneous Compliance",
+            ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters["logeta0"] = Parameter(
+            "logeta0",
+            0.0,
+            "Log of Terminal Viscosity",
+            ParameterType.real,
+            opt_type=OptType.opt)
         self.parameters["logtmin"] = Parameter(
             "logtmin",
             np.log10(tmin),
@@ -111,12 +137,6 @@ class BaseTheoryRetardationModesTime:
             "logtmax",
             np.log10(tmax),
             "Log of time range maximum",
-            ParameterType.real,
-            opt_type=OptType.opt)
-        self.parameters["logvisc"] = Parameter(
-            "logvisc",
-            0.0,
-            "Log of Terminal Viscosity",
             ParameterType.real,
             opt_type=OptType.opt)
         self.parameters["nmodes"] = Parameter(
@@ -279,14 +299,16 @@ class BaseTheoryRetardationModesTime:
             self.Qprint("Invalid stress value")
             return
         nmodes = self.parameters["nmodes"].value
-        visc = np.power(10,self.parameters["logvisc"].value)
+        J0 = np.power(10,self.parameters["logJini"].value)
+        eta0 = np.power(10,self.parameters["logeta0"].value)
         tau = np.logspace(self.parameters["logtmin"].value,
                           self.parameters["logtmax"].value, nmodes)
 
         for i in range(nmodes):
             expT_tau = (1.0-np.exp(-tt.data[:, 0] / tau[i]))
             J = np.power(10, self.parameters["logJ%02d" % i].value)
-            tt.data[:, 1] += stress * J * expT_tau + visc*tt.data[:, 0]
+            tt.data[:, 1] += stress * J * expT_tau
+        tt.data[:, 1] += stress*(J0 + tt.data[:, 0]/eta0)
 
     def plot_theory_stuff(self):
         """[summary]
