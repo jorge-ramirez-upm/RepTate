@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Williams-Landel-Ferry TTS Shift &#8212; RepTate 0.8.0 20180215 documentation</title>
+    <title>Williams-Landel-Ferry TTS Shift &#8212; RepTate 0.9.0 20180327 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.8.0 20180215',
+        VERSION:     '0.9.0 20180327',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -27,8 +27,6 @@
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="Automatic TTS Shift" href="TTSAutomatic.html" />
-    <link rel="prev" title="TTS" href="../theory.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -44,17 +42,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="TTSAutomatic.html" title="Automatic TTS Shift"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../theory.html" title="TTS"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../TTS.html" > TTS: Time-Temperature Superposition</a> &#187;</li>
-          <li class="nav-item nav-item-4"><a href="../theory.html" accesskey="U">TTS</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -62,12 +50,15 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../theory.html"
-                        title="previous chapter">TTS</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="TTSAutomatic.html"
-                        title="next chapter">Automatic TTS Shift</a></p>
+  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Williams-Landel-Ferry TTS Shift</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+</ul>
+</li>
+</ul>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -97,9 +88,50 @@
 <h1>Williams-Landel-Ferry TTS Shift<a class="headerlink" href="#williams-landel-ferry-tts-shift" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Coming soon…</p>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryTTS.TheoryWLFShift">
+<em class="property">class </em><code class="descclassname">TheoryTTS.</code><code class="descname">TheoryWLFShift</code><a class="reference internal" href="../../../../_modules/TheoryTTS.html#TheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.TheoryWLFShift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic theory for Time-Temperature Superposition, based on the WLF equation</p>
+<p>[description]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Time-temperature superposition based on a WLF equation with two parameters. Temperature of the data is read from the file. The temperature to which the data is shifted is specified by <span class="math">\(T_0\)</span>. This theory shifts many samples simultaneously with the same shift factors which follow exactly the WLF equation. Thus, if there is one temperature for which the data is out of line with the others, the theory does not try to hide it by using an arbitrary shifting - instead the shifted data will clearly show that one of the temperatures went  wrong. Also, the vertical shifts are applied according to the density change only, whereas in other rheometer software some loading errors are hidden into the vertical shifts.</p>
+<p>In the <strong>horizontal shift</strong>, the frequency is modified according to:</p>
+<div class="math">
+\[\omega(T_0) = a_T \omega(T)\]</div>
+<p>with</p>
+<div class="math">
+\[\log_{10} a_T = \frac{-C_1 (T-T_0)}{T+C_2}\]</div>
+<p>where <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> are material parameters. Note that in many publications the denominator of this equation contains <span class="math">\(T_0\)</span> as well - in this case <span class="math">\(C_2\)</span> depends on <span class="math">\(T_0\)</span>. The parameter <span class="math">\(C_1\)</span> depends on the temperature <span class="math">\(T_0\)</span>. If <span class="math">\(T_0\)</span> is changed from <span class="math">\(T_0^{old}\)</span> to <span class="math">\(T_0^{new}\)</span>, the value of <span class="math">\(C_1\)</span> changes according to the expression:</p>
+<div class="math">
+\[C_1^{new} = C_1^{old}\frac{T_0^{old}+C_2}{T_0^{new}+C_2}\]</div>
+<p>In the <strong>vertical shift</strong>, the modulus is modified according to the expression:</p>
+<div class="math">
+\[G(T_0) = G(T)/b_T\]</div>
+<p>with</p>
+<div class="math">
+\[b_T = \frac{\rho(T)T}{\rho(T_0)T_0} = \frac{(\rho_0-T C_3\cdot 10^{-3})(T+273.15)}{(\rho_0-T_0 C_3\cdot 10^{-3})(T_0+273.15)}\]</div>
+<p>where <span class="math">\(\rho_0\)</span> is the density of the polymer at 0 degrees Celsius.</p>
+<p>The <strong>molecular weight dependence</strong> of <span class="math">\(T_g\)</span> must be considered when shift data of very short chains or very broad molecular weight distributions containing a significative fraction of short chains. This change is roughly related to the amount of free ends present in the sample. In order to take the effect into account, we use the following phenomenological expression, which was shown to fit the experimental data:</p>
+<div class="math">
+\[T_g = T_g^\infty - \frac{C_{T_g}}{M_w}\]</div>
+<p>A simple chain ends argument leads to the same expression with <span class="math">\(M_n\)</span> instead of <span class="math">\(M_w\)</span> (here, we are assuming that <span class="math">\(M_w \approx M_n\)</span>). This leads to the following modified expression for the <strong>horizontal shift</strong>:</p>
+<div class="math">
+\[\log_{10} a_T = \frac{-C_1 (T-T_0+\frac{C_{T_g}}{M_w})}{T+C_2+\frac{C_{T_g}}{M_w}}\]</div>
+<p>In most cases, when shifting the data of well entangled monodisperse polymers, this effect can be discarded by unticking the corresponding check box in the theory window.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Try to shift simultaneously different samples of the same material, using the suggested values of the fitting parameters from the Materials Database or taking them from the literature.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Load all the <a href="#id1"><span class="problematic" id="id2">*</span></a>.osc files in the same dataset.</p>
+</div>
 </div>
 </div>
 
@@ -118,22 +150,12 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="TTSAutomatic.html" title="Automatic TTS Shift"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../theory.html" title="TTS"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../TTS.html" > TTS: Time-Temperature Superposition</a> &#187;</li>
-          <li class="nav-item nav-item-4"><a href="../theory.html" >TTS</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

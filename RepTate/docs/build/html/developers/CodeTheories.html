@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Theories &#8212; RepTate 0.8.0 20180215 documentation</title>
+    <title>Theories &#8212; RepTate 0.9.0 20180327 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.8.0 20180215',
+        VERSION:     '0.9.0 20180327',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="CodeApplications.html" title="Applications"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of Reptate</a> &#187;</li> 
       </ul>
@@ -563,6 +563,11 @@
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="TheoryDiscrMWD.BaseTheoryDiscrMWD.get_mwd">
+<code class="descname">get_mwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryDiscrMWD.html#BaseTheoryDiscrMWD.get_mwd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDiscrMWD.BaseTheoryDiscrMWD.get_mwd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="TheoryDiscrMWD.BaseTheoryDiscrMWD.graphic_bins_visible">
@@ -1149,8 +1154,29 @@ G''(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} G_i \frac{\omega\tau_i}{1+(\omega
 <dt id="TheoryMaxwellModes.TheoryMaxwellModesTime">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">TheoryMaxwellModesTime</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#TheoryMaxwellModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.TheoryMaxwellModesTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
-<p>Fit Maxwell modes to a time depenendent relaxation function</p>
-<p>[description]</p>
+<p>Fit a generalized Maxwell model to a time dependent relaxation function.</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Function</strong></dt>
+<dd><div class="first last math">
+\[\begin{eqnarray}
+G(t) &amp; = &amp; \sum_{i=1}^{n_{modes}} G_i \exp (-t/\tau_i)
+\end{eqnarray}\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last simple">
+<li><span class="math">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
+<li>logtmin = <span class="math">\(\log(t_{min})\)</span>: decimal logarithm of the minimum time.</li>
+<li>logtmax = <span class="math">\(\log(t_{max})\)</span>: decimal logarithm of the maximum time.</li>
+<li>logGi = <span class="math">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math">\(i\)</span>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 <dl class="attribute">
 <dt id="TheoryMaxwellModes.TheoryMaxwellModesTime.citations">
 <code class="descname">citations</code><em class="property"> = ''</em><a class="headerlink" href="#TheoryMaxwellModes.TheoryMaxwellModesTime.citations" title="Permalink to this definition">¶</a></dt>
@@ -2010,14 +2036,14 @@ Total error is the mean square of the residual, averaged over all points conside
         <li class="right" >
           <a href="CodeApplications.html" title="Applications"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.8.0 20180215 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of Reptate</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>
