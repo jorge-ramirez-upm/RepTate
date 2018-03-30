@@ -1,6 +1,6 @@
-===============================
+-------------------------------
 Williams-Landel-Ferry TTS Shift
-===============================
+-------------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -52,6 +52,11 @@ A simple chain ends argument leads to the same expression with :math:`M_n` inste
     \log_{10} a_T = \frac{-C_1 (T-T_0+\frac{C_{T_g}}{M_w})}{T+C_2+\frac{C_{T_g}}{M_w}}
 
 In most cases, when shifting the data of well entangled monodisperse polymers, this effect can be discarded by unticking the corresponding check box in the theory window.
+
+.. note::
+    * In the case of polybutadiene, the equation that controls the molecular weight dependence of :math:`T_g` with the temperature is given by:
+    .. math::
+        T_g = T_g^\infty - \frac{C_{T_g}}{M_w} + 68.7\cdot \mathrm{dx12}
 
 .. warning::
     Try to shift simultaneously different samples of the same material, using the suggested values of the fitting parameters from the Materials Database or taking them from the literature.

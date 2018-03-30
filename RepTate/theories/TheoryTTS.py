@@ -50,9 +50,27 @@ from PyQt5.QtCore import QSize
 
 
 class TheoryWLFShift(CmdBase):
-    """Basic theory for Time-Temperature Superposition, based on the WLF equation
+    """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
     
-    [description]
+    * **Function**
+        .. math::
+            \\begin{eqnarray}
+            \\omega(T_0) &= & a_T \\omega(T) \\\\
+            G(T_0) &= &G(T)/b_T \\\\
+            \\log_{10} a_T &= & \\frac{-C_1 (T-T_0)}{T+C_2} \\\\
+            b_T &= & \\frac{\\rho(T)T}{\\rho(T_0)T_0} = \\frac{(\\rho_0-T C_3\\cdot 10^{-3})(T+273.15)}{(\\rho_0-T_0 C_3\\cdot 10^{-3})(T_0+273.15)} \\\\
+            T_g &= &T_g^\\infty - \\frac{C_{T_g}}{M_w}
+            \\end{eqnarray}
+    
+    * **Parameters**
+       - :math:`C_1`: WLF material parameter.
+       - :math:`C_2`: Corresponds to :math:`C_2-T_0`, :math:`C_2` being the standard WLF material parameter.
+       - :math:`\\rho_0`: Density of the polymer at 0 degrees C.
+       - :math:`C_3`: Material parameter related to the T dependence of the density.
+       - :math:`T_0`: Temperature to which the experimental data will be shifted.
+       - :math:`C_{T_g}`: Material parameter that describes the dependence of :math:`T_g` with :math:`M_w`.
+       - dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).
+    
     """
     thname = "WLFShift"
     description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"

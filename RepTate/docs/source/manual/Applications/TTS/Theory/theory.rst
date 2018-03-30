@@ -9,4 +9,5 @@ TTS Theories
    :maxdepth: 2
 
 .. include:: WLFShift.rst
+.. include:: WLFShiftTest.rst
 .. include:: TTSAutomatic.rst

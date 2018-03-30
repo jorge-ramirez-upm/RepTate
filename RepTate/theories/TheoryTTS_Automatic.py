@@ -50,9 +50,11 @@ from PyQt5.QtCore import QSize
 
 
 class TheoryTTSShiftAutomatic(CmdBase):
-    """Basic theory for Time-Temperature Superposition, based on the WLF equation
+    """Automatic Time-temperature superposition of experimental data.
+        
+    * **Parameters**
+       - This theory has no parameters.
     
-    [description]
     """
     thname = "TTSShiftAutomatic"
     description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
