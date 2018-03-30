@@ -125,7 +125,7 @@ class BaseTheoryDebye:
             value=62.3,
             description='???????',
             type=ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.const)
         self.parameters['M_mono'] = Parameter(
             name='M_mono',
             value=0.104,
@@ -210,10 +210,24 @@ class BaseTheoryDebye:
         else:
             tt.data[:, 1] = Contr * Mw / Mmono * Phi * (1.0 - Phi) * debFn + Bck
         
-        if (stretched):
-            self.Qprint("%12s %8.4g %8.4g"%(f.file_name_short,Mw, Lambda * np.sqrt(CRg * Mw)))
-        else:
-            self.Qprint("%12s %8.4g %8.4g"%(f.file_name_short,Mw, np.sqrt(CRg * Mw)))
+    def do_error(self, line):
+        super().do_error(line)
+        if (line == ""):
+            self.Qprint("")
+            self.Qprint("%12s %8s %8s"%("File","Mw","Rg"))
+            CRg = self.parameters["C_gyr"].value
+            Lambda = self.parameters["Lambda"].value
+            stretched = self.parameters["stretched"].value
+            nfiles = len(self.parent_dataset.files)
+            for i in range(nfiles):
+                f = self.parent_dataset.files[i]
+                if (f.active):
+                    Mw = float(f.file_parameters["Mw"])
+                    if (stretched):
+                        self.Qprint("%12s %8.4g %8.4g"%(f.file_name_short,Mw, Lambda * np.sqrt(CRg * Mw)))
+                    else:
+                        self.Qprint("%12s %8.4g %8.4g"%(f.file_name_short,Mw, np.sqrt(CRg * Mw)))
+
 
 class CLTheoryDebye(BaseTheoryDebye, Theory):
     """[summary]
