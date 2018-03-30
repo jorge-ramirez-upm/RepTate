@@ -50,9 +50,26 @@ from PyQt5.QtCore import QSize
 
 
 class TheoryWLFShiftTest(CmdBase):
-    """Basic theory for Time-Temperature Superposition, based on the WLF equation
+    """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
     
-    [description]
+    * **Function**
+        .. math::
+            \\begin{eqnarray}
+            \\omega(T_r) &= & a_T \\omega(T) \\\\
+            G(T_r) &= & b_T G(T) \\\\
+            \\log_{10} a_T &= & \\frac{-B_1 (T-T_r)}{(B_2+T_r)(B_2+T)} \\\\
+            b_T &= & \\frac{\\rho(T_r)T_r}{\\rho(T)T} = \\frac{(1+\\alpha T)(T_r+273.15)}{(1+\\alpha T_r)(T+273.15)} \\\\
+            T_g &= &T_g^\\infty - \\frac{C_{T_g}}{M_w}
+            \\end{eqnarray}
+    
+    * **Parameters**
+       - :math:`T_r`: Reference temperature to which the experimental data will be shifted.
+       - :math:`B_1`: Material parameter, corresponding to :math:`C_1C_2`, :math:`C_1` and :math:`C_2` being the standard WLF material parameters.
+       - :math:`B_2`: Material parameter, corresponding to :math:`C_2-T_r`, :math:`C_2` being the standard WLF material parameter.
+       - logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.
+       - :math:`C_{T_g}`: Material parameter that describes the dependence of :math:`T_g` with :math:`M_w`.
+       - dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).
+    
     """
     thname = "WLFShiftTest"
     description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
@@ -82,6 +99,7 @@ class BaseTheoryWLFShiftTest:
     
     [description]
     """
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/WLFShift.html'
     single_file = False
 
     def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
@@ -95,50 +113,42 @@ class BaseTheoryWLFShiftTest:
         """
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShiftTest
-        self.parameters["C1"] = Parameter(
-            "C1",
-            6.85,
-            "Material parameter C1 for WLF Shift",
-            ParameterType.real,
-            opt_type=OptType.opt)
-        self.parameters["C2"] = Parameter(
-            "C2",
-            150,
-            "Material parameter C2 for WLF Shift",
-            ParameterType.real,
-            opt_type=OptType.opt)
-        self.parameters["rho0"] = Parameter(
-            "rho0",
-            0.928,
-            "Density of polymer at 0 °C",
-            ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters["C3"] = Parameter(
-            "C3",
-            0.61,
-            "Density parameter",
-            ParameterType.real,
-            opt_type=OptType.const)
         self.parameters["Tr"] = Parameter(
-            "Tr",
-            25,
-            "Material parameter Tr Reference T WLF shift",
-            ParameterType.real,
+            name="Tr",
+            value=25,
+            description="Reference T to WLF shift the data to",
+            type=ParameterType.real,
             opt_type=OptType.const)
-        self.parameters["T"] = Parameter(
-            "T",
-            25,
-            "Temperature to shift WLF to, in °C",
-            ParameterType.real,
+        self.parameters["B1"] = Parameter(
+            name="B1",
+            value=850,
+            description="Material parameter B1 for WLF Shift",
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters["B2"] = Parameter(
+            name="B2",
+            value=126,
+            description="Material parameter B2 for WLF Shift",
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters["logalpha"] = Parameter(
+            name="logalpha",
+            value=-3.18,
+            description="Log_10 of the thermal expansion coefficient at 0 °C",
+            type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters["CTg"] = Parameter(
-            "CTg",
-            14.65,
-            "Molecular weight dependence of Tg",
-            ParameterType.real,
+            name="CTg",
+            value=14.65,
+            description="Molecular weight dependence of Tg",
+            type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters["dx12"] = Parameter(
-            "dx12", 0, "For PBd", ParameterType.real, opt_type=OptType.const)
+            name="dx12", 
+            value=0, 
+            description="Fraction 1,2 vinyl units (for PBd)", 
+            type=ParameterType.real, 
+            opt_type=OptType.const)
         self.parameters["vert"] = Parameter(
             name="vert",
             value=True,
@@ -168,12 +178,10 @@ class BaseTheoryWLFShiftTest:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        T = self.parameters["T"].value
         Tr = self.parameters["Tr"].value
-        C1 = self.parameters["C1"].value
-        C2 = self.parameters["C2"].value
-        C3 = self.parameters["C3"].value
-        rho0 = self.parameters["rho0"].value
+        B1 = self.parameters["B1"].value
+        B2 = self.parameters["B2"].value
+        alpha = np.power(10.0,self.parameters["logalpha"].value)
         CTg = self.parameters["CTg"].value
         dx12 = self.parameters["dx12"].value
         iso = self.parameters["iso"].value
@@ -191,20 +199,18 @@ class BaseTheoryWLFShiftTest:
 
         # Trying a new expression for the shift
         if iso:
+            B2 += CTg / Mw - 68.7*dx12
             Trcorrected = Tr - CTg / Mw + 68.7 * dx12
         else:
             Trcorrected = Tr
-        tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, -C1 * C2 * (Tf - T) /
-                                                 (C2 + T - Trcorrected) /
-                                                 (C2 + Tf - Trcorrected))
+        tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, -B1 * (Tf - Trcorrected) / (B2 + Trcorrected) / (B2 + Tf))
 
         if vert:
-            bT = (rho0 - Tf * C3 * 1E-3) * (Tf + 273.15) / ((
-                rho0 - T * C3 * 1E-3) * (T + 273.15))
+            bT = (1 + alpha*Tf) * (Tr + 273.15) / (1 + alpha*Tr) / (Tf + 273.15)
         else:
             bT = 1
-        tt.data[:, 1] = ft.data[:, 1] / bT
-        tt.data[:, 2] = ft.data[:, 2] / bT
+        tt.data[:, 1] = ft.data[:, 1] * bT
+        tt.data[:, 2] = ft.data[:, 2] * bT
 
     def do_error(self, line):
         """Override the error calculation for TTS
@@ -305,6 +311,15 @@ class BaseTheoryWLFShiftTest:
         if (line == ""):
             self.Qprint("%21s %10.5g (%10d)" %
                                    ("TOTAL", total_error, npoints))
+        if (line == ""):
+            self.Qprint("")
+            B1 = self.parameters["B1"].value
+            B2 = self.parameters["B2"].value
+            Tr = self.parameters["Tr"].value
+            self.Qprint("WLF Params @ Tr = %g"%Tr)
+            self.Qprint("C1 = %g"%(B1/(B2+Tr)))
+            self.Qprint("C2 = %g"%(B2+Tr))
+
         return total_error
 
     def func_fitTTS(self, *param_in):
@@ -326,7 +341,7 @@ class BaseTheoryWLFShiftTest:
             if par.opt_type == OptType.opt:
                 par.value = param_in[0][ind]
                 ind += 1
-        self.do_calculate("")
+        self.do_calculate("", timing=False)
         error = self.do_error("none")
         return error
 
@@ -338,15 +353,23 @@ class BaseTheoryWLFShiftTest:
         Arguments:
             - line {[type]} -- [description]
         """
-        self.fitting = True
+        self.is_fitting = True
+        start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
 
         # Mount the vector of parameters (Active ones only)
         initial_guess = []
-        for p in self.parameters.keys():
+        k = list(self.parameters.keys())
+        k.sort()
+        for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 initial_guess.append(par.value)
+        if (not initial_guess):
+            self.Qprint("No parameter to minimize")
+            return
+        opt = dict(return_full=True)
+        self.nfev = 0
 
         res = minimize(self.func_fitTTS, initial_guess, method='Nelder-Mead')
 
@@ -359,9 +382,7 @@ class BaseTheoryWLFShiftTest:
             (res['nfev'], res.fun))
 
         ind = 0
-        k = list(self.parameters.keys())
-        k.sort()
-        self.Qprint("%10s   %10s" % ("Parameter", "Value"))
+        self.Qprint("%10s = %10s" % ("Parameter", "Value"))
         self.Qprint("===========================")
         for p in k:
             par = self.parameters[p]
@@ -370,8 +391,11 @@ class BaseTheoryWLFShiftTest:
                 self.Qprint('*%9s = %10.5g' % (par.name, par.value))
             else:
                 self.Qprint('%10s = %10.5g' % (par.name, par.value))
-        self.fitting = False
-        self.do_calculate(line)
+        self.is_fitting = False
+        self.do_calculate(line, timing=False)
+        self.Qprint("")
+        self.Qprint("---Fitting in %.3g seconds---" %
+                               (time.time() - start_time))
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
