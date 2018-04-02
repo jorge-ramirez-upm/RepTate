@@ -322,8 +322,8 @@ class BaseTheoryTTSShiftAutomatic:
         #print(tt[:,1]-yinterp1)
         yinterp2 = interp(tt[:, 0], self.current_master_curve[:, 0],
                           self.current_master_curve[:, 2])
-        error = np.sum((yinterp1 - tt[:, 1])**2) + np.sum(
-            (yinterp2 - tt[:, 2])**2)
+        error = np.sum((np.log10(yinterp1) - np.log10(tt[:, 1]))**2) + np.sum(
+            (np.log10(yinterp2) - np.log10(tt[:, 2]))**2)
         #error=np.sum((yinterp1-tt[:,1])**2)
         npt = len(yinterp1) * 2
         #npt=len(yinterp1)
@@ -416,6 +416,9 @@ class BaseTheoryTTSShiftAutomatic:
                         self.func_fitTTS_one,
                         initial_guess,
                         method='Nelder-Mead')
+                    #res = minimize(
+                    #    self.func_fitTTS_one,
+                    #    initial_guess)
                     if (not res['success']):
                         self.Qprint(
                             "Solution not found: %s" % res['message'])
@@ -537,6 +540,9 @@ class BaseTheoryTTSShiftAutomatic:
                     fout.write(str(data[i, j]) + '\t')
                 fout.write('\n')
             fout.close()
+
+    def destructor(self):
+        pass
 
 
 class CLTheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, Theory):
