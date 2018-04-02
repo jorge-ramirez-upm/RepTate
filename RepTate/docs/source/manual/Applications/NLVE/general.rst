@@ -27,7 +27,7 @@ Text files with ``.shear`` extension should be organised as follows:
 - 2 columns separated by **spaces** or **tabs** containing respectively:
 
   #. time, :math:`t`,
-  #. shear stress growth coefficient (viscosity), :math:`\eta^+(t) = \dfrac{\sigma_{xy}}{\dot\gamma}`,
+  #. shear stress growth function, :math:`\sigma^+(t)`,
 
 A correct ``.shear`` file looks like:
 
@@ -52,7 +52,7 @@ Text files with ``.uext`` extension should be organised as follows:
 - 2 columns separated by **spaces** or **tabs** containing respectively:
 
   #. time, :math:`t`,
-  #. tensile stress growth coefficient (viscosity), :math:`\eta_E^+(t) = \dfrac{\sigma_{xx} - \sigma_{yy}}{\dot\varepsilon}`,
+  #. tensile stress growth function, :math:`\sigma_E^+(t)`,
 
 A correct ``.uext`` file looks like:
 
