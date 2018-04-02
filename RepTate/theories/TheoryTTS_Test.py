@@ -506,6 +506,8 @@ class BaseTheoryWLFShiftTest:
                 fout.write('\n')
             fout.close()
 
+    def destructor(self):
+        pass
 
 class CLTheoryWLFShiftTest(BaseTheoryWLFShiftTest, Theory):
     """[summary]
