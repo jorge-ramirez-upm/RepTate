@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Williams-Landel-Ferry TTS Shift &#8212; RepTate 0.9.0 20180327 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.0 20180327',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -68,12 +59,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -97,7 +90,7 @@
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[\begin{split}\begin{eqnarray}
 \omega(T_0) &amp;= &amp; a_T \omega(T) \\
 G(T_0) &amp;= &amp;G(T)/b_T \\
@@ -111,13 +104,13 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(C_1\)</span>: WLF material parameter.</li>
-<li><span class="math">\(C_2\)</span>: Corresponds to <span class="math">\(C_2-T_0\)</span>, <span class="math">\(C_2\)</span> being the standard WLF material parameter.</li>
-<li><span class="math">\(\rho_0\)</span>: Density of the polymer at 0 degrees C.</li>
-<li><span class="math">\(C_3\)</span>: Material parameter related to the T dependence of the density.</li>
-<li><span class="math">\(T_0\)</span>: Temperature to which the experimental data will be shifted.</li>
-<li><span class="math">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math">\(T_g\)</span> with <span class="math">\(M_w\)</span>.</li>
-<li>dx12: Fraction of 1-2 (vynil) units (valid for polybutadyene).</li>
+<li><span class="math notranslate">\(C_1\)</span>: WLF material parameter.</li>
+<li><span class="math notranslate">\(C_2\)</span>: Corresponds to <span class="math notranslate">\(C_2-T_0\)</span>, <span class="math notranslate">\(C_2\)</span> being the standard WLF material parameter.</li>
+<li><span class="math notranslate">\(\rho_0\)</span>: Density of the polymer at 0 degrees C.</li>
+<li><span class="math notranslate">\(C_3\)</span>: Material parameter related to the T dependence of the density.</li>
+<li><span class="math notranslate">\(T_0\)</span>: Temperature to which the experimental data will be shifted.</li>
+<li><span class="math notranslate">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math notranslate">\(T_g\)</span> with <span class="math notranslate">\(M_w\)</span>.</li>
+<li>dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).</li>
 </ul>
 </dd>
 </dl>
@@ -128,36 +121,36 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>Time-temperature superposition based on a WLF equation with two parameters. Temperature of the data is read from the file. The temperature to which the data is shifted is specified by <span class="math">\(T_0\)</span>. This theory shifts many samples simultaneously with the same shift factors which follow exactly the WLF equation. Thus, if there is one temperature for which the data is out of line with the others, the theory does not try to hide it by using an arbitrary shifting - instead the shifted data will clearly show that one of the temperatures went  wrong. Also, the vertical shifts are applied according to the density change only, whereas in other rheometer software some loading errors are hidden into the vertical shifts.</p>
+<p>Time-temperature superposition based on a WLF equation with two parameters. Temperature of the data is read from the file. The temperature to which the data is shifted is specified by <span class="math notranslate">\(T_0\)</span>. This theory shifts many samples simultaneously with the same shift factors which follow exactly the WLF equation. Thus, if there is one temperature for which the data is out of line with the others, the theory does not try to hide it by using an arbitrary shifting - instead the shifted data will clearly show that one of the temperatures went  wrong. Also, the vertical shifts are applied according to the density change only, whereas in other rheometer software some loading errors are hidden into the vertical shifts.</p>
 <p>In the <strong>horizontal shift</strong>, the frequency is modified according to:</p>
-<div class="math">
+<div class="math notranslate">
 \[\omega(T_0) = a_T \omega(T)\]</div>
 <p>with</p>
-<div class="math">
+<div class="math notranslate">
 \[\log_{10} a_T = \frac{-C_1 (T-T_0)}{T+C_2}\]</div>
-<p>where <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> are material parameters. Note that in many publications the denominator of this equation contains <span class="math">\(T_0\)</span> as well - in this case <span class="math">\(C_2\)</span> depends on <span class="math">\(T_0\)</span>. The parameter <span class="math">\(C_1\)</span> depends on the temperature <span class="math">\(T_0\)</span>. If <span class="math">\(T_0\)</span> is changed from <span class="math">\(T_0^{old}\)</span> to <span class="math">\(T_0^{new}\)</span>, the value of <span class="math">\(C_1\)</span> changes according to the expression:</p>
-<div class="math">
+<p>where <span class="math notranslate">\(C_1\)</span> and <span class="math notranslate">\(C_2\)</span> are material parameters. Note that in many publications the denominator of this equation contains <span class="math notranslate">\(T_0\)</span> as well - in this case <span class="math notranslate">\(C_2\)</span> depends on <span class="math notranslate">\(T_0\)</span>. The parameter <span class="math notranslate">\(C_1\)</span> depends on the temperature <span class="math notranslate">\(T_0\)</span>. If <span class="math notranslate">\(T_0\)</span> is changed from <span class="math notranslate">\(T_0^{old}\)</span> to <span class="math notranslate">\(T_0^{new}\)</span>, the value of <span class="math notranslate">\(C_1\)</span> changes according to the expression:</p>
+<div class="math notranslate">
 \[C_1^{new} = C_1^{old}\frac{T_0^{old}+C_2}{T_0^{new}+C_2}\]</div>
 <p>In the <strong>vertical shift</strong>, the modulus is modified according to the expression:</p>
-<div class="math">
+<div class="math notranslate">
 \[G(T_0) = G(T)/b_T\]</div>
 <p>with</p>
-<div class="math">
+<div class="math notranslate">
 \[b_T = \frac{\rho(T)T}{\rho(T_0)T_0} = \frac{(\rho_0-T C_3\cdot 10^{-3})(T+273.15)}{(\rho_0-T_0 C_3\cdot 10^{-3})(T_0+273.15)}\]</div>
-<p>where <span class="math">\(\rho_0\)</span> is the density of the polymer at 0 degrees Celsius.</p>
-<p>The <strong>molecular weight dependence</strong> of <span class="math">\(T_g\)</span> must be considered when shift data of very short chains or very broad molecular weight distributions containing a significative fraction of short chains. This change is roughly related to the amount of free ends present in the sample. In order to take the effect into account, we use the following phenomenological expression, which was shown to fit the experimental data:</p>
-<div class="math">
+<p>where <span class="math notranslate">\(\rho_0\)</span> is the density of the polymer at 0 degrees Celsius.</p>
+<p>The <strong>molecular weight dependence</strong> of <span class="math notranslate">\(T_g\)</span> must be considered when shift data of very short chains or very broad molecular weight distributions containing a significative fraction of short chains. This change is roughly related to the amount of free ends present in the sample. In order to take the effect into account, we use the following phenomenological expression, which was shown to fit the experimental data:</p>
+<div class="math notranslate">
 \[T_g = T_g^\infty - \frac{C_{T_g}}{M_w}\]</div>
-<p>A simple chain ends argument leads to the same expression with <span class="math">\(M_n\)</span> instead of <span class="math">\(M_w\)</span> (here, we are assuming that <span class="math">\(M_w \approx M_n\)</span>). This leads to the following modified expression for the <strong>horizontal shift</strong>:</p>
-<div class="math">
+<p>A simple chain ends argument leads to the same expression with <span class="math notranslate">\(M_n\)</span> instead of <span class="math notranslate">\(M_w\)</span> (here, we are assuming that <span class="math notranslate">\(M_w \approx M_n\)</span>). This leads to the following modified expression for the <strong>horizontal shift</strong>:</p>
+<div class="math notranslate">
 \[\log_{10} a_T = \frac{-C_1 (T-T_0+\frac{C_{T_g}}{M_w})}{T+C_2+\frac{C_{T_g}}{M_w}}\]</div>
 <p>In most cases, when shifting the data of well entangled monodisperse polymers, this effect can be discarded by unticking the corresponding check box in the theory window.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="simple">
-<li>In the case of polybutadiene, the equation that controls the molecular weight dependence of <span class="math">\(T_g\)</span> with the temperature is given by:</li>
+<li>In the case of polybutadiene, the equation that controls the molecular weight dependence of <span class="math notranslate">\(T_g\)</span> with the temperature is given by:</li>
 </ul>
-<div class="last math">
+<div class="last math notranslate">
 \[T_g = T_g^\infty - \frac{C_{T_g}}{M_w} + 68.7\cdot \mathrm{dx12}\]</div>
 </div>
 <div class="admonition warning">
@@ -191,7 +184,7 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
     </div>
   </body>
 </html>
