@@ -41,7 +41,7 @@ from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import QUrl, Qt
-from PyQt5.QtWidgets import QApplication, QInputDialog, QLineEdit, QMenu, QAction, QToolButton
+from PyQt5.QtWidgets import QApplication, QInputDialog, QLineEdit, QMenu, QAction, QToolButton, QMessageBox
 
 from CmdBase import CmdBase, CmdMode, CalcMode
 from QApplicationWindow import QApplicationWindow
@@ -130,6 +130,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionCreep.triggered.connect(self.new_creep_window)
         self.actionSANS.triggered.connect(self.new_sans_window)
         self.actionReact.triggered.connect(self.new_React_window)
+        self.actionDielectric.triggered.connect(self.new_DielectricSpectroscopy_window)
+        self.actionDynamicStructureFactor.triggered.connect(self.new_DynamicStructureFactor_window)
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)
         #self.Projecttree.itemSelectionChanged.connect(self.treeChanged)
@@ -350,6 +352,21 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         app_name = "React"
         return self.Qopen_app(app_name,
                               ':/Icons/Images/new_icons/icons8-test-tube.png')
+
+    def new_DielectricSpectroscopy_window(self):
+        """Open a new Dielectric Spectroscopy application window
+        
+        [description]
+        """
+        QMessageBox.warning(self, "new Dielectric Spectroscopy application", "Coming soon...")
+
+    def new_DynamicStructureFactor_window(self):
+        """Open a new Dynamic Structure Factor application window
+        
+        [description]
+        """
+        QMessageBox.warning(self, "new Dynamic Structure Factor application", "Coming soon...")
+
 
     # def new_xy_window(self):
     #     """Open a new XY application window

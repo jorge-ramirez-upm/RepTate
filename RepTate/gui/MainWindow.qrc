@@ -34,5 +34,7 @@
     <file>Images/new_icons/icons8-SANS.png</file>
     <file>Images/new_icons/icons8-library.png</file>
     <file>Images/new_icons/icons8-exit-sign.png</file>
+    <file>Images/new_icons/Dipoles.png</file>
+    <file>Images/new_icons/icons8-streaming.png</file>
   </qresource>
 </RCC>
