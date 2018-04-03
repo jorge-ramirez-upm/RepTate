@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit</InterpreterId>
+    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>
     </CommandLineArguments>
@@ -117,7 +117,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda_4.1.11_64-bit" />
+    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />
