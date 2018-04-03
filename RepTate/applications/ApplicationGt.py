@@ -133,18 +133,18 @@ class BaseApplicationGt:
             view_proc=self.viewSchwarzl_Gt,
             n=2,
             snames=["G',G''"])
-        #        self.views["i-Rheo G',G''"] = View(
-        #            name="i-Rheo G',G''",
-        #            description="G', G'' from i-Rheo transformation of G(t)",
-        #            x_label="$\omega$",
-        #            y_label="G',G''",
-        #            x_units="rad/s",
-        #            y_units="Pa",
-        #            log_x=True,
-        #            log_y=True,
-        #            view_proc=self.viewiRheo,
-        #            n=2,
-        #            snames=["G',G''"])
+        self.views["i-Rheo G',G''"] = View(
+            name="i-Rheo G',G''",
+            description="G', G'' from i-Rheo transformation of G(t)",
+            x_label="$\omega$",
+            y_label="G',G''",
+            x_units="rad/s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewiRheo,
+            n=2,
+            snames=["G',G''"])
 
         #set multiviews
         self.multiviews = [
@@ -254,15 +254,10 @@ class BaseApplicationGt:
         coeff = (dt.data[ind1 + 1:, 1] - dt.data[ind1:-1, 1]) / (
             dt.data[ind1 + 1:, 0] - dt.data[ind1:-1, 0])
         for i, w in enumerate(wp):
-            y[i, 0] = (
-                (1 - np.cos(w * t1)) *
-                (g1 - g0) / t1 + np.dot(coeff,
-                                        np.cos(w * dt.data[ind1:-1, 0]) -
-                                        np.cos(w * dt.data[ind1 + 1:, 0]))) / (
-                                            -w * w)
-            y[i, 1] = (w * g0 + np.sin(w * t1) * (g1 - g0) / t1 +
-                       np.dot(coeff, -np.sin(w * dt.data[ind1:-1, 0]) +
-                              np.sin(w * dt.data[ind1 + 1:, 0]))) / (-w * w)
+
+            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(coeff, -np.sin(w * dt.data[ind1:-1, 0]) + np.sin(w * dt.data[ind1 + 1:, 0])) / w
+            
+            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * dt.data[ind1:-1, 0]) - np.cos(w * dt.data[ind1 + 1:, 0])) / w
 
         return x, y, True
 
