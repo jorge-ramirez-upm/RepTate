@@ -8,6 +8,12 @@ NLVE: General description
 ..	toctree::
    	:maxdepth: 2
 	
+-------
+Purpose
+-------
+
+.. autoclass:: ApplicationNLVE.ApplicationNLVE()	
+
 ----------
 Data Files
 ----------
@@ -71,16 +77,16 @@ A correct ``.uext`` file looks like:
 Views
 -----
 
-:math:`\log(eta(t))`
+:math:`\log(\eta(t))`
 -------------------------
 log transient viscosity
 
-:math:`\log(sigma(t))-gamma` (log-linear)
+:math:`\log(\sigma(t))-\gamma` (log-linear)
 -----------------------------------------
 
 log transient shear stress vs strain
 
-:math:`\log(sigma(t))-t` (log-linear)
+:math:`\log(\sigma(t))-t` (log-linear)
 -------------------------------------
 
 log transient shear stress vs time

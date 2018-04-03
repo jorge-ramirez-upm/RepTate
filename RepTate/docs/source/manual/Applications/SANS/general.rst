@@ -8,6 +8,11 @@ SANS: General description
 ..  toctree::
    	:maxdepth: 2
 	
+-------
+Purpose
+-------
+
+.. autoclass:: ApplicationSANS.ApplicationSANS()	
 
 ----------
 Data Files

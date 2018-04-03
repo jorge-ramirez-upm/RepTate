@@ -7,7 +7,9 @@ User Manual
 
    General/general
    Applications/applications
+   Shortcuts
    Tools/tools
+   
 .. toctree::
    :maxdepth: 1
 

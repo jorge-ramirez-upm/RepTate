@@ -8,6 +8,12 @@ Creep: General description
 ..	toctree::
    	:maxdepth: 2
 	
+-------
+Purpose
+-------
+
+.. autoclass:: ApplicationCreep.ApplicationCreep()	
+
 ----------
 Data Files
 ----------
@@ -31,6 +37,7 @@ Text files with ``.creep`` extension should be organised as follows:
 A correct ``.creep`` file looks like:
 
 .. code-block:: none
+
   chem=PE;label=CM3;T=150;stress=10;
   t	    strain	    stress	T 
   s	    -	        Pa	    C

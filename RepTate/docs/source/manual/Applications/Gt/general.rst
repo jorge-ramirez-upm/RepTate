@@ -2,9 +2,70 @@
 G(t): General description
 ==================================
 
+.. contents:: Contents
+    :local:
+
 ..	toctree::
    	:maxdepth: 2
 	
+-------
+Purpose
+-------
 
-.. note::
-	Coming soon...
+.. autoclass:: ApplicationGt.ApplicationGt()	
+
+
+----------
+Data Files
+----------
+
+.. include:: ../datafile_doc.rst
+
+``.gt`` extension
+--------------------
+
+Text files with ``.gt`` extension should be organised as follows:
+
+- ``.gt`` files should provide at least parameter values for
+
+  #. Molecular weight, :math:`M_w`
+  #. Strain applied, :math:`\gamma`. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress.
+
+- 2 columns separated by **spaces** or **tabs** containing respectively:
+
+  #. time, :math:`t`,
+  #. shear stress, :math:`G(t)`,
+
+A correct ``.gt`` file looks like:
+
+.. code-block:: none
+  
+  ncontri=1;Mw=224;gamma=1;
+  t Gt
+  0.0E+0      1.28146E+10     
+  5.0E-6      1.13402E+10     
+  1.0E-5      7.57171E+9     
+  ...         ...
+
+-----
+Views
+-----
+
+:math:`\log(G(t))`
+-------------------------
+
+
+:math:`G(t)` 
+--------------
+
+
+Schwarzl Transformation
+-----------------------
+
+:math:`G'(\omega), G''(\omega)`
+
+i-Rheo Transformation
+---------------------
+
+:math:`G'(\omega), G''(\omega)`
+

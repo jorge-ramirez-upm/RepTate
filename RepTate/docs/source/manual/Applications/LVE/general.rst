@@ -7,7 +7,12 @@ LVE: General Description
 
 ..	toctree::
    	:maxdepth: 2
-	
+
+-------
+Purpose
+-------
+
+.. autoclass:: ApplicationLVE.ApplicationLVE()	
 	
 ----------
 Data Files

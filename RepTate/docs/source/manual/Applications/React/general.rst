@@ -10,6 +10,12 @@ React: General description
    	:maxdepth: 2
 	
 	
+-------
+Purpose
+-------
+
+.. autoclass:: ApplicationReact.ApplicationReact()	
+
 ----------
 Data Files
 ----------

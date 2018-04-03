@@ -7,6 +7,12 @@ MWD: General description
 
 ..	toctree::
    	:maxdepth: 2
+
+-------
+Purpose
+-------
+
+.. autoclass:: ApplicationMWD.ApplicationMWD()	
 	
 ----------
 Data Files

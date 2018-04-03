@@ -7,6 +7,12 @@ TTS: General description
 
 ..	toctree::
    	:maxdepth: 2
+
+-------
+Purpose
+-------
+
+.. autoclass:: ApplicationTTS.ApplicationTTS()	
 	
 ----------
 Data Files
