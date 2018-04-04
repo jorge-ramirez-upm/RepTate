@@ -2,6 +2,27 @@
 Version History
 ===============
 
+Release 0.9 - 20180327
+======================
+- New App: SANS for Neutran Scattering experiments
+- New App: Creep
+- New TTS Theory: WLF with temperature independent parameters
+- New LVE Theory: Branch-on-Branch linear rheology from polyconf file
+- New LVE and Gt Theories: dynamic dilution of star polymers in freq and time domain
+- New LVE and Gt Theories: Rouse model in freq and time domain
+- New NLVE Theory: Blend of Rolie-Poly equations for polydisperse melts
+- New NLVE Theory: Pom-pom model
+- New NLVE Theory: Giesekus constitutive equation
+- New NLVE Theory: Upper-Convected Maxwell constitutive equation
+- New Creep Theory: Retardation Modes
+- New SANS Theory: Debye function for neutron scattering of ideal polymer chains
+- New React Theory: generate polymer configuration with BoB
+- New View i-Rheo in Application Gt
+- Double click on theory parameter to change its attributes
+- Auto fit when dragging x/y-limits 
+- Select format of theory lines
+- New basic theories (exponential, polynomial, etc), available to all Apps
+
 Release 0.8 - 20180215
 ======================
 - New App: React
