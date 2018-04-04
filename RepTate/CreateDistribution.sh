@@ -25,6 +25,7 @@ mkdir dist/RepTate/data
 cp -r data/* dist/RepTate/data 
 mkdir dist/RepTate/theories
 cp theories/linlin.npz dist/RepTate/theories
+cp theories/*so dist/RepTate
 mkdir -p dist/RepTate/gui/Images
 cp gui/Images/logo.jpg dist/RepTate/gui/Images
 

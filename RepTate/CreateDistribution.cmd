@@ -22,6 +22,7 @@ mkdir dist\RepTate\data
 xcopy data dist\RepTate\data /E
 mkdir dist\RepTate\theories
 copy theories\linlin.npz dist\RepTate\theories
+copy theories\*win32.so dist\RepTate
 mkdir dist\RepTate\gui\Images
 copy gui\Images\logo.jpg dist\RepTate\gui\Images
 rem exit /b
