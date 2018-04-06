@@ -46,7 +46,6 @@ import numpy as np
 class ApplicationSANS(CmdBase):
     """Application to Analyze Data from SANS experiments
     
-    [description]
     """
     name = "SANS"
     description = "Small Angle Neutron Scattering Experiments"

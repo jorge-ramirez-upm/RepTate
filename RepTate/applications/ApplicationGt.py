@@ -47,9 +47,8 @@ import schwarzl_ctypes_helper as sch
 
 
 class ApplicationGt(CmdBase):
-    """Application to analyze the relaxation modulus
+    """Application to Analyze Stress Relaxation Data
     
-    [description]
     """
     name = "Gt"
     description = "Relaxation modulus"

@@ -44,7 +44,7 @@ import numpy as np
 
 
 class ApplicationTemplate(CmdBase):
-    """[summary]
+    """Application for ...
     
     [description]
     """

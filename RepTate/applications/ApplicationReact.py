@@ -47,9 +47,8 @@ import matplotlib.gridspec as gridspec
 
 
 class ApplicationReact(CmdBase):
-    """[summary]
+    """Application for Monte Carlo polymerisation
     
-    [description]
     """
     name = 'React'
     description = 'React Application'  #used in the command-line Reptate

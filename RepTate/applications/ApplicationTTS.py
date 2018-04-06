@@ -47,7 +47,6 @@ import numpy as np
 class ApplicationTTS(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
 
-    [description]
     """
     name = "TTS"
     description = "Linear Viscoelasticity"

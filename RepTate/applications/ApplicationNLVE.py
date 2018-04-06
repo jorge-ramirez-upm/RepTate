@@ -44,9 +44,8 @@ import numpy as np
 
 
 class ApplicationNLVE(CmdBase):
-    """Application to Analyze Start up of Non Linear flow
+    """Application to Analyze Start up of Nonlinear flow
     
-    [description]
     """
     name = "NLVE"
     description = "Non-Linear Flow"

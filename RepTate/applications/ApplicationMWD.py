@@ -44,9 +44,8 @@ import numpy as np
 
 
 class ApplicationMWD(CmdBase):
-    """Application to analyze Molecular Weight distributions
+    """Application to analyze Molecular Weight Distributions
     
-    [description]
     """
     name = "MWD"
     description = "Experimental Molecular weight distributions"

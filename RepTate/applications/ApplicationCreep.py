@@ -46,7 +46,6 @@ import numpy as np
 class ApplicationCreep(CmdBase):
     """Application to Analyze Data from Creep experiments
     
-    [description]
     """
     name = "Creep"
     description = "Creep Experiments"

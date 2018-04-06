@@ -11,7 +11,7 @@ All RepTate Theories
     ../Applications/NLVE/Theory/theory
     ../Applications/Gt/Theory/theory
     ../Applications/Creep/Theory/theory
-    ../Applications/SANS/theory
+    ../Applications/SANS/Theory/theory
     ../Applications/React/Theory/theory
     basic_theories
     

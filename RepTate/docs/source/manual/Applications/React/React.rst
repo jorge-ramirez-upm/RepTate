@@ -7,18 +7,10 @@
 	:align: bottom
 	
 ..	toctree::
-   	:maxdepth: 3
-	
-	general
-
-..	toctree::
    	:maxdepth: 2
-	
+
+	general	
 	Theory/theory
-
-..	toctree::
-   	:maxdepth: 3
-
 	Tutorial/tutorialGUIReact
 	Tutorial/tutorialCLReact
 	

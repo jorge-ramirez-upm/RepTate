@@ -46,7 +46,6 @@ import numpy as np
 class ApplicationLVE(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
     
-    [description]
     """
     name = "LVE"
     description = "Linear Viscoelasticity"

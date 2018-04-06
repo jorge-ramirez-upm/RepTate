@@ -27,13 +27,12 @@ Data Files
 
 Text files with ``.reac`` extension should be organised as follows:
 
-- Any parameters in the first line. ``.reac`` files are not expected
-  to provide any specific parameter values.
+- ``.reac`` files are not expected to provide any specific parameter values. 
 
 - 4 columns separated by **spaces** or **tabs** containing respectively:
 
   #. molar mass, :math:`M`,
-  #. weight associated, :math:`w(M)`,
+  #. weight associated, :math:`\dfrac{\text d w(\log M)}{\text d \log M}`,
   #. the `g`-factor, :math:`g(M)` 
   #. number of branch per 1000 carbon, :math:`\log_{10}(g(M))`.
 

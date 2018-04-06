@@ -36,7 +36,7 @@ Text files with ``.tts`` extension should be organised as follows:
   #. elastic modulus, :math:`G'`,
   #. loss modulus :math:`G''`.
 
-A correct ``.tts`` file looks like:
+Other columns will be ignored. A correct ``.tts`` file looks like:
 
 .. code-block:: none
   
