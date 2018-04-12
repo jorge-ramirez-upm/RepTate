@@ -753,10 +753,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 ds.theories[ds.current_theory].set_xy_limits_visible(False, False)
                 
         self.view_switch(selected_view_name) #view_switch of Application
+        self.set_view_tools(selected_view_name)
         self.update_Qplot()
         self.disconnect_curve_drag()
         if ds:
             ds.highlight_series()
+
+    def set_view_tools(self, view_name):
+        pass
 
     def dragEnterEvent(self, e):
         """[summary]
