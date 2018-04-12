@@ -144,6 +144,18 @@ class BaseApplicationGt:
             view_proc=self.viewiRheo,
             n=2,
             snames=["G',G''"])
+        self.views["i-Rheo1000 G',G''"] = View(
+            name="i-Rheo1000 G',G''",
+            description="G', G'' from i-Rheo transformation of G(t) Oversampling=1000",
+            x_label="$\omega$",
+            y_label="G',G''",
+            x_units="rad/s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewiRheo1000,
+            n=2,
+            snames=["G',G''"])
 
         #set multiviews
         self.multiviews = [
@@ -258,6 +270,46 @@ class BaseApplicationGt:
             
             y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * dt.data[ind1:-1, 0]) - np.cos(w * dt.data[ind1 + 1:, 0])) / w
 
+        return x, y, True
+
+
+    def viewiRheo1000(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+        """
+        OVER=1000
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        f = interpolate.interp1d(
+            dt.data[:, 0],
+            dt.data[:, 1],
+            kind='cubic',
+            assume_sorted=True,
+            fill_value='extrapolate')
+        g0 = f(0)
+        ind1 = np.argmax(dt.data[:, 0] > 0)
+        t1 = dt.data[ind1, 0]
+        g1 = dt.data[ind1, 1]
+        tinf = np.max(dt.data[:, 0])
+        wp = np.logspace(np.log10(1 / tinf), np.log10(1 / t1), dt.num_rows)
+        x[:, 0] = wp[:]
+        x[:, 1] = wp[:]
+
+        # Create oversampled data
+        xdata=np.zeros(1)
+        xdata[0]=dt.data[ind1, 0]
+        for i in range(ind1+1,len(dt.data[:,0])):
+            tmp = np.logspace(np.log10(dt.data[i-1,0]),np.log10(dt.data[i,0]),OVER+1)
+            xdata = np.append(xdata,tmp[1:])
+        ydata=f(xdata)
+
+        coeff = (ydata[1:] - ydata[:-1]) / (xdata[1:] - xdata[:-1])
+        for i, w in enumerate(wp):
+            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
+            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
         return x, y, True
 
 
