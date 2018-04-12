@@ -39,6 +39,9 @@ import os
 import sys
 import glob
 import argparse
+from logging import *
+basicConfig(level=INFO)
+ 
 # os.chdir(os.path.dirname(sys.argv[0])) # set cwd as *this* dir
 sys.path.append('core')
 sys.path.append('gui')
