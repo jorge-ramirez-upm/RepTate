@@ -22,16 +22,7 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -210,7 +201,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Reptate.ico</normaloff>:/Icons/Images/Reptate.ico</iconset>
+     <normaloff>:/Icons/Images/Reptate_logo_100.png</normaloff>:/Icons/Images/Reptate_logo_100.png</iconset>
    </property>
    <property name="text">
     <string> About Reptate</string>
@@ -264,7 +255,7 @@
   <action name="actionAbout_Qt">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/qt.ico</normaloff>:/Icons/Images/qt.ico</iconset>
+     <normaloff>:/Icons/Images/qt_logo_128.png</normaloff>:/Icons/Images/qt_logo_128.png</iconset>
    </property>
    <property name="text">
     <string>About Qt</string>
