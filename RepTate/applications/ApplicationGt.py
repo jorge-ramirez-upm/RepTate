@@ -43,6 +43,7 @@ from QApplicationWindow import QApplicationWindow
 import numpy as np
 from scipy import interpolate
 
+from PyQt5.QtWidgets import QSpinBox, QPushButton
 import schwarzl_ctypes_helper as sch
 
 
@@ -144,9 +145,10 @@ class BaseApplicationGt:
             view_proc=self.viewiRheo,
             n=2,
             snames=["G',G''"])
-        self.views["i-Rheo1000 G',G''"] = View(
-            name="i-Rheo1000 G',G''",
-            description="G', G'' from i-Rheo transformation of G(t) Oversampling=1000",
+        self.views["i-Rheo-Over G',G''"] = View(
+            name="i-Rheo-Over G',G''",
+            description=
+            "G', G'' from i-Rheo transformation of G(t) with Oversampling",
             x_label="$\omega$",
             y_label="G',G''",
             x_units="rad/s",
@@ -156,6 +158,9 @@ class BaseApplicationGt:
             view_proc=self.viewiRheo1000,
             n=2,
             snames=["G',G''"])
+        self.OVER = 100  # initial oversampling
+        self.MIN_OVER = 1  # min oversampling
+        self.MAX_OVER = 10000  # max oversampling
 
         #set multiviews
         self.multiviews = [
@@ -266,12 +271,16 @@ class BaseApplicationGt:
             dt.data[ind1 + 1:, 0] - dt.data[ind1:-1, 0])
         for i, w in enumerate(wp):
 
-            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(coeff, -np.sin(w * dt.data[ind1:-1, 0]) + np.sin(w * dt.data[ind1 + 1:, 0])) / w
-            
-            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * dt.data[ind1:-1, 0]) - np.cos(w * dt.data[ind1 + 1:, 0])) / w
+            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
+                coeff, -np.sin(w * dt.data[ind1:-1, 0]) +
+                np.sin(w * dt.data[ind1 + 1:, 0])) / w
+
+            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
+                coeff,
+                np.cos(w * dt.data[ind1:-1, 0]) -
+                np.cos(w * dt.data[ind1 + 1:, 0])) / w
 
         return x, y, True
-
 
     def viewiRheo1000(self, dt, file_parameters):
         """[summary]
@@ -280,7 +289,6 @@ class BaseApplicationGt:
         
         Arguments:
         """
-        OVER=1000
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         f = interpolate.interp1d(
@@ -299,17 +307,22 @@ class BaseApplicationGt:
         x[:, 1] = wp[:]
 
         # Create oversampled data
-        xdata=np.zeros(1)
-        xdata[0]=dt.data[ind1, 0]
-        for i in range(ind1+1,len(dt.data[:,0])):
-            tmp = np.logspace(np.log10(dt.data[i-1,0]),np.log10(dt.data[i,0]),OVER+1)
-            xdata = np.append(xdata,tmp[1:])
-        ydata=f(xdata)
+        xdata = np.zeros(1)
+        xdata[0] = dt.data[ind1, 0]
+        for i in range(ind1 + 1, len(dt.data[:, 0])):
+            tmp = np.logspace(
+                np.log10(dt.data[i - 1, 0]), np.log10(dt.data[i, 0]),
+                self.OVER + 1)
+            xdata = np.append(xdata, tmp[1:])
+        ydata = f(xdata)
 
         coeff = (ydata[1:] - ydata[:-1]) / (xdata[1:] - xdata[:-1])
         for i, w in enumerate(wp):
-            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
-            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
+            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
+                coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
+            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
+                coeff,
+                np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
         return x, y, True
 
 
@@ -329,6 +342,12 @@ class CLApplicationGt(BaseApplicationGt, Application):
         """
         super().__init__(name, parent)
 
+    def show_sb_oversampling(self):
+        pass
+
+    def hide_sb_oversampling(self):
+        pass
+
 
 class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
     """[summary]
@@ -345,3 +364,34 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
             - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
+        self.sb_oversampling = QSpinBox()
+        self.sb_oversampling.setRange(self.MIN_OVER, self.MAX_OVER)
+        self.sb_oversampling.setValue(self.OVER)
+        self.sb_oversampling.valueChanged.connect(self.change_oversampling)
+
+        self.pb = QPushButton("GO")
+        self.pb.clicked.connect(self.update_all_ds_plots)
+
+        self.viewLayout.insertWidget(2, self.sb_oversampling)
+        self.viewLayout.insertWidget(3, self.pb)
+        self.hide_sb_oversampling()
+
+    def change_oversampling(self, val):
+        self.OVER = val
+
+    def show_sb_oversampling(self):
+        self.sb_oversampling.show()
+        self.pb.show()
+
+    def hide_sb_oversampling(self):
+        self.sb_oversampling.hide()
+        self.pb.hide()
+
+    def set_view_tools(self, view_name):
+        if view_name == "i-Rheo-Over G',G''":
+            self.show_sb_oversampling()
+        else:
+            try:
+                self.hide_sb_oversampling()
+            except AttributeError:
+                pass

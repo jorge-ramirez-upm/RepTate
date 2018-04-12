@@ -207,6 +207,7 @@ class MultiView(QWidget):
                 else:
                     self.axarr[i].set_visible(False)
         self.canvas.draw()
+        self.parent_application.set_view_tools(view_name)
 
     def organizeHorizontal(self, nplots):
         gs = gridspec.GridSpec(1, self.nplots,left=self.LEFT,right=self.RIGHT,
