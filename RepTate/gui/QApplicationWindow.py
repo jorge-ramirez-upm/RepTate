@@ -935,11 +935,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             - [type] -- [description]
         """
         # file browser window  
-        options = QFileDialog.Options()
+        qfdlg = QFileDialog(self)
+        #options = QFileDialog.Options()
+        options = qfdlg.Options()
         #options |= QFileDialog.DontUseNativeDialog
         dir_start = "data/"
         dilogue_name = "Open"
-        selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
+        #selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
+        selected_files, _ = qfdlg.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
         return selected_files
 
     def showDataInspector(self, checked):
