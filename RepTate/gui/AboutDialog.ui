@@ -18,7 +18,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="About.qrc">
-    <normaloff>:/Images/Images/Reptate64.ico</normaloff>:/Images/Images/Reptate64.ico</iconset>
+    <normaloff>:/Images/Images/RepTate_logo_100.png</normaloff>:/Images/Images/RepTate_logo_100.png</iconset>
   </property>
   <property name="modal">
    <bool>true</bool>

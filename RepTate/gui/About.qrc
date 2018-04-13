@@ -1,7 +1,7 @@
 <RCC>
   <qresource prefix="/Images">
     <file>Images/logo.png</file>
+    <file>Images/RepTate_logo_100.png</file>
     <file>Images/alexei.png</file>
-    <file>Images/Reptate64.ico</file>
   </qresource>
 </RCC>
