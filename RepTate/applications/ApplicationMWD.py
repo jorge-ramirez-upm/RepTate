@@ -85,6 +85,8 @@ class BaseApplicationMWD:
             - parent {[type]} -- [description] (default: {None})
         """
         from TheoryDiscrMWD import TheoryDiscrMWD
+        from TheoryGEX import TheoryGEX
+        from TheoryLogNormal import TheoryLogNormal
 
         super().__init__(name, parent)
 
@@ -145,7 +147,8 @@ class BaseApplicationMWD:
 
         # THEORIES
         self.theories[TheoryDiscrMWD.thname] = TheoryDiscrMWD
-        #self.theories[TheoryMaxwellModesTime.thname]=TheoryMaxwellModesTime
+        self.theories[TheoryGEX.thname]=TheoryGEX
+        self.theories[TheoryLogNormal.thname]=TheoryLogNormal
         self.add_common_theories()
 
         #set the current view
