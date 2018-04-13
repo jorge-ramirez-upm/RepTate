@@ -1,13 +1,8 @@
 echo off
-rem CREATE CLEAN PYTHON ENVIRONMENT
-rem NEED MODULES matplotlib pyreadline pint seaborn tabulate pyqt5 pyinstaller packaging certifi
-
 rem CREATE GUI Version First
 rmdir /s /q build\RepTate
 rmdir /s /q dist\RepTate
-rem ADD -w FLAG TO MAKE A WINDOWS APPLICATION WITH NO TERMINAL
-rem pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
-pyinstaller -w -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTate.py
+pyinstaller -w -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements --hidden-import=scipy._lib.messagestream --hidden-import=pandas._libs.tslibs.timedeltas -p applications;core;theories;tools;gui RepTate.py
 mkdir dist\RepTate\gui
 copy gui\theorytab.ui dist\RepTate
 copy gui\DataSet.ui dist\RepTate
@@ -25,16 +20,16 @@ copy theories\linlin.npz dist\RepTate\theories
 copy theories\*win32.so dist\RepTate
 mkdir dist\RepTate\gui\Images
 copy gui\Images\logo.jpg dist\RepTate\gui\Images
-rem exit /b
-
+mkdir dist\RepTate\platforms
+copy dist\RepTate\PyQt5\Qt\plugins\platforms\* dist\RepTate\platforms 
+mkdir dist\RepTate\tests
+xcopy tests dist\RepTate\tests /E
 
 rem Then CREATE CL Version
 rmdir /s /q build\RepTateCL
 rmdir /s /q dist\RepTateCL
-pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements -p applications;core;theories;tools;gui RepTateCL.py
+pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements --hidden-import=scipy._lib.messagestream --hidden-import=pandas._libs.tslibs.timedeltas -p applications;core;theories;tools;gui RepTateCL.py
 copy dist\RepTateCL\RepTateCL.exe dist\RepTate
-mkdir dist\RepTate\tests
-xcopy tests dist\RepTate\tests /E
 
 rem Clean up build folders
 rmdir /s /q build\RepTate
