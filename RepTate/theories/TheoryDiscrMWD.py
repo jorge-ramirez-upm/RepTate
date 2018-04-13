@@ -518,7 +518,6 @@ class BaseTheoryDiscrMWD:
         phi = self.saved_th[:, 1]
         return m, phi
 
-
 class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
     """[summary]
     
@@ -602,11 +601,16 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         self.update_parameter_table()
 
     def Qhide_theory_extras(self, state):
-        """Uncheck the view_bins_button button. Called when curent theory is changed
+        """Uncheck the view_bins_button button and change button activation state.
+        Called when curent theory is changed
         
         [description]
         """
         self.view_bins_button.setChecked(state)
+        self.parent_dataset.actionMinimize_Error.setDisabled(state)
+        self.parent_dataset.actionShow_Limits.setDisabled(state)
+        self.parent_dataset.actionVertical_Limits.setDisabled(state)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(state)
 
     def handle_view_bins_button_triggered(self, checked):
         """[summary]
