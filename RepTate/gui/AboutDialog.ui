@@ -36,7 +36,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="About.qrc">:/Images/Images/logo.jpg</pixmap>
+    <pixmap resource="About.qrc">:/Images/Images/logo.png</pixmap>
    </property>
   </widget>
   <widget class="QPushButton" name="closeButton">
@@ -74,7 +74,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="About.qrc">:/Images/Images/alexei.jpg</pixmap>
+    <pixmap resource="About.qrc">:/Images/Images/alexei.png</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="label_6">

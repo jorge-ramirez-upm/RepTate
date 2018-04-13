@@ -53,7 +53,7 @@ class SplashScreen(QSplashScreen):
         """
         QSplashScreen.__init__(
             self,
-            QPixmap("gui/Images/logo.jpg"))
+            QPixmap("gui/Images/logo.png"))
         QApplication.flush()
 
     def showMessage(self, msg):

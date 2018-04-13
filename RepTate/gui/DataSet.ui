@@ -159,7 +159,7 @@
   <action name="actionNo_Limits">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
+     <normaloff>:/Images/Images/Line Chart.png</normaloff>:/Images/Images/Line Chart.png</iconset>
    </property>
    <property name="text">
     <string>No Limits</string>
@@ -174,7 +174,7 @@
    </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart Vertical Limits.ico</normaloff>:/Images/Images/Line Chart Vertical Limits.ico</iconset>
+     <normaloff>:/Images/Images/Line Chart Vertical Limits.png</normaloff>:/Images/Images/Line Chart Vertical Limits.png</iconset>
    </property>
    <property name="text">
     <string>xrange</string>
@@ -189,7 +189,7 @@
    </property>
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</normaloff>:/Images/Images/Line Chart Horizontal Limits.ico</iconset>
+     <normaloff>:/Images/Images/Line Chart Horizontal Limits.png</normaloff>:/Images/Images/Line Chart Horizontal Limits.png</iconset>
    </property>
    <property name="text">
     <string>yrange</string>
@@ -201,7 +201,7 @@
   <action name="actionBoth_Limits">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart Both Limits.ico</normaloff>:/Images/Images/Line Chart Both Limits.ico</iconset>
+     <normaloff>:/Images/Images/Line Chart Both Limits.png</normaloff>:/Images/Images/Line Chart Both Limits.png</iconset>
    </property>
    <property name="text">
     <string>Both Limits</string>
@@ -213,7 +213,7 @@
   <action name="actionShow_Limits">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/Line Chart.ico</normaloff>:/Images/Images/Line Chart.ico</iconset>
+     <normaloff>:/Images/Images/Line Chart.png</normaloff>:/Images/Images/Line Chart.png</iconset>
    </property>
    <property name="text">
     <string>Show Limits</string>

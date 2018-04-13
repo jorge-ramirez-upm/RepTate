@@ -305,7 +305,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             img = "Line Chart Horizontal Limits"
         else:
             img = "Line Chart"
-        self.actionShow_Limits.setIcon(QIcon(':/Images/Images/%s' % img))
+        self.actionShow_Limits.setIcon(QIcon(':/Images/Images/%s.png' % img))
 
     def set_no_limits(self, th_name):
         """Turn the x and yrange selectors off

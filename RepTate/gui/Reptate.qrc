@@ -118,10 +118,10 @@
         <file>Images/ImportTheory.ico</file>
         <file>Images/LeftRight.ico</file>
         <file>Images/Library.ico</file>
-        <file>Images/Line Chart Both Limits.ico</file>
-        <file>Images/Line Chart Horizontal Limits.ico</file>
-        <file>Images/Line Chart Vertical Limits.ico</file>
-        <file>Images/Line Chart.ico</file>
+        <file>Images/Line Chart Both Limits.png</file>
+        <file>Images/Line Chart Horizontal Limits.png</file>
+        <file>Images/Line Chart Vertical Limits.png</file>
+        <file>Images/Line Chart.png</file>
         <file>Images/Lines.ico</file>
         <file>Images/logo.jpg</file>
         <file>Images/LVE.ico</file>
@@ -142,7 +142,6 @@
         <file>Images/Remove.ico</file>
         <file>Images/Rept.ico</file>
         <file>Images/Reptate.bmp</file>
-        <file>Images/Reptate.ico</file>
         <file>Images/Reptate64.ico</file>
         <file>Images/Reptate128.bmp</file>
         <file>Images/Reptate128.png</file>
