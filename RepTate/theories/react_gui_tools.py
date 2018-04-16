@@ -503,7 +503,7 @@ class ParameterReactMix(QDialog):
                 ):  #select only React application
                 for ds in app.datasets.values():  #loop over datasets
                     for th in ds.theories.values():  #loop over theories
-                        if th.reactname != 'ReactMix' and th.simexists:  # exclude React Mix theories
+                        if th.reactname not in ['ReactMix', 'CreatePolyconf'] and th.simexists:  # exclude React Mix and CreatePolyconf theories
                             self.opened_react_theories.append(th)
 
 

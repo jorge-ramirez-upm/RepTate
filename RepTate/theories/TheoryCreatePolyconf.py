@@ -156,6 +156,7 @@ class BaseTheoryCreatePolyconf:
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
+        self.reactname = "CreatePolyconf"
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
         self.signal_param_dialog.connect(self.launch_param_dialog)
