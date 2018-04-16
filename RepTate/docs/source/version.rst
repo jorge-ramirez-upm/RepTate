@@ -2,6 +2,11 @@
 Version History
 ===============
 
+Release 0.9.1 - 20180416
+========================
+- New MWD Theories: Generalized Exponential (GEX) & LogNormal distributions
+- New Gt View: i-Rheo transformation with tunable oversampling
+
 Release 0.9 - 20180327
 ======================
 - New App: SANS for Neutran Scattering experiments
