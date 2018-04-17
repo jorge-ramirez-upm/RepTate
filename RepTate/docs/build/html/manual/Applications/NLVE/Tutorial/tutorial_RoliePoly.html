@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tutorial Rolie-Poly &#8212; RepTate 0.9.0 20180327 documentation</title>
+    <title>Tutorial Rolie-Poly &#8212; RepTate 0.9.1 20180416 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.9.0 20180327',
+        VERSION:     '0.9.1 20180416',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -27,7 +27,7 @@
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="NLVE Tutorial: Command Line" href="tutorialCLNLVE.html" />
+    <link rel="next" title="Tutorial Blend of Rolie-Poly" href="tutorial_Blend_RoliePoly.html" />
     <link rel="prev" title="NLVE Tutorial: Graphical User Interface" href="tutorialGUINLVE.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -45,12 +45,12 @@
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorialCLNLVE.html" title="NLVE Tutorial: Command Line"
+          <a href="tutorial_Blend_RoliePoly.html" title="Tutorial Blend of Rolie-Poly"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tutorialGUINLVE.html" title="NLVE Tutorial: Graphical User Interface"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.1 20180416 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li>
@@ -66,8 +66,8 @@
   <p class="topless"><a href="tutorialGUINLVE.html"
                         title="previous chapter">NLVE Tutorial: Graphical User Interface</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorialCLNLVE.html"
-                        title="next chapter">NLVE Tutorial: Command Line</a></p>
+  <p class="topless"><a href="tutorial_Blend_RoliePoly.html"
+                        title="next chapter">Tutorial Blend of Rolie-Poly</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -100,8 +100,11 @@
 <li><p class="first">Start RepTate and create a new NLVE Application <a class="reference internal" href="../../../../_images/NLVE.png"><img alt="logo" class="align-bottom" src="../../../../_images/NLVE.png" style="width: 20pt; height: 20pt;" /></a>:</p>
 <a class="reference internal image-reference" href="../../../../_images/new_NLVE.png"><img alt="New application" class="align-center" src="../../../../_images/new_NLVE.png" style="width: 400pt;" /></a>
 </li>
-<li><p class="first">Drag and drop shear (<cite>.shear</cite>) or uniaxial extension (<cite>.uext</cite>) data files, e.g. all the <cite>.uext</cite> files from the <cite>data/DOW/Non-Linear_Rheology/Start-up_extension/</cite> folder.</p>
-<p>The first column of the file should contain the time and the second column the viscosity (shear or tensile stress growth coefficient).</p>
+<li><p class="first">Drag and drop shear (<code class="docutils literal"><span class="pre">.shear</span></code>) or uniaxial extension (<code class="docutils literal"><span class="pre">.uext</span></code>) data files,
+e.g. all the <code class="docutils literal"><span class="pre">.uext</span></code> files from the folder
+<code class="docutils literal"><span class="pre">data/DOW/Non-Linear_Rheology/Start-up_extension/</span></code>.</p>
+<p>The first column of the file should contain the time and the second
+column the stress (shear, or tensile, stress growth function).</p>
 <a class="reference internal image-reference" href="../../../../_images/load_uext_data.png"><img alt="Load data" class="align-center" src="../../../../_images/load_uext_data.png" style="width: 400pt;" /></a>
 </li>
 <li><p class="first">Select the “RoliePoly” theory <a class="reference internal" href="../../../../_images/RP_theory.png"><img alt="th_select" class="align-bottom" src="../../../../_images/RP_theory.png" style="height: 15pt;" /></a> and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
@@ -117,7 +120,8 @@ You can:</p>
 minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
 </li>
 <li><p class="first">Alternatively, it is possible to copy the values from a file or spreadsheet
-and paste the values into the “Edit Modes” table.</p>
+from and external program and paste the values into the “Edit Modes” table.
+Note that you should adjust the number of modes before pasting the values.</p>
 </li>
 <li><p class="first">Obtain the Maxwell modes from a different RepTate application (LVE, TTS,
 G(t)).
@@ -126,10 +130,8 @@ G(t)).
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Create a new LVE Application <a class="reference internal" href="../../../../_images/LVE.png"><img alt="logoLVE" class="align-bottom" src="../../../../_images/LVE.png" style="width: 20pt; height: 20pt;" /></a> (see <span class="xref std std-ref">Tutorial LVE Application</span> for
-more details)
-and open the linear viscoelastic data file corresponding to the <strong>same sample</strong> at
-the <strong>same temperature</strong>.
+<li><p class="first">Create a new LVE Application <a class="reference internal" href="../../../../_images/LVE.png"><img alt="logoLVE" class="align-bottom" src="../../../../_images/LVE.png" style="width: 20pt; height: 20pt;" /></a> and open the linear viscoelastic data
+file corresponding to the <strong>same sample</strong> at the <strong>same temperature</strong>.
 Then create a new Maxwell theory <a class="reference internal" href="../../../../_images/select_Maxwell.png"><img alt="maxwell" class="align-bottom" src="../../../../_images/select_Maxwell.png" style="height: 15pt;" /></a> and minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>:</p>
 <a class="reference internal image-reference" href="../../../../_images/LVE_for_NLVE.png"><img alt="LVE for NLVE" class="align-center" src="../../../../_images/LVE_for_NLVE.png" style="width: 400pt;" /></a>
 </li>
@@ -147,12 +149,12 @@ prediction:</p>
 </li>
 <li><p class="first">The number of stretching modes is given by <a class="reference internal" href="../../../../_images/nstretch.png"><img alt="nstretch" class="align-bottom" src="../../../../_images/nstretch.png" style="height: 15pt;" /></a>. <span class="math">\(N_\text{stretch}=0\)</span>
 means that the non-stretching version of the Rolie-Poly model will be used for all
-modes.
+modes. See <a class="reference internal" href="../Theory/theory.html#roliepoly-equation-label"><span class="std std-ref">Rolie-Poly equation</span></a> for more details.
 So far, the calculations were done using “infinitely stretching chains” <a class="reference internal" href="../../../../_images/icons8-infinite.png"><img alt="no_fene" class="align-bottom" src="../../../../_images/icons8-infinite.png" style="height: 15pt;" /></a>.
 Click that button to use finite extensibility <a class="reference internal" href="../../../../_images/icons8-facebook-f.png"><img alt="fene" class="align-bottom" src="../../../../_images/icons8-facebook-f.png" style="height: 15pt;" /></a>. The maximum extensibility
-parameter <em>lmax</em> is now present in the parameter table.
+parameter <code class="docutils literal"><span class="pre">lmax</span></code> is now present in the parameter table.
 You can change its value and click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory
-predictions</p>
+predictions:</p>
 <blockquote>
 <div><a class="reference internal image-reference" href="../../../../_images/with_fene.png"><img alt="With fene" class="align-center" src="../../../../_images/with_fene.png" style="width: 400pt;" /></a>
 </div></blockquote>
@@ -176,12 +178,12 @@ predictions</p>
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorialCLNLVE.html" title="NLVE Tutorial: Command Line"
+          <a href="tutorial_Blend_RoliePoly.html" title="Tutorial Blend of Rolie-Poly"
              >next</a> |</li>
         <li class="right" >
           <a href="tutorialGUINLVE.html" title="NLVE Tutorial: Graphical User Interface"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.1 20180416 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li>
