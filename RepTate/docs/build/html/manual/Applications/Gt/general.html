@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>G(t): General description &#8212; RepTate 0.9.0 20180327 documentation</title>
+    <title>G(t): General description &#8212; RepTate 0.9.1 20180416 documentation</title>
     <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.9.0 20180327',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -33,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +41,7 @@
         <li class="right" >
           <a href="Gt.html" title="G(t): Stress Relaxation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.1 20180416 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="Gt.html" accesskey="U"> G(t): Stress Relaxation</a> &#187;</li> 
@@ -66,12 +57,12 @@
 <li><a class="reference internal" href="#">G(t): General description</a><ul>
 <li><a class="reference internal" href="#purpose">Purpose</a></li>
 <li><a class="reference internal" href="#data-files">Data Files</a><ul>
-<li><a class="reference internal" href="#gt-extension"><code class="docutils literal"><span class="pre">.gt</span></code> extension</a></li>
+<li><a class="reference internal" href="#gt-extension"><code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#views">Views</a><ul>
-<li><a class="reference internal" href="#id1"><span class="math">\(\log(G(t))\)</span></a></li>
-<li><a class="reference internal" href="#id2"><span class="math">\(G(t)\)</span></a></li>
+<li><a class="reference internal" href="#id1"><span class="math notranslate">\(\log(G(t))\)</span></a></li>
+<li><a class="reference internal" href="#id2"><span class="math notranslate">\(G(t)\)</span></a></li>
 <li><a class="reference internal" href="#schwarzl-transformation">Schwarzl Transformation</a></li>
 <li><a class="reference internal" href="#i-rheo-transformation">i-Rheo Transformation</a></li>
 </ul>
@@ -95,12 +86,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -118,12 +111,12 @@
 <ul class="simple">
 <li><a class="reference internal" href="#purpose" id="id3">Purpose</a></li>
 <li><a class="reference internal" href="#data-files" id="id4">Data Files</a><ul>
-<li><a class="reference internal" href="#gt-extension" id="id5"><code class="docutils literal"><span class="pre">.gt</span></code> extension</a></li>
+<li><a class="reference internal" href="#gt-extension" id="id5"><code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#views" id="id6">Views</a><ul>
-<li><a class="reference internal" href="#id1" id="id7"><span class="math">\(\log(G(t))\)</span></a></li>
-<li><a class="reference internal" href="#id2" id="id8"><span class="math">\(G(t)\)</span></a></li>
+<li><a class="reference internal" href="#id1" id="id7"><span class="math notranslate">\(\log(G(t))\)</span></a></li>
+<li><a class="reference internal" href="#id2" id="id8"><span class="math notranslate">\(G(t)\)</span></a></li>
 <li><a class="reference internal" href="#schwarzl-transformation" id="id9">Schwarzl Transformation</a></li>
 <li><a class="reference internal" href="#i-rheo-transformation" id="id10">i-Rheo Transformation</a></li>
 </ul>
@@ -144,27 +137,27 @@
 <div class="section" id="data-files">
 <h2><a class="toc-backref" href="#id4">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal"><span class="pre">;</span></code>).
+<li>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal notranslate"><span class="pre">;</span></code>).
 It may contain any number of parameters which will be read and saved as file-parameter in RepTate.</li>
 <li>Then the data columns should appear, separated by <strong>spaces</strong> or <strong>tabs</strong>.</li>
 </ul>
 <div class="section" id="gt-extension">
-<h3><a class="toc-backref" href="#id5"><code class="docutils literal"><span class="pre">.gt</span></code> extension</a><a class="headerlink" href="#gt-extension" title="Permalink to this headline">¶</a></h3>
-<p>Text files with <code class="docutils literal"><span class="pre">.gt</span></code> extension should be organised as follows:</p>
+<h3><a class="toc-backref" href="#id5"><code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension</a><a class="headerlink" href="#gt-extension" title="Permalink to this headline">¶</a></h3>
+<p>Text files with <code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension should be organised as follows:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">.gt</span></code> files should provide at least parameter values for<ol class="arabic">
-<li>Molecular weight, <span class="math">\(M_w\)</span></li>
-<li>Strain applied, <span class="math">\(\gamma\)</span>. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress.</li>
+<li><code class="docutils literal notranslate"><span class="pre">.gt</span></code> files should provide at least parameter values for<ol class="arabic">
+<li>Molecular weight, <span class="math notranslate">\(M_w\)</span></li>
+<li>Strain applied, <span class="math notranslate">\(\gamma\)</span>. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress.</li>
 </ol>
 </li>
 <li>2 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:<ol class="arabic">
-<li>time, <span class="math">\(t\)</span>,</li>
-<li>shear stress, <span class="math">\(G(t)\)</span>,</li>
+<li>time, <span class="math notranslate">\(t\)</span>,</li>
+<li>shear stress, <span class="math notranslate">\(G(t)\)</span>,</li>
 </ol>
 </li>
 </ul>
-<p>A correct <code class="docutils literal"><span class="pre">.gt</span></code> file looks like:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ncontri=1;Mw=224;gamma=1;
+<p>A correct <code class="docutils literal notranslate"><span class="pre">.gt</span></code> file looks like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncontri=1;Mw=224;gamma=1;
 t Gt
 0.0E+0      1.28146E+10
 5.0E-6      1.13402E+10
@@ -177,18 +170,18 @@ t Gt
 <div class="section" id="views">
 <h2><a class="toc-backref" href="#id6">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id1">
-<h3><a class="toc-backref" href="#id7"><span class="math">\(\log(G(t))\)</span></a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7"><span class="math notranslate">\(\log(G(t))\)</span></a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="id2">
-<h3><a class="toc-backref" href="#id8"><span class="math">\(G(t)\)</span></a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8"><span class="math notranslate">\(G(t)\)</span></a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="schwarzl-transformation">
 <h3><a class="toc-backref" href="#id9">Schwarzl Transformation</a><a class="headerlink" href="#schwarzl-transformation" title="Permalink to this headline">¶</a></h3>
-<p><span class="math">\(G'(\omega), G''(\omega)\)</span></p>
+<p><span class="math notranslate">\(G'(\omega), G''(\omega)\)</span></p>
 </div>
 <div class="section" id="i-rheo-transformation">
 <h3><a class="toc-backref" href="#id10">i-Rheo Transformation</a><a class="headerlink" href="#i-rheo-transformation" title="Permalink to this headline">¶</a></h3>
-<p><span class="math">\(G'(\omega), G''(\omega)\)</span></p>
+<p><span class="math notranslate">\(G'(\omega), G''(\omega)\)</span></p>
 </div>
 </div>
 </div>
@@ -214,7 +207,7 @@ t Gt
         <li class="right" >
           <a href="Gt.html" title="G(t): Stress Relaxation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.1 20180416 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="Gt.html" > G(t): Stress Relaxation</a> &#187;</li> 
@@ -222,7 +215,7 @@ t Gt
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

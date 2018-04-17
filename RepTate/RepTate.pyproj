@@ -93,6 +93,7 @@
     <Compile Include="theories\TheoryDiscrMWD.py" />
     <Compile Include="theories\TheoryDTDStars.py" />
     <Compile Include="theories\TheoryGEX.py" />
+    <Compile Include="theories\TheoryHavriliakNegamiModes.py" />
     <Compile Include="theories\TheoryLikhtmanMcLeish2002.py" />
     <Compile Include="theories\TheoryMaxwellModes.py">
       <SubType>Code</SubType>

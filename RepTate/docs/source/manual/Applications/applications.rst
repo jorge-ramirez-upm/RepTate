@@ -13,6 +13,7 @@ Applications
    Creep/Creep
    SANS/SANS
    React/React
+   Dielectric/Dielectric
    
 - Detailed description of all applications:
 	- Views and theories included

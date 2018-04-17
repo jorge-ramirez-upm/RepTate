@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Theories &#8212; RepTate 0.9.0 20180327 documentation</title>
+    <title>Theories &#8212; RepTate 0.9.1 20180416 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.0 20180327',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -33,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +41,7 @@
         <li class="right" >
           <a href="CodeApplications.html" title="Applications"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.1 20180416 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of Reptate</a> &#187;</li> 
       </ul>
@@ -89,12 +80,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -116,7 +109,7 @@
 <dl class="class">
 <dt id="TheoryBasic.BaseTheoryExponential">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">BaseTheoryExponential</code><span class="sig-paren">(</span><em>name='Exponential'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#BaseTheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.BaseTheoryExponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Fit an exponential decay to the data</p>
 <p>[description]</p>
 <dl class="method">
@@ -153,7 +146,7 @@
 <dl class="class">
 <dt id="TheoryBasic.BaseTheoryPolynomial">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">BaseTheoryPolynomial</code><span class="sig-paren">(</span><em>name='ThPolynomial'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#BaseTheoryPolynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.BaseTheoryPolynomial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="TheoryBasic.BaseTheoryPolynomial.destructor">
 <code class="descname">destructor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#BaseTheoryPolynomial.destructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.BaseTheoryPolynomial.destructor" title="Permalink to this definition">¶</a></dt>
@@ -168,7 +161,7 @@
 <dt id="TheoryBasic.BaseTheoryPolynomial.polynomial">
 <code class="descname">polynomial</code><span class="sig-paren">(</span><em>f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#BaseTheoryPolynomial.polynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.BaseTheoryPolynomial.polynomial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Actual polynomial function.</p>
-<div class="math">
+<div class="math notranslate">
 \[(a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2\]</div>
 <dl class="docutils">
 <dt>Keyword Arguments:</dt>
@@ -204,7 +197,7 @@
 <dl class="class">
 <dt id="TheoryBasic.BaseTheoryPowerLaw">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">BaseTheoryPowerLaw</code><span class="sig-paren">(</span><em>name='PowerLaw'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#BaseTheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.BaseTheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Fit a power law to the data</p>
 <p>[description]</p>
 <dl class="method">
@@ -241,7 +234,7 @@
 <dl class="class">
 <dt id="TheoryBasic.BaseTheoryTwoExponentials">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">BaseTheoryTwoExponentials</code><span class="sig-paren">(</span><em>name='TwoExponentials'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#BaseTheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.BaseTheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Fit 2 exponentials decay to the data</p>
 <p>[description]</p>
 <dl class="method">
@@ -278,7 +271,7 @@
 <dl class="class">
 <dt id="TheoryBasic.CLTheoryExponential">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">CLTheoryExponential</code><span class="sig-paren">(</span><em>name='ThExponential'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#CLTheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.CLTheoryExponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryExponential" title="TheoryBasic.BaseTheoryExponential"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryExponential</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryExponential" title="TheoryBasic.BaseTheoryExponential"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryExponential</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -286,7 +279,7 @@
 <dl class="class">
 <dt id="TheoryBasic.CLTheoryPolynomial">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">CLTheoryPolynomial</code><span class="sig-paren">(</span><em>name='ThPolynomial'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#CLTheoryPolynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.CLTheoryPolynomial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPolynomial" title="TheoryBasic.BaseTheoryPolynomial"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryPolynomial</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPolynomial" title="TheoryBasic.BaseTheoryPolynomial"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryPolynomial</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -294,7 +287,7 @@
 <dl class="class">
 <dt id="TheoryBasic.CLTheoryPowerLaw">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">CLTheoryPowerLaw</code><span class="sig-paren">(</span><em>name='ThPowerLaw'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#CLTheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.CLTheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPowerLaw" title="TheoryBasic.BaseTheoryPowerLaw"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryPowerLaw</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPowerLaw" title="TheoryBasic.BaseTheoryPowerLaw"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryPowerLaw</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -302,7 +295,7 @@
 <dl class="class">
 <dt id="TheoryBasic.CLTheoryTwoExponentials">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">CLTheoryTwoExponentials</code><span class="sig-paren">(</span><em>name='ThTwoExponentials'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#CLTheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.CLTheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryTwoExponentials" title="TheoryBasic.BaseTheoryTwoExponentials"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryTwoExponentials</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryTwoExponentials" title="TheoryBasic.BaseTheoryTwoExponentials"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryTwoExponentials</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -310,7 +303,7 @@
 <dl class="class">
 <dt id="TheoryBasic.GUITheoryExponential">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">GUITheoryExponential</code><span class="sig-paren">(</span><em>name='ThExponential'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#GUITheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.GUITheoryExponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryExponential" title="TheoryBasic.BaseTheoryExponential"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryExponential</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryExponential" title="TheoryBasic.BaseTheoryExponential"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryExponential</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -318,7 +311,7 @@
 <dl class="class">
 <dt id="TheoryBasic.GUITheoryPolynomial">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">GUITheoryPolynomial</code><span class="sig-paren">(</span><em>name='ThMaxwellFrequencyPolynomial'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#GUITheoryPolynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.GUITheoryPolynomial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPolynomial" title="TheoryBasic.BaseTheoryPolynomial"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryPolynomial</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPolynomial" title="TheoryBasic.BaseTheoryPolynomial"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryPolynomial</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -339,7 +332,7 @@
 <dl class="class">
 <dt id="TheoryBasic.GUITheoryPowerLaw">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">GUITheoryPowerLaw</code><span class="sig-paren">(</span><em>name='ThPowerLaw'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#GUITheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.GUITheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPowerLaw" title="TheoryBasic.BaseTheoryPowerLaw"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryPowerLaw</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryPowerLaw" title="TheoryBasic.BaseTheoryPowerLaw"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryPowerLaw</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -347,7 +340,7 @@
 <dl class="class">
 <dt id="TheoryBasic.GUITheoryTwoExponentials">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">GUITheoryTwoExponentials</code><span class="sig-paren">(</span><em>name='ThTwoExponentials'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#GUITheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.GUITheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryTwoExponentials" title="TheoryBasic.BaseTheoryTwoExponentials"><code class="xref py py-class docutils literal"><span class="pre">TheoryBasic.BaseTheoryTwoExponentials</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryBasic.BaseTheoryTwoExponentials" title="TheoryBasic.BaseTheoryTwoExponentials"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryBasic.BaseTheoryTwoExponentials</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -355,12 +348,12 @@
 <dl class="class">
 <dt id="TheoryBasic.TheoryExponential">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryExponential</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#TheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryExponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit a single exponential decay to the data</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[y(x) = a \exp(-x/T)\]</div>
 </dd>
 </dl>
@@ -368,8 +361,8 @@
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(a\)</span>: prefactor.</li>
-<li><span class="math">\(T\)</span>: exponential “time” constant.</li>
+<li><span class="math notranslate">\(a\)</span>: prefactor.</li>
+<li><span class="math notranslate">\(T\)</span>: exponential “time” constant.</li>
 </ul>
 </dd>
 </dl>
@@ -390,12 +383,12 @@
 <dl class="class">
 <dt id="TheoryBasic.TheoryPolynomial">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryPolynomial</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#TheoryPolynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryPolynomial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
-<p>Fit a polynomial of degree <span class="math">\(n\)</span> to the data</p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<p>Fit a polynomial of degree <span class="math notranslate">\(n\)</span> to the data</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[y(x) = \sum_{i=0}^n A_i x^i\]</div>
 </dd>
 </dl>
@@ -403,8 +396,8 @@
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(n\)</span>: degree of the polynomial function.</li>
-<li><span class="math">\(A_i\)</span>: polynomial coefficeints.</li>
+<li><span class="math notranslate">\(n\)</span>: degree of the polynomial function.</li>
+<li><span class="math notranslate">\(A_i\)</span>: polynomial coefficeints.</li>
 </ul>
 </dd>
 </dl>
@@ -425,12 +418,12 @@
 <dl class="class">
 <dt id="TheoryBasic.TheoryPowerLaw">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryPowerLaw</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#TheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit a power law to the data</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[y(x) = a x^b\]</div>
 </dd>
 </dl>
@@ -438,8 +431,8 @@
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(a\)</span>: prefactor.</li>
-<li><span class="math">\(b\)</span>: exponent.</li>
+<li><span class="math notranslate">\(a\)</span>: prefactor.</li>
+<li><span class="math notranslate">\(b\)</span>: exponent.</li>
 </ul>
 </dd>
 </dl>
@@ -460,12 +453,12 @@
 <dl class="class">
 <dt id="TheoryBasic.TheoryTwoExponentials">
 <em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryTwoExponentials</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryBasic.html#TheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit <strong>two</strong> single exponential decay to the data</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[y(x) = a_1 \exp(x/T_1) + a_2 \exp(-x/T_2)\]</div>
 </dd>
 </dl>
@@ -473,8 +466,8 @@
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(a_1\)</span>, <span class="math">\(a_2\)</span>: prefactors.</li>
-<li><span class="math">\(T_1\)</span>, <span class="math">\(T_2\)</span>: exponential “time” constants.</li>
+<li><span class="math notranslate">\(a_1\)</span>, <span class="math notranslate">\(a_2\)</span>: prefactors.</li>
+<li><span class="math notranslate">\(T_1\)</span>, <span class="math notranslate">\(T_2\)</span>: exponential “time” constants.</li>
 </ul>
 </dd>
 </dl>
@@ -500,7 +493,7 @@
 <dl class="class">
 <dt id="TheoryDiscrMWD.BaseTheoryDiscrMWD">
 <em class="property">class </em><code class="descclassname">TheoryDiscrMWD.</code><code class="descname">BaseTheoryDiscrMWD</code><span class="sig-paren">(</span><em>name='ThDiscrMWD'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryDiscrMWD.html#BaseTheoryDiscrMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDiscrMWD.BaseTheoryDiscrMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -639,7 +632,7 @@
 <dl class="class">
 <dt id="TheoryDiscrMWD.CLTheoryDiscrMWD">
 <em class="property">class </em><code class="descclassname">TheoryDiscrMWD.</code><code class="descname">CLTheoryDiscrMWD</code><span class="sig-paren">(</span><em>name='MWDiscr'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryDiscrMWD.html#CLTheoryDiscrMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDiscrMWD.CLTheoryDiscrMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryDiscrMWD.BaseTheoryDiscrMWD" title="TheoryDiscrMWD.BaseTheoryDiscrMWD"><code class="xref py py-class docutils literal"><span class="pre">TheoryDiscrMWD.BaseTheoryDiscrMWD</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryDiscrMWD.BaseTheoryDiscrMWD" title="TheoryDiscrMWD.BaseTheoryDiscrMWD"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryDiscrMWD.BaseTheoryDiscrMWD</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -647,13 +640,14 @@
 <dl class="class">
 <dt id="TheoryDiscrMWD.GUITheoryDiscrMWD">
 <em class="property">class </em><code class="descclassname">TheoryDiscrMWD.</code><code class="descname">GUITheoryDiscrMWD</code><span class="sig-paren">(</span><em>name='MWDiscr'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryDiscrMWD.html#GUITheoryDiscrMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDiscrMWD.GUITheoryDiscrMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryDiscrMWD.BaseTheoryDiscrMWD" title="TheoryDiscrMWD.BaseTheoryDiscrMWD"><code class="xref py py-class docutils literal"><span class="pre">TheoryDiscrMWD.BaseTheoryDiscrMWD</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryDiscrMWD.BaseTheoryDiscrMWD" title="TheoryDiscrMWD.BaseTheoryDiscrMWD"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryDiscrMWD.BaseTheoryDiscrMWD</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
 <dt id="TheoryDiscrMWD.GUITheoryDiscrMWD.Qhide_theory_extras">
 <code class="descname">Qhide_theory_extras</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryDiscrMWD.html#GUITheoryDiscrMWD.Qhide_theory_extras"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDiscrMWD.GUITheoryDiscrMWD.Qhide_theory_extras" title="Permalink to this definition">¶</a></dt>
-<dd><p>Uncheck the view_bins_button button. Called when curent theory is changed</p>
+<dd><p>Uncheck the view_bins_button button and change button activation state.
+Called when curent theory is changed</p>
 <p>[description]</p>
 </dd></dl>
 
@@ -686,7 +680,7 @@
 <dl class="class">
 <dt id="TheoryDiscrMWD.TheoryDiscrMWD">
 <em class="property">class </em><code class="descclassname">TheoryDiscrMWD.</code><code class="descname">TheoryDiscrMWD</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryDiscrMWD.html#TheoryDiscrMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDiscrMWD.TheoryDiscrMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Discretize a Molecular Weight Distribution</p>
 <p>[description]</p>
 <dl class="attribute">
@@ -715,7 +709,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002">
 <em class="property">class </em><code class="descclassname">TheoryLikhtmanMcLeish2002.</code><code class="descname">BaseTheoryLikhtmanMcLeish2002</code><span class="sig-paren">(</span><em>name='ThLikhtmanMcLeish2002'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryLikhtmanMcLeish2002.html#BaseTheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -747,7 +741,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryLikhtmanMcLeish2002.CLTheoryLikhtmanMcLeish2002">
 <em class="property">class </em><code class="descclassname">TheoryLikhtmanMcLeish2002.</code><code class="descname">CLTheoryLikhtmanMcLeish2002</code><span class="sig-paren">(</span><em>name='ThLikhtmanMcLeish2002'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryLikhtmanMcLeish2002.html#CLTheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryLikhtmanMcLeish2002.CLTheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002" title="TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002"><code class="xref py py-class docutils literal"><span class="pre">TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002" title="TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -755,7 +749,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002">
 <em class="property">class </em><code class="descclassname">TheoryLikhtmanMcLeish2002.</code><code class="descname">GUITheoryLikhtmanMcLeish2002</code><span class="sig-paren">(</span><em>name='ThLikhtmanMcLeish2002'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryLikhtmanMcLeish2002.html#GUITheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002" title="TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002"><code class="xref py py-class docutils literal"><span class="pre">TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002" title="TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -763,7 +757,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002">
 <em class="property">class </em><code class="descclassname">TheoryLikhtmanMcLeish2002.</code><code class="descname">TheoryLikhtmanMcLeish2002</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryLikhtmanMcLeish2002.html#TheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers</p>
 <p>[description]</p>
 <dl class="attribute">
@@ -791,7 +785,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">BaseTheoryMaxwellModesFrequency</code><span class="sig-paren">(</span><em>name='ThMaxwellFrequency'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#BaseTheoryMaxwellModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <dl class="method">
 <dt id="TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.MaxwellModesFrequency">
@@ -908,7 +902,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryMaxwellModes.BaseTheoryMaxwellModesTime">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">BaseTheoryMaxwellModesTime</code><span class="sig-paren">(</span><em>name='ThMaxwellTime'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#BaseTheoryMaxwellModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1026,7 +1020,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryMaxwellModes.CLTheoryMaxwellModesFrequency">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">CLTheoryMaxwellModesFrequency</code><span class="sig-paren">(</span><em>name='ThMaxwellFrequency'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#CLTheoryMaxwellModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.CLTheoryMaxwellModesFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency" title="TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency"><code class="xref py py-class docutils literal"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency" title="TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1034,7 +1028,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryMaxwellModes.CLTheoryMaxwellModesTime">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">CLTheoryMaxwellModesTime</code><span class="sig-paren">(</span><em>name='ThMaxwellTime'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#CLTheoryMaxwellModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.CLTheoryMaxwellModesTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesTime" title="TheoryMaxwellModes.BaseTheoryMaxwellModesTime"><code class="xref py py-class docutils literal"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesTime</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesTime" title="TheoryMaxwellModes.BaseTheoryMaxwellModesTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesTime</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1042,7 +1036,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryMaxwellModes.GUITheoryMaxwellModesFrequency">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">GUITheoryMaxwellModesFrequency</code><span class="sig-paren">(</span><em>name='ThMaxwellFrequency'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#GUITheoryMaxwellModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency" title="TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency"><code class="xref py py-class docutils literal"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency" title="TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1078,7 +1072,7 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryMaxwellModes.GUITheoryMaxwellModesTime">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">GUITheoryMaxwellModesTime</code><span class="sig-paren">(</span><em>name='ThMaxwellTime'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#GUITheoryMaxwellModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.GUITheoryMaxwellModesTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesTime" title="TheoryMaxwellModes.BaseTheoryMaxwellModesTime"><code class="xref py py-class docutils literal"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesTime</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryMaxwellModes.BaseTheoryMaxwellModesTime" title="TheoryMaxwellModes.BaseTheoryMaxwellModesTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryMaxwellModes.BaseTheoryMaxwellModesTime</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1113,12 +1107,12 @@ polymers.</p>
 <dl class="class">
 <dt id="TheoryMaxwellModes.TheoryMaxwellModesFrequency">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">TheoryMaxwellModesFrequency</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#TheoryMaxwellModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.TheoryMaxwellModesFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit a generalized Maxwell model to a frequency dependent relaxation function.</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[\begin{split}\begin{eqnarray}
 G'(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} G_i \frac{(\omega\tau_i)^2}{1+(\omega\tau_i)^2} \\
 G''(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} G_i \frac{\omega\tau_i}{1+(\omega\tau_i)^2}
@@ -1129,10 +1123,10 @@ G''(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} G_i \frac{\omega\tau_i}{1+(\omega
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
-<li>logwmin = <span class="math">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
-<li>logwmax = <span class="math">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
-<li>logGi = <span class="math">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math">\(i\)</span>.</li>
+<li><span class="math notranslate">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math notranslate">\(\omega_{min}\)</span> and <span class="math notranslate">\(\omega_{max}\)</span>.</li>
+<li>logwmin = <span class="math notranslate">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
+<li>logwmax = <span class="math notranslate">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
+<li>logGi = <span class="math notranslate">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math notranslate">\(i\)</span>.</li>
 </ul>
 </dd>
 </dl>
@@ -1153,12 +1147,12 @@ G''(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} G_i \frac{\omega\tau_i}{1+(\omega
 <dl class="class">
 <dt id="TheoryMaxwellModes.TheoryMaxwellModesTime">
 <em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">TheoryMaxwellModesTime</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryMaxwellModes.html#TheoryMaxwellModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.TheoryMaxwellModesTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit a generalized Maxwell model to a time dependent relaxation function.</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[\begin{eqnarray}
 G(t) &amp; = &amp; \sum_{i=1}^{n_{modes}} G_i \exp (-t/\tau_i)
 \end{eqnarray}\]</div>
@@ -1168,10 +1162,10 @@ G(t) &amp; = &amp; \sum_{i=1}^{n_{modes}} G_i \exp (-t/\tau_i)
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
-<li>logtmin = <span class="math">\(\log(t_{min})\)</span>: decimal logarithm of the minimum time.</li>
-<li>logtmax = <span class="math">\(\log(t_{max})\)</span>: decimal logarithm of the maximum time.</li>
-<li>logGi = <span class="math">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math">\(i\)</span>.</li>
+<li><span class="math notranslate">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math notranslate">\(\omega_{min}\)</span> and <span class="math notranslate">\(\omega_{max}\)</span>.</li>
+<li>logtmin = <span class="math notranslate">\(\log(t_{min})\)</span>: decimal logarithm of the minimum time.</li>
+<li>logtmax = <span class="math notranslate">\(\log(t_{max})\)</span>: decimal logarithm of the maximum time.</li>
+<li>logGi = <span class="math notranslate">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math notranslate">\(i\)</span>.</li>
 </ul>
 </dd>
 </dl>
@@ -1202,7 +1196,7 @@ G(t) &amp; = &amp; \sum_{i=1}^{n_{modes}} G_i \exp (-t/\tau_i)
 <dl class="class">
 <dt id="TheoryRoliePoly.BaseTheoryRoliePoly">
 <em class="property">class </em><code class="descclassname">TheoryRoliePoly.</code><code class="descname">BaseTheoryRoliePoly</code><span class="sig-paren">(</span><em>name='ThRoliePoly'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#BaseTheoryRoliePoly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.BaseTheoryRoliePoly" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1388,7 +1382,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRoliePoly.CLTheoryRoliePoly">
 <em class="property">class </em><code class="descclassname">TheoryRoliePoly.</code><code class="descname">CLTheoryRoliePoly</code><span class="sig-paren">(</span><em>name='ThRoliePoly'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#CLTheoryRoliePoly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.CLTheoryRoliePoly" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryRoliePoly.BaseTheoryRoliePoly" title="TheoryRoliePoly.BaseTheoryRoliePoly"><code class="xref py py-class docutils literal"><span class="pre">TheoryRoliePoly.BaseTheoryRoliePoly</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryRoliePoly.BaseTheoryRoliePoly" title="TheoryRoliePoly.BaseTheoryRoliePoly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryRoliePoly.BaseTheoryRoliePoly</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1396,7 +1390,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRoliePoly.EditModesDialog">
 <em class="property">class </em><code class="descclassname">TheoryRoliePoly.</code><code class="descname">EditModesDialog</code><span class="sig-paren">(</span><em>parent=None</em>, <em>times=None</em>, <em>G=None</em>, <em>MAX_MODES=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#EditModesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.EditModesDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 <dl class="method">
 <dt id="TheoryRoliePoly.EditModesDialog.handle_spinboxValueChanged">
 <code class="descname">handle_spinboxValueChanged</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#EditModesDialog.handle_spinboxValueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.EditModesDialog.handle_spinboxValueChanged" title="Permalink to this definition">¶</a></dt>
@@ -1407,7 +1401,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRoliePoly.FeneMode">
 <em class="property">class </em><code class="descclassname">TheoryRoliePoly.</code><code class="descname">FeneMode</code><a class="reference internal" href="../_modules/TheoryRoliePoly.html#FeneMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.FeneMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
 <p>Defines the finite extensibility function</p>
 <dl class="docutils">
 <dt>Parameters can be:</dt>
@@ -1432,7 +1426,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRoliePoly.FlowMode">
 <em class="property">class </em><code class="descclassname">TheoryRoliePoly.</code><code class="descname">FlowMode</code><a class="reference internal" href="../_modules/TheoryRoliePoly.html#FlowMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.FlowMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
 <p>Defines the flow geometry used</p>
 <dl class="docutils">
 <dt>Parameters can be:</dt>
@@ -1457,7 +1451,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRoliePoly.GUITheoryRoliePoly">
 <em class="property">class </em><code class="descclassname">TheoryRoliePoly.</code><code class="descname">GUITheoryRoliePoly</code><span class="sig-paren">(</span><em>name='ThRoliePoly'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#GUITheoryRoliePoly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.GUITheoryRoliePoly" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryRoliePoly.BaseTheoryRoliePoly" title="TheoryRoliePoly.BaseTheoryRoliePoly"><code class="xref py py-class docutils literal"><span class="pre">TheoryRoliePoly.BaseTheoryRoliePoly</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryRoliePoly.BaseTheoryRoliePoly" title="TheoryRoliePoly.BaseTheoryRoliePoly"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryRoliePoly.BaseTheoryRoliePoly</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1519,7 +1513,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRoliePoly.TheoryRoliePoly">
 <em class="property">class </em><code class="descclassname">TheoryRoliePoly.</code><code class="descname">TheoryRoliePoly</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#TheoryRoliePoly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.TheoryRoliePoly" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Rolie-Poly</p>
 <p>[description]</p>
 <dl class="attribute">
@@ -1547,7 +1541,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRouse.BaseTheoryRouseFrequency">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">BaseTheoryRouseFrequency</code><span class="sig-paren">(</span><em>name='ThRouseFrequency'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#BaseTheoryRouseFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.BaseTheoryRouseFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1621,7 +1615,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRouse.BaseTheoryRouseTime">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">BaseTheoryRouseTime</code><span class="sig-paren">(</span><em>name='ThRouseTime'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#BaseTheoryRouseTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.BaseTheoryRouseTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1688,7 +1682,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRouse.CLTheoryRouseFrequency">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">CLTheoryRouseFrequency</code><span class="sig-paren">(</span><em>name='ThRouseFrequency'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#CLTheoryRouseFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.CLTheoryRouseFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseFrequency" title="TheoryRouse.BaseTheoryRouseFrequency"><code class="xref py py-class docutils literal"><span class="pre">TheoryRouse.BaseTheoryRouseFrequency</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseFrequency" title="TheoryRouse.BaseTheoryRouseFrequency"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryRouse.BaseTheoryRouseFrequency</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1696,7 +1690,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRouse.CLTheoryRouseTime">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">CLTheoryRouseTime</code><span class="sig-paren">(</span><em>name='ThRouseTime'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#CLTheoryRouseTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.CLTheoryRouseTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseTime" title="TheoryRouse.BaseTheoryRouseTime"><code class="xref py py-class docutils literal"><span class="pre">TheoryRouse.BaseTheoryRouseTime</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseTime" title="TheoryRouse.BaseTheoryRouseTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryRouse.BaseTheoryRouseTime</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1704,7 +1698,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRouse.GUITheoryRouseFrequency">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">GUITheoryRouseFrequency</code><span class="sig-paren">(</span><em>name='ThRouseFrequency'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#GUITheoryRouseFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.GUITheoryRouseFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseFrequency" title="TheoryRouse.BaseTheoryRouseFrequency"><code class="xref py py-class docutils literal"><span class="pre">TheoryRouse.BaseTheoryRouseFrequency</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseFrequency" title="TheoryRouse.BaseTheoryRouseFrequency"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryRouse.BaseTheoryRouseFrequency</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1712,7 +1706,7 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRouse.GUITheoryRouseTime">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">GUITheoryRouseTime</code><span class="sig-paren">(</span><em>name='ThRouseTime'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#GUITheoryRouseTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.GUITheoryRouseTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseTime" title="TheoryRouse.BaseTheoryRouseTime"><code class="xref py py-class docutils literal"><span class="pre">TheoryRouse.BaseTheoryRouseTime</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryRouse.BaseTheoryRouseTime" title="TheoryRouse.BaseTheoryRouseTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryRouse.BaseTheoryRouseTime</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1720,13 +1714,13 @@ with stretching and finite extensibility if selecter</p>
 <dl class="class">
 <dt id="TheoryRouse.TheoryRouseFrequency">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">TheoryRouseFrequency</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#TheoryRouseFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.TheoryRouseFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit Rouse modes to a frequency dependent relaxation function</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math">\(N\)</span>):</p>
-<div class="last math">
+<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math notranslate">\(N\)</span>):</p>
+<div class="last math notranslate">
 \[\begin{split}G'(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{(\omega\tau_p)^2} {1 +  (\omega\tau_p)^2}\\
 G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omega\tau_p)^2}\\
 \tau_p &amp;= \dfrac{N^2 \tau_0 }{ 2 p^2}\end{split}\]</div>
@@ -1736,18 +1730,18 @@ G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omeg
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first simple">
-<li><span class="math">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
-<li><span class="math">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
-<li><span class="math">\(M_0\)</span>: molar mass of an elementary segment</li>
+<li><span class="math notranslate">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
+<li><span class="math notranslate">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
+<li><span class="math notranslate">\(M_0\)</span>: molar mass of an elementary segment</li>
 </ul>
 <dl class="last docutils">
 <dt>where</dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(c\)</span>: number of segments per unit volume</li>
-<li><span class="math">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
-<li><span class="math">\(T\)</span>: temperature</li>
-<li><span class="math">\(N=M_w/M_0\)</span>: number of segments par chain</li>
-<li><span class="math">\(M_w\)</span>: weight-average molecular mass</li>
+<li><span class="math notranslate">\(c\)</span>: number of segments per unit volume</li>
+<li><span class="math notranslate">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
+<li><span class="math notranslate">\(T\)</span>: temperature</li>
+<li><span class="math notranslate">\(N=M_w/M_0\)</span>: number of segments par chain</li>
+<li><span class="math notranslate">\(M_w\)</span>: weight-average molecular mass</li>
 </ul>
 </dd>
 </dl>
@@ -1770,13 +1764,13 @@ G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omeg
 <dl class="class">
 <dt id="TheoryRouse.TheoryRouseTime">
 <em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">TheoryRouseTime</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRouse.html#TheoryRouseTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.TheoryRouseTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Fit Rouse modes to a time dependent relaxation function</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math">\(N\)</span>):</p>
-<div class="last math">
+<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math notranslate">\(N\)</span>):</p>
+<div class="last math notranslate">
 \[G(t) = G_0 \dfrac 1 N \sum_{p=1}^N \exp\left(\dfrac{-2p^2t}{N^2\tau_0}\right)\]</div>
 </dd>
 </dl>
@@ -1784,18 +1778,18 @@ G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omeg
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first simple">
-<li><span class="math">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
-<li><span class="math">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
-<li><span class="math">\(M_0\)</span>: molar mass of an elementary segment</li>
+<li><span class="math notranslate">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
+<li><span class="math notranslate">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
+<li><span class="math notranslate">\(M_0\)</span>: molar mass of an elementary segment</li>
 </ul>
 <dl class="last docutils">
 <dt>where</dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(c\)</span>: number of segments per unit volume</li>
-<li><span class="math">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
-<li><span class="math">\(T\)</span>: temperature</li>
-<li><span class="math">\(N=M_w/M_0\)</span>: number of segments par chain</li>
-<li><span class="math">\(M_w\)</span>: weight-average molecular mass</li>
+<li><span class="math notranslate">\(c\)</span>: number of segments per unit volume</li>
+<li><span class="math notranslate">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
+<li><span class="math notranslate">\(T\)</span>: temperature</li>
+<li><span class="math notranslate">\(N=M_w/M_0\)</span>: number of segments par chain</li>
+<li><span class="math notranslate">\(M_w\)</span>: weight-average molecular mass</li>
 </ul>
 </dd>
 </dl>
@@ -1828,7 +1822,7 @@ G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omeg
 <dl class="class">
 <dt id="TheoryTTS.BaseTheoryWLFShift">
 <em class="property">class </em><code class="descclassname">TheoryTTS.</code><code class="descname">BaseTheoryWLFShift</code><span class="sig-paren">(</span><em>name='ThWLFShift'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryTTS.html#BaseTheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.BaseTheoryWLFShift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1966,7 +1960,7 @@ Total error is the mean square of the residual, averaged over all points conside
 <dl class="class">
 <dt id="TheoryTTS.CLTheoryWLFShift">
 <em class="property">class </em><code class="descclassname">TheoryTTS.</code><code class="descname">CLTheoryWLFShift</code><span class="sig-paren">(</span><em>name='ThWLFShift'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryTTS.html#CLTheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.CLTheoryWLFShift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryTTS.BaseTheoryWLFShift" title="TheoryTTS.BaseTheoryWLFShift"><code class="xref py py-class docutils literal"><span class="pre">TheoryTTS.BaseTheoryWLFShift</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryTTS.BaseTheoryWLFShift" title="TheoryTTS.BaseTheoryWLFShift"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryTTS.BaseTheoryWLFShift</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -1974,7 +1968,7 @@ Total error is the mean square of the residual, averaged over all points conside
 <dl class="class">
 <dt id="TheoryTTS.GUITheoryWLFShift">
 <em class="property">class </em><code class="descclassname">TheoryTTS.</code><code class="descname">GUITheoryWLFShift</code><span class="sig-paren">(</span><em>name='ThWLFShift'</em>, <em>parent_dataset=None</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryTTS.html#GUITheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.GUITheoryWLFShift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#TheoryTTS.BaseTheoryWLFShift" title="TheoryTTS.BaseTheoryWLFShift"><code class="xref py py-class docutils literal"><span class="pre">TheoryTTS.BaseTheoryWLFShift</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal"><span class="pre">QTheory.QTheory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#TheoryTTS.BaseTheoryWLFShift" title="TheoryTTS.BaseTheoryWLFShift"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryTTS.BaseTheoryWLFShift</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QTheory.QTheory" title="QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">QTheory.QTheory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1997,12 +1991,12 @@ Total error is the mean square of the residual, averaged over all points conside
 <dl class="class">
 <dt id="TheoryTTS.TheoryWLFShift">
 <em class="property">class </em><code class="descclassname">TheoryTTS.</code><code class="descname">TheoryWLFShift</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryTTS.html#TheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.TheoryWLFShift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.</p>
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[\begin{split}\begin{eqnarray}
 \omega(T_0) &amp;= &amp; a_T \omega(T) \\
 G(T_0) &amp;= &amp;G(T)/b_T \\
@@ -2016,12 +2010,12 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(C_1\)</span>: WLF material parameter.</li>
-<li><span class="math">\(C_2\)</span>: Corresponds to <span class="math">\(C_2-T_0\)</span>, <span class="math">\(C_2\)</span> being the standard WLF material parameter.</li>
-<li><span class="math">\(\rho_0\)</span>: Density of the polymer at 0 degrees C.</li>
-<li><span class="math">\(C_3\)</span>: Material parameter related to the T dependence of the density.</li>
-<li><span class="math">\(T_0\)</span>: Temperature to which the experimental data will be shifted.</li>
-<li><span class="math">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math">\(T_g\)</span> with <span class="math">\(M_w\)</span>.</li>
+<li><span class="math notranslate">\(C_1\)</span>: WLF material parameter.</li>
+<li><span class="math notranslate">\(C_2\)</span>: Corresponds to <span class="math notranslate">\(C_2-T_0\)</span>, <span class="math notranslate">\(C_2\)</span> being the standard WLF material parameter.</li>
+<li><span class="math notranslate">\(\rho_0\)</span>: Density of the polymer at 0 degrees C.</li>
+<li><span class="math notranslate">\(C_3\)</span>: Material parameter related to the T dependence of the density.</li>
+<li><span class="math notranslate">\(T_0\)</span>: Temperature to which the experimental data will be shifted.</li>
+<li><span class="math notranslate">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math notranslate">\(T_g\)</span> with <span class="math notranslate">\(M_w\)</span>.</li>
 <li>dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).</li>
 </ul>
 </dd>
@@ -2069,14 +2063,14 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
         <li class="right" >
           <a href="CodeApplications.html" title="Applications"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.0 20180327 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.1 20180416 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of Reptate</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>
