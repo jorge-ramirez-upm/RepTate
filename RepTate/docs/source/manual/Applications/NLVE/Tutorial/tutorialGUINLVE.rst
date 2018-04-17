@@ -6,3 +6,4 @@ NLVE Tutorial: Graphical User Interface
    :maxdepth: 2
 
    tutorial_RoliePoly
+   tutorial_Blend_RoliePoly
