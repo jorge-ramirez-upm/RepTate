@@ -358,7 +358,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         
         [description]
         """
-        QMessageBox.warning(self, "new Dielectric Spectroscopy application", "Coming soon...")
+        app_name = "Dielectric"
+        return self.Qopen_app(app_name,
+                              ':/Icons/Images/new_icons/Dipoles.png')
 
     def new_DynamicStructureFactor_window(self):
         """Open a new Dynamic Structure Factor application window

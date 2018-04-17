@@ -2,15 +2,12 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
-  <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>837</width>
-    <height>525</height>
+    <width>692</width>
+    <height>469</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,125 +20,139 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>-10</x>
-     <y>0</y>
-     <width>331</width>
-     <height>421</height>
-    </rect>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <property name="spacing">
+    <number>0</number>
    </property>
-   <property name="text">
-    <string/>
+   <property name="leftMargin">
+    <number>0</number>
    </property>
-   <property name="pixmap">
-    <pixmap resource="About.qrc">:/Images/Images/logo.png</pixmap>
+   <property name="topMargin">
+    <number>0</number>
    </property>
-  </widget>
-  <widget class="QPushButton" name="closeButton">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>460</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
+   <property name="rightMargin">
+    <number>0</number>
    </property>
-   <property name="text">
-    <string>Close</string>
+   <property name="bottomMargin">
+    <number>0</number>
    </property>
-   <property name="autoDefault">
-    <bool>true</bool>
-   </property>
-   <property name="default">
-    <bool>false</bool>
-   </property>
-   <property name="flat">
-    <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>480</x>
-     <y>0</y>
-     <width>191</width>
-     <height>201</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="About.qrc">:/Images/Images/alexei.png</pixmap>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_6">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>200</y>
-     <width>491</width>
-     <height>321</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;RepTate&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;R&lt;/span&gt;heology of &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;ntangled &lt;span style=&quot; font-weight:600;&quot;&gt;P&lt;/span&gt;olymers: &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;oolkit for the &lt;span style=&quot; font-weight:600;&quot;&gt;A&lt;/span&gt;nalysis of &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;heory and &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;xperiment), was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the &lt;a href=&quot;http://www.leeds.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;University of Leeds&lt;/span&gt;&lt;/a&gt; and the &lt;a href=&quot;http://www.reading.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;University of Reading&lt;/span&gt;&lt;/a&gt;, as part of the muPP2 project, funded by the EPSRC. This new version is a port (and enhancement) of the original RepTate code to python, using pyqt and matplotlib for the visuals, and numpy and scipy for numerical calculations. It has been developed by &lt;a href=&quot;mailto: jorge.ramirez@upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Jorge Ramírez&lt;/span&gt;&lt;/a&gt; (&lt;a href=&quot;www.upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Universidad Politécnica de Madrid&lt;/span&gt;&lt;/a&gt;) and Victor Boudara (University of Leeds). The program and source code are released under the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.en.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPLv3 license&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;This project is dedicated to the memory of our great friend and collaborator Alexei.&lt;br/&gt;OLD web site: &lt;a href=&quot;https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.reptate.com&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Project page: &lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://github.com/jorge-ramirez-upm/RepTate &quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/jorge-ramirez-upm/RepTate&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;Documentation: &lt;a href=&quot;https://github.com/jorge-ramirez-upm/RepTate &quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://reptate.readthedocs.io/en/latest/&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;Icons:&lt;a href=&quot; https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://icons8.com/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::RichText</enum>
-   </property>
-   <property name="scaledContents">
-    <bool>false</bool>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_Version">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>0</y>
-     <width>287</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>RepTate </string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_Version">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="About.qrc">:/Images/Images/logo.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame_2">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="About.qrc">:/Images/Images/alexei.png</pixmap>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;RepTate&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;R&lt;/span&gt;heology of &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;ntangled &lt;span style=&quot; font-weight:600;&quot;&gt;P&lt;/span&gt;olymers: &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;oolkit for the &lt;span style=&quot; font-weight:600;&quot;&gt;A&lt;/span&gt;nalysis of &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;heory and &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;xperiment), was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the &lt;a href=&quot;http://www.leeds.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;University of Leeds&lt;/span&gt;&lt;/a&gt; and the &lt;a href=&quot;http://www.reading.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;University of Reading&lt;/span&gt;&lt;/a&gt;, as part of the muPP2 project, funded by the EPSRC. This new version is a port (and enhancement) of the original RepTate code to python, using pyqt and matplotlib for the visuals, and numpy and scipy for numerical calculations. It has been developed by &lt;a href=&quot;mailto: jorge.ramirez@upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Jorge Ramírez&lt;/span&gt;&lt;/a&gt; (&lt;a href=&quot;www.upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Universidad Politécnica de Madrid&lt;/span&gt;&lt;/a&gt;) and Victor Boudara (University of Leeds). The program and source code are released under the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.en.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPLv3 license&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;This project is dedicated to the memory of our great friend and collaborator Alexei.&lt;br/&gt;OLD web site: &lt;a href=&quot;https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.reptate.com&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Project page: &lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://github.com/jorge-ramirez-upm/RepTate &quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/jorge-ramirez-upm/RepTate&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;Documentation: &lt;a href=&quot;https://github.com/jorge-ramirez-upm/RepTate &quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://reptate.readthedocs.io/en/latest/&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;Icons:&lt;a href=&quot; https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://icons8.com/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources>
   <include location="About.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>176</x>
-     <y>535</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>175</x>
-     <y>277</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
