@@ -86,7 +86,8 @@ class BaseApplicationDielectric:
         """
         from TheoryDebyeModes import TheoryDebyeModesFrequency
         from TheoryHavriliakNegamiModes import TheoryHavriliakNegamiModesFrequency
-
+        from TheoryKWWModes import TheoryKWWModesFrequency
+        
         #from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
         #from TheoryTTS import TheoryWLFShift
         #from TheoryCarreauYasuda import TheoryCarreauYasuda
@@ -217,6 +218,7 @@ class BaseApplicationDielectric:
         # THEORIES
         self.theories[TheoryDebyeModesFrequency.thname] = TheoryDebyeModesFrequency
         self.theories[TheoryHavriliakNegamiModesFrequency.thname] = TheoryHavriliakNegamiModesFrequency
+        self.theories[TheoryKWWModesFrequency.thname] = TheoryKWWModesFrequency
         #self.theories[
         #    TheoryLikhtmanMcLeish2002.thname] = TheoryLikhtmanMcLeish2002
         #self.theories[TheoryCarreauYasuda.thname] = TheoryCarreauYasuda
