@@ -71,9 +71,12 @@ Tutorial Rolie-Poly
         :align: center
         :alt: New application
 		
-#.  Drag and drop shear (`.shear`) or uniaxial extension (`.uext`) data files, e.g. all the `.uext` files from the `data/DOW/Non-Linear_Rheology/Start-up_extension/` folder.
+#.  Drag and drop shear (``.shear``) or uniaxial extension (``.uext``) data files, 
+    e.g. all the ``.uext`` files from the folder 
+    ``data/DOW/Non-Linear_Rheology/Start-up_extension/``.
 
-    The first column of the file should contain the time and the second column the viscosity (shear or tensile stress growth coefficient).
+    The first column of the file should contain the time and the second 
+    column the stress (shear, or tensile, stress growth function).
 
     .. image:: images/load_uext_data.png
         :width: 400pt
@@ -102,16 +105,15 @@ Tutorial Rolie-Poly
           minimize |fit|.
         
         - Alternatively, it is possible to copy the values from a file or spreadsheet
-          and paste the values into the "Edit Modes" table.
+          from and external program and paste the values into the "Edit Modes" table.
+          Note that you should adjust the number of modes before pasting the values.
 
         - Obtain the Maxwell modes from a different RepTate application (LVE, TTS, 
           G(t)).
           **In this tutorial we will import Maxwell modes from a LVE application.**
 
-#.  Create a new LVE Application |logoLVE| (see :ref:`Tutorial LVE Application` for 
-    more details)
-    and open the linear viscoelastic data file corresponding to the **same sample** at
-    the **same temperature**. 
+#.  Create a new LVE Application |logoLVE| and open the linear viscoelastic data 
+    file corresponding to the **same sample** at the **same temperature**. 
     Then create a new Maxwell theory |maxwell| and minimize |fit|:
 	
     .. image:: images/LVE_for_NLVE.png
@@ -137,12 +139,12 @@ Tutorial Rolie-Poly
 
 #.  The number of stretching modes is given by |nstretch|. :math:`N_\text{stretch}=0` 
     means that the non-stretching version of the Rolie-Poly model will be used for all 
-    modes.
+    modes. See :ref:`RoliePoly_equation-label` for more details.
     So far, the calculations were done using "infinitely stretching chains" |no_fene|. 
     Click that button to use finite extensibility |fene|. The maximum extensibility
-    parameter *lmax* is now present in the parameter table.
+    parameter ``lmax`` is now present in the parameter table.
     You can change its value and click "calculate" |calculate| to update the theory 
-    predictions
+    predictions:
 	
 	.. image:: images/with_fene.png
 		:width: 400pt

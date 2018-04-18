@@ -431,7 +431,7 @@ class BaseTheoryBlendRoliePoly:
         
         [description]
         """
-        self.extra_graphic_visible(False)
+        self.show_theory_extras(False)
         self.ax.lines.remove(self.LVEenvelopeseries)
 
     def show_theory_extras(self, show=False):
@@ -979,6 +979,9 @@ class BaseTheoryBlendRoliePoly:
                     del self.parameters["tauR%02d" % i]
         return '', True
 
+    def do_fit(self, line):
+        """Minimisation procedure disabled in this theory"""
+        pass
 
 class CLTheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, Theory):
     """[summary]
@@ -1140,6 +1143,10 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         [description]
         """
         self.linearenvelope.setChecked(state)
+        self.parent_dataset.actionMinimize_Error.setDisabled(state)
+        self.parent_dataset.actionShow_Limits.setDisabled(state)
+        self.parent_dataset.actionVertical_Limits.setDisabled(state)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(state)
 
     def show_linear_envelope(self, state):
         self.extra_graphic_visible(state)

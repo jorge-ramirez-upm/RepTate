@@ -1,3 +1,5 @@
+.. _RoliePoly_equation-label:
+
 -------------------
 Rolie-Poly equation
 -------------------
