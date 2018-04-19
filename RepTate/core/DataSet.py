@@ -409,6 +409,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                         dt.series[nx][i].set_data(x[:, i], y[:, i])
                         dt.series[nx][i].set_visible(True)
                         dt.series[nx][i].set_marker(marker)
+                        if i == 1: # filled and empty symbols
+                            if face == 'none':
+                                face = color
+                            elif face == color:
+                                face = 'none'
                         dt.series[nx][i].set_markerfacecolor(face)
                         dt.series[nx][i].set_markeredgecolor(color)
                         dt.series[nx][i].set_markeredgewidth(width)
