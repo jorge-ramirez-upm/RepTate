@@ -40,10 +40,10 @@ import enum
 import math
 import numpy as np
 import itertools
-import seaborn as sns   
 #from UI_Multimatplotlib import Ui_Form
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QTabWidget, QWidget, QSizePolicy
 from PyQt5.QtCore import QSize, QMetaObject, Qt
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 import matplotlib.gridspec as gridspec
@@ -98,9 +98,39 @@ class MultiView(QWidget):
         self.setupUi(self)
         
     def setupUi(self, matplotlibWidget):
-        sns.set_style("white")
-        sns.set_style("ticks")
-        plt.style.use('seaborn-poster')
+        # Remove seaborn dependency
+        dark_gray = ".15" 
+        light_gray = ".8"
+        style_dict = {
+            "figure.facecolor": "white",
+            "text.color": dark_gray,
+            "axes.labelcolor": dark_gray,
+            "axes.facecolor": "white",
+            "axes.edgecolor": dark_gray,
+            "axes.linewidth": 1.25,
+            "grid.color": light_gray,
+            "legend.frameon": False,
+            "legend.numpoints": 1,
+            "legend.scatterpoints": 1,
+            "xtick.direction": "out",
+            "ytick.direction": "out",
+            "xtick.color": dark_gray,
+            "ytick.color": dark_gray,
+            "xtick.major.size": 6,
+            "ytick.major.size": 6,
+            "xtick.minor.size": 3,
+            "ytick.minor.size": 3,             
+            "axes.grid": False, 
+            "axes.axisbelow": True,
+            "image.cmap": "rocket",
+            "font.family": ["sans-serif"],
+            "font.sans-serif": ["Arial", "DejaVu Sans", "Liberation Sans",
+                                "Bitstream Vera Sans", "sans-serif"],
+            "grid.linestyle": "-",
+            "lines.solid_capstyle": "round",
+            }
+        mpl.rcParams.update(style_dict)            
+
         matplotlibWidget.setObjectName("matplotlibWidget")
         self.horizontalLayout = QHBoxLayout(matplotlibWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -161,8 +191,15 @@ class MultiView(QWidget):
         self.plotcontainer.addWidget(self.canvas)
         self.init_plot(0)
 
-        connection_id = self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)        
-        sns.despine()
+        connection_id = self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)
+        axes = plt.gcf().axes
+        for ax_i in axes:
+            for side in ["top", "right"]:
+                ax_i.spines[side].set_visible(False)
+
+            ax_i.xaxis.tick_bottom()
+            ax_i.yaxis.tick_left()
+         
 
     def init_plot(self, index):
         if index == 0: #multiplots

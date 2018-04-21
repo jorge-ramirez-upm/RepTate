@@ -37,7 +37,6 @@ Module that defines the basic class from which all applications are derived.
 """
 import io
 import logging
-import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
 
