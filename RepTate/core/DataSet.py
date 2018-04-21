@@ -45,7 +45,6 @@ from CmdBase import CmdBase, CmdMode
 from Theory import Theory
 from FileType import TXTColumnFile
 from File import File
-from tabulate import tabulate
 from DataTable import DataTable
 
 import itertools
@@ -830,13 +829,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         print("Path: %s" % file.file_full_path)
         print(file.file_parameters)
         print(file.header_lines)
+        dfile = list(self.parent_application.filetypes.values())[0] 
+        inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
+        print(inspect_header)
         print(file.data_table.data)
-        print(
-            tabulate(
-                file.data_table.data,
-                tablefmt="grid",
-                floatfmt=".4g",
-                headers=file.data_table.column_names))
 
 
 # THEORY STUFF ##########################################################################################################
