@@ -38,6 +38,7 @@ Module for the basic definition of file types.
 import os
 import numpy as np
 import logging
+from openpyxl import load_workbook
 from File import File
 
 class TXTColumnFile(object):
@@ -225,3 +226,74 @@ class TXTColumnFile(object):
         file.data_table.data = file.data_table.data[file.data_table.data[:,0].argsort()]
 
         return file
+
+class ExcelFile(object):
+    """Parse and read contents from Excel file
+    """
+    def __init__(self, name='ExcelFile', extension='xlsx', 
+                 description='Generic Excel file', 
+                 col_names=[], basic_file_parameters=[], col_units=[]):
+
+        self.name=name
+        self.extension=extension
+        self.description=description
+        self.col_names=col_names
+        self.col_index=list(range(len(self.col_names)))
+        self.basic_file_parameters=basic_file_parameters # Those that will show by default in the dataset
+        self.col_units=col_units
+        self.logger = logging.getLogger('ReptateLogger')
+
+    def read_file(self, filename, parent_dataset, axarr):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - filename {[type]} -- [description]
+            - parent_dataset {[type]} -- [description]
+            - ax {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        if not os.path.isfile(filename):
+            print("File \"%s\" does not exists"%f)
+            return
+        file = File(filename, self, parent_dataset, axarr)
+        wb = load_workbook(filename)
+        for i, k in enumerate(wb.sheetnames):
+            print("%d: %s" % (i, k))
+        opt = int(input("Select the Sheet that contains the data (number between 0 and %d) > " % (len(wb.sheetnames) - 1)))
+        if (opt < 0 or opt >= len(wb.sheetnames)):
+            print("Invalid option!")
+        ws = wb[wb.sheetnames[opt]]
+        cexcelnames = ['A','B','C','D','E','F']
+        for i in range(ws.max_column):
+            print("%10s"%cexcelnames[i], end=' ')
+        print("")
+        for i, row in enumerate(ws.rows):
+            for j, cell in enumerate(row):
+                a=cell.value
+                if type(a) is float:
+                    print("%10.5g"%a, end=' ')
+                elif type(a) is str:
+                    print("%10s"%a, end=' ')
+                elif type(a) is int:
+                    print("%10d"%a, end=' ')
+                if j>10:
+                    break
+            print("")
+            if i>4:
+                break
+        file.data_table.num_rows = ws.max_row-2
+        file.data_table.num_columns= len(self.col_names)
+        file.data_table.data = np.zeros((file.data_table.num_rows, file.data_table.num_columns))
+        for j, n in enumerate(self.col_names):
+            opt=''
+            while opt not in cexcelnames:
+                opt = input("Column that contains the data for %s > " % n)
+            for i in range(3,ws.max_row+1):
+                cell_name = "{}{}".format(opt, i)
+                file.data_table.data[i-3,j]=ws[cell_name].value
+        return file
+        

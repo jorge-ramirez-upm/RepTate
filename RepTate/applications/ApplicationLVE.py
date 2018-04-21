@@ -39,7 +39,7 @@ from CmdBase import CmdBase, CmdMode
 from Application import Application
 from QApplicationWindow import QApplicationWindow
 from View import View
-from FileType import TXTColumnFile
+from FileType import TXTColumnFile, ExcelFile
 import numpy as np
 
 
@@ -297,7 +297,9 @@ class BaseApplicationLVE:
                               ['w', 'G\'', 'G\'\''], ['Mw', 'T'],
                               ['rad/s', 'Pa', 'Pa'])
         self.filetypes[ftype.extension] = ftype
-
+        self.filetypes['xlsx'] = ExcelFile("Excel File", "xlsx", "ExcelFIle",
+                                            ['w','G\'','G\'\''], [], ['rad/s', 'Pa', 'Pa'])
+        
         # THEORIES
         self.theories[
             TheoryMaxwellModesFrequency.thname] = TheoryMaxwellModesFrequency
