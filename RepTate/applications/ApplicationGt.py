@@ -43,9 +43,10 @@ from QApplicationWindow import QApplicationWindow
 import numpy as np
 from scipy import interpolate
 
-from PyQt5.QtWidgets import QSpinBox, QPushButton
+from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
+from PyQt5.QtGui import QDoubleValidator
 import schwarzl_ctypes_helper as sch
-
+from math import log10, sin, cos
 
 class ApplicationGt(CmdBase):
     """Application to Analyze Stress Relaxation Data
@@ -95,6 +96,10 @@ class BaseApplicationGt:
         super().__init__(
             name, parent, nplots=2,
             ncols=2)  # will call Application.__init__ with these args
+
+        # time range for view conversion to frequency domain
+        self.tmin_view = -np.inf
+        self.tmax_view = np.inf
 
         # VIEWS
         self.views["log[G(t)]"] = View(
@@ -231,11 +236,13 @@ class BaseApplicationGt:
         Returns:
             - [type] -- [description]
         """
-        x = np.zeros((dt.num_rows, 2))
-        y = np.zeros((dt.num_rows, 2))
+        data_x, data_y = self.get_xy_data_in_xrange(dt)
+        n = len(data_x)
+        x = np.zeros((n, 2))
+        y = np.zeros((n, 2))
 
         wp, Gp, wpp, Gpp = sch.do_schwarzl_gt(
-            dt.num_rows, dt.data[:, 1], dt.data[:, 0])  #call the C function
+            n, data_y, data_x)  #call the C function
 
         x[:, 0] = wp[:]
         x[:, 1] = wpp[:]
@@ -250,35 +257,38 @@ class BaseApplicationGt:
         
         Arguments:
         """
-        x = np.zeros((dt.num_rows, 2))
-        y = np.zeros((dt.num_rows, 2))
+        data_x, data_y = self.get_xy_data_in_xrange(dt)
+        n = len(data_x)
+        x = np.zeros((n, 2))
+        y = np.zeros((n, 2))
+
         f = interpolate.interp1d(
-            dt.data[:, 0],
-            dt.data[:, 1],
+            data_x,
+            data_y,
             kind='cubic',
             assume_sorted=True,
             fill_value='extrapolate')
         g0 = f(0)
-        ind1 = np.argmax(dt.data[:, 0] > 0)
-        t1 = dt.data[ind1, 0]
-        g1 = dt.data[ind1, 1]
-        tinf = np.max(dt.data[:, 0])
-        wp = np.logspace(np.log10(1 / tinf), np.log10(1 / t1), dt.num_rows)
+        ind1 = np.argmax(data_x > 0)
+        t1 = data_x[ind1]
+        g1 = data_y[ind1]
+        tinf = np.max(data_x)
+        wp = np.logspace(log10(1 / tinf), log10(1 / t1), n)
         x[:, 0] = wp[:]
         x[:, 1] = wp[:]
 
-        coeff = (dt.data[ind1 + 1:, 1] - dt.data[ind1:-1, 1]) / (
-            dt.data[ind1 + 1:, 0] - dt.data[ind1:-1, 0])
+        coeff = (data_y[ind1 + 1:] - data_y[ind1:-1]) / (
+            data_x[ind1 + 1:] - data_x[ind1:-1])
         for i, w in enumerate(wp):
 
-            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
-                coeff, -np.sin(w * dt.data[ind1:-1, 0]) +
-                np.sin(w * dt.data[ind1 + 1:, 0])) / w
+            y[i, 0] = g0 + sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
+                coeff, -np.sin(w * data_x[ind1:-1]) +
+                np.sin(w * data_x[ind1 + 1:])) / w
 
-            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
+            y[i, 1] = -(1 - cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
                 coeff,
-                np.cos(w * dt.data[ind1:-1, 0]) -
-                np.cos(w * dt.data[ind1 + 1:, 0])) / w
+                np.cos(w * data_x[ind1:-1]) -
+                np.cos(w * data_x[ind1 + 1:])) / w
 
         return x, y, True
 
@@ -289,42 +299,53 @@ class BaseApplicationGt:
         
         Arguments:
         """
-        x = np.zeros((dt.num_rows, 2))
-        y = np.zeros((dt.num_rows, 2))
+        data_x, data_y = self.get_xy_data_in_xrange(dt)
+        n = len(data_x)
+        x = np.zeros((n, 2))
+        y = np.zeros((n, 2))
+
         f = interpolate.interp1d(
-            dt.data[:, 0],
-            dt.data[:, 1],
+            data_x,
+            data_y,
             kind='cubic',
             assume_sorted=True,
             fill_value='extrapolate')
         g0 = f(0)
-        ind1 = np.argmax(dt.data[:, 0] > 0)
-        t1 = dt.data[ind1, 0]
-        g1 = dt.data[ind1, 1]
-        tinf = np.max(dt.data[:, 0])
-        wp = np.logspace(np.log10(1 / tinf), np.log10(1 / t1), dt.num_rows)
+        ind1 = np.argmax(data_x > 0)
+        t1 = data_x[ind1]
+        g1 = data_y[ind1]
+        tinf = np.max(data_x)
+        wp = np.logspace(np.log10(1 / tinf), np.log10(1 / t1), n)
         x[:, 0] = wp[:]
         x[:, 1] = wp[:]
 
         # Create oversampled data
         xdata = np.zeros(1)
-        xdata[0] = dt.data[ind1, 0]
-        for i in range(ind1 + 1, len(dt.data[:, 0])):
+        xdata[0] = data_x[ind1]
+        for i in range(ind1 + 1, n):
             tmp = np.logspace(
-                np.log10(dt.data[i - 1, 0]), np.log10(dt.data[i, 0]),
+                log10(data_x[i - 1]), log10(data_x[i]),
                 self.OVER + 1)
             xdata = np.append(xdata, tmp[1:])
         ydata = f(xdata)
 
         coeff = (ydata[1:] - ydata[:-1]) / (xdata[1:] - xdata[:-1])
         for i, w in enumerate(wp):
-            y[i, 0] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
+            y[i, 0] = g0 + sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
                 coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
-            y[i, 1] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
+
+            y[i, 1] = -(1 - cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
                 coeff,
                 np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
         return x, y, True
 
+    def get_xy_data_in_xrange(self, dt):
+        """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
+        #get indices of data in xrange
+        args = np.where(np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view))
+        x_in_range = dt.data[:, 0][args]
+        y_in_range = dt.data[:, 1][args]
+        return x_in_range, y_in_range
 
 class CLApplicationGt(BaseApplicationGt, Application):
     """[summary]
@@ -364,34 +385,104 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
             - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
+
+        self.add_oversampling_widget()
+        self.set_oversampling_widget_visible(False)
+        
+        self.add_xrange_widget_view()
+        self.set_xrange_widgets_view_visible(False)
+
+    def add_oversampling_widget(self):
+        """Add spinbox for the oversampling ratio"""
         self.sb_oversampling = QSpinBox()
         self.sb_oversampling.setRange(self.MIN_OVER, self.MAX_OVER)
         self.sb_oversampling.setValue(self.OVER)
         self.sb_oversampling.valueChanged.connect(self.change_oversampling)
 
-        self.pb = QPushButton("GO")
-        self.pb.clicked.connect(self.update_all_ds_plots)
-
         self.viewLayout.insertWidget(2, self.sb_oversampling)
-        self.viewLayout.insertWidget(3, self.pb)
-        self.hide_sb_oversampling()
 
-    def change_oversampling(self, val):
-        self.OVER = val
+    def add_xrange_widget_view(self):
+        """Add widgets below the view combobox to select the 
+        x-range applied to view transformation"""
+        hlayout = QHBoxLayout()
+        
+        hlayout.addStretch()
+        #xmin
+        self.xmin_view = QLineEdit("-inf")
+        self.xmin_view.textChanged.connect(self.change_xmin)
+        self.xmin_view.setValidator(QDoubleValidator())
+        self.xmin_view.setMaximumWidth(35)
+        self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
+        hlayout.addWidget(self.xmin_label)
+        hlayout.addWidget(self.xmin_view)
+        #space
+        hlayout.addSpacing(5)
+        #xmax
+        self.xmax_view = QLineEdit("inf")
+        self.xmax_view.textChanged.connect(self.change_xmax)
+        self.xmax_view.setValidator(QDoubleValidator())
+        self.xmax_view.setMaximumWidth(35)
+        self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
+        hlayout.addWidget(self.xmax_label)
+        hlayout.addWidget(self.xmax_view)
+        #push button to refresh view
+        self.pb = QPushButton("GO")
+        self.pb.setMaximumWidth(25)
+        self.pb.clicked.connect(self.update_all_ds_plots)
+        hlayout.addWidget(self.pb)
+        self.hlayout_view = hlayout
+        self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
 
-    def show_sb_oversampling(self):
-        self.sb_oversampling.show()
-        self.pb.show()
-
-    def hide_sb_oversampling(self):
-        self.sb_oversampling.hide()
-        self.pb.hide()
-
-    def set_view_tools(self, view_name):
-        if view_name == "i-Rheo-Over G',G''":
-            self.show_sb_oversampling()
+    def change_xmin(self, text):
+        """Update the value of t_min"""
+        if text in "-np.inf -inf":
+            self.tmin_view = -np.inf
         else:
             try:
-                self.hide_sb_oversampling()
+                self.tmin_view = 10**float(text)
+            except:
+                pass
+
+    def change_xmax(self, text):
+        """Update the value of t_max"""
+        if text in "np.inf inf":
+            self.tmax_view = np.inf
+        else:
+            try:
+                self.tmax_view = 10**float(text)
+            except:
+                pass
+
+    def change_oversampling(self, val):
+        """Change the value of the oversampling ratio.
+        Called when the spinbox value is changed"""
+        self.OVER = val
+
+    def set_oversampling_widget_visible(self, state):
+        """Show/Hide the extra widget "sampling ratio" """
+        self.sb_oversampling.setVisible(state)
+
+    def set_xrange_widgets_view_visible(self, state):
+        """Show/Hide the extra widgets for xrange selection"""
+        self.pb.setVisible(state)
+        self.xmin_label.setVisible(state)
+        self.xmax_label.setVisible(state)
+        self.xmin_view.setVisible(state)
+        self.xmax_view.setVisible(state)
+        
+    def set_view_tools(self, view_name):
+        """Show/Hide extra view widgets depending on the current view"""
+        if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
+            self.set_xrange_widgets_view_visible(True)
+            self.set_oversampling_widget_visible(False)
+        elif view_name == "i-Rheo-Over G',G''":
+            self.set_xrange_widgets_view_visible(True)
+            self.set_oversampling_widget_visible(True)
+        else:
+            try:
+                self.set_xrange_widgets_view_visible(False)
+                self.set_oversampling_widget_visible(False)
             except AttributeError:
                 pass
