@@ -50,7 +50,6 @@ from DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
 
-from tabulate import tabulate
 from collections import OrderedDict
 
 
@@ -791,19 +790,22 @@ class Theory(CmdBase):
         [description]
         """
         apmng = self.parent_dataset.parent_application.parent_manager
-        L = apmng.list_theories_Maxwell()
+        L, S= apmng.list_theories_Maxwell(th_exclude=self)
         print("Found %d theories that provide modes" % len(L))
-        for i, k in enumerate(L.keys()):
+        kys = list(L.keys())
+        kys.sort()
+        for i, k in enumerate(kys):
             print("%d: %s" % (i, k))
-            print(tabulate([L[k][0][0], L[k][0][1]], tablefmt="grid"))
-            print("")
         opt = int(
             input("Select theory (number between 0 and %d> " % (len(L) - 1)))
         if (opt < 0 or opt >= len(L)):
             print("Invalid option!")
         else:
-            tt = L[list(L.keys())[opt]][0]
-            self.set_modes(tt[0], tt[1])
+            tau, G0 = L[kys[opt]]()
+            tauinds = (-tau).argsort()
+            tau = tau[tauinds]
+            G0 = G0[tauinds]
+            self.set_modes(tau, G0)
 
     def do_copy_modes(self, line):
         """[summary]

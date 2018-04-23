@@ -350,7 +350,7 @@ class ApplicationManager(CmdBase):
                   "No copy has been made")
             return
 
-    def list_theories_Maxwell(self):
+    def list_theories_Maxwell(self, th_exclude=None):
         """List the theories in the current RepTate instance that provide and need
         Maxwell modes
         
@@ -368,7 +368,7 @@ class ApplicationManager(CmdBase):
                 #print ("%s %s"%(app.name, ds.name))
                 for thname in ds.theories.keys():
                     th = ds.theories[thname]
-                    if th.has_modes:
+                    if th.has_modes and th != th_exclude:
                         get_dict["%s.%s.%s" % (app.name, ds.name,
                                                th.name)] = th.get_modes
                         set_dict["%s.%s.%s" % (app.name, ds.name,

@@ -5,14 +5,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>41d5c2f2-6dbc-423a-8657-cd5c56d3d66b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>RepTate.py</StartupFile>
+    <StartupFile>RepTateCL.py</StartupFile>
     <SearchPath>gui\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
+    <InterpreterId>Global|VisualStudio|Miniconda</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>
     </CommandLineArguments>
@@ -119,7 +119,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
+    <InterpreterReference Include="Global|VisualStudio|Miniconda" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />

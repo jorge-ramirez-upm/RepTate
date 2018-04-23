@@ -147,19 +147,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # Hide Data Inspector
         self.DataInspectordockWidget.hide()
 
-        # PLOT Style
-        # sns.set_style("white")
-        # sns.set_style("ticks")
-        # #plt.style.use('seaborn-talk')
-        # #plt.style.use('seaborn-paper')
-        # plt.style.use('seaborn-poster')
-        # self.figure=plt.figure()
-        # self.ax = self.figure.add_subplot(111)
-        
-        # self.canvas = FigureCanvasQTAgg(self.figure)
-        # self.canvas.setFocusPolicy( QtCore.Qt.ClickFocus )
-        # self.canvas.setFocus()
-        # self.canvas = self.multiplots.canvas
         self.mplvl.addWidget(self.multiplots)
         
         self.mpl_toolbar = NavigationToolbar2QT(self.canvas, self)
@@ -176,7 +163,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
         # self.canvas.draw()
         # self.update_Qplot()
-        # sns.despine() # Remove up and right side of plot box
         # LEGEND STUFF
         self.legend = None
         # leg=plt.legend(loc='upper left', frameon=True, ncol=2)
