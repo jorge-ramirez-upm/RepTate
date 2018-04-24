@@ -114,6 +114,7 @@ class Application(CmdBase):
                                                        self.onpick)
         connection_id = self.figure.canvas.mpl_connect('button_release_event',
                                                        self.onrelease)
+        connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
 
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
@@ -205,6 +206,8 @@ class Application(CmdBase):
         #cur_yrange = (cur_ylim[1] - cur_ylim[0])*.5
         xdata = event.xdata  # get event x location
         ydata = event.ydata  # get event y location
+        if (xdata == None or ydata == None):
+            return
         if event.button == 'up':
             # deal with zoom in
             scale_factor = 1 / base_scale
