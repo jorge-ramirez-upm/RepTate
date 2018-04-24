@@ -39,6 +39,9 @@ import os
 import sys
 import glob
 import argparse
+from logging import *
+basicConfig(level=INFO)
+
 sys.path.append('core')
 sys.path.append('gui')
 sys.path.append('console')
