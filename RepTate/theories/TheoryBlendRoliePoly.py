@@ -513,6 +513,10 @@ class BaseTheoryBlendRoliePoly:
         """CLF correction function Likthman-McLeish (2002)"""
         return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
 
+    def gZ(self, z):
+        """CLF correction function for modulus Likthman-McLeish (2002)"""
+        return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
+
     def find_down_indx(self, tauseff, taud):
         """Find index i such that taud[i] < tauseff < taud[i+1]
         or returns -1 if tauseff < taud[0]
@@ -922,7 +926,7 @@ class BaseTheoryBlendRoliePoly:
                 if self.with_fene == FeneMode.with_fene:
                     sig_i *= self.calculate_fene(lsq[:, i], lmax)
                 if self.with_gcorr == GcorrMode.with_gcorr:
-                    sig_i *= sqrt(self.fZ(self.Zeff[i]))
+                    sig_i *= self.gZ(self.Zeff[i])
                 tt.data[:, 1] += phi_arr[i] * sig_i
 
             tt.data[:, 1] *= self.parameters["GN0"].value
