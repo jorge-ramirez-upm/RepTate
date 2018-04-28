@@ -82,8 +82,16 @@ Views
 
 :math:`W(M)` (log-lin)
 --------------------------------
+.. |img1| image:: images/MWD_log-lin.png
+    :width: 45%
 
+:math:`W(M)` (log-log)
+--------------------------------
+.. |img1| image:: images/MWD_log-log.png
+    :width: 45%
 
 :math:`W(M)` (lin-lin)
 --------------------------------
+.. |img1| image:: images/MWD_lin-lin.png
+    :width: 45%
 
