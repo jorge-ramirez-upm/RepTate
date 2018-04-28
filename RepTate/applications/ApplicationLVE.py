@@ -297,6 +297,10 @@ class BaseApplicationLVE:
                               ['w', 'G\'', 'G\'\''], ['Mw', 'T'],
                               ['rad/s', 'Pa', 'Pa'])
         self.filetypes[ftype.extension] = ftype
+        self.filetypes['osc'] = TXTColumnFile("OSC files", "osc",
+            "Small-angle oscillatory masurements from the Rheometer",
+            ['w', 'G\'', 'G\'\''], ['Mw', 'T'], ['rad/s', 'Pa', 'Pa'])
+        
         self.filetypes['xlsx'] = ExcelFile("Excel File", "xlsx", "ExcelFIle",
                                             ['w','G\'','G\'\''], [], ['rad/s', 'Pa', 'Pa'])
         
