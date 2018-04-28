@@ -31,8 +31,6 @@
 #
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryLogNormal
-
-LogNormal file for creating a new theory
 """
 import numpy as np
 from math import gamma, pi
@@ -49,7 +47,7 @@ class TheoryLogNormal(CmdBase):
     [description]
     """
     thname = 'LogNormalTheory'
-    description = 'Generalized Exponential Function (LogNormal)'
+    description = 'LogNormal distribution'
     citations = ''
 
     def __new__(cls, name='ThLogNormal', parent_dataset=None, axarr=None):
@@ -72,16 +70,16 @@ class TheoryLogNormal(CmdBase):
 
 
 class BaseTheoryLogNormal:
-    """Generalized Exponential Function (LogNormal) for experimental molecular weight distributions.
+    """Log-Normal distribution
     
     * **Function**
         .. math::
-            W(M) = W_0 \\frac{1}{\\sigma\\sqrt{\\Pi}} \\frac{1}{M} \\exp\\left[ - \\frac{\\left(\\ln{M}-\\ln{M_0}\\right)^2}{2\\sigma^2} \\right]
+            W(M) = W_0 \\frac{1}{\\sigma\\sqrt{\\pi}} \\frac{1}{M} \\exp\\left[ - \\frac{\\left(\\ln{M}-\\ln{M_0}\\right)^2}{2\\sigma^2} \\right]
     
     * **Parameters**
-       - :math:`\\log_10(W_0)`: Normalization constant.
-       - :math:`\\log_10(M_0)`: .
-       - :math:`\\sigma`: .
+       - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.
+       - ``logW0`` :math:`\\equiv\\log_{10}(M_0)`
+       - ``sigma`` :math:`\\equiv\\sigma`
     """
     #help_file = ''
     single_file = False  # False if the theory can be applied to multiple files simultaneously
@@ -150,7 +148,7 @@ class BaseTheoryLogNormal:
         pass
 
     def LogNormal(self, f=None):
-        """LogNormal function that returns the square of y
+        """LogNormal function
         
         [description]
         

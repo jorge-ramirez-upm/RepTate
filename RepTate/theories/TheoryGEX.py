@@ -79,10 +79,10 @@ class BaseTheoryGEX:
             W(M) = W_0 \\frac{b}{M_0 \\Gamma\\left(\\frac{a}{b}\\right)} \\left(\\frac{M}{M_0}\\right)^{a-1} \\exp\\left[ -\\left(\\frac{M}{M_0}\\right)^b \\right]
     
     * **Parameters**
-       - :math:`\\log_10(W_0)`: Normalization constant.
-       - :math:`\\log_10(M_0)`: .
-       - :math:`a`: .
-       - :math:`b`: .
+       - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.
+       - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`: .
+       - ``a`` 
+       - ``b``
     """
     #help_file = ''
     single_file = False  # False if the theory can be applied to multiple files simultaneously
@@ -159,8 +159,8 @@ class BaseTheoryGEX:
         pass
 
     def GEX(self, f=None):
-        """GEX function that returns the square of y
-        
+        """GEX function
+
         [description]
         
         Keyword Arguments:

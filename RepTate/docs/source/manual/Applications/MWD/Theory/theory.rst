@@ -9,3 +9,6 @@ MWD: Theories
    :maxdepth: 2
 
 .. include:: MWDiscr.rst
+.. include:: lognormal.rst
+.. include:: GEX.rst
+
