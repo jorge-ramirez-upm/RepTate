@@ -55,7 +55,7 @@ Views
 
 log(G',G''(w))
 -------------------------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1G2
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1G2()
    
 .. image:: images/TTS_logG1G2.png
     :width: 45%
@@ -64,7 +64,7 @@ log(G',G''(w))
 
 G',G''(w)
 --------------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewG1G2
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewG1G2()
 
 .. image:: images/TTS_G1G2.png
     :width: 45%
@@ -72,7 +72,7 @@ G',G''(w)
 
 etastar
 ----------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewEtaStar
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewEtaStar()
 
 .. image:: images/TTS_etastar.png
     :width: 45%
@@ -80,7 +80,7 @@ etastar
 
 logetastar
 ----------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogEtaStar
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogEtaStar()
 
 .. image:: images/TTS_logetastar.png
     :width: 45%
@@ -88,7 +88,7 @@ logetastar
 
 delta    
 ----------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewDelta
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewDelta()
 
 .. image:: images/TTS_delta.png
     :width: 45%
@@ -96,7 +96,7 @@ delta
 
 tan(delta)
 ----------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewTanDelta
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewTanDelta()
 
 .. image:: images/TTS_tandelta.png
     :width: 45%
@@ -104,7 +104,7 @@ tan(delta)
 
 log(tan(delta))
 ----------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogTanDelta
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogTanDelta()
 
 .. image:: images/TTS_logtandelta.png
     :width: 45%
@@ -112,7 +112,7 @@ log(tan(delta))
     
 log(G*)
 ----------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogGstar
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogGstar()
 
 .. image:: images/TTS_logGstar.png
     :width: 45%
@@ -120,7 +120,7 @@ log(G*)
 
 log(tan(delta),G*)
 ----------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogtandeltaGstar
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogtandeltaGstar()
 
 .. image:: images/TTS_logtandeltaGstar.png
     :width: 45%
@@ -128,7 +128,7 @@ log(tan(delta),G*)
 
 delta(G*)
 ----------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewdeltatanGstar
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewdeltatanGstar()
 
 .. image:: images/TTS_deltaGstar.png
     :width: 45%
@@ -136,7 +136,7 @@ delta(G*)
 
 J',J''(w)
 ----------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewJ1J2
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewJ1J2()
 
 .. image:: images/TTS_J1J2.png
     :width: 45%
@@ -144,7 +144,7 @@ J',J''(w)
 
 Cole-Cole
 ----------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewColeCole
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewColeCole()
 
 .. image:: images/TTS_ColeCole.png
     :width: 45%
@@ -152,7 +152,7 @@ Cole-Cole
 
 log(G')
 -------------------------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1()
 
 .. image:: images/TTS_logG1.png
     :width: 45%
@@ -161,7 +161,7 @@ log(G')
 
 G'
 --------------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewG1
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewG1()
 
 .. image:: images/TTS_G1.png
     :width: 45%
@@ -169,7 +169,7 @@ G'
 
 log(G'')
 -------------------------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG2
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG2()
 
 .. image:: images/TTS_logG2.png
     :width: 45%
@@ -178,7 +178,7 @@ log(G'')
 
 G''
 --------------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewG2
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewG2()
 
 .. image:: images/TTS_G2.png
     :width: 45%
@@ -186,7 +186,7 @@ G''
 
 log(G',G''(w),tan(delta))
 --------------------------------
-.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta
+.. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta()
 
 .. image:: images/TTS_logG1G2tandelta.png
     :width: 45%

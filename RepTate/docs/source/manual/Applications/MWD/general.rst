@@ -82,7 +82,7 @@ Views
 
 log-lin
 --------------------------------
-.. automethod:: ApplicationMWD.BaseApplicationMWD.view_WM
+.. automethod:: ApplicationMWD.BaseApplicationMWD.view_WM()
 
 (Molecular weight in logarithmic scale)
 
@@ -92,7 +92,7 @@ log-lin
 
 log-log
 --------------------------------
-.. automethod:: ApplicationMWD.BaseApplicationMWD.view_logWM
+.. automethod:: ApplicationMWD.BaseApplicationMWD.view_logWM()
 
 .. image:: images/MWD_log-log.png
     :width: 45%
@@ -100,7 +100,7 @@ log-log
 
 lin-lin
 --------------------------------
-.. automethod:: ApplicationMWD.BaseApplicationMWD.view_WM
+.. automethod:: ApplicationMWD.BaseApplicationMWD.view_WM()
 
 .. image:: images/MWD_lin-lin.png
     :width: 45%

@@ -79,7 +79,7 @@ Views
 
 log(eta(t))
 ---------------------
-.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogeta
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogeta()
 
 .. image:: images/NLVE_logeta.png
     :width: 45%
@@ -87,7 +87,7 @@ log(eta(t))
 
 eta(t)
 ---------------------
-.. automethod:: ApplicationNLVE.BaseApplicationNLVE.vieweta
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.vieweta()
 
 .. image:: images/NLVE_eta.png
     :width: 45%
@@ -95,7 +95,7 @@ eta(t)
 
 log(sigma(gamma))
 ---------------------
-.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma()
 
 .. image:: images/NLVE_logsigmagamma.png
     :width: 45%
@@ -103,7 +103,7 @@ log(sigma(gamma))
     
 sigma(gamma)
 ---------------------
-.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma()
 
 .. image:: images/NLVE_sigmagamma.png
     :width: 45%
@@ -111,7 +111,7 @@ sigma(gamma)
 
 log(sigma(t))
 ---------------------
-.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime()
 
 .. image:: images/NLVE_logsigmat.png
     :width: 45%
@@ -120,7 +120,7 @@ log(sigma(t))
     
 sigma(t)
 ---------------------
-.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime()
 
 .. image:: images/NLVE_sigmat.png
     :width: 45%

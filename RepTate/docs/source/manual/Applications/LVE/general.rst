@@ -52,7 +52,7 @@ Views
 
 log(G',G''(w))
 -------------------------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2()
    
 .. image:: images/LVE_logG1G2.png
     :width: 45%
@@ -61,7 +61,7 @@ log(G',G''(w))
 
 G',G''(w)
 --------------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG1G2
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG1G2()
 
 .. image:: images/LVE_G1G2.png
     :width: 45%
@@ -69,7 +69,7 @@ G',G''(w)
 
 etastar
 ----------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewEtaStar
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewEtaStar()
 
 .. image:: images/LVE_etastar.png
     :width: 45%
@@ -77,7 +77,7 @@ etastar
 
 logetastar
 ----------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogEtaStar
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogEtaStar()
 
 .. image:: images/LVE_logetastar.png
     :width: 45%
@@ -85,7 +85,7 @@ logetastar
 
 delta    
 ----------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewDelta
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewDelta()
 
 .. image:: images/LVE_delta.png
     :width: 45%
@@ -93,7 +93,7 @@ delta
 
 tan(delta)
 ----------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewTanDelta
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewTanDelta()
 
 .. image:: images/LVE_tandelta.png
     :width: 45%
@@ -101,7 +101,7 @@ tan(delta)
 
 log(tan(delta))
 ----------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogTanDelta
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogTanDelta()
 
 .. image:: images/LVE_logtandelta.png
     :width: 45%
@@ -109,7 +109,7 @@ log(tan(delta))
     
 log(G*)
 ----------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogGstar
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogGstar()
 
 .. image:: images/LVE_logGstar.png
     :width: 45%
@@ -117,7 +117,7 @@ log(G*)
 
 log(tan(delta),G*)
 ----------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar()
 
 .. image:: images/LVE_logtandeltaGstar.png
     :width: 45%
@@ -125,7 +125,7 @@ log(tan(delta),G*)
 
 delta(G*)
 ----------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar()
 
 .. image:: images/LVE_deltaGstar.png
     :width: 45%
@@ -133,7 +133,7 @@ delta(G*)
 
 J',J''(w)
 ----------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewJ1J2
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewJ1J2()
 
 .. image:: images/LVE_J1J2.png
     :width: 45%
@@ -141,7 +141,7 @@ J',J''(w)
 
 Cole-Cole
 ----------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewColeCole
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewColeCole()
 
 .. image:: images/LVE_ColeCole.png
     :width: 45%
@@ -149,7 +149,7 @@ Cole-Cole
 
 log(G')
 -------------------------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1()
 
 .. image:: images/LVE_logG1.png
     :width: 45%
@@ -158,7 +158,7 @@ log(G')
 
 G'
 --------------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG1
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG1()
 
 .. image:: images/LVE_G1.png
     :width: 45%
@@ -166,7 +166,7 @@ G'
 
 log(G'')
 -------------------------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG2
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG2()
 
 .. image:: images/LVE_logG2.png
     :width: 45%
@@ -175,7 +175,7 @@ log(G'')
 
 G''
 --------------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG2
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG2()
 
 .. image:: images/LVE_G2.png
     :width: 45%
@@ -183,7 +183,7 @@ G''
 
 log(G',G''(w),tan(delta))
 --------------------------------
-.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta()
 
 .. image:: images/LVE_logG1G2tandelta.png
     :width: 45%
