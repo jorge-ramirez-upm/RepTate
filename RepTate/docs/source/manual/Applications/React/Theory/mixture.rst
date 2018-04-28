@@ -27,7 +27,7 @@ new Monte Carlo simulations but uses those already made.
 On opening the theory, one is presented with (apparently) just one parameter,
 which is
 
-`nbin`:
+``nbin``:
     this is the number of bins - equally spaced in :math:`\log_{10}\text{MW}`
     - used for analysis of the molecules. More bins means more resolution in the
     :math:`\log_{10}\text{MW}` axis, but also more noise because there are fewer molecules per
