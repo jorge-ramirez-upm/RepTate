@@ -185,9 +185,9 @@ class BaseApplicationLVE:
             1, ["log(G*)"])
         self.views["log(tan(delta),G*)"] = View(
             "log(tan(delta),G*)",
-            "log(tan($\delta)(G*))",
+            "log(tan($\delta$)(G*))",
             "G*",
-            "log(tan($\delta)(G*))",
+            "log(tan($\delta$)(G*))",
             "Pa",
             "-",
             False,
