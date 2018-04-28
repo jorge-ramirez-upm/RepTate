@@ -70,9 +70,7 @@ class ApplicationLVE(CmdBase):
 
 
 class BaseApplicationLVE:
-    """[summary]
-    
-    [description]
+    """
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html'
 
@@ -320,16 +318,7 @@ class BaseApplicationLVE:
         self.set_views()
 
     def viewLogG1G2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` and loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -340,16 +329,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewG1G2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega`(in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -360,16 +340,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewEtaStar(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -378,16 +349,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogEtaStar(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)` 
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -397,16 +359,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewDelta(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Loss or phase angle :math:`\\delta(\\omega)=\\arctan(G''/G')\\cdot 180/\\pi` (in degrees, in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -415,16 +368,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewTanDelta(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Tangent of the phase angle :math:`\\tan(\\delta(\\omega))=G''/G'` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -433,16 +377,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogTanDelta(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)` 
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -451,16 +386,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogGstar(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)` 
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -470,16 +396,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogtandeltaGstar(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G'^2+G''^2}`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -489,16 +406,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewdeltatanGstar(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Loss angle :math:`\\delta(\\omega)=\\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G'^2+G''^2}`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -508,16 +416,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewJ1J2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Storage compliance :math:`J'(\\omega)=G'/(G'^2+G''^2)` and loss compliance :math:`J''(\\omega)=G''/(G'^2+G''^2)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -530,16 +429,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewColeCole(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Cole-Cole plot: out of phase viscosity :math:`\\eta''(\\omega)=G'(\\omega)/\\omega` vs dynamic viscosity :math:`\\eta'(\\omega)=G''(\\omega)/\\omega`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -548,16 +438,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogG1(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -566,16 +447,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewG1(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Storage modulus :math:`G'(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -584,16 +456,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogG2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -602,16 +465,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewG2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -620,16 +474,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogG1G2tandelta(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))`, loss modulus :math:`\\log(G''(\\omega))` and tangent of the loss angle :math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 3))
         y = np.zeros((dt.num_rows, 3))

@@ -50,20 +50,141 @@ Other columns will be ignored. A correct ``.tts`` file looks like:
 Views
 -----
 
-:math:`G'(\omega), G''(\omega)`
---------------------------------
-
-:math:`\log(G'(\omega)), \log(G''(\omega))`
+log(G',G''(w))
 -------------------------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2
+   
+.. image:: images/LVE_logG1G2.png
+    :width: 45%
+    :align: center
 
-:math:`\eta^*(\omega)`
+
+G',G''(w)
+--------------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG1G2
+
+.. image:: images/LVE_G1G2.png
+    :width: 45%
+    :align: center
+
+etastar
 ----------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewEtaStar
 
-:math:`\log(\eta^*(\omega))`
-----------------------------
+.. image:: images/LVE_etastar.png
+    :width: 45%
+    :align: center
 
-:math:`\delta(\omega)`
+logetastar
 ----------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogEtaStar
 
-:math:`\tan(\delta(\omega))`
+.. image:: images/LVE_logetastar.png
+    :width: 45%
+    :align: center
+
+delta    
+----------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewDelta
+
+.. image:: images/LVE_delta.png
+    :width: 45%
+    :align: center
+
+tan(delta)
 ----------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewTanDelta
+
+.. image:: images/LVE_tandelta.png
+    :width: 45%
+    :align: center
+
+log(tan(delta))
+----------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogTanDelta
+
+.. image:: images/LVE_logtandelta.png
+    :width: 45%
+    :align: center
+    
+log(G*)
+----------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogGstar
+
+.. image:: images/LVE_logGstar.png
+    :width: 45%
+    :align: center
+
+log(tan(delta),G*)
+----------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar
+
+.. image:: images/LVE_logtandeltaGstar.png
+    :width: 45%
+    :align: center
+
+delta(G*)
+----------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar
+
+.. image:: images/LVE_deltaGstar.png
+    :width: 45%
+    :align: center
+
+J',J''(w)
+----------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewJ1J2
+
+.. image:: images/LVE_J1J2.png
+    :width: 45%
+    :align: center
+
+Cole-Cole
+----------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewColeCole
+
+.. image:: images/LVE_ColeCole.png
+    :width: 45%
+    :align: center
+
+log(G')
+-------------------------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1
+
+.. image:: images/LVE_logG1.png
+    :width: 45%
+    :align: center
+
+
+G'
+--------------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG1
+
+.. image:: images/LVE_G1.png
+    :width: 45%
+    :align: center
+
+log(G'')
+-------------------------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG2
+
+.. image:: images/LVE_logG2.png
+    :width: 45%
+    :align: center
+
+
+G''
+--------------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewG2
+
+.. image:: images/LVE_G2.png
+    :width: 45%
+    :align: center
+
+log(G',G''(w),tan(delta))
+--------------------------------
+.. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta
+
+.. image:: images/LVE_logG1G2tandelta.png
+    :width: 45%
+    :align: center
