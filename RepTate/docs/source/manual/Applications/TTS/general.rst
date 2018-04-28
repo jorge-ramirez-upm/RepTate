@@ -88,7 +88,7 @@ Logarithm of the complex viscosity :math:`\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\
 
 delta    
 ----------------------
-Loss or phase angle :math:`\delta(\omega)=\atan(G''/G')\cdot 180/\pi` (in degrees, in logarithmic scale) vs :math:`\omega` (in logarithmic scale)
+Loss or phase angle :math:`\delta(\omega)=\arctan(G''/G')\cdot 180/\pi` (in degrees, in logarithmic scale) vs :math:`\omega` (in logarithmic scale)
 
 .. image:: images/TTS_delta.png
     :width: 45%
@@ -112,7 +112,7 @@ log(tan(delta))
     
 log(G*)
 ----------------------------
-Logarithm of the modulus of the complex viscosity :math:`|G*(\omega)|=\sqrt(G'^2+G''^2)` vs :math:`\log(\omega)` 
+Logarithm of the modulus of the complex viscosity :math:`|G*(\omega)|=\sqrt{G'^2+G''^2}` vs :math:`\log(\omega)` 
 
 .. image:: images/TTS_logGstar.png
     :width: 45%
@@ -120,7 +120,7 @@ Logarithm of the modulus of the complex viscosity :math:`|G*(\omega)|=\sqrt(G'^2
 
 log(tan(delta),G*)
 ----------------------------
-Logarithm of the tangent of the loss angle :math:`\tan(\delta(\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G*(\omega)|=\sqrt(G'^2+G''^2)`
+Logarithm of the tangent of the loss angle :math:`\tan(\delta(\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G*(\omega)|=\sqrt{G'^2+G''^2}`
 
 .. image:: images/TTS_logtandeltaGstar.png
     :width: 45%
@@ -128,7 +128,7 @@ Logarithm of the tangent of the loss angle :math:`\tan(\delta(\omega))=G''/G'` v
 
 delta(G*)
 ----------------------------
-Loss angle :math:`\delta(\omega)=\atan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G*(\omega)|=\sqrt(G'^2+G''^2)`
+Loss angle :math:`\delta(\omega)=\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G*(\omega)|=\sqrt{G'^2+G''^2}`
 
 .. image:: images/TTS_deltaGstar.png
     :width: 45%
@@ -186,7 +186,7 @@ Loss modulus :math:`G''(\omega)` (in logarithmic scale) vs :math:`\omega`(in log
 
 log(G',G''(w),tan(delta))
 --------------------------------
-Logarithm of the storage modulus :math:`\log(G'(\omega))`, loss modulus :math:`\log(G''(\omega))` and tangent of the loss angle :math:`\log(\tan(\delta(\omega)))=\log(G''/G')`vs :math:`\log(\omega)`
+Logarithm of the storage modulus :math:`\log(G'(\omega))`, loss modulus :math:`\log(G''(\omega))` and tangent of the loss angle :math:`\log(\tan(\delta(\omega)))=\log(G''/G')` vs :math:`\log(\omega)`
 
 .. image:: images/TTS_logG1G2tandelta.png
     :width: 45%
