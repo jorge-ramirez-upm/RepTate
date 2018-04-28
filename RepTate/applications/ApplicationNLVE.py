@@ -105,8 +105,20 @@ class BaseApplicationNLVE:
             view_proc=self.viewLogeta,
             n=1,
             snames=["$\eta$(t)"])
-        self.views["log(sigma(t))-gamma"] = View(
-            name="log(sigma(t))",
+        self.views["eta(t)"] = View(
+            name="eta(t)",
+            description="transient viscosity",
+            x_label="t",
+            y_label="$\eta$(t)",
+            x_units="s",
+            y_units="Pa$\cdot$s",
+            log_x=True,
+            log_y=True,
+            view_proc=self.vieweta,
+            n=1,
+            snames=["$\eta$(t)"])            
+        self.views["log(sigma(gamma))"] = View(
+            name="log(sigma(gamma))",
             description="log transient shear stress vs gamma",
             x_label="log($\gamma$)",
             y_label="log($\sigma_{xy}$($\gamma$))",
@@ -117,7 +129,19 @@ class BaseApplicationNLVE:
             view_proc=self.viewLogSigmaGamma,
             n=1,
             snames=["$\sigma_{xy}$($\gamma$)"])
-        self.views["log(sigma(t))-t"] = View(
+        self.views["sigma(gamma)"] = View(
+            name="sigma(gamma)",
+            description="transient shear stress vs gamma",
+            x_label="$\gamma$",
+            y_label="$\sigma_{xy}$($\gamma$)",
+            x_units="-",
+            y_units="Pa",
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewSigmaGamma,
+            n=1,
+            snames=["$\sigma_{xy}$($\gamma$)"])            
+        self.views["log(sigma(t))"] = View(
             name="log(sigma(t))",
             description="log transient shear stress vs time",
             x_label="log(t)",
@@ -129,6 +153,18 @@ class BaseApplicationNLVE:
             view_proc=self.viewLogSigmaTime,
             n=1,
             snames=["$\sigma_{xy}$($\gamma$)"])
+        self.views["sigma(t)"] = View(
+            name="sigma(t)",
+            description="transient shear stress vs time",
+            x_label="t",
+            y_label="$\sigma_{xy}$(t)",
+            x_units="s",
+            y_units="Pa",
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewSigmaTime,
+            n=1,
+            snames=["$\sigma_{xy}$(t)"])
 
         #set multiviews
         self.multiviews = [
@@ -178,6 +214,28 @@ class BaseApplicationNLVE:
             flow_rate = float(file_parameters["edot"])
         y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
+        
+    def vieweta(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        try:
+            flow_rate = float(file_parameters["gdot"])
+        except:
+            flow_rate = float(file_parameters["edot"])
+        y[:, 0] = dt.data[:, 1] / flow_rate
+        return x, y, True
 
     def viewLogSigmaTime(self, dt, file_parameters):
         """[summary]
@@ -197,6 +255,24 @@ class BaseApplicationNLVE:
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
+    def viewSigmaTime(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 1]
+        return x, y, True
+        
     def viewLogSigmaGamma(self, dt, file_parameters):
         """[summary]
         
@@ -217,6 +293,28 @@ class BaseApplicationNLVE:
             flow_rate = float(file_parameters["edot"])
         x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  #compute strain
         y[:, 0] = np.log10(dt.data[:, 1])
+        return x, y, True
+        
+    def viewSigmaGamma(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        try:
+            flow_rate = float(file_parameters["gdot"])
+        except:
+            flow_rate = float(file_parameters["edot"])
+        x[:, 0] = dt.data[:, 0] * flow_rate  #compute strain
+        y[:, 0] = dt.data[:, 1]
         return x, y, True
 
 
