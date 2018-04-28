@@ -103,18 +103,18 @@ class BaseApplicationMWD:
             view_proc=self.view_WM,
             n=1,
             snames=["W(M)"])
-        # self.views["log-log"] = View(
-        #     name="log-log",
-        #     description="Molecular weight distribution",
-        #     x_label="M",
-        #     y_label="W(M)",
-        #     x_units="g/mol",
-        #     y_units="-",
-        #     log_x=True,
-        #     log_y=True,
-        #     view_proc=self.view_WM,
-        #     n=1,
-        #     snames=["W(M)"])
+        self.views["log-log"] = View(
+            name="log-log",
+            description="Molecular weight distribution",
+            x_label="log(M)",
+            y_label="log(W(M))",
+            x_units="g/mol",
+            y_units="-",
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_logWM,
+            n=1,
+            snames=["W(M)"])
         self.views["lin-lin"] = View(
             name="lin-lin",
             description="Molecular weight distribution",
@@ -171,8 +171,24 @@ class BaseApplicationMWD:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-
-
+        
+    def view_logWM(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
+        return x, y, True
 
 class CLApplicationMWD(BaseApplicationMWD, Application):
     """[summary]
