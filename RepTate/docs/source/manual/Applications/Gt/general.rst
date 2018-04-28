@@ -51,21 +51,54 @@ A correct ``.gt`` file looks like:
 Views
 -----
 
-:math:`\log(G(t))`
+log[G(t)]
 -------------------------
+.. automethod:: ApplicationGt.BaseApplicationGt.viewLogGt()
 
+.. image:: images/Gt_LogGt.png
+    :width: 45%
+    :align: center
 
-:math:`G(t)` 
+G(t)
 --------------
+.. automethod:: ApplicationGt.BaseApplicationGt.viewGt()
 
+.. image:: images/Gt_Gt.png
+    :width: 45%
+    :align: center
 
-Schwarzl Transformation
+Schwarzl G',G''
 -----------------------
+.. automethod:: ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt()
 
-:math:`G'(\omega), G''(\omega)`
+The time range of the :math:`G(t)` that will be used for the Fourier transformation can be selected by changing the values of the text boxes :math:`\log(t_{min})` and :math:`\log(t_{min})`. For more details, check :cite:`Gt-Schwarzl_1971`.
 
-i-Rheo Transformation
+.. image:: images/Gt_Schwarzl.png
+    :width: 45%
+    :align: center
+
+i-Rheo G',G''
 ---------------------
+.. automethod:: ApplicationGt.BaseApplicationGt.viewiRheo()
 
-:math:`G'(\omega), G''(\omega)`
+The time range of the :math:`G(t)` that will be used for the Fourier transformation can be selected by changing the values of the text boxes :math:`\log(t_{min})` and :math:`\log(t_{min})`. For more details, check :cite:`Gt-Tassieri_2016`.
 
+.. image:: images/Gt_iRheo.png
+    :width: 45%
+    :align: center
+
+i-Rheo-Over G',G''
+---------------------
+.. automethod:: ApplicationGt.BaseApplicationGt.viewiRheoOver()
+
+The time range of the :math:`G(t)` that will be used for the Fourier transformation can be selected by changing the values of the text boxes :math:`\log(t_{min})` and :math:`\log(t_{min})`. For more details, check :cite:`Gt-Tassieri_2016`.
+
+.. image:: images/Gt_iRheoOver.png
+    :width: 45%
+    :align: center
+
+.. rubric:: References
+
+.. bibliography:: bibliography.bib
+    :style: unsrt
+    :keyprefix: Gt-

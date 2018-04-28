@@ -160,7 +160,7 @@ class BaseApplicationGt:
             y_units="Pa",
             log_x=True,
             log_y=True,
-            view_proc=self.viewiRheo1000,
+            view_proc=self.viewiRheoOver,
             n=2,
             snames=["G',G''"])
         self.OVER = 100  # initial oversampling
@@ -189,16 +189,7 @@ class BaseApplicationGt:
         self.set_views()
 
     def viewGt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -207,16 +198,7 @@ class BaseApplicationGt:
         return x, y, True
 
     def viewLogGt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -225,16 +207,8 @@ class BaseApplicationGt:
         return x, y, True
 
     def viewSchwarzl_Gt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Schwarzl transformation: numerical calculation of the storage modulus :math:`G'(\\omega)` and loss modulus 
+        :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)` 
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         n = len(data_x)
@@ -251,11 +225,7 @@ class BaseApplicationGt:
         return x, y, True
 
     def viewiRheo(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
+        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig).
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         n = len(data_x)
@@ -292,12 +262,8 @@ class BaseApplicationGt:
 
         return x, y, True
 
-    def viewiRheo1000(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
+    def viewiRheoOver(self, dt, file_parameters):
+        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         n = len(data_x)
