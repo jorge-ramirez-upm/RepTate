@@ -169,7 +169,7 @@ class BaseApplicationGt:
 
         #set multiviews
         self.multiviews = [
-            self.views["log[G(t)]"], self.views["Schwarzl G',G''"]
+            self.views["log[G(t)]"], self.views["i-Rheo G',G''"]
         ]  #default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews)
 
