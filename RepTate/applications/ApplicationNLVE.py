@@ -194,16 +194,7 @@ class BaseApplicationNLVE:
         self.set_views()
 
     def viewLogeta(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -216,16 +207,7 @@ class BaseApplicationNLVE:
         return x, y, True
         
     def vieweta(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -238,16 +220,7 @@ class BaseApplicationNLVE:
         return x, y, True
 
     def viewLogSigmaTime(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -256,16 +229,7 @@ class BaseApplicationNLVE:
         return x, y, True
 
     def viewSigmaTime(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs time :math:`t`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -274,16 +238,7 @@ class BaseApplicationNLVE:
         return x, y, True
         
     def viewLogSigmaGamma(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -296,16 +251,7 @@ class BaseApplicationNLVE:
         return x, y, True
         
     def viewSigmaGamma(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

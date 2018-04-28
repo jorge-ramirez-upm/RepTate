@@ -77,16 +77,51 @@ A correct ``.uext`` file looks like:
 Views
 -----
 
-:math:`\log(\eta(t))`
+log(eta(t))
 ---------------------
-log transient viscosity
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogeta
 
-:math:`\log(\sigma(t))-\gamma` (log-linear)
--------------------------------------------
+.. image:: images/NLVE_logeta.png
+    :width: 45%
+    :align: center
 
-log transient shear stress vs strain
+eta(t)
+---------------------
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.vieweta
 
-:math:`\log(\sigma(t))-t` (log-linear)
---------------------------------------
+.. image:: images/NLVE_eta.png
+    :width: 45%
+    :align: center
 
-log transient shear stress vs time
+log(sigma(gamma))
+---------------------
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma
+
+.. image:: images/NLVE_logsigmagamma.png
+    :width: 45%
+    :align: center
+    
+sigma(gamma)
+---------------------
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma
+
+.. image:: images/NLVE_sigmagamma.png
+    :width: 45%
+    :align: center
+
+log(sigma(t))
+---------------------
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime
+
+.. image:: images/NLVE_logsigmat.png
+    :width: 45%
+    :align: center
+
+    
+sigma(t)
+---------------------
+.. automethod:: ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime
+
+.. image:: images/NLVE_sigmat.png
+    :width: 45%
+    :align: center

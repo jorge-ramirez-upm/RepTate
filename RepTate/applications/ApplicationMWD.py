@@ -155,16 +155,7 @@ class BaseApplicationMWD:
         self.set_views()
 
     def view_WM(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """:math:`W(M)` vs :math:`M`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -173,16 +164,7 @@ class BaseApplicationMWD:
         return x, y, True
         
     def view_logWM(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """:math:`\\log(W(M))` vs :math:`\\log(M)` 
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
