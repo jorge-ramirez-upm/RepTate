@@ -80,18 +80,30 @@ A correct ``.reac`` file looks like:
 Views
 -----
 
-:math:`W(M)` (log-lin)
+log-lin
 --------------------------------
-.. |img1| image:: images/MWD_log-lin.png
-    :width: 45%
 
-:math:`W(M)` (log-log)
---------------------------------
-.. |img1| image:: images/MWD_log-log.png
-    :width: 45%
+:math:`W(M)` vs :math:`M` (in logarithmic scale)
 
-:math:`W(M)` (lin-lin)
---------------------------------
-.. |img1| image:: images/MWD_lin-lin.png
+.. image:: images/MWD_log-lin.png
     :width: 45%
+    :align: center
+
+log-log
+--------------------------------
+
+:math:`\log(W(M))` vs :math:`\log(M)` 
+
+.. image:: images/MWD_log-log.png
+    :width: 45%
+    :align: center
+
+lin-lin
+--------------------------------
+
+:math:`W(M)` vs :math:`M`
+
+.. image:: images/MWD_lin-lin.png
+    :width: 45%
+    :align: center
 
