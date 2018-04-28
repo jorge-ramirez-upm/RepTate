@@ -80,7 +80,7 @@ class Application(CmdBase):
         self.parent_manager = parent
         self.logger = logging.getLogger('ReptateLogger')
         self.views = OrderedDict()
-        self.filetypes = {}
+        self.filetypes = OrderedDict() # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order
         self.datasets = {}
         self.current_view = 0
