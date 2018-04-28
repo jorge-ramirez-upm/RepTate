@@ -161,7 +161,7 @@ Logarithm of the storage modulus :math:`\log(G'(\omega))` vs :math:`\log(\omega)
 
 G'
 --------------------------------
-Storage modulus :math:`G'(\omega)` (in logarithmic scale) vs :math:`\omega`(in logarithmic scale)
+Storage modulus :math:`G'(\omega)` (in logarithmic scale) vs :math:`\omega` (in logarithmic scale)
 
 .. image:: images/TTS_G1.png
     :width: 45%
@@ -178,7 +178,7 @@ Logarithm of the loss modulus :math:`\log(G''(\omega))` vs :math:`\log(\omega)`
 
 G''
 --------------------------------
-Loss modulus :math:`G''(\omega)` (in logarithmic scale) vs :math:`\omega`(in logarithmic scale)
+Loss modulus :math:`G''(\omega)` (in logarithmic scale) vs :math:`\omega` (in logarithmic scale)
 
 .. image:: images/TTS_G2.png
     :width: 45%
