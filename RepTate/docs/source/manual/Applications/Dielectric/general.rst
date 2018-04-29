@@ -53,20 +53,92 @@ Other columns will be ignored. A correct ``.tts`` file looks like:
 Views
 -----
 
-:math:`G'(\omega), G''(\omega)`
+log(e',e''(w))
 --------------------------------
 
-:math:`\log(G'(\omega)), \log(G''(\omega))`
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewLogE1E2()
+
+.. image:: images/Dielectric_LogE1E1.png
+    :width: 45%
+    :align: center
+
+semilog(e',e''(w))
 -------------------------------------------
 
-:math:`\eta^*(\omega)`
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1E2()
+
+.. image:: images/Dielectric_SemiLogE1E1.png
+    :width: 45%
+    :align: center
+
+e'(w)", "e''(w)    
 ----------------------
 
-:math:`\log(\eta^*(\omega))`
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewE1E2()
+
+.. image:: images/Dielectric_E1E2.png
+    :width: 45%
+    :align: center
+
+log(e')    
 ----------------------------
 
-:math:`\delta(\omega)`
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewLogE1()
+
+.. image:: images/Dielectric_LogE1.png
+    :width: 45%
+    :align: center
+
+semilog(e')
 ----------------------
 
-:math:`\tan(\delta(\omega))`
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1()
+
+.. image:: images/Dielectric_SemiLogE1.png
+    :width: 45%
+    :align: center
+
+e'
 ----------------------------
+
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewE1()
+
+.. image:: images/Dielectric_E1.png
+    :width: 45%
+    :align: center
+
+log(e'')    
+----------------------------
+
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewLogE2()
+
+.. image:: images/Dielectric_LogE2.png
+    :width: 45%
+    :align: center
+
+semilog(e'')
+----------------------
+
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE2()
+
+.. image:: images/Dielectric_SemiLogE2.png
+    :width: 45%
+    :align: center
+
+e''
+----------------------------
+
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewE2()
+
+.. image:: images/Dielectric_E2.png
+    :width: 45%
+    :align: center
+
+Cole-Cole
+----------------------------
+
+.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewColeCole()
+
+.. image:: images/Dielectric_ColeCole.png
+    :width: 45%
+    :align: center

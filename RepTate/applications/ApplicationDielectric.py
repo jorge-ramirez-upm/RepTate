@@ -101,7 +101,7 @@ class BaseApplicationDielectric:
             name="log(e',e''(w))",
             description="log Relative permittivity, Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="log(e'($\omega$),e''($\omega$))",
+            y_label="log($\epsilon'(\omega),\epsilon''(\omega)$)",
             x_units="rad/s",
             y_units="-",
             log_x=False,
@@ -113,7 +113,7 @@ class BaseApplicationDielectric:
             name="semilog(e',e''(w))",
             description="semilog Relative permittivity, Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="e'($\omega$),e''($\omega$)",
+            y_label="$\epsilon'(\omega),\epsilon''(\omega)$",
             x_units="rad/s",
             y_units="-",
             log_x=False,
@@ -125,7 +125,7 @@ class BaseApplicationDielectric:
             "e',e''(w)",
             "Relative permittivity, Dielectric Loss",
             "$\omega$",
-            "e'($\omega$),e''($\omega$)",
+            "$\epsilon'(\omega),\epsilon''(\omega)$",
             "rad/s",
             "-",
             True,
@@ -136,7 +136,7 @@ class BaseApplicationDielectric:
             name="log(e')",
             description="log Relative Permittivity",
             x_label="log($\omega$)",
-            y_label="log(e'($\omega$))",
+            y_label="log($\epsilon'(\omega)$)",
             x_units="rad/s",
             y_units="-",
             log_x=False,
@@ -148,7 +148,7 @@ class BaseApplicationDielectric:
             name="semilog(e')",
             description="log Relative Permittivity",
             x_label="log($\omega$)",
-            y_label="e'($\omega$)",
+            y_label="$\epsilon'(\omega)$",
             x_units="rad/s",
             y_units="-",
             log_x=False,
@@ -160,7 +160,7 @@ class BaseApplicationDielectric:
             "e'",
             "Relative Permittivity",
             "$\omega$",
-            "e'($\omega$)",
+            "$\epsilon'(\omega)$",
             "rad/s",
             "-",
             True,
@@ -171,7 +171,7 @@ class BaseApplicationDielectric:
             name="log(e'')",
             description="log Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="log(e''($\omega$))",
+            y_label="log($\epsilon''(\omega)$)",
             x_units="rad/s",
             y_units="-",
             log_x=False,
@@ -183,7 +183,7 @@ class BaseApplicationDielectric:
             name="semilog(e'')",
             description="semilog Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="e''($\omega$)",
+            y_label="$\epsilon''(\omega)$",
             x_units="rad/s",
             y_units="-",
             log_x=False,
@@ -195,13 +195,24 @@ class BaseApplicationDielectric:
             "e''",
             "Dielectric Loss",
             "$\omega$",
-            "e''($\omega$)",
+            "$\epsilon''(\omega)$",
             "rad/s",
             "-",
             True,
             True,
             self.viewE2,
             1, ["e''(w)"])
+        self.views["Cole-Cole"] = View(
+            "Cole-Cole",
+            "Cole-Cole plot",
+            "$\epsilon'$",
+            "$\epsilon''$",
+            "-",
+            "-",
+            False,
+            False,
+            self.viewColeCole,
+            1, ["Cole-Cole"])
 
         #set multiviews
         self.multiviews = [
@@ -232,16 +243,7 @@ class BaseApplicationDielectric:
         self.set_views()
 
     def viewLogE1E2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Log or the relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -252,16 +254,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewSemiLogE1E2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Semilog plot: Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -272,16 +265,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewE1E2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -293,16 +277,7 @@ class BaseApplicationDielectric:
 
 
     def viewLogE1(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Log or the relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -311,16 +286,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewSemiLogE1(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Semilog plot: Relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -329,16 +295,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewE1(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Relative permittivity :math:`\\epsilon'(\\omega)` vs frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -347,16 +304,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewLogE2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Log or the Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -365,16 +313,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewSemiLogE2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Semilog plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -383,16 +322,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewE2(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Dielectric Loss :math:`\\epsilon''(\\omega)` vs frequency :math:`\\omega`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -400,6 +330,14 @@ class BaseApplicationDielectric:
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
+    def viewColeCole(self, dt, file_parameters):
+        """Cole-Cole plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs relative permittivity :math:`\\epsilon'(\\omega)`
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 1]
+        y[:, 0] = dt.data[:, 2]
+        return x, y, True
 
 
 class CLApplicationDielectric(BaseApplicationDielectric, Application):
