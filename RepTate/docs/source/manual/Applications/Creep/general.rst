@@ -50,18 +50,43 @@ A correct ``.creep`` file looks like:
 Views
 -----
 
-:math:`\log(\gamma(t))`
+log(gamma(t))
 --------------------------------
+.. automethod:: ApplicationCreep.BaseApplicationCreep.viewLogStraint()
 
-:math:`\gamma(t)`
+.. image:: images/Creep_LogGammat.png
+    :width: 45%
+    :align: center
+
+gamma(t)
 -------------------------------------------
+.. automethod:: ApplicationCreep.BaseApplicationCreep.viewStraint()
 
-:math:`\log(J(t))`
+.. image:: images/Creep_Gammat.png
+    :width: 45%
+    :align: center
+
+log(J(t))
 ----------------------
+.. automethod:: ApplicationCreep.BaseApplicationCreep.viewLogJt()
 
-:math:`J(t)`
+.. image:: images/Creep_LogJt.png
+    :width: 45%
+    :align: center
+
+J(t)
 ----------------------------
+.. automethod:: ApplicationCreep.BaseApplicationCreep.viewJt()
 
-:math:`t/J(t)`
+.. image:: images/Creep_Jt.png
+    :width: 45%
+    :align: center
+
+t/J(t)
 ----------------------
+.. automethod:: ApplicationCreep.BaseApplicationCreep.viewt_Jt()
+
+.. image:: images/Creep_t_Jt.png
+    :width: 45%
+    :align: center
 

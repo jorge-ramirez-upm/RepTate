@@ -170,16 +170,7 @@ class BaseApplicationCreep:
         self.set_views()
 
     def viewLogStraint(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -188,16 +179,7 @@ class BaseApplicationCreep:
         return x, y, True
 
     def viewStraint(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Applied strain :math:`\\gamma(t)` vs time :math:`t` (both axes in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -206,16 +188,7 @@ class BaseApplicationCreep:
         return x, y, True
 
     def viewLogJt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t` 
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -225,16 +198,7 @@ class BaseApplicationCreep:
         return x, y, True
 
     def viewJt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs time :math:`t` (both axes in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -244,16 +208,7 @@ class BaseApplicationCreep:
         return x, y, True
 
     def viewt_Jt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Time divided by compliance :math:`t/J(t)` vs time :math:`t` (both axes in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
