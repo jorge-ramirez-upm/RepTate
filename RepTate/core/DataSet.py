@@ -50,6 +50,8 @@ from DataTable import DataTable
 import itertools
 from collections import OrderedDict
 
+import numpy as np
+from scipy.integrate import simps
 
 class ColorMode(Enum):
     """[summary]
@@ -323,10 +325,80 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         for th in self.theories.values():
             th.do_hide()
 
+    def do_integrate(self, line=""):
+        """Calculate the integral of the data in the current dataset using current view (or the first view if there are more than one) of the parent application
+        """
+        view = self.parent_application.multiviews[0]
+        th = self.current_theory
+
+        print ("Integrating the active data according to %s vs %s)"%(view.name,view.x_label))
+        print ("%20s"%"FILE", end='')
+        for i in range(view.n):
+            print (" %10s"%view.snames[i], end='')
+        print("")
+
+        for j, file in enumerate(self.files):
+            dt = file.data_table
+            print ("%20s"%file.file_name_short, end='')
+            try:
+                x, y, success = view.view_proc(dt, file.file_parameters)
+            except TypeError as e:
+                print("in do_integrate()", e)
+                return
+            for i in range(view.n):
+                ydata = y[:,i]
+                xdata = x[:,i]
+                conditionnaninf = (~np.isnan(xdata)) * (~np.isnan(ydata)) * (~np.isinf(xdata)) * (~np.isinf(ydata)) 
+                ydata = np.extract(conditionnaninf, ydata)
+                xdata = np.extract(conditionnaninf, xdata)
+                if (th != None):
+                    if (self.theories[th].xrange.get_visible()):
+                        conditionx = (xdata > th.xmin) * (xdata < th.xmax)
+                    else:
+                        conditionx = (xdata > -np.inf) * (xdata < np.inf)
+                    if (self.theories[th].yrange.get_visible()):
+                        conditiony = (ydata > th.ymin) * (ydata < th.ymax)
+                    else:
+                        conditiony = (ydata > -np.inf) * (ydata < np.inf)
+                    ydata = np.extract(conditionx * conditiony, ydata)
+                    xdata = np.extract(conditionx * conditiony, xdata)
+
+                I = simps(ydata,xdata)
+                print (" %10g"%I, end='')
+            print("") 
+
+
+            for tth in self.theories.values():
+                tt = tth.tables[file.file_name_short]
+                print ("%20s"%tth.name, end='')
+                try:
+                    x, y, success = view.view_proc(tt, file.file_parameters)
+                except Exception as e:
+                    print("in do_integrate th", e)
+                    continue
+                for i in range(view.n):
+                    ydata = y[:,i]
+                    xdata = x[:,i]
+                    conditionnaninf = (~np.isnan(xdata)) * (~np.isnan(ydata)) * (~np.isinf(xdata)) * (~np.isinf(ydata)) 
+                    ydata = np.extract(conditionnaninf, ydata)
+                    xdata = np.extract(conditionnaninf, xdata)
+                    if (self.theories[th].xrange.get_visible()):
+                        conditionx = (xdata > th.xmin) * (xdata < th.xmax)
+                    else:
+                        conditionx = (xdata > -np.inf) * (xdata < np.inf)
+                    if (self.theories[th].yrange.get_visible()):
+                        conditiony = (ydata > th.ymin) * (ydata < th.ymax)
+                    else:
+                        conditiony = (ydata > -np.inf) * (ydata < np.inf)
+                    ydata = np.extract(conditionx * conditiony, ydata)
+                    xdata = np.extract(conditionx * conditiony, xdata)
+
+                    I = simps(ydata,xdata)
+                    print (" %10g"%I, end='')
+                print("") 
+                    
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application
-        
-        [description]
         """
         # view = self.parent_application.current_view
 
