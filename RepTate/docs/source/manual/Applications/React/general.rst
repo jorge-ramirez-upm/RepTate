@@ -53,17 +53,52 @@ A correct ``.reac`` file looks like:
 Views
 -----
 
-:math:`w(M)` (log-linear)
+w(M)
 -------------------------
 
+.. automethod:: ApplicationReact.BaseApplicationReact.view_wM()
+
+.. image:: images/React_wM.png
+    :width: 45%
+    :align: center
+
+log(w(M))
+------------------------------------
+Molecular weight distribution
 :math:`\log_{10}(w(M))` (log-linear)
-------------------------------------
 
-:math:`g(M)` (log-linear)
+.. automethod:: ApplicationReact.BaseApplicationReact.view_logwM()
+
+.. image:: images/React_logwM.png
+    :width: 45%
+    :align: center
+
+g(M)
 -------------------------
+:math:`g(M)` (log-linear)
 
+.. automethod:: ApplicationReact.BaseApplicationReact.view_gM()
+
+.. image:: images/React_gM.png
+    :width: 45%
+    :align: center
+
+log(g(M))
+------------------------------------
 :math:`\log_{10}(g(M))` (log-linear)
-------------------------------------
 
-:math:`\text{br/1000C}` (log-linear)
+.. automethod:: ApplicationReact.BaseApplicationReact.view_loggM()
+
+.. image:: images/React_LoggM.png
+    :width: 45%
+    :align: center
+
+br/1000C
 ------------------------------------
+:math:`\text{br/1000C}` (log-linear)
+
+.. automethod:: ApplicationReact.BaseApplicationReact.view_br_1000C()
+
+.. image:: images/React_br_1000C.png
+    :width: 45%
+    :align: center
