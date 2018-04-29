@@ -50,15 +50,39 @@ A correct ``.sans`` file looks like:
 -----
 Views
 -----
-
-:math:`\log (I) \ \mathrm{vs} \ \log(q)`
+log(I(q))
 ----------------------------------------
 
-:math:`I \ \mathrm{vs} \ q`
+.. automethod:: ApplicationSANS.BaseApplicationSANS.viewLogSANS()
+
+.. image:: images/SANS_LogIq.png
+    :width: 45%
+    :align: center
+
+
+I(q)
 ---------------------------
 
-:math:`I^{-1} \ \mathrm{vs} \ q^2`   (Zimm plot)
+.. automethod:: ApplicationSANS.BaseApplicationSANS.viewSANS()
+
+.. image:: images/SANS_Iq.png
+    :width: 45%
+    :align: center
+
+Zimm
 ------------------------------------------------
 
-:math:`q^2\cdot I \ \mathrm{vs} \ q`  (Kratky plot)
+.. automethod:: ApplicationSANS.BaseApplicationSANS.viewZimm()
+
+.. image:: images/SANS_Zimm.png
+    :width: 45%
+    :align: center
+
+Kratky
 ---------------------------------------------------
+
+.. automethod:: ApplicationSANS.BaseApplicationSANS.viewKratky()
+
+.. image:: images/SANS_Kratky.png
+    :width: 45%
+    :align: center

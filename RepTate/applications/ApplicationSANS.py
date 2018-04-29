@@ -158,16 +158,7 @@ class BaseApplicationSANS:
         self.set_views()
 
     def viewLogSANS(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Logarithm of the scattered intensity :math:`\\log (I(q))` vs the logarithm of the scattering vector :math:`\\log(q)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -176,16 +167,7 @@ class BaseApplicationSANS:
         return x, y, True
 
     def viewSANS(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Scattered intensity :math:`I(q)` vs scattering vector :math:`q` (both axes in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -194,16 +176,7 @@ class BaseApplicationSANS:
         return x, y, True
 
     def viewKratky(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q` 
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -212,16 +185,7 @@ class BaseApplicationSANS:
         return x, y, True
 
     def viewZimm(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+        """Zimm plot: :math:`I(q)^{-1}` vs :math:`q^2`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
