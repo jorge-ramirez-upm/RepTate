@@ -19,7 +19,7 @@ RepTate can be installed in two ways:
 The "shortcut"
 ==============
 
-Binary packages (file containing all the needed files and libraries, 
+Binary packages (containing all the needed files and libraries, 
 as well as a Python interpreter), can be downloaded here:
 
 `RepTate for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EWV3803YS2NOuD5oRae3y9YBYEQqSUNkgZr_A4JMFDHElA?e=JzOyrM?download=1>`_
