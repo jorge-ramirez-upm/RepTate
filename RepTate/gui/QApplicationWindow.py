@@ -907,7 +907,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             for param in self.filetypes[ext].basic_file_parameters[:]:
                 try:
                     temp = dt.file_parameters[param]
-                    print(param, "'",dt.file_parameters[param],"'")
                     if temp == '' or temp == '\n': # case where no value is provided (end line)
                         e_list.append(param)
                 except KeyError:
