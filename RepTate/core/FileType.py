@@ -143,6 +143,7 @@ class TXTColumnFile(object):
             - line {[type]} -- [description]
             - file {[type]} -- [description]
         """
+        line = line.replace(' ', '') # remove all spaces
         items=line.split(';')
         file.file_parameters={}
         for i in range(len(items)):
