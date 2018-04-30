@@ -742,6 +742,11 @@ class Theory(CmdBase):
             - line {[ymin ymax]} -- Sets the limits of the span
         """
         if (line == ""):
+            self.ymin, self.ymax = self.ax.get_ylim()
+            self.yminline.set_data([0, 1], [self.ymin, self.ymin])
+            self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
+            self.yrange.set_xy([[0, self.ymin], [1, self.ymin], [1, self.ymax],
+                                [0, self.ymax], [0, self.ymin]])
             self.yrange.set_visible(not self.yrange.get_visible())
             self.yminline.set_visible(not self.yminline.get_visible())
             self.ymaxline.set_visible(not self.ymaxline.get_visible())
