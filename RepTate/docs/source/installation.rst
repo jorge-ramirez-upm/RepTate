@@ -22,11 +22,11 @@ The "shortcut"
 Binary packages (containing all the needed files and libraries, 
 as well as a Python interpreter), can be downloaded here:
 
-`RepTate v0.9.1 for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EWV3803YS2NOuD5oRae3y9YBYEQqSUNkgZr_A4JMFDHElA?e=JzOyrM?download=1>`_
+`RepTate v0.9.1 for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EWV3803YS2NOuD5oRae3y9YBYEQqSUNkgZr_A4JMFDHElA?download=1>`_
     Download size: 305 MB. 
     Unzip the dowloaded file and look for the RepTate executable ``RepTate.exe``.
 
-`RepTate v0.9.1 for Mac (OS X 10.10 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EQV6JjH4p7ZMn-TOvQ8ze8ABR-9vXRGT1QtektModMbGmg?e=ObvSEK?download=1>`_ 
+`RepTate v0.9.1 for Mac (OS X 10.10 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EQV6JjH4p7ZMn-TOvQ8ze8ABR-9vXRGT1QtektModMbGmg?download=1>`_ 
     Download size: 82 MB.
     Drag-and-drop the RepTate application in your Application folder. 
 
