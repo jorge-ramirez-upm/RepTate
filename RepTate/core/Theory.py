@@ -600,14 +600,19 @@ class Theory(CmdBase):
         Arguments:
             - line {[type]} -- [description]
         """
-        print('Saving prediction of ' + self.thname + ' theory')
+        self.Qprint('Saving prediction(s) of ' + self.name + ' theory')
         for f in self.parent_dataset.files:
             fparam = f.file_parameters
             ttable = self.tables[f.file_name_short]
-            ofilename = os.path.splitext(
-                f.file_full_path)[0] + '_TH' + os.path.splitext(
-                    f.file_full_path)[1]
-            print('File: ' + f.file_name_short)
+            if line == '':
+                ofilename = os.path.splitext(
+                    f.file_full_path)[0] + '_TH' + os.path.splitext(
+                        f.file_full_path)[1]
+            else:
+                ofilename = os.path.join(line, f.file_name_short + '_TH' + os.path.splitext(
+                        f.file_full_path)[1])
+            # print("ofilename", ofilename)
+            # print('File: ' + f.file_name_short)
             fout = open(ofilename, 'w')
             k = list(f.file_parameters.keys())
             k.sort()

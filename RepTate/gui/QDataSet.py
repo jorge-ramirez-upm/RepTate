@@ -39,7 +39,7 @@ from os.path import dirname, join, abspath
 from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon, QIntValidator, QDoubleValidator
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel, QFileDialog
 from DataSet import DataSet
 from QTheory import QTheory
 from DataSetWidget import DataSetWidget
@@ -201,6 +201,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         menu.addAction(self.actionHorizontal_Limits)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
+        self.action_save_theory_data = QAction(QIcon(':/Icon8/Images/new_icons/icons8-save_TH.png'), "Save Theory Data", self)
+        tb.addAction(self.action_save_theory_data)
         self.TheoryLayout.insertWidget(0, tb)
         self.splitter.setSizes((1000, 3000))
 
@@ -230,11 +232,26 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.handle_actionMinimize_Error)
         connection_id = self.actionCalculate_Theory.triggered.connect(
             self.handle_actionCalculate_Theory)
+        connection_id = self.action_save_theory_data.triggered.connect(
+            self.handle_action_save_theory_data)
 
         connection_id = self.actionVertical_Limits.triggered.connect(
             self.toggle_vertical_limits)
         connection_id = self.actionHorizontal_Limits.triggered.connect(
             self.toggle_horizontal_limits)
+
+    def handle_action_save_theory_data(self):
+        """Save theory data of current theory"""
+        th = self.current_theory
+        if th:
+            # file browser window  
+            dialog = QFileDialog(self)
+            dir_start = "data/"
+            dilogue_name = "Select Folder"
+            folder = dialog.getExistingDirectory(self, dilogue_name, dir_start)
+            print("folder", folder)
+            self.theories[th].do_save(folder)
+
 
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)
