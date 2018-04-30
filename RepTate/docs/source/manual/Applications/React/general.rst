@@ -33,8 +33,8 @@ Text files with ``.reac`` extension should be organised as follows:
 
   #. molar mass, :math:`M`,
   #. weight associated, :math:`\dfrac{\text d w(\log M)}{\text d \log M}`,
-  #. the `g`-factor, :math:`g(M)` 
-  #. number of branch per 1000 carbon, :math:`\log_{10}(g(M))`.
+  #. the `g`-factor, :math:`g(M)=\dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}` 
+  #. number of branching points per 1000 carbon.
 
 A correct ``.reac`` file looks like:
 
@@ -54,7 +54,7 @@ Views
 -----
 
 w(M)
--------------------------
+----
 
 .. automethod:: ApplicationReact.BaseApplicationReact.view_wM()
 
@@ -63,8 +63,7 @@ w(M)
     :align: center
 
 log(w(M))
-------------------------------------
-Molecular weight distribution
+---------
 :math:`\log_{10}(w(M))` (log-linear)
 
 .. automethod:: ApplicationReact.BaseApplicationReact.view_logwM()
@@ -74,7 +73,7 @@ Molecular weight distribution
     :align: center
 
 g(M)
--------------------------
+----
 :math:`g(M)` (log-linear)
 
 .. automethod:: ApplicationReact.BaseApplicationReact.view_gM()
@@ -84,7 +83,7 @@ g(M)
     :align: center
 
 log(g(M))
-------------------------------------
+---------
 :math:`\log_{10}(g(M))` (log-linear)
 
 .. automethod:: ApplicationReact.BaseApplicationReact.view_loggM()
@@ -94,7 +93,7 @@ log(g(M))
     :align: center
 
 br/1000C
-------------------------------------
+--------
 :math:`\text{br/1000C}` (log-linear)
 
 .. automethod:: ApplicationReact.BaseApplicationReact.view_br_1000C()

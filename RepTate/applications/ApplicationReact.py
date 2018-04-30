@@ -209,7 +209,8 @@ class BaseApplicationReact:
         return x, y, True
 
     def view_gM(self, dt, file_parameters):
-        """MISSING DOC
+        """:math:`g`-factor as a function of the molecular weight.
+        The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -218,7 +219,8 @@ class BaseApplicationReact:
         return x, y, True
 
     def view_loggM(self, dt, file_parameters):
-        """MISSING DOC
+        """Logarithm of the :math:`g`-factor as a function of the molecular weight.
+        The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -227,7 +229,7 @@ class BaseApplicationReact:
         return x, y, True
 
     def view_br_1000C(self, dt, file_parameters):
-        """MISSING DOC
+        """Number of branching points per 1000 carbon as a function of the molecular weight
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
