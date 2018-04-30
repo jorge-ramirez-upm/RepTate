@@ -459,14 +459,14 @@ class BaseTheoryBlendRoliePoly:
         Returns:
             - [type] -- [description]
         """
-        pass
-        # nmodes = self.parameters["nmodes"].value
-        # tau = np.zeros(nmodes)
-        # G = np.zeros(nmodes)
-        # for i in range(nmodes):
-        #     tau[i] = self.parameters["tauD%02d" % i].value
-        #     G[i] = self.parameters["G%02d" % i].value
-        # return tau, G
+        nmodes = self.parameters["nmodes"].value
+        tau = np.zeros(nmodes)
+        G = np.zeros(nmodes)
+        GN0 = self.parameters["GN0"].value
+        for i in range(nmodes):
+            tau[i] = self.parameters["tauD%02d" % i].value
+            G[i] = GN0 * self.parameters["phi%02d" % i].value
+        return tau, G
 
     def set_modes_from_mwd(self, m, phi):
         """[summary]
