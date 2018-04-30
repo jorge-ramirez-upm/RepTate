@@ -7,10 +7,14 @@ RepTate can be installed in two ways:
     #. the "shortcut", which will allow you to run RepTate in a couple of clicks;
     #. the "scenic route", which require more steps and the use of the command-line interface. 
 
-Note that RepTate is continuously updated by the developers. Option-2 will get you the latest version, 
-while Option-1 is a "snapshot" in time of the software. 
-Moreover, the "scenic route" is ultimately faster than the "shortcut" when, in the future, 
-you will want to update your version of RepTate (with the powerful ``git pull`` command). 
+.. note::
+    RepTate is continuously updated by the developers. Option-2 will get you the latest version, 
+    while Option-1 is a "snapshot" in time of the software. 
+
+.. hint::
+    Ultimately, the "scenic route" is faster than the "shortcut":
+    To update your version of RepTate in the future, the "scenic route" offers
+    the powerful ``git pull`` command.
 
 The "shortcut"
 ==============
