@@ -4,8 +4,8 @@ Installation
 
 RepTate can be installed in two ways: 
 
-    #. the "shortcut", which will allow you to run RepTate in a couple of clicks;
-    #. the "scenic route", which require more steps and the use of the command-line interface. 
+    #. the "shortcut", allows you to run RepTate in a couple of clicks;
+    #. the "scenic route", requires more steps and the use of the command-line interface. 
 
 .. note::
     RepTate is continuously updated by the developers. Option-2 will get you the latest version, 
