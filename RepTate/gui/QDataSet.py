@@ -304,6 +304,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.actionShow_Limits.setDisabled(state)
         self.actionVertical_Limits.setDisabled(state)
         self.actionHorizontal_Limits.setDisabled(state)
+        self.action_save_theory_data.setDisabled(state)
 
     def set_limit_icon(self):
         """[summary]
