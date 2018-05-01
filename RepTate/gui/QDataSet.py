@@ -417,19 +417,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.parent_application.update_plot()
         self.parent_application.update_Qplot()
 
-    def Qshow_all(self):
-        """Show all the files in this dataset, except those previously hiden
-        
-        [description]
-        """
-        self.do_show_all()
-        for i in range(self.DataSettreeWidget.topLevelItemCount()):
-            file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
-            if file_name in self.inactive_files:
-                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 0)
-            else:
-                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 2)
-
     def handle_thTabBarDoubleClicked(self, index):
         """Edit Theory name
         
