@@ -138,13 +138,13 @@ class TheoryPomPom(CmdBase):
     description = "PomPom"
     citations = ""
 
-    def __new__(cls, name="ThPomPom", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -164,13 +164,14 @@ class BaseTheoryPomPom:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model'
     single_file = False
+    thname = TheoryPomPom.thname
 
-    def __init__(self, name="ThPomPom", parent_dataset=None, axarr=None):
+    def __init__(self, name="", parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThPomPom"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -290,9 +291,8 @@ class BaseTheoryPomPom:
         else:
             nustar = 2.0 / (q - 1)
             Axy = gdot * tauB * (1 - exp(-t / tauB))
-            Axx = 2 * gdot * gdot * tauB * tauB * (
-                1 - exp(-t / tauB)) + 1 - 2 * gdot * gdot * tauB * t * exp(
-                    -t / tauB)
+            Axx = 2 * gdot * gdot * tauB * tauB * (1 - exp(
+                -t / tauB)) + 1 - 2 * gdot * gdot * tauB * t * exp(-t / tauB)
             Trace = Axx + 2
             #For very fast modes, avoid integrating
             aux = tauS / exp(nustar * (l - 1))
@@ -314,8 +314,8 @@ class BaseTheoryPomPom:
             nustar = 2.0 / (q - 1.0)
             Axx = (1 - 2 * edot * tauB * exp(
                 (2 * edot * tauB - 1) * t / tauB)) / (1 - 2 * edot * tauB)
-            Ayy = (1 + edot * tauB * exp(-(1 + edot * tauB) * t / tauB)
-                    ) / (1 + edot * tauB)
+            Ayy = (1 + edot * tauB * exp(-(1 + edot * tauB) * t / tauB)) / (
+                1 + edot * tauB)
             Trace = Axx + 2 * Ayy
             #For very fast modes, avoid integrating
             aux = tauS / exp(nustar * (l - 1))
@@ -327,8 +327,7 @@ class BaseTheoryPomPom:
             if aux * edot < 1e-3:
                 dydx = 0
             else:
-                dydx = firstterm - (
-                    l - 1) / tauS * exp(nustar * (l - 1))
+                dydx = firstterm - (l - 1) / tauS * exp(nustar * (l - 1))
         return dydx
 
     def calculate_PomPom(self, f=None):
@@ -382,7 +381,7 @@ class BaseTheoryPomPom:
                 args=(p, ),
                 atol=abserr,
                 rtol=relerr)
-            
+
             # write results in table
             l = np.delete(l, [0])  # delete the t=0 value
             t = np.delete(times, [0])  # delete the t=0 value
@@ -403,8 +402,8 @@ class BaseTheoryPomPom:
                         1 + flow_rate * tauB)
 
                 k = np.ones(len(t))
-                k[Axx_arr < 1e240] = (
-                    Axx_arr - Ayy_arr) / (Axx_arr + 2 * Ayy_arr)  # k=1 if Axx > 1e240
+                k[Axx_arr < 1e240] = (Axx_arr - Ayy_arr) / (
+                    Axx_arr + 2 * Ayy_arr)  # k=1 if Axx > 1e240
 
                 tt.data[:, 1] += 3 * G * l * l * k
 
@@ -478,12 +477,12 @@ class CLTheoryPomPom(BaseTheoryPomPom, Theory):
     [description]
     """
 
-    def __init__(self, name="ThPomPom", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -496,12 +495,12 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThPomPom", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

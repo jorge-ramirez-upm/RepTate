@@ -44,6 +44,7 @@ from PyQt5.QtWidgets import QToolBar, QAction
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 
+
 class TheoryDebye(CmdBase):
     """Fit a Debye function to the small angle neutron scattering data of ideal polymer chains. 
     
@@ -75,13 +76,13 @@ class TheoryDebye(CmdBase):
     description = 'Debye theory for neutron scattering from ideal polymer chains'
     citations = ''
 
-    def __new__(cls, name='ThDebye', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThDebye'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -101,13 +102,14 @@ class BaseTheoryDebye:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/SANS/Theory/Debye.html'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryDebye.thname
 
-    def __init__(self, name='ThDebye', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThDebye'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -164,7 +166,7 @@ class BaseTheoryDebye:
             type=ParameterType.boolean,
             opt_type=OptType.const,
             display_flag=False)
-            
+
     def calculateDebye(self, f=None):
         """Debye function that returns the square of y
         
@@ -199,22 +201,25 @@ class BaseTheoryDebye:
         nonideal = self.parameters["non-ideal"].value
 
         tt.data[:, 0] = ft.data[:, 0]
-        
+
         Rg = np.sqrt(CRg * Mw)
         if (stretched):
-            Rg*=Lambda
+            Rg *= Lambda
         RgQsq = Rg * Rg * ft.data[:, 0] * ft.data[:, 0]
         debFn = 2.0 / RgQsq / RgQsq * (RgQsq + np.exp(-RgQsq) - 1.0)
         if (nonideal):
-            tt.data[:, 1] = Contr * 1 / (1 / (Mw / Mmono * Phi * (1.0 - Phi) * debFn) - 2 * Chi) + Bck
+            tt.data[:, 1] = Contr * 1 / (1 /
+                                         (Mw / Mmono * Phi *
+                                          (1.0 - Phi) * debFn) - 2 * Chi) + Bck
         else:
-            tt.data[:, 1] = Contr * Mw / Mmono * Phi * (1.0 - Phi) * debFn + Bck
-        
+            tt.data[:,
+                    1] = Contr * Mw / Mmono * Phi * (1.0 - Phi) * debFn + Bck
+
     def do_error(self, line):
         super().do_error(line)
         if (line == ""):
             self.Qprint("")
-            self.Qprint("%12s %8s %8s"%("File","Mw","Rg"))
+            self.Qprint("%12s %8s %8s" % ("File", "Mw", "Rg"))
             CRg = self.parameters["C_gyr"].value
             Lambda = self.parameters["Lambda"].value
             stretched = self.parameters["stretched"].value
@@ -224,9 +229,12 @@ class BaseTheoryDebye:
                 if (f.active):
                     Mw = float(f.file_parameters["Mw"])
                     if (stretched):
-                        self.Qprint("%12s %8.4g %8.4g"%(f.file_name_short,Mw, Lambda * np.sqrt(CRg * Mw)))
+                        self.Qprint("%12s %8.4g %8.4g" %
+                                    (f.file_name_short, Mw,
+                                     Lambda * np.sqrt(CRg * Mw)))
                     else:
-                        self.Qprint("%12s %8.4g %8.4g"%(f.file_name_short,Mw, np.sqrt(CRg * Mw)))
+                        self.Qprint("%12s %8.4g %8.4g" %
+                                    (f.file_name_short, Mw, np.sqrt(CRg * Mw)))
 
     def destructor(self):
         pass
@@ -238,12 +246,12 @@ class CLTheoryDebye(BaseTheoryDebye, Theory):
     [description]
     """
 
-    def __init__(self, name='ThDebye', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThDebye'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -258,18 +266,18 @@ class GUITheoryDebye(BaseTheoryDebye, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThDebye', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThDebye'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
 
-    # add widgets specific to the theory here:
+        # add widgets specific to the theory here:
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
         self.tbutstretched = tb.addAction(
@@ -277,9 +285,10 @@ class GUITheoryDebye(BaseTheoryDebye, QTheory):
         self.tbutstretched.setCheckable(True)
         self.tbutstretched.setChecked(False)
         self.tbutnonideal = tb.addAction(
-            QIcon(':/Images/Images/new_icons/icons8-broom.png'), 'Non-Ideal Mix')
+            QIcon(':/Images/Images/new_icons/icons8-broom.png'),
+            'Non-Ideal Mix')
         self.tbutnonideal.setCheckable(True)
-        self.tbutnonideal .setChecked(False)
+        self.tbutnonideal.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
 
         #connections signal and slots

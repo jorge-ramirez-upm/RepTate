@@ -50,13 +50,13 @@ class TheoryLogNormal(CmdBase):
     description = 'LogNormal distribution'
     citations = ''
 
-    def __new__(cls, name='ThLogNormal', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThLogNormal'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -81,15 +81,16 @@ class BaseTheoryLogNormal:
        - ``logW0`` :math:`\\equiv\\log_{10}(M_0)`
        - ``sigma`` :math:`\\equiv\\sigma`
     """
-    #help_file = ''
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryLogNormal.thname
 
-    def __init__(self, name='ThLogNormal', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThLogNormal'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -136,7 +137,7 @@ class BaseTheoryLogNormal:
 
         """
         pass
-    
+
     def destructor(self):
         """[summary]
         
@@ -162,27 +163,29 @@ class BaseTheoryLogNormal:
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
-        W0 = np.power(10.0,self.parameters["logW0"].value)
-        M0 = np.power(10.0,self.parameters["logM0"].value)
+        W0 = np.power(10.0, self.parameters["logW0"].value)
+        M0 = np.power(10.0, self.parameters["logM0"].value)
         sigma = self.parameters["sigma"].value
-        
+
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = W0/sigma/np.sqrt(2*pi)/tt.data[:, 0]*np.exp(-(np.log(tt.data[:, 0])-np.log(M0))**2/2/sigma**2)
+        tt.data[:, 1] = W0 / sigma / np.sqrt(2 * pi) / tt.data[:, 0] * np.exp(
+            -(np.log(tt.data[:, 0]) - np.log(M0))**2 / 2 / sigma**2)
 
     def do_error(self, line):
         super().do_error(line)
         if (line == ""):
             self.Qprint("")
-            M0 = np.power(10.0,self.parameters["logM0"].value)
+            M0 = np.power(10.0, self.parameters["logM0"].value)
             sigma = self.parameters["sigma"].value
-            Mn = M0*np.exp(sigma**2/2)
-            Mw = M0*np.exp(3*sigma**2/2)
-            Mz = M0*np.exp(5*sigma**2/2)
-            self.Qprint("Mn = %g"%Mn)
-            self.Qprint("Mw = %g"%Mw)
-            self.Qprint("Mz = %g"%Mz)
-            self.Qprint("D  = %g"%(Mw/Mn))
+            Mn = M0 * np.exp(sigma**2 / 2)
+            Mw = M0 * np.exp(3 * sigma**2 / 2)
+            Mz = M0 * np.exp(5 * sigma**2 / 2)
+            self.Qprint("Mn = %g" % Mn)
+            self.Qprint("Mw = %g" % Mw)
+            self.Qprint("Mz = %g" % Mz)
+            self.Qprint("D  = %g" % (Mw / Mn))
+
 
 class CLTheoryLogNormal(BaseTheoryLogNormal, Theory):
     """[summary]
@@ -190,12 +193,12 @@ class CLTheoryLogNormal(BaseTheoryLogNormal, Theory):
     [description]
     """
 
-    def __init__(self, name='ThLogNormal', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThLogNormal'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -210,12 +213,12 @@ class GUITheoryLogNormal(BaseTheoryLogNormal, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThLogNormal', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThLogNormal'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

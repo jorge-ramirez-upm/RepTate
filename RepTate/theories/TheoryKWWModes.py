@@ -48,6 +48,7 @@ from DraggableArtists import DragType, DraggableModesSeries
 
 from kww_ctypes_helper import kwwc, kwws
 
+
 class TheoryKWWModesFrequency(CmdBase):
     """Fit a Kohlrausch-Williams-Watts (KWW, stretched exponential) model to a frequency dependent relaxation function. 
     
@@ -70,13 +71,13 @@ class TheoryKWWModesFrequency(CmdBase):
     thname = "KWWModesFrequency"
     description = "Fit Havriliak-Negami modes to frequency dependent function"
 
-    def __new__(cls, name="ThHavriliak-NegamiFrequency", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -94,14 +95,14 @@ class BaseTheoryKWWModesFrequency:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#Havriliak-Negami-modes'
     single_file = True
+    thname = TheoryKWWModesFrequency.thname
 
-    def __init__(self, name="ThHavriliak-NegamiFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
                 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -153,8 +154,8 @@ class BaseTheoryKWWModesFrequency:
         # Interpolate modes from data
         w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
         eps = np.abs(
-              np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
-                           self.parent_dataset.files[0].data_table.data[:, 1]))
+            np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
+                      self.parent_dataset.files[0].data_table.data[:, 1]))
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logDe%02d" % i] = Parameter(
                 "logDe%02d" % i,
@@ -313,8 +314,8 @@ class BaseTheoryKWWModesFrequency:
         for i in range(nmodes):
             eps = np.power(10, self.parameters["logDe%02d" % i].value)
             for j, w in enumerate(tt.data[:, 0]):
-                tt.data[j, 1] += eps*kwwc(w*tau[i], beta)
-                tt.data[j, 2] += eps*kwws(w*tau[i], beta)
+                tt.data[j, 1] += eps * kwwc(w * tau[i], beta)
+                tt.data[j, 2] += eps * kwws(w * tau[i], beta)
 
     def plot_theory_stuff(self):
         """[summary]
@@ -352,13 +353,12 @@ class CLTheoryKWWModesFrequency(BaseTheoryKWWModesFrequency, Theory):
     [description]
     """
 
-    def __init__(self, name="ThHavriliak-NegamiFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -371,13 +371,12 @@ class GUITheoryKWWModesFrequency(BaseTheoryKWWModesFrequency, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThHavriliak-NegamiFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -453,5 +452,3 @@ class GUITheoryKWWModesFrequency(BaseTheoryKWWModesFrequency, QTheory):
 
         self.do_calculate("")
         self.update_parameter_table()
-
-

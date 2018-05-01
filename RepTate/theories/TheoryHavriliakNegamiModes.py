@@ -67,22 +67,24 @@ class TheoryHavriliakNegamiModesFrequency(CmdBase):
     thname = "HavriliakNegamiModesFrequency"
     description = "Fit Havriliak-Negami modes to frequency dependent function"
 
-    def __new__(cls, name="ThHavriliak-NegamiFrequency", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
         Returns:
             - [type] -- [description]
         """
-        return GUITheoryHavriliakNegamiModesFrequency(name, parent_dataset, ax) if (
-            CmdBase.mode == CmdMode.GUI) else CLTheoryHavriliakNegamiModesFrequency(
-                name, parent_dataset, ax)
+        return GUITheoryHavriliakNegamiModesFrequency(
+            name, parent_dataset,
+            ax) if (CmdBase.mode == CmdMode.GUI
+                    ) else CLTheoryHavriliakNegamiModesFrequency(
+                        name, parent_dataset, ax)
 
 
 class BaseTheoryHavriliakNegamiModesFrequency:
@@ -91,14 +93,14 @@ class BaseTheoryHavriliakNegamiModesFrequency:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#Havriliak-Negami-modes'
     single_file = True
+    thanme = TheoryHavriliakNegamiModesFrequency.thname
 
-    def __init__(self, name="ThHavriliak-NegamiFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
                 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -157,8 +159,8 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         # Interpolate modes from data
         w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
         eps = np.abs(
-              np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
-                           self.parent_dataset.files[0].data_table.data[:, 1]))
+            np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
+                      self.parent_dataset.files[0].data_table.data[:, 1]))
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logDe%02d" % i] = Parameter(
                 "logDe%02d" % i,
@@ -318,7 +320,8 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         sol += einf
         for i in range(nmodes):
             eps = np.power(10, self.parameters["logDe%02d" % i].value)
-            sol += eps/np.power(1.0 + np.power(1j*tt.data[:, 0] * tau[i],alpha),gamma)
+            sol += eps / np.power(
+                1.0 + np.power(1j * tt.data[:, 0] * tau[i], alpha), gamma)
 
         tt.data[:, 1] = np.real(sol)
         tt.data[:, 2] = -np.imag(sol)
@@ -353,38 +356,38 @@ class BaseTheoryHavriliakNegamiModesFrequency:
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
 
 
-class CLTheoryHavriliakNegamiModesFrequency(BaseTheoryHavriliakNegamiModesFrequency, Theory):
+class CLTheoryHavriliakNegamiModesFrequency(
+        BaseTheoryHavriliakNegamiModesFrequency, Theory):
     """[summary]
     
     [description]
     """
 
-    def __init__(self, name="ThHavriliak-NegamiFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
 
 
-class GUITheoryHavriliakNegamiModesFrequency(BaseTheoryHavriliakNegamiModesFrequency, QTheory):
+class GUITheoryHavriliakNegamiModesFrequency(
+        BaseTheoryHavriliakNegamiModesFrequency, QTheory):
     """[summary]
     
     [description]
     """
 
-    def __init__(self, name="ThHavriliak-NegamiFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThHavriliak-NegamiFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -460,5 +463,3 @@ class GUITheoryHavriliakNegamiModesFrequency(BaseTheoryHavriliakNegamiModesFrequ
 
         self.do_calculate("")
         self.update_parameter_table()
-
-

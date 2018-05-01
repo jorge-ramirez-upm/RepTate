@@ -141,13 +141,13 @@ class TheoryRoliePoly(CmdBase):
 Simple constitutive equation for linear polymer melts derived from molecular theory: Rolie-Poly equation\n\
 J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
 
-    def __new__(cls, name="ThRoliePoly", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -167,13 +167,14 @@ class BaseTheoryRoliePoly:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#rolie-poly-equation'
     single_file = False
+    thname = TheoryRoliePoly.thname
 
-    def __init__(self, name="ThRoliePoly", parent_dataset=None, axarr=None):
+    def __init__(self, name="", parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThRoliePoly"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -579,12 +580,12 @@ class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
     [description]
     """
 
-    def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -597,12 +598,12 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThRoliePoly", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

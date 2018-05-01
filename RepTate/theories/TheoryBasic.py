@@ -62,7 +62,7 @@ class TheoryPolynomial(CmdBase):
     thname = "Polynomial"
     description = "Fit a polynomial of degree n"
 
-    def __new__(cls, name="ThPolynomial", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         return GUITheoryPolynomial(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryPolynomial(
@@ -72,13 +72,14 @@ class TheoryPolynomial(CmdBase):
 class BaseTheoryPolynomial:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#polynomial'
     single_file = True
+    thname = TheoryPolynomial.thname
 
-    def __init__(self, name="ThPolynomial", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Polynomial"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -153,11 +154,12 @@ class BaseTheoryPolynomial:
         tt.data[:, 0] = ft.data[:, 0]
         for i in range(self.parameters["n"].value + 1):
             a = self.parameters["A%02d" % i].value
-            for j in range (1, tt.num_columns):
+            for j in range(1, tt.num_columns):
                 tt.data[:, j] += a * tt.data[:, 0]**i
 
     def destructor(self):
         pass
+
 
 class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
     """[summary]
@@ -165,12 +167,12 @@ class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
     [description]
     """
 
-    def __init__(self, name="ThPolynomial", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -183,15 +185,12 @@ class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
     [description]
     """
 
-    def __init__(self,
-                 name="ThMaxwellFrequencyPolynomial",
-                 parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -238,13 +237,13 @@ class TheoryPowerLaw(CmdBase):
     thname = "PowerLaw"
     description = "Fit Power Law"
 
-    def __new__(cls, name="ThPowerLaw", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -264,13 +263,14 @@ class BaseTheoryPowerLaw:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#power-law'
     single_file = True
+    thname = TheoryPowerLaw.thname
 
-    def __init__(self, name="PowerLaw", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"PowerLaw"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -295,11 +295,13 @@ class BaseTheoryPowerLaw:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        for j in range (1, tt.num_columns):
-            tt.data[:, j] = self.parameters["a"].value * tt.data[:, 0]**self.parameters["b"].value
+        for j in range(1, tt.num_columns):
+            tt.data[:, j] = self.parameters[
+                "a"].value * tt.data[:, 0]**self.parameters["b"].value
 
     def destructor(self):
         pass
+
 
 class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
     """[summary]
@@ -307,13 +309,13 @@ class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
     [description]
     """
 
-    def __init__(self, name="ThPowerLaw", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -326,12 +328,12 @@ class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThPowerLaw", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -357,13 +359,13 @@ class TheoryExponential(CmdBase):
     thname = "Exponential"
     description = "Fit Exponential"
 
-    def __new__(cls, name="ThExponential", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -383,13 +385,14 @@ class BaseTheoryExponential:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#exponential'
     single_file = True
+    thname = TheoryExponential.thname
 
-    def __init__(self, name="Exponential", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Exponential"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -418,12 +421,13 @@ class BaseTheoryExponential:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        for j in range (1, tt.num_columns):
+        for j in range(1, tt.num_columns):
             tt.data[:, j] = self.parameters["a"].value * np.exp(
                 -tt.data[:, 0] / self.parameters["T"].value)
 
     def destructor(self):
         pass
+
 
 class CLTheoryExponential(BaseTheoryExponential, Theory):
     """[summary]
@@ -431,12 +435,12 @@ class CLTheoryExponential(BaseTheoryExponential, Theory):
     [description]
     """
 
-    def __init__(self, name="ThExponential", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -449,12 +453,12 @@ class GUITheoryExponential(BaseTheoryExponential, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThExponential", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -480,13 +484,13 @@ class TheoryTwoExponentials(CmdBase):
     thname = "TwoExponentials"
     description = "Fit two exponentials"
 
-    def __new__(cls, name="ThTwoExponentials", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -506,13 +510,14 @@ class BaseTheoryTwoExponentials:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#double-exponential'
     single_file = True
+    thname = TheoryTwoExponentials.thname
 
-    def __init__(self, name="TwoExponentials", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TwoExponentials"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -553,12 +558,13 @@ class BaseTheoryTwoExponentials:
         a2 = self.parameters["a2"].value
         T1 = self.parameters["T1"].value
         T2 = self.parameters["T2"].value
-        for j in range (1, tt.num_columns):
+        for j in range(1, tt.num_columns):
             tt.data[:, j] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(
                 -tt.data[:, 0] / T2)
 
     def destructor(self):
         pass
+
 
 class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
     """[summary]
@@ -566,12 +572,12 @@ class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
     [description]
     """
 
-    def __init__(self, name="ThTwoExponentials", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -584,12 +590,12 @@ class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThTwoExponentials", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

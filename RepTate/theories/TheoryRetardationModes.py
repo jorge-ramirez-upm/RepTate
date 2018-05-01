@@ -70,13 +70,13 @@ class TheoryRetardationModesTime(CmdBase):
     description = "Fit Retardation modes to time dependent creep data"
     citations = ""
 
-    def __new__(cls, name="ThRetardationTime", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThRetardationTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -96,13 +96,14 @@ class BaseTheoryRetardationModesTime:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Retardation.html'
     single_file = True
+    thname = TheoryRetardationModesTime.thname
 
-    def __init__(self, name="ThRetardationTime", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThRetardationTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -346,12 +347,12 @@ class CLTheoryRetardationModesTime(BaseTheoryRetardationModesTime, Theory):
     [description]
     """
 
-    def __init__(self, name="ThRetardationTime", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThRetardationTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -364,12 +365,12 @@ class GUITheoryRetardationModesTime(BaseTheoryRetardationModesTime, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThRetardationTime", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThRetardationTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

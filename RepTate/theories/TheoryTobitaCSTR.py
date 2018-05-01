@@ -64,13 +64,13 @@ reactor during free-radical polymerisation.
     description = 'Tobita LDPE CSTR reaction theory'
     citations = 'J. Pol. Sci. Part B, 39, 391-403 (2001)'
 
-    def __new__(cls, name='ThTemplate', parent_dataset=None, ax=None):
+    def __new__(cls, name='', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -91,16 +91,17 @@ class BaseTheoryTobitaCSTR:
     # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaCSTR.html' % ((os.sep, )*6)
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/tobitaCSTR.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryTobitaCSTR.thname
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='', parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -301,9 +302,8 @@ class BaseTheoryTobitaCSTR:
                 # update on number made
                 if rch.react_dist[ndist].contents.npoly % np.trunc(
                         numtomake / 20) == 0:
-                    self.Qprint(
-                        'Made %d polymers' %
-                        rch.react_dist[ndist].contents.npoly)
+                    self.Qprint('Made %d polymers' %
+                                rch.react_dist[ndist].contents.npoly)
                     QApplication.processEvents(
                     )  # needed to use Qprint if in single-thread
 
@@ -346,11 +346,9 @@ class BaseTheoryTobitaCSTR:
             self.Qprint(
                 'Made %d polymers' % rch.react_dist[ndist].contents.npoly)
             self.Qprint('Saved %d polymers in memory' %
-                                   rch.react_dist[ndist].contents.nsaved)
-            self.Qprint(
-                'Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
-            self.Qprint(
-                'Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
+                        rch.react_dist[ndist].contents.nsaved)
+            self.Qprint('Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
+            self.Qprint('Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
             self.Qprint(
                 'br/1000C = %.3g' % rch.react_dist[ndist].contents.brav)
             self.Qprint('*************************')
@@ -359,8 +357,7 @@ class BaseTheoryTobitaCSTR:
             rch.react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.Qprint(
-            '%d arm records left in memory' % rch.pb_global.arms_left)
+        self.Qprint('%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
 
     def destructor(self):
@@ -374,12 +371,12 @@ class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
     [description]
     """
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='', parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -394,12 +391,12 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, ax=None):
+    def __init__(self, name='', parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

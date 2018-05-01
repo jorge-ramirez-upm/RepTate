@@ -52,13 +52,13 @@ class TheoryGEX(CmdBase):
     description = 'Generalized Exponential Function (GEX)'
     citations = ''
 
-    def __new__(cls, name='ThGEX', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThGEX'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -84,15 +84,16 @@ class BaseTheoryGEX:
        - ``a`` 
        - ``b``
     """
-    #help_file = ''
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryGEX.thname
 
-    def __init__(self, name='ThGEX', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThGEX'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -147,7 +148,7 @@ class BaseTheoryGEX:
 
         """
         pass
-    
+
     def destructor(self):
         """[summary]
         
@@ -173,29 +174,31 @@ class BaseTheoryGEX:
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
-        W0 = np.power(10.0,self.parameters["logW0"].value)
-        M0 = np.power(10.0,self.parameters["logM0"].value)
+        W0 = np.power(10.0, self.parameters["logW0"].value)
+        M0 = np.power(10.0, self.parameters["logM0"].value)
         a = self.parameters["a"].value
         b = self.parameters["b"].value
-        
+
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = W0*b/M0/gamma((a+1)/b)*np.power(tt.data[:, 0]/M0,a)*np.exp(-np.power(tt.data[:, 0]/M0,b))
+        tt.data[:, 1] = W0 * b / M0 / gamma((a + 1) / b) * np.power(
+            tt.data[:, 0] / M0, a) * np.exp(-np.power(tt.data[:, 0] / M0, b))
 
     def do_error(self, line):
         super().do_error(line)
         if (line == ""):
             self.Qprint("")
-            M0 = np.power(10.0,self.parameters["logM0"].value)
+            M0 = np.power(10.0, self.parameters["logM0"].value)
             a = self.parameters["a"].value
             b = self.parameters["b"].value
-            Mn = M0*gamma((a+1)/b)/gamma(a/b)
-            Mw = M0*gamma((a+2)/b)/gamma((a+1)/b)
-            Mz = M0*gamma((a+3)/b)/gamma((a+2)/b)
-            self.Qprint("Mn = %g"%Mn)
-            self.Qprint("Mw = %g"%Mw)
-            self.Qprint("Mz = %g"%Mz)
-            self.Qprint("D  = %g"%(Mw/Mn))
+            Mn = M0 * gamma((a + 1) / b) / gamma(a / b)
+            Mw = M0 * gamma((a + 2) / b) / gamma((a + 1) / b)
+            Mz = M0 * gamma((a + 3) / b) / gamma((a + 2) / b)
+            self.Qprint("Mn = %g" % Mn)
+            self.Qprint("Mw = %g" % Mw)
+            self.Qprint("Mz = %g" % Mz)
+            self.Qprint("D  = %g" % (Mw / Mn))
+
 
 class CLTheoryGEX(BaseTheoryGEX, Theory):
     """[summary]
@@ -203,12 +206,12 @@ class CLTheoryGEX(BaseTheoryGEX, Theory):
     [description]
     """
 
-    def __init__(self, name='ThGEX', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThGEX'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -223,12 +226,12 @@ class GUITheoryGEX(BaseTheoryGEX, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThGEX', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThGEX'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

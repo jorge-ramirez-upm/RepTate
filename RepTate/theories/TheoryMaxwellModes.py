@@ -67,13 +67,13 @@ class TheoryMaxwellModesFrequency(CmdBase):
     thname = "MaxwellModesFrequency"
     description = "Fit Maxwell modes to frequency dependent function"
 
-    def __new__(cls, name="ThMaxwellFrequency", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -91,14 +91,14 @@ class BaseTheoryMaxwellModesFrequency:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
     single_file = True
+    thname = TheoryMaxwellModesFrequency.thname
 
-    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
                 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -330,13 +330,12 @@ class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
     [description]
     """
 
-    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -349,13 +348,12 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThMaxwellFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -458,13 +456,13 @@ class TheoryMaxwellModesTime(CmdBase):
     description = "Fit Maxwell modes to time dependent function"
     citations = ""
 
-    def __new__(cls, name="ThMaxwellTime", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -484,13 +482,14 @@ class BaseTheoryMaxwellModesTime:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Maxwell.html'
     single_file = True
+    thname = TheoryMaxwellModesTime.thname
 
-    def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -587,8 +586,7 @@ class BaseTheoryMaxwellModesTime:
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(
             self.graphicmodes, DragType.special,
-            self.parent_dataset.parent_application,
-            self.drag_mode)
+            self.parent_dataset.parent_application, self.drag_mode)
         self.plot_theory_stuff()
 
     def destructor(self):
@@ -709,12 +707,12 @@ class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
     [description]
     """
 
-    def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -727,12 +725,12 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThMaxwellTime", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellTime"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

@@ -60,13 +60,13 @@ class TheoryTTSShiftAutomatic(CmdBase):
     description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
     cite = ""
 
-    def __new__(cls, name="ThWLFShifTest", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -85,16 +85,14 @@ class BaseTheoryTTSShiftAutomatic:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/TTSAutomatic.html'
     single_file = False
+    thname = TheoryTTSShiftAutomatic.thname
 
-    def __init__(self,
-                 name="ThTTSShiftAutomatic",
-                 parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -243,8 +241,8 @@ class BaseTheoryTTSShiftAutomatic:
 
         if (line == ""):
             self.Qprint("")
-            self.Qprint("%17s %8s (%5s)" % ("Mw,Mw2,phi,phi2",
-                                                       "Error", "#Pts."))
+            self.Qprint("%17s %8s (%5s)" % ("Mw,Mw2,phi,phi2", "Error",
+                                            "#Pts."))
             self.Qprint("==================================")
             p = list(MwUnique.keys())
             p.sort()
@@ -252,8 +250,8 @@ class BaseTheoryTTSShiftAutomatic:
                 s = "%gk,%gk,%g,%g" % (o[0], o[1], o[2], o[3])
                 if (MwUnique[o][1] > 0):
                     self.Qprint("%17s %8.3g (%5d)" %
-                                           (s, MwUnique[o][0] / MwUnique[o][1],
-                                            MwUnique[o][1]))
+                                (s, MwUnique[o][0] / MwUnique[o][1],
+                                 MwUnique[o][1]))
                 else:
                     self.Qprint("%17s %8s (%5d)" % (s, "-", 0))
         if (npoints > 0):
@@ -261,8 +259,7 @@ class BaseTheoryTTSShiftAutomatic:
         else:
             total_error = 1e10
         if (line == ""):
-            self.Qprint("%17s %8.3g (%5d)" % ("TOTAL", total_error,
-                                                         npoints))
+            self.Qprint("%17s %8.3g (%5d)" % ("TOTAL", total_error, npoints))
         return total_error
 
     def func_fitTTS(self, *param_in):
@@ -348,8 +345,8 @@ class BaseTheoryTTSShiftAutomatic:
         #print (self.Tdict)
         for case in self.Tdict.keys():
             self.Qprint("")
-            self.Qprint('Mw=%g Mw2=%g phi=%g phi2=%g' %
-                                   (case[0], case[1], case[2], case[3]))
+            self.Qprint('Mw=%g Mw2=%g phi=%g phi2=%g' % (case[0], case[1],
+                                                         case[2], case[3]))
             self.Qprint('==================================')
             Temps0 = [x[0] for x in self.Tdict[case]]
             Temps = np.abs(
@@ -369,10 +366,8 @@ class BaseTheoryTTSShiftAutomatic:
             self.shiftParameters[fname] = (0.0, 0.0)
             #print(self.current_master_curve) #DEBUG
             #print(Temps0[indices[0]], 0.0, 0.0)
-            self.Qprint('%6s %11s %11s' % ('T', 'log(Hshift)',
-                                                      'log(Vshift)'))
-            self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[indices[0]],
-                                                            0.0, 0.0))
+            self.Qprint('%6s %11s %11s' % ('T', 'log(Hshift)', 'log(Vshift)'))
+            self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[indices[0]], 0.0, 0.0))
             indices = np.delete(indices, 0, None)
 
             for i in indices:
@@ -420,8 +415,7 @@ class BaseTheoryTTSShiftAutomatic:
                     #    self.func_fitTTS_one,
                     #    initial_guess)
                     if (not res['success']):
-                        self.Qprint(
-                            "Solution not found: %s" % res['message'])
+                        self.Qprint("Solution not found: %s" % res['message'])
                         return
                     XSHIFT = res.x[0]
                     if self.parameters["vert"].value:
@@ -443,8 +437,8 @@ class BaseTheoryTTSShiftAutomatic:
                     self.shiftParameters[fname] = (XSHIFT, YSHIFT)
 
                 #print(Temps0[i], XSHIFT, YSHIFT)
-                self.Qprint('%6.3g %11.3g %11.3g' %
-                                       (Temps0[i], XSHIFT, YSHIFT))
+                self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], XSHIFT,
+                                                     YSHIFT))
 
         self.fitting = False
         self.do_calculate(line)
@@ -551,15 +545,12 @@ class CLTheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, Theory):
     [description]
     """
 
-    def __init__(self,
-                 name="ThTTSShiftAutomatic",
-                 parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -572,15 +563,12 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
     [description]
     """
 
-    def __init__(self,
-                 name="ThTTSShiftAutomatic",
-                 parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThTTSShiftAutomatic"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

@@ -75,13 +75,13 @@ class TheoryWLFShiftTest(CmdBase):
     description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
     cite = ""
 
-    def __new__(cls, name="ThWLFShifTest", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -101,13 +101,14 @@ class BaseTheoryWLFShiftTest:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/WLFShift.html'
     single_file = False
+    thname = TheoryWLFShiftTest.thname
 
-    def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -144,10 +145,10 @@ class BaseTheoryWLFShiftTest:
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters["dx12"] = Parameter(
-            name="dx12", 
-            value=0, 
-            description="Fraction 1,2 vinyl units (for PBd)", 
-            type=ParameterType.real, 
+            name="dx12",
+            value=0,
+            description="Fraction 1,2 vinyl units (for PBd)",
+            type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters["vert"] = Parameter(
             name="vert",
@@ -181,7 +182,7 @@ class BaseTheoryWLFShiftTest:
         Tr = self.parameters["Tr"].value
         B1 = self.parameters["B1"].value
         B2 = self.parameters["B2"].value
-        alpha = np.power(10.0,self.parameters["logalpha"].value)
+        alpha = np.power(10.0, self.parameters["logalpha"].value)
         CTg = self.parameters["CTg"].value
         dx12 = self.parameters["dx12"].value
         iso = self.parameters["iso"].value
@@ -199,14 +200,18 @@ class BaseTheoryWLFShiftTest:
 
         # Trying a new expression for the shift
         if iso:
-            B2 += CTg / Mw - 68.7*dx12
+            B2 += CTg / Mw - 68.7 * dx12
             Trcorrected = Tr - CTg / Mw + 68.7 * dx12
         else:
             Trcorrected = Tr
-        tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, -B1 * (Tf - Trcorrected) / (B2 + Trcorrected) / (B2 + Tf))
+        tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, -B1 *
+                                                 (Tf - Trcorrected) /
+                                                 (B2 + Trcorrected) /
+                                                 (B2 + Tf))
 
         if vert:
-            bT = (1 + alpha*Tf) * (Tr + 273.15) / (1 + alpha*Tr) / (Tf + 273.15)
+            bT = (1 + alpha * Tf) * (Tr + 273.15) / (1 + alpha * Tr) / (
+                Tf + 273.15)
         else:
             bT = 1
         tt.data[:, 1] = ft.data[:, 1] * bT
@@ -290,35 +295,33 @@ class BaseTheoryWLFShiftTest:
 
         if (line == ""):
             self.Qprint("%5s %5s %5s %5s %10s (%10s)" %
-                                   ("Mw", "Mw2", "phi", "phi2", "Error",
-                                    "# Points"))
+                        ("Mw", "Mw2", "phi", "phi2", "Error", "# Points"))
             self.Qprint("=====================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1] > 0):
                     self.Qprint("%5gk %5gk %5g %5g %10.5g (%10d)" %
-                                           (o[0], o[1], o[2], o[3],
-                                            MwUnique[o][0] / MwUnique[o][1],
-                                            MwUnique[o][1]))
+                                (o[0], o[1], o[2], o[3],
+                                 MwUnique[o][0] / MwUnique[o][1],
+                                 MwUnique[o][1]))
                 else:
                     self.Qprint("%5gk %5gk %5g %5g %10s (%10d)" %
-                                           (o[0], o[1], o[2], o[3], "-", 0))
+                                (o[0], o[1], o[2], o[3], "-", 0))
         if (npoints > 0):
             total_error /= npoints
         else:
             total_error = 1e10
         if (line == ""):
-            self.Qprint("%21s %10.5g (%10d)" %
-                                   ("TOTAL", total_error, npoints))
+            self.Qprint("%21s %10.5g (%10d)" % ("TOTAL", total_error, npoints))
         if (line == ""):
             self.Qprint("")
             B1 = self.parameters["B1"].value
             B2 = self.parameters["B2"].value
             Tr = self.parameters["Tr"].value
-            self.Qprint("WLF Params @ Tr = %g"%Tr)
-            self.Qprint("C1 = %g"%(B1/(B2+Tr)))
-            self.Qprint("C2 = %g"%(B2+Tr))
+            self.Qprint("WLF Params @ Tr = %g" % Tr)
+            self.Qprint("C1 = %g" % (B1 / (B2 + Tr)))
+            self.Qprint("C2 = %g" % (B2 + Tr))
 
         return total_error
 
@@ -395,7 +398,7 @@ class BaseTheoryWLFShiftTest:
         self.do_calculate(line, timing=False)
         self.Qprint("")
         self.Qprint("---Fitting in %.3g seconds---" %
-                               (time.time() - start_time))
+                    (time.time() - start_time))
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
@@ -509,18 +512,19 @@ class BaseTheoryWLFShiftTest:
     def destructor(self):
         pass
 
+
 class CLTheoryWLFShiftTest(BaseTheoryWLFShiftTest, Theory):
     """[summary]
     
     [description]
     """
 
-    def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -533,12 +537,12 @@ class GUITheoryWLFShiftTest(BaseTheoryWLFShiftTest, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThWLFShiftTest", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThWLFShiftTest"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

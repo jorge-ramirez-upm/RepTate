@@ -116,13 +116,13 @@ class TheoryCreatePolyconf(CmdBase):
     description = 'CreatePolyconf Theory'
     citations = ''
 
-    def __new__(cls, name='ThCreatePolyconf', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCreatePolyconf'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -141,17 +141,15 @@ class BaseTheoryCreatePolyconf:
     """
     #help_file = ''
     single_file = True  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryCreatePolyconf.thname
     signal_param_dialog = pyqtSignal(object)
 
-    def __init__(self,
-                 name='ThCreatePolyconf',
-                 parent_dataset=None,
-                 axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCreatePolyconf'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -239,7 +237,8 @@ class BaseTheoryCreatePolyconf:
         # Run BoB C++ code
         bch = BobCtypesHelper(self)
         gpc_out = []
-        mn, mw, gpc_out = bch.save_polyconf_and_return_gpc(self.argv, self.npol_tot)
+        mn, mw, gpc_out = bch.save_polyconf_and_return_gpc(
+            self.argv, self.npol_tot)
 
         #copy results to RepTate data file
         if gpc_out:
@@ -248,7 +247,7 @@ class BaseTheoryCreatePolyconf:
                 temp_polyconf = os.path.join('theories', 'temp',
                                              'temp_polyconf.dat')
                 copy2(temp_polyconf, self.polyconf_file_out)
-            
+
             self.Qprint("Polymer configuration written in \"%s\"" %
                         self.polyconf_file_out)
             self.Qprint("\nMn=%.3g, Mw=%.3g, PDI=%.3g" % (mn, mw, mw / mn))
@@ -268,15 +267,12 @@ class CLTheoryCreatePolyconf(BaseTheoryCreatePolyconf, Theory):
     [description]
     """
 
-    def __init__(self,
-                 name='ThCreatePolyconf',
-                 parent_dataset=None,
-                 axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCreatePolyconf'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -291,15 +287,12 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
     [description]
     """
 
-    def __init__(self,
-                 name='ThCreatePolyconf',
-                 parent_dataset=None,
-                 axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCreatePolyconf'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

@@ -59,13 +59,13 @@ class TheoryReactMix(CmdBase):
     description = 'ReactMix Theory'
     citations = ''
 
-    def __new__(cls, name='ThReactMix', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -83,17 +83,17 @@ class BaseTheoryReactMix:
     
     [description]
     """
-    # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%smixture.html' % ((os.sep, )*6)
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/mixture.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryReactMix.thname
     signal_mix_dialog = pyqtSignal(object)
 
-    def __init__(self, name='ThReactMix', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -197,12 +197,11 @@ class BaseTheoryReactMix:
         for i, dist in enumerate(self.dists):
             totpoly = totpoly + rch.react_dist[dist].contents.npoly
             totsaved = totsaved + rch.react_dist[dist].contents.nsaved
-            self.Qprint(
-                'Used distribution %s' % self.theory_names[i])
+            self.Qprint('Used distribution %s' % self.theory_names[i])
             self.Qprint(
                 'Containing %d polymers' % rch.react_dist[dist].contents.npoly)
             self.Qprint('Including %d saved polymers' %
-                                   rch.react_dist[dist].contents.nsaved)
+                        rch.react_dist[dist].contents.nsaved)
 
         self.Qprint('Total polymers: %d' % totpoly)
         self.Qprint('Total saved polymers: %d' % totsaved)
@@ -248,12 +247,12 @@ class CLTheoryReactMix(BaseTheoryReactMix, Theory):
     [description]
     """
 
-    def __init__(self, name='ThReactMix', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -268,12 +267,12 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThReactMix', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThReactMix'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

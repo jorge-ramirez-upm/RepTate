@@ -59,13 +59,13 @@ class TheoryMultiMetCSTR(CmdBase):
     description = 'MultiMetCSTR Theory'
     citations = ''
 
-    def __new__(cls, name='ThMultiMetCSTR', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -83,21 +83,20 @@ class BaseTheoryMultiMetCSTR:
     
     [description]
     """
-    help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%sMetalloceneCSTR.html' % (
-        (os.sep, ) * 6)
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/MetalloceneCSTR.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryMultiMetCSTR.thname
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)
     signal_mulmet_dialog = pyqtSignal(object)
 
-    def __init__(self, name='ThMultiMetCSTR', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -296,9 +295,8 @@ class BaseTheoryMultiMetCSTR:
                 # update on number made
                 if rch.react_dist[ndist].contents.npoly % np.trunc(
                         numtomake / 20) == 0:
-                    self.Qprint(
-                        'Made %d polymers' %
-                        rch.react_dist[ndist].contents.npoly)
+                    self.Qprint('Made %d polymers' %
+                                rch.react_dist[ndist].contents.npoly)
                     QApplication.processEvents(
                     )  # needed to use Qprint if in single-thread
 
@@ -341,11 +339,9 @@ class BaseTheoryMultiMetCSTR:
             self.Qprint(
                 'Made %d polymers' % rch.react_dist[ndist].contents.npoly)
             self.Qprint('Saved %d polymers in memory' %
-                                   rch.react_dist[ndist].contents.nsaved)
-            self.Qprint(
-                'Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
-            self.Qprint(
-                'Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
+                        rch.react_dist[ndist].contents.nsaved)
+            self.Qprint('Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
+            self.Qprint('Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
             self.Qprint(
                 'br/1000C = %.3g' % rch.react_dist[ndist].contents.brav)
             self.Qprint('*************************')
@@ -354,8 +350,7 @@ class BaseTheoryMultiMetCSTR:
             rch.react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.Qprint(
-            '%d arm records left in memory' % rch.pb_global.arms_left)
+        self.Qprint('%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
 
     def destructor(self):
@@ -392,12 +387,12 @@ class CLTheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, Theory):
     [description]
     """
 
-    def __init__(self, name='ThMultiMetCSTR', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -412,12 +407,12 @@ class GUITheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThMultiMetCSTR', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThMultiMetCSTR'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

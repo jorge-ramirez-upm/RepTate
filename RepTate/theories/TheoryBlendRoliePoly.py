@@ -64,6 +64,7 @@ class FlowMode(Enum):
     shear = 0
     uext = 1
 
+
 class GcorrMode(Enum):
     """Primitive path fluctuations reduce the terminal modulus due to shortened tube.
     Defines if we include that correction.
@@ -75,6 +76,7 @@ class GcorrMode(Enum):
     none = 0
     with_gcorr = 1
 
+
 class FeneMode(Enum):
     """Defines the finite extensibility function
     
@@ -85,13 +87,14 @@ class FeneMode(Enum):
     none = 0
     with_fene = 1
 
+
 class GetMwdRepate(QDialog):
     def __init__(self, parent=None, th_dict={}, title="title"):
         super().__init__(parent)
 
         self.setWindowTitle(title)
         layout = QVBoxLayout(self)
-        
+
         validator = QDoubleValidator()
         hlayout = QHBoxLayout()
         hlayout.addWidget(QLabel("Me"))
@@ -120,17 +123,14 @@ class GetMwdRepate(QDialog):
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
 
+
 class EditMWDDialog(QDialog):
-    def __init__(self,
-                 parent=None,
-                 m=None,
-                 phi=None,
-                 MAX_MODES=0):
+    def __init__(self, parent=None, m=None, phi=None, MAX_MODES=0):
         super().__init__(parent)
 
         self.setWindowTitle("Input Molecular weight distribution")
         layout = QVBoxLayout(self)
-        
+
         validator = QDoubleValidator()
         hlayout = QHBoxLayout()
         hlayout.addWidget(QLabel("Me"))
@@ -186,6 +186,7 @@ class EditMWDDialog(QDialog):
         for i in range(nrow_old, value):  #create extra rows with defaut values
             self.table.setItem(i, 0, QTableWidgetItem("0"))
             self.table.setItem(i, 1, QTableWidgetItem("1000"))
+
 
 class EditModesDialog(QDialog):
     def __init__(self,
@@ -274,13 +275,13 @@ class TheoryBlendRoliePoly(CmdBase):
     description = "BlendRoliePoly"
     citations = ""
 
-    def __new__(cls, name="ThBlendRoliePoly", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -300,16 +301,14 @@ class BaseTheoryBlendRoliePoly:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#rolie-poly-blend-equations'
     single_file = False
+    thname = TheoryBlendRoliePoly.thname
 
-    def __init__(self,
-                 name="ThBlendRoliePoly",
-                 parent_dataset=None,
-                 axarr=None):
+    def __init__(self, name="", parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThBlendRoliePoly"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -545,7 +544,7 @@ class BaseTheoryBlendRoliePoly:
                 phi_dil = 1
                 break
             elif down == n - 1:
-                #(just in case) tauseff > taud[n-1] 
+                #(just in case) tauseff > taud[n-1]
                 phi_dil = phi[n - 1]
                 break
             else:
@@ -581,7 +580,7 @@ class BaseTheoryBlendRoliePoly:
         """
         #m[0] < m[1] <  ... < m[n]
         self.sort_list(m, phi)
-        
+
         taus = []
         taus_short = []
         taud = []
@@ -889,7 +888,7 @@ class BaseTheoryBlendRoliePoly:
                 sig_i = np.zeros(nt)
                 for j in range(nmodes):
                     sig_i += phi_arr[j] * sig[:, I + c * j + 2]
-                
+
                 if self.with_fene == FeneMode.with_fene:
                     sig_i *= self.calculate_fene(lsq[:, i], lmax)
                 if self.with_gcorr == GcorrMode.with_gcorr:
@@ -987,18 +986,19 @@ class BaseTheoryBlendRoliePoly:
         """Minimisation procedure disabled in this theory"""
         pass
 
+
 class CLTheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, Theory):
     """[summary]
     
     [description]
     """
 
-    def __init__(self, name="ThBlendRoliePoly", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -1011,12 +1011,12 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThBlendRoliePoly", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -1119,7 +1119,7 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         else:
             self.with_gcorr = GcorrMode.none
         self.Qprint("Press calculate to update theory")
-            
+
     def handle_with_fene_button(self, checked):
         if checked:
             self.with_fene = FeneMode.with_fene
@@ -1225,11 +1225,11 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 )
             else:
                 self.handle_actionCalculate_Theory()
-    
+
     def edit_mwd_modes(self):
         nmodes = self.parameters["nmodes"].value
         phi = np.ones(nmodes) / nmodes
-        m = np.arange(1, nmodes+1) * 1e3
+        m = np.arange(1, nmodes + 1) * 1e3
 
         d = EditMWDDialog(self, m, phi, 200)
         if d.exec_():
@@ -1246,7 +1246,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                     m.append(float(d.table.item(i, 0).text()))
                     phi.append(float(d.table.item(i, 1).text()))
                 except ValueError:
-                    self.Qprint("Could not understand line %d, try again" % (i + 1))
+                    self.Qprint("Could not understand line %d, try again" %
+                                (i + 1))
                     return
             self.set_modes_from_mwd(m, phi)
 

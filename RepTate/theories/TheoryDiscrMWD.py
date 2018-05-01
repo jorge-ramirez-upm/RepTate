@@ -55,13 +55,13 @@ class TheoryDiscrMWD(CmdBase):
     description = "Discretize a Molecular Weight Distribution"
     citations = ""
 
-    def __new__(cls, name="MWDiscr", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"MWDiscr"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -81,13 +81,14 @@ class BaseTheoryDiscrMWD:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/MWDiscr.html'
     single_file = True
+    thname = TheoryDiscrMWD.thname
 
-    def __init__(self, name="ThDiscrMWD", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThDiscrMWD"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -358,10 +359,10 @@ class BaseTheoryDiscrMWD:
             return Mn / 1000, Mw / 1000, PDI, Mz / Mw
         else:
             self.Qprint("Characteristics of the %s MWD:\n"
-                                   "%7s %7s %7s %7s\n"
-                                   "\n%6.3gk %6.3gk %7.3g %7.3g\n" %
-                                   (line, "Mn", "Mw", "Mw/Mn", "Mz/Mw",
-                                    Mn / 1000, Mw / 1000, PDI, Mz / Mw))
+                        "%7s %7s %7s %7s\n"
+                        "\n%6.3gk %6.3gk %7.3g %7.3g\n" %
+                        (line, "Mn", "Mw", "Mw/Mn", "Mz/Mw", Mn / 1000,
+                         Mw / 1000, PDI, Mz / Mw))
 
     def discretise_mwd(self, f=None):
         """Discretize a molecular weight distribution
@@ -403,14 +404,15 @@ class BaseTheoryDiscrMWD:
         out_mbins = np.zeros(nbin)  #output M bins
         for i in range(nbin):
             x = []  # list of M containing bin edges and data point in between
-            y = []  # list of weight containg interpolated values at bin edges and data points
+            y = [
+            ]  # list of weight containg interpolated values at bin edges and data points
             w_interp = np.interp(
                 [edge_bins[i], edge_bins[i + 1]],
                 ft[:, 0],
                 ft[:, 1],
                 left=0,
                 right=0)  #interpolate out of range values to zero
-            x.append(edge_bins[i]) 
+            x.append(edge_bins[i])
             y.append(w_interp[0])
             for j in range(n):
                 if edge_bins[i] <= ft[j, 0] and ft[j, 0] < edge_bins[i + 1]:
@@ -420,7 +422,7 @@ class BaseTheoryDiscrMWD:
             y.append(w_interp[1])
             tempM = 0
             for j in range(len(x)):
-                tempM += x[j] * y[j] # w * M(w) 
+                tempM += x[j] * y[j]  # w * M(w)
             out_mbins[i] = tempM
             s = np.sum(y)
             if s != 0:
@@ -468,7 +470,8 @@ class BaseTheoryDiscrMWD:
         self.saved_th[:, 0] = out_mbins[arg_nonzero]
         for i, arg in enumerate(arg_nonzero):
             self.saved_th[i, 1] = (
-                np.log10(edge_bins[arg + 1]) - np.log10(edge_bins[arg])) * w_out[arg]
+                np.log10(edge_bins[arg + 1]) - np.log10(edge_bins[arg])
+            ) * w_out[arg]
         self.saved_th[:, 1] /= np.sum(self.saved_th[:, 1])
         self.calculate_moments(self.saved_th, "discretized")
 
@@ -518,18 +521,19 @@ class BaseTheoryDiscrMWD:
         phi = self.saved_th[:, 1]
         return m, phi
 
+
 class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
     """[summary]
     
     [description]
     """
 
-    def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"MWDiscr"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -542,12 +546,12 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
     [description]
     """
 
-    def __init__(self, name="MWDiscr", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"MWDiscr"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

@@ -129,13 +129,13 @@ class TheoryGiesekus(CmdBase):
     description = "Giesekus"
     citations = ""
 
-    def __new__(cls, name="ThGiesekus", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -155,13 +155,14 @@ class BaseTheoryGiesekus:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
     single_file = False
+    thname = TheoryGiesekus.thname
 
-    def __init__(self, name="ThGiesekus", parent_dataset=None, axarr=None):
+    def __init__(self, name="", parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThGiesekus"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -321,7 +322,7 @@ class BaseTheoryGiesekus:
 
         dsxx = 2 * edot * sxx + (alpha - 1) * (sxx - 1) / tau - alpha / tau * (
             sxx * sxx - sxx)
-            
+
         dsyy = -edot * syy + (alpha - 1) * (syy - 1) / tau - alpha / tau * (
             syy * syy - syy)
 
@@ -461,12 +462,12 @@ class CLTheoryGiesekus(BaseTheoryGiesekus, Theory):
     [description]
     """
 
-    def __init__(self, name="ThGiesekus", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -479,12 +480,12 @@ class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThGiesekus", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

@@ -68,13 +68,13 @@ class TheoryDebyeModesFrequency(CmdBase):
     thname = "DebyeModesFrequency"
     description = "Fit Debye modes to frequency dependent function"
 
-    def __new__(cls, name="ThDebyeFrequency", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThDebyeFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -92,14 +92,14 @@ class BaseTheoryDebyeModesFrequency:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#Debye-modes'
     single_file = True
+    thname = TheoryDebyeModesFrequency.thname
 
-    def __init__(self, name="ThDebyeFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
                 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThDebyeFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -142,8 +142,8 @@ class BaseTheoryDebyeModesFrequency:
         # Interpolate modes from data
         w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
         eps = np.abs(
-              np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
-                           self.parent_dataset.files[0].data_table.data[:, 1]))
+            np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
+                      self.parent_dataset.files[0].data_table.data[:, 1]))
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logDe%02d" % i] = Parameter(
                 "logDe%02d" % i,
@@ -297,7 +297,7 @@ class BaseTheoryDebyeModesFrequency:
                            self.parameters["logwmax"].value, nmodes)
         tau = 1.0 / freq
 
-        tt.data[:,1] += einf
+        tt.data[:, 1] += einf
         for i in range(nmodes):
             wT = tt.data[:, 0] * tau[i]
             wTsq = wT**2
@@ -341,13 +341,12 @@ class CLTheoryDebyeModesFrequency(BaseTheoryDebyeModesFrequency, Theory):
     [description]
     """
 
-    def __init__(self, name="ThDebyeFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThDebyeFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -360,13 +359,12 @@ class GUITheoryDebyeModesFrequency(BaseTheoryDebyeModesFrequency, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThDebyeFrequency", parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThDebyeFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -442,5 +440,3 @@ class GUITheoryDebyeModesFrequency(BaseTheoryDebyeModesFrequency, QTheory):
 
         self.do_calculate("")
         self.update_parameter_table()
-
-

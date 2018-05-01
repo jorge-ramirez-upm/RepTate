@@ -147,13 +147,13 @@ class TheoryUCM(CmdBase):
     description = "UCM"
     citations = ""
 
-    def __new__(cls, name="ThUCM", parent_dataset=None, ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -173,13 +173,14 @@ class BaseTheoryUCM:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#upper-convected-maxwell-model'
     single_file = False
+    thname = TheoryUCM.thname
 
-    def __init__(self, name="ThUCM", parent_dataset=None, axarr=None):
+    def __init__(self, name="", parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThUCM"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -213,7 +214,7 @@ class BaseTheoryUCM:
                 display_flag=False,
                 bracketed=True,
                 min_value=0)
-        
+
         self.MAX_MODES = 40
         self.init_flow_mode()
 
@@ -379,12 +380,12 @@ class CLTheoryUCM(BaseTheoryUCM, Theory):
     [description]
     """
 
-    def __init__(self, name="ThUCM", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -397,12 +398,12 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
     [description]
     """
 
-    def __init__(self, name="ThUCM", parent_dataset=None, ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThMaxwellFrequency"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

@@ -69,13 +69,13 @@ class TheoryTobitaBatch(CmdBase):
     description = 'The LDPE batch reaction theory'
     citations = 'J. Pol. Sci. Part B, 39, 391-403 (2001)'
 
-    def __new__(cls, name='ThTobitaBatch', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -96,16 +96,17 @@ class BaseTheoryTobitaBatch():
     # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/tobitaLDPE.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryTobitaBatch.thname
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)
 
-    def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -380,12 +381,12 @@ class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
     [description]
     """
 
-    def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -400,12 +401,12 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThTobitaBatch', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTobitaBatch'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

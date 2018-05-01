@@ -68,13 +68,13 @@ class TheoryRouseTime(CmdBase):
     description = "Fit Rouse modes to time dependent function"
     citations = ""
 
-    def __new__(cls, name='ThRouseTime', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -94,13 +94,14 @@ class BaseTheoryRouseTime:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Theory/theory.html#rouse-time'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryRouseTime.thname
 
-    def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -210,10 +211,10 @@ class BaseTheoryRouseTime:
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
-        
+
         t = ft.data[:, 0]
         params = [G0, tau0, Mw / M0, t]
-        
+
         tt.data[:, 0] = t
         tt.data[:, 1] = rh.approx_rouse_time(params)
 
@@ -224,13 +225,13 @@ class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):
     [description]
     """
 
-    def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -245,12 +246,12 @@ class GUITheoryRouseTime(BaseTheoryRouseTime, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThRouseTime', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseTime'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -289,13 +290,13 @@ class TheoryRouseFrequency(CmdBase):
     thname = "RouseFrequency"
     description = "Fit Maxwell modes to frequency dependent function"
 
-    def __new__(cls, name='ThRouseFrequency', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -314,16 +315,14 @@ class BaseTheoryRouseFrequency:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryRouseFrequency.thname
 
-    def __init__(self,
-                 name='ThRouseFrequency',
-                 parent_dataset=None,
-                 axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -423,7 +422,7 @@ class BaseTheoryRouseFrequency:
         omega = ft.data[:, 0]
         params = [G0, tau0, Mw / M0, omega]
         gp, gpp = rh.approx_rouse_frequency(params)
-        
+
         tt.data[:, 0] = omega
         tt.data[:, 1] = gp
         tt.data[:, 2] = gpp
@@ -435,16 +434,13 @@ class CLTheoryRouseFrequency(BaseTheoryRouseFrequency, Theory):
     [description]
     """
 
-    def __init__(self,
-                 name='ThRouseFrequency',
-                 parent_dataset=None,
-                 axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -459,16 +455,13 @@ class GUITheoryRouseFrequency(BaseTheoryRouseFrequency, QTheory):
     [description]
     """
 
-    def __init__(self,
-                 name='ThRouseFrequency',
-                 parent_dataset=None,
-                 axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThRouseFrequency'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

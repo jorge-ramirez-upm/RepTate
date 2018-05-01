@@ -51,13 +51,13 @@ class TheoryTemplate(CmdBase):
     description = 'Template Theory'
     citations = ''
 
-    def __new__(cls, name='ThTemplate', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -77,13 +77,14 @@ class BaseTheoryTemplate:
     """
     #help_file = ''
     single_file = False  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryTemplate.thname
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -116,7 +117,7 @@ class BaseTheoryTemplate:
 
         """
         pass
-    
+
     def destructor(self):
         """[summary]
         
@@ -153,12 +154,12 @@ class CLTheoryTemplate(BaseTheoryTemplate, Theory):
     [description]
     """
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -173,12 +174,12 @@ class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThTemplate', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThTemplate'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

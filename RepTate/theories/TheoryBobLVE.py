@@ -64,13 +64,13 @@ class TheoryBobLVE(CmdBase):
     description = 'BobLVE Theory'
     citations = ''
 
-    def __new__(cls, name='ThBobLVE', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThBobLVE'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -90,6 +90,7 @@ class BaseTheoryBobLVE:
     """
     #help_file = ''
     single_file = True  # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryBobLVE.thname
     signal_param_dialog = pyqtSignal(object)
 
     def __init__(self, name='ThBobLVE', parent_dataset=None, axarr=None):
@@ -198,12 +199,12 @@ class CLTheoryBobLVE(BaseTheoryBobLVE, Theory):
     [description]
     """
 
-    def __init__(self, name='ThBobLVE', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThBobLVE'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -218,12 +219,12 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThBobLVE', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_dataset=None, axarr=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThBobLVE'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

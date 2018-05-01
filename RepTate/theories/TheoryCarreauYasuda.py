@@ -64,13 +64,13 @@ class TheoryCarreauYasuda(CmdBase):
     description = 'Carreau-Yasuda Theory'
     citations = ''
 
-    def __new__(cls, name='ThCarreauYasuda', parent_dataset=None, ax=None):
+    def __new__(cls, name='', parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -90,13 +90,14 @@ class BaseTheoryCarreauYasuda:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/CarreauYasuda.html'
     single_file = False # False if the theory can be applied to multiple files simultaneously
+    thname = TheoryCarreauYasuda.thname
 
-    def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):
+    def __init__(self, name='', parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -204,12 +205,12 @@ class CLTheoryCarreauYasuda(BaseTheoryCarreauYasuda, Theory):
     [description]
     """
 
-    def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):
+    def __init__(self, name='', parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -222,12 +223,12 @@ class GUITheoryCarreauYasuda(BaseTheoryCarreauYasuda, QTheory):
     [description]
     """
 
-    def __init__(self, name='ThCarreauYasuda', parent_dataset=None, ax=None):
+    def __init__(self, name='', parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThCarreauYasuda'})
+            - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """

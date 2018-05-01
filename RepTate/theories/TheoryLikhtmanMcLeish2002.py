@@ -56,16 +56,13 @@ class TheoryLikhtmanMcLeish2002(CmdBase):
 Quantitative Theory for Linear Dynamics of Linear Entangled Polymers\n\
 Macromolecules 2002, 35, 6332-6343"
 
-    def __new__(cls,
-                name="ThLikhtmanMcLeish2002",
-                parent_dataset=None,
-                ax=None):
+    def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
         [description]
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         
@@ -84,16 +81,14 @@ class BaseTheoryLikhtmanMcLeish2002:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/LikhtmanMcLeish.html'
     single_file = False
+    thname = TheoryLikhtmanMcLeish2002.thname
 
-    def __init__(self,
-                 name="ThLikhtmanMcLeish2002",
-                 parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -195,9 +190,14 @@ class BaseTheoryLikhtmanMcLeish2002:
         vec = np.unique(vec)
         table = np.zeros((len(vec), 3))
         table[:, 0] = vec
-        w1 = (Z-self.Zarray[indZ0])/(self.Zarray[indZ1]-self.Zarray[indZ0])
-        table[:, 1] = (1.0-w1) * interp(vec, table0[:, 0], table0[:, indcnu1]) + w1*interp(vec, table1[:, 0], table1[:, indcnu1])
-        table[:, 2] = (1.0-w1) * interp(vec, table0[:, 0], table0[:, indcnu2]) + w1*interp(vec, table1[:, 0], table1[:, indcnu2])
+        w1 = (Z - self.Zarray[indZ0]) / (
+            self.Zarray[indZ1] - self.Zarray[indZ0])
+        table[:, 1] = (1.0 - w1) * interp(
+            vec, table0[:, 0], table0[:, indcnu1]) + w1 * interp(
+                vec, table1[:, 0], table1[:, indcnu1])
+        table[:, 2] = (1.0 - w1) * interp(
+            vec, table0[:, 0], table0[:, indcnu2]) + w1 * interp(
+                vec, table1[:, 0], table1[:, indcnu2])
 
         tt.data[:, 1] = interp(tt.data[:, 0], table[:, 0] / taue,
                                Ge * table[:, 1])
@@ -211,15 +211,12 @@ class CLTheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, Theory):
     [description]
     """
 
-    def __init__(self,
-                 name="ThLikhtmanMcLeish2002",
-                 parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
@@ -232,17 +229,13 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
     [description]
     """
 
-    def __init__(self,
-                 name="ThLikhtmanMcLeish2002",
-                 parent_dataset=None,
-                 ax=None):
+    def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
         
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ThLikhtmanMcLeish2002"})
+            - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-        #print("GUITheoryLikhtmanMcLeish2002")
