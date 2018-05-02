@@ -116,7 +116,7 @@ def start_RepTate(argv):
     app = ApplicationManager()
 
     # Handle files & open apps accordingly
-    d = {app.extension: app.name for app in  list(app.available_applications.values())}
+    d = {app.extension: app.appname for app in  list(app.available_applications.values())}
     for k in dictfiles.keys():
         if (k in d.keys()):
             app.new(d[k])
