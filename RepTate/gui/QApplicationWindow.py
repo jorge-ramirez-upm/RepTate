@@ -98,7 +98,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.tab_count = 0
         self.curves = []
         self.zorder = 100
-       
+        self.dir_start = 'Data/' # default folder opened
+        
         # Accept Drag and drop events
         self.setAcceptDrops(True)
 
@@ -931,10 +932,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #options = QFileDialog.Options()
         options = qfdlg.Options()
         #options |= QFileDialog.DontUseNativeDialog
-        dir_start = "data/"
         dilogue_name = "Open"
         #selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
-        selected_files, _ = qfdlg.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
+        selected_files, _ = qfdlg.getOpenFileNames(self, dilogue_name, self.dir_start, ext_filter, options=options)
+        if selected_files:
+            self.dir_start = dirname(selected_files[0])
         return selected_files
 
     def showDataInspector(self, checked):
