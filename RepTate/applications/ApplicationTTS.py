@@ -48,7 +48,7 @@ class ApplicationTTS(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
 
     """
-    name = "TTS"
+    appname = "TTS"
     description = "Linear Viscoelasticity"
     extension = 'osc'
 
@@ -76,6 +76,7 @@ class BaseApplicationTTS:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/TTS.html'
+    appname = ApplicationTTS.appname
 
     def __init__(self, name="TTS", parent=None):
         """

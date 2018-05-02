@@ -631,7 +631,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 th.destructor()
             except:
                 pass
-            thname = th.name.rstrip("0123456789")
+            thname = th.thname
             thtabname = ds.TheorytabWidget.tabText(0)
             th_cleaned.append((thname, thtabname))
             ds.TheorytabWidget.removeTab(0)

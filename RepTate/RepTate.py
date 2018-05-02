@@ -126,7 +126,7 @@ def start_RepTate(argv):
     splash.finish(ex)
 
     # Handle files & open apps accordingly
-    d = {ex.extension: ex.name for ex in  list(ex.available_applications.values())}
+    d = {ex.extension: ex.appname for ex in  list(ex.available_applications.values())}
     for k in dictfiles.keys():
         if (k in d.keys()):
             ex.new_app_from_name(d[k])

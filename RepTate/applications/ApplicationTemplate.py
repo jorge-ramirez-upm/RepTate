@@ -48,7 +48,7 @@ class ApplicationTemplate(CmdBase):
     
     [description]
     """
-    name = 'Template'
+    appname = 'Template'
     description = 'Template Application'  #used in the command-line Reptate
     extension = "txt"  # drag and drop this extension automatically opens this application
 
@@ -76,6 +76,7 @@ class BaseApplicationTemplate:
     """
 
     #help_file = ''
+    appname = ApplicationTemplate.appname
 
     def __init__(self, name='Template', parent=None, nplots=1, ncols=2):
         """

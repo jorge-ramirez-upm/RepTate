@@ -47,7 +47,7 @@ class ApplicationMWD(CmdBase):
     """Application to analyze Molecular Weight Distributions
     
     """
-    name = "MWD"
+    appname = "MWD"
     description = "Experimental Molecular weight distributions"
     extension = "gpc"
 
@@ -75,6 +75,7 @@ class BaseApplicationMWD:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/MWD.html'
+    appname = ApplicationMWD.appname
 
     def __init__(self, name="MWD", parent=None):
         """

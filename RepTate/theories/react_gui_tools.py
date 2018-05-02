@@ -497,10 +497,10 @@ class ParameterReactMix(QDialog):
         self.opened_react_theories = []
         current_manager = self.parent_theory.parent_dataset.parent_application.parent_manager
 
-        for app in current_manager.applications.values(
-        ):  #list all opened apps
-            if (app.name.rstrip("0123456789") == 'React'
-                ):  #select only React application
+        for app in current_manager.applications.values():  
+        #list all opened apps
+            if app.appname == 'React':  
+                #select only React application
                 for ds in app.datasets.values():  #loop over datasets
                     for th in ds.theories.values():  #loop over theories
                         if th.reactname not in ['ReactMix', 'CreatePolyconf'] and th.simexists:  # exclude React Mix and CreatePolyconf theories

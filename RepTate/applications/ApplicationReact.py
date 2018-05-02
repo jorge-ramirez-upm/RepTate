@@ -50,7 +50,7 @@ class ApplicationReact(CmdBase):
     """Application for Monte Carlo polymerisation
     
     """
-    name = 'React'
+    appname = 'React'
     description = 'React Application'  #used in the command-line Reptate
     extension = 'reac'
 
@@ -78,6 +78,7 @@ class BaseApplicationReact:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/React.html'
+    appname = ApplicationReact.appname
 
     def __init__(self, name='React', parent=None, **kwargs):
         """

@@ -368,8 +368,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     len(self.files) - len(self.inactive_files)) > 1:
                 header = "Calculate"
                 message = "<p>Too many active files: \"%s\" uses only one data file.</p>\
-                    <p>The theory will be apllied to the highlighted file if any or to the first active file.</p>" % (
-                    (th.name).rstrip("0123456789"))
+                    <p>The theory will be applied to the highlighted file if any or to the first active file.</p>" % th.thname
                 QMessageBox.warning(self, header, message)
             th.handle_actionCalculate_Theory()
 
@@ -386,8 +385,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     len(self.files) - len(self.inactive_files)) > 1:
                 header = "Minimization"
                 message = "<p>Too many active files: \"%s\" uses only one data file.</p>\
-                    <p>The theory will be apllied to the highlighted file if any or to the first active file.</p>" % (
-                    (th.name).rstrip("0123456789"))
+                    <p>The theory will be applied to the highlighted file if any or to the first active file.</p>" % th.thname
                 QMessageBox.warning(self, header, message)
             th.handle_actionMinimize_Error()
 

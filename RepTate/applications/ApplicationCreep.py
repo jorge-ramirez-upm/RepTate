@@ -47,7 +47,7 @@ class ApplicationCreep(CmdBase):
     """Application to Analyze Data from Creep experiments
     
     """
-    name = "Creep"
+    appname = "Creep"
     description = "Creep Experiments"
     extension = "creep"
 
@@ -75,6 +75,7 @@ class BaseApplicationCreep:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Creep/Creep.html'
+    appname = ApplicationCreep.appname
 
     def __init__(self, name="Creep", parent=None):
         """

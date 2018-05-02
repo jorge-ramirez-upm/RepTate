@@ -47,7 +47,7 @@ class ApplicationDielectric(CmdBase):
     """Application to Analyze Dielectric Spectroscopy Data
     
     """
-    name = "Dielectric"
+    appname = "Dielectric"
     description = "Dielectric Spectroscopy"
     extension = "dls"
 
@@ -75,6 +75,7 @@ class BaseApplicationDielectric:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Dielectric/Dielectric.html'
+    appname = ApplicationDielectric.appname
 
     def __init__(self, name="Dielectric", parent=None):
         """

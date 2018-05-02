@@ -98,17 +98,17 @@ class ApplicationManager(CmdBase):
         self.application_counter = 0
         self.applications = {}
         self.available_applications = {}
-        self.available_applications[ApplicationMWD.name] = ApplicationMWD
-        self.available_applications[ApplicationTTS.name] = ApplicationTTS
-        self.available_applications[ApplicationLVE.name] = ApplicationLVE
-        self.available_applications[ApplicationNLVE.name] = ApplicationNLVE
-        self.available_applications[ApplicationGt.name] = ApplicationGt
-        self.available_applications[ApplicationCreep.name] = ApplicationCreep
-        self.available_applications[ApplicationSANS.name] = ApplicationSANS
-        self.available_applications[ApplicationReact.name] = ApplicationReact
-        self.available_applications[ApplicationDielectric.name] = ApplicationDielectric
-        # self.available_applications[ApplicationXY.name] = ApplicationXY
-        #self.available_applications[ApplicationFRS_I.name]=ApplicationFRS_I
+        self.available_applications[ApplicationMWD.appname] = ApplicationMWD
+        self.available_applications[ApplicationTTS.appname] = ApplicationTTS
+        self.available_applications[ApplicationLVE.appname] = ApplicationLVE
+        self.available_applications[ApplicationNLVE.appname] = ApplicationNLVE
+        self.available_applications[ApplicationGt.appname] = ApplicationGt
+        self.available_applications[ApplicationCreep.appname] = ApplicationCreep
+        self.available_applications[ApplicationSANS.appname] = ApplicationSANS
+        self.available_applications[ApplicationReact.appname] = ApplicationReact
+        self.available_applications[ApplicationDielectric.appname] = ApplicationDielectric
+        # self.available_applications[ApplicationXY.apname] = ApplicationXY
+        #self.available_applications[ApplicationFRS_I.apname]=ApplicationFRS_I
 
 # APPLICATION STUFF
 
@@ -121,7 +121,7 @@ class ApplicationManager(CmdBase):
             - [type] -- [description]
         """
         L = [
-            "%s: %s" % (app.name, app.description)
+            "%s: %s" % (app.appname, app.description)
             for app in list(self.available_applications.values())
         ]
         return L
@@ -208,7 +208,7 @@ class ApplicationManager(CmdBase):
         for app in L:
             print(app)
 
-    def new(self, name):
+    def new(self, appname):
         """Create new application
         
         [description]
@@ -219,27 +219,27 @@ class ApplicationManager(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        if (name in self.available_applications):
+        if (appname in self.available_applications):
             self.application_counter += 1
-            newapp = self.available_applications[name](
-                name + str(self.application_counter), self)
+            newapp = self.available_applications[appname](
+                appname + str(self.application_counter), self)
             self.applications[newapp.name] = newapp
             #if CmdBase.mode != CmdMode.GUI:
             #    newapp.do_new("")
             return newapp
         else:
-            print("Application \"%s\" is not available" % name)
+            print("Application \"%s\" is not available" % appname)
             return None
 
-    def do_new(self, name):
+    def do_new(self, appname):
         """Create new application
         
         [description]
         
         Arguments:
-            - name {[type]} -- [description]
+            - appname {[type]} -- [description]
         """
-        newapp = self.new(name)
+        newapp = self.new(appname)
         if (newapp != None):
             if (self.mode == CmdMode.batch):
                 newapp.prompt = ''
@@ -361,13 +361,9 @@ class ApplicationManager(CmdBase):
         """
         get_dict = {}
         set_dict = {}
-        for appname in self.applications.keys():
-            app = self.applications[appname]
-            for dsname in app.datasets.keys():
-                ds = app.datasets[dsname]
-                #print ("%s %s"%(app.name, ds.name))
-                for thname in ds.theories.keys():
-                    th = ds.theories[thname]
+        for app in self.applications.values():
+            for ds in app.datasets.values():
+                for th in ds.theories.values():
                     if th.has_modes and th != th_exclude:
                         get_dict["%s.%s.%s" % (app.name, ds.name,
                                                th.name)] = th.get_modes

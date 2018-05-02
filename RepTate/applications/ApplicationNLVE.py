@@ -47,7 +47,7 @@ class ApplicationNLVE(CmdBase):
     """Application to Analyze Start up of Nonlinear flow
     
     """
-    name = "NLVE"
+    appname = "NLVE"
     description = "Non-Linear Flow"
     extension = "shear"
 
@@ -75,6 +75,7 @@ class BaseApplicationNLVE:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/NLVE.html'
+    appname = ApplicationNLVE.appname
 
     def __init__(self, name="NLVE", parent=None):
         """

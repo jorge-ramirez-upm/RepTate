@@ -47,7 +47,7 @@ class ApplicationSANS(CmdBase):
     """Application to Analyze Data from SANS experiments
     
     """
-    name = "SANS"
+    appname = "SANS"
     description = "Small Angle Neutron Scattering Experiments"
     extension = "sans"
 
@@ -75,6 +75,7 @@ class BaseApplicationSANS:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/SANS/SANS.html'
+    appname = ApplicationSANS.appname
 
     def __init__(self, name="SANS", parent=None):
         """

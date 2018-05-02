@@ -47,7 +47,7 @@ class ApplicationLVE(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
     
     """
-    name = "LVE"
+    appname = "LVE"
     description = "Linear Viscoelasticity"
     extension = "tts"
 
@@ -73,6 +73,7 @@ class BaseApplicationLVE:
     """
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html'
+    appname = ApplicationLVE.appname
 
     def __init__(self, name="LVE", parent=None):
         """

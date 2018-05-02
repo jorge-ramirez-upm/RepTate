@@ -52,7 +52,7 @@ class ApplicationGt(CmdBase):
     """Application to Analyze Stress Relaxation Data
     
     """
-    name = "Gt"
+    appname = "Gt"
     description = "Relaxation modulus"
     extension = "gt"
 
@@ -80,6 +80,7 @@ class BaseApplicationGt:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Gt.html'
+    appname = ApplicationGt.appname
 
     def __init__(self, name="Gt", parent=None):
         """
