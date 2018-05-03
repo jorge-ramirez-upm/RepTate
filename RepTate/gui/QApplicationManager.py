@@ -148,7 +148,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.show_app_help.triggered.connect(self.handle_show_app_help)
         self.show_th_help.triggered.connect(self.handle_show_th_help)
 
-
+        self.REPTATE_SAVE = 'reptate_save.txt'
 
         # CONSOLE WINDOW (need to integrate it with cmd commands)
         #self.text_edit = Console(self)

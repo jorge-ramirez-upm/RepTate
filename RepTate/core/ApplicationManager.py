@@ -67,7 +67,6 @@ class ApplicationManager(CmdBase):
     prompt = 'reptate> '
     intro = 'Reptate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
         version, date)
-    REPTATE_SAVE = 'reptate_save.txt'
 
     def __init__(self, parent=None):
         """
