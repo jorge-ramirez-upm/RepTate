@@ -74,7 +74,7 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_lve_window()
+    ex.handle_new_app('LVE')
     
     #####################
     # TEST Likhtman-McLeish
@@ -104,7 +104,7 @@ def start_RepTate(argv):
     #####################
     # TEST Carreau-Yasuda
     # Open a Dataset
-    ex.new_lve_window()
+    ex.handle_new_app('LVE')
     ex.applications["LVE2"].new_tables_from_files([
                                                    pi_dir + "PI_483.1k_T-35.tts",
                                                    ])
@@ -124,7 +124,7 @@ def start_RepTate(argv):
     #####################
     # TEST DTD
     # Open a Dataset
-    ex.new_lve_window()
+    ex.handle_new_app('LVE')
     pi_dir = "data%sPI_STAR%s"%((os.sep,)*2)
     ex.applications["LVE3"].new_tables_from_files([
                                                    pi_dir + "S6Z8.1T40.tts",
