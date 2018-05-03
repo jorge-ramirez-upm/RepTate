@@ -1,11 +1,11 @@
 <RCC>
   <qresource prefix="/Icons">
-    <file>Images/new_icons/icons8-test-tube.png</file>
     <file>Images/Clip.ico</file>
     <file>Images/Exit.ico</file>
     <file>Images/Help.ico</file>
     <file>Images/qt_logo_128.png</file>
     <file>Images/console.ico</file>
+    <file>Images/new_icons/React.png</file>
     <file>Images/Calculator.ico</file>
     <file>Images/MatDB.ico</file>
     <file>Images/Library.ico</file>
@@ -25,16 +25,18 @@
     <file>Images/TTS.ico</file>
     <file>Images/MWD.ico</file>
     <file>Images/new_icons/icons8-binoculars.png</file>
-    <file>Images/new_icons/icons8-TTS.png</file>
-    <file>Images/new_icons/icons8-MWD.png</file>
-    <file>Images/new_icons/icons8-LVE.png</file>
-    <file>Images/new_icons/icons8-Gt.png</file>
-    <file>Images/new_icons/icons8-NLVE.png</file>
-    <file>Images/new_icons/icons8-Creep.png</file>
-    <file>Images/new_icons/icons8-SANS.png</file>
     <file>Images/new_icons/icons8-library.png</file>
     <file>Images/new_icons/icons8-exit-sign.png</file>
-    <file>Images/new_icons/Dipoles.png</file>
-    <file>Images/new_icons/icons8-streaming.png</file>
+    <file>Images/new_icons/icons8-save.png</file>
+    <file>Images/new_icons/DynamicStructureFactor.png</file>
+    <file>Images/new_icons/icons8-open.png</file>
+    <file>Images/new_icons/MWD.png</file>
+    <file>Images/new_icons/TTS.png</file>
+    <file>Images/new_icons/Dielectric.png</file>
+    <file>Images/new_icons/SANS.png</file>
+    <file>Images/new_icons/NLVE.png</file>
+    <file>Images/new_icons/LVE.png</file>
+    <file>Images/new_icons/Gt.png</file>
+    <file>Images/new_icons/Creep.png</file>
   </qresource>
 </RCC>
