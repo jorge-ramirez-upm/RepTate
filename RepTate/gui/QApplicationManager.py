@@ -170,6 +170,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         if ans == 'y':
             print('SAVING!')
             self.save_reptate()
+        event.accept()
 
     def save_reptate(self):
         apps_dic = OrderedDict()
