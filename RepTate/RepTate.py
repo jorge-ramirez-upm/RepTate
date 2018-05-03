@@ -129,14 +129,13 @@ def start_RepTate(argv):
     d = {ex.extension: ex.appname for ex in  list(ex.available_applications.values())}
     for k in dictfiles.keys():
         if (k in d.keys()):
-            ex.new_app_from_name(d[k])
+            ex.handle_new_app(d[k])
             appname="%s%d"%(d[k],ex.application_counter)
             ex.applications[appname].new_tables_from_files(dictfiles[k])
         else:
             print("File type %s cannot be opened"%k)
 
     ex.showMaximized()
-    ex.restoring_session()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':

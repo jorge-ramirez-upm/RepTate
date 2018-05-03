@@ -177,7 +177,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_plot_hover)   
         connection_id = self.actionShowFigureTools.triggered.connect(self.viewMPLToolbar)
         connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
-        connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.createNew_Empty_Dataset)
+        connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
         connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
@@ -783,7 +783,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
-        # pass
+        pass
         # try:
         #     plt.tight_layout(pad=1.2)
         # except:
@@ -817,7 +817,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         newitem.setCheckState(0, 2)
         
         self.dataset_actions_disabled(False) #activate buttons
+
+
         
+    def handle_createNew_Empty_Dataset(self):
+        """Called when button 'new dataset' pushed"""
+        self.createNew_Empty_Dataset()
         
     def createNew_Empty_Dataset(self, tabname=''):
         """Add New empty tab to DataSettabWidget

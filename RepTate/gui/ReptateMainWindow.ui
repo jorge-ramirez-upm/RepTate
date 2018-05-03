@@ -132,7 +132,7 @@
   <action name="actionTTS">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-TTS.png</normaloff>:/Icons/Images/new_icons/icons8-TTS.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/TTS.png</normaloff>:/Icons/Images/new_icons/TTS.png</iconset>
    </property>
    <property name="text">
     <string>TTS</string>
@@ -147,7 +147,7 @@
   <action name="actionLVE">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-LVE.png</normaloff>:/Icons/Images/new_icons/icons8-LVE.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/LVE.png</normaloff>:/Icons/Images/new_icons/LVE.png</iconset>
    </property>
    <property name="text">
     <string>LVE</string>
@@ -162,7 +162,7 @@
   <action name="actionNLVE">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-NLVE.png</normaloff>:/Icons/Images/new_icons/icons8-NLVE.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/NLVE.png</normaloff>:/Icons/Images/new_icons/NLVE.png</iconset>
    </property>
    <property name="text">
     <string>NLVE</string>
@@ -177,7 +177,7 @@
   <action name="actionGt">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-Gt.png</normaloff>:/Icons/Images/new_icons/icons8-Gt.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/Gt.png</normaloff>:/Icons/Images/new_icons/Gt.png</iconset>
    </property>
    <property name="text">
     <string>Gt</string>
@@ -210,7 +210,7 @@
   <action name="actionMWD">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-MWD.png</normaloff>:/Icons/Images/new_icons/icons8-MWD.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/MWD.png</normaloff>:/Icons/Images/new_icons/MWD.png</iconset>
    </property>
    <property name="text">
     <string>MWD</string>
@@ -225,7 +225,7 @@
   <action name="actionCreep">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-Creep.png</normaloff>:/Icons/Images/new_icons/icons8-Creep.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/Creep.png</normaloff>:/Icons/Images/new_icons/Creep.png</iconset>
    </property>
    <property name="text">
     <string>Creep</string>
@@ -240,7 +240,7 @@
   <action name="actionSANS">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-SANS.png</normaloff>:/Icons/Images/new_icons/icons8-SANS.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/SANS.png</normaloff>:/Icons/Images/new_icons/SANS.png</iconset>
    </property>
    <property name="text">
     <string>SANS</string>
@@ -279,7 +279,7 @@
   <action name="actionReact">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-test-tube.png</normaloff>:/Icons/Images/new_icons/icons8-test-tube.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/React.png</normaloff>:/Icons/Images/new_icons/React.png</iconset>
    </property>
    <property name="text">
     <string>React</string>
@@ -294,7 +294,7 @@
   <action name="actionDielectric">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/Dipoles.png</normaloff>:/Icons/Images/new_icons/Dipoles.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/Dielectric.png</normaloff>:/Icons/Images/new_icons/Dielectric.png</iconset>
    </property>
    <property name="text">
     <string>Dielectric</string>
@@ -309,7 +309,7 @@
   <action name="actionDynamicStructureFactor">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/icons8-streaming.png</normaloff>:/Icons/Images/new_icons/icons8-streaming.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/DynamicStructureFactor.png</normaloff>:/Icons/Images/new_icons/DynamicStructureFactor.png</iconset>
    </property>
    <property name="text">
     <string>DynamicStructureFactor</string>

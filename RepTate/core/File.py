@@ -57,11 +57,8 @@ class File(object):
             - axarr {[type]} -- [description] (default: {None})
         """
         self.file_full_path = os.path.abspath(file_name)
-        tmpname = self.file_full_path.split(os.sep)
-        tmpname = tmpname[len(tmpname)-1]
-        lst = tmpname.split('.')
-        short = '.'.join(lst[:-1])      
-        self.file_name_short = short
+        tmpname = os.path.basename(self.file_full_path)
+        self.file_name_short = os.path.splitext(tmpname)[0]
         self.file_type = file_type
         self.parent_dataset = parent_dataset
         self.axarr = axarr
