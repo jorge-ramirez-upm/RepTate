@@ -1055,8 +1055,9 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 th_id, self, self.parent_application.axarr)
             self.theories[th.name] = th
             self.current_theory = th.name
-            if (self.mode == CmdMode.GUI and calculate):
-                th.do_calculate('')
+            if self.mode == CmdMode.GUI:
+                if calculate:
+                    th.do_calculate('')
             else:
                 if (self.mode == CmdMode.batch):
                     th.prompt = ''

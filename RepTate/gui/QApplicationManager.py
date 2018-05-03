@@ -148,7 +148,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.show_app_help.triggered.connect(self.handle_show_app_help)
         self.show_th_help.triggered.connect(self.handle_show_th_help)
 
-        self.opening()
+
 
         # CONSOLE WINDOW (need to integrate it with cmd commands)
         #self.text_edit = Console(self)
@@ -158,7 +158,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
 #################
 #SAVE/LOAD REPTATE SESSION
-    def opening(self):
+    def restoring_session(self):
         if os.path.isfile(self.REPTATE_SAVE):
             ans = input('RESTORE SESSION? (y/n): ')
             if ans == 'y':
@@ -202,7 +202,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                         [
                             ('th_tabname', ds.TheorytabWidget.tabText(k)),
                             ('thname', th.thname),
-                            ('th_param', param_dic)
+                            ('th_param', param_dic),
+                            ('th_textbox', str(th.thTextBox.toPlainText()))
                             # TODO: do we save the theory table data?
                         ]
                     )
@@ -263,7 +264,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
             if not os.path.isfile(fpath):
                 print("File \"%s\" does not exists" % fpath)
-                # TODO: propose user to locate the file
+                # TODO: propose user to locate the file if missing
                 continue
             f = ftype.read_file(fpath, ds, ds.parent_application.axarr)
             ds.files.append(f)
@@ -272,18 +273,25 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             for pname in fparams:
                 f.file_parameters[pname] = fparams[pname]
 
+            ds.parent_application.addTableToCurrentDataSet(f, f_ext)
+            ds.do_plot()
+            ds.parent_application.update_Qplot()
+            ds.set_table_icons(ds.table_icon_list)
+
     def restore_theories(self, ds, theories):
         for th_dic in theories.values():
             th_tabname = th_dic['th_tabname']
             thname = th_dic['thname']
             th_param = th_dic['th_param']
+            th_textbox = th_dic['th_textbox']
             
             new_th = ds.new_theory(thname, th_tabname, calculate=False)
             for pname in th_param:
                 # MUST BE SURE NMODE IF SET FIRST! 
                 # I think OrderedDict should be OK
                 new_th.set_param_value(pname, th_param[pname])
-
+            new_th.update_parameter_table()
+            new_th.thTextBox.insertPlainText(th_textbox)
 
     def load_session(self, saved_session):
         import json

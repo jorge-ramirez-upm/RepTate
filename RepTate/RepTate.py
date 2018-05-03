@@ -136,7 +136,7 @@ def start_RepTate(argv):
             print("File type %s cannot be opened"%k)
 
     ex.showMaximized()
-
+    ex.restoring_session()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
