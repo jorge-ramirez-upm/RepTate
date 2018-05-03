@@ -12,6 +12,7 @@ Applications
 - Creep experiments (Creep)
 - Neutron scattering experiments (SANS)
 - Monte Carlo polymerisation (React)
+- Dielectric Spectroscopy (Dielectric)
 
 Theories
 ========
@@ -29,6 +30,8 @@ Theories
 - Giesekus constitutive equation (NLVE)
 - Debye theory for neutron scattering from ideal polymer chains (SANS)
 - Basic theories (polynomial, power law, exponential decay, etc, available in all applications)
+- Debye and Havriliak-Negami relaxation modes (Dielectric)
+- Kolhrauch-Williams-Watts (KWW) modes (Dielectric, BETA version).
 
 Each theory is associated to the application (MW, TTS, etc.) where the theory can be found.
 
@@ -37,3 +40,9 @@ Graphical User Interface
 - Export the figure to PDF, PNG, ...
 - Flexibility to choose symbols and colors for the data
 - Inspection of the experiment and theory data
+- Read data from Excel file (Experimental, CL version)
+- i-Rheo Fourier transform to get G' and G'' from G(t)
+- Zoom with wheel
+- Calculate integral, find peaks (BETA, only in CL version)
+- Save predictions of theory to a Reptate compatible file
+

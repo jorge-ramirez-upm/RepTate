@@ -2,6 +2,22 @@
 Version History
 ===============
 
+Release 0.9.2 - 20180503
+========================
+- New App: Dielectric spectroscopy
+- New Dielectric Theories: Debye and Havriliak-Negami relaxation modes
+- New Dielectric Theories: Kolhrauch-Williams-Watts (KWW) modes (BETA VERSION)
+- Select xrange for iRheo G(t) view transformation
+- alternate filled/empty symbols for views with n>1
+- Read data from Excel file (only in CL version, LVE app)
+- Zoom plot with mouse wheel (does not work if multiview > 1)
+- Added all LVE views to TTS.
+- LVE app can open osc files.
+- Added missing views from old Reptate
+- i-Rheo is the default view for panel 2 (Gt)
+- Calculate integrals and find peaks of data (Experimental, only in CL version)
+- "get modes" for Blend RP theory
+
 Release 0.9.1 - 20180416
 ========================
 - New MWD Theories: Generalized Exponential (GEX) & LogNormal distributions
