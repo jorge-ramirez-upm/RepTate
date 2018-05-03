@@ -72,7 +72,7 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_React_window()
+    ex.handle_new_app('React')
 
     #####################
     # TEST Likhtman-McLeish

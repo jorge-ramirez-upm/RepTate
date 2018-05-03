@@ -75,7 +75,7 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_mwd_window()
+    ex.handle_new_app('MWD')
     
     #####################
     # TEST MaxwellModesTime
@@ -87,7 +87,7 @@ def start_RepTate(argv):
     # Open a theory
     ex.applications["MWD1"].datasets["Set1"].new_theory("MWDiscr")
 
-    ex.new_mwd_window()
+    ex.handle_new_app('MWD')
     ex.applications["MWD2"].new_tables_from_files([
                                                    gt_dir + "Munstedt_PSIV.gpc",
                                                    ])

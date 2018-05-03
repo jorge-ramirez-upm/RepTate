@@ -75,7 +75,7 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_gt_window()
+    ex.handle_new_app('Gt')
     
     #####################
     # TEST MaxwellModesTime

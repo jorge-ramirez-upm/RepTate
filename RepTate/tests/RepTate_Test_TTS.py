@@ -73,7 +73,7 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_tts_window()
+    ex.handle_new_app('TTS')
     
     # Open a Dataset
     pi_dir = "data%sPI_LINEAR%sosc%s"%((os.sep,)*3)

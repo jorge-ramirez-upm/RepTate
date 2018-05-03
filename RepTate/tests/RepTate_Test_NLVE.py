@@ -75,7 +75,7 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.new_nlve_window()
+    ex.handle_new_app('NLVE')
 
     #####################
     # TEST Rolie-Poly
@@ -100,7 +100,7 @@ def start_RepTate(argv):
     #####################
     # TEST Rolie-Poly uniaxial extension
     # Open a Dataset
-    ex.new_nlve_window()
+    ex.handle_new_app('NLVE')
     dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_extension%s" % ((
         os.sep, ) * 4)
     ex.applications["NLVE2"].new_tables_from_files([
@@ -124,7 +124,7 @@ def start_RepTate(argv):
 
     ####################
     #open linear rheology data to import the Maxwell modes
-    ex.new_lve_window()
+    ex.handle_new_app('NLVE')
     dow_dir = "data%sDOW%sLinear_Rheology_TTS%s" % ((
         os.sep, ) * 3)
     ex.applications["LVE3"].new_tables_from_files([
