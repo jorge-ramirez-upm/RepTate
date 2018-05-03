@@ -819,7 +819,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.dataset_actions_disabled(False) #activate buttons
         
         
-    def createNew_Empty_Dataset(self):
+    def createNew_Empty_Dataset(self, tabname=''):
         """Add New empty tab to DataSettabWidget
         
         [description]
@@ -829,7 +829,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds_name = 'Set%d'%num
         ds = QDataSet(name=ds_name, parent=self)
         self.datasets[ds_name] = ds
-        ind = self.DataSettabWidget.addTab(ds, ds_name)
+        if tabname == '':
+            tabname = ds_name
+        ind = self.DataSettabWidget.addTab(ds, tabname)
 
         #Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind)
@@ -853,7 +855,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             #inspect_header = dfile.col_names[:]
             inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
             inspec_tab = self.inspector_table.setHorizontalHeaderLabels(inspect_header)
-        
+        return self.DataSettabWidget.widget(ind)
+
     def openDataset(self):
         """[summary]
         

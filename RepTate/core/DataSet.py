@@ -1031,7 +1031,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         for t in self.theories.values():
             print("   %s: %s\t %s" % (t.name, t.thname, t.description))
 
-    def do_theory_new(self, line):
+    def do_theory_new(self, line, calculate=True):
         """Add a new theory of the type specified to the current Data Set
         
         [description]
@@ -1055,14 +1055,15 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 th_id, self, self.parent_application.axarr)
             self.theories[th.name] = th
             self.current_theory = th.name
-            if (self.mode == CmdMode.GUI):
+            if (self.mode == CmdMode.GUI and calculate):
                 th.do_calculate('')
             else:
                 if (self.mode == CmdMode.batch):
                     th.prompt = ''
                 else:
                     th.prompt = self.prompt[:-2] + '/' + th.name + '> '
-                th.do_calculate('')
+                if calculate:
+                    th.do_calculate('')
                 th.cmdloop()
             return th
         else:

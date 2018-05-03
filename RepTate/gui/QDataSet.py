@@ -644,7 +644,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.new_theory(th_name)
         self.actionNew_Theory.setDisabled(False)
 
-    def new_theory(self, th_name, th_tab_id=""):
+    def new_theory(self, th_name, th_tab_id="", calculate=True):
         """[summary]
         
         [description]
@@ -658,7 +658,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.set_no_limits(
                 self.current_theory)  #remove the xy-range limits
         self.theory_actions_disabled(False)  #enable theory buttons
-        newth = self.do_theory_new(th_name)
+        newth = self.do_theory_new(th_name, calculate)
 
         # add new theory tab
         if th_tab_id == "":
@@ -684,3 +684,4 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.TheorytabWidget.blockSignals(False)
         newth.update_parameter_table()
         newth.do_show()
+        return newth

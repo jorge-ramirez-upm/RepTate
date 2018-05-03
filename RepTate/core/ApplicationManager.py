@@ -54,6 +54,7 @@ from ApplicationDielectric import ApplicationDielectric
 # from ApplicationXY import ApplicationXY
 #from ApplicationFRS_I import *
 import Version
+from collections import OrderedDict
 
 
 class ApplicationManager(CmdBase):
@@ -66,6 +67,7 @@ class ApplicationManager(CmdBase):
     prompt = 'reptate> '
     intro = 'Reptate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
         version, date)
+    REPTATE_SAVE = 'reptate_save.txt'
 
     def __init__(self, parent=None):
         """
@@ -96,19 +98,24 @@ class ApplicationManager(CmdBase):
 
         # SETUP APPLICATIONS
         self.application_counter = 0
-        self.applications = {}
-        self.available_applications = {}
+        self.applications = OrderedDict()
+        self.available_applications = OrderedDict()
         self.available_applications[ApplicationMWD.appname] = ApplicationMWD
         self.available_applications[ApplicationTTS.appname] = ApplicationTTS
         self.available_applications[ApplicationLVE.appname] = ApplicationLVE
         self.available_applications[ApplicationNLVE.appname] = ApplicationNLVE
         self.available_applications[ApplicationGt.appname] = ApplicationGt
-        self.available_applications[ApplicationCreep.appname] = ApplicationCreep
+        self.available_applications[
+            ApplicationCreep.appname] = ApplicationCreep
         self.available_applications[ApplicationSANS.appname] = ApplicationSANS
-        self.available_applications[ApplicationReact.appname] = ApplicationReact
-        self.available_applications[ApplicationDielectric.appname] = ApplicationDielectric
+        self.available_applications[
+            ApplicationReact.appname] = ApplicationReact
+        self.available_applications[
+            ApplicationDielectric.appname] = ApplicationDielectric
         # self.available_applications[ApplicationXY.apname] = ApplicationXY
         #self.available_applications[ApplicationFRS_I.apname]=ApplicationFRS_I
+
+
 
 # APPLICATION STUFF
 

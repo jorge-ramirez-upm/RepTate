@@ -37,6 +37,7 @@ ApplicationManager.
 
 """
 import logging
+import os
 from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QDesktopServices
@@ -47,6 +48,7 @@ from CmdBase import CmdBase, CmdMode, CalcMode
 from QApplicationWindow import QApplicationWindow
 from ApplicationManager import ApplicationManager
 from QAboutReptate import AboutWindow
+from collections import OrderedDict
 
 PATH = dirname(abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(join(PATH, 'ReptateMainWindow.ui'))
@@ -95,9 +97,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.toolBarHelp.insertWidget(self.actionAbout_Qt, tbut)
         self.toolBarHelp.insertSeparator(self.actionAbout_Qt)
         #self.toolBar.insertSeparator(self.actionQuit)
-        self.toolBarApps.setContextMenuPolicy(Qt.PreventContextMenu);
-        self.toolBarHelp.setContextMenuPolicy(Qt.PreventContextMenu);
-        self.toolBarTools.setContextMenuPolicy(Qt.PreventContextMenu);
+        self.toolBarApps.setContextMenuPolicy(Qt.PreventContextMenu)
+        self.toolBarHelp.setContextMenuPolicy(Qt.PreventContextMenu)
+        self.toolBarTools.setContextMenuPolicy(Qt.PreventContextMenu)
         
         # # ApplicationXY button
         # #choose the button icon
@@ -146,11 +148,185 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.show_app_help.triggered.connect(self.handle_show_app_help)
         self.show_th_help.triggered.connect(self.handle_show_th_help)
 
+        self.opening()
+
         # CONSOLE WINDOW (need to integrate it with cmd commands)
         #self.text_edit = Console(self)
         #this is how you pass in locals to the interpreter
         #self.text_edit.initInterpreter(locals())
         #self.verticalLayout.addWidget(self.text_edit)
+
+#################
+#SAVE/LOAD REPTATE SESSION
+    def opening(self):
+        if os.path.isfile(self.REPTATE_SAVE):
+            ans = input('RESTORE SESSION? (y/n): ')
+            if ans == 'y':
+                print('RESTORING!')
+                self.load_session(self.REPTATE_SAVE)
+
+    def closeEvent(self, event):
+        ans = input('SAVE SESSION? (y/n): ')
+        if ans == 'y':
+            print('SAVING!')
+            self.save_reptate()
+
+    def save_reptate(self):
+        apps_dic = OrderedDict()
+        napps = self.ApplicationtabWidget.count()
+        for i in range(napps):
+            app = self.ApplicationtabWidget.widget(i)
+            datasets_dic = {}
+            ndatasets = app.DataSettabWidget.count()
+            for j in range(ndatasets):
+                ds = app.DataSettabWidget.widget(j)
+                files_dic = {}
+                for f in ds.files:
+                    param_dic = dict([ (pname, f.file_parameters[pname]) for pname in f.file_parameters])
+                    file_dic = dict(
+                        [
+                            ('fpath', f.file_full_path),
+                            ('is_active', f.active),
+                            ('fparam', param_dic)
+                            # TODO: save the plot attributes (marker, color, filled, size)
+                        ]
+                    )
+                    files_dic[f.file_name_short] = file_dic
+
+                theories_dic = {}
+                ntheories = ds.TheorytabWidget.count()
+                for k in range(ntheories):
+                    th = ds.TheorytabWidget.widget(k)
+                    param_dic = OrderedDict([(pname, th.parameters[pname].value) for pname in th.parameters])
+                    th_dic = dict(
+                        [
+                            ('th_tabname', ds.TheorytabWidget.tabText(k)),
+                            ('thname', th.thname),
+                            ('th_param', param_dic)
+                            # TODO: do we save the theory table data?
+                        ]
+                    )
+                    theories_dic[th.name] = th_dic
+                
+                ds_dict = dict(
+                    [
+                        ('ds_tabname', app.DataSettabWidget.tabText(j)),
+                        ('files', files_dic),
+                        ('current_th_indx', ds.TheorytabWidget.currentIndex()),
+                        ('theories', theories_dic)
+                    ]
+                )
+                datasets_dic[ds.name] = ds_dict
+
+
+            app_dic = OrderedDict(
+                [
+                    ('app_tabname', self.ApplicationtabWidget.tabText(i)),
+                    ('app_indx', i),
+                    ('appname', app.appname), 
+                    ('current_view_names', [v.name for v in app.multiviews]), 
+                    ('current_ds_indx', app.DataSettabWidget.currentIndex()),
+                    ('datasets', datasets_dic)
+                ]
+            )
+
+            apps_dic[app.name] = app_dic
+
+        current_app_indx = self.ApplicationtabWidget.currentIndex()
+        out = OrderedDict([('current_app_indx', current_app_indx), ('apps', apps_dic)])
+        print('out\n', out)
+
+        import json
+        json.dump(out, open(self.REPTATE_SAVE, 'w'), indent=4)
+
+
+
+    # load RepTate session
+############################
+
+    def restore_app(self, app_name, app_tabname):
+        newapp = self.new(app_name)
+        icon = QIcon(':/Icons/Images/new_icons/icons8-%s.png' % app_name)
+        ind = self.ApplicationtabWidget.addTab(newapp, icon, app_tabname)
+        self.ApplicationtabWidget.setCurrentIndex(ind)
+        self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
+        return self.ApplicationtabWidget.widget(ind), ind
+
+    def restore_files(self, ds, files):
+        for file_dic in files.values():
+            fpath = file_dic['fpath']
+            is_active = file_dic['is_active']
+            fparams = file_dic['fparam'] # dict
+
+            f_ext = fpath.split('.')[-1]
+            ftype = ds.parent_application.filetypes[f_ext]
+
+            if not os.path.isfile(fpath):
+                print("File \"%s\" does not exists" % fpath)
+                # TODO: propose user to locate the file
+                continue
+            f = ftype.read_file(fpath, ds, ds.parent_application.axarr)
+            ds.files.append(f)
+            ds.current_file = f
+            f.active = is_active
+            for pname in fparams:
+                f.file_parameters[pname] = fparams[pname]
+
+    def restore_theories(self, ds, theories):
+        for th_dic in theories.values():
+            th_tabname = th_dic['th_tabname']
+            thname = th_dic['thname']
+            th_param = th_dic['th_param']
+            
+            new_th = ds.new_theory(thname, th_tabname, calculate=False)
+            for pname in th_param:
+                # MUST BE SURE NMODE IF SET FIRST! 
+                # I think OrderedDict should be OK
+                new_th.set_param_value(pname, th_param[pname])
+
+
+    def load_session(self, saved_session):
+        import json
+
+        data = json.load(open(saved_session))
+        app_indx_now = current_app_indx = data['current_app_indx']
+        apps_dic = data['apps']
+        for app_dic in apps_dic.values():
+            app_tabname = app_dic['app_tabname']
+            app_indx = app_dic['app_indx'] 
+            appname = app_dic['appname']
+            current_view_names = app_dic['current_view_names']
+            current_ds_indx = app_dic['current_ds_indx']
+            datasets = app_dic['datasets']
+
+            new_app_tab, ind = self.restore_app(appname, app_tabname)
+            if app_indx == current_app_indx:
+                # to be safe in case some apps are open before restore
+                app_indx_now = ind
+
+            for ds_dic in datasets.values():
+                ds_tabname = ds_dic['ds_tabname']
+                files = ds_dic['files']
+                current_th_indx = ds_dic['current_th_indx']
+                theories = ds_dic['theories']
+
+                new_ds_tab = new_app_tab.createNew_Empty_Dataset(tabname=ds_tabname)
+                self.restore_files(new_ds_tab, files)
+                self.restore_theories(new_ds_tab, theories)
+                new_ds_tab.TheorytabWidget.setCurrentIndex(current_th_indx)
+            #set app views
+            new_app_tab.multiviews = [new_app_tab.views[v] for v in current_view_names]
+            new_app_tab.viewComboBox.setCurrentText(current_view_names[0])
+            new_app_tab.change_view()
+            #set current ds_tab index
+            new_app_tab.DataSettabWidget.setCurrentIndex(current_ds_indx)
+    
+        self.ApplicationtabWidget.setCurrentIndex(app_indx_now)
+
+
+#################
+
+
     def handle_show_reptate_help(self):
         """Show RepTate documentation"""
         try:
@@ -275,8 +451,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset(
         )  #populate with empty dataset at app opening
-        app_id = "%s%d" % (app_name, self.application_counter)
-        ind = self.ApplicationtabWidget.addTab(newapp, QIcon(icon), app_id)
+        app_tabname = "%s%d" % (app_name, self.application_counter)
+        ind = self.ApplicationtabWidget.addTab(newapp, QIcon(icon), app_tabname)
         self.ApplicationtabWidget.setCurrentIndex(ind)
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
         return newapp
