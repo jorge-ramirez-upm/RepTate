@@ -47,6 +47,7 @@ from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
 from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 
 
 class TheoryWLFShiftTest(CmdBase):
@@ -551,23 +552,21 @@ class GUITheoryWLFShiftTest(BaseTheoryWLFShiftTest, QTheory):
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
-        self.verticalshift = tb.addAction(self.style().standardIcon(
-            getattr(QStyle, 'SP_ArrowUp')), 'Vertical shift')
+        self.verticalshift = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-vertical-shift.png'), 'Vertical shift')
         self.verticalshift.setCheckable(True)
         self.verticalshift.setChecked(True)
-        self.isofrictional = tb.addAction(self.style().standardIcon(
-            getattr(QStyle, 'SP_FileDialogInfoView')),
+        self.isofrictional = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-iso.png'),
                                           'Shift to isofrictional state')
         self.isofrictional.setCheckable(True)
         self.isofrictional.setChecked(True)
-        self.savemaster = tb.addAction(self.style().standardIcon(
-            getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
+        # self.savemaster = tb.addAction(self.style().standardIcon(
+        #     getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.verticalshift.triggered.connect(
             self.do_vertical_shift)
         connection_id = self.isofrictional.triggered.connect(
             self.do_isofrictional)
-        connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
+        # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
 
     def do_vertical_shift(self):
         self.set_param_value("vert", self.verticalshift.isChecked())
@@ -575,8 +574,8 @@ class GUITheoryWLFShiftTest(BaseTheoryWLFShiftTest, QTheory):
     def do_isofrictional(self):
         self.set_param_value("iso", self.isofrictional.isChecked())
 
-    def do_save_dialog(self):
-        folder = str(
-            QFileDialog.getExistingDirectory(
-                self, "Select Directory to save Master curves"))
-        self.do_save(folder)
+    # def do_save_dialog(self):
+    #     folder = str(
+    #         QFileDialog.getExistingDirectory(
+    #             self, "Select Directory to save Master curves"))
+    #     self.do_save(folder)

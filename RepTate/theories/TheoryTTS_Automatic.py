@@ -47,6 +47,8 @@ from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog, QComboBox
 from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+
 
 
 class TheoryTTSShiftAutomatic(CmdBase):
@@ -577,23 +579,21 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
-        self.verticalshift = tb.addAction(self.style().standardIcon(
-            getattr(QStyle, 'SP_ArrowUp')), 'Vertical shift')
+        self.verticalshift = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-vertical-shift.png'), 'Vertical shift')
         self.verticalshift.setCheckable(True)
         self.verticalshift.setChecked(True)
-        self.savemaster = tb.addAction(self.style().standardIcon(
-            getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
+        # self.savemaster = tb.addAction(self.style().standardIcon(
+        #     getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
         self.cbTemp = QComboBox()
         self.populate_TempComboBox()
         self.cbTemp.setToolTip("Select a goal Temperature")
         tb.addWidget(self.cbTemp)
-        self.refreshT = tb.addAction(self.style().standardIcon(
-            getattr(QStyle, 'SP_BrowserReload')), 'Refresh T list')
+        self.refreshT = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-reset.png'), 'Refresh T list')
 
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.verticalshift.triggered.connect(
             self.do_vertical_shift)
-        connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
+        # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
         connection_id = self.cbTemp.currentIndexChanged.connect(
             self.change_temperature)
         connection_id = self.refreshT.triggered.connect(
@@ -614,11 +614,11 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
     def do_vertical_shift(self):
         self.set_param_value("vert", self.verticalshift.isChecked())
 
-    def do_save_dialog(self):
-        folder = str(
-            QFileDialog.getExistingDirectory(
-                self, "Select Directory to save Master curves"))
-        self.do_save(folder)
+    # def do_save_dialog(self):
+    #     folder = str(
+    #         QFileDialog.getExistingDirectory(
+    #             self, "Select Directory to save Master curves"))
+    #     self.do_save(folder)
 
     def change_temperature(self):
         try:
