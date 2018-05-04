@@ -305,7 +305,7 @@
   <action name="actionReload_Data">
    <property name="icon">
     <iconset resource="Reptate.qrc">
-     <normaloff>:/Images/Images/new_icons/icons8-reset.png</normaloff>:/Images/Images/new_icons/icons8-reset.png</iconset>
+     <normaloff>:/Images/Images/new_icons/icons8-file-reload.png</normaloff>:/Images/Images/new_icons/icons8-file-reload.png</iconset>
    </property>
    <property name="text">
     <string>Reload Data</string>
