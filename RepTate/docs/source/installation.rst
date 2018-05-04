@@ -20,17 +20,18 @@ The "shortcut"
 ==============
 
 Binary packages (containing all the needed files and libraries, 
-as well as a Python interpreter), can be downloaded here:
+as well as a Python interpreter), for the latest version (|release|) can be downloaded here: 
 
-`RepTate v0.9.2 for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/ESnK3LROPi5AkPzDhPbNzmIB4WIXWpOnCHIKKGbjsLGONw?download=1>`_
-    Download size: 305 MB. 
-    Unzip the dowloaded file and look for the RepTate executable ``RepTate.exe``.
+`RepTate for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1>`_
+    Unzip and uncompress the dowloaded file and look for the RepTate executable ``RepTate.exe``.
 
-`RepTate v0.9.1 for Mac (OS X 10.10 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EXKiiLH82eFOms4_xidNoLwBSkCXC1cYUp398K9huY1riA?download=1>`_ 
-    Download size: 82 MB.
+`RepTate for Mac (OS X 10.10 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1>`_ 
     Drag-and-drop the RepTate application in your Applications folder. 
-
+    
 Linux users are supposed to follow the instruction below.
+
+Previous versions of the code can be downloaded from the following `folder 
+<https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz>`_.
 
 The "scenic route"
 ==================
