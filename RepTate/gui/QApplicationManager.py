@@ -360,19 +360,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
 
     def closeEvent(self, event):
-        """Ask if we want to save project before closing RepTate"""
-        btns = (QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
-        msg = 'Do you want to save your project before exiting RepTate?'
-        title = 'Quit'
-        ans = QMessageBox.question(self, title , msg, buttons=btns)
-        if ans == QMessageBox.No:
-            event.accept()
-        elif ans == QMessageBox.Yes:
-            success = self.launch_save_dialog()
-            if not success:
-                event.ignore()
-        elif ans == QMessageBox.Cancel:
-            event.ignore()
+        """Ask if we want to save project before closing RepTate (uncomment the rest)"""
+        pass
+        # btns = (QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+        # msg = 'Do you want to save your project before exiting RepTate?'
+        # title = 'Quit'
+        # ans = QMessageBox.question(self, title , msg, buttons=btns)
+        # if ans == QMessageBox.No:
+        #     event.accept()
+        # elif ans == QMessageBox.Yes:
+        #     success = self.launch_save_dialog()
+        #     if not success:
+        #         event.ignore()
+        # elif ans == QMessageBox.Cancel:
+        #     event.ignore()
 
     def launch_open_dialog(self):
         """Get filename of RepTate project to open"""
