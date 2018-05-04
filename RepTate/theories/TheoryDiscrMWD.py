@@ -254,6 +254,12 @@ class BaseTheoryDiscrMWD:
             self.drag_bin)
         # self.plot_theory_stuff()
 
+        self.extra_data['bin_height'] = np.zeros(nbin)
+        self.extra_data['bin_edges'] = np.zeros(nbin + 1)
+        for i in range(nbin + 1):
+            self.extra_data['bin_edges'][i] = np.power(10, self.parameters["logM%02d" % i].value)
+        
+
     def destructor(self):
         """Called when the theory tab is closed
         
@@ -460,20 +466,25 @@ class BaseTheoryDiscrMWD:
         # tt.data[:, 1] = w_out
 
         #graphic stuff
-        self.bin_height = w_out
-        self.bin_edges = edge_bins
+        # self.bin_height = w_out
+        # self.bin_edges = edge_bins
+        #save into extra_data
+        self.extra_data['bin_height'] = w_out
+        self.extra_data['bin_edges'] = edge_bins
 
         #compute moments of discretized distribution
         arg_nonzero = np.flatnonzero(w_out)
         nbin_out = len(arg_nonzero)
-        self.saved_th = np.zeros((nbin_out, 2))
-        self.saved_th[:, 0] = out_mbins[arg_nonzero]
+        saved_th = np.zeros((nbin_out, 2))
+        saved_th[:, 0] = out_mbins[arg_nonzero]
         for i, arg in enumerate(arg_nonzero):
-            self.saved_th[i, 1] = (
+            saved_th[i, 1] = (
                 np.log10(edge_bins[arg + 1]) - np.log10(edge_bins[arg])
             ) * w_out[arg]
-        self.saved_th[:, 1] /= np.sum(self.saved_th[:, 1])
-        self.calculate_moments(self.saved_th, "discretized")
+        saved_th[:, 1] /= np.sum(saved_th[:, 1])
+        self.calculate_moments(saved_th, "discretized")
+        self.extra_data['saved_th'] = saved_th
+
 
     def plot_theory_stuff(self):
         """[summary]
@@ -491,8 +502,8 @@ class BaseTheoryDiscrMWD:
         self.set_bar_plot(True)
 
         #set the tick marks of for each bin Mw value
-        self.Mw_bin.set_data(self.saved_th[:, 0],
-                             np.zeros(len(self.saved_th[:, 0])))
+        self.Mw_bin.set_data(self.extra_data['saved_th'][:, 0],
+                             np.zeros(len(self.extra_data['saved_th'][:, 0])))
         self.Mw_bin.set_visible(True)
 
     def set_bar_plot(self, visible=True):
@@ -503,13 +514,14 @@ class BaseTheoryDiscrMWD:
         except:
             pass  #no bar plot to remove
         if visible:
-            edges = self.bin_edges[:-1]  #remove last bin
+            bin_e = self.extra_data['bin_edges']
+            edges = bin_e[:-1]  #remove last bin
             width = np.zeros(nbin)
             for i in range(nbin):
-                width[i] = (self.bin_edges[i + 1] - self.bin_edges[i])
+                width[i] = (bin_e[i + 1] - bin_e[i])
             self.bar_bins = self.ax.bar(
                 edges,
-                self.bin_height,
+                self.extra_data['bin_height'],
                 width,
                 align='edge',
                 color='grey',
@@ -517,8 +529,8 @@ class BaseTheoryDiscrMWD:
                 alpha=0.5)
 
     def get_mwd(self):
-        m = self.saved_th[:, 0]
-        phi = self.saved_th[:, 1]
+        m = self.extra_data['saved_th'][:, 0]
+        phi = self.extra_data['saved_th'][:, 1]
         return m, phi
 
 
@@ -642,14 +654,14 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         fout = open(out_file[0], 'w')
 
         # output polymers
-        Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.saved_th, "")
+        Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.extra_data['saved_th'], "")
         fout.write("Mn=%.3g;Mw=%.3g;PDI=%.3g;Mz/Mw=%.3g\n" % (Mn, Mw, PDI,
                                                               Mz_Mw))
         fout.write("%-10s %12s\n" % ("M", "phi(M)"))
-        nbin_out = len(self.saved_th[:, 0])
+        nbin_out = len(self.extra_data['saved_th'][:, 0])
         for i in range(nbin_out):
-            fout.write("%-10.3e %12.6e\n" % (self.saved_th[i, 0],
-                                             self.saved_th[i, 1]))
+            fout.write("%-10.3e %12.6e\n" % (self.extra_data['saved_th'][i, 0],
+                                             self.extra_data['saved_th'][i, 1]))
         message = stars
         message += "Saved %d bins to \"%s\"" % (nbin_out, out_file[0])
 

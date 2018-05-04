@@ -423,14 +423,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     th_table_dic = dict( 
                         [ (f.file_name_short, th.tables[f.file_name_short].data.tolist()) for f in ds.files]
                     )
-                    
+                    e_dic = th.extra_data
+                    for key in e_dic:
+                        val = e_dic[key]
+                        if type(val) is np.ndarray:
+                            e_dic[key] = val.tolist()
+
                     th_dic = dict(
                         [
                             ('th_tabname', ds.TheorytabWidget.tabText(k)),
                             ('thname', th.thname),
                             ('th_param', param_dic),
                             ('th_textbox', str(th.thTextBox.toPlainText())),
-                            ('th_tables', th_table_dic)
+                            ('th_tables', th_table_dic),
+                            ('extra_data', e_dic)
                         ]
                     )
                     theories_dic[th.name] = th_dic
@@ -516,14 +522,21 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             th_param = th_dic['th_param']
             th_textbox = th_dic['th_textbox']
             th_tables = th_dic['th_tables']
+            extra_data = th_dic['extra_data']
 
-            new_th = ds.new_theory(thname, th_tabname, calculate=False)
+            for key in extra_data:
+                val = extra_data[key]
+                if type(val) == list:
+                    extra_data[key] = np.asarray(val)
+
+            new_th = ds.new_theory(thname, th_tabname, calculate=False, extra_data=extra_data)
             for pname in th_param:
                 new_th.set_param_value(pname, th_param[pname])
             for fname in th_tables:
                 tt = new_th.tables[fname]
                 tt.data = np.asarray(th_tables[fname])
                 tt.num_rows, tt.num_columns = tt.data.shape
+            
             new_th.update_parameter_table()
             new_th.thTextBox.insertPlainText(th_textbox)
 

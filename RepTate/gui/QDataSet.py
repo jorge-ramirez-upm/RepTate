@@ -645,7 +645,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.new_theory(th_name)
         self.actionNew_Theory.setDisabled(False)
 
-    def new_theory(self, th_name, th_tab_id="", calculate=True):
+    def new_theory(self, th_name, th_tab_id="", calculate=True, extra_data={}):
         """[summary]
         
         [description]
@@ -683,6 +683,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.TheorytabWidget.setTabToolTip(index,
                                            th_name)  #set new-tab tool tip
         self.TheorytabWidget.blockSignals(False)
+        if extra_data:
+            newth.extra_data = extra_data
         newth.update_parameter_table()
         newth.do_show()
         return newth
