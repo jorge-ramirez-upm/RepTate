@@ -128,14 +128,14 @@ def initialise_tool_bar(parent_theory):
 
     #BOB settings buttons
     parent_theory.bob_settings_button = tb.addAction(
-        QIcon(':/Icon8/Images/new_icons/icons8-bob-hat.png'),
+        QIcon(':/Icon8/Images/new_icons/icons8-BoB-settings.png'),
         'Edit BoB Binning Settings')
     parent_theory.save_bob_configuration_button = tb.addAction(
-        QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'),
+        QIcon(':/Icon8/Images/new_icons/icons8-save-BoB.png'),
         'Save Polymer Configuration for BoB')
     #stop calculation button
     parent_theory.stop_calulation_button = tb.addAction(
-        QIcon(':/Icon8/Images/new_icons/icons8-road-closure.png'),
+        QIcon(':/Icon8/Images/new_icons/icons8-stop-sign.png'),
         'Stop Current Calulation')
     parent_theory.stop_calulation_button.setDisabled(True)
 
