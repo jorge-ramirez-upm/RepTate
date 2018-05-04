@@ -22,7 +22,7 @@ The "shortcut"
 Binary packages (containing all the needed files and libraries, 
 as well as a Python interpreter), can be downloaded here:
 
-`RepTate v0.9.1 for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EWV3803YS2NOuD5oRae3y9YBYEQqSUNkgZr_A4JMFDHElA?download=1>`_
+`RepTate v0.9.2 for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/ESnK3LROPi5AkPzDhPbNzmIB4WIXWpOnCHIKKGbjsLGONw?download=1>`_
     Download size: 305 MB. 
     Unzip the dowloaded file and look for the RepTate executable ``RepTate.exe``.
 

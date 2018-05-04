@@ -22,7 +22,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -37,12 +46,12 @@
     </item>
    </layout>
   </widget>
-  <widget class="QToolBar" name="toolBarApps">
+  <widget class="QToolBar" name="toolBarProject">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
    <property name="toolTip">
-    <string>Appications Toolbar</string>
+    <string>Project Toolbar</string>
    </property>
    <property name="movable">
     <bool>true</bool>
@@ -55,6 +64,26 @@
      <width>24</width>
      <height>24</height>
     </size>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpenProject"/>
+   <addaction name="actionSaveProject"/>
+   <addaction name="actionQuit"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarApps">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="toolTip">
+    <string>Appications  Toolbar</string>
    </property>
    <property name="floatable">
     <bool>false</bool>
@@ -78,7 +107,7 @@
   </widget>
   <widget class="QToolBar" name="toolBarTools">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>toolBar_2</string>
    </property>
    <property name="toolTip">
     <string>Tools Toolbar</string>
@@ -94,15 +123,21 @@
    </attribute>
    <addaction name="actionMaterials_Database"/>
   </widget>
-  <widget class="QToolBar" name="toolBarHelp">
+  <widget class="QToolBar" name="toolBarHelpAbout">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
-    <string>toolBar_2</string>
+    <string>toolBar</string>
    </property>
    <property name="toolTip">
-    <string>Help Toolbar</string>
+    <string>Help/About Toolbar</string>
    </property>
-   <property name="floatable">
-    <bool>false</bool>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -110,9 +145,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionAbout_Qt"/>
-   <addaction name="actionAbout"/>
-   <addaction name="actionQuit"/>
   </widget>
   <action name="actionQuit">
    <property name="icon">
@@ -260,20 +292,8 @@
    <property name="text">
     <string>About Qt</string>
    </property>
-  </action>
-  <action name="actionHelp">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/Help.ico</normaloff>:/Icons/Images/Help.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Contents</string>
-   </property>
-   <property name="toolTip">
-    <string>Main Help</string>
-   </property>
-   <property name="shortcut">
-    <string>F1</string>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionReact">
@@ -319,6 +339,111 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-open.png</normaloff>:/Icons/Images/new_icons/icons8-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>OpenProject</string>
+   </property>
+   <property name="toolTip">
+    <string>Open RepTate Project</string>
+   </property>
+  </action>
+  <action name="actionSaveProject">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-save.png</normaloff>:/Icons/Images/new_icons/icons8-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>SaveProject</string>
+   </property>
+   <property name="toolTip">
+    <string>Save RepTate Project</string>
+   </property>
+  </action>
+  <action name="actionShow_reptate_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-user-manual.png</normaloff>:/Icons/Images/new_icons/icons8-user-manual.png</iconset>
+   </property>
+   <property name="text">
+    <string>RepTate help</string>
+   </property>
+   <property name="toolTip">
+    <string>RepTate help</string>
+   </property>
+  </action>
+  <action name="actionShow_app_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-user-manualApp.png</normaloff>:/Icons/Images/new_icons/icons8-user-manualApp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Current Application help</string>
+   </property>
+   <property name="toolTip">
+    <string>Current Application help</string>
+   </property>
+  </action>
+  <action name="actionShow_th_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-user-manualTh.png</normaloff>:/Icons/Images/new_icons/icons8-user-manualTh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Current Theory help</string>
+   </property>
+   <property name="toolTip">
+    <string>Current Theory help</string>
+   </property>
+  </action>
+  <action name="actionAboutMatplotlib">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/Created_with_Matplotlib-logo2.png</normaloff>:/Icons/Images/new_icons/Created_with_Matplotlib-logo2.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Matplotlib</string>
+   </property>
+   <property name="toolTip">
+    <string>About Matplotlib</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAboutNumpy">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/numpylogo.png</normaloff>:/Icons/Images/new_icons/numpylogo.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Numpy</string>
+   </property>
+   <property name="toolTip">
+    <string>About Numpy</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAboutScipy">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/scipylogo.png</normaloff>:/Icons/Images/new_icons/scipylogo.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Scipy</string>
+   </property>
+   <property name="toolTip">
+    <string>About Scipy</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
  </widget>

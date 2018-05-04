@@ -38,5 +38,11 @@
     <file>Images/new_icons/LVE.png</file>
     <file>Images/new_icons/Gt.png</file>
     <file>Images/new_icons/Creep.png</file>
+    <file>Images/new_icons/icons8-user-manual.png</file>    
+    <file>Images/new_icons/icons8-user-manualApp.png</file>    
+    <file>Images/new_icons/icons8-user-manualTh.png</file>    
+    <file>Images/new_icons/Created_with_Matplotlib-logo2.png</file>
+    <file>Images/new_icons/numpylogo.png</file>
+    <file>Images/new_icons/scipylogo.png</file>
   </qresource>
 </RCC>

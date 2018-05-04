@@ -86,21 +86,36 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
         #help button
         icon = QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png')
-        self.show_reptate_help = QAction(icon, 'RepTate Manual', self)
-        self.show_app_help = QAction(icon, 'Application Manual', self)
-        self.show_th_help = QAction(icon, 'Theory Manual', self)
+        #self.show_reptate_help = QAction(icon, 'RepTate Manual', self)
+        #self.show_app_help = QAction(icon, 'Application Manual', self)
+        #self.show_th_help = QAction(icon, 'Theory Manual', self)
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
-        tbut.setDefaultAction(self.show_reptate_help)
+        tbut.setDefaultAction(self.actionShow_reptate_help)
         menu = QMenu()
-        menu.addAction(self.show_app_help)
-        menu.addAction(self.show_th_help)
+        menu.addAction(self.actionShow_app_help)
+        menu.addAction(self.actionShow_th_help)
         tbut.setMenu(menu)
-        self.toolBarHelp.insertWidget(self.actionAbout_Qt, tbut)
-        self.toolBarHelp.insertSeparator(self.actionAbout_Qt)
+        #self.toolBarHelpAbout.insertWidget(self.actionAbout_Qt, tbut)
+        self.toolBarHelpAbout.addWidget(tbut)
+        self.toolBarHelpAbout.addSeparator()
+        
+        tbut = QToolButton()
+        tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut.setDefaultAction(self.actionAbout)
+        menu = QMenu()
+        menu.addAction(self.actionAbout_Qt)
+        menu.addAction(self.actionAboutMatplotlib)
+        menu.addAction(self.actionAboutNumpy)        
+        menu.addAction(self.actionAboutScipy)
+        tbut.setMenu(menu)
+        self.toolBarHelpAbout.addWidget(tbut)
+        
+        self.toolBarHelpAbout.insertSeparator(self.actionAbout_Qt)
         #self.toolBar.insertSeparator(self.actionQuit)
+        self.toolBarProject.setContextMenuPolicy(Qt.PreventContextMenu)
         self.toolBarApps.setContextMenuPolicy(Qt.PreventContextMenu)
-        self.toolBarHelp.setContextMenuPolicy(Qt.PreventContextMenu)
+        self.toolBarHelpAbout.setContextMenuPolicy(Qt.PreventContextMenu)
         self.toolBarTools.setContextMenuPolicy(Qt.PreventContextMenu)
         
         # # ApplicationXY button
@@ -125,6 +140,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.reptatelogger.addHandler(handler)
 
         # Connect actions
+        self.actionOpenProject.triggered.connect(self.launch_open_dialog)
+        self.actionSaveProject.triggered.connect(self.launch_save_dialog)
+        
         # Generate action buttons from dict of available applications
         self.actionMWD.triggered.connect(lambda: self.handle_new_app('MWD'))
         self.actionTTS.triggered.connect(lambda: self.handle_new_app('TTS'))
@@ -147,11 +165,17 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         connection_id = self.ApplicationtabWidget.tabBarDoubleClicked.connect(
             self.handle_doubleClickTab)
         # help buttons
-        self.show_reptate_help.triggered.connect(self.handle_show_reptate_help)
-        self.show_app_help.triggered.connect(self.handle_show_app_help)
-        self.show_th_help.triggered.connect(self.handle_show_th_help)
+        self.actionShow_reptate_help.triggered.connect(self.handle_show_reptate_help)
+        self.actionShow_app_help.triggered.connect(self.handle_show_app_help)
+        self.actionShow_th_help.triggered.connect(self.handle_show_th_help)
+        
+        # additional about buttons
+        self.actionAboutMatplotlib.triggered.connect(self.handle_about_matplotlib)
+        self.actionAboutNumpy.triggered.connect(self.handle_about_numpy)
+        self.actionAboutScipy.triggered.connect(self.handle_about_scipy)
 
-        self.add_save_load_buttons()
+
+        #self.add_save_load_buttons()
         self.REPTATE_PROJ_JSON = 'reptate_project.json' # json filename inside zip
 
         # CONSOLE WINDOW (need to integrate it with cmd commands)
@@ -191,6 +215,18 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/All_Theories.html'
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
+    def handle_about_matplotlib(self):
+        """Show matplotlib web site"""
+        QDesktopServices.openUrl(QUrl.fromUserInput(('https://matplotlib.org/index.html')))
+        
+    def handle_about_numpy(self):
+        """Show numpy web site"""
+        QDesktopServices.openUrl(QUrl.fromUserInput(('http://www.numpy.org/')))
+
+    def handle_about_scipy(self):
+        """Show scipy web site"""
+        QDesktopServices.openUrl(QUrl.fromUserInput(('https://scipy.org/')))
+        
     def list_theories_Maxwell(self, th_exclude=None):
         """Redefinition for the GUI mode that lists the tab names.
         List the theories in the current RepTate instance that provide and need
@@ -309,18 +345,18 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 #SAVE/LOAD REPTATE SESSION
 ############################
 
-    def add_save_load_buttons(self):
-        """Add "save" and "open" project buttons"""
-        icon = QIcon(':/Icons/Images/new_icons/icons8-save.png')
-        self.save_button = QAction(icon, 'Save Project', self)
-        self.save_button.triggered.connect(self.launch_save_dialog)
+#    def add_save_load_buttons(self):
+#        """Add "save" and "open" project buttons"""
+#        icon = QIcon(':/Icons/Images/new_icons/icons8-save.png')
+#        self.save_button = QAction(icon, 'Save Project', self)
+#        self.save_button.triggered.connect(self.launch_save_dialog)
 
-        icon = QIcon(':/Icons/Images/new_icons/icons8-open.png')
-        self.open_button = QAction(icon, 'Open Project', self)
-        self.open_button.triggered.connect(self.launch_open_dialog)
+#        icon = QIcon(':/Icons/Images/new_icons/icons8-open.png')
+#        self.open_button = QAction(icon, 'Open Project', self)
+#        self.open_button.triggered.connect(self.launch_open_dialog)
         
-        self.toolBarTools.addAction(self.save_button)
-        self.toolBarTools.addAction(self.open_button)
+#        self.toolBarTools.addAction(self.save_button)
+#        self.toolBarTools.addAction(self.open_button)
 
 
     def closeEvent(self, event):
