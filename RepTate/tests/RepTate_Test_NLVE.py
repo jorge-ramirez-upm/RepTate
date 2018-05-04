@@ -124,7 +124,7 @@ def start_RepTate(argv):
 
     ####################
     #open linear rheology data to import the Maxwell modes
-    ex.handle_new_app('NLVE')
+    ex.handle_new_app('LVE')
     dow_dir = "data%sDOW%sLinear_Rheology_TTS%s" % ((
         os.sep, ) * 3)
     ex.applications["LVE3"].new_tables_from_files([
