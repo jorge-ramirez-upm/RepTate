@@ -4,6 +4,8 @@ Version History
 
 Release 0.9.2 - 20180503
 ========================
+- Save theory predictions to a file
+- Save/Load Reptate project
 - New App: Dielectric spectroscopy
 - New Dielectric Theories: Debye and Havriliak-Negami relaxation modes
 - New Dielectric Theories: Kolhrauch-Williams-Watts (KWW) modes (BETA VERSION)
