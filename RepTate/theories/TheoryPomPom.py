@@ -514,10 +514,10 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
         self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-garden-shears.png'),
+            QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
             "Shear Flow")
         self.extensional_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-socks.png'),
+            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
             "Extensional Flow")
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)

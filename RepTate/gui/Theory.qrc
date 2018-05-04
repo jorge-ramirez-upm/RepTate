@@ -32,5 +32,7 @@
         <file>Images/new_icons/icons8-iso.png</file>
         <file>Images/new_icons/icons8-BoB-settings.png</file>
         <file>Images/new_icons/icons8-save-BoB.png</file>
+        <file>Images/new_icons/icon-uext.png</file>
+        <file>Images/new_icons/icon-shear.png</file>
     </qresource>
 </RCC>
