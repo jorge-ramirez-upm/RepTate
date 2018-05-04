@@ -26,7 +26,7 @@ as well as a Python interpreter), can be downloaded here:
     Download size: 305 MB. 
     Unzip the dowloaded file and look for the RepTate executable ``RepTate.exe``.
 
-`RepTate v0.9.1 for Mac (OS X 10.10 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EQV6JjH4p7ZMn-TOvQ8ze8ABR-9vXRGT1QtektModMbGmg?download=1>`_ 
+`RepTate v0.9.1 for Mac (OS X 10.10 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EXKiiLH82eFOms4_xidNoLwBSkCXC1cYUp398K9huY1riA?download=1>`_ 
     Download size: 82 MB.
     Drag-and-drop the RepTate application in your Applications folder. 
 
