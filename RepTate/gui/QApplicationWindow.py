@@ -593,11 +593,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not ds:
             return
         self.disconnect_curve_drag()
-        paths_to_reopen, th_to_reopen = self.clear_files_and_th_from_dataset(ds)
-        if paths_to_reopen:
-            self.new_tables_from_files(paths_to_reopen)
-        for th_name, tab_name in th_to_reopen:
-            ds.new_theory(th_name, tab_name)
+        paths_to_reopen, th_to_reopen, success = self.clear_files_and_th_from_dataset(ds)
+        print("paths... ", paths_to_reopen, th_to_reopen, success)
+        if success:
+            if paths_to_reopen:
+                self.new_tables_from_files(paths_to_reopen)
+            for th_name, tab_name in th_to_reopen:
+                ds.new_theory(th_name, tab_name)
+        else:
+            QMessageBox.warning(self, 'Reload Error', 'Error in locating some data files')
 
     def clear_files_and_th_from_dataset(self, ds):
         """Remove all files from dataset and widgetTree,
@@ -614,8 +618,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         file_paths_cleaned = []
         th_cleaned = []
         #save file names
-        for file in ds.files:
-            file_paths_cleaned.append(file.file_full_path)
+        for f in ds.files:
+            fpath = f.file_full_path
+            print(fpath)
+            if not isfile(fpath):
+                return None, None, False
+            file_paths_cleaned.append(fpath)
         #remove lines from figure
         self.remove_ds_ax_lines(ds.name) 
         ds.set_no_limits(ds.current_theory) 
@@ -638,7 +646,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         ds.files.clear()
         ds.theories.clear()
-        return file_paths_cleaned, th_cleaned
+        return file_paths_cleaned, th_cleaned, True
 
     def handle_actionView_All_Sets(self, checked):
         """Show all datasets simultaneously

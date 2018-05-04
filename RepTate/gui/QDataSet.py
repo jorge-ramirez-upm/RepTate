@@ -36,6 +36,7 @@ Module that defines the GUI counterpart of Dataset.
 
 """
 from os.path import dirname, join, abspath
+import os
 from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon, QIntValidator, QDoubleValidator
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
@@ -244,13 +245,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """Save theory data of current theory"""
         th = self.current_theory
         if th:
-            # file browser window  
-            dialog = QFileDialog(self)
+            # file browser window
             dir_start = "data/"
             dilogue_name = "Select Folder"
-            folder = dialog.getExistingDirectory(self, dilogue_name, dir_start)
-            print("folder", folder)
-            self.theories[th].do_save(folder)
+            folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
+            if os.path.isdir(folder):
+                print('saving')
+                self.theories[th].do_save(folder)
 
 
     def set_table_icons(self, table_icon_list):
