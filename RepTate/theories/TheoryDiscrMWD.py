@@ -663,7 +663,7 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         
     def do_save(self, dir):
         nbin = self.parameters['nbin'].value
-        file_out = os.path.join(dir, self.extra_data['current_fname'] + '_%dbins' % nbin + '.txt')
+        file_out = os.path.join(dir, self.extra_data['current_fname'] + '_TH_%dbins' % nbin + '.txt')
         fout = open(file_out, 'w')
         # output polymers
         Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.extra_data['saved_th'], "")
