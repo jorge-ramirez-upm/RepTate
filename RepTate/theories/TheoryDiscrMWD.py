@@ -253,7 +253,6 @@ class BaseTheoryDiscrMWD:
             self.parent_dataset.parent_application.current_view.log_x,
             self.parent_dataset.parent_application.current_view.log_y,
             self.drag_bin)
-        # self.plot_theory_stuff()
 
         self.extra_data['bin_height'] = np.zeros(nbin)
         self.extra_data['bin_edges'] = np.zeros(nbin + 1)
@@ -261,6 +260,8 @@ class BaseTheoryDiscrMWD:
             self.extra_data['bin_edges'][i] = np.power(10, self.parameters["logM%02d" % i].value)
         
     def set_extra_data(self, extra_data):
+        """Define the extra_data dict and set the bin number
+        Redefinition of the QTheory function"""
         self.extra_data = extra_data
         nbin = len(self.extra_data['bin_height'])
         try:
@@ -466,17 +467,12 @@ class BaseTheoryDiscrMWD:
                 y, x=np.log10(x)) / (
                     np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i]))
 
-        # #copy weights and M into theory table
+        # copy weights and M into theory table
         tt = self.tables[f.file_name_short]
         tt.num_columns = 2
         tt.num_rows = len(w_out)
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        # tt.data[:, 0] = out_mbins
-        # tt.data[:, 1] = w_out
 
-        #graphic stuff
-        # self.bin_height = w_out
-        # self.bin_edges = edge_bins
         #save into extra_data
         self.extra_data['bin_height'] = w_out
         self.extra_data['bin_edges'] = edge_bins
@@ -593,17 +589,11 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         self.view_bins_button.setCheckable(True)
         self.view_bins_button.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
-        #save to file
-        # self.save_theory_results_button = tb.addAction(
-        #     QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'),
-        #     'Save Theory Results')
         self.thToolsLayout.insertWidget(0, tb)
 
         #connections signal and slots
         connection_id = self.view_bins_button.triggered.connect(
             self.handle_view_bins_button_triggered)
-        # connection_id = self.save_theory_results_button.triggered.connect(
-        #     self.handle_save_theory_results)
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged)
 
@@ -645,21 +635,6 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         self.graphic_bins_visible(checked)
         self.set_bar_plot(True)  #leave the bar plot on
         self.parent_dataset.parent_application.update_plot()
-
-    # def handle_save_theory_results(self):
-    #     """
-    #     Launch a dialog to select a filename when to save the discretized distribution.
-    #     """
-    #     stars = '*************************\n'
-    #     options = QFileDialog.Options()
-    #     options |= QFileDialog.DontUseNativeDialog
-    #     dir_start = "data/MWD/discretized.dat"
-    #     dilogue_name = "Save"
-    #     ext_filter = "Data Files (*.dat)"
-    #     out_file = QFileDialog.getSaveFileName(
-    #         self, dilogue_name, dir_start, options=options)
-    #     if out_file[0] == "":
-    #         return
         
     def do_save(self, dir):
         nbin = self.parameters['nbin'].value
