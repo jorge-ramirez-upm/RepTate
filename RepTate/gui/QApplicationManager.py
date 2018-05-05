@@ -529,14 +529,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 if type(val) == list:
                     extra_data[key] = np.asarray(val)
 
-            new_th = ds.new_theory(thname, th_tabname, calculate=False, extra_data=extra_data)
+            new_th = ds.new_theory(thname, th_tabname, calculate=False, show=False)
             for pname in th_param:
                 new_th.set_param_value(pname, th_param[pname])
             for fname in th_tables:
                 tt = new_th.tables[fname]
                 tt.data = np.asarray(th_tables[fname])
                 tt.num_rows, tt.num_columns = tt.data.shape
-            
+            new_th.set_extra_data(extra_data)
             new_th.update_parameter_table()
             new_th.thTextBox.insertPlainText(th_textbox)
 
@@ -549,7 +549,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             with tempfile.TemporaryDirectory() as tmpdirname:
                 with zipfile.ZipFile(project_path) as z:
                     z.extract(self.REPTATE_PROJ_JSON, tmpdirname)
-                    data = json.load(open(os.path.join(tmpdirname, self.REPTATE_PROJ_JSON)))
+                    data = json.load(open(os.path.join(tmpdirname, self.REPTATE_PROJ_JSON)), object_pairs_hook=OrderedDict)
         except:
             print("File \"%s\" seems to be corrupted" % project_path)
             return
