@@ -523,7 +523,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             "File: \"%s\" in %s" %
             (file.file_name_short,
              self.parent_application.DataSettabWidget.tabText(ds_index)))
-
+        inspec_tab.resizeColumnsToContents()
+        inspec_tab.resizeRowsToContents()
+             
     def handle_itemChanged(self, item, column):
         """[summary]
         
