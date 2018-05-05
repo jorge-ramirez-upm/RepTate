@@ -684,7 +684,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                                            th_name)  #set new-tab tool tip
         self.TheorytabWidget.blockSignals(False)
         if extra_data:
-            newth.extra_data = extra_data
+            newth.set_extra_data(extra_data)
         newth.update_parameter_table()
         newth.do_show()
         return newth

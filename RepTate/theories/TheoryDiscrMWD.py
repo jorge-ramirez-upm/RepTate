@@ -259,6 +259,14 @@ class BaseTheoryDiscrMWD:
         for i in range(nbin + 1):
             self.extra_data['bin_edges'][i] = np.power(10, self.parameters["logM%02d" % i].value)
         
+    def set_extra_data(self, extra_data):
+        self.extra_data = extra_data
+        nbin = len(self.extra_data['bin_height'])
+        try:
+            self.handle_spinboxValueChanged(nbin)
+        except:
+            # in CL mode
+            pass
 
     def destructor(self):
         """Called when the theory tab is closed
@@ -508,7 +516,6 @@ class BaseTheoryDiscrMWD:
 
     def set_bar_plot(self, visible=True):
         """Hide/Show the bar plot"""
-        nbin = self.parameters["nbin"].value
         try:
             self.bar_bins.remove()  #remove existing bars, if any
         except:
@@ -516,6 +523,7 @@ class BaseTheoryDiscrMWD:
         if visible:
             bin_e = self.extra_data['bin_edges']
             edges = bin_e[:-1]  #remove last bin
+            nbin = len(edges)
             width = np.zeros(nbin)
             for i in range(nbin):
                 width[i] = (bin_e[i + 1] - bin_e[i])
