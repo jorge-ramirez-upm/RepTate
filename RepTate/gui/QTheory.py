@@ -226,6 +226,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         connection_id = self.thParamTable.itemChanged.connect(
             self.handle_parameterItemChanged)
 
+    def set_extra_data(self, extra_data):
+        """set the extra data dict at loading"""
+        self.extra_data = extra_data
+
     def handle_actionCalculate_Theory(self):
         if self.thread_calc_busy:
             return
