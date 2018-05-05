@@ -35,6 +35,7 @@
 Module that defines the theory to discretize a molecular weight distribution.
 
 """
+import os
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
@@ -386,7 +387,7 @@ class BaseTheoryDiscrMWD:
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         """
-
+        self.extra_data['current_fname'] = f.file_name_short
         # sort M, w with M increasing in ft
         f.data_table.data = f.data_table.data[np.argsort(
             f.data_table.data[:, 0])]
@@ -593,16 +594,16 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         self.view_bins_button.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
         #save to file
-        self.save_theory_results_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'),
-            'Save Theory Results')
+        # self.save_theory_results_button = tb.addAction(
+        #     QIcon(':/Icon8/Images/new_icons/icons8-money-box.png'),
+        #     'Save Theory Results')
         self.thToolsLayout.insertWidget(0, tb)
 
         #connections signal and slots
         connection_id = self.view_bins_button.triggered.connect(
             self.handle_view_bins_button_triggered)
-        connection_id = self.save_theory_results_button.triggered.connect(
-            self.handle_save_theory_results)
+        # connection_id = self.save_theory_results_button.triggered.connect(
+        #     self.handle_save_theory_results)
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged)
 
@@ -645,22 +646,25 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         self.set_bar_plot(True)  #leave the bar plot on
         self.parent_dataset.parent_application.update_plot()
 
-    def handle_save_theory_results(self):
-        """
-        Launch a dialog to select a filename when to save the discretized distribution.
-        """
-        stars = '*************************\n'
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        dir_start = "data/MWD/discretized.dat"
-        dilogue_name = "Save"
-        ext_filter = "Data Files (*.dat)"
-        out_file = QFileDialog.getSaveFileName(
-            self, dilogue_name, dir_start, options=options)
-        if out_file[0] == "":
-            return
-        fout = open(out_file[0], 'w')
-
+    # def handle_save_theory_results(self):
+    #     """
+    #     Launch a dialog to select a filename when to save the discretized distribution.
+    #     """
+    #     stars = '*************************\n'
+    #     options = QFileDialog.Options()
+    #     options |= QFileDialog.DontUseNativeDialog
+    #     dir_start = "data/MWD/discretized.dat"
+    #     dilogue_name = "Save"
+    #     ext_filter = "Data Files (*.dat)"
+    #     out_file = QFileDialog.getSaveFileName(
+    #         self, dilogue_name, dir_start, options=options)
+    #     if out_file[0] == "":
+    #         return
+        
+    def do_save(self, dir):
+        nbin = self.parameters['nbin'].value
+        file_out = os.path.join(dir, self.extra_data['current_fname'] + '_%dbins' % nbin + '.txt')
+        fout = open(file_out, 'w')
         # output polymers
         Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.extra_data['saved_th'], "")
         fout.write("Mn=%.3g;Mw=%.3g;PDI=%.3g;Mz/Mw=%.3g\n" % (Mn, Mw, PDI,
@@ -670,7 +674,7 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         for i in range(nbin_out):
             fout.write("%-10.3e %12.6e\n" % (self.extra_data['saved_th'][i, 0],
                                              self.extra_data['saved_th'][i, 1]))
-        message = stars
-        message += "Saved %d bins to \"%s\"" % (nbin_out, out_file[0])
+        message = '*************************\n'
+        message += "Saved %d bins to \"%s\"" % (nbin_out, file_out)
 
         self.Qprint(message)
