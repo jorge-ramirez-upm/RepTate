@@ -148,6 +148,36 @@ class BaseTheoryMaxwellModesFrequency:
         self.artistmodes = []
         self.setup_graphic_modes()
 
+    def set_param_value(self, name, value):
+        """Change other parameters when nmodes is changed, else call parent function"""
+        if name == 'nmodes':
+            nmodesold = self.parameters["nmodes"].value
+            wminold = self.parameters["logwmin"].value
+            wmaxold = self.parameters["logwmax"].value
+            wold = np.logspace(wminold, wmaxold, nmodesold)
+            Gold = np.zeros(nmodesold)
+            for i in range(nmodesold):
+                Gold[i] = self.parameters["logG%02d" % i].value
+                del self.parameters["logG%02d" % i]
+
+            nmodesnew = value
+            super().set_param_value("nmodes", nmodesnew)
+            wnew = np.logspace(wminold, wmaxold, nmodesnew)
+
+            Gnew = np.interp(wnew, wold, Gold)
+
+            for i in range(nmodesnew):
+                self.parameters["logG%02d" % i] = Parameter(
+                    "logG%02d" % i,
+                    Gnew[i],
+                    "Log of Mode %d amplitude" % i,
+                    ParameterType.real,
+                    opt_type=OptType.opt)
+            if CmdBase.mode == CmdMode.GUI:
+                self.spinbox.setValue(value)
+        else:
+            super().set_param_value(name, value)
+
     def drag_mode(self, dx, dy):
         """[summary]
         
@@ -403,30 +433,8 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         Arguments:
             - value {[type]} -- [description]
         """
-        """Handle a change of the parameter 'nmode'"""
-        nmodesold = self.parameters["nmodes"].value
-        wminold = self.parameters["logwmin"].value
-        wmaxold = self.parameters["logwmax"].value
-        wold = np.logspace(wminold, wmaxold, nmodesold)
-        Gold = np.zeros(nmodesold)
-        for i in range(nmodesold):
-            Gold[i] = self.parameters["logG%02d" % i].value
-            del self.parameters["logG%02d" % i]
-
-        nmodesnew = value
-        self.set_param_value("nmodes", nmodesnew)
-        wnew = np.logspace(wminold, wmaxold, nmodesnew)
-
-        Gnew = np.interp(wnew, wold, Gold)
-
-        for i in range(nmodesnew):
-            self.parameters["logG%02d" % i] = Parameter(
-                "logG%02d" % i,
-                Gnew[i],
-                "Log of Mode %d amplitude" % i,
-                ParameterType.real,
-                opt_type=OptType.opt)
-
+        """Handle a change of the parameter 'nmodes'"""
+        self.set_param_value('nmodes', value)
         self.do_calculate("")
         self.update_parameter_table()
 
@@ -538,6 +546,37 @@ class BaseTheoryMaxwellModesTime:
         self.graphicmodes = None
         self.artistmodes = None
         self.setup_graphic_modes()
+
+    def set_param_value(self, name, value):
+        """Change other parameters when nmodes is changed, else call parent function"""
+        if name == 'nmodes':
+            nmodesold = self.parameters["nmodes"].value
+            tminold = self.parameters["logtmin"].value
+            tmaxold = self.parameters["logtmax"].value
+            tauold = np.logspace(tminold, tmaxold, nmodesold)
+            Gold = np.zeros(nmodesold)
+            for i in range(nmodesold):
+                Gold[i] = self.parameters["logG%02d" % i].value
+                del self.parameters["logG%02d" % i]
+
+            nmodesnew = value
+            super().set_param_value("nmodes", nmodesnew)
+            taunew = np.logspace(tminold, tmaxold, nmodesnew)
+
+            Gnew = np.interp(taunew, tauold, Gold)
+
+            for i in range(nmodesnew):
+                self.parameters["logG%02d" % i] = Parameter(
+                    "logG%02d" % i,
+                    Gnew[i],
+                    "Log of Mode %d amplitude" % i,
+                    ParameterType.real,
+                    opt_type=OptType.opt)
+            if CmdBase.mode == CmdMode.GUI:
+                self.spinbox.setValue(value)
+        else:
+            super().set_param_value(name, value)
+    
 
     def drag_mode(self, dx, dy):
         """[summary]
@@ -782,28 +821,6 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         Arguments:
             - value {[type]} -- [description]
         """
-        nmodesold = self.parameters["nmodes"].value
-        tminold = self.parameters["logtmin"].value
-        tmaxold = self.parameters["logtmax"].value
-        tauold = np.logspace(tminold, tmaxold, nmodesold)
-        Gold = np.zeros(nmodesold)
-        for i in range(nmodesold):
-            Gold[i] = self.parameters["logG%02d" % i].value
-            del self.parameters["logG%02d" % i]
-
-        nmodesnew = value
-        self.set_param_value("nmodes", nmodesnew)
-        taunew = np.logspace(tminold, tmaxold, nmodesnew)
-
-        Gnew = np.interp(taunew, tauold, Gold)
-
-        for i in range(nmodesnew):
-            self.parameters["logG%02d" % i] = Parameter(
-                "logG%02d" % i,
-                Gnew[i],
-                "Log of Mode %d amplitude" % i,
-                ParameterType.real,
-                opt_type=OptType.opt)
-
+        self.set_param_value('nmode', value)
         self.do_calculate("")
         self.update_parameter_table()
