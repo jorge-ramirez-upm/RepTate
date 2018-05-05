@@ -36,7 +36,7 @@ Module for the main Graphical User Interface of RepTate. It is the GUI counterpa
 ApplicationManager.
 
 """
-import logging
+#import logging
 import os
 from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
@@ -62,8 +62,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/index.html'
-    reptatelogger = logging.getLogger('ReptateLogger')
-    reptatelogger.setLevel(logging.DEBUG)
+    #reptatelogger = logging.getLogger('ReptateLogger')
+    #reptatelogger.setLevel(logging.DEBUG)
 
     def __init__(self, parent=None):
         """
@@ -134,10 +134,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.setUsesScrollButtons(True)
 
         # log file
-        log_file_name = 'Qreptate.log'
-        handler = logging.handlers.RotatingFileHandler(
-            log_file_name, maxBytes=20000, backupCount=2)
-        self.reptatelogger.addHandler(handler)
+        #log_file_name = 'Qreptate.log'
+        #handler = logging.handlers.RotatingFileHandler(
+        #    log_file_name, maxBytes=20000, backupCount=2)
+        #self.reptatelogger.addHandler(handler)
 
         # Connect actions
         self.actionOpenProject.triggered.connect(self.launch_open_dialog)

@@ -38,7 +38,7 @@ It is the GUI counterpart of Application.
 """ 
 import io
 from os.path import dirname, join, abspath, isfile
-import logging
+#import logging
 from PyQt5.QtGui import QIcon, QColor
 from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
@@ -92,7 +92,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         Ui_AppWindow.__init__(self)
         
         self.setupUi(self)
-        self.logger = logging.getLogger('ReptateLogger')
+        #self.logger = logging.getLogger('ReptateLogger')
         self.name = name
         self.parent_application = parent
         self.tab_count = 0
@@ -778,7 +778,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         Arguments:
             - e {[type]} -- [description]
         """
-        reptatelogger = logging.getLogger('ReptateLogger')
+        #reptatelogger = logging.getLogger('ReptateLogger')
         paths_to_open = []
         for url in e.mimeData().urls():
             path = url.toLocalFile()
