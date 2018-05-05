@@ -36,7 +36,7 @@ Module that defines the basic class from which all applications are derived.
 
 """
 import io
-import logging
+#import logging
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
 
@@ -78,7 +78,7 @@ class Application(CmdBase):
         super().__init__()
         self.name = name
         self.parent_manager = parent
-        self.logger = logging.getLogger('ReptateLogger')
+        #self.logger = logging.getLogger('ReptateLogger')
         self.views = OrderedDict()
         self.filetypes = OrderedDict() # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order

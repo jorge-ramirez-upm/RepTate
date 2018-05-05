@@ -36,8 +36,8 @@ Module for the Main interface that contains all applications. Command line versi
 
 """
 import sys
-import logging
-import logging.handlers
+#import logging
+#import logging.handlers
 import matplotlib.pyplot as plt
 import readline
 
@@ -80,9 +80,9 @@ class ApplicationManager(CmdBase):
         super().__init__()
 
         # SETUP LOG
-        self.reptatelogger = logging.getLogger('ReptateLogger')
-        self.reptatelogger.setLevel(logging.DEBUG)  # INFO, WARNING
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+        #self.reptatelogger = logging.getLogger('ReptateLogger')
+        #self.reptatelogger.setLevel(logging.DEBUG)  # INFO, WARNING
+        #logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
         #log_file_name = 'reptate.log'
         #handler = logging.handlers.RotatingFileHandler(
         #    log_file_name, maxBytes=20000, backupCount=2, mode='w')

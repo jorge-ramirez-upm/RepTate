@@ -37,7 +37,7 @@ Module for the basic definition of file types.
 """ 
 import os
 import numpy as np
-import logging
+#import logging
 from openpyxl import load_workbook
 from File import File
 
@@ -115,7 +115,7 @@ class TXTColumnFile(object):
         self.col_index=list(range(len(self.col_names)))
         self.basic_file_parameters=basic_file_parameters # Those that will show by default in the dataset
         self.col_units=col_units
-        self.logger = logging.getLogger('ReptateLogger')
+        #self.logger = logging.getLogger('ReptateLogger')
 
     def is_number(self, s):
         """[summary]
@@ -242,7 +242,7 @@ class ExcelFile(object):
         self.col_index=list(range(len(self.col_names)))
         self.basic_file_parameters=basic_file_parameters # Those that will show by default in the dataset
         self.col_units=col_units
-        self.logger = logging.getLogger('ReptateLogger')
+        #self.logger = logging.getLogger('ReptateLogger')
 
     def read_file(self, filename, parent_dataset, axarr):
         """[summary]
