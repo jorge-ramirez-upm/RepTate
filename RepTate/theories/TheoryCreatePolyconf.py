@@ -142,6 +142,8 @@ class BaseTheoryCreatePolyconf:
     #help_file = ''
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryCreatePolyconf.thname
+    citations = TheoryCreatePolyconf.citations
+
     signal_param_dialog = pyqtSignal(object)
 
     def __init__(self, name='', parent_dataset=None, axarr=None):

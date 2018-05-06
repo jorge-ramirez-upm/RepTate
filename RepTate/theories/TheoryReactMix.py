@@ -86,6 +86,8 @@ class BaseTheoryReactMix:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/mixture.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryReactMix.thname
+    citations = TheoryReactMix.citations
+
     signal_mix_dialog = pyqtSignal(object)
 
     def __init__(self, name='', parent_dataset=None, axarr=None):

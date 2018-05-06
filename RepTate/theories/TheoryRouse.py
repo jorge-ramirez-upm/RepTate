@@ -95,6 +95,7 @@ class BaseTheoryRouseTime:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Theory/theory.html#rouse-time'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryRouseTime.thname
+    citations = TheoryRouseTime.citations
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """
@@ -289,7 +290,8 @@ class TheoryRouseFrequency(CmdBase):
     """
     thname = "RouseFrequency"
     description = "Fit Maxwell modes to frequency dependent function"
-
+    citations = ""
+    
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
@@ -316,6 +318,7 @@ class BaseTheoryRouseFrequency:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryRouseFrequency.thname
+    citations = TheoryRouseFrequency.citations
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """

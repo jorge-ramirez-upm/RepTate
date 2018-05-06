@@ -67,7 +67,8 @@ class TheoryDebyeModesFrequency(CmdBase):
     """
     thname = "DebyeModesFrequency"
     description = "Fit Debye modes to frequency dependent function"
-
+    citations = ""
+    
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
@@ -93,7 +94,8 @@ class BaseTheoryDebyeModesFrequency:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#Debye-modes'
     single_file = True
     thname = TheoryDebyeModesFrequency.thname
-
+    citations = TheoryDebyeModesFrequency.citations
+    
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**

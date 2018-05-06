@@ -174,6 +174,7 @@ class BaseTheoryUCM:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#upper-convected-maxwell-model'
     single_file = False
     thname = TheoryUCM.thname
+    citations = TheoryUCM.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """

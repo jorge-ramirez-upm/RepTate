@@ -97,6 +97,8 @@ class BaseTheoryTobitaBatch():
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/tobitaLDPE.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryTobitaBatch.thname
+    citations = TheoryTobitaBatch.citations
+
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)

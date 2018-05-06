@@ -60,7 +60,7 @@ class TheoryTTSShiftAutomatic(CmdBase):
     """
     thname = "TTSShiftAutomatic"
     description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
-    cite = ""
+    citations = ""
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -88,6 +88,7 @@ class BaseTheoryTTSShiftAutomatic:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/TTSAutomatic.html'
     single_file = False
     thname = TheoryTTSShiftAutomatic.thname
+    citations = TheoryTTSShiftAutomatic.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

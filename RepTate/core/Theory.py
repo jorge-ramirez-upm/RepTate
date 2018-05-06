@@ -221,6 +221,7 @@ class Theory(CmdBase):
         if timing:
             self.Qprint("\n---Calculated in %.3g seconds---" %
                                    (time.time() - start_time))
+            self.do_cite("")
         self.calculate_is_busy = False
 
     def theory_files(self):
@@ -489,6 +490,7 @@ class Theory(CmdBase):
         self.do_calculate(line, timing=False)
         self.Qprint("\n---Fitting in %.3g seconds---" %
                                (time.time() - start_time))
+        self.do_cite("")
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
@@ -858,7 +860,8 @@ class Theory(CmdBase):
         Arguments:
             - line {[type]} -- [description]
         """
-        print(self.citations)
+        if (self.citations != ""):
+            self.Qprint("\nCITE: "+self.citations+"\n")
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset

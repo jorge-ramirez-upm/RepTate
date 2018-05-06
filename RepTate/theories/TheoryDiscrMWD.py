@@ -83,6 +83,7 @@ class BaseTheoryDiscrMWD:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/MWDiscr.html'
     single_file = True
     thname = TheoryDiscrMWD.thname
+    citations = TheoryDiscrMWD.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

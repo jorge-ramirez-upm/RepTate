@@ -97,6 +97,7 @@ class BaseTheoryRetardationModesTime:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Retardation.html'
     single_file = True
     thname = TheoryRetardationModesTime.thname
+    citations = TheoryRetardationModesTime.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
