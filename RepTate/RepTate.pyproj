@@ -111,6 +111,7 @@
     </Compile>
     <Compile Include="theories\TheoryTTS_Automatic.py" />
     <Compile Include="theories\TheoryTTS_Test.py" />
+    <Compile Include="tools\ToolIntegral.py" />
     <Compile Include="tools\ToolTemplate.py" />
   </ItemGroup>
   <ItemGroup>

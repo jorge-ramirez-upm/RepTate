@@ -53,6 +53,7 @@ from PyQt5.QtGui import QCursor, QImage
 from collections import OrderedDict
 from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
 from ToolTemplate import ToolTemplate
+from ToolIntegral import ToolIntegral
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -105,6 +106,7 @@ class Application(CmdBase):
 
         # Tools available everywhere
         self.tools[ToolTemplate.toolname] = ToolTemplate
+        self.tools[ToolIntegral.toolname] = ToolIntegral
         
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
