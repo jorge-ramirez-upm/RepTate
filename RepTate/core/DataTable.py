@@ -62,15 +62,15 @@ class DataTable(object):
         self.series=[]
         
         for nx in range(len(axarr)): #create series for each plot
-            serries_nx = []
+            series_nx = []
             for i in range(self.MAX_NUM_SERIES): 
                 ss = axarr[nx].plot([], [], label='', picker=5)
                 if i == 0:
                     ss[0].aname = aname #define artist name
                 else:    
                     ss[0].aname = aname + " #%d"%(i + 1) #define artist name
-                serries_nx.append(ss[0])
-            self.series.append(serries_nx)
+                series_nx.append(ss[0])
+            self.series.append(series_nx)
 
     def __str__(self):
         """[summary]

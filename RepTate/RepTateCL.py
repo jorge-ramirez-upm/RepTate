@@ -47,6 +47,7 @@ sys.path.append('gui')
 sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
+sys.path.append('tools')
 from ApplicationManager import ApplicationManager
 from time import time, sleep
 from PyQt5.QtWidgets import QApplication

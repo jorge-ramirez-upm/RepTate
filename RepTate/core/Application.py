@@ -44,6 +44,7 @@ from CmdBase import CmdBase, CmdMode
 from Theory import Theory
 from DataSet import DataSet
 from TheoryBasic import *
+from Tool import *
 
 from MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
@@ -51,7 +52,7 @@ from PyQt5.QtGui import QCursor, QImage
 
 from collections import OrderedDict
 from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
-
+from ToolTemplate import ToolTemplate
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -82,6 +83,7 @@ class Application(CmdBase):
         self.views = OrderedDict()
         self.filetypes = OrderedDict() # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order
+        self.tools = OrderedDict()     # keep tools combobox in order
         self.datasets = {}
         self.current_view = 0
         self.num_datasets = 0
@@ -101,6 +103,9 @@ class Application(CmdBase):
         self.common_theories[TheoryExponential.thname] = TheoryExponential
         self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
 
+        # Tools available everywhere
+        self.tools[ToolTemplate.toolname] = ToolTemplate
+        
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
                                     self.nplots, self.ncols, self)
@@ -543,6 +548,26 @@ class Application(CmdBase):
         """
         self.theory_available()
 
+# TOOL STUFF
+    def tool_available(self):
+        """List available tools in the current application
+        
+        [description]
+        """
+        for t in list(self.tools.values()):
+            print("%s:\t%s" % (t.toolname, t.description))
+
+    def do_tools_available(self, line):
+        """List available tools in the current application
+        
+        [description]
+        
+        Arguments:
+            line {[type]} -- [description]
+        """
+        self.tool_available()
+
+        
 # LEGEND STUFF
 
     def legend(self):

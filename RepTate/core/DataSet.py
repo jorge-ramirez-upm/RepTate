@@ -43,6 +43,7 @@ import glob
 from enum import Enum
 from CmdBase import CmdBase, CmdMode
 from Theory import Theory
+from Tool import Tool
 from FileType import TXTColumnFile
 from File import File
 from DataTable import DataTable
@@ -215,9 +216,12 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         self.th_linestyle = 'solid'
         self.th_line_width = 1.5
         self.theories = {}
+        self.tools = {}
         self.num_theories = 0
+        self.num_tools = 0
         self.inactive_files = {}
         self.current_theory = None
+        self.current_tool = None
         self.table_icon_list = [
         ]  #save the file's marker shape, fill and color there
         self.selected_file = None
@@ -285,6 +289,9 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             th.set_th_table_visible(file_matching[0].file_name_short,
                                     check_state)
 
+        for to in self.tools.values():
+            to.set_tool_table_visible(file_matching[0].file_name_short, check_state)
+                                    
         #save the check_state to recover it upon change of tab or 'view all' events
         if check_state == False:
             self.inactive_files[file_matching[0]
@@ -310,6 +317,8 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                         dt.series[nx][i].set_visible(True)
         if self.current_theory:
             self.theories[self.current_theory].do_show()
+        if self.current_tool:
+            self.tools[self.current_tool].do_show()
 
     def do_hide_all(self):
         """[summary]
@@ -324,6 +333,8 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     dt.series[nx][i].set_visible(False)
         for th in self.theories.values():
             th.do_hide()
+        for to in self.tools.values():
+            to.do_hide()
 
     def do_integrate(self, line=""):
         """Calculate the integral of the data in the current dataset using current view (or the first view if there are more than one) of the parent application
@@ -456,12 +467,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     print(" %g"%xdata[d],end='')
                     print(" %g"%ydata[d],end='')
             print("")
-
-
-
-
-
-
         
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application
@@ -598,6 +603,24 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                             tt.series[nx][i].set_visible(False)
                             tt.series[nx][i].set_label('')
 
+                for to in self.tools.values():
+                    if to.active:
+                        to.plot_tool_stuff()
+                    tt = to.tables[file.file_name_short]
+                    for i in range(tt.MAX_NUM_SERIES):
+                        if (i < view.n and file.active and to.active):
+                            tt.series[nx][i].set_data(tt.data[:, 0], tt.data[:, i+1])
+                            tt.series[nx][i].set_visible(True)
+                            tt.series[nx][i].set_marker('')
+                            tt.series[nx][i].set_linestyle(th_linestyle)
+                            tt.series[nx][i].set_linewidth(self.th_line_width)
+                            tt.series[nx][i].set_color(th_color)
+                            tt.series[nx][i].set_label('')
+                        else:
+                            tt.series[nx][i].set_visible(False)
+                            tt.series[nx][i].set_label('')
+                    
+                    
         self.parent_application.update_plot()
 
     def do_sort(self, line):
@@ -975,6 +998,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
 # THEORY STUFF ##########################################################################################################
 
+    def do_theory_available(self, line):
+        """List available theories in parent application"""
+        self.parent_application.theory_available()
+
     def do_theory_delete(self, name):
         """Delete a theory from the current dataset
         
@@ -1122,6 +1149,94 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         completions = self.complete_theory_delete(text, line, begidx, endidx)
         return completions
 
+# TOOL STUFF ##########################################################################################################
+
+    def do_tool_available(self, line):
+        """List available tools in parent application"""
+        self.parent_application.tool_available()
+
+    def do_tool_new(self, line, calculate=True):
+        """Add a new tool of the type specified to the current Data Set"""
+        tooltypes = list(self.parent_application.tools.keys())
+        if (line in tooltypes):
+            if (self.current_file is None):
+                print("Current dataset is empty\n" "%s was not created" % line)
+                return
+            self.num_tools += 1
+            to_id = "%s%02d" % (line, self.num_tools)
+            to = self.parent_application.tools[line](
+                to_id, self, self.parent_application.axarr)
+            self.tools[to.name] = to
+            self.current_tool = to.name
+            if self.mode == CmdMode.GUI:
+                if calculate:
+                    to.do_calculate('')
+            else:
+                if (self.mode == CmdMode.batch):
+                    to.prompt = ''
+                else:
+                    to.prompt = self.prompt[:-2] + '/' + to.name + '> '
+                if calculate:
+                    to.do_calculate('')
+                to.cmdloop()
+            return to
+        else:
+            print("Tool \"%s\" does not exists" % line)
+
+    def complete_tool_new(self, text, line, begidx, endidx):
+        """Complete new tool command"""
+        tool_names = list(self.parent_application.tools.keys())
+        if not text:
+            completions = tool_names[:]
+        else:
+            completions = [f for f in tool_names if f.startswith(text)]
+        return completions
+        
+    def do_tool_switch(self, line):
+        """Change the active tool"""
+        if line in self.tools.keys():
+            to = self.tools[line]
+            to.cmdloop()
+        else:
+            print("Tool\"%s\" not found" % line)
+
+    def complete_tool_switch(self, text, line, begidx, endidx):
+        """Complete the tool switch command"""
+        completions = self.complete_tool_delete(text, line, begidx, endidx)
+        return completions
+
+    def do_tool_delete(self, name):
+        """Delete a tool from the current dataset"""
+        if name in self.tools.keys():
+            try:
+                self.tools[name].destructor()
+            except:
+                print("No destructor programmed for %s" %
+                      self.tools[name].name)
+            for tt in self.tools[name].tables.values():  # remove matplotlib artist from ax
+                for i in range(tt.MAX_NUM_SERIES):
+                    for nx in range(self.nplots):
+                        self.parent_application.axarr[nx].lines.remove(tt.series[nx][i])
+            del self.tools[name]
+        else:
+            print("Tool \"%s\" not found" % name)
+
+    def complete_tool_delete(self, text, line, begidx, endidx):
+        """Complete delete tool command"""
+        to_names = list(self.tools.keys())
+        if not text:
+            completions = to_names[:]
+        else:
+            completions = [f for f in to_names if f.startswith(text)]
+        return completions
+
+    def do_tool_list(self, line):
+        """List open tools in current dataset"""
+        for t in self.tools.values():
+            print("   %s: %s\t %s" % (t.name, t.toolname, t.description))
+
+###########################      
+        
     def do_legend(self, line):
         """[summary]
         
