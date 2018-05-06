@@ -137,9 +137,7 @@ class TheoryRoliePoly(CmdBase):
     """
     thname = "RoliePoly"
     description = "RoliePoly"
-    citations = "Likhtman, A.E. & Graham, R.S.\n\
-Simple constitutive equation for linear polymer melts derived from molecular theory: Rolie-Poly equation\n\
-J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
+    citations = "Likhtman, A.E. & Graham, R.S., J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -168,6 +166,7 @@ class BaseTheoryRoliePoly:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#rolie-poly-equation'
     single_file = False
     thname = TheoryRoliePoly.thname
+    citations = TheoryRoliePoly.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """

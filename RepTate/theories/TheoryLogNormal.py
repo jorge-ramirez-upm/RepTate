@@ -84,6 +84,7 @@ class BaseTheoryLogNormal:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryLogNormal.thname
+    citations = TheoryLogNormal.citations
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """

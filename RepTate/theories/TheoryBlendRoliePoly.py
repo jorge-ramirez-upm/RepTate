@@ -302,6 +302,7 @@ class BaseTheoryBlendRoliePoly:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#rolie-poly-blend-equations'
     single_file = False
     thname = TheoryBlendRoliePoly.thname
+    citations = TheoryBlendRoliePoly.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """

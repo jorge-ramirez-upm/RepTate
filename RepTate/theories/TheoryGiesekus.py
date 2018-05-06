@@ -156,6 +156,7 @@ class BaseTheoryGiesekus:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
     single_file = False
     thname = TheoryGiesekus.thname
+    citations = TheoryGiesekus.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """

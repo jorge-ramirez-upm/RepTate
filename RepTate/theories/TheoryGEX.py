@@ -87,6 +87,7 @@ class BaseTheoryGEX:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryGEX.thname
+    citations = TheoryGEX.citations
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """

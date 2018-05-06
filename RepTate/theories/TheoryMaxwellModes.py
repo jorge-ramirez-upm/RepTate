@@ -66,7 +66,8 @@ class TheoryMaxwellModesFrequency(CmdBase):
     """
     thname = "MaxwellModesFrequency"
     description = "Fit Maxwell modes to frequency dependent function"
-
+    citations = ""
+    
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
@@ -92,6 +93,7 @@ class BaseTheoryMaxwellModesFrequency:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
     single_file = True
     thname = TheoryMaxwellModesFrequency.thname
+    citations = TheoryMaxwellModesFrequency.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
@@ -491,6 +493,7 @@ class BaseTheoryMaxwellModesTime:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Maxwell.html'
     single_file = True
     thname = TheoryMaxwellModesTime.thname
+    citations = TheoryMaxwellModesTime.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

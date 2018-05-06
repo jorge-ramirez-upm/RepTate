@@ -71,7 +71,8 @@ class TheoryDTDStarsFreq(CmdBase):
     """
     thname = "DTDStarsFreq"
     description = "Fit Dynamic Tube Dilution theory for stars, frequency domain"
-
+    citations = ""
+    
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
@@ -99,6 +100,7 @@ class BaseTheoryDTDStarsFreq:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#dtdstarsFreq'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDTDStarsFreq.thname
+    citations = TheoryDTDStarsFreq.citations
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """
@@ -264,7 +266,8 @@ class TheoryDTDStarsTime(CmdBase):
     """
     thname = "DTDStarsTime"
     description = "Fit Dynamic Tube Dilution theory for stars, time domain"
-
+    citations = ""
+    
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
@@ -292,6 +295,7 @@ class BaseTheoryDTDStarsTime:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#dtdstarsTime'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDTDStarsTime.thname
+    citations = TheoryDTDStarsTime.citations
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """

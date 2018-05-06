@@ -52,9 +52,7 @@ class TheoryLikhtmanMcLeish2002(CmdBase):
     """
     thname = "Likhtman-McLeish"
     description = "Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers"
-    cite = "Likhtman A.E. and McLeish T.C.B.\n\
-Quantitative Theory for Linear Dynamics of Linear Entangled Polymers\n\
-Macromolecules 2002, 35, 6332-6343"
+    citations = "Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -82,7 +80,8 @@ class BaseTheoryLikhtmanMcLeish2002:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/LikhtmanMcLeish.html'
     single_file = False
     thname = TheoryLikhtmanMcLeish2002.thname
-
+    citations = TheoryLikhtmanMcLeish2002.citations
+    
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**

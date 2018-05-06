@@ -103,6 +103,7 @@ class BaseTheoryDebye:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/SANS/Theory/Debye.html'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDebye.thname
+    citations = TheoryDebye.citations
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """

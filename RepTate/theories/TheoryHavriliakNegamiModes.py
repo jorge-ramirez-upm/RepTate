@@ -66,7 +66,8 @@ class TheoryHavriliakNegamiModesFrequency(CmdBase):
     """
     thname = "HavriliakNegamiModesFrequency"
     description = "Fit Havriliak-Negami modes to frequency dependent function"
-
+    citations = ""
+    
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
         
@@ -93,7 +94,8 @@ class BaseTheoryHavriliakNegamiModesFrequency:
     """
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#Havriliak-Negami-modes'
     single_file = True
-    thanme = TheoryHavriliakNegamiModesFrequency.thname
+    thname = TheoryHavriliakNegamiModesFrequency.thname
+    citations = TheoryHavriliakNegamiModesFrequency.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

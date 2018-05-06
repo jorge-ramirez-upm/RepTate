@@ -75,7 +75,7 @@ class TheoryWLFShift(CmdBase):
     """
     thname = "WLFShift"
     description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
-    cite = ""
+    citations = ""
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -104,6 +104,7 @@ class BaseTheoryWLFShift:
     help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/WLFShift.html'
     single_file = False
     thname = TheoryWLFShift.thname
+    citations = TheoryWLFShift.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

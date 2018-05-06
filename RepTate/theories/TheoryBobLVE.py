@@ -91,6 +91,8 @@ class BaseTheoryBobLVE:
     #help_file = ''
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobLVE.thname
+    citations = TheoryBobLVE.citations
+
     signal_param_dialog = pyqtSignal(object)
 
     def __init__(self, name='ThBobLVE', parent_dataset=None, axarr=None):
