@@ -201,19 +201,21 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         self.files = []
         self.current_file = None
         self.num_files = 0
+        # Marker settings
         self.marker_size = 12
         self.line_width = 1
-        self.colormode = ColorMode.variable
+        self.colormode = ColorMode.variable.value
         self.color1 = ColorMode.color1.value
         self.color2 = ColorMode.color2.value
-        self.th_line_mode = ThLineMode.as_data
+        self.th_line_mode = ThLineMode.as_data.value
         self.th_color = ThLineMode.color.value
         self.palette_name = 'ColorBlind'
-        self.symbolmode = SymbolMode.fixed
+        self.symbolmode = SymbolMode.fixed.value
         self.symbol1 = SymbolMode.symbol1.value
         self.symbol1_name = SymbolMode.symbol1_name.value
         self.th_linestyle = 'solid'
         self.th_line_width = 1.5
+        #
         self.theories = {}
         self.num_theories = 0
         self.inactive_files = {}
@@ -470,14 +472,14 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
         self.table_icon_list.clear()
         filled = False
-        if self.symbolmode == SymbolMode.fixed:  #single symbol, empty?
+        if self.symbolmode == SymbolMode.fixed.value:  #single symbol, empty?
             markers = [self.symbol1]
             marker_names = [self.symbol1_name]
-        elif self.symbolmode == SymbolMode.fixedfilled:  #single symbol, filled?
+        elif self.symbolmode == SymbolMode.fixedfilled.value:  #single symbol, filled?
             markers = [self.symbol1]
             marker_names = [self.symbol1_name]
             filled = True
-        elif self.symbolmode == SymbolMode.variable:  #variable symbols, empty
+        elif self.symbolmode == SymbolMode.variable.value:  #variable symbols, empty
             markers = SymbolMode.allmarkers.value
             marker_names = SymbolMode.allmarkernames.value
         else:  #
@@ -485,9 +487,9 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             marker_names = SymbolMode.filledmarkernames.value
             filled = True
 
-        if self.colormode == ColorMode.fixed:  #single color?
+        if self.colormode == ColorMode.fixed.value:  #single color?
             colors = [self.color1]
-        elif self.colormode == ColorMode.variable:  #variable colors from palette
+        elif self.colormode == ColorMode.variable.value:  #variable colors from palette
             colors = ColorMode.colorpalettes.value[self.palette_name]
         else:
             n = len(self.files) - len(
@@ -523,7 +525,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 marker_name_lst)  #if file.marker is None else file.marker
             color = next(palette)  #if file.color is None else file.color
             face = color if filled else 'none'
-            if self.th_line_mode == ThLineMode.as_data:
+            if self.th_line_mode == ThLineMode.as_data.value:
                 th_color = color
             else:
                 th_color = self.th_color

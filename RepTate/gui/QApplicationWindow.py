@@ -438,7 +438,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.dialog.ui.sbThLineWidth.setValue(ds.th_line_width)
         #preset radioButtons
             #symbols
-        is_fixed = ds.symbolmode == SymbolMode.fixed
+        is_fixed = ds.symbolmode == SymbolMode.fixed.value
         self.dialog.ui.rbFixedSymbol.setChecked(is_fixed)
         # self.dialog.ui.rbVariableSymbol.setChecked(not is_fixed)
         self.dialog.ui.cbSymbolType.setDisabled(not is_fixed)
@@ -446,7 +446,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ind = self.dialog.ui.cbPalette.findText(ds.palette_name)
         self.dialog.ui.cbPalette.setCurrentIndex(ind)
         #preset radiobutton theory
-        if ds.th_line_mode == ThLineMode.as_data:
+        if ds.th_line_mode == ThLineMode.as_data.value:
             self.dialog.ui.rbThSameColor.click()
         else:
             self.dialog.ui.rbThFixedColor.click()
@@ -456,9 +456,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.dialog.ui.rbFixedColor.setChecked(False)
         # self.dialog.ui.rbGradientColor.setChecked(False)
         # self.dialog.ui.rbPalette.setChecked(False)
-        if ds.colormode == ColorMode.fixed:
+        if ds.colormode == ColorMode.fixed.value:
             self.dialog.ui.rbFixedColor.click()
-        elif ds.colormode == ColorMode.gradient:
+        elif ds.colormode == ColorMode.gradient.value:
             self.dialog.ui.rbGradientColor.click()
         else:
             self.dialog.ui.rbPalette.click()
@@ -478,38 +478,38 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if ds:
             #find the color mode
             if self.dialog.ui.rbFixedColor.isChecked(): #fixed color?
-                ds.colormode = ColorMode.fixed
+                ds.colormode = ColorMode.fixed.value
                 ds.color1 = self.color1 if self.color1 else ColorMode.color1.value
             elif self.dialog.ui.rbPalette.isChecked(): #color from palette?
-                ds.colormode = ColorMode.variable
+                ds.colormode = ColorMode.variable.value
                 ds.palette_name = self.dialog.ui.cbPalette.currentText()
                 # ds.palette = ColorMode.colorpalettes.value[palette_name]
             else: # color from gradient
-                ds.colormode = ColorMode.gradient
+                ds.colormode = ColorMode.gradient.value
                 ds.color1 = self.color1 if self.color1 else ColorMode.color1.value
                 ds.color2 = self.color2 if self.color2 else ColorMode.color2.value
             
             #find Theory color mode
             if self.dialog.ui.rbThSameColor.isChecked():
-                ds.th_line_mode = ThLineMode.as_data
+                ds.th_line_mode = ThLineMode.as_data.value
             else:
-                ds.th_line_mode = ThLineMode.fixed
+                ds.th_line_mode = ThLineMode.fixed.value
                 ds.th_color = self.color_th if self.color_th else ThLineMode.color.value
 
             #find the shape mode
             if self.dialog.ui.rbVariableSymbol.isChecked(): #variable symbols?
                 if self.dialog.ui.rbFilled.isChecked(): #filled?
-                    ds.symbolmode = SymbolMode.variablefilled
+                    ds.symbolmode = SymbolMode.variablefilled.value
                 else: #empty
-                    ds.symbolmode = SymbolMode.variable
+                    ds.symbolmode = SymbolMode.variable.value
             else: #single symbol
                 ind = self.dialog.ui.cbSymbolType.currentIndex()
                 if self.dialog.ui.rbFilled.isChecked(): #filled?
-                    ds.symbolmode = SymbolMode.fixedfilled
+                    ds.symbolmode = SymbolMode.fixedfilled.value
                     ds.symbol1 = SymbolMode.filledmarkers.value[ind]
                     ds.symbol1_name = self.dialog.ui.cbSymbolType.currentText()
                 else: #empty
-                    ds.symbolmode = SymbolMode.fixed
+                    ds.symbolmode = SymbolMode.fixed.value
                     ds.symbol1 = SymbolMode.allmarkers.value[ind]
                     ds.symbol1_name = self.dialog.ui.cbSymbolType.currentText()
 
