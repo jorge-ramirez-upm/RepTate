@@ -398,14 +398,15 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         napps = self.ApplicationtabWidget.count()
         for i in range(napps):
             app = self.ApplicationtabWidget.widget(i)
-            datasets_dic = {}
+            datasets_dic = OrderedDict()
             ndatasets = app.DataSettabWidget.count()
             for j in range(ndatasets):
                 ds = app.DataSettabWidget.widget(j)
-                files_dic = {}
+                files_dic = OrderedDict()
                 for f in ds.files:
-                    param_dic = dict([ (pname, f.file_parameters[pname]) for pname in f.file_parameters])
-                    file_dic = dict(
+                    param_dic = OrderedDict([ (pname, f.file_parameters[pname]) for pname in f.file_parameters])
+
+                    file_dic = OrderedDict(
                         [
                             ('fname', os.path.basename(f.file_full_path)),
                             ('is_active', f.active),
@@ -415,12 +416,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     )
                     files_dic[f.file_name_short] = file_dic
 
-                theories_dic = {}
+                theories_dic = OrderedDict()
                 ntheories = ds.TheorytabWidget.count()
                 for k in range(ntheories):
                     th = ds.TheorytabWidget.widget(k)
                     param_dic = OrderedDict([(pname, th.parameters[pname].value) for pname in th.parameters])
-                    th_table_dic = dict( 
+                    th_table_dic = OrderedDict( 
                         [ (f.file_name_short, th.tables[f.file_name_short].data.tolist()) for f in ds.files]
                     )
                     e_dic = th.extra_data
@@ -429,7 +430,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                         if type(val) is np.ndarray:
                             e_dic[key] = val.tolist()
 
-                    th_dic = dict(
+                    th_dic = OrderedDict(
                         [
                             ('th_tabname', ds.TheorytabWidget.tabText(k)),
                             ('thname', th.thname),
@@ -441,12 +442,30 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     )
                     theories_dic[th.name] = th_dic
                 
-                ds_dict = dict(
+                ds_markers = OrderedDict(
+                    [
+                        ('marker_size', ds.marker_size),
+                        ('line_width', ds.line_width),
+                        ('colormode', ds.colormode),
+                        ('color1', ds.color1),
+                        ('color2', ds.color2),
+                        ('th_line_mode', ds.th_line_mode),
+                        ('th_color', ds.th_color),
+                        ('palette_name', ds.palette_name),
+                        ('symbolmode', ds.symbolmode),
+                        ('symbol1', ds.symbol1),
+                        ('symbol1_name', ds.symbol1_name),
+                        ('th_linestyle', ds.th_linestyle),
+                        ('th_line_width', ds.th_line_width)
+                    ]
+                )
+                ds_dict = OrderedDict(
                     [
                         ('ds_tabname', app.DataSettabWidget.tabText(j)),
                         ('files', files_dic),
                         ('current_th_indx', ds.TheorytabWidget.currentIndex()),
-                        ('theories', theories_dic)
+                        ('theories', theories_dic),
+                        ('ds_markers', ds_markers)
                     ]
                 )
                 datasets_dic[ds.name] = ds_dict
@@ -516,6 +535,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
     def restore_theories(self, ds, theories):
         """Open theories"""
+        import time
         for th_dic in theories.values():
             th_tabname = th_dic['th_tabname']
             thname = th_dic['thname']
@@ -538,7 +558,25 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 tt.num_rows, tt.num_columns = tt.data.shape
             new_th.set_extra_data(extra_data)
             new_th.update_parameter_table()
-            new_th.thTextBox.insertPlainText(th_textbox)
+            new_th.thTextBox.insertPlainText(
+                th_textbox + '\n***Restored at %s on %s ****' % 
+                (time.strftime("%X"), time.strftime("%a %b %d, %Y")))
+    
+    def restore_marker_settings(self, ds, marker_dic):
+        """Restore the dataset marker settings"""
+        ds.marker_size = marker_dic['marker_size']
+        ds.line_width = marker_dic['line_width']
+        ds.colormode = marker_dic['colormode']
+        ds.color1 = marker_dic['color1']
+        ds.color2 = marker_dic['color2']
+        ds.th_line_mode = marker_dic['th_line_mode']
+        ds.th_color = marker_dic['th_color']
+        ds.palette_name = marker_dic['palette_name']
+        ds.symbolmode = marker_dic['symbolmode']
+        ds.symbol1 = marker_dic['symbol1']
+        ds.symbol1_name = marker_dic['symbol1_name']
+        ds.th_linestyle = marker_dic['th_linestyle']
+        ds.th_line_width = marker_dic['th_line_width']
 
     def open_project(self, project_path):
         """Open file and load project"""
@@ -578,11 +616,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 files = ds_dic['files']
                 current_th_indx = ds_dic['current_th_indx']
                 theories = ds_dic['theories']
+                ds_markers = ds_dic['ds_markers']
 
                 new_ds_tab = new_app_tab.createNew_Empty_Dataset(tabname=ds_tabname)
                 self.restore_files(new_ds_tab, files)
                 self.restore_theories(new_ds_tab, theories)
                 new_ds_tab.TheorytabWidget.setCurrentIndex(current_th_indx)
+                self.restore_marker_settings(new_ds_tab, ds_markers)
 
             #set app views
             new_app_tab.multiviews = [new_app_tab.views[v] for v in current_view_names]
