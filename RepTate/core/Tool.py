@@ -511,9 +511,9 @@ class Tool(CmdBase):
         self.yminline.set_visible(ystate)
         self.ymaxline.set_visible(ystate)
 
-        self.parent_dataset.actionVertical_Limits.setChecked(xstate)
-        self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
-        self.parent_dataset.set_limit_icon()
+        #self.parent_dataset.actionVertical_Limits.setChecked(xstate)
+        #self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
+        #self.parent_dataset.set_limit_icon()
 
 
     def do_cite(self, line):
@@ -645,7 +645,7 @@ class Tool(CmdBase):
         else:
             super(Tool, self).default(line)
 
-    def do_hide(self):
+    def do_hide(self, line):
         """Hide the Tool artists and associated tools
         
         [description]
@@ -673,7 +673,7 @@ class Tool(CmdBase):
             for nx in range(self.parent_dataset.nplots):
                 tt.series[nx][i].set_visible(state)
 
-    def do_show(self):
+    def do_show(self, line):
         """[summary]
         
         [description]

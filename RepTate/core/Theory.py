@@ -982,7 +982,7 @@ class Theory(CmdBase):
         else:
             super(Theory, self).default(line)
 
-    def do_hide(self):
+    def do_hide(self, line):
         """Hide the theory artists and associated tools
         
         [description]
@@ -1006,7 +1006,7 @@ class Theory(CmdBase):
             for nx in range(self.parent_dataset.nplots):
                 tt.series[nx][i].set_visible(state)
 
-    def do_show(self):
+    def do_show(self, line):
         """[summary]
         
         [description]

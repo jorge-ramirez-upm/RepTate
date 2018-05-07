@@ -54,6 +54,7 @@ from collections import OrderedDict
 from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
 from ToolTemplate import ToolTemplate
 from ToolIntegral import ToolIntegral
+from ToolFindPeaks import ToolFindPeaks
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -107,6 +108,7 @@ class Application(CmdBase):
         # Tools available everywhere
         self.tools[ToolTemplate.toolname] = ToolTemplate
         self.tools[ToolIntegral.toolname] = ToolIntegral
+        self.tools[ToolFindPeaks.toolname] = ToolFindPeaks
         
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
