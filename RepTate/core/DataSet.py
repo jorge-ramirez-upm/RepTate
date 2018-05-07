@@ -218,12 +218,9 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         self.th_line_width = 1.5
         #
         self.theories = {}
-        self.tools = {}
         self.num_theories = 0
-        self.num_tools = 0
         self.inactive_files = {}
         self.current_theory = None
-        self.current_tool = None
         self.table_icon_list = [
         ]  #save the file's marker shape, fill and color there
         self.selected_file = None
@@ -291,8 +288,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             th.set_th_table_visible(file_matching[0].file_name_short,
                                     check_state)
 
-        for to in self.tools.values():
-            to.set_tool_table_visible(file_matching[0].file_name_short, check_state)
                                     
         #save the check_state to recover it upon change of tab or 'view all' events
         if check_state == False:
@@ -319,8 +314,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                         dt.series[nx][i].set_visible(True)
         if self.current_theory:
             self.theories[self.current_theory].do_show()
-        if self.current_tool:
-            self.tools[self.current_tool].do_show()
 
     def do_hide_all(self):
         """[summary]
@@ -335,8 +328,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     dt.series[nx][i].set_visible(False)
         for th in self.theories.values():
             th.do_hide()
-        for to in self.tools.values():
-            to.do_hide()
         
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application
@@ -416,6 +407,22 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     print("in do_plot()", e)
                     return
 
+                for to in self.parent_application.tools:
+                    if to.active:
+                        newxy = []
+                        for i in range(view.n):
+                            xcopy = x[:, i]
+                            ycopy = y[:, i]
+                            xcopy, ycopy = to.calculate(xcopy, ycopy)
+                            newxy.append([xcopy,ycopy])
+                        lenx = len(newxy[0][0])
+                        x.resize((lenx,view.n))
+                        y.resize((lenx,view.n))
+                        for i in range(view.n):
+                            x[:, i] = newxy[i][0]
+                            y[:, i] = newxy[i][1]
+
+
                 for i in range(dt.MAX_NUM_SERIES):
                     if (i < view.n and file.active):
                         dt.series[nx][i].set_data(x[:, i], y[:, i])
@@ -473,24 +480,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                             tt.series[nx][i].set_visible(False)
                             tt.series[nx][i].set_label('')
 
-                for to in self.tools.values():
-                    if to.active:
-                        to.plot_tool_stuff()
-                    tt = to.tables[file.file_name_short]
-                    for i in range(tt.MAX_NUM_SERIES):
-                        if (i < view.n and file.active and to.active):
-                            tt.series[nx][i].set_data(tt.data[:, 0], tt.data[:, i+1])
-                            tt.series[nx][i].set_visible(True)
-                            tt.series[nx][i].set_marker('')
-                            tt.series[nx][i].set_linestyle(th_linestyle)
-                            tt.series[nx][i].set_linewidth(self.th_line_width)
-                            tt.series[nx][i].set_color(th_color)
-                            tt.series[nx][i].set_label('')
-                        else:
-                            tt.series[nx][i].set_visible(False)
-                            tt.series[nx][i].set_label('')
-                    
-                    
         self.parent_application.update_plot()
 
     def do_sort(self, line):
@@ -1020,47 +1009,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         return completions
 
 # TOOL STUFF ##########################################################################################################
-
-    def do_tool_available(self, line):
-        """List available tools in parent application"""
-        self.parent_application.tool_available()
-
-    def do_tool_new(self, line, calculate=True):
-        """Add a new tool of the type specified to the current Data Set"""
-        tooltypes = list(self.parent_application.tools.keys())
-        if (line in tooltypes):
-            if (self.current_file is None):
-                print("Current dataset is empty\n" "%s was not created" % line)
-                return
-            self.num_tools += 1
-            to_id = "%s%02d" % (line, self.num_tools)
-            to = self.parent_application.tools[line](
-                to_id, self, self.parent_application.axarr)
-            self.tools[to.name] = to
-            self.current_tool = to.name
-            if self.mode == CmdMode.GUI:
-                if calculate:
-                    to.do_calculate('')
-            else:
-                if (self.mode == CmdMode.batch):
-                    to.prompt = ''
-                else:
-                    to.prompt = self.prompt[:-2] + '/' + to.name + '> '
-                if calculate:
-                    to.do_calculate('')
-                to.cmdloop()
-            return to
-        else:
-            print("Tool \"%s\" does not exists" % line)
-
-    def complete_tool_new(self, text, line, begidx, endidx):
-        """Complete new tool command"""
-        tool_names = list(self.parent_application.tools.keys())
-        if not text:
-            completions = tool_names[:]
-        else:
-            completions = [f for f in tool_names if f.startswith(text)]
-        return completions
         
     def do_tool_switch(self, line):
         """Change the active tool"""

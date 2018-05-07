@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
+    <InterpreterId>Global|VisualStudio|Miniconda</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>
     </CommandLineArguments>
@@ -112,6 +112,7 @@
     <Compile Include="theories\TheoryTTS_Automatic.py" />
     <Compile Include="theories\TheoryTTS_Test.py" />
     <Compile Include="tools\ToolFindPeaks.py" />
+    <Compile Include="tools\ToolGradient.py" />
     <Compile Include="tools\ToolIntegral.py" />
     <Compile Include="tools\ToolTemplate.py" />
   </ItemGroup>
@@ -124,7 +125,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
+    <InterpreterReference Include="Global|VisualStudio|Miniconda" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />

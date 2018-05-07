@@ -52,7 +52,6 @@ from PyQt5.QtGui import QCursor, QImage
 
 from collections import OrderedDict
 from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
-from ToolTemplate import ToolTemplate
 from ToolIntegral import ToolIntegral
 from ToolFindPeaks import ToolFindPeaks
 from ToolGradient import ToolGradient
@@ -86,8 +85,10 @@ class Application(CmdBase):
         self.views = OrderedDict()
         self.filetypes = OrderedDict() # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order
-        self.tools = OrderedDict()     # keep tools combobox in order
+        self.availabletools = OrderedDict()     # keep tools combobox in order
         self.datasets = {}
+        self.tools = []
+        self.num_tools = 0
         self.current_view = 0
         self.num_datasets = 0
         self.legend_visible = False
@@ -107,10 +108,9 @@ class Application(CmdBase):
         self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
 
         # Tools available everywhere
-        self.tools[ToolTemplate.toolname] = ToolTemplate
-        self.tools[ToolIntegral.toolname] = ToolIntegral
-        self.tools[ToolFindPeaks.toolname] = ToolFindPeaks
-        self.tools[ToolGradient.toolname] = ToolGradient
+        self.availabletools[ToolIntegral.toolname] = ToolIntegral
+        self.availabletools[ToolFindPeaks.toolname] = ToolFindPeaks
+        self.availabletools[ToolGradient.toolname] = ToolGradient
         
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
@@ -560,10 +560,10 @@ class Application(CmdBase):
         
         [description]
         """
-        for t in list(self.tools.values()):
+        for t in list(self.availabletools.values()):
             print("%s:\t%s" % (t.toolname, t.description))
 
-    def do_tools_available(self, line):
+    def do_tool_available(self, line):
         """List available tools in the current application
         
         [description]
@@ -573,7 +573,88 @@ class Application(CmdBase):
         """
         self.tool_available()
 
+    def do_tool_add(self, line, calculate=True):
+        """Add a new tool of the type specified to the list of tools"""
+        tooltypes = list(self.availabletools.keys())
+        if (line in tooltypes):
+            self.num_tools += 1
+            to_id = "%s%02d" % (line, self.num_tools)
+            to = self.availabletools[line](to_id)
+            self.tools.append(to)
+            if (self.mode == CmdMode.batch):
+                to.prompt = ''
+            else:
+                to.prompt = self.prompt[:-2] + '/' + to.name + '> '
+            to.cmdloop()
+            #return to
+        else:
+            print("Tool \"%s\" does not exists" % line)
+
+    def complete_tool_add(self, text, line, begidx, endidx):
+        """Complete new tool command"""
+        tool_names = list(self.availabletools.keys())
+        if not text:
+            completions = tool_names[:]
+        else:
+            completions = [f for f in tool_names if f.startswith(text)]
+        return completions
+
+    def do_tool_delete(self, name):
+        """Delete a tool from the current application"""
+        listtools = [x.name for x in self.tools]
+        try:
+            idx = listtools.index(name)
+            self.tools[idx].destructor()
+            del self.tools[idx]
+        except AttributeError as e:
+            print("Tool \"%s\" not found" % name)
+            
+    def complete_tool_delete(self, text, line, begidx, endidx):
+        """Complete delete tool command"""
+        listtools = [x.name for x in self.tools]
+        if not text:
+            completions = listtools[:]
+        else:
+            completions = [f for f in listtools if f.startswith(text)]
+        return completions
         
+    def do_tool_list(self, line):
+        """List opened tools"""
+        for t in self.tools:
+            if t.active:
+                print(t.name + " *")
+            else:
+                print(t.name)
+
+    def do_tool_switch(self, line):
+        """Change the active tool"""
+        listtools = [x.name for x in self.tools]
+        try:
+            idx = listtools.index(name)
+            self.tools[idx].cmdloop()
+        except AttributeError as e:
+            print("Tool\"%s\" not found" % line)
+
+    def complete_tool_switch(self, text, line, begidx, endidx):
+        """Complete the tool switch command"""
+        completions = self.complete_tool_delete(text, line, begidx, endidx)
+        return completions
+
+    def do_tool_activate(self, name):
+        listtools = [x.name for x in self.tools]
+        try:
+            idx = listtools.index(name)
+            self.tools[idx].do_activate(name)
+        except AttributeError as e:
+            print("Tool \"%s\" not found" % name)
+        except ValueError as e:
+            print("Tool \"%s\" not found" % name)
+
+    def complete_tool_activate(self, text, line, begidx, endidx):
+        """Complete the tool switch command"""
+        completions = self.complete_tool_delete(text, line, begidx, endidx)
+        return completions
+
 # LEGEND STUFF
 
     def legend(self):
