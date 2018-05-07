@@ -55,6 +55,7 @@ from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, The
 from ToolTemplate import ToolTemplate
 from ToolIntegral import ToolIntegral
 from ToolFindPeaks import ToolFindPeaks
+from ToolGradient import ToolGradient
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -109,6 +110,7 @@ class Application(CmdBase):
         self.tools[ToolTemplate.toolname] = ToolTemplate
         self.tools[ToolIntegral.toolname] = ToolIntegral
         self.tools[ToolFindPeaks.toolname] = ToolFindPeaks
+        self.tools[ToolGradient.toolname] = ToolGradient
         
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
