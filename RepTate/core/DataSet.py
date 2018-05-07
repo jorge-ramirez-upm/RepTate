@@ -337,67 +337,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             th.do_hide()
         for to in self.tools.values():
             to.do_hide()
-
-
-    def do_findpeaks(self, line="", threshold=0.3, minimum_distance=5, minimum=False):
-        """
-        Find the peaks in the files of the current dataset with respect to the current view
-        Arguments:
-            - threshold {float} -- number between 0.0 and 1.0. Determines the size of
-            the peaks that will be detected.
-            - minimum_distance {int} -- Minimum number of datapoints between deteceted peaks.        
-        """
-        view = self.parent_application.multiviews[0]
-        print ("Finding peaks in active data...")
-        print ("%20s"%"FILE",end='')
-        for i in range(view.n):
-            print (" PEAKS %10s"%view.snames[i], end='')
-        print("")
-        for j, file in enumerate(self.files):
-            dt = file.data_table
-
-            print ("%20s"%file.file_name_short, end='')
-            for i in range(view.n):
-                try:
-                    x, y, success = view.view_proc(dt, file.file_parameters)
-                except TypeError as e:
-                    print("in do_findpeaks()", e)
-                    return
-
-                ydata = y[:,i]
-                xdata = x[:,i]
-
-                thresholdnow = threshold * (np.max(ydata) - np.min(ydata)) + np.min(ydata)
-                dy = np.diff(ydata)
-                zeros,=np.where(dy == 0)
-                if len(zeros) == len(ydata) - 1:
-                    print("", end='')
-                    continue
-                while len(zeros):
-                    zerosr = np.hstack([dy[1:], 0.])
-                    zerosl = np.hstack([0., dy[:-1]])
-                    dy[zeros]=zerosr[zeros]
-                    zeros,=np.where(dy == 0)
-                    dy[zeros]=zerosl[zeros]
-                    zeros,=np.where(dy == 0)
-                peaks = np.where((np.hstack([dy, 0.]) < 0.)
-                     & (np.hstack([0., dy]) > 0.)
-                     & (ydata > thresholdnow))[0]
-                if peaks.size > 1 and minimum_distance > 1:
-                    highest = peaks[np.argsort(ydata[peaks])][::-1]
-                    rem = np.ones(ydata.size, dtype=bool)
-                    rem[peaks] = False
-
-                    for peak in highest:
-                        if not rem[peak]:
-                            sl = slice(max(0, peak - minimum_distance), peak + minimum_distance + 1)
-                            rem[sl] = True
-                            rem[peak] = False
-                    peaks = np.arange(ydata.size)[~rem]
-                for d in peaks:
-                    print(" %g"%xdata[d],end='')
-                    print(" %g"%ydata[d],end='')
-            print("")
         
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application
