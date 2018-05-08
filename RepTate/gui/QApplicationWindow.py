@@ -594,7 +594,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             return
         self.disconnect_curve_drag()
         paths_to_reopen, th_to_reopen, success = self.clear_files_and_th_from_dataset(ds)
-        print("paths... ", paths_to_reopen, th_to_reopen, success)
         if success:
             if paths_to_reopen:
                 self.new_tables_from_files(paths_to_reopen)
