@@ -645,7 +645,7 @@ class Tool(CmdBase):
         else:
             super(Tool, self).default(line)
 
-    def do_hide(self, line):
+    def do_hide(self, line=''):
         """Hide the Tool artists and associated tools
         
         [description]
@@ -673,7 +673,7 @@ class Tool(CmdBase):
             for nx in range(self.parent_dataset.nplots):
                 tt.series[nx][i].set_visible(state)
 
-    def do_show(self, line):
+    def do_show(self, line=''):
         """[summary]
         
         [description]
