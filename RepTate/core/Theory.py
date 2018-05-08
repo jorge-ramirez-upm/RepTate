@@ -1006,7 +1006,7 @@ class Theory(CmdBase):
             for nx in range(self.parent_dataset.nplots):
                 tt.series[nx][i].set_visible(state)
 
-    def do_show(self, line):
+    def do_show(self):
         """[summary]
         
         [description]
