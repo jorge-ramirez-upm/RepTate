@@ -128,7 +128,9 @@ def start_RepTate(argv):
     # Handle files & open apps accordingly
     d = {ex.extension: ex.appname for ex in  list(ex.available_applications.values())}
     for k in dictfiles.keys():
-        if (k in d.keys()):
+        if k == 'rept':
+            ex.open_project(dictfiles[k][0])
+        elif (k in d.keys()):
             ex.handle_new_app(d[k])
             appname="%s%d"%(d[k],ex.application_counter)
             ex.applications[appname].new_tables_from_files(dictfiles[k])
