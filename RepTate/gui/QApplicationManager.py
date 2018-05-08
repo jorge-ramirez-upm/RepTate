@@ -305,9 +305,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         Arguments:
             - index {[type]} -- [description]
         """
-        app_name = self.ApplicationtabWidget.widget(index).name
+        app = self.ApplicationtabWidget.widget(index)
+        ds_name_list = [key for key in app.datasets]
+        for ds_name in ds_name_list:
+            app.delete(ds_name) #call theory destructor
         self.ApplicationtabWidget.removeTab(index)
-        self.delete(app_name)
+        self.delete(app.name)
 
     def Qopen_app(self, app_name, icon):
         """[summary]
