@@ -1,6 +1,6 @@
-============
+===================
 Dielectric Theories
-============
+===================
 
 .. contents:: Contents
    :local:

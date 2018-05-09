@@ -2,7 +2,7 @@
 MWD Discretization
 ------------------
 
-.. |piggy| image:: /gui_icons/icons8-money-box.png
+.. |th_save| image:: /gui_icons/icons8-save_TH.png
     :width: 20pt
     :height: 20pt
     :align: bottom
@@ -39,7 +39,7 @@ MWD Discretization
     .. math::
         M_{w,i} = \frac{\sum w_j M_j}{\sum w_j}.
 
-#.  To save the discretized molecular weight, click the |piggy| button.
+#.  To save the discretized molecular weight, click the |th_save| button.
 
     The output file contains a header with the moments  :math:`M_n`, :math:`M_w` and the `PDI`, and two columns.
     The first column is the molecular weight :math:`M_{w,i}` as indicated by the grey tick marks, 

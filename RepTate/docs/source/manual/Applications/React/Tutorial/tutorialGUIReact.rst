@@ -12,12 +12,12 @@ React Tutorial: Graphical User Interface
     :height: 20pt
     :align: bottom
 
-.. |bob-hat| image:: /gui_icons/icons8-bob-hat.png
+.. |bob_param| image:: /gui_icons/icons8-BoB-settings.png
     :width: 20pt
     :height: 20pt
     :align: bottom
 
-.. |piggy| image:: /gui_icons/icons8-money-box.png
+.. |save| image:: /gui_icons/icons8-save-BoB.png
     :width: 20pt
     :height: 20pt
     :align: bottom
@@ -88,6 +88,6 @@ three-graphs display with the view of the relevant graph changed.
         :alt: New TobitaBatch theory
 
 
-#.  To adjust the BoB binning settings, click the |bob-hat| button.
+#.  To adjust the BoB binning settings, click the |bob_param| button.
 
-#.  To save the polymer configuration for BoB, click the |piggy| button.
+#.  To save the polymer configuration for BoB, click the |save| button.

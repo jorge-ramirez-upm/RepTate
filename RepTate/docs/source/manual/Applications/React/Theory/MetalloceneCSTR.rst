@@ -1,13 +1,8 @@
-========================
+================
 Metallocene CSTR
-========================
+================
 
-.. |piggy| image:: images/icons8-money-box.png
-    :width: 20pt
-    :height: 20pt
-    :align: bottom
-
-.. |calculate| image:: images/icons8-abacus.png
+.. |calculate| image:: /gui_icons/icons8-abacus.png
     :width: 20pt
     :height: 20pt
     :align: bottom

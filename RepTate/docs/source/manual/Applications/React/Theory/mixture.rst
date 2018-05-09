@@ -2,12 +2,12 @@
 React mixture
 ========================
 
-.. |piggy| image:: images/icons8-money-box.png
+.. |save| image:: /gui_icons/icons8-save-BoB.png
     :width: 20pt
     :height: 20pt
     :align: bottom
 
-.. |calculate| image:: images/icons8-abacus.png
+.. |calculate| image:: /gui_icons/icons8-abacus.png
     :width: 20pt
     :height: 20pt
     :align: bottom
@@ -75,7 +75,7 @@ Saving to BoB
 -------------
 
 To save a BoB polymer configuration file corresponding to the mixture, click
-the |piggy| button.
+the |save| button.
 The mixture theory first checks to see whether any of the other
 theories have been modified since the mixture MWD was last calculated - if so,
 you are prompted to recalculate the mixture MWD (this ensures you don't save a

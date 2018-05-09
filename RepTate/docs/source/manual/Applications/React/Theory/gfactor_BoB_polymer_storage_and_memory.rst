@@ -1,9 +1,9 @@
-.. |bob-hat| image:: images/icons8-bob-hat.png
+.. |bob_param| image:: /gui_icons/icons8-BoB-settings.png
     :width: 20pt
     :height: 20pt
     :align: bottom
 
-.. |piggy| image:: images/icons8-money-box.png
+.. |save| image:: /gui_icons/icons8-save-BoB.png
     :width: 20pt
     :height: 20pt
     :align: bottom
@@ -45,7 +45,7 @@ configuration file for BoB, the weights of the saved molecules are adjusted
 accordingly, to account for the unsaved molecules.
 
 You can modify the parameters used for saving molecules by clicking on the
-|bob-hat|
+|bob_param|
 button. This opens a form with four parameters:
 
 *   the maximum molecular weight of the bins,
@@ -57,7 +57,7 @@ button. This opens a form with four parameters:
 In particular, increasing either of the last two parameters 
 increases the number of polymers saved.
 
-Clicking the |piggy|
+Clicking the |save|
 button opens a save dialogue box which allows you to save a polymer
 configuration file containing the connectivity for the saved polymer. The
 format of this file, and the use of it within a BoB calculation, is given in
@@ -86,7 +86,7 @@ records.
 	    molecule looks like being particularly large, you will get a warning message!
 	*   If you make too many molecules, you will run out of memory.
 	*   If you save too many molecules, you will run out of arm records (adjust
-	    the parameters by clicking on the |bob-hat| button.
+	    the parameters by clicking on the |bob_param| button.
 	*   If you have other theories open which are already using a lot of
 	    storage, there might not be enough memory left for your current calculation
 	    (close un-needed theories, or adjust their parameters so they don't use as
