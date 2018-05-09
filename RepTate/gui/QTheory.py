@@ -227,8 +227,12 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.handle_parameterItemChanged)
 
     def set_extra_data(self, extra_data):
-        """set the extra data dict at loading"""
+        """set the extra data dict at loading, redefined in Child class if needed"""
         self.extra_data = extra_data
+    
+    def get_extra_data(self):
+        """get the extra data dict before saving (defined in Child class if needed"""
+        pass
 
     def handle_actionCalculate_Theory(self):
         if self.thread_calc_busy:

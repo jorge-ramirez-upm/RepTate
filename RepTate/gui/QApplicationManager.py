@@ -427,7 +427,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     th_table_dic = OrderedDict( 
                         [ (f.file_name_short, th.tables[f.file_name_short].data.tolist()) for f in ds.files]
                     )
+                    th.get_extra_data()
                     e_dic = th.extra_data
+                    # convert numpy arrays into lists
                     for key in e_dic:
                         val = e_dic[key]
                         if type(val) is np.ndarray:
@@ -562,7 +564,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             new_th.set_extra_data(extra_data)
             new_th.update_parameter_table()
             new_th.thTextBox.insertPlainText(
-                th_textbox + '\n***Restored at %s on %s ****' % 
+                th_textbox + '\n***Restored at %s on %s****' % 
                 (time.strftime("%X"), time.strftime("%a %b %d, %Y")))
     
     def restore_marker_settings(self, ds, marker_dic):

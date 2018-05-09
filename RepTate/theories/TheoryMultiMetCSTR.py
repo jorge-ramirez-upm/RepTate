@@ -137,11 +137,8 @@ class BaseTheoryMultiMetCSTR:
             description='number of bins',
             type=ParameterType.real,
             opt_type=OptType.const)
-        self.numcat_max = 30
+        self.NUMCAT_MAX = 30
         # default parameters value
-        self.numcat = 2
-        self.time_const = 300.0
-        self.monomer_conc = 2.0
         self.init_param_values()
 
         self.signal_request_dist.connect(rgt.request_more_dist)
@@ -149,9 +146,28 @@ class BaseTheoryMultiMetCSTR:
         self.signal_request_arm.connect(rgt.request_more_arm)
         self.signal_mulmet_dialog.connect(rgt.launch_mulmet_dialog)
 
+    def set_extra_data(self, extra_data):
+        """Called when loading a project, set saved parameter values"""
+        self.numcat = extra_data['numcat']
+        self.time_const = extra_data['time_const']
+        self.monomer_conc = extra_data['monomer_conc']
+        self.pvalues = extra_data['pvalues']
+    
+    def get_extra_data(self):
+        """Called when saving project. Save parameters in extra_data dict"""
+        self.extra_data['numcat'] = self.numcat
+        self.extra_data['time_const'] = self.time_const
+        self.extra_data['monomer_conc'] = self.monomer_conc
+        self.extra_data['pvalues'] = self.pvalues
+
     def init_param_values(self):
+        """Initialise parameters with default values"""
+        self.numcat = 2
+        self.time_const = 300.0
+        self.monomer_conc = 2.0
+
         self.pvalues = [
-            ['0' for j in range(5)] for i in range(self.numcat_max)
+            ['0' for j in range(5)] for i in range(self.NUMCAT_MAX)
         ]  #initially self.numcat=2 lines of parameters
         self.pvalues[0][0] = '4e-4'  #cat conc
         self.pvalues[0][1] = '101.1'  #Kp
@@ -163,6 +179,7 @@ class BaseTheoryMultiMetCSTR:
         self.pvalues[1][1] = '90.17'
         self.pvalues[1][2] = '1.5'
         self.pvalues[1][3] = '0.3'
+
 
     def Calc(self, f=None):
         """MultiMetCSTR function that returns the square of y
@@ -238,7 +255,7 @@ class BaseTheoryMultiMetCSTR:
                             ct.c_double(self.time_const),
                             ct.c_double(self.monomer_conc),
                             ct.c_int(self.numcat), ct.c_int(ndist),
-                            ct.c_int(self.numcat_max))
+                            ct.c_int(self.NUMCAT_MAX))
 
         rch.react_dist[ndist].contents.npoly = 0
         rch.react_dist[ndist].contents.M_e = Me

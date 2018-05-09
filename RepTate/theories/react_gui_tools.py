@@ -611,7 +611,7 @@ class ParameterMultiMetCSTR(QDialog):
     def __init__(self, parent_theory):
         super().__init__(parent_theory)
         self.parent_theory = parent_theory
-        self.numcat_max = parent_theory.numcat_max  #maximum number of catalysts
+        self.NUMCAT_MAX = parent_theory.NUMCAT_MAX  #maximum number of catalysts
         self.make_lines(parent_theory.pvalues)
         self.createFormGroupBox(parent_theory.numcat)
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok
@@ -625,7 +625,7 @@ class ParameterMultiMetCSTR(QDialog):
         hlayout.addWidget(QLabel('<b>No. of catalysts</b>'))
         self.sb_ncatalyst = QSpinBox()
         self.sb_ncatalyst.setMinimum(1)
-        self.sb_ncatalyst.setMaximum(self.numcat_max)
+        self.sb_ncatalyst.setMaximum(self.NUMCAT_MAX)
         self.sb_ncatalyst.setValue(parent_theory.numcat)
         self.sb_ncatalyst.valueChanged.connect(
             self.handle_sb_ncatalyst_valueChanged)
@@ -676,7 +676,7 @@ class ParameterMultiMetCSTR(QDialog):
         qledit.setValidator(dvalidator)
         qledit.setText('0.0')  #new lines contain zeros
         self.lines = []
-        for i in range(self.numcat_max):
+        for i in range(self.NUMCAT_MAX):
             line = []
             for j in range(5):
                 qledit = QLineEdit()
@@ -690,8 +690,8 @@ class ParameterMultiMetCSTR(QDialog):
         Called when the number of lines in the form is changed.
         """
         self.lines_saved = [['0' for j in range(5)]
-                            for i in range(self.numcat_max)]
-        for i in range(self.numcat_max):
+                            for i in range(self.NUMCAT_MAX)]
+        for i in range(self.NUMCAT_MAX):
             for j in range(5):
                 self.lines_saved[i][j] = self.lines[i][j].text()
 
@@ -700,7 +700,7 @@ class ParameterMultiMetCSTR(QDialog):
         self.parent_theory.numcat = self.sb_ncatalyst.value()
         self.parent_theory.time_const = float(self.time_const.text())
         self.parent_theory.monomer_conc = float(self.monomer_conc.text())
-        for i in range(self.numcat_max):
+        for i in range(self.NUMCAT_MAX):
             for j in range(5):
                 self.parent_theory.pvalues[i][j] = self.lines[i][j].text()
 
