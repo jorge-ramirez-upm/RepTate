@@ -742,7 +742,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             
             f.write('\n#end')
         
-        QMessageBox.information(self, 'Success', 'Wrote FlowSole paramters in \"%s\"' % fpath)
+        QMessageBox.information(self, 'Success', 'Wrote FlowSolve parameters in \"%s\"' % fpath)
 
     def handle_with_fene_button(self, checked):
         if checked:

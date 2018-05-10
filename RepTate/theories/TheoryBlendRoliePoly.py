@@ -42,7 +42,7 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup, QFileDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
 from PyQt5.QtCore import Qt
@@ -50,6 +50,8 @@ from Theory_rc import *
 from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
+import time
+import Version
 
 import rp_blend_ctypes_helper as rpch
 
@@ -1085,6 +1087,12 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         # self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
         # tb.addWidget(self.spinbox)
 
+        #Save to flowsolve button
+        self.flowsolve_btn = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-flowsolve.png'),
+            'Save Parameters To FlowSolve')
+        self.flowsolve_btn.setCheckable(False)
+
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(
@@ -1107,6 +1115,57 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             self.handle_with_fene_button)
         connection_id = self.with_gcorr_button.triggered.connect(
             self.handle_with_gcorr_button)
+        connection_id = self.flowsolve_btn.triggered.connect(
+            self.handle_flowsolve_btn)
+
+    def handle_flowsolve_btn(self):
+        """Save theory parameters in FlowSolve format"""
+
+        #Get filename of RepTate project to open
+        fpath, _ = QFileDialog.getSaveFileName(self,
+            "Save Parameters to FowSolve", "data/", "FlowSolve (*.fsrep)")
+        if fpath == '':
+            return
+        
+        with open(fpath, 'w') as f:
+            header = '# flowGen input\n'
+            header += '# comments\n'
+            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION, Version.DATE)
+            header += '# At %s on %s\n' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n# param global\n')
+            f.write('constit polydisperse\n')
+            # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
+
+            f.write('\n# param constitutive\n')
+            
+            n = self.parameters['nmodes'].value
+
+            td = np.zeros(n)
+            for i in range(n):
+                td[i] = self.parameters["tauD%02d" % i].value
+            # sort taud ascending order
+            args = np.argsort(td)
+
+            fraction = 'fraction'
+            taud = 'taud'
+            tauR = 'tauR'
+            lmax = 'lambdaMax'
+            for i, arg in enumerate(args):
+                fraction += ' %f' % self.parameters["phi%02d" % arg].value
+                taud += ' %f' % self.parameters["tauD%02d" % arg].value
+                tauR += ' %f' % self.parameters["tauR%02d" % arg].value
+                lmax += ' %f' % self.parameters["lmax"].value
+            f.write('%s\n%s\n%s\n%s\n' % (taud, tauR, fraction, lmax))
+
+            f.write('modulus %f\n' % self.parameters["GN0"].value)
+            f.write('beta %f\n' % self.parameters["beta"].value)
+            f.write('delta %f\n' % self.parameters["delta"].value)
+            
+            f.write('\n#end')
+        
+        QMessageBox.information(self, 'Success', 'Wrote FlowSolve parameters in \"%s\"' % fpath)
 
     def handle_with_gcorr_button(self, checked):
         if checked:

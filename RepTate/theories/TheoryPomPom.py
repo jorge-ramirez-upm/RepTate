@@ -43,7 +43,7 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QFileDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
@@ -51,7 +51,8 @@ from Theory_rc import *
 from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
-
+import Version
+import time
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -543,6 +544,12 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
+        #Save to flowsolve button
+        self.flowsolve_btn = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-flowsolve.png'),
+            'Save Parameters To FlowSolve')
+        self.flowsolve_btn.setCheckable(False)
+
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(
@@ -555,6 +562,54 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
             self.edit_modes_window)
         connection_id = self.plot_modes_action.triggered.connect(
             self.plot_modes_graph)
+        connection_id = self.flowsolve_btn.triggered.connect(
+            self.handle_flowsolve_btn)
+
+    def handle_flowsolve_btn(self):
+        """Save theory parameters in FlowSolve format"""
+
+        #Get filename of RepTate project to open
+        fpath, _ = QFileDialog.getSaveFileName(self,
+            "Save Parameters to FowSolve", "data/", "FlowSolve (*.fsrep)")
+        if fpath == '':
+            return
+        
+        with open(fpath, 'w') as f:
+            header = '# flowGen input\n'
+            header += '# comments\n'
+            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION, Version.DATE)
+            header += '# At %s on %s\n' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n# param global\n')
+            f.write('constit multip\n')
+            # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
+
+            f.write('\n# param constitutive\n')
+            
+            n = self.parameters['nmodes'].value
+            td = np.zeros(n)
+            for i in range(n):
+                td[i] = self.parameters["tauB%02d" % i].value
+            # sort taud ascending order
+            args = np.argsort(td)
+
+            modulus = 'modulus'
+            taub = 'taub'
+            ratio = 'ratio'
+            qarms = 'qarms'
+            for i, arg in enumerate(args):
+                modulus += ' %f' % self.parameters["G%02d" % arg].value
+                taub += ' %f' % self.parameters["tauB%02d" % arg].value
+                ratio += ' %f' % self.parameters["ratio%02d" % arg].value
+                qarms += ' %f' % self.parameters["q%02d" % arg].value
+            f.write('%s\n%s\n%s\n%s\n' % (modulus, taub, ratio, qarms))
+            
+            f.write('nustar 2\n')
+
+            f.write('\n#end')
+        
+        QMessageBox.information(self, 'Success', 'Wrote FlowSolve parameters in \"%s\"' % fpath)
 
     def select_shear_flow(self):
         self.flow_mode = FlowMode.shear
