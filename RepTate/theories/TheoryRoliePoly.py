@@ -42,7 +42,7 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QFileDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
@@ -50,7 +50,8 @@ from Theory_rc import *
 from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
-
+import Version
+import time
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -662,6 +663,12 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
         tb.addWidget(self.spinbox)
 
+        #Save to flowsolve button
+        self.flowsolve_btn = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-flowsolve.png'),
+            'Save Parameters To FlowSolve')
+        self.flowsolve_btn.setCheckable(False)
+
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(
@@ -680,6 +687,62 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.handle_spinboxValueChanged)
         connection_id = self.with_fene_button.triggered.connect(
             self.handle_with_fene_button)
+        connection_id = self.flowsolve_btn.triggered.connect(
+            self.handle_flowsolve_btn)
+
+    def handle_flowsolve_btn(self):
+        """Save theory parameters in FlowSolve format"""
+
+        #Get filename of RepTate project to open
+        fpath, _ = QFileDialog.getSaveFileName(self,
+            "Save Parameters to FowSolve", "data/", "FlowSolve (*.fsrep)")
+        if fpath == '':
+            return
+        
+        with open(fpath, 'w') as f:
+            header = '# flowGen input\n'
+            header += '# comments\n'
+            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION, Version.DATE)
+            header += '# At %s on %s\n' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n# param global\n')
+            f.write('constit roliepoly\n')
+            # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
+
+            f.write('\n# param constitutive\n')
+            
+            n = self.parameters['nmodes'].value
+            nR = self.parameters['nstretch'].value
+            td = np.zeros(n)
+            
+            for i in range(n):
+                td[i] = self.parameters["tauD%02d" % i].value
+            # sort taud ascending order
+            args = np.argsort(td)
+
+            modulus = 'modulus'
+            taud = 'taud'
+            tauR = 'tauR'
+            lmax = 'lambdaMax'
+            for i, arg in enumerate(args):
+                modulus += ' %f' % self.parameters["G%02d" % arg].value
+                taud += ' %f' % self.parameters["tauD%02d" % arg].value
+                if n - i <= nR:
+                    tauR += ' %f' % self.parameters["tauR%02d" % arg].value
+                    if self.with_fene == FeneMode.with_fene:
+                        lmax += ' %f' % self.parameters["lmax"].value
+                    else:
+                        lmax += ' %f' % np.inf
+            f.write('%s\n%s\n%s\n%s\n' % (modulus, taud, tauR, lmax))
+
+            f.write('beta %f\n' % self.parameters["beta"].value)
+            f.write('delta %f\n' % self.parameters["delta"].value)
+            f.write('firstStretch %d\n' % (n-nR))
+            
+            f.write('\n#end')
+        
+        QMessageBox.information(self, 'Success', 'Wrote FlowSole paramters in \"%s\"' % fpath)
 
     def handle_with_fene_button(self, checked):
         if checked:
