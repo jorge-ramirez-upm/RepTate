@@ -1157,7 +1157,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 tauR += ' %f' % self.parameters["tauR%02d" % arg].value
                 lmax += ' %f' % self.parameters["lmax"].value
             f.write('%s\n%s\n%s\n' % (taud, tauR, fraction))
-            
+            if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
+                f.write('%s\n' % lmax)
             f.write('modulus %f\n' % self.parameters["GN0"].value)
             f.write('beta %f\n' % self.parameters["beta"].value)
             f.write('delta %f\n' % self.parameters["delta"].value)
