@@ -563,8 +563,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 tt.num_rows, tt.num_columns = tt.data.shape
             new_th.set_extra_data(extra_data)
             new_th.update_parameter_table()
-            new_th.thTextBox.insertPlainText(
-                th_textbox + '\n***Restored at %s on %s****' % 
+            new_th.thTextBox.insertPlainText(th_textbox)
+            new_th.Qprint('\n***Restored at %s on %s****\n' % 
                 (time.strftime("%X"), time.strftime("%a %b %d, %Y")))
     
     def restore_marker_settings(self, ds, marker_dic):
