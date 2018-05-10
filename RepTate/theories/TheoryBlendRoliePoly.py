@@ -419,13 +419,14 @@ class BaseTheoryBlendRoliePoly:
         self.init_flow_mode()
 
     def set_extra_data(self, extra_data):
+        """Set arrays when loading project"""
         self.MWD_m = extra_data['MWD_m']
         self.MWD_phi = extra_data['MWD_phi']
 
     def get_extra_data(self):
+        """Set extra_data when saving project"""
         self.extra_data['MWD_m'] = self.MWD_m
         self.extra_data['MWD_phi'] = self.MWD_phi
-
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -660,13 +661,6 @@ class BaseTheoryBlendRoliePoly:
             Zeff[i] = z * vphi[i]
         self.Zeff = np.array(Zeff)
 
-        # print("%8s %8s %8s %8s %8s %8s" % ("i", "M", "taud", "zphie", "phie",
-        #                                    "taud0"))
-        # for i in range(n):
-        #     z = m[i] / Me
-        #     print("%8d %8.3g %8.3g %8.3g %8.3g %8.3g" %
-        #           (i, m[i], taud[i], z * vphi[i], vphi[i],
-        #            3. * z * z * z * taue))
 
         for i in range(n):
             #factor 0.5 cf. G(t)~mu^2 (Likthman2002)
@@ -697,55 +691,6 @@ class BaseTheoryBlendRoliePoly:
             wfene = 0
         return rpch.compute_derivs_shear(sigma, p, t, wfene)
 
-        # With Python:
-        # n, lmax, phi, taud, taus, beta, delta, gamma_dot, tmax = p
-        # c = 3 # number of components in sigma (xx, yy, xy)
-        # deriv = np.zeros(n * n * c)
-        # # Create the vector with the time derivative of sigma
-        # stretch = np.zeros(n)
-        # for i in range(n):
-        #     I = c * n * i
-        #     trace = 0
-        #     for j in range(n):
-        #         sjxx = sigma[I + c * j]
-        #         sjyy = sigma[I + c * j + 1]
-        #         trace += phi[j] * (sjxx + 2 * sjyy)
-        #     stretch[i] = sqrt(trace / 3.0)
-
-        # for i in range(n):
-        #     I = c * n * i
-        #     tdi = taud[i]
-        #     tsi = taus[i]
-        #     li = stretch[i]
-        #     ret = 2.0 * (1.0 - 1.0 / li) / tsi
-        #     if self.with_fene == FeneMode.with_fene:
-        #         fene = self.calculate_fene(li * li, lmax)
-        #         ret *= fene
-
-        #     for j in range(n):
-        #         tdj = taud[j]
-        #         tsj = taus[j]
-        #         sxx = sigma[I + c * j]
-        #         syy = sigma[I + c * j + 1]
-        #         sxy = sigma[I + c * j + 2]
-        #         lj = stretch[j]
-        #         rep = 1 / (2 * tdi) + 1 / (2 * tdj) # assumes beta_thermal = 1
-
-        #         auxj = 2.0 * beta * (1.0 - 1.0 / lj) / tsj
-        #         if self.with_fene == FeneMode.with_fene:
-        #             fene = self.calculate_fene(lj * lj, lmax)
-        #             auxj *= fene
-        #         rccr = auxj * li**(2*delta)
-
-        #         dsxx = 2 * gamma_dot * sxy - rep * (sxx - 1.0) - ret * sxx - rccr * (sxx - 1.0)
-        #         dsyy = - rep * (syy - 1.0) - ret * syy - rccr * (syy - 1.0)
-        #         dsxy = gamma_dot * syy - rep * sxy - ret * sxy - rccr * sxy
-
-        #         deriv[I + c * j] = dsxx
-        #         deriv[I + c * j + 1] = dsyy
-        #         deriv[I + c * j + 2] = dsxy
-        # return deriv
-
     def sigmadot_uext(self, sigma, t, p):
         """Rolie-Poly differential equation under *uniaxial elongational* flow
         with stretching and finite extensibility if selecter
@@ -769,52 +714,6 @@ class BaseTheoryBlendRoliePoly:
         else:
             wfene = 0
         return rpch.compute_derivs_uext(sigma, p, t, wfene)
-
-        # With Python:
-        # n, lmax, phi, taud, taus, beta, delta, epsilon_dot, tmax = p
-        # c = 2 # number of components in sigma (xx, yy, xy)
-        # deriv = np.zeros(n * n * c)
-        # # Create the vector with the time derivative of sigma
-        # stretch = np.zeros(n)
-        # for i in range(n):
-        #     I = c * n * i
-        #     trace = 0
-        #     for j in range(n):
-        #         sjxx = sigma[I + c * j]
-        #         sjyy = sigma[I + c * j + 1]
-        #         trace += phi[j] * (sjxx + 2 * sjyy)
-        #     stretch[i] = sqrt(trace / 3.0)
-
-        # for i in range(n):
-        #     I = c * n * i
-        #     tdi = taud[i]
-        #     tsi = taus[i]
-        #     li = stretch[i]
-        #     ret = 2.0 * (1.0 - 1.0 / li) / tsi
-        #     if self.with_fene == FeneMode.with_fene:
-        #         fene = self.calculate_fene(li * li, lmax)
-        #         ret *= fene
-
-        #     for j in range(n):
-        #         tdj = taud[j]
-        #         tsj = taus[j]
-        #         sxx = sigma[I + c * j]
-        #         syy = sigma[I + c * j + 1]
-        #         lj = stretch[j]
-        #         rep = 1.0 / (2 * tdi) + 1.0 / (2 * tdj) # assumes beta_thermal = 1
-
-        #         auxj = 2.0 * beta * (1.0 - 1.0 / lj) / tsj
-        #         if self.with_fene == FeneMode.with_fene:
-        #             fene = self.calculate_fene(lj * lj, lmax)
-        #             auxj *= fene
-        #         rccr = auxj * li**(2*delta)
-
-        #         dsxx =  2.0 * epsilon_dot * sxx - rep * (sxx - 1.0) - ret * sxx - rccr * (sxx - 1.0)
-        #         dsyy = -epsilon_dot * syy - rep * (syy - 1.0) - ret * syy - rccr * (syy - 1.0)
-
-        #         deriv[I + c * j] = dsxx
-        #         deriv[I + c * j + 1] = dsyy
-        # return deriv
 
     def calculate_fene(self, l_square, lmax):
         """calculate finite extensibility function value"""
@@ -1266,9 +1165,7 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
 
                 self.MWD_m[:] = m[:]
                 self.MWD_phi[:] = phi[:]
-                print("get:", sum(self.MWD_phi))
                 self.set_modes_from_mwd(m, phi)
-                print("then:", sum(self.MWD_phi))
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
