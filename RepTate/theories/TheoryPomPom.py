@@ -575,17 +575,16 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
             return
         
         with open(fpath, 'w') as f:
-            header = '# flowGen input\n'
-            header += '# comments\n'
+            header = '#flowGen input\n'
             header += '# Generated with RepTate v%s %s\n' % (Version.VERSION, Version.DATE)
             header += '# At %s on %s\n' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
             f.write(header)
 
-            f.write('\n# param global\n')
+            f.write('\n#param global\n')
             f.write('constit multip\n')
             # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
 
-            f.write('\n# param constitutive\n')
+            f.write('\n#param constitutive\n')
             
             n = self.parameters['nmodes'].value
             td = np.zeros(n)

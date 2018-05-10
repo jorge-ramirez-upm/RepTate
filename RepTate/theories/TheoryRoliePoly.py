@@ -53,6 +53,7 @@ from SpreadsheetWidget import SpreadsheetWidget
 import Version
 import time
 
+
 class FlowMode(Enum):
     """Defines the flow geometry used
     
@@ -617,8 +618,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
         self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
-            "Shear Flow")
+            QIcon(':/Icon8/Images/new_icons/icon-shear.png'), "Shear Flow")
         self.extensional_flow_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
             "Extensional Flow")
@@ -657,7 +657,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.with_fene_button.setCheckable(True)
         #SpinBox "nmodes"
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(0, self.parameters["nmodes"].value)  # min and max number of modes
+        self.spinbox.setRange(
+            0, self.parameters["nmodes"].value)  # min and max number of modes
         self.spinbox.setSuffix(" stretch")
         self.spinbox.setToolTip("Number of stretching modes")
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
@@ -695,30 +696,31 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
 
         #Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(self,
-            "Save Parameters to FowSolve", "data/", "FlowSolve (*.fsrep)")
+                                               "Save Parameters to FowSolve",
+                                               "data/", "FlowSolve (*.fsrep)")
         if fpath == '':
             return
-        
+
         with open(fpath, 'w') as f:
-            header = '# flowGen input\n'
-            header += '# comments\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION, Version.DATE)
-            header += '# At %s on %s\n' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
+            header = '#flowGen input\n'
+            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
+                                                             Version.DATE)
+            header += '# At %s on %s\n' % (time.strftime("%X"),
+                                           time.strftime("%a %b %d, %Y"))
             f.write(header)
 
-            f.write('\n# param global\n')
+            f.write('\n#param global\n')
             f.write('constit roliepoly\n')
             # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
 
-            f.write('\n# param constitutive\n')
-            
+            f.write('\n#param constitutive\n')
             n = self.parameters['nmodes'].value
             nR = self.parameters['nstretch'].value
+
+            # sort taud ascending order
             td = np.zeros(n)
-            
             for i in range(n):
                 td[i] = self.parameters["tauD%02d" % i].value
-            # sort taud ascending order
             args = np.argsort(td)
 
             modulus = 'modulus'
@@ -730,19 +732,19 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
                 taud += ' %f' % self.parameters["tauD%02d" % arg].value
                 if n - i <= nR:
                     tauR += ' %f' % self.parameters["tauR%02d" % arg].value
-                    if self.with_fene == FeneMode.with_fene:
-                        lmax += ' %f' % self.parameters["lmax"].value
-                    else:
-                        lmax += ' %f' % np.inf
-            f.write('%s\n%s\n%s\n%s\n' % (modulus, taud, tauR, lmax))
-
+                    lmax += ' %f' % self.parameters["lmax"].value
+            f.write('%s\n%s\n%s\n' % (modulus, taud, tauR))
+            if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
+                f.write('%s\n' % lmax)
             f.write('beta %f\n' % self.parameters["beta"].value)
             f.write('delta %f\n' % self.parameters["delta"].value)
-            f.write('firstStretch %d\n' % (n-nR))
-            
+            f.write('firstStretch %d\n' %
+                    (1 + n - nR))  # +1 as flowsolve uses 1-n index not 0-n-1
+
             f.write('\n#end')
-        
-        QMessageBox.information(self, 'Success', 'Wrote FlowSolve parameters in \"%s\"' % fpath)
+
+        QMessageBox.information(self, 'Success',
+                                'Wrote FlowSolve parameters in \"%s\"' % fpath)
 
     def handle_with_fene_button(self, checked):
         if checked:
@@ -829,11 +831,16 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.set_param_value("nstretch", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value("tauD%02d" % i, d.table.item(i, 0).text())
-                msg, success2 = self.set_param_value("G%02d" % i, d.table.item(i, 1).text())
+                msg, success1 = self.set_param_value("tauD%02d" % i,
+                                                     d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("G%02d" % i,
+                                                     d.table.item(i, 1).text())
                 success *= success1 * success2
             if not success:
-                QMessageBox.warning(self, 'Error', 'Some parameter(s) could not be updated.\nPlease try again.')
+                QMessageBox.warning(
+                    self, 'Error',
+                    'Some parameter(s) could not be updated.\nPlease try again.'
+                )
             else:
                 self.handle_actionCalculate_Theory()
 

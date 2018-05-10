@@ -1128,17 +1128,16 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             return
         
         with open(fpath, 'w') as f:
-            header = '# flowGen input\n'
-            header += '# comments\n'
+            header = '#flowGen input\n'
             header += '# Generated with RepTate v%s %s\n' % (Version.VERSION, Version.DATE)
             header += '# At %s on %s\n' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
             f.write(header)
 
-            f.write('\n# param global\n')
+            f.write('\n#param global\n')
             f.write('constit polydisperse\n')
             # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
 
-            f.write('\n# param constitutive\n')
+            f.write('\n#param constitutive\n')
             
             n = self.parameters['nmodes'].value
 
@@ -1157,8 +1156,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 taud += ' %f' % self.parameters["tauD%02d" % arg].value
                 tauR += ' %f' % self.parameters["tauR%02d" % arg].value
                 lmax += ' %f' % self.parameters["lmax"].value
-            f.write('%s\n%s\n%s\n%s\n' % (taud, tauR, fraction, lmax))
-
+            f.write('%s\n%s\n%s\n' % (taud, tauR, fraction))
+            
             f.write('modulus %f\n' % self.parameters["GN0"].value)
             f.write('beta %f\n' % self.parameters["beta"].value)
             f.write('delta %f\n' % self.parameters["delta"].value)
