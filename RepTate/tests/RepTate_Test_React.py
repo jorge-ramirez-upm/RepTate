@@ -43,6 +43,7 @@ sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
 sys.path.append('visual')
+sys.path.append('tools')
 from CmdBase import CmdBase, CalcMode
 from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
