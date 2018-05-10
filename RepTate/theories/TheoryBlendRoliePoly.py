@@ -136,12 +136,12 @@ class EditMWDDialog(QDialog):
         validator = QDoubleValidator()
         hlayout = QHBoxLayout()
         hlayout.addWidget(QLabel("Me"))
-        self.Me_text = QLineEdit("%.3g" % parent.parameters["Me"].value)
+        self.Me_text = QLineEdit("%.4g" % parent.parameters["Me"].value)
         self.Me_text.setValidator(validator)
         hlayout.addWidget(self.Me_text)
 
         hlayout.addWidget(QLabel("taue"))
-        self.taue_text = QLineEdit("%.3g" % parent.parameters["tau_e"].value)
+        self.taue_text = QLineEdit("%.4g" % parent.parameters["tau_e"].value)
         self.taue_text.setValidator(validator)
         hlayout.addWidget(self.taue_text)
 
@@ -414,7 +414,18 @@ class BaseTheoryBlendRoliePoly:
         self.with_fene = FeneMode.none
         self.with_gcorr = GcorrMode.none
         self.Zeff = []
+        self.MWD_m = [100, 1000]
+        self.MWD_phi =  [0.5, 0.5]
         self.init_flow_mode()
+
+    def set_extra_data(self, extra_data):
+        self.MWD_m = extra_data['MWD_m']
+        self.MWD_phi = extra_data['MWD_phi']
+
+    def get_extra_data(self):
+        self.extra_data['MWD_m'] = self.MWD_m
+        self.extra_data['MWD_phi'] = self.MWD_phi
+
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -1252,7 +1263,12 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                     return
                 item = d.btngrp.checkedButton().text()
                 m, phi = get_dict[item]()
+
+                self.MWD_m[:] = m[:]
+                self.MWD_phi[:] = phi[:]
+                print("get:", sum(self.MWD_phi))
                 self.set_modes_from_mwd(m, phi)
+                print("then:", sum(self.MWD_phi))
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
@@ -1287,11 +1303,7 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 self.handle_actionCalculate_Theory()
 
     def edit_mwd_modes(self):
-        nmodes = self.parameters["nmodes"].value
-        phi = np.ones(nmodes) / nmodes
-        m = np.arange(1, nmodes + 1) * 1e3
-
-        d = EditMWDDialog(self, m, phi, 200)
+        d = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
         if d.exec_():
             nmodes = d.table.rowCount()
             m = []
@@ -1309,6 +1321,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                     self.Qprint("Could not understand line %d, try again" %
                                 (i + 1))
                     return
+            self.MWD_m[:] = m[:]
+            self.MWD_phi[:] = phi[:]
             self.set_modes_from_mwd(m, phi)
 
     def plot_modes_graph(self):
