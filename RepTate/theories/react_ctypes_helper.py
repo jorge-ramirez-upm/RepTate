@@ -39,7 +39,12 @@ import os
 
 dir_path = os.path.dirname(
     os.path.realpath(__file__))  # get the directory path of current file
-lib_path = dir_path + os.sep + 'react_lib_%s.so' % (sys.platform)
+if sys.maxsize > 2**32:
+    # 64-bit system
+    lib_path = dir_path + os.sep + 'react_lib_%s.so' % (sys.platform)
+else:
+    # 32-bit system    
+    lib_path = dir_path + os.sep + 'react_lib_%s_i686.so' % (sys.platform)
 try:
     react_lib = ct.CDLL(lib_path)
 except:
