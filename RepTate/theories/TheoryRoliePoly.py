@@ -259,6 +259,15 @@ class BaseTheoryRoliePoly:
         self.with_fene = FeneMode.none
         self.init_flow_mode()
 
+    def set_extra_data(self, extra_data):
+        """Set extra data when loading project"""
+        self.handle_with_fene_button(extra_data['with_fene'])
+        self.spinbox.setValue(self.parameters["nstretch"].value)
+
+    def get_extra_data(self):
+        """Set extra_data when saving project"""
+        self.extra_data['with_fene'] = self.with_fene == FeneMode.with_fene
+
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
         try:
@@ -749,12 +758,14 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
     def handle_with_fene_button(self, checked):
         if checked:
             self.with_fene = FeneMode.with_fene
+            self.with_fene_button.setChecked(True)
             self.with_fene_button.setIcon(
                 QIcon(':/Icon8/Images/new_icons/icons8-facebook-f.png'))
             self.parameters["lmax"].display_flag = True
             self.parameters["lmax"].opt_type = OptType.nopt
         else:
             self.with_fene = FeneMode.none
+            self.with_fene_button.setChecked(False)
             self.with_fene_button.setIcon(
                 QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
             self.parameters["lmax"].display_flag = False
