@@ -822,11 +822,11 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         # self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmode'
+        """Handle a change of the parameter 'nmodes'
         
         Arguments:
             - value {[type]} -- [description]
         """
-        self.set_param_value('nmode', value)
+        self.set_param_value('nmodes', value)
         self.do_calculate("")
         self.update_parameter_table()
