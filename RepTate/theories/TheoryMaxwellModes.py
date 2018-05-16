@@ -163,7 +163,7 @@ class BaseTheoryMaxwellModesFrequency:
                 del self.parameters["logG%02d" % i]
 
             nmodesnew = value
-            super().set_param_value("nmodes", nmodesnew)
+            message, success = super().set_param_value("nmodes", nmodesnew)
             wnew = np.logspace(wminold, wmaxold, nmodesnew)
 
             Gnew = np.interp(wnew, wold, Gold)
@@ -178,7 +178,9 @@ class BaseTheoryMaxwellModesFrequency:
             if CmdBase.mode == CmdMode.GUI:
                 self.spinbox.setValue(value)
         else:
-            super().set_param_value(name, value)
+            message, success = super().set_param_value(name, value)
+        
+        return message, success
 
     def drag_mode(self, dx, dy):
         """[summary]
@@ -563,7 +565,7 @@ class BaseTheoryMaxwellModesTime:
                 del self.parameters["logG%02d" % i]
 
             nmodesnew = value
-            super().set_param_value("nmodes", nmodesnew)
+            message, success = super().set_param_value("nmodes", nmodesnew)
             taunew = np.logspace(tminold, tmaxold, nmodesnew)
 
             Gnew = np.interp(taunew, tauold, Gold)
@@ -578,8 +580,9 @@ class BaseTheoryMaxwellModesTime:
             if CmdBase.mode == CmdMode.GUI:
                 self.spinbox.setValue(value)
         else:
-            super().set_param_value(name, value)
-    
+            message, success = super().set_param_value(name, value)
+        
+        return message, success
 
     def drag_mode(self, dx, dy):
         """[summary]
