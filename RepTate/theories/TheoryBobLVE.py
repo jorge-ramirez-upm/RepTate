@@ -253,8 +253,9 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
     def num_file_lines(self, fname):
         """Return the number of lines in the file `fname`"""
         with open(fname) as f:
-            for i, l in enumerate(f):
-                pass
+            i = 0
+            for _, l in enumerate(f):
+                i += 1 
             return i + 1
 
     def setup_dialog(self):
