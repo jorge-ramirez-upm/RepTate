@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'gui/bob_gen_poly.ui'
+# Form implementation generated from reading ui file 'bob_gen_poly.ui'
 #
 # Created by: PyQt5 UI code generator 5.10
 #
@@ -268,9 +268,9 @@ class Ui_Dialog(object):
         self.groupBox.setTitle(_translate("Dialog", "Components"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Chemistry), _translate("Dialog", "Chemistry"))
         self.label_6.setText(_translate("Dialog", "Max. num. of polymers"))
-        self.n_polymers.setText(_translate("Dialog", "1e6"))
+        self.n_polymers.setText(_translate("Dialog", "1e4"))
         self.label_7.setText(_translate("Dialog", "Max. num. of segments"))
-        self.n_segments.setText(_translate("Dialog", "1e6"))
+        self.n_segments.setText(_translate("Dialog", "1e5"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Memory), _translate("Dialog", "Memory"))
         self.proto_label.setText(_translate("Dialog", "Enter Polymer Prototype:"))
         self.proto_text.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

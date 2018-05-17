@@ -21,7 +21,7 @@ void genStar_asym(int ni, int nf)
 {
  extern FILE* infofl; extern FILE * inpfl;
  extern double mass_mono;
- extern polymer * branched_poly;
+ extern std::vector <polymer> branched_poly;
  extern int runmode;
  int arm_type, arm_type_short; double mass, pdi, mass_short, pdi_short;
  if(runmode == 3){ fscanf(inpfl, "%d", &arm_type);

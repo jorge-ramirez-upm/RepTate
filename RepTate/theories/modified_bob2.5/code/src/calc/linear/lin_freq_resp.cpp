@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <vector>
 #include "./lin_rheo.h"
 
-double *omega, *g_p, *g_pp;
+std::vector <double> omega, g_p, g_pp;
 int n_lve_out;
 
 void lin_freq_resp(int ndata, double *tp, double *phip, double *phip_ST)
@@ -44,9 +44,9 @@ void lin_freq_resp(int ndata, double *tp, double *phip, double *phip_ST)
   case 3:
     //put results in arrays
     n_lve_out = (int)ceil(1 + log(FreqMax / FreqMin) / log(FreqInterval));
-    omega = new double[n_lve_out];
-    g_p = new double[n_lve_out];
-    g_pp = new double[n_lve_out];
+    omega.resize(n_lve_out);
+    g_p.resize(n_lve_out);
+    g_pp.resize(n_lve_out);
     break;
   default:
     resfourfl = fopen("gtp.dat", "w");

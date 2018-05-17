@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "./nlin.h"
 void nlin_retraction(int n)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 double z0, dz, t_stretch; int rate_indx;
 
 z0=arm_pool[n].z; dz=arm_pool[n].dz; 
@@ -30,7 +30,7 @@ else{ t_stretch=interp_rouse_time(&arm_pool[na].compound_fit_zeff[0], \
 &arm_pool[na].compound_fit_time[0], arm_pool[na].compound_store_data_num, z0);}
 rate_indx=find_rate_indx(t_stretch);
 
-extern double ** nlin_prio_phi_relax; // extern double nlin_dphi_true;
+extern std::vector< std::vector <double> > nlin_prio_phi_relax; // extern double nlin_dphi_true;
 nlin_prio_phi_relax[arm_pool[na].priority][rate_indx]+=dz;
 // nlin_dphi_true+=dz;
 

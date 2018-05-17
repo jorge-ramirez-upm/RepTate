@@ -20,7 +20,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 polymer polygenCayleyLIN(int levl, int* arm_type, double* mn_arm, double* pdi)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 double bbone=2.0*mn_arm[0];
 cur_poly=polygenH(arm_type[1],mn_arm[1],pdi[1],arm_type[0],bbone,pdi[0]);

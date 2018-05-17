@@ -24,7 +24,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void genUDF(int ni, int nf) { 
 extern FILE * infofl; extern FILE * inpfl;
 extern double mass_mono; extern int runmode;
-extern polymer * branched_poly;
+extern std::vector <polymer> branched_poly;
 
 int  arm_type[UDF_segment_num];
 double  mass[UDF_segment_num];

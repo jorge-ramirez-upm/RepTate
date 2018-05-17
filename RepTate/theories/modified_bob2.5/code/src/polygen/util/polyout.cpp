@@ -20,8 +20,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <cstdlib>
 void polyout(int m)
 {
-extern arm * arm_pool;
-extern polymer * branched_poly;
+extern std::vector <arm> arm_pool;
+extern std::vector <polymer> branched_poly;
 extern double cur_time;
 extern FILE * debugfl;
 

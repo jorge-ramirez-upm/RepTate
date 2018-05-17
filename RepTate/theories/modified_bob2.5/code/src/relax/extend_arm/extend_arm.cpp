@@ -23,7 +23,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 using namespace std;
 void extend_arm(int m, int n)   // branched_poly[m].arm_pool[n]
 { 
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 
   if(arm_pool[n].freeze_arm_len_eff) // n can not be extended
     {

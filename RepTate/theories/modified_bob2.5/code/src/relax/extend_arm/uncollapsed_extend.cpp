@@ -24,7 +24,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 using namespace std;
 void uncollapsed_extend(int m, int n)
 { 
- extern arm * arm_pool;
+ extern std::vector <arm> arm_pool;
  extern double phi,Alpha,cur_time,PSquare;
 
 // Changes 10 May 2007

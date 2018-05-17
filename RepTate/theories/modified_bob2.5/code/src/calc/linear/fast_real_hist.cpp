@@ -17,10 +17,12 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
  
 // fast modes from histograms in real time
 #include <math.h>
+#include <vector>
+
 double fast_real_hist(double tt)
 {
  extern double N_e;
- extern double * phi_hist;
+ extern std::vector <double> phi_hist;
  extern int zintmin,zintmax;
  double tmpvar, gtmp1, gtmp2, goft_fast;
  goft_fast=0.0;

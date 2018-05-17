@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #define UDF_segment_num 9
 polymer polygenUDF(int * arm_type, double * mass, double * pdi)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 int  nn[UDF_segment_num];
 for(int i=0; i<UDF_segment_num; i++){

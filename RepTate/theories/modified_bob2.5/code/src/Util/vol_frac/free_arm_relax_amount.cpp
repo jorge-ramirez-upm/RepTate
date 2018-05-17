@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 double free_arm_relax_amount(int n)
  {
-   extern arm * arm_pool;
+   extern std::vector <arm> arm_pool;
    double relax_amount=0.0;
    int n0=n;
    double dz = arm_pool[n0].z;

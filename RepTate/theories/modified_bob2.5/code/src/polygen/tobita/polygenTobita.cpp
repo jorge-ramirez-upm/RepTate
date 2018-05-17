@@ -23,7 +23,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 polymer polygenTobita(double tau, double beta, double cs, double cb,
   double fin_conv)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 double cur_conv, seg_len; polymer cur_poly; bool sc_tag; int m, m1;
 
 cur_conv=getconv1(fin_conv);

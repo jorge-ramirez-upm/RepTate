@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 polymer polygenH(int arm_type1, double m_arm,double pdi_arm,
                      int arm_type2, double m_cross,double pdi_cross)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 int n1=request_arm(); int n2=request_arm(); int n3=request_arm();
 int n4=request_arm(); int n5=request_arm();

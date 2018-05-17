@@ -18,7 +18,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 polymer polygenLin(double seglen)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 int n1=request_arm(); int n2=request_arm();
 cur_poly.first_end=n1;

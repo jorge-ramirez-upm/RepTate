@@ -53,7 +53,7 @@ void return_gpcls(int nbin, int ncomp, int ni, int nf, double *lgmid_out, double
 void return_gpchist(int ncomp, int n_cur_comp, double *mass_ar, double *gfac_ar, double *branch_ar, double *wt_frac,
                     double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
 
-extern double *omega, *g_p, *g_pp;
+extern std::vector <double> omega, g_p, g_pp;
 extern int n_lve_out;
 
 #endif

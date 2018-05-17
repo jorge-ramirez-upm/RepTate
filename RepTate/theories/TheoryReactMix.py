@@ -160,7 +160,7 @@ class BaseTheoryReactMix:
                 0.5
             )  # TODO: find a better way to wait for the dialog thread to finish
         if not self.success_dialog:
-            self.Qprint('Mixture canceled')
+            self.Qprint('Mixture cancelled')
             return
 
         #check mix settings

@@ -29,32 +29,25 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish, V. Boudara
 
 int bob_main(int, char **);
 bool reptate_flag = true; // if false, "end_code()" is called at the end of bob_main()
-int bob_loaded = 0;
 
 int nnp_size;
 bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn_out, double *mw_out, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out)
 {
   try
   {
-    printf("bob_loaded=%d\n", bob_loaded);
-    bob_loaded = 1;
     infofl = fopen("info.txt", "w");
-    printf("check 1 infofl open\n");
     rcread();
-    printf("check 2 rcread\n");
     bob_main(argc, argv);
-    printf("check 3 bob_main\n");
     return_gpcls(nbin, ncomp, ni, nf, lgmid_out, wtbin_out, brbin_out, gbin_out);
-    printf("check 4 return_gpcls\n");
     get_mn_mw(mn_out, mw_out);
-    printf("check 5 get_mn_mw\n");
-    close_files();
-    printf("check 6 close_files\n");
+    // close_files();
+    end_code();
     return true;
   }
   catch (const std::exception &)
   {
-    close_files();
+    // close_files();
+    end_code();
     return false;
   }
 }
@@ -69,12 +62,14 @@ bool get_bob_lve(double *omega_out, double *gp_out, double *gpp_out)
       gp_out[i] = g_p[i];
       gpp_out[i] = g_pp[i];
     }
-    // end_code();
+    // close_files();
+    end_code();
     return true;
   }
   catch (const std::exception &)
   {
-    // end_code();
+    // close_files();
+    end_code();
     return false;
   }
 }
@@ -83,8 +78,6 @@ bool run_bob_lve(int argc, char **argv, int *n)
 {
   try
   {
-    printf("bob_loaded=%d\n", bob_loaded);
-    bob_loaded = 1;
     infofl = fopen("info.txt", "w");
     rcread();
     extern int OutMode;
@@ -184,7 +177,7 @@ int bob_main(int argc, char *argv[])
         }
         fclose(fprio);
       }
-      br_copy = new polycopy[num_poly];
+      br_copy.resize(num_poly);
       for (int i = 0; i < num_poly; i++)
       {
         int nnp = 1;
@@ -198,14 +191,14 @@ int bob_main(int argc, char *argv[])
         nnp_size = nnp;
         br_copy[i].narm = nnp;
         br_copy[i].active = 0;
-        br_copy[i].armindx = new int[nnp];
-        br_copy[i].priority = new int[nnp];
-        br_copy[i].assigned_trelax = new int[nnp];
-        br_copy[i].trelax = new double[nnp];
-        br_copy[i].zeta = new double[nnp];
-        br_copy[i].relax_end = new int[nnp];
-        br_copy[i].assigned_taus = new int[nnp];
-        br_copy[i].taus = new double[nnp];
+        br_copy[i].armindx.resize(nnp);
+        br_copy[i].priority.resize(nnp);
+        br_copy[i].assigned_trelax.resize(nnp);
+        br_copy[i].trelax.resize(nnp);
+        br_copy[i].zeta.resize(nnp);
+        br_copy[i].relax_end.resize(nnp);
+        br_copy[i].assigned_taus.resize(nnp);
+        br_copy[i].taus.resize(nnp);
 
         nnp = 0;
         br_copy[i].armindx[nnp] = n1;

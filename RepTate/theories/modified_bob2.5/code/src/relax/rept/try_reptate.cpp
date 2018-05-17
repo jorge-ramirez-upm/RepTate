@@ -20,8 +20,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 bool try_reptate(int n)
 {
-extern arm * arm_pool;
-extern polymer * branched_poly;
+extern std::vector <arm> arm_pool;
+extern std::vector <polymer> branched_poly;
 extern double phi,cur_time,Alpha,PSquare,RetLim;
 extern int ReptScheme;
 double  drag_sidebranch, bbonelen, len_to_rep;

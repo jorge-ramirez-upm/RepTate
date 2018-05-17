@@ -19,10 +19,10 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 void sample_alt_taus(void)
 {
-extern polymer * branched_poly;
-extern polycopy * br_copy;
+extern std::vector <polymer> branched_poly;
+extern std::vector <polycopy> br_copy;
 extern double  cur_time;
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern void alt_taus_assign(int, int, double);
 extern void alt_taus_assign2(int, int, double);
 extern int nlin_relaxing_arm(int, double);
@@ -113,8 +113,8 @@ for(int i=0; i<num_poly; i++){
 
 void alt_taus_assign(int i, int n1, double tau_s)
 {
-extern polycopy * br_copy;
-extern arm * arm_pool;
+extern std::vector <polycopy> br_copy;
+extern std::vector <arm> arm_pool;
 int k=arm_pool[n1].copy_num;
       if(br_copy[i].assigned_taus[k] != 0){
           br_copy[i].assigned_taus[k]=0;
@@ -124,8 +124,8 @@ int k=arm_pool[n1].copy_num;
 
 void alt_taus_assign2(int i, int n1, double tau_s)
 {
-extern polycopy * br_copy;
-extern arm * arm_pool;
+extern std::vector <polycopy> br_copy;
+extern std::vector <arm> arm_pool;
 int k=arm_pool[n1].copy_num;
       if(br_copy[i].assigned_taus[k] != 0  && br_copy[i].assigned_taus[k] != 1){
           br_copy[i].assigned_taus[k]=1;

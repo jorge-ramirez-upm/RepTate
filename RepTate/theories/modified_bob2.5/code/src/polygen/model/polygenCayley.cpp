@@ -20,7 +20,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 polymer polygenCayley(int levl, int* arm_type, double* mn_arm, double* pdi)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 cur_poly=polygenStar(arm_type[0], mn_arm[0], pdi[0]);
 

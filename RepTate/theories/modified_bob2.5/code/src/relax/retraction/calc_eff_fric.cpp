@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 double calc_eff_fric(int n)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern double Alpha;
 int n1=arm_pool[n].next_friction;
 int n2=arm_pool[n].nxt_relax;

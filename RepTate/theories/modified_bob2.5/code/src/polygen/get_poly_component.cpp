@@ -23,6 +23,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void get_poly_component(int n, double blend_frac)
 {
   extern int runmode, num_poly;
+  extern int max_poly;
   int num_cur_comp;
   extern int CalcGPCLS;
   extern void gpcls(int, int, int, int);
@@ -52,6 +53,10 @@ void get_poly_component(int n, double blend_frac)
     fscanf(inpfl, "%d %d", &num_cur_comp, &polytype);
   }
   num_cur_comp += num_poly;
+
+  if (num_cur_comp > max_poly){
+    my_abort((char *)"Error: ran out of polymers in get_poly_component\n");
+  }
 
   switch (polytype)
   {

@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdlib.h>
 #include <stdio.h>
 void calc_priority(int n) {
- extern arm * arm_pool; extern polymer * branched_poly;
+ extern std::vector <arm> arm_pool; extern std::vector <polymer> branched_poly;
  extern void set_prio(int, int);
  int n1=branched_poly[n].first_end; set_prio(n,n1); int n2=arm_pool[n1].down;
  while(n2 != n1){set_prio(n,n2); n2=arm_pool[n2].down; } }
@@ -29,7 +29,7 @@ void calc_priority(int n) {
 
 void set_prio(int n, int n1)
 {
- extern arm * arm_pool; extern polymer * branched_poly;
+ extern std::vector <arm> arm_pool; extern std::vector <polymer> branched_poly;
  extern int PrioMode;
 if(arm_pool[n1].free_end){arm_pool[n1].priority=1; }
 else{ set_tmpflag_left(n,n1);

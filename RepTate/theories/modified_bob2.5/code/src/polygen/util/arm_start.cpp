@@ -20,7 +20,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 void arm_start(int n)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern double phi;
 arm_pool[n].prune=false; arm_pool[n].ghost=false; arm_pool[n].collapsed=false;
 arm_pool[n].nxt_relax=-1; arm_pool[n].phi_collapse=-1.0;

@@ -22,8 +22,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 void mk_ghost(int m, int n)
 { 
-extern polymer * branched_poly;
-extern arm * arm_pool;
+extern std::vector <polymer> branched_poly;
+extern std::vector <arm> arm_pool;
 extern double Alpha;
 
 double tmpvar = arm_pool[n].tau_collapse * 

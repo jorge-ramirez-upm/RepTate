@@ -51,43 +51,68 @@ void end_code(void)
   extern int GenPolyOnly;
   if (GenPolyOnly != 0)
   {
-    extern polycopy *br_copy;
+    extern std::vector <polycopy> br_copy;
     extern int num_poly;
-    for (int i = 0; i < num_poly; i++)
+    for (int i = 0; i < br_copy.size(); i++)
     {
-      delete[] br_copy[i].armindx;
-      delete[] br_copy[i].priority;
-      delete[] br_copy[i].assigned_trelax;
-      delete[] br_copy[i].trelax;
-      delete[] br_copy[i].zeta;
-      delete[] br_copy[i].relax_end;
-      delete[] br_copy[i].assigned_taus;
-      delete[] br_copy[i].taus;
+      br_copy[i].armindx.clear();
+      br_copy[i].priority.clear();
+      br_copy[i].assigned_trelax.clear();
+      br_copy[i].trelax.clear();
+      br_copy[i].zeta.clear();
+      br_copy[i].relax_end.clear();
+      br_copy[i].assigned_taus.clear();
+      br_copy[i].taus.clear();
+ 
+      // hopefully deallocate the memory
+      br_copy[i].armindx.shrink_to_fit();
+      br_copy[i].priority.shrink_to_fit();
+      br_copy[i].assigned_trelax.shrink_to_fit();
+      br_copy[i].trelax.shrink_to_fit();
+      br_copy[i].zeta.shrink_to_fit();
+      br_copy[i].relax_end.shrink_to_fit();
+      br_copy[i].assigned_taus.shrink_to_fit();
+      br_copy[i].taus.shrink_to_fit();
     }
+    br_copy.clear();
+    br_copy.shrink_to_fit();
 
-    extern double *t_maxwell;
-    delete[] t_maxwell;
+    extern std::vector <double> t_maxwell;
+    t_maxwell.clear();
+    t_maxwell.shrink_to_fit();
 
     extern int CalcNlin;
     if (CalcNlin == 0)
     {
-      extern double **nlin_prio_phi_relax;
-      extern double **nlin_prio_phi_held;
-      extern int max_prio_var;
-      extern void delete_ar_2d_double(double **ar, int m);
-      delete_ar_2d_double(nlin_prio_phi_relax, max_prio_var);
-      delete_ar_2d_double(nlin_prio_phi_held, max_prio_var);
+      extern std::vector< std::vector <double> > nlin_prio_phi_relax;
+      extern std::vector< std::vector <double> > nlin_prio_phi_held;
+      for (int i=0; i<nlin_prio_phi_relax.size(); i++){
+        nlin_prio_phi_relax[i].clear();
+        nlin_prio_phi_held[i].clear();
+        nlin_prio_phi_relax[i].shrink_to_fit();
+        nlin_prio_phi_held[i].shrink_to_fit();
+      }
+        nlin_prio_phi_relax.clear();
+        nlin_prio_phi_held.clear();
+        nlin_prio_phi_relax.shrink_to_fit();
+        nlin_prio_phi_held.shrink_to_fit();
     }
 
-    extern double *omega, *g_p, *g_pp;
-    delete[] omega;
-    delete[] g_p;
-    delete[] g_pp;
+    extern std::vector <double> omega, g_p, g_pp;
+    omega.clear();
+    g_p.clear();
+    g_pp.clear();
   }
-  extern arm *arm_pool;
-  extern polymer *branched_poly;
-  extern double *phi_hist;
-  delete[] phi_hist;
-  delete[] arm_pool;
-  delete[] branched_poly;
+  extern std::vector <arm> arm_pool;
+  extern std::vector <polymer> branched_poly;
+  extern std::vector <double> phi_hist;
+
+  phi_hist.clear();
+  arm_pool.clear();
+  branched_poly.clear();
+  // hopefully deallocate the memory
+  phi_hist.shrink_to_fit();
+  arm_pool.shrink_to_fit();
+  branched_poly.shrink_to_fit();
+
 }

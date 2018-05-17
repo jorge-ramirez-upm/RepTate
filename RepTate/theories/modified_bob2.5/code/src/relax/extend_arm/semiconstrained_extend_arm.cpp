@@ -22,7 +22,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 using namespace std;
 void semiconstrained_extend_arm(int m,int n,int n1,int n2)
 {  // n2.relaxing && !n1.relaxing
- extern arm * arm_pool;
+ extern std::vector <arm> arm_pool;
  int r2=arm_pool[n2].relax_end;
 
  if(!arm_pool[r2].collapsed) { mk_ghost(m,n); }

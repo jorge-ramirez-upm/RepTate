@@ -21,7 +21,7 @@ void genstargel(int ni, int nf)
 {
  extern FILE* infofl; extern FILE * inpfl;
  extern double mass_mono;
- extern polymer * branched_poly;
+ extern std::vector <polymer> branched_poly;
  extern int runmode;
  int arm_type ; double mass, pdi;
  double reaction_extent;

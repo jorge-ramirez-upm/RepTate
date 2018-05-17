@@ -21,14 +21,14 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdlib.h>
 #include <stdio.h>
 void calc_seniority(int n) {
- extern arm * arm_pool; extern polymer * branched_poly;
+ extern std::vector <arm> arm_pool; extern std::vector <polymer> branched_poly;
  extern void set_seniority(int,int);
  int n1=branched_poly[n].first_end; set_seniority(n,n1);
  int n2=arm_pool[n1].down;
  while(n2 != n1){set_seniority(n,n2); n2=arm_pool[n2].down;}}
 
 void set_seniority(int n, int n1) {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 if(arm_pool[n1].free_end){arm_pool[n1].seniority=1;}
 else{
   int nL1=arm_pool[n1].L1; int nL2=arm_pool[n1].L2;
@@ -40,7 +40,7 @@ if(sL <= sR){arm_pool[n1].seniority = sL;}
 else{arm_pool[n1].seniority = sR;} }}
 
 void partial_seniority(int n, int n1, int nL1, int nL2, int * psL) {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 int psL1, psL2; psL1=0; psL2=0;
  set_tmpflag(n);
 arm_pool[n1].tmpflag=false; arm_pool[nL2].tmpflag=false;

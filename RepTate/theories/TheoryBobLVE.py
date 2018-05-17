@@ -175,7 +175,7 @@ class BaseTheoryBobLVE:
             # TODO: find a better way to wait for the dialog thread to finish
             time.sleep(0.5)
         if not self.success_dialog:
-            self.Qprint('Operation canceled')
+            self.Qprint('Operation cancelled')
             return
         QApplication.processEvents()
 
@@ -184,7 +184,7 @@ class BaseTheoryBobLVE:
         try:
             omega, gp, gpp = bch.return_bob_lve(self.argv)
         except BobError:
-            print('Caught BoB ERROR')
+            self.Qprint('Operation cancelled')
             return
 
         #copy results to RepTate data file

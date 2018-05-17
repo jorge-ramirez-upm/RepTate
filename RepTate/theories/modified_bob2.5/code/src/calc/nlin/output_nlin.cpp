@@ -17,6 +17,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
  
 #include <stdio.h>
 #include <math.h>
+#include <vector>
+
 void output_nlin(void) {
 extern FILE * nlin_outfl;
 extern double nlin_phi_true, nlin_phi_ST, nlin_dphi_true, nlin_dphi_ST, Alpha;
@@ -24,7 +26,7 @@ extern int nlin_num_data_av, NumNlinStretch;
 extern int nlin_collect_data;
 extern int num_maxwell, nlin_nxt_data; 
 extern double nlin_t_min, nlin_t_max, NlinAvDt;
-extern double * t_maxwell;
+extern std::vector <double> t_maxwell;
 
 nlin_phi_true=nlin_phi_true/((double) nlin_num_data_av);
 nlin_phi_ST=nlin_phi_ST/((double) nlin_num_data_av);
@@ -35,8 +37,8 @@ tmpvar+=Alpha*nlin_phi_true*exp((Alpha - 1.0)*log(nlin_phi_ST))*nlin_dphi_ST;
 w_split=w_split/tmpvar;
 
 int num_modes=0; extern int max_prio_var;
-extern double ** nlin_prio_phi_relax; 
-extern double ** nlin_prio_phi_held;
+extern std::vector< std::vector <double> > nlin_prio_phi_relax; 
+extern std::vector< std::vector <double> > nlin_prio_phi_held;
 double tot_phi_relax, tot_phi_held;
 tot_phi_relax=0.0; tot_phi_held=0.0;
 
@@ -67,7 +69,7 @@ for(int i=0; i<max_prio_var; i++){ cur_rate=1.0;
 extern int nlin_collect_data;
 extern int num_maxwell, nlin_nxt_data; 
 extern double nlin_t_min, nlin_t_max, NlinAvDt;
-extern double * t_maxwell;
+extern std::vector <double> t_maxwell;
 nlin_collect_data=-1; nlin_nxt_data++;
 if(nlin_nxt_data < num_maxwell){
 nlin_t_min=t_maxwell[nlin_nxt_data]/NlinAvDt;

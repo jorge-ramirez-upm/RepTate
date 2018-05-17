@@ -22,7 +22,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include<stdio.h>
 void collapse_star_arm(int m, int n)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern double Alpha;
 double tmpvar=arm_pool[n].tau_collapse*pow(arm_pool[n].phi_collapse,2.0*Alpha);
 

@@ -18,8 +18,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 #include "./nlin.h"
 void calc_nlin_phi_held(void) {
-extern polymer * branched_poly; extern arm * arm_pool; extern int num_poly;
-extern double ** nlin_prio_phi_held;  int n1,n2;
+extern std::vector <polymer> branched_poly; extern std::vector <arm> arm_pool; extern int num_poly;
+extern std::vector< std::vector <double> > nlin_prio_phi_held;  int n1,n2;
 
 for(int i=0; i< num_poly; i++){ if(branched_poly[i].alive){
  n1=branched_poly[i].first_free;  n2=arm_pool[n1].free_down;

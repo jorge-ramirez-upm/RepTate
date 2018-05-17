@@ -20,7 +20,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 void tobita_clean(polymer * cur_poly)
 {
-extern arm * arm_pool; int kk=1;
+extern std::vector <arm> arm_pool; int kk=1;
 int n0=cur_poly[0].first_end; arm_pool[n0].tmpflag=false;
 int nmin=n0; int nmax=n0; int nd=arm_pool[n0].down;
 if(nmin > nd){nmin=nd;}
@@ -81,7 +81,7 @@ delete [] tmp_pool;
 // assign attributes of arm n to m
 void tobita_swap_arm(int m, int n)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 arm_pool[m].arm_len=arm_pool[n].arm_len;
 int nt=arm_pool[n].up; arm_pool[m].up=nt; arm_pool[nt].down=m;
 nt=arm_pool[n].down; arm_pool[m].down=nt; arm_pool[nt].up=m;

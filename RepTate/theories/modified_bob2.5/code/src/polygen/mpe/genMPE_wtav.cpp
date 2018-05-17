@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void genMPE_wtav(int ni, int nf)
 {
 extern FILE* infofl; extern FILE* inpfl;
-extern polymer * branched_poly;
+extern std::vector <polymer> branched_poly;
 double mass,b_m;
 extern int runmode;
 int wtav_poly_type=0;

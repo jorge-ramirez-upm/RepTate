@@ -20,8 +20,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 
 void reptate_nlin_sngl_arm(int n) {
-extern arm * arm_pool;
-extern double ** nlin_prio_phi_relax; // extern double nlin_dphi_true;
+extern std::vector <arm> arm_pool;
+extern std::vector< std::vector <double> > nlin_prio_phi_relax; // extern double nlin_dphi_true;
 double z0=arm_pool[n].z;
 int nsplit, cur_prio, rate_indx;
 double dz, t_stretch, zz;

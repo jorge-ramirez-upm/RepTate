@@ -21,9 +21,9 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void calcsnipprio(void)
 {
   extern void calc_snip_priority(int);
-  extern arm *arm_pool;
-  extern polymer *branched_poly;
-  extern polycopy *br_copy;
+  extern std::vector <arm> arm_pool;
+  extern std::vector <polymer> branched_poly;
+  extern std::vector <polycopy> br_copy;
   extern int num_poly;
   FILE *fpr = fopen("savedprio.dat", "w");
 
@@ -65,7 +65,7 @@ void calcsnipprio(void)
 
 void dumpsnipprio(void)
 {
-  extern polycopy *br_copy;
+  extern std::vector <polycopy> br_copy;
   extern int num_poly;
   // extern double cur_time;
   FILE *fpr = fopen("savedprio.dat", "r");

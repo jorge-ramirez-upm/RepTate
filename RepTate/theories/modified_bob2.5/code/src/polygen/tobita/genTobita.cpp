@@ -22,7 +22,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void genTobita(int ni, int nf)
 {
  extern FILE* infofl; extern FILE * inpfl;
- extern polymer * branched_poly;
+ extern std::vector <polymer> branched_poly;
  double tau, beta, cs, cb, fin_conv;
 extern int runmode;
 extern polymer polygenTobita(double, double, double, double, double);

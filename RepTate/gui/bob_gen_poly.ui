@@ -304,7 +304,7 @@
                <set>Qt::ImhDigitsOnly</set>
               </property>
               <property name="text">
-               <string>1e6</string>
+               <string>1e4</string>
               </property>
              </widget>
             </item>
@@ -336,7 +336,7 @@
                <set>Qt::ImhDigitsOnly</set>
               </property>
               <property name="text">
-               <string>1e6</string>
+               <string>1e5</string>
               </property>
              </widget>
             </item>

@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 void MPE_add_branch(int n, double branch_prob, double logprobs)
 {
-extern MTRand mtrand1; extern arm * arm_pool;
+extern MTRand mtrand1; extern std::vector <arm> arm_pool;
 extern double N_e;
 
 int n1=request_arm(); int n2=request_arm();
@@ -50,7 +50,7 @@ else
 polymer polygenMPE(double prop_prob, double mono_prob)
 {
 extern MTRand mtrand1;
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern double N_e;
 polymer cur_poly;
 double tmpvar = prop_prob*mono_prob;

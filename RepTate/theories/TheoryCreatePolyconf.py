@@ -233,7 +233,7 @@ class BaseTheoryCreatePolyconf:
                 0.5
             )  # TODO: find a better way to wait for the dialog thread to finish
         if not self.success_dialog:
-            self.Qprint('Operation canceled')
+            self.Qprint('Operation cancelled')
             return
 
         self.bch = BobCtypesHelper(self)
@@ -243,7 +243,7 @@ class BaseTheoryCreatePolyconf:
             mn, mw, gpc_out = self.bch.save_polyconf_and_return_gpc(
             self.argv, self.npol_tot)
         except BobError:
-            print('Caught BoB ERROR')
+            self.Qprint('Operation cancelled')
             return
 
         #copy results to RepTate data file

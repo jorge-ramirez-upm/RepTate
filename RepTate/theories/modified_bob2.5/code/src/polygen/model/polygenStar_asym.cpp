@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 polymer polygenStar_asym(int arm_type, double mn_arm, double pdi,
                  int arm_type_short, double mn_short, double pdi_short)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 int n1=request_arm(); int n2=request_arm(); int n3=request_arm();
 

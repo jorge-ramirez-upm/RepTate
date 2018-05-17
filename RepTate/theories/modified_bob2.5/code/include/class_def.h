@@ -3,20 +3,22 @@
 #ifndef myclass_flag_
 #define myclass_flag_
 
+#include <vector>
+
 class polycopy{
 public :
 int narm;
 int active;
-int * armindx;
-int * priority;
-int * assigned_trelax;
-double * trelax;
-double * zeta;
-int * relax_end;
+std::vector <int> armindx;
+std::vector <int> priority;
+std::vector <int> assigned_trelax;
+std::vector <double> trelax;
+std::vector <double> zeta;
+std::vector <int> relax_end;
 //int * assigned_Deff;     // * added by DJR * //
 //double * Deff;
-int * assigned_taus;     // * added by DJR * //
-double * taus;
+std::vector <int> assigned_taus;     // * added by DJR * //
+std::vector <double> taus;
               };
 class arm {
   public :

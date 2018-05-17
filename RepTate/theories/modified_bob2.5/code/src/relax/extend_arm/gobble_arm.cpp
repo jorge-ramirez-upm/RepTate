@@ -23,7 +23,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void gobble_arm(int m, int n, int n1, int n2)
 { 
  extern polymer *  branched_poly;
- extern arm * arm_pool;
+ extern std::vector <arm> arm_pool;
  extern double Alpha;
  int r2=arm_pool[n2].relax_end;
  arm_pool[n1].relax_end=n; arm_pool[n1].relaxing=true;

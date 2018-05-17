@@ -22,7 +22,7 @@ the relaxation. */
 
 void poly_start(polymer* cur_poly)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 cur_poly[0].alive=true; cur_poly[0].relaxed_frac=0.0;
 cur_poly[0].rept_set=false; cur_poly[0].ghost_contrib=0.0;
 int n1=cur_poly[0].first_end; arm_start(n1); int num_seg=1;

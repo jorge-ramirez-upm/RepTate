@@ -18,8 +18,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 void check_linearity(int n) //check if n'th polymer is linear
 {
- extern arm * arm_pool;
- extern polymer * branched_poly;
+ extern std::vector <arm> arm_pool;
+ extern std::vector <polymer> branched_poly;
  int n1=branched_poly[n].first_free;
  int num_seg=1;
  int n2=arm_pool[n1].free_down;

@@ -21,7 +21,7 @@ void genComb(int ni, int nf)
 {
 extern FILE * infofl; extern FILE * inpfl;
 extern double  mass_mono;
-extern polymer * branched_poly;
+extern std::vector <polymer> branched_poly;
 extern int runmode;
 double m_bbone, m_arm, num_arm;
 double pdi_arm, pdi_bbone;

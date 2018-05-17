@@ -23,8 +23,8 @@ between 'n_start' and 'n_end' */
 #include <stdio.h>
 void set_vol_frac(int n_start, int n_end, int n_component, double blend_frac)
 {
-extern arm * arm_pool;
-extern polymer * branched_poly;
+extern std::vector <arm> arm_pool;
+extern std::vector <polymer> branched_poly;
 extern FILE * infofl;
 double total_mass = 0.0;
 

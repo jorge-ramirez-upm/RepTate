@@ -21,7 +21,7 @@ void genStar(int ni, int nf)
 {
  extern FILE* infofl; extern FILE * inpfl;
  extern double mass_mono;
- extern polymer * branched_poly;
+ extern std::vector <polymer> branched_poly;
  extern int runmode;
  int arm_type, num_arm; double mass, pdi;
  if(runmode == 3){ fscanf(inpfl, "%d %lf %lf", &arm_type, &mass, &pdi);
@@ -59,7 +59,7 @@ extern polymer polygenStar18(int , double , double );
 
 polymer polygenStar18(int arm_type, double mn_arm, double pdi)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 int nn[33];
 for(int i=0; i<33; i++){nn[i]=request_arm(); arm_pool[nn[i]].arm_len=0.0;}

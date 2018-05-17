@@ -22,7 +22,7 @@ void gencoupledComb(int ni, int nf)
 // coupled comb : added 15 APR 2008. Generate two combs and add one of the side arms to the other
 extern FILE * infofl; extern FILE * inpfl;
 extern double  mass_mono;
-extern polymer * branched_poly;
+extern std::vector <polymer> branched_poly;
 extern int runmode;
 double m_bbone, m_arm, num_arm;
 double pdi_arm, pdi_bbone;

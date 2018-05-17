@@ -22,7 +22,7 @@ polymer polygenasH(int arm_type, double m_arm1,double pdi_arm1,
   double m_arm2, double pdi_arm2, double m_cross,double pdi_cross)
 {
 extern double N_e;
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 int n1=request_arm(); int n2=request_arm(); int n3=request_arm();
 int n4=request_arm(); int n5=request_arm();

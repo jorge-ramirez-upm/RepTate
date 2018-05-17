@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void genMPE(int ni, int nf)
 {
 extern FILE* infofl; extern FILE* inpfl;
-extern polymer * branched_poly;
+extern std::vector <polymer> branched_poly;
 double mass,beta;
 extern int runmode;
 if(runmode == 2)

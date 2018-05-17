@@ -20,7 +20,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 void calc_free_arm_phi_held(int n)
 {
-extern arm * arm_pool; extern double ** nlin_prio_phi_held;
+extern std::vector <arm> arm_pool; extern std::vector< std::vector <double> > nlin_prio_phi_held;
 double z0=arm_pool[n].z; double dz1=0; double cumulative_z=arm_pool[n].arm_len;
 int n0=n; int n1=n; int cur_prio, nsplit, rate_indx; double dz, t_stretch;
 

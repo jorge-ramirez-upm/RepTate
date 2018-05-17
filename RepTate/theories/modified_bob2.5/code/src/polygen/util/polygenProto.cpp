@@ -20,7 +20,7 @@ polymer polygenProto(int narm, int * arm_type, int * LL1,
    int * LL2, int * RR1, int * RR2, double * mass, double * pdi) {
 
 polymer cur_poly;
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 int n, n1, nsv; nsv=0;
    for(int j=0; j < narm; j++)
      {

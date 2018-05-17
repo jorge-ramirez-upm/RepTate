@@ -15,6 +15,7 @@ void my_abort(char *s);
 
 #include "./class_def.h"
 #include "./routines.h"
+#include <vector>
 
 
 #endif

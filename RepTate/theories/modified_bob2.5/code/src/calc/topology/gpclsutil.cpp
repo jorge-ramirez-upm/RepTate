@@ -22,8 +22,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 double gpc_calc_mass(int i)
 {
-  extern polymer *branched_poly;
-  extern arm *arm_pool;
+  extern std::vector <polymer> branched_poly;
+  extern std::vector <arm> arm_pool;
   int n0 = branched_poly[i].first_end;
   double mass = arm_pool[n0].arm_len;
   int nd = arm_pool[n0].down;
@@ -39,8 +39,8 @@ double gpc_calc_mass(int i)
 
 double gpc_calc_wtfrac(int i)
 {
-  extern polymer *branched_poly;
-  extern arm *arm_pool;
+  extern std::vector <polymer> branched_poly;
+  extern std::vector <arm> arm_pool;
   int n0 = branched_poly[i].first_end;
   double mass = arm_pool[n0].vol_fraction;
   int nd = arm_pool[n0].down;
@@ -54,8 +54,8 @@ double gpc_calc_wtfrac(int i)
 
 int gpc_num_br(int i)
 {
-  extern polymer *branched_poly;
-  extern arm *arm_pool;
+  extern std::vector <polymer> branched_poly;
+  extern std::vector <arm> arm_pool;
   int n0 = branched_poly[i].first_end;
   int nn = 1;
   int nd = arm_pool[n0].down;
@@ -72,8 +72,8 @@ int gpc_num_br(int i)
 // Use Kramer's decomposition for branched Rg
 double gpc_calc_gfac(int m)
 {
-  extern arm *arm_pool;
-  extern polymer *branched_poly;
+  extern std::vector <arm> arm_pool;
+  extern std::vector <polymer> branched_poly;
   extern double left_mass(int);
   double rg_br = 0.0;
   double ntot = 0.0;
@@ -116,7 +116,7 @@ double gpc_calc_gfac(int m)
 
 double left_mass(int i)
 {
-  extern arm *arm_pool;
+  extern std::vector <arm> arm_pool;
   extern double recur_left_mass(int, int);
   int nL1, nL2;
   double mass = 0.0;
@@ -141,7 +141,7 @@ double left_mass(int i)
 
 double recur_left_mass(int n1, int i)
 {
-  extern arm *arm_pool;
+  extern std::vector <arm> arm_pool;
   double mass = arm_pool[n1].arm_len;
   if ((arm_pool[n1].L1 == i) || (arm_pool[n1].L2 == i))
   { // travel right

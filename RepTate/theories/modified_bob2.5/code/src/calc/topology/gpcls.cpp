@@ -25,7 +25,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 void gpcls(int ncomp, int ni, int nf, int number_based)
 {
-  extern polymer *branched_poly;
+  extern std::vector <polymer> branched_poly;
   int n_cur_comp = nf - ni;
   double *mass_ar = new double[n_cur_comp];
   double *gfac_ar = new double[n_cur_comp];

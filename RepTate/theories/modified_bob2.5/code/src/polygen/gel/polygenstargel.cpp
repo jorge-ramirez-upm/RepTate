@@ -20,7 +20,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 polymer polygenstargel(double p, int arm_type, double mn_arm, double pdi)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly;
 
 int n1=request_arm(); int n2=request_arm(); int n3=request_arm();
@@ -46,7 +46,7 @@ return(cur_poly);
 
 void stargel_internal(double p, int arm_type, double mn_arm, double pdi, polymer * cur_poly, int n0)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern MTRand mtrand1;
 double randnum=mtrand1();
 if(randnum < p){

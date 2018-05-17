@@ -19,13 +19,13 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 void sample_alt_time(void)
 {
-extern polymer * branched_poly;
-extern polycopy * br_copy;
+extern std::vector <polymer> branched_poly;
+extern std::vector <polycopy> br_copy;
 extern double  cur_time;
 extern double phi_ST;
 extern double PSquare;
 extern double Alpha;
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern void alt_time_assign(int, int, int, int);
 extern int nlin_relaxing_arm(int, double);
 extern int num_poly;
@@ -102,7 +102,7 @@ n2=arm_pool[n2].down;
 
 void alt_time_assign(int i, int n1, int nrelax, int orig_narm)
 {
-extern polycopy * br_copy;
+extern std::vector <polycopy> br_copy;
 extern double  cur_time;
 extern double phi_ST;
 extern double Alpha;

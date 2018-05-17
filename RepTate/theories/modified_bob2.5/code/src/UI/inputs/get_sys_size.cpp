@@ -59,11 +59,13 @@ void get_sys_size(void)
   // during relaxation, we might need to add one more arm per molecule.
   max_arm += max_poly;
 
-  extern polymer *branched_poly;
-  branched_poly = new polymer[max_poly];
-  if (branched_poly == NULL)
+  extern std::vector <polymer> branched_poly;
+  try{
+    branched_poly.resize(max_poly);
+  }
+  catch (const std::exception &)
   {
-    my_abort((char *)"Error : Could not allocate polymers. \n");
+    my_abort((char *)"Error: Could not allocate polymers. \n");
   }
 
   extern void pool_init(void);

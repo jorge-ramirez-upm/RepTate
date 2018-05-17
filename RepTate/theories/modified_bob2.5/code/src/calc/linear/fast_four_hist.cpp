@@ -17,12 +17,14 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
  
 //fast modes via histogram in Fourier space
 #include <math.h>
+#include <vector>
+
 void fast_four_hist(double freq, double* gpfast, double* g2pfast)
 {
 double gp, g2p, tmpvar, tmppow2, tmppow4;
 double freqsq = freq*freq;
 extern double N_e;
-extern double * phi_hist;
+extern std::vector <double> phi_hist;
 extern int zintmin, zintmax;
 extern void warnmsgs(int);
 if(freq < 0.0) {warnmsgs(404);} 

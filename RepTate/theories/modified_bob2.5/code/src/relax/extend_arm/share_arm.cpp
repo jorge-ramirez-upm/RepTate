@@ -23,7 +23,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 int share_arm(int m,int n,int n1,int n2)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern double Alpha;
 
 int ret_val =0;

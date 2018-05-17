@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'gui/bob_LVE.ui'
+# Form implementation generated from reading ui file 'bob_LVE.ui'
 #
 # Created by: PyQt5 UI code generator 5.10
 #
@@ -27,6 +27,11 @@ class Ui_Dialog(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.groupBox_3 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
+        self.groupBox_3.setSizePolicy(sizePolicy)
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -118,7 +123,6 @@ class Ui_Dialog(object):
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout_2.addWidget(self.buttonBox)
         self.verticalLayout.addWidget(self.inp_param_widget)
-        self.inp_param_widget.raise_()
 
         self.retranslateUi(Dialog)
         self.buttonBox.rejected.connect(Dialog.reject)
@@ -129,10 +133,10 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Simulation Parameters"))
         self.groupBox_3.setTitle(_translate("Dialog", "Memory"))
-        self.n_polymers.setText(_translate("Dialog", "1e6"))
+        self.n_polymers.setText(_translate("Dialog", "1e4"))
         self.label_6.setText(_translate("Dialog", "Num. polymers"))
         self.label_7.setText(_translate("Dialog", "Num. segments"))
-        self.n_segments.setText(_translate("Dialog", "1e6"))
+        self.n_segments.setText(_translate("Dialog", "1e5"))
         self.groupBox_2.setTitle(_translate("Dialog", "Parameters"))
         self.label_2.setText(_translate("Dialog", "alpha"))
         self.alpha.setText(_translate("Dialog", "1"))

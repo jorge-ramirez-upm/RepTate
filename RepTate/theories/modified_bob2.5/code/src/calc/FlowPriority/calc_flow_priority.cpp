@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 void calc_flow_priority(int n) {
 
- extern arm * arm_pool; extern polymer * branched_poly;
+ extern std::vector <arm> arm_pool; extern std::vector <polymer> branched_poly;
  extern void set_flow_prio(int);
  int n1=branched_poly[n].first_end; set_flow_prio(n1); 
  int n2=arm_pool[n1].down;
@@ -35,7 +35,7 @@ while(n2 != n1){arm_pool[n2].priority-=1; n2=arm_pool[n2].down;}
 
 void set_flow_prio(int n1)
 {
- extern arm * arm_pool; 
+ extern std::vector <arm> arm_pool; 
  extern void flow_travel(int, int, int *);
 int mL, mR; mL=mR=0;
 
@@ -59,7 +59,7 @@ else{arm_pool[n1].priority=mR;}
 
 void flow_travel(int n0, int n1, int * m)
 {
- extern arm * arm_pool;
+ extern std::vector <arm> arm_pool;
  extern void flow_lencal(int, int, int *, double, double *);
 int LL1=arm_pool[n1].L1; int LL2=arm_pool[n1].L2;
 int RR1=arm_pool[n1].R1; int RR2=arm_pool[n1].R2;
@@ -163,7 +163,7 @@ if ((arm_pool[LL1].armtaus >= SnipTime) &&
 
 void flow_lencal(int n0, int n1, int * endlab, double Time, double * zlength)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 int LL1=arm_pool[n1].L1; int LL2=arm_pool[n1].L2;
 int RR1=arm_pool[n1].R1; int RR2=arm_pool[n1].R2;
 

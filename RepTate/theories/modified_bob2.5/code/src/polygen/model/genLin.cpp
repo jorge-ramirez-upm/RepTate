@@ -22,7 +22,7 @@ void genLin(int ni, int nf)
 {
 extern FILE* infofl; extern FILE * inpfl;
 extern int  runmode;
-extern polymer * branched_poly;
+extern std::vector <polymer> branched_poly;
 extern double mass_mono;
 double seglen, mass,pdi;
 int arm_type;

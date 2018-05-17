@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 void topoan(void)
 {
-extern arm * arm_pool; extern polymer * branched_poly;
+extern std::vector <arm> arm_pool; extern std::vector <polymer> branched_poly;
 extern int num_poly;
 extern void calc_priority(int); extern void calc_seniority(int);
 for(int i=0; i<num_poly; i++){

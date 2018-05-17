@@ -22,8 +22,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 int time_step(int indx)
 {
   extern double cur_time, DtMult, phi, deltaphi;
-  extern arm *arm_pool;
-  extern polymer *branched_poly;
+  extern std::vector <arm> arm_pool;
+  extern std::vector <polymer> branched_poly;
   extern int num_poly;
   int num_alive = 0;
 

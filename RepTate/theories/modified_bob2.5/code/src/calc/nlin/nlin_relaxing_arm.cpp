@@ -18,7 +18,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 #include <stdio.h>
 int nlin_relaxing_arm(int n, double z) {
-extern arm * arm_pool; int na=n;
+extern std::vector <arm> arm_pool; int na=n;
 double dz=arm_pool[n].arm_len;
 while(dz < z){
   if(arm_pool[na].nxt_relax != -1){

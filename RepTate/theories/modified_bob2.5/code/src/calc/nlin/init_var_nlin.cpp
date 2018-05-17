@@ -14,11 +14,12 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+#include <vector> 
+
 void init_var_nlin(void)
 {
-extern double ** nlin_prio_phi_relax;
-extern double ** nlin_prio_phi_held;
+extern std::vector< std::vector <double> > nlin_prio_phi_relax;
+extern std::vector< std::vector <double> > nlin_prio_phi_held;
 extern int max_prio_var, NumNlinStretch;
 
 for(int i=0; i< max_prio_var; i++){ for(int j=0; j<NumNlinStretch; j++){

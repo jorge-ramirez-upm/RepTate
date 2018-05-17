@@ -23,7 +23,7 @@ void tobita_grow(int dir, int m, double cur_conv, bool sc_tag, int * rlevel,
    double cs, double cb, double fin_conv,double tau, double beta, int* bcount) {
 int m1, m2;
 double new_conv, seg_len;
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 extern MTRand mtrand1;
 double sigma, psigma, lambda, plambda, pref;
 

@@ -23,7 +23,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void genProto(int ni, int nf)
 {
   extern int runmode;
-  extern polymer *branched_poly;
+  extern std::vector <polymer> branched_poly;
   extern double mass_mono;
   if (runmode != 3)
   {

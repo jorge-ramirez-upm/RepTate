@@ -20,8 +20,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 void del_ghost(int m)
 { 
- extern polymer * branched_poly;
- extern arm * arm_pool;
+ extern std::vector <polymer> branched_poly;
+ extern std::vector <arm> arm_pool;
 
  int n1=branched_poly[m].first_free;
  int n2=arm_pool[n1].free_down;

@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 polymer polygencoupledComb(int arm_typeb, double m_bbone, double pdi_bbone, 
    int arm_typea, double m_arm, double pdi_arm, double dnarm)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 polymer cur_poly; 
 double cur_bbone, cur_arm; extern MTRand mtrand1;
 cur_bbone=poly_get_arm(arm_typeb, m_bbone, pdi_bbone);

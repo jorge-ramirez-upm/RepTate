@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 int inner_arm_compound(int n)
 {
- extern arm * arm_pool;
+ extern std::vector <arm> arm_pool;
  int nnxt=arm_pool[n].nxt_relax;
  int nsv=n;
   while(nnxt != -1) {

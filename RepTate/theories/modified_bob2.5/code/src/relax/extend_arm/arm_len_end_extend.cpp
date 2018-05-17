@@ -20,7 +20,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../relax.h"
 void arm_len_end_extend(int m,int n,int n1,int n2)
 { 
-  extern arm * arm_pool;
+  extern std::vector <arm> arm_pool;
 
   int r1=arm_pool[n1].relax_end;
 

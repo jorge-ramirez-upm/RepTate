@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 #include "./nlin.h"
 void sample_eff_arm_len(int nnn){
-extern arm * arm_pool; extern double cur_time;
+extern std::vector <arm> arm_pool; extern double cur_time;
 int n=nlin_relaxing_arm(nnn, arm_pool[nnn].arm_len_eff);
 
 int ndt=arm_pool[n].compound_store_data_num;

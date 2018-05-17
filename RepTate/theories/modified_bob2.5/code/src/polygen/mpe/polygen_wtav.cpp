@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 void add_wt_right(int n, double logprob, double b_u, double b_d, int dir)
 { // dir >0 => downstream
-extern MTRand mtrand1; extern arm * arm_pool;
+extern MTRand mtrand1; extern std::vector <arm> arm_pool;
 extern double N_e;
 
 int n1=request_arm(); int n2=request_arm();
@@ -49,7 +49,7 @@ else{add_wt_right(n2, logprob, b_u, b_d, -1);}
 
 void add_wt_left(int n, double logprob, double bp)
 {
-extern MTRand mtrand1; extern arm * arm_pool;
+extern MTRand mtrand1; extern std::vector <arm> arm_pool;
 extern double N_e;
 
 int n1=request_arm(); int n2=request_arm();
@@ -75,7 +75,7 @@ polymer cur_poly;
 extern double N_e;
 double b_d;
 extern MTRand mtrand1;
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 int n1=request_arm();  cur_poly.first_end=n1;
 arm_pool[n1].L1=arm_pool[n1].L2=arm_pool[n1].R1=arm_pool[n1].R2=-1;
 arm_pool[n1].arm_len=(flory_distb(logprob)+flory_distb(logprob))/N_e;

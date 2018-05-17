@@ -49,7 +49,7 @@
                <item row="0" column="1">
                 <widget class="QLineEdit" name="n_polymers">
                  <property name="text">
-                  <string>1e6</string>
+                  <string>1e4</string>
                  </property>
                 </widget>
                </item>
@@ -70,7 +70,7 @@
                <item row="1" column="1">
                 <widget class="QLineEdit" name="n_segments">
                  <property name="text">
-                  <string>1e6</string>
+                  <string>1e5</string>
                  </property>
                 </widget>
                </item>
@@ -230,9 +230,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>widget</zorder>
-  <zorder>widget</zorder>
-  <zorder>inp_param_widget</zorder>
  </widget>
  <resources/>
  <connections>

@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 void tob_add_arm(int n, int n1, int na)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 if(na != -1){
 if(arm_pool[na].L1 == n1){arm_pool[na].L1=n;}
 if(arm_pool[na].L2 == n1){arm_pool[na].L2=n;}
@@ -32,7 +32,7 @@ if(arm_pool[na].R2 == n1){arm_pool[na].R2=n;}
 }
 void tobita_arm_clean(int n, int * kk, int * tmp_pool)
 {
-extern arm * arm_pool;
+extern std::vector <arm> arm_pool;
 int n1=arm_pool[n].L1; int n2=arm_pool[n].L2;
 int na; 
 

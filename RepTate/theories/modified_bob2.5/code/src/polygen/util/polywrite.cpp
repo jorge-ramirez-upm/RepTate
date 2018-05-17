@@ -22,8 +22,8 @@ void polywrite(void)
 {
   extern FILE *conffl;
   extern int num_poly;
-  extern arm *arm_pool;
-  extern polymer *branched_poly;
+  extern std::vector <arm> arm_pool;
+  extern std::vector <polymer> branched_poly;
   extern char polycode[10];
   extern double N_e;
 
