@@ -33,6 +33,7 @@
 // --------------------------------------------------------------------------------------------------------
 //    THE FOLLOWING IS FOR REPTATE COMPATIBILITY
 #include <stdio.h>
+#include <cstdlib>
 #include <exception>
 #include <math.h>
 #include "../../include/bob.h"
