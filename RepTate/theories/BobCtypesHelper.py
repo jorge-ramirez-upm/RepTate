@@ -129,8 +129,6 @@ class BobCtypesHelper:
 
     def return_bob_lve(self, arg_list):
         """Run BoB LVE and copy results to arrays"""
-        # reset the library
-        self.reload_lib()
         # prepare the arguments for bob_main function
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
