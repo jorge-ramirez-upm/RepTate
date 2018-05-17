@@ -255,7 +255,7 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         with open(fname) as f:
             for i, l in enumerate(f):
                 pass
-        return i + 1
+            return i + 1
 
     def setup_dialog(self):
         """Load the form dialog from bob_LVE.py"""
