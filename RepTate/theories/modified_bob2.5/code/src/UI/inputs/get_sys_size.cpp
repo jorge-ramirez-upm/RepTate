@@ -63,8 +63,7 @@ void get_sys_size(void)
   branched_poly = new polymer[max_poly];
   if (branched_poly == NULL)
   {
-    printf("Error : Could not allocate polymers. \n");
-    abort();
+    my_abort((char *)"Error : Could not allocate polymers. \n");
   }
 
   extern void pool_init(void);

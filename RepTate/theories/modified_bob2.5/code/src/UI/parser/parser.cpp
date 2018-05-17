@@ -167,8 +167,9 @@ int parser(int argc, char *argv[])
       inpfl = fopen(inpfname, "r");
       if (inpfl == NULL)
       {
-        printf("Error opening input file %s \n", inpfname);
-        abort();
+        char s[256];
+        sprintf(s, "Error opening input file %s \n", inpfname);
+        my_abort(s);
       }
 
       if (defconf != 0)

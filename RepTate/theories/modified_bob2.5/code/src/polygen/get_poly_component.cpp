@@ -135,8 +135,9 @@ void get_poly_component(int n, double blend_frac)
     break;
 
   default:
-    printf("Undefined polymer type %d \n", polytype);
-    abort();
+    char s[256];
+    sprintf(s, "Undefined polymer type %d \n", polytype);
+    my_abort(s);
     break;
   }
 

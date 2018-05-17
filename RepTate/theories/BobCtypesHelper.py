@@ -33,13 +33,21 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
-from ctypes import CDLL, c_double, c_int, c_char_p, byref
+from ctypes import CFUNCTYPE, CDLL, c_double, c_int, c_char_p, byref, c_bool
 import sys
 import os
 
 
+class BobError(Exception):
+    """Class for BoB exceptions"""
+    pass
+
+
 class BobCtypesHelper:
     """Wrapper class to call BoB C++ functions"""
+
+    CB_FTYPE = CFUNCTYPE(None,
+                         c_char_p)  # callback [return type, [args types]]
 
     def __init__(self, parent_theory):
 
@@ -49,10 +57,12 @@ class BobCtypesHelper:
         # load the sharedlibrary
         if sys.maxsize > 2**32:
             # 64-bit system
-            self.lib_path = dir_path + os.sep + 'bob2p5_lib_%s.so' % (sys.platform)
+            self.lib_path = dir_path + os.sep + 'bob2p5_lib_%s.so' % (
+                sys.platform)
         else:
             # 32-bit system
-            self.lib_path = dir_path + os.sep + 'bob2p5_lib_%s_i686.so' % (sys.platform)
+            self.lib_path = dir_path + os.sep + 'bob2p5_lib_%s_i686.so' % (
+                sys.platform)
         try:
             self.bob_lib = CDLL(self.lib_path)
         except:
@@ -60,22 +70,29 @@ class BobCtypesHelper:
         # link the C function to Python
         self.link_c_functions()
 
+    def print_from_c(self, char):
+        """Function called by BoB from the C++ code. 
+        Called when error occured during BoB execution
+        """
+        err_msg = '\nERROR encountered in BoB:\n%s\n---------------' % (
+            char.decode())
+        print(err_msg) # DEBUG
+        self.parent_theory.Qprint(err_msg)
+
     def link_c_functions(self):
         """Declare the Python functions equivalents to the C functions"""
         self.bob_save_polyconf_and_return_gpc = self.bob_lib.reptate_save_polyconf_and_return_gpc
-        self.bob_save_polyconf_and_return_gpc.restype = None
+        self.bob_save_polyconf_and_return_gpc.restype = c_bool
 
         self.run_bob_lve = self.bob_lib.run_bob_lve
-        self.run_bob_lve.restype = None
+        self.run_bob_lve.restype = c_bool
 
         self.get_bob_lve = self.bob_lib.get_bob_lve
-        self.get_bob_lve.restype = None
+        self.get_bob_lve.restype = c_bool
 
-        self.set_GPCNumBin = self.bob_lib.set_GPCNumBin
-        self.set_GPCNumBin.restype = None
-
-        self.get_mn_mw = self.bob_lib.get_mn_mw
-        self.get_mn_mw.restype = None
+        self.cbfunc = self.CB_FTYPE(
+            self.print_from_c)  # callback C function from Python function
+        self.bob_lib.def_pycallback_func(self.cbfunc)
 
     def free_lib(self):
         """Unload the library. This is equivalent to closing BoB"""
@@ -99,7 +116,9 @@ class BobCtypesHelper:
         """Run BoB asking for a polyconf file only (no relaxation etc) and
         output the characteristics of the polymer configuration"""
         # reset the library
-        self.reload_lib() 
+        print("reloading library")
+        # self.reload_lib()
+        print("reloading library done")
         # prepare the arguments for bob_main function
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
@@ -118,20 +137,27 @@ class BobCtypesHelper:
         gbin_arr = (c_double * nbin)()
         mn = c_double()
         mw = c_double()
-        #call C function
-        self.bob_save_polyconf_and_return_gpc(
-            c_int(n_arg), argv, c_int(nbin), ncomp, ni, nf, byref(mn),
-            byref(mw), lgmid_arr, wtbin_arr, brbin_arr, gbin_arr)
-        #unload the library
-        self.free_lib()
-        # return results
-        arrs = [lgmid_arr[:], wtbin_arr[:], brbin_arr[:], gbin_arr[:]]
-        return [mn.value, mw.value, arrs]
+
+        #call C function, return False if error in BoB
+        if self.bob_save_polyconf_and_return_gpc(
+                c_int(n_arg), argv, c_int(nbin), ncomp, ni, nf, byref(mn),
+                byref(mw), lgmid_arr, wtbin_arr, brbin_arr, gbin_arr):
+
+            # unload the library
+            # self.free_lib()
+
+            # return results
+            arrs = [lgmid_arr[:], wtbin_arr[:], brbin_arr[:], gbin_arr[:]]
+            return [mn.value, mw.value, arrs]
+
+        # BoB encountered error
+        # self.free_lib()
+        raise BobError
 
     def return_bob_lve(self, arg_list):
         """Run BoB LVE and copy results to arrays"""
         # reset the library
-        self.reload_lib() 
+        self.reload_lib()
         # prepare the arguments for bob_main function
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
@@ -139,15 +165,20 @@ class BobCtypesHelper:
             argv[i] = arg_list[i].encode('utf-8')
 
         # run bob LVE and get size of results
+        # call C function, return False if error in BoB
         out_size = c_int()
-        self.run_bob_lve(c_int(n_arg), argv, byref(out_size))
+        if self.run_bob_lve(c_int(n_arg), argv, byref(out_size)):
+            #allocate Python memory for results and copy bob results
+            omega = (c_double * out_size.value)()
+            g_p = (c_double * out_size.value)()
+            g_pp = (c_double * out_size.value)()
 
-        #allocate Python memory for results and copy bob results  
-        omega = (c_double * out_size.value)()
-        g_p = (c_double * out_size.value)()
-        g_pp = (c_double * out_size.value)()
-        self.get_bob_lve(omega, g_p, g_pp)
-        #unload the library
+            if self.get_bob_lve(omega, g_p, g_pp):
+                #unload the library
+                self.free_lib()
+
+                return [omega[:], g_p[:], g_pp[:]]
+
+        # BoB encountered error
         self.free_lib()
-        return [omega[:], g_p[:], g_pp[:]]
-
+        raise BobError

@@ -17,6 +17,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../../include/bob.h"
+
 void get_poly(void)
 {
   extern int runmode, num_poly;
@@ -41,8 +43,9 @@ void get_poly(void)
       conffl = fopen(conffname, "r");
       if (conffl == NULL)
       {
-        printf("Error opening configuration file %s \n", conffname);
-        abort();
+        char s[256];
+        sprintf(s, "Error opening configuration file %s \n", conffname);
+        my_abort(s);
       }
       polyread();
     }
@@ -51,8 +54,7 @@ void get_poly(void)
       conffl = fopen(conffname, "w");
       if (conffl == NULL)
       {
-        printf("Error opening file to write configuration \n");
-        abort();
+        my_abort((char *)"Error opening file to write configuration \n");
       }
       printf("How many components you want ? ");
       scanf("%d", &num_comp);
@@ -90,8 +92,9 @@ void get_poly(void)
       conffl = fopen(conffname, "r");
       if (conffl == NULL)
       {
-        printf("Error opening configuration file %s \n", conffname);
-        abort();
+        char s[256];
+        sprintf(s, "Error opening configuration file %s \n", conffname);
+        my_abort(s);
       }
       polyread();
     }
@@ -100,8 +103,9 @@ void get_poly(void)
       conffl = fopen(conffname, "w");
       if (conffl == NULL)
       {
-        printf("Error opening configuration file %s \n", conffname);
-        abort();
+        char s[256];
+        sprintf(s, "Error opening configuration file %s \n", conffname);
+        my_abort(s);
       }
 
       num_poly = 0;

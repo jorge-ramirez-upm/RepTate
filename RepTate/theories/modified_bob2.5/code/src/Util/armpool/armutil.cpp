@@ -27,10 +27,9 @@ void pool_init(void)
   arm_pool = new arm[max_arm];
   if (arm_pool == NULL)
   {
-    printf("ERROR : Could not allocate memory for arms. \n");
-    printf("Current request was for %d arms. \n", max_arm);
-    printf("Consider reducing the number and try again. \n");
-    abort();
+    char s[256];
+    sprintf(s, "ERROR : Could not allocate memory for arms. \nCurrent request was for %d arms. \nConsider reducing the number and try again. \n", max_arm);
+    my_abort(s);
   }
 
   first_avail_in_pool = 0;
@@ -51,8 +50,7 @@ int request_arm(void)
   int nxt = arm_pool[m].R1;
   if (nxt == -1)
   {
-    printf("Error : ran out of available arm in request_arm \n");
-    abort();
+    my_abort((char *)"Error : ran out of available arm in request_arm \n");
   }
   arm_pool[nxt].L1 = -1;
   first_avail_in_pool = nxt;

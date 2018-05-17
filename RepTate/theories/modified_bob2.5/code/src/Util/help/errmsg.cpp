@@ -14,24 +14,40 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../../include/bob.h"
+
 void errmsg(int code)
 {
-extern int runmode;
-extern FILE * errfl; extern FILE * infofl;
-if(runmode == 2){
+  extern int runmode;
+  extern FILE *errfl;
+  extern FILE *infofl;
+  if (runmode == 2)
+  {
 
-printf("Aborting now... \n");
-                }
-else{
-if(errfl == NULL){errfl=fopen("bob.err","w");}
-
-fprintf(errfl,"Aborting now... \n");
+    printf("Aborting now... \n");
+  }
+  else
+  {
+    if (errfl == NULL)
+    {
+      errfl = fopen("bob.err", "w");
     }
 
-if(errfl != NULL){fclose(errfl);}
-if(infofl != NULL){fclose(infofl);}
-abort();
+    fprintf(errfl, "Aborting now... \n");
+  }
+
+  if (errfl != NULL)
+  {
+    fclose(errfl);
+  }
+  if (infofl != NULL)
+  {
+    fclose(infofl);
+  }
+  char s[256];
+  sprintf(s, "error code %d\nAborting now... \n", code);
+  my_abort(s);
 }

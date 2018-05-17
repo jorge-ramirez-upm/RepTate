@@ -17,6 +17,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish, V. Boudara
 */
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <exception>
 #include <math.h>
 #include <stdlib.h>
 #include "../../include/bob.h"
@@ -27,47 +29,83 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish, V. Boudara
 
 int bob_main(int, char **);
 bool reptate_flag = true; // if false, "end_code()" is called at the end of bob_main()
+int bob_loaded = 0;
 
 int nnp_size;
-void reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn_out, double *mw_out, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out)
+bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn_out, double *mw_out, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out)
 {
-  infofl = fopen("info.txt", "w");
-  rcread();
-  bob_main(argc, argv);
-  return_gpcls(nbin, ncomp, ni, nf, lgmid_out, wtbin_out, brbin_out, gbin_out);
-  get_mn_mw(mn_out, mw_out);
-  end_code();
+  try
+  {
+    printf("bob_loaded=%d\n", bob_loaded);
+    bob_loaded = 1;
+    infofl = fopen("info.txt", "w");
+    printf("check 1 infofl open\n");
+    rcread();
+    printf("check 2 rcread\n");
+    bob_main(argc, argv);
+    printf("check 3 bob_main\n");
+    return_gpcls(nbin, ncomp, ni, nf, lgmid_out, wtbin_out, brbin_out, gbin_out);
+    printf("check 4 return_gpcls\n");
+    get_mn_mw(mn_out, mw_out);
+    printf("check 5 get_mn_mw\n");
+    close_files();
+    printf("check 6 close_files\n");
+    return true;
+  }
+  catch (const std::exception &)
+  {
+    close_files();
+    return false;
+  }
 }
 
-void run_bob_lve(int argc, char **argv, int *n)
+bool get_bob_lve(double *omega_out, double *gp_out, double *gpp_out)
 {
-  printf("bob_loaded=%d\n", bob_loaded);
-  bob_loaded = 1;
-  infofl = fopen("info.txt", "w");
-  rcread();
-  extern int OutMode;
-  OutMode = 3;
-  bob_main(argc, argv);
-  *n = n_lve_out;
-}
-void get_bob_lve(double *omega_out, double *gp_out, double *gpp_out)
-{
-  for (int i = 0; i < n_lve_out; i++)
+  try
   {
-    omega_out[i] = omega[i];
-    gp_out[i] = g_p[i];
-    gpp_out[i] = g_pp[i];
+    for (int i = 0; i < n_lve_out; i++)
+    {
+      omega_out[i] = omega[i];
+      gp_out[i] = g_p[i];
+      gpp_out[i] = g_pp[i];
+    }
+    // end_code();
+    return true;
   }
-  end_code();
+  catch (const std::exception &)
+  {
+    // end_code();
+    return false;
+  }
+}
+
+bool run_bob_lve(int argc, char **argv, int *n)
+{
+  try
+  {
+    printf("bob_loaded=%d\n", bob_loaded);
+    bob_loaded = 1;
+    infofl = fopen("info.txt", "w");
+    rcread();
+    extern int OutMode;
+    OutMode = 3;
+    bob_main(argc, argv);
+    *n = n_lve_out;
+    return true;
+  }
+  catch (const std::exception &)
+  {
+    return false;
+  }
 }
 
 int bob_main(int argc, char *argv[])
 {
+
   int cont_exec = parser(argc, argv);
   if (cont_exec == 1)
   {
-    printf("Parser failed \n");
-    abort();
+    my_abort((char *)"Parser failed \n");
   }
 
   if (cont_exec == 0)
@@ -103,9 +141,7 @@ int bob_main(int argc, char *argv[])
         FILE *fprio = fopen("savedprio.dat", "r"); //reading in previous savedprio.dat
         if (fprio == NULL)
         {
-          printf("Was expecting file savedprio.dat here \n");
-          printf("Please run with CalcNlin=no  first. \n");
-          abort();
+          my_abort((char *)"Was expecting file savedprio.dat here \nPlease run with CalcNlin=no  first. \n");
         }
         for (int i = 0; i < num_poly; i++)
         {

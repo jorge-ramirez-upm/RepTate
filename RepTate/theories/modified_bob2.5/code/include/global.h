@@ -56,5 +56,4 @@ polycopy *br_copy = NULL;
 int FlowPriority;
 double FlowTime; // FlowTime is immediately copied to SnipTime
                  // to retain old codes
-int bob_loaded = 0;
 #endif

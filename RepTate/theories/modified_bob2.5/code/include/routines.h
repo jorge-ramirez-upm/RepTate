@@ -19,5 +19,6 @@ extern void output_nlin(void);
 extern int time_step(int);
 
 extern void end_code(void);
+extern void close_files(void);
 
 

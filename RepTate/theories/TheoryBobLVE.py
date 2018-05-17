@@ -47,7 +47,7 @@ from collections import OrderedDict
 import time
 
 import bob_LVE  # dialog
-from BobCtypesHelper import BobCtypesHelper
+from BobCtypesHelper import BobCtypesHelper, BobError
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
@@ -181,12 +181,14 @@ class BaseTheoryBobLVE:
 
         # Run BoB C++ code
         bch = BobCtypesHelper(self)
-        omega, gp, gpp = bch.return_bob_lve(self.argv)
+        try:
+            omega, gp, gpp = bch.return_bob_lve(self.argv)
+        except BobError:
+            print('Caught BoB ERROR')
+            return
 
         #copy results to RepTate data file
         if omega:
-            # print(omega, gp, gpp)
-
             tt.num_columns = ft.num_columns
             tt.num_rows = len(omega)
             tt.data = np.zeros((tt.num_rows, tt.num_columns))

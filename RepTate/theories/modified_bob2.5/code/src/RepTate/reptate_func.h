@@ -36,12 +36,18 @@
 #define REPTATE_FUNC_H
 #include <vector>
 
-extern "C" void reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn, double *mw, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
-extern "C" void set_GPCNumBin(int nbin);
-extern "C" void get_mn_mw(double *mn, double *mw);
-extern "C" void run_bob_lve(int argc, char **argv, int* n);
-extern "C" void get_bob_lve(double *omega_out, double* gp_out, double * gpp_out);
+// callback function
+typedef void pyfunc(char* s);
+extern pyfunc *py_callback;
 
+// functions used by Python
+extern "C" void def_pycallback_func(pyfunc F);
+extern "C" bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn, double *mw, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
+extern "C" bool run_bob_lve(int argc, char **argv, int* n);
+extern "C" bool get_bob_lve(double *omega_out, double* gp_out, double * gpp_out);
+
+// other functions
+void get_mn_mw(double *mn, double *mw);
 void return_gpcls(int nbin, int ncomp, int ni, int nf, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
 
 void return_gpchist(int ncomp, int n_cur_comp, double *mass_ar, double *gfac_ar, double *branch_ar, double *wt_frac,

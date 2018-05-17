@@ -21,7 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdlib.h>
 #include "../../include/bob.h"
 
-void end_code(void)
+void close_files(void)
 {
   extern FILE *infofl;
   extern FILE *errfl;
@@ -38,7 +38,16 @@ void end_code(void)
   {
     fclose(debugfl);
   }
+  if (debugfl != NULL)
+  {
+    fclose(debugfl);
+  }
+}
 
+void end_code(void)
+{
+
+  close_files();
   extern int GenPolyOnly;
   if (GenPolyOnly != 0)
   {

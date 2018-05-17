@@ -42,8 +42,7 @@ void genfromfile(int ni, int *nf, double blend_frac)
     err = getline(inpfl, polyfname);
     if (err == -1)
     {
-      printf("Failed to get file name in genfromfile.cpp \n");
-      abort();
+      my_abort((char *)"Failed to get file name in genfromfile.cpp \n");
     }
   }
 
@@ -54,8 +53,9 @@ void genfromfile(int ni, int *nf, double blend_frac)
   FILE *tmpfl = fopen(polyfname, "r");
   if (tmpfl == NULL)
   {
-    printf("Non existent file %-10.20s \n quitting now : genfromfile.cpp ... \n", polyfname);
-    abort();
+    char s[256];
+    sprintf(s, "Non existent file %-10.20s \n quitting now : genfromfile.cpp ... \n", polyfname);
+    my_abort(s);
   }
 
   extern char polycode[10];

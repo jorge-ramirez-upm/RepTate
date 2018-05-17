@@ -47,7 +47,7 @@ from collections import OrderedDict
 import time
 
 import bob_gen_poly  # dialog
-from BobCtypesHelper import BobCtypesHelper
+from BobCtypesHelper import BobCtypesHelper, BobError
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
 from PyQt5.QtCore import QUrl, pyqtSignal
@@ -236,11 +236,15 @@ class BaseTheoryCreatePolyconf:
             self.Qprint('Operation canceled')
             return
 
+        self.bch = BobCtypesHelper(self)
         # Run BoB C++ code
-        bch = BobCtypesHelper(self)
         gpc_out = []
-        mn, mw, gpc_out = bch.save_polyconf_and_return_gpc(
+        try:
+            mn, mw, gpc_out = self.bch.save_polyconf_and_return_gpc(
             self.argv, self.npol_tot)
+        except BobError:
+            print('Caught BoB ERROR')
+            return
 
         #copy results to RepTate data file
         if gpc_out:
@@ -252,7 +256,12 @@ class BaseTheoryCreatePolyconf:
 
             self.Qprint("Polymer configuration written in \"%s\"" %
                         self.polyconf_file_out)
-            self.Qprint("\nMn=%.3g, Mw=%.3g, PDI=%.3g" % (mn, mw, mw / mn))
+            try:
+                self.Qprint("\nMn=%.3g, Mw=%.3g, PDI=%.3g" % (mn, mw, mw / mn))
+            except ZeroDivisionError:
+                self.Qprint("\nMn=%.3g, Mw=%.3g" % (mn, mw))
+
+            # copy results to data series
             lgmid_out, wtbin_out, brbin_out, gbin_out = gpc_out
             tt.num_columns = ft.num_columns
             tt.num_rows = len(lgmid_out)
@@ -689,7 +698,7 @@ FunH
         result of the polymer configuration created by BoB.
         Return a string with a filename"""
         options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
+        options |= QFileDialog.DontConfirmOverwrite
         dir_start = os.path.join('data', 'React', 'BoB_polyconf.dat')
         dilogue_name = 'Save BoB Polymer Configuration'
         ext_filter = 'Data Files (*.dat)'
