@@ -14,18 +14,22 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/bob.h"
 polymer polygenLin(double seglen)
 {
-extern std::vector <arm> arm_pool;
-polymer cur_poly;
-int n1=request_arm(); int n2=request_arm();
-cur_poly.first_end=n1;
-arm_pool[n1].up=n2; arm_pool[n1].down=n2;
-arm_pool[n2].up=n1; arm_pool[n2].down=n1;
-arm_pool[n1].R1=n2; arm_pool[n2].L1=n1;
-arm_pool[n1].arm_len=arm_pool[n2].arm_len=0.50*seglen;
-poly_start(&cur_poly);
-return(cur_poly);
+  extern std::vector<arm> arm_pool;
+  polymer cur_poly;
+  int n1 = request_arm();
+  int n2 = request_arm();
+  cur_poly.first_end = n1;
+  arm_pool[n1].up = n2;
+  arm_pool[n1].down = n2;
+  arm_pool[n2].up = n1;
+  arm_pool[n2].down = n1;
+  arm_pool[n1].R1 = n2;
+  arm_pool[n2].L1 = n1;
+  arm_pool[n1].arm_len = arm_pool[n2].arm_len = 0.50 * seglen;
+  poly_start(&cur_poly);
+  return (cur_poly);
 }

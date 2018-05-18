@@ -14,28 +14,28 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 // Calculate the effective friction of compound arm n
-#include<math.h>
-#include<stdio.h>
+#include <math.h>
+#include <stdio.h>
 #include "../../../include/bob.h"
 double calc_eff_fric(int n)
 {
-extern std::vector <arm> arm_pool;
-extern double Alpha;
-int n1=arm_pool[n].next_friction;
-int n2=arm_pool[n].nxt_relax;
-double zeff=arm_pool[n].arm_len_eff;
-double zouter=arm_pool[n].arm_len;
-double drag=0.0;
+  extern std::vector<arm> arm_pool;
+  extern double Alpha;
+  int n1 = arm_pool[n].next_friction;
+  int n2 = arm_pool[n].nxt_relax;
+  double zeff = arm_pool[n].arm_len_eff;
+  double zouter = arm_pool[n].arm_len;
+  double drag = 0.0;
 
-while(n1 != -1){
-drag+= arm_pool[n1].tau_collapse*
-             pow(arm_pool[n1].phi_collapse,2.0*Alpha)*(zeff - zouter)/zeff;
-zouter+=arm_pool[n2].arm_len;
-n2=arm_pool[n2].nxt_relax;
-n1=arm_pool[n1].next_friction;
-               }
-return(drag);
-
+  while (n1 != -1)
+  {
+    drag += arm_pool[n1].tau_collapse *
+            pow(arm_pool[n1].phi_collapse, 2.0 * Alpha) * (zeff - zouter) / zeff;
+    zouter += arm_pool[n2].arm_len;
+    n2 = arm_pool[n2].nxt_relax;
+    n1 = arm_pool[n1].next_friction;
+  }
+  return (drag);
 }

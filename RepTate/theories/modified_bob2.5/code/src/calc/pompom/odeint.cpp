@@ -14,41 +14,74 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "./pompom.h"
 #include <math.h>
 
-void odeint(double ystart,double x1,double x2,double eps,double h1,double hmin, 
-double tauS, double tauB, double gdot, int q, int kmax, 
-double * xp, double * yp,
-  void (*derivs) (double, double*, double*, double, double, double, int) )
+void odeint(double ystart, double x1, double x2, double eps, double h1, double hmin,
+            double tauS, double tauB, double gdot, int q, int kmax,
+            double *xp, double *yp,
+            void (*derivs)(double, double *, double *, double, double, double, int))
 {
-double dydx, yscal, hlast, hdid, hnext; double x=x1;
-double tiny=1.0e-30; double h;
-extern void warnmsgs(int);
-if((x2 - x1) > 0.0){h=fabs(h1);}
-else{h=-fabs(h1);}
-int kount,nok,nbad; kount=nok=nbad=0;
-double y=ystart; int flag;
+  double dydx, yscal, hlast, hdid, hnext;
+  double x = x1;
+  double tiny = 1.0e-30;
+  double h;
+  extern void warnmsgs(int);
+  if ((x2 - x1) > 0.0)
+  {
+    h = fabs(h1);
+  }
+  else
+  {
+    h = -fabs(h1);
+  }
+  int kount, nok, nbad;
+  kount = nok = nbad = 0;
+  double y = ystart;
+  int flag;
 
-hlast=h;
-for (int i=0; i<kmax; i++){ flag=0; h=hlast;
-while((x < (xp[i]- tiny)) && (flag == 0)){
-if((xp[i] - x) < fabs(h)){h=xp[i]-x + tiny; flag=1;}
-       (*derivs) (x,&y,&dydx,tauS, tauB, gdot, q);
-       yscal=fabs(y)+fabs(h*dydx) + tiny;	
- rkqs(&y,dydx,&x,h,eps,yscal,&hdid,&hnext,tauS, tauB, gdot, q, derivs);
-  if(hdid == h){nok++;}
-  else{nbad++;}
-if(fabs(hnext) < hmin){
-	h=hmin;}
-	else{h=hnext;} 
-if((xp[i] - x) < fabs(h)){h=xp[i]-x + tiny; flag=1;}
-             }
-yp[i]=y;
-}
+  hlast = h;
+  for (int i = 0; i < kmax; i++)
+  {
+    flag = 0;
+    h = hlast;
+    while ((x < (xp[i] - tiny)) && (flag == 0))
+    {
+      if ((xp[i] - x) < fabs(h))
+      {
+        h = xp[i] - x + tiny;
+        flag = 1;
+      }
+      (*derivs)(x, &y, &dydx, tauS, tauB, gdot, q);
+      yscal = fabs(y) + fabs(h * dydx) + tiny;
+      rkqs(&y, dydx, &x, h, eps, yscal, &hdid, &hnext, tauS, tauB, gdot, q, derivs);
+      if (hdid == h)
+      {
+        nok++;
+      }
+      else
+      {
+        nbad++;
+      }
+      if (fabs(hnext) < hmin)
+      {
+        h = hmin;
+      }
+      else
+      {
+        h = hnext;
+      }
+      if ((xp[i] - x) < fabs(h))
+      {
+        h = xp[i] - x + tiny;
+        flag = 1;
+      }
+    }
+    yp[i] = y;
+  }
 
-/*
+  /*
 hlast=hmin;
 
 for(int nstp=0; nstp<=10000; nstp++){flag=0;
@@ -73,5 +106,4 @@ if(flag == 0){if(fabs(hnext) < hmin){
 //warnmsgs(402); 
 return;
 */
-
-} 
+}

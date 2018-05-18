@@ -14,41 +14,43 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/bob.h"
 #include <stdio.h>
 #include <math.h>
 void genGEL_wtav(int ni, int nf)
 {
-extern FILE* infofl; extern FILE* inpfl;
-extern std::vector <polymer> branched_poly;
-extern double mass_mono;
-double mn_arm,b_u;
-extern int runmode;
-int wtav_poly_type=1;
-if(runmode == 2)
-{
-printf(" Weight averaged gelation polymer ensemble \n");
-printf("segment molar mass M_{N,S} ? .."); scanf("%le", &mn_arm);
-printf("branching prob p ? .."); scanf("%le", &b_u);
-}
-else
-{
-fscanf(inpfl, "%le %le", &mn_arm, &b_u);
-}
-fprintf(infofl, "Selected weight averaged gelation ensemble \n");
+  extern FILE *infofl;
+  extern FILE *inpfl;
+  extern std::vector<polymer> branched_poly;
+  extern double mass_mono;
+  double mn_arm, b_u;
+  extern int runmode;
+  int wtav_poly_type = 1;
+  if (runmode == 2)
+  {
+    printf(" Weight averaged gelation polymer ensemble \n");
+    printf("segment molar mass M_{N,S} ? ..");
+    scanf("%le", &mn_arm);
+    printf("branching prob p ? ..");
+    scanf("%le", &b_u);
+  }
+  else
+  {
+    fscanf(inpfl, "%le %le", &mn_arm, &b_u);
+  }
+  fprintf(infofl, "Selected weight averaged gelation ensemble \n");
 
-  fprintf(infofl, "M_{N,S} = %e \n",mn_arm);
-  fprintf(infofl, "p = %e \n",b_u);
+  fprintf(infofl, "M_{N,S} = %e \n", mn_arm);
+  fprintf(infofl, "p = %e \n", b_u);
 
-mn_arm=mn_arm/mass_mono; // segment length
+  mn_arm = mn_arm / mass_mono; // segment length
 
-double logprob=log(1.0 - 1.0/mn_arm);
-  for (int i=ni; i<nf; i++)
-   {
-    branched_poly[i]=polygen_wtav(wtav_poly_type, logprob, b_u);
-   }
+  double logprob = log(1.0 - 1.0 / mn_arm);
+  for (int i = ni; i < nf; i++)
+  {
+    branched_poly[i] = polygen_wtav(wtav_poly_type, logprob, b_u);
+  }
 
-  fprintf(infofl, "created %d wt av gelation polymers. \n",nf-ni);
-
+  fprintf(infofl, "created %d wt av gelation polymers. \n", nf - ni);
 }

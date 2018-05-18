@@ -14,23 +14,40 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
-#include "./pompom.h"
-void pm_shear(double x, double * y, double * dydx, 
-   double tauS, double tauB, double gdot, int q){
-double axy, axx, ptrace, aux, nustar;
 
-if( (y[0] >= q) || (q == 1)){y[0]=(double) q; dydx[0]=0.0;}
-else{
- if( y[0] < 1.0){y[0]=1.0; dydx[0]=0.0; }
- else{nustar=2.0/((double) (q-1));
-   axy=gdot*tauB * (1.0 - exp(-x/tauB));
-   axx=2.0*(gdot*gdot)*(tauB*tauB)*(1.0 - exp(-x/tauB))
-   + 1.0 - 2.0 * (gdot*gdot) * tauB * x * exp(-x / tauB);
-        ptrace= axx + 2.0;
-        aux = tauS / exp(nustar * (y[0] - 1.0));
-        if((aux * gdot) < 0.001){dydx[0]= 0.0;}
-	else{dydx[0]=y[0]*gdot*axy/ptrace-(y[0]-1.0)*exp(nustar*(y[0]-1.0))/tauS;}
-     }
-   }
+#include "./pompom.h"
+void pm_shear(double x, double *y, double *dydx,
+              double tauS, double tauB, double gdot, int q)
+{
+  double axy, axx, ptrace, aux, nustar;
+
+  if ((y[0] >= q) || (q == 1))
+  {
+    y[0] = (double)q;
+    dydx[0] = 0.0;
+  }
+  else
+  {
+    if (y[0] < 1.0)
+    {
+      y[0] = 1.0;
+      dydx[0] = 0.0;
+    }
+    else
+    {
+      nustar = 2.0 / ((double)(q - 1));
+      axy = gdot * tauB * (1.0 - exp(-x / tauB));
+      axx = 2.0 * (gdot * gdot) * (tauB * tauB) * (1.0 - exp(-x / tauB)) + 1.0 - 2.0 * (gdot * gdot) * tauB * x * exp(-x / tauB);
+      ptrace = axx + 2.0;
+      aux = tauS / exp(nustar * (y[0] - 1.0));
+      if ((aux * gdot) < 0.001)
+      {
+        dydx[0] = 0.0;
+      }
+      else
+      {
+        dydx[0] = y[0] * gdot * axy / ptrace - (y[0] - 1.0) * exp(nustar * (y[0] - 1.0)) / tauS;
+      }
+    }
+  }
 }

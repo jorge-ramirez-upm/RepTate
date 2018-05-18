@@ -14,7 +14,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 // Returns false in m'th polymer is not comb
 // for a comb, each inner segment has atleast one left and atleast one right
 // neighbour segment which are free.
@@ -22,32 +22,33 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 bool iscomb(int m)
 {
-extern std::vector <polymer> branched_poly;
-extern std::vector <arm> arm_pool;
-bool isitcomb=true;
+  extern std::vector<polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  bool isitcomb = true;
 
-if(branched_poly[m].num_branch > 3)
-{
-int n1=branched_poly[m].first_end;
-if(!arm_pool[n1].free_end)
- {
-if(!((arm_pool[arm_pool[n1].L1].free_end || arm_pool[arm_pool[n1].L2].free_end)
-&& (arm_pool[arm_pool[n1].R1].free_end || arm_pool[arm_pool[n1].R2].free_end)))
-{isitcomb=false;}
- }
-int n2=arm_pool[n1].down;
-while(n2 != n1)
-{
-if(!arm_pool[n2].free_end)
- {
-if(!((arm_pool[arm_pool[n2].L1].free_end || arm_pool[arm_pool[n2].L2].free_end)
-&& (arm_pool[arm_pool[n2].R1].free_end || arm_pool[arm_pool[n2].R2].free_end)))
-{isitcomb=false;}
- }
-n2=arm_pool[n2].down;
-}
-}
+  if (branched_poly[m].num_branch > 3)
+  {
+    int n1 = branched_poly[m].first_end;
+    if (!arm_pool[n1].free_end)
+    {
+      if (!((arm_pool[arm_pool[n1].L1].free_end || arm_pool[arm_pool[n1].L2].free_end) && (arm_pool[arm_pool[n1].R1].free_end || arm_pool[arm_pool[n1].R2].free_end)))
+      {
+        isitcomb = false;
+      }
+    }
+    int n2 = arm_pool[n1].down;
+    while (n2 != n1)
+    {
+      if (!arm_pool[n2].free_end)
+      {
+        if (!((arm_pool[arm_pool[n2].L1].free_end || arm_pool[arm_pool[n2].L2].free_end) && (arm_pool[arm_pool[n2].R1].free_end || arm_pool[arm_pool[n2].R2].free_end)))
+        {
+          isitcomb = false;
+        }
+      }
+      n2 = arm_pool[n2].down;
+    }
+  }
 
-return isitcomb;
+  return isitcomb;
 }
-

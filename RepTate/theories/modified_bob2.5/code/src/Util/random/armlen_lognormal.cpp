@@ -14,12 +14,12 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "./bob_random.h"
 #include <math.h>
 double armlen_lognormal(double mn, double pdi)
 {
- double mm=log(mn) - 0.50*log(pdi);
- double ss=sqrt(log(pdi));
- return exp(mm + ss*gasdev());
+  double mm = log(mn) - 0.50 * log(pdi);
+  double ss = sqrt(log(pdi));
+  return exp(mm + ss * gasdev());
 }

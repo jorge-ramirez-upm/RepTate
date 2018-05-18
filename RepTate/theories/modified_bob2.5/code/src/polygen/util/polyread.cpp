@@ -23,8 +23,8 @@ void polyread(void)
 {
   extern FILE *conffl;
   extern int num_poly;
-  extern std::vector <arm> arm_pool;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
   extern char polycode[10];
 
   int segnum, LL1, LL2, RR1, RR2, nsv, n1;

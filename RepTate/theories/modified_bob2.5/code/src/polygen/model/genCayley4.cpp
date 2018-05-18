@@ -22,7 +22,7 @@ void genCayley4(int ni, int nf)
   extern FILE *infofl;
   extern FILE *inpfl;
   extern double mass_mono;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<polymer> branched_poly;
 
   extern int runmode;
 

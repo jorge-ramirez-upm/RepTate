@@ -14,21 +14,27 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <math.h>
 int find_rate_indx(double t_stretch)
 {
-extern double cur_time, StretchBinWidth;
-extern int NumNlinStretch;
-int rate_indx;
-double t_ratio;
-if(t_stretch >= cur_time){rate_indx=0;}
-else{
-t_ratio=cur_time/t_stretch;
-rate_indx=(int) floor(log(t_ratio)/log(StretchBinWidth));
-if(rate_indx >= NumNlinStretch){rate_indx=NumNlinStretch-1;}
-}
+  extern double cur_time, StretchBinWidth;
+  extern int NumNlinStretch;
+  int rate_indx;
+  double t_ratio;
+  if (t_stretch >= cur_time)
+  {
+    rate_indx = 0;
+  }
+  else
+  {
+    t_ratio = cur_time / t_stretch;
+    rate_indx = (int)floor(log(t_ratio) / log(StretchBinWidth));
+    if (rate_indx >= NumNlinStretch)
+    {
+      rate_indx = NumNlinStretch - 1;
+    }
+  }
 
-return rate_indx;
+  return rate_indx;
 }
-

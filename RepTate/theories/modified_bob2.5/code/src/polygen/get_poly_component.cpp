@@ -54,7 +54,8 @@ void get_poly_component(int n, double blend_frac)
   }
   num_cur_comp += num_poly;
 
-  if (num_cur_comp > max_poly){
+  if (num_cur_comp > max_poly)
+  {
     my_abort((char *)"Error: ran out of polymers in get_poly_component\n");
   }
 

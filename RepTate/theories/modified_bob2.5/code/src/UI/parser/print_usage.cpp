@@ -14,23 +14,23 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
-#include<stdio.h>
+
+#include <stdio.h>
 void print_usage(void)
 {
-printf(" Incorrect usage \n\n");
+  printf(" Incorrect usage \n\n");
 
-printf("use bob without any arguments for interactive mode. \n\n");
+  printf("use bob without any arguments for interactive mode. \n\n");
 
-printf("bob --version prints version \n");
-printf("bob --help gives help page and tells you how to get more help. \n\n");
+  printf("bob --version prints version \n");
+  printf("bob --help gives help page and tells you how to get more help. \n\n");
 
-printf("bob -b goes to batch mode \n");
-printf("In batch mode, you can give input and configuration filenames as \n");
-printf(" -i input_filename -c configuration_filename \n");
-printf("Default input filename for batch mode is inp.dat \n");
-printf(" and default configuration filename is polyconf.dat \n");
-printf(" Some parameters are set through bob.rc \n");
-printf(" For details look at the manual \n");
-printf(" use -n to switch on non-linear flow calculation \n");
+  printf("bob -b goes to batch mode \n");
+  printf("In batch mode, you can give input and configuration filenames as \n");
+  printf(" -i input_filename -c configuration_filename \n");
+  printf("Default input filename for batch mode is inp.dat \n");
+  printf(" and default configuration filename is polyconf.dat \n");
+  printf(" Some parameters are set through bob.rc \n");
+  printf(" For details look at the manual \n");
+  printf(" use -n to switch on non-linear flow calculation \n");
 }

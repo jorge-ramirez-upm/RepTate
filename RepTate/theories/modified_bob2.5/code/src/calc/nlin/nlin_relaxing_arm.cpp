@@ -14,21 +14,29 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/bob.h"
 #include <stdio.h>
-int nlin_relaxing_arm(int n, double z) {
-extern std::vector <arm> arm_pool; int na=n;
-double dz=arm_pool[n].arm_len;
-while(dz < z){
-  if(arm_pool[na].nxt_relax != -1){
-                         na=arm_pool[na].nxt_relax;
-                         dz +=arm_pool[na].arm_len;
-                                  }
-  else{
-if( (z -dz ) > 1.e-6){printf("possible error in nlin_relaxing_arm \n");}
-     dz=z+tiny;}
-             }
-return na;
+int nlin_relaxing_arm(int n, double z)
+{
+  extern std::vector<arm> arm_pool;
+  int na = n;
+  double dz = arm_pool[n].arm_len;
+  while (dz < z)
+  {
+    if (arm_pool[na].nxt_relax != -1)
+    {
+      na = arm_pool[na].nxt_relax;
+      dz += arm_pool[na].arm_len;
+    }
+    else
+    {
+      if ((z - dz) > 1.e-6)
+      {
+        printf("possible error in nlin_relaxing_arm \n");
+      }
+      dz = z + tiny;
+    }
+  }
+  return na;
 }
-

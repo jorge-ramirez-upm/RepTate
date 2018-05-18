@@ -14,12 +14,13 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "./bob_random.h"
 #include <math.h>
 double armlen_gaussian(double mn, double pdi)
 {
-double arm_len = mn*(1.0 + sqrt(pdi -1.0) *gasdev() );
-if(arm_len < 1.0e-3) arm_len=1.0e-3;
-return arm_len;
+  double arm_len = mn * (1.0 + sqrt(pdi - 1.0) * gasdev());
+  if (arm_len < 1.0e-3)
+    arm_len = 1.0e-3;
+  return arm_len;
 }

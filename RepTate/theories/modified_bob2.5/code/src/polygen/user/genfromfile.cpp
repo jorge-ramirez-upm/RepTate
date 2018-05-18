@@ -60,8 +60,8 @@ void genfromfile(int ni, int *nf, double blend_frac)
 
   extern char polycode[10];
   int ncur_comp;
-  extern std::vector <arm> arm_pool;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
 
   int segnum, LL1, LL2, RR1, RR2, nsv, n1;
   nsv = 0;

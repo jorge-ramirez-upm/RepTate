@@ -14,22 +14,30 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
-// delete empty space or newline at the begining. 
+
+// delete empty space or newline at the begining.
 // read characters till the next newline. Replace newline by null
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 void get_name(char *word, int n)
 {
-int k=0; int c='\n';
-while(isspace(c = fgetc(stdin)) || (c=='\n'));
-*word++=c; 
-      while(c !='\n')
-       {
-        c=fgetc(stdin);
-        if(c != '\n') *word++ = c;
-        k++; if(k >= n) {printf("Too many characters to read!\n"); c='\n';}
-       }
-        *word='\0';
+  int k = 0;
+  int c = '\n';
+  while (isspace(c = fgetc(stdin)) || (c == '\n'))
+    ;
+  *word++ = c;
+  while (c != '\n')
+  {
+    c = fgetc(stdin);
+    if (c != '\n')
+      *word++ = c;
+    k++;
+    if (k >= n)
+    {
+      printf("Too many characters to read!\n");
+      c = '\n';
+    }
+  }
+  *word = '\0';
 }

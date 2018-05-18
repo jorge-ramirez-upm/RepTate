@@ -21,10 +21,10 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 void create_phi_hist(void)
 {
-  extern std::vector <arm> arm_pool;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
   extern int zintmin, zintmax, num_poly;
-  extern std::vector <double> phi_hist;
+  extern std::vector<double> phi_hist;
   int phi_hist_max = 0;
   int n1, n2, zint;
   for (int i = 0; i < num_poly; i++)

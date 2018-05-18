@@ -51,7 +51,7 @@ void end_code(void)
   extern int GenPolyOnly;
   if (GenPolyOnly != 0)
   {
-    extern std::vector <polycopy> br_copy;
+    extern std::vector<polycopy> br_copy;
     extern int num_poly;
     for (int i = 0; i < br_copy.size(); i++)
     {
@@ -63,7 +63,7 @@ void end_code(void)
       br_copy[i].relax_end.clear();
       br_copy[i].assigned_taus.clear();
       br_copy[i].taus.clear();
- 
+
       // hopefully deallocate the memory
       br_copy[i].armindx.shrink_to_fit();
       br_copy[i].priority.shrink_to_fit();
@@ -77,35 +77,36 @@ void end_code(void)
     br_copy.clear();
     br_copy.shrink_to_fit();
 
-    extern std::vector <double> t_maxwell;
+    extern std::vector<double> t_maxwell;
     t_maxwell.clear();
     t_maxwell.shrink_to_fit();
 
     extern int CalcNlin;
     if (CalcNlin == 0)
     {
-      extern std::vector< std::vector <double> > nlin_prio_phi_relax;
-      extern std::vector< std::vector <double> > nlin_prio_phi_held;
-      for (int i=0; i<nlin_prio_phi_relax.size(); i++){
+      extern std::vector<std::vector<double> > nlin_prio_phi_relax;
+      extern std::vector<std::vector<double> > nlin_prio_phi_held;
+      for (int i = 0; i < nlin_prio_phi_relax.size(); i++)
+      {
         nlin_prio_phi_relax[i].clear();
         nlin_prio_phi_held[i].clear();
         nlin_prio_phi_relax[i].shrink_to_fit();
         nlin_prio_phi_held[i].shrink_to_fit();
       }
-        nlin_prio_phi_relax.clear();
-        nlin_prio_phi_held.clear();
-        nlin_prio_phi_relax.shrink_to_fit();
-        nlin_prio_phi_held.shrink_to_fit();
+      nlin_prio_phi_relax.clear();
+      nlin_prio_phi_held.clear();
+      nlin_prio_phi_relax.shrink_to_fit();
+      nlin_prio_phi_held.shrink_to_fit();
     }
 
-    extern std::vector <double> omega, g_p, g_pp;
+    extern std::vector<double> omega, g_p, g_pp;
     omega.clear();
     g_p.clear();
     g_pp.clear();
   }
-  extern std::vector <arm> arm_pool;
-  extern std::vector <polymer> branched_poly;
-  extern std::vector <double> phi_hist;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
+  extern std::vector<double> phi_hist;
 
   phi_hist.clear();
   arm_pool.clear();
@@ -114,5 +115,4 @@ void end_code(void)
   phi_hist.shrink_to_fit();
   arm_pool.shrink_to_fit();
   branched_poly.shrink_to_fit();
-
 }

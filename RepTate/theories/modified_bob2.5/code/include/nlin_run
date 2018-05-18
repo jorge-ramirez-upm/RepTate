@@ -9,55 +9,55 @@ echo "pause -1" >> pltlin.m
 firstset="true";
 for i in `cat rates.dat`
 do
-echo "rate = $i"
-
-cp ${basedir}/include/bobrc.base bob.rc
-if [ "$firstset" = "true" ] 
-then
-cp inp.dat inp1
-fi
-ttt=`echo "scale=8; 1/${i}" | bc`
-echo "NlinPrep=yes" >> bob.rc
-echo "CalcNlin=no" >> bob.rc
-echo "FlowTime=$ttt" >> bob.rc
-echo "FlowPriority=no" >> bob.rc
-
-echo "2" > nlin.inp
-tmax=`echo "scale=8; 50/${i}" | bc`
-echo "0 $i 1.0e-4 ${tmax}" >> nlin.inp
-tmax=`echo "scale=8; 10/${i}" | bc`
-echo "1 $i 1.0e-4 ${tmax}" >> nlin.inp
-${basedir}/src/obj/bob2p5 -i inp1
-if [ "$firstset" = "true" ]
-then
-eta0=`cat info.txt | grep zero-shear | cut -d= -f2,2`
-etaf=`cat info.txt | grep complex-viscosity | cut -d= -f2,2`
-echo "${eta0}  ${etaf}" >> flowprop.dat
-fi
-
-rm inp1
-head -5 inp.dat > inp1
-echo "0" >> inp1
-cp ${basedir}/include/bobrc.base bob.rc
-echo "NlinPrep=yes" >> bob.rc
-echo "CalcNlin=yes" >> bob.rc
-echo "FlowTime=$ttt" >> bob.rc
-echo "FlowPriority=yes" >> bob.rc
-${basedir}/src/obj/bob2p5 -i inp1
-exthard=`cat info.txt | grep hardening | cut -d: -f2,2`
-shrthin=`cat info.txt | grep thinning | cut -d: -f2,2`
-echo "${i} ${exthard}  ${shrthin}" >> flowprop.dat
-
-mv shear.dat shear${i}.dat
-mv extn1.dat extn${i}.dat
-if [ "$firstset" = "true" ] 
-then 
-echo "plot 'shear${i}.dat' using 1:(\$2/\$4)" >> pltnlin.m
-firstset="false"
-else
-echo "replot 'shear${i}.dat' using 1:(\$2/\$4)" >> pltnlin.m
-fi
-
-echo "replot 'extn${i}.dat' using 1:(\$2/\$3)" >> pltnlin.m
+    echo "rate = $i"
+    
+    cp ${basedir}/include/bobrc.base bob.rc
+    if [ "$firstset" = "true" ]
+    then
+        cp inp.dat inp1
+    fi
+    ttt=`echo "scale=8; 1/${i}" | bc`
+    echo "NlinPrep=yes" >> bob.rc
+    echo "CalcNlin=no" >> bob.rc
+    echo "FlowTime=$ttt" >> bob.rc
+    echo "FlowPriority=no" >> bob.rc
+    
+    echo "2" > nlin.inp
+    tmax=`echo "scale=8; 50/${i}" | bc`
+    echo "0 $i 1.0e-4 ${tmax}" >> nlin.inp
+    tmax=`echo "scale=8; 10/${i}" | bc`
+    echo "1 $i 1.0e-4 ${tmax}" >> nlin.inp
+    ${basedir}/src/obj/bob2p5 -i inp1
+    if [ "$firstset" = "true" ]
+    then
+        eta0=`cat info.txt | grep zero-shear | cut -d= -f2,2`
+        etaf=`cat info.txt | grep complex-viscosity | cut -d= -f2,2`
+        echo "${eta0}  ${etaf}" >> flowprop.dat
+    fi
+    
+    rm inp1
+    head -5 inp.dat > inp1
+    echo "0" >> inp1
+    cp ${basedir}/include/bobrc.base bob.rc
+    echo "NlinPrep=yes" >> bob.rc
+    echo "CalcNlin=yes" >> bob.rc
+    echo "FlowTime=$ttt" >> bob.rc
+    echo "FlowPriority=yes" >> bob.rc
+    ${basedir}/src/obj/bob2p5 -i inp1
+    exthard=`cat info.txt | grep hardening | cut -d: -f2,2`
+    shrthin=`cat info.txt | grep thinning | cut -d: -f2,2`
+    echo "${i} ${exthard}  ${shrthin}" >> flowprop.dat
+    
+    mv shear.dat shear${i}.dat
+    mv extn1.dat extn${i}.dat
+    if [ "$firstset" = "true" ]
+    then
+        echo "plot 'shear${i}.dat' using 1:(\$2/\$4)" >> pltnlin.m
+        firstset="false"
+    else
+        echo "replot 'shear${i}.dat' using 1:(\$2/\$4)" >> pltnlin.m
+    fi
+    
+    echo "replot 'extn${i}.dat' using 1:(\$2/\$3)" >> pltnlin.m
 done
 echo "pause -1" >> pltnlin.m

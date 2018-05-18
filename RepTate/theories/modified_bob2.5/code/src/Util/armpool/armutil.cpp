@@ -21,17 +21,18 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void pool_init(void)
 {
   extern int first_avail_in_pool;
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   extern int max_arm;
 
-  try{
+  try
+  {
     arm_pool.resize(max_arm);
   }
   catch (const std::exception &)
   {
     char s[256];
     sprintf(s, "Error: Could not allocate memory for arms. \nCurrent request was for %d arms. \nConsider reducing the number and try again. \n", max_arm);
-    my_abort(s);  
+    my_abort(s);
   }
 
   first_avail_in_pool = 0;
@@ -46,7 +47,7 @@ void pool_init(void)
 int request_arm(void)
 {
   extern int first_avail_in_pool;
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
 
   int m = first_avail_in_pool;
   int nxt = arm_pool[m].R1;
@@ -66,7 +67,7 @@ int request_arm(void)
 void return_arm(int m)
 {
   extern int first_avail_in_pool;
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   int tmp = first_avail_in_pool;
   arm_pool[tmp].L1 = m;
   arm_pool[m].R1 = tmp;
@@ -76,8 +77,8 @@ void return_arm(int m)
 
 void set_tmpflag(int n)
 {
-  extern std::vector <arm> arm_pool;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
   int n0 = branched_poly[n].first_end;
   arm_pool[n0].tmpflag = true;
   int nd = arm_pool[n0].down;
@@ -90,8 +91,8 @@ void set_tmpflag(int n)
 
 void unset_tmpflag(int n)
 {
-  extern std::vector <arm> arm_pool;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
   int n0 = branched_poly[n].first_end;
   arm_pool[n0].tmpflag = false;
   int nd = arm_pool[n0].down;
@@ -105,7 +106,7 @@ void unset_tmpflag(int n)
 // polymer n, everything on left of na are set true;
 void set_tmpflag_left(int n, int na)
 {
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   unset_tmpflag(n);
   arm_pool[na].tmpflag = true;
 
@@ -134,7 +135,7 @@ void set_tmpflag_left(int n, int na)
 
 void set_tmpflag_right(int n, int na)
 {
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   unset_tmpflag(n);
   arm_pool[na].tmpflag = true;
 
@@ -163,7 +164,7 @@ void set_tmpflag_right(int n, int na)
 
 void set_tmpflag_travel(int na)
 {
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   arm_pool[na].tmpflag = true;
   int nn = arm_pool[na].L1;
   if (nn != -1)
@@ -201,7 +202,7 @@ void set_tmpflag_travel(int na)
 
 int request_attached_arm(int m)
 {
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   int m1 = request_arm();
   arm_pool[m1].down = arm_pool[m].down;
   arm_pool[m].down = m1;
@@ -212,7 +213,7 @@ int request_attached_arm(int m)
 
 void remove_arm_from_list(int m)
 {
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   int nd = arm_pool[m].down;
   int nu = arm_pool[m].up;
   arm_pool[nu].down = nd;

@@ -14,13 +14,13 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <cstdio>
 void print_short_license(void)
 {
-printf("Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish \n");
-printf("This program comes with ABSOLUTELY NO WARRANTY. \n");
-printf("This is a free software, and you are welcome to redistribute it \n");
-printf("under certain conditions.\n");
-printf("see <http://www.gnu.org/licenses/gpl.txt> for details. \n\n"); 
+  printf("Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish \n");
+  printf("This program comes with ABSOLUTELY NO WARRANTY. \n");
+  printf("This is a free software, and you are welcome to redistribute it \n");
+  printf("under certain conditions.\n");
+  printf("see <http://www.gnu.org/licenses/gpl.txt> for details. \n\n");
 }

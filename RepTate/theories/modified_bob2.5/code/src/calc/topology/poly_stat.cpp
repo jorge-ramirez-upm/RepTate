@@ -21,8 +21,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <math.h>
 double mass_poly(int n)
 {
-  extern std::vector <arm> arm_pool;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
   double mass_now = 0.0;
   int n1 = branched_poly[n].first_end;
   mass_now += arm_pool[n1].vol_fraction;
@@ -37,7 +37,7 @@ double mass_poly(int n)
 
 void poly_stat(void)
 {
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<polymer> branched_poly;
   extern bool iscomb(int);
   int ncomb = 0;
   int nlin = 0;

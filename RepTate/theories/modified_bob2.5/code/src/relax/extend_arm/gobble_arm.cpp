@@ -14,38 +14,52 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 // polymer : m, arm n gobbles up n1 accumulating drag due to n2
 #include <math.h>
 #include "../../../include/bob.h"
 #include "../relax.h"
 #include <stdio.h>
 void gobble_arm(int m, int n, int n1, int n2)
-{ 
- extern polymer *  branched_poly;
- extern std::vector <arm> arm_pool;
- extern double Alpha;
- int r2=arm_pool[n2].relax_end;
- arm_pool[n1].relax_end=n; arm_pool[n1].relaxing=true;
- arm_pool[n].compound=true; arm_pool[n].collapsed=false;
- arm_pool[n].phi_collapse = -1.0;
+{
+  extern std::vector<polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern double Alpha;
+  int r2 = arm_pool[n2].relax_end;
+  arm_pool[n1].relax_end = n;
+  arm_pool[n1].relaxing = true;
+  arm_pool[n].compound = true;
+  arm_pool[n].collapsed = false;
+  arm_pool[n].phi_collapse = -1.0;
 
- int na=arm_pool[n].next_friction; int n3=na;
- if(na == -1) {arm_pool[n].next_friction = r2; arm_pool[r2].next_friction = -1;}
- else{
- while(na != -1){n3=na; na=arm_pool[na].next_friction;}
- arm_pool[n3].next_friction=r2;  arm_pool[r2].next_friction = -1;}
+  int na = arm_pool[n].next_friction;
+  int n3 = na;
+  if (na == -1)
+  {
+    arm_pool[n].next_friction = r2;
+    arm_pool[r2].next_friction = -1;
+  }
+  else
+  {
+    while (na != -1)
+    {
+      n3 = na;
+      na = arm_pool[na].next_friction;
+    }
+    arm_pool[n3].next_friction = r2;
+    arm_pool[r2].next_friction = -1;
+  }
 
- int n0=inner_arm_compound(n); arm_pool[n0].nxt_relax=n1;
- double tmpvar=arm_pool[r2].tau_collapse*
-              pow(arm_pool[r2].phi_collapse,2.0*Alpha);
-  arm_pool[n].zeff_numer+= arm_pool[n].arm_len_end*tmpvar;
-  arm_pool[n].zeff_denom+=tmpvar;
-  arm_pool[n].extra_drag+=tmpvar;
-  arm_pool[n].arm_len_end+= arm_pool[n1].arm_len;
-    if(arm_pool[r2].ghost)
-      branched_poly[m].ghost_contrib -=tmpvar;
-    else
-      arm_pool[r2].prune=true;
-
+  int n0 = inner_arm_compound(n);
+  arm_pool[n0].nxt_relax = n1;
+  double tmpvar = arm_pool[r2].tau_collapse *
+                  pow(arm_pool[r2].phi_collapse, 2.0 * Alpha);
+  arm_pool[n].zeff_numer += arm_pool[n].arm_len_end * tmpvar;
+  arm_pool[n].zeff_denom += tmpvar;
+  arm_pool[n].extra_drag += tmpvar;
+  arm_pool[n].arm_len_end += arm_pool[n1].arm_len;
+  if (arm_pool[r2].ghost)
+    branched_poly[m].ghost_contrib -= tmpvar;
+  else
+    arm_pool[r2].prune = true;
 }

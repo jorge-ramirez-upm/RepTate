@@ -14,48 +14,55 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/bob.h"
 #include <stdio.h>
 void genH(int ni, int nf)
 {
- extern FILE* infofl; extern FILE * inpfl;
- extern double mass_mono;
- extern std::vector <polymer> branched_poly;
+  extern FILE *infofl;
+  extern FILE *inpfl;
+  extern double mass_mono;
+  extern std::vector<polymer> branched_poly;
 
-extern int runmode;
- double m_arm, m_cross, pdi_arm, pdi_cross;
- int arm_type1, arm_type2;
+  extern int runmode;
+  double m_arm, m_cross, pdi_arm, pdi_cross;
+  int arm_type1, arm_type2;
 
-if(runmode == 2){
-printf("First we need information about the four side arms. \n");
-user_get_arm_type(&arm_type1,&m_arm,&pdi_arm);
-printf("Now information about the backbone. \n");
-user_get_arm_type(&arm_type2,&m_cross,&pdi_cross);
-                }
-else{
-   fscanf(inpfl, "%d", &arm_type1);
-   fscanf(inpfl, "%le %le", &m_arm, &pdi_arm);
-   fscanf(inpfl, "%d", &arm_type2);
-   fscanf(inpfl, "%le %le", &m_cross, &pdi_cross);
-    }
-
- fprintf(infofl,"Selected H polymer\n");
- fprintf(infofl,"Side arms : ");
- print_arm_type(arm_type1, m_arm, pdi_arm);
- fprintf(infofl,"Backbone : ");
- print_arm_type(arm_type2, m_cross, pdi_cross);
-
-  m_arm=m_arm/mass_mono; if(arm_type1 != 0) {m_arm=m_arm/pdi_arm;}
- m_cross=m_cross/mass_mono; if(arm_type2 != 0) {m_cross = m_cross/pdi_cross;}
- for (int i=ni; i<nf; i++)
+  if (runmode == 2)
   {
-branched_poly[i]=polygenH(arm_type1,m_arm,pdi_arm,arm_type2,m_cross,pdi_cross);
+    printf("First we need information about the four side arms. \n");
+    user_get_arm_type(&arm_type1, &m_arm, &pdi_arm);
+    printf("Now information about the backbone. \n");
+    user_get_arm_type(&arm_type2, &m_cross, &pdi_cross);
+  }
+  else
+  {
+    fscanf(inpfl, "%d", &arm_type1);
+    fscanf(inpfl, "%le %le", &m_arm, &pdi_arm);
+    fscanf(inpfl, "%d", &arm_type2);
+    fscanf(inpfl, "%le %le", &m_cross, &pdi_cross);
   }
 
- fprintf(infofl,"Created %d H  polymers \n", nf-ni);
+  fprintf(infofl, "Selected H polymer\n");
+  fprintf(infofl, "Side arms : ");
+  print_arm_type(arm_type1, m_arm, pdi_arm);
+  fprintf(infofl, "Backbone : ");
+  print_arm_type(arm_type2, m_cross, pdi_cross);
+
+  m_arm = m_arm / mass_mono;
+  if (arm_type1 != 0)
+  {
+    m_arm = m_arm / pdi_arm;
+  }
+  m_cross = m_cross / mass_mono;
+  if (arm_type2 != 0)
+  {
+    m_cross = m_cross / pdi_cross;
+  }
+  for (int i = ni; i < nf; i++)
+  {
+    branched_poly[i] = polygenH(arm_type1, m_arm, pdi_arm, arm_type2, m_cross, pdi_cross);
+  }
+
+  fprintf(infofl, "Created %d H  polymers \n", nf - ni);
 }
-
-
-
-

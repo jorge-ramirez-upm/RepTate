@@ -107,7 +107,6 @@ int bob_main(int argc, char *argv[])
     poly_stat();
     if (GenPolyOnly != 0)
     {
-
       if ((Snipping != 0) && (CalcNlin != 0))
       {
         fprintf(infofl, "Following relaxation to calculate linear rheology\n");

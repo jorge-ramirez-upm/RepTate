@@ -14,17 +14,17 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <stdio.h>
 #include "../../../include/bob.h"
 void print_version(void)
 {
-printf("bob : Rheology of general Branch-On-Branch polymer\n");
-printf("%s : dated %s\n", bob_version, bob_date);
-printf("Known issues : \n");
-printf("        :  In some places Alpha is hardcoded to 1.0 \n");
-printf("        :  If a component occupies very small weight fraction \n");
-printf("             and relaxes much slowly than rest of the material, \n");
-printf("    the prediction may be wrong if they become non-self-entangled.\n"); 
-printf("bug report : d.j.read@leeds.ac.uk \n");
+  printf("bob : Rheology of general Branch-On-Branch polymer\n");
+  printf("%s : dated %s\n", bob_version, bob_date);
+  printf("Known issues : \n");
+  printf("        :  In some places Alpha is hardcoded to 1.0 \n");
+  printf("        :  If a component occupies very small weight fraction \n");
+  printf("             and relaxes much slowly than rest of the material, \n");
+  printf("    the prediction may be wrong if they become non-self-entangled.\n");
+  printf("bug report : d.j.read@leeds.ac.uk \n");
 }

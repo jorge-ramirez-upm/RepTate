@@ -6,7 +6,6 @@ extern int rcread(void);
 extern int parser(int argc, char *argv[]);
 extern void user_interface(void);
 
-
 // calc
 extern void lin_rheology(int);
 extern void pompom(void);
@@ -20,5 +19,3 @@ extern int time_step(int);
 
 extern void end_code(void);
 extern void close_files(void);
-
-

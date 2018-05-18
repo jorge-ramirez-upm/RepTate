@@ -14,35 +14,37 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/bob.h"
 #include <stdio.h>
 #include <cstdlib>
 void polyout(int m)
 {
-extern std::vector <arm> arm_pool;
-extern std::vector <polymer> branched_poly;
-extern double cur_time;
-extern FILE * debugfl;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
+  extern double cur_time;
+  extern FILE *debugfl;
 
-int n1=branched_poly[m].first_end;
-int n2=arm_pool[n1].down;
-if(debugfl == NULL) {debugfl=fopen("debg.dat","w");}
-fprintf(debugfl,"%e \n",cur_time);
-fprintf(debugfl, "%d \n", m);
-fprintf(debugfl, "%d %d %e %e %e %e %d %d \n", n1,arm_pool[n1].nxt_relax,
-   arm_pool[n1].z, arm_pool[n1].arm_len_eff, 
-     arm_pool[n1].arm_len_end,arm_pool[n1].extra_drag,
-arm_pool[n1].nxtbranch1,arm_pool[n1].nxtbranch2);
-while(n2 != n1)
-{
+  int n1 = branched_poly[m].first_end;
+  int n2 = arm_pool[n1].down;
+  if (debugfl == NULL)
+  {
+    debugfl = fopen("debg.dat", "w");
+  }
+  fprintf(debugfl, "%e \n", cur_time);
+  fprintf(debugfl, "%d \n", m);
+  fprintf(debugfl, "%d %d %e %e %e %e %d %d \n", n1, arm_pool[n1].nxt_relax,
+          arm_pool[n1].z, arm_pool[n1].arm_len_eff,
+          arm_pool[n1].arm_len_end, arm_pool[n1].extra_drag,
+          arm_pool[n1].nxtbranch1, arm_pool[n1].nxtbranch2);
+  while (n2 != n1)
+  {
 
-fprintf(debugfl, "%d %d %e %e %e %e %d %d\n", n2,arm_pool[n2].nxt_relax,
-   arm_pool[n2].z, arm_pool[n2].arm_len_eff, 
-     arm_pool[n2].arm_len_end, arm_pool[n2].extra_drag,
-arm_pool[n2].nxtbranch1,arm_pool[n2].nxtbranch2);
+    fprintf(debugfl, "%d %d %e %e %e %e %d %d\n", n2, arm_pool[n2].nxt_relax,
+            arm_pool[n2].z, arm_pool[n2].arm_len_eff,
+            arm_pool[n2].arm_len_end, arm_pool[n2].extra_drag,
+            arm_pool[n2].nxtbranch1, arm_pool[n2].nxtbranch2);
 
-n2=arm_pool[n2].down;
-}
-
+    n2 = arm_pool[n2].down;
+  }
 }

@@ -14,33 +14,31 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <stdio.h>
-void graceheadernlin(FILE * fid)
+void graceheadernlin(FILE *fid)
 {
-fprintf(fid, "# Grace project file \n");
-fprintf(fid, "# created by Bob2.4 \n");
-fprintf(fid, "@g0 on \n");
-fprintf(fid, "@g0 hidden false \n");
-fprintf(fid, "@g0 type XY \n");
-fprintf(fid, "@g0 stacked false \n");
-fprintf(fid, "@with g0 \n");
-fprintf(fid, "@     world 0.001, 1000, 0.001, 1000 \n");
-fprintf(fid, "@     stack world 0, 0, 0, 0 \n");
-fprintf(fid, "@     view 0.15, 0.1567, 0.887, 0.85 \n");
-fprintf(fid, "@     xaxes scale Logarithmic \n");
-fprintf(fid, "@     yaxes scale Logarithmic \n");
-fprintf(fid, "@     xaxis on \n");
-fprintf(fid, "@     xaxis label \"t (s) \" \n");
-fprintf(fid, "@     xaxis ticklabel format power \n");
-fprintf(fid, "@     xaxis ticklabel prec 0 \n");
-fprintf(fid, "@     xaxis tick minor ticks 0 \n");
-fprintf(fid, "@     yaxis on \n");
-fprintf(fid, "@     yaxis ticklabel format power \n");
-fprintf(fid, "@     yaxis ticklabel prec 0 \n");
-fprintf(fid, "@     yaxis tick minor ticks 0 \n");
-fprintf(fid, "@target G0.S0 \n");
-fprintf(fid, "@type xy \n");
-
-
+  fprintf(fid, "# Grace project file \n");
+  fprintf(fid, "# created by Bob2.4 \n");
+  fprintf(fid, "@g0 on \n");
+  fprintf(fid, "@g0 hidden false \n");
+  fprintf(fid, "@g0 type XY \n");
+  fprintf(fid, "@g0 stacked false \n");
+  fprintf(fid, "@with g0 \n");
+  fprintf(fid, "@     world 0.001, 1000, 0.001, 1000 \n");
+  fprintf(fid, "@     stack world 0, 0, 0, 0 \n");
+  fprintf(fid, "@     view 0.15, 0.1567, 0.887, 0.85 \n");
+  fprintf(fid, "@     xaxes scale Logarithmic \n");
+  fprintf(fid, "@     yaxes scale Logarithmic \n");
+  fprintf(fid, "@     xaxis on \n");
+  fprintf(fid, "@     xaxis label \"t (s) \" \n");
+  fprintf(fid, "@     xaxis ticklabel format power \n");
+  fprintf(fid, "@     xaxis ticklabel prec 0 \n");
+  fprintf(fid, "@     xaxis tick minor ticks 0 \n");
+  fprintf(fid, "@     yaxis on \n");
+  fprintf(fid, "@     yaxis ticklabel format power \n");
+  fprintf(fid, "@     yaxis ticklabel prec 0 \n");
+  fprintf(fid, "@     yaxis tick minor ticks 0 \n");
+  fprintf(fid, "@target G0.S0 \n");
+  fprintf(fid, "@type xy \n");
 }

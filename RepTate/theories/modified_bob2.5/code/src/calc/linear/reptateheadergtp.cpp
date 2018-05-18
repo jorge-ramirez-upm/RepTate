@@ -14,12 +14,12 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include <stdio.h>
-void reptateheadergtp(FILE * fid)
+void reptateheadergtp(FILE *fid)
 {
-extern double temp;
-fprintf(fid,"T = %e; origin=Bob;\n",temp-273.0);
-fprintf(fid,"w        G'     G'' \n");
-fprintf(fid,"rad/s    Pa     Pa  \n");
+  extern double temp;
+  fprintf(fid, "T = %e; origin=Bob;\n", temp - 273.0);
+  fprintf(fid, "w        G'     G'' \n");
+  fprintf(fid, "rad/s    Pa     Pa  \n");
 }

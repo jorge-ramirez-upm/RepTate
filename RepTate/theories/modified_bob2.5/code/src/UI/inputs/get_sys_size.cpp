@@ -59,8 +59,9 @@ void get_sys_size(void)
   // during relaxation, we might need to add one more arm per molecule.
   max_arm += max_poly;
 
-  extern std::vector <polymer> branched_poly;
-  try{
+  extern std::vector<polymer> branched_poly;
+  try
+  {
     branched_poly.resize(max_poly);
   }
   catch (const std::exception &)

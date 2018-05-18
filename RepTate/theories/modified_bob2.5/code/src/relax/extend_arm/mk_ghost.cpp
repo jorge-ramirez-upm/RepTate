@@ -14,21 +14,21 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 // turn branched_poly[m].arm_pool[n] to ghost
 #include <math.h>
 #include "../../../include/bob.h"
 #include "../relax.h"
 
 void mk_ghost(int m, int n)
-{ 
-extern std::vector <polymer> branched_poly;
-extern std::vector <arm> arm_pool;
-extern double Alpha;
+{
+  extern std::vector<polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern double Alpha;
 
-double tmpvar = arm_pool[n].tau_collapse * 
-                pow(arm_pool[n].phi_collapse,2.0*Alpha);
-arm_pool[n].ghost=true;
-branched_poly[m].ghost_contrib+=tmpvar; sv_mass(m,n);
+  double tmpvar = arm_pool[n].tau_collapse *
+                  pow(arm_pool[n].phi_collapse, 2.0 * Alpha);
+  arm_pool[n].ghost = true;
+  branched_poly[m].ghost_contrib += tmpvar;
+  sv_mass(m, n);
 }
-

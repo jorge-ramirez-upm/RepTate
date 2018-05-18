@@ -14,17 +14,20 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/bob.h"
 void check_linearity(int n) //check if n'th polymer is linear
 {
- extern std::vector <arm> arm_pool;
- extern std::vector <polymer> branched_poly;
- int n1=branched_poly[n].first_free;
- int num_seg=1;
- int n2=arm_pool[n1].free_down;
- while(n2 != n1)
-  {num_seg++; n2=arm_pool[n2].free_down;}
- if(num_seg <= 2) branched_poly[n].linear_tag=true; 
-
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
+  int n1 = branched_poly[n].first_free;
+  int num_seg = 1;
+  int n2 = arm_pool[n1].free_down;
+  while (n2 != n1)
+  {
+    num_seg++;
+    n2 = arm_pool[n2].free_down;
+  }
+  if (num_seg <= 2)
+    branched_poly[n].linear_tag = true;
 }

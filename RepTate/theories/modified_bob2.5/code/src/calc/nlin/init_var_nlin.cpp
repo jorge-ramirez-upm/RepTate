@@ -14,21 +14,30 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
-#include <vector> 
+#include <vector>
 
 void init_var_nlin(void)
 {
-extern std::vector< std::vector <double> > nlin_prio_phi_relax;
-extern std::vector< std::vector <double> > nlin_prio_phi_held;
-extern int max_prio_var, NumNlinStretch;
+  extern std::vector<std::vector<double> > nlin_prio_phi_relax;
+  extern std::vector<std::vector<double> > nlin_prio_phi_held;
+  extern int max_prio_var, NumNlinStretch;
 
-for(int i=0; i< max_prio_var; i++){ for(int j=0; j<NumNlinStretch; j++){
- nlin_prio_phi_relax[i][j]=0.0; nlin_prio_phi_held[i][j]=0.0; }}
+  for (int i = 0; i < max_prio_var; i++)
+  {
+    for (int j = 0; j < NumNlinStretch; j++)
+    {
+      nlin_prio_phi_relax[i][j] = 0.0;
+      nlin_prio_phi_held[i][j] = 0.0;
+    }
+  }
 
-extern int nlin_collect_data; nlin_collect_data=0;
-extern int nlin_num_data_av; nlin_num_data_av=0;
-extern double nlin_phi_true, nlin_phi_ST, nlin_dphi_true, nlin_dphi_ST;
-nlin_phi_true=0.0; nlin_phi_ST=0.0; nlin_dphi_true=0.0; nlin_dphi_ST=0.0;
-
+  extern int nlin_collect_data;
+  nlin_collect_data = 0;
+  extern int nlin_num_data_av;
+  nlin_num_data_av = 0;
+  extern double nlin_phi_true, nlin_phi_ST, nlin_dphi_true, nlin_dphi_ST;
+  nlin_phi_true = 0.0;
+  nlin_phi_ST = 0.0;
+  nlin_dphi_true = 0.0;
+  nlin_dphi_ST = 0.0;
 }
-

@@ -14,32 +14,32 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 /* For free arm n0 (possibly compound), find out how much material relaxed */
 #include "../../../include/bob.h"
 double free_arm_relax_amount(int n)
- {
-   extern std::vector <arm> arm_pool;
-   double relax_amount=0.0;
-   int n0=n;
-   double dz = arm_pool[n0].z;
+{
+  extern std::vector<arm> arm_pool;
+  double relax_amount = 0.0;
+  int n0 = n;
+  double dz = arm_pool[n0].z;
 
   while (dz > tiny)
+  {
+    if (dz > arm_pool[n0].arm_len)
     {
-     if (dz > arm_pool[n0].arm_len)
-      {
-       relax_amount += arm_pool[n0].vol_fraction;
-       dz = dz - arm_pool[n0].arm_len;
-       n0=arm_pool[n0].nxt_relax;
-      }
-     else
-      {
-       relax_amount += arm_pool[n0].vol_fraction * dz/arm_pool[n0].arm_len;
-        n0=-1;
-      }
-     if(n0 < 0) dz=-1.0;
+      relax_amount += arm_pool[n0].vol_fraction;
+      dz = dz - arm_pool[n0].arm_len;
+      n0 = arm_pool[n0].nxt_relax;
     }
+    else
+    {
+      relax_amount += arm_pool[n0].vol_fraction * dz / arm_pool[n0].arm_len;
+      n0 = -1;
+    }
+    if (n0 < 0)
+      dz = -1.0;
+  }
 
-  return(relax_amount);
-   
- }
+  return (relax_amount);
+}

@@ -14,44 +14,57 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 /* User defined polymer : The skeletal code */
 
 #include "../../../include/bob.h"
 #include <stdio.h>
-#define UDF_segment_num 9   // The polymer has this many segments
+#define UDF_segment_num 9 // The polymer has this many segments
 
-void genUDF(int ni, int nf) { 
-extern FILE * infofl; extern FILE * inpfl;
-extern double mass_mono; extern int runmode;
-extern std::vector <polymer> branched_poly;
+void genUDF(int ni, int nf)
+{
+  extern FILE *infofl;
+  extern FILE *inpfl;
+  extern double mass_mono;
+  extern int runmode;
+  extern std::vector<polymer> branched_poly;
 
-int  arm_type[UDF_segment_num];
-double  mass[UDF_segment_num];
-double  pdi[UDF_segment_num];
+  int arm_type[UDF_segment_num];
+  double mass[UDF_segment_num];
+  double pdi[UDF_segment_num];
 
-if(runmode == 3){ // non-interactive mode : read from input file
- for(int i=0; i < UDF_segment_num; i++){
-   fscanf(inpfl, "%d %le %le", &arm_type[i], &mass[i], &pdi[i]); }
-                }
-else{ // interactive mode 
-  for(int i=0; i < UDF_segment_num; i++){ // user_get_arm_type prompts to input one arm at a time
-     printf("User Defined Polymer : segment index i \n");
-     user_get_arm_type(&arm_type[i], &mass[i], &pdi[i]);
-                                        }
+  if (runmode == 3)
+  { // non-interactive mode : read from input file
+    for (int i = 0; i < UDF_segment_num; i++)
+    {
+      fscanf(inpfl, "%d %le %le", &arm_type[i], &mass[i], &pdi[i]);
     }
+  }
+  else
+  { // interactive mode
+    for (int i = 0; i < UDF_segment_num; i++)
+    { // user_get_arm_type prompts to input one arm at a time
+      printf("User Defined Polymer : segment index i \n");
+      user_get_arm_type(&arm_type[i], &mass[i], &pdi[i]);
+    }
+  }
 
-fprintf(infofl, "User defined polymer with %d segments \n", UDF_segment_num);
-for(int i=0; i< UDF_segment_num; i++){
-  print_arm_type(arm_type[i], mass[i], pdi[i]);
-// express mass in terms of number of monomer. convert to M_N
-   mass[i]=mass[i]/mass_mono; if(arm_type[i] != 0){mass[i]=mass[i]/pdi[i];}
-                                     }
+  fprintf(infofl, "User defined polymer with %d segments \n", UDF_segment_num);
+  for (int i = 0; i < UDF_segment_num; i++)
+  {
+    print_arm_type(arm_type[i], mass[i], pdi[i]);
+    // express mass in terms of number of monomer. convert to M_N
+    mass[i] = mass[i] / mass_mono;
+    if (arm_type[i] != 0)
+    {
+      mass[i] = mass[i] / pdi[i];
+    }
+  }
 
-for(int i=ni; i<nf; i++){ // The first polymer is ni. (nf - ni) UDF polymer
-        branched_poly[i]=polygenUDF(arm_type, mass, pdi);
-                        }
+  for (int i = ni; i < nf; i++)
+  { // The first polymer is ni. (nf - ni) UDF polymer
+    branched_poly[i] = polygenUDF(arm_type, mass, pdi);
+  }
 
-fprintf(infofl, "Created %d user defined polymers \n", nf-ni);
-
+  fprintf(infofl, "Created %d user defined polymers \n", nf - ni);
 }

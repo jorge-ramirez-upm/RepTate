@@ -8,4 +8,3 @@ extern void fast_four_hist(double, double *, double *);
 extern void graceheadergt(FILE *);
 extern void graceheadergtp(FILE *);
 extern void reptateheadergtp(FILE *);
-

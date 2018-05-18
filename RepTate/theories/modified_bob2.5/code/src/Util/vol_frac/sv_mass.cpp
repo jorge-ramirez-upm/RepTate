@@ -14,23 +14,21 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 /* Save the weight fraction carried by (possibly compound) arm 'n' on polymer
  'm' which has collapsed and is being removed from free arm list */
 
 #include "../../../include/bob.h"
-void sv_mass(int m, int n) 
+void sv_mass(int m, int n)
 {
-extern std::vector <arm> arm_pool;
-extern std::vector <polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
+  extern std::vector<polymer> branched_poly;
 
-       int nnxt=arm_pool[n].nxt_relax;
-       branched_poly[m].relaxed_frac += arm_pool[n].vol_fraction;
-       while(nnxt != -1)
-        {
-         branched_poly[m].relaxed_frac += arm_pool[nnxt].vol_fraction;
-         nnxt=arm_pool[nnxt].nxt_relax;
-        }
-
+  int nnxt = arm_pool[n].nxt_relax;
+  branched_poly[m].relaxed_frac += arm_pool[n].vol_fraction;
+  while (nnxt != -1)
+  {
+    branched_poly[m].relaxed_frac += arm_pool[nnxt].vol_fraction;
+    nnxt = arm_pool[nnxt].nxt_relax;
+  }
 }
-

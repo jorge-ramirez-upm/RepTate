@@ -14,21 +14,19 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 int fold_rd(int n, int nmin)
 {
-if(n == -1)
- return(n);
-else
- return(n+nmin);
+  if (n == -1)
+    return (n);
+  else
+    return (n + nmin);
 }
 
 int fold_wrt(int n, int nmin)
 {
-if(n == -1)
- return(n);
-else
- return(n-nmin);
+  if (n == -1)
+    return (n);
+  else
+    return (n - nmin);
 }
-
-

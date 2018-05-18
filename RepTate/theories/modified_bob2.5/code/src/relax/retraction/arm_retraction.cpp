@@ -24,7 +24,7 @@ void arm_retraction(int n, int indx)
 {
   double dz;
   extern double cur_time, gamma1, phi, DtMult, deltaphi, Alpha, RetLim, PSquare;
-  extern std::vector <arm> arm_pool;
+  extern std::vector<arm> arm_pool;
   extern int PrefMode;
   extern int LtRsActivated;
 

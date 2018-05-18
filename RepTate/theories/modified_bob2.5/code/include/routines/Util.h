@@ -11,9 +11,8 @@ extern void set_tmpflag_travel(int);
 
 // help
 extern void errmsg(int);
-extern void warnmsgs(int );
-extern void warnmsgstring(int, char * );
-
+extern void warnmsgs(int);
+extern void warnmsgstring(int, char *);
 
 // random
 extern double gasdev(void);
@@ -25,11 +24,9 @@ extern double gammln(double);
 extern double poisson(double);
 extern void rand_on_line(double, int, double *);
 
-
 // vol_frac
 extern double frac_unrelaxed(void);
 extern double free_arm_relax_amount(int);
 extern void set_vol_frac(int, int, int, double);
 extern void set_vol_frac_wtav(int, int, int, double);
 extern void sv_mass(int, int);
-

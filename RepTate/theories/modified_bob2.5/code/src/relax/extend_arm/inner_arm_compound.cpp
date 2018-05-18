@@ -14,16 +14,18 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 // For compound arm, find the inner-most arm
 #include "../../../include/bob.h"
 int inner_arm_compound(int n)
 {
- extern std::vector <arm> arm_pool;
- int nnxt=arm_pool[n].nxt_relax;
- int nsv=n;
-  while(nnxt != -1) {
-    nsv=nnxt; 
-    nnxt=arm_pool[nsv].nxt_relax; }
- return(nsv);
+  extern std::vector<arm> arm_pool;
+  int nnxt = arm_pool[n].nxt_relax;
+  int nsv = n;
+  while (nnxt != -1)
+  {
+    nsv = nnxt;
+    nnxt = arm_pool[nsv].nxt_relax;
+  }
+  return (nsv);
 }

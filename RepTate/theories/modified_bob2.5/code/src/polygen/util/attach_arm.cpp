@@ -14,10 +14,13 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/bob.h"
-void attach_arm(int n0,int n1,int n2,int n3,int n4)
+void attach_arm(int n0, int n1, int n2, int n3, int n4)
 {
-extern std::vector <arm> arm_pool;
-arm_pool[n0].L1=n1; arm_pool[n0].L2=n2; arm_pool[n0].R1=n3; arm_pool[n0].R2=n4;
+  extern std::vector<arm> arm_pool;
+  arm_pool[n0].L1 = n1;
+  arm_pool[n0].L2 = n2;
+  arm_pool[n0].R1 = n3;
+  arm_pool[n0].R2 = n4;
 }

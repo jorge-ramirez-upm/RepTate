@@ -14,13 +14,13 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 // returns flory distribution of segments given log(monomer addition prob)
 #include "../../../include/MersenneTwister.h"
 #include <math.h>
 double flory_distb(double logprobs)
 {
-extern MTRand mtrand1;
-double tmpvar=(double)ceil(log(mtrand1())/logprobs);
-return(tmpvar);
+  extern MTRand mtrand1;
+  double tmpvar = (double)ceil(log(mtrand1()) / logprobs);
+  return (tmpvar);
 }

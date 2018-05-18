@@ -14,36 +14,54 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 #include "../../../include/MersenneTwister.h"
 #include <math.h>
-double getconv1(double cur_conv) { extern MTRand mtrand1; 
-double new_conv=cur_conv*mtrand1(); return new_conv; }
+double getconv1(double cur_conv)
+{
+  extern MTRand mtrand1;
+  double new_conv = cur_conv * mtrand1();
+  return new_conv;
+}
 
-double getconv2(double cur_conv,double fin_conv) { extern MTRand mtrand1; 
-double new_conv=1.0 -
-  (1.0-cur_conv)*exp(-mtrand1()*log((1.0-cur_conv)/(1.0-fin_conv))); 
-return new_conv; }
+double getconv2(double cur_conv, double fin_conv)
+{
+  extern MTRand mtrand1;
+  double new_conv = 1.0 -
+                    (1.0 - cur_conv) * exp(-mtrand1() * log((1.0 - cur_conv) / (1.0 - fin_conv)));
+  return new_conv;
+}
 
-double brlength(double conv, double cb, double fin_conv) 
-{extern MTRand mtrand1;
-double rho=cb*log( (1.0 - conv)/(1.0-fin_conv) );
-double r= (log(1.0/mtrand1()))/rho; 
-return r; }
+double brlength(double conv, double cb, double fin_conv)
+{
+  extern MTRand mtrand1;
+  double rho = cb * log((1.0 - conv) / (1.0 - fin_conv));
+  double r = (log(1.0 / mtrand1())) / rho;
+  return r;
+}
 
 double scilength(double conv, double cs, double fin_conv)
-{extern MTRand mtrand1;
-double eta=cs*log( (1.0 - conv)/(1.0 - fin_conv) );
-double r=(log(1.0/mtrand1()))/eta;
-if(r < 1000.0){r=ceil(r);}
-return r;}
+{
+  extern MTRand mtrand1;
+  double eta = cs * log((1.0 - conv) / (1.0 - fin_conv));
+  double r = (log(1.0 / mtrand1())) / eta;
+  if (r < 1000.0)
+  {
+    r = ceil(r);
+  }
+  return r;
+}
 
 double calclength(double conv, double cs, double cb, double tau, double beta)
-{extern MTRand mtrand1;
-double sigma=cs*conv/(1.0 - conv);
-double lambda=cb*conv/(1.0 - conv);
-double pref=tau+beta+sigma+lambda;
-double r=(log(1.0/mtrand1()))/pref;
-if(r < 1000.0){r=ceil(r);}
-return r;}
-
+{
+  extern MTRand mtrand1;
+  double sigma = cs * conv / (1.0 - conv);
+  double lambda = cb * conv / (1.0 - conv);
+  double pref = tau + beta + sigma + lambda;
+  double r = (log(1.0 / mtrand1())) / pref;
+  if (r < 1000.0)
+  {
+    r = ceil(r);
+  }
+  return r;
+}

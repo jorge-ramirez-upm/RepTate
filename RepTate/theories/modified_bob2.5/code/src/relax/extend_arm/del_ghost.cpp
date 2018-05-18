@@ -14,31 +14,36 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 //remove ghost entries from free arm list
 #include <math.h>
 #include "../../../include/bob.h"
 void del_ghost(int m)
-{ 
- extern std::vector <polymer> branched_poly;
- extern std::vector <arm> arm_pool;
+{
+  extern std::vector<polymer> branched_poly;
+  extern std::vector<arm> arm_pool;
 
- int n1=branched_poly[m].first_free;
- int n2=arm_pool[n1].free_down;
-    while(n2 != n1)
-     {
-       if(arm_pool[n2].ghost)
-        {
-         int nf1=arm_pool[n2].free_down; int nf2=arm_pool[n2].free_up;
-         arm_pool[nf2].free_down=nf1; arm_pool[nf1].free_up=nf2;
-        }
-       n2=arm_pool[n2].free_down;
-     }
-   if(arm_pool[n1].ghost)
-     {
-       int nf1=arm_pool[n1].free_down; int nf2=arm_pool[n1].free_up;
-       arm_pool[nf2].free_down=nf1; arm_pool[nf1].free_up=nf2;
-       branched_poly[m].first_free=nf1;
-       if(nf1 == n1) branched_poly[m].alive=false;
-     }
+  int n1 = branched_poly[m].first_free;
+  int n2 = arm_pool[n1].free_down;
+  while (n2 != n1)
+  {
+    if (arm_pool[n2].ghost)
+    {
+      int nf1 = arm_pool[n2].free_down;
+      int nf2 = arm_pool[n2].free_up;
+      arm_pool[nf2].free_down = nf1;
+      arm_pool[nf1].free_up = nf2;
+    }
+    n2 = arm_pool[n2].free_down;
+  }
+  if (arm_pool[n1].ghost)
+  {
+    int nf1 = arm_pool[n1].free_down;
+    int nf2 = arm_pool[n1].free_up;
+    arm_pool[nf2].free_down = nf1;
+    arm_pool[nf1].free_up = nf2;
+    branched_poly[m].first_free = nf1;
+    if (nf1 == n1)
+      branched_poly[m].alive = false;
+  }
 }

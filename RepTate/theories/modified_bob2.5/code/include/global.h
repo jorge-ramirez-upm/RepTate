@@ -19,9 +19,9 @@ double StretchBinWidth, NlinAvDt, MaxwellInterval, NlinAvInterval, ReptAmount;
 /* other variables */
 
 int num_poly, first_avail_in_pool;
-std::vector <arm> arm_pool;
-std::vector <polymer> branched_poly;
-std::vector <double> phi_hist;
+std::vector<arm> arm_pool;
+std::vector<polymer> branched_poly;
+std::vector<double> phi_hist;
 
 char polycode[10];
 
@@ -39,13 +39,13 @@ FILE *protofl;
 MTRand mtrand1;
 
 /* specific to nonlinear part */
-std::vector <std::vector <double> > nlin_prio_phi_relax;
-std::vector <std::vector <double> > nlin_prio_phi_held;
+std::vector<std::vector<double> > nlin_prio_phi_relax;
+std::vector<std::vector<double> > nlin_prio_phi_held;
 double nlin_phi_true, nlin_phi_ST, nlin_dphi_true, nlin_dphi_ST;
 int max_prio_var, max_senio_var;
 
 int num_maxwell, nlin_nxt_data;
-std::vector <double> t_maxwell;
+std::vector<double> t_maxwell;
 double nlin_t_min, nlin_t_max;
 int nlin_collect_data, nlin_num_data_av;
 
@@ -55,7 +55,7 @@ FILE *nlin_outfl;
 int Snipping;
 int NlinPrep; // Copy to Snipping
 double SnipTime;
-std::vector <polycopy> br_copy;
+std::vector<polycopy> br_copy;
 int FlowPriority;
 double FlowTime; // FlowTime is immediately copied to SnipTime
                  // to retain old codes

@@ -14,28 +14,33 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 //called via poly_start : set up arm variables correctly
 #include <math.h>
 #include <stdio.h>
 #include "../../../include/bob.h"
-void user_get_arm_type(int * arm_type, double * mass, double * pdi)
+void user_get_arm_type(int *arm_type, double *mass, double *pdi)
 {
-printf("Type 0 for strictly monodisperse \n");
-printf("     1 for Gaussian distribution in segment lengths \n");
-printf("     2 for Lognormal  \n");
-printf("     3 for Semi-living (several monomer acts as unit to match PDI\n");
-printf("     4 for Flory distribution  \n");
-printf("arm type ?  ");
-scanf("%d", &arm_type[0]);
-if((arm_type[0] < 0) || (arm_type[0] > 4)){
-printf("Unknown arm type %d \n", arm_type[0]);
-printf("Assuming monodisperse \n"); arm_type[0] = 0; }
+  printf("Type 0 for strictly monodisperse \n");
+  printf("     1 for Gaussian distribution in segment lengths \n");
+  printf("     2 for Lognormal  \n");
+  printf("     3 for Semi-living (several monomer acts as unit to match PDI\n");
+  printf("     4 for Flory distribution  \n");
+  printf("arm type ?  ");
+  scanf("%d", &arm_type[0]);
+  if ((arm_type[0] < 0) || (arm_type[0] > 4))
+  {
+    printf("Unknown arm type %d \n", arm_type[0]);
+    printf("Assuming monodisperse \n");
+    arm_type[0] = 0;
+  }
 
-printf("M_w of single segment (in g/mol) ?  ");
-scanf("%le", &mass[0]);
+  printf("M_w of single segment (in g/mol) ?  ");
+  scanf("%le", &mass[0]);
 
-if(arm_type[0] != 0){ printf("Polydispersity Index ?  ");
-scanf("%le", &pdi[0]);}
-
+  if (arm_type[0] != 0)
+  {
+    printf("Polydispersity Index ?  ");
+    scanf("%le", &pdi[0]);
+  }
 }

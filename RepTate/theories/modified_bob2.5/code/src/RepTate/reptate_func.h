@@ -37,14 +37,14 @@
 #include <vector>
 
 // callback function
-typedef void pyfunc(char* s);
+typedef void pyfunc(char *s);
 extern pyfunc *py_callback;
 
 // functions used by Python
 extern "C" void def_pycallback_func(pyfunc F);
 extern "C" bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn, double *mw, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
-extern "C" bool run_bob_lve(int argc, char **argv, int* n);
-extern "C" bool get_bob_lve(double *omega_out, double* gp_out, double * gpp_out);
+extern "C" bool run_bob_lve(int argc, char **argv, int *n);
+extern "C" bool get_bob_lve(double *omega_out, double *gp_out, double *gpp_out);
 
 // other functions
 void get_mn_mw(double *mn, double *mw);
@@ -53,7 +53,7 @@ void return_gpcls(int nbin, int ncomp, int ni, int nf, double *lgmid_out, double
 void return_gpchist(int ncomp, int n_cur_comp, double *mass_ar, double *gfac_ar, double *branch_ar, double *wt_frac,
                     double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
 
-extern std::vector <double> omega, g_p, g_pp;
+extern std::vector<double> omega, g_p, g_pp;
 extern int n_lve_out;
 
 #endif

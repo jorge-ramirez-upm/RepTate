@@ -80,7 +80,7 @@ void return_gpcls(int nbin, int ncomp, int ni, int nf, double *lgmid_out, double
         extern int num_poly;
         extern int GPCNumBin;
         GPCNumBin = nbin;
-        extern std::vector <polymer> branched_poly;
+        extern std::vector<polymer> branched_poly;
         int n_cur_comp = nf - ni;
         double *mass_ar = new double[n_cur_comp];
         double *gfac_ar = new double[n_cur_comp];

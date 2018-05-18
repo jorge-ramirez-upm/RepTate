@@ -14,25 +14,30 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
- 
+
 // pick up random n points over length [0,L] and return sorted
 #include "../../../include/MersenneTwister.h"
 #include <math.h>
-void rand_on_line(double L, int n, double * junc)
+void rand_on_line(double L, int n, double *junc)
 {
-extern MTRand mtrand1;
-for(int i=0; i< n; i++)
- {
-  junc[i]=L*mtrand1();
- }
+  extern MTRand mtrand1;
+  for (int i = 0; i < n; i++)
+  {
+    junc[i] = L * mtrand1();
+  }
 
-//NR: piksrt
-double a;
-int i;
-for (int j=1; j< n; j++)
- {
-  a=junc[j]; i=j;
-  while(i >0 && junc[i-1] > a){ junc[i]=junc[i-1]; i--;}
-  junc[i]=a;
- }
+  //NR: piksrt
+  double a;
+  int i;
+  for (int j = 1; j < n; j++)
+  {
+    a = junc[j];
+    i = j;
+    while (i > 0 && junc[i - 1] > a)
+    {
+      junc[i] = junc[i - 1];
+      i--;
+    }
+    junc[i] = a;
+  }
 }
