@@ -92,7 +92,7 @@ class BaseTheoryHavriliakNegamiModesFrequency:
     """[summary] 
         
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#Havriliak-Negami-modes'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Dielectric/Theory/theory.html#havriliak-negami-modes'
     single_file = True
     thname = TheoryHavriliakNegamiModesFrequency.thname
     citations = TheoryHavriliakNegamiModesFrequency.citations

@@ -77,7 +77,7 @@ class BaseTheoryLikhtmanMcLeish2002:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/LikhtmanMcLeish.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory'
     single_file = False
     thname = TheoryLikhtmanMcLeish2002.thname
     citations = TheoryLikhtmanMcLeish2002.citations

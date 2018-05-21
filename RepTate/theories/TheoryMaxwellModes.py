@@ -492,7 +492,7 @@ class BaseTheoryMaxwellModesTime:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Maxwell.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Gt/Theory/theory.html#maxwell-modes'
     single_file = True
     thname = TheoryMaxwellModesTime.thname
     citations = TheoryMaxwellModesTime.citations

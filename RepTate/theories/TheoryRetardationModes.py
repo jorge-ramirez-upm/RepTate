@@ -94,7 +94,7 @@ class BaseTheoryRetardationModesTime:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/Retardation.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Creep/Theory/theory.html#retardation-modes'
     single_file = True
     thname = TheoryRetardationModesTime.thname
     citations = TheoryRetardationModesTime.citations

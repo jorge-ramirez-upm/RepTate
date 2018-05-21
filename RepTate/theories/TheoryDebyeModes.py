@@ -91,7 +91,7 @@ class BaseTheoryDebyeModesFrequency:
     """[summary] 
         
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/Theory/theory.html#Debye-modes'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Dielectric/Theory/theory.html#debye-modes'
     single_file = True
     thname = TheoryDebyeModesFrequency.thname
     citations = TheoryDebyeModesFrequency.citations
