@@ -39,70 +39,128 @@ The "scenic route"
 This option will take you through the installation of Python 3, RepTate dependancies, 
 and the "cloning" of RepTate's repository.
 
-Install Python 3 in your computer. Any 64-bit distribution is fine. We recommend `miniconda 
-<https://conda.io/miniconda.html>`_.
+Executive summary
+-----------------
 
-Windows
--------
+#. Install Python 3.6 or later via `Minconda <https://conda.io/miniconda.html>`_ (or your favourite method)
+#. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl) via ``conda install <package>``
+#. Install Git (version control system)  via ``conda install git``
+#. Clone RepTate's repository via ``git clone https://github.com/jorge-ramirez-upm/RepTate.git``
+#. Try launching RepTate application: ``cd RepTate`` then again ``cd RepTate`` then ``python RepTate.py``
+#. From time to time, check for updates via ``git pull``
 
-After installing miniconda with Python 3.6, 64-bit, open a terminal and run::
+Should anything goes wrong, please read the detailed explanations below. 
 
-    > conda install pyqt 
-    > conda install matplotlib 
-    > conda install scipy
-    > conda install pyreadline
-    > conda install openpyxl
+Detailed explanations
+----------------------
 
-If necessary, install the git CVS system. Then, clone the RepTate source code distribution 
-from `GitHub website <https://github.com/jorge-ramirez-upm/RepTate>`_::
+Install Python 3
+~~~~~~~~~~~~~~~~
 
-    > git clone https://github.com/jorge-ramirez-upm/RepTate.git
+To install Python 3, you can either install `Minconda <https://conda.io/miniconda.html>`_ (requires 300 MB of disk space)
+or install the full `Anaconda <https://www.anaconda.com/download/>`_ Python (requires 3 GB of disk space). Note that depending on your
+operating system, other methods, not covered here, are available.
 
-Alternatively, download the zip package containing the RepTate source code and uncompress it.    
-After that, it should be possible to run RepTate in the RepTate folder with the command::
+We recommend you to install the former, `Minconda <https://conda.io/miniconda.html>`_, that contains Python only (and a small number of useful packages) and to 
+install "manually" the extra packages that RepTate needs, as explained below.  
+The latter contains Python and 100+ automatically installed open source scientific 
+packages and their dependencies, not *all* used by RepTate.
+In either case you want to install **Python 3.6 or a later version** (not Python 2!). 
 
-    > python RepTate.py
+Once the installation is completed, open the command line interface "Anaconda prompt" (or equivalent). 
+On Windows, this is usually found by clicking the Windows button and looking under 
+"All Programmes -> Anaconda3".
+Verify that Python 3 has been correctly installed by typing in the command line interface::
 
-Linux
------
+    python --version
 
-After installing miniconda with Python 3.6, 64-bit, open a terminal and run::
+It should print something like ``Python 3.x.x``. If it prints something 
+like ``Python 2.x.x`` instead, then try::
 
-    > conda install pyqt 
-    > conda install matplotlib 
-    > conda install scipy
-    > conda install openpyxl
+    python3 --version
 
-If necessary, install the git CVS system. Then, clone the RepTate source code distribution 
-from `GitHub website <https://github.com/jorge-ramirez-upm/RepTate>`_::
+and if that print something like ``Python 3.x.x``, you will need to add the "3" 
+at the end of ``python`` every time you see it in the "Anaconda prompt".
 
-    > git clone https://github.com/jorge-ramirez-upm/RepTate.git
 
-Alternatively, download the zip package containing the RepTate source code and uncompress it.    
-After that, it should be possible to run RepTate in the RepTate folder with the command::
+Install extra packages 
+~~~~~~~~~~~~~~~~~~~~~~
 
-    > python RepTate.py
+You need to install some extra packages to be able to run RepTate. 
+Open an "Anaconda prompt" (or equivalent). On Windows, this is found by clicking the Windows 
+button and looking under All Programmes -> anaconda3.
+This will open up a window where you can type commands to install the extra packages::
+
+    conda install pyqt 
+    conda install matplotlib 
+    conda install scipy
+    conda install openpyxl
+
+Additionally, on Windows::
     
-Mac
----
+    conda install pyreadline
 
-After installing miniconda with Python 3.6, 64-bit, open a terminal and run::
-    
-    > conda install pyqt 
-    > conda install matplotlib 
-    > conda install scipy
-    > conda install openpyxl
-    
-Install MacOS developer tools (in order to use git). Then, from a terminal, clone the 
-RepTate source code distribution from `GitHub website <https://github.com/jorge-ramirez-upm/RepTate>`_::
+On  Mac or Linux::
 
-    > git clone https://github.com/jorge-ramirez-upm/RepTate.git
+    conda install readline
 
-Alternatively, download the zip package containing the RepTate source code and uncompress it. 
-After that, it should be possible to run RepTate in the RepTate folder with the command::
+If a package is missing and you try to run RepTate, Python will print an 
+information message in the terminal telling you what went missing.
 
-    > python RepTate.py
 
-    
-    
-    
+Install Git
+~~~~~~~~~~~
+
+Git is a free and open source distributed version control system. We use it 
+for the development of RepTate. To install Git, do::
+
+    conda install git
+
+"Clone" RepTate repository
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+RepTate developers keep track of the changes they make to the RepTate project 
+using git as a version control system. 
+When a developer make a change or bug-fix to RepTate, it is uploaded to an online
+repository, hosted by GitHub.
+The source code of RepTate is open access (see RepTate's Licence) and can be found
+`here <https://github.com/jorge-ramirez-upm/RepTate>`_.
+To download the full repository to your computer, type in the command line interface::
+
+    git clone https://github.com/jorge-ramirez-upm/RepTate.git
+
+This will create a new folder called ``RepTate`` by default.
+
+.. Alternatively, download the zip package containing the RepTate source code and uncompress it.    
+.. After that, it should be possible to run RepTate in the RepTate folder with the command::
+
+Launch RepTate
+~~~~~~~~~~~~~~
+
+To launch RepTate, you should change the current working directory of the
+command line interface to ``RepTate/RepTate/``. Type::
+
+    cd RepTate
+    cd RepTate
+    python RepTate.py
+
+Wait a little, and RepTate should appear on your screen!
+
+Take a moment to read the `User Manual <http://reptate.readthedocs.io/en/latest/manual/manual.html>`_.
+
+Update RepTate
+~~~~~~~~~~~~~~
+
+If you successfully went through this tutorial, you have the latest version of RepTate.
+However, from time to time, you can check for additions or bug-fix uploaded by RepTate's developers.
+While you are in the ``RepTate`` folder (say ``RepTate/RepTate/``), type::
+
+    git pull
+
+If there is no update available, it will print someting like ``Already up to date.``, otherwise you will the full list of changes printed on your screen.
+
+Once this is done, you can launch RepTate as usual.
+
+.. note::
+    If anything goes wrong during the installation, please contact the developers 
+    using the contact details given on the `documentation's main page <http://reptate.readthedocs.io>`_.
