@@ -100,7 +100,7 @@ class BaseTheoryWLFShiftTest:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/WLFShift.html'
+    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift-test'
     single_file = False
     thname = TheoryWLFShiftTest.thname
     citations = TheoryWLFShiftTest.citations
