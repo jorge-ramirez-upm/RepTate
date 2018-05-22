@@ -74,12 +74,12 @@ Verify that Python 3 has been correctly installed by typing in the command line 
 
     python --version
 
-It should print something like ``Python 3.x.x``. If it prints something 
-like ``Python 2.x.x`` instead, then try::
+It should print something like ``Python 3.x.x``. If it prints an error message or something 
+like ``Python 2.x.x``, then try::
 
     python3 --version
 
-and if that print something like ``Python 3.x.x``, you will need to add the "3" 
+If it prints something like ``Python 3.x.x``, you will need to add the "3" 
 at the end of ``python`` every time you see it in the "Anaconda prompt".
 
 
@@ -149,7 +149,8 @@ command line interface to ``RepTate/RepTate/``. Type::
     cd RepTate
     python RepTate.py
 
-Wait a little, and RepTate should appear on your screen!
+Wait a little, and RepTate should appear on your screen! Note that you may need to use 
+``python3 RepTate.py`` depending on your system
 
 Take a moment to read the `User Manual <http://reptate.readthedocs.io/en/latest/manual/manual.html>`_.
 
