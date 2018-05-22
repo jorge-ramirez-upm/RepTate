@@ -49,7 +49,7 @@ Executive summary
 #. Try launching RepTate application: ``cd RepTate`` then again ``cd RepTate`` then ``python RepTate.py``
 #. From time to time, check for updates via ``git pull``
 
-Should anything goes wrong, please read the detailed explanations below. 
+Should anything go wrong, please read the detailed explanations below. 
 
 Detailed explanations
 ----------------------
@@ -167,5 +167,5 @@ If there is no update available, it will print someting like ``Already up to dat
 Once this is done, you can launch RepTate as usual.
 
 .. note::
-    If anything goes wrong during the installation, please contact the developers 
+    If anything go wrong during the installation, please contact the developers 
     using the contact details given on the `documentation's main page <http://reptate.readthedocs.io>`_.
