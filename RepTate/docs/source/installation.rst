@@ -105,7 +105,12 @@ On  Mac or Linux::
     conda install readline
 
 If a package is missing and you try to run RepTate, Python will print an 
-information message in the terminal telling you what went missing.
+information message in the terminal telling you what went missing. 
+For example, something like::
+
+    ModuleNotFoundError: No module named 'openpyxl'
+
+tells you that you need to install the ``openpyxl`` package.
 
 
 Install Git
