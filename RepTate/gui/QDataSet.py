@@ -687,5 +687,5 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         self.TheorytabWidget.blockSignals(False)
         if show:
             newth.update_parameter_table()
-            newth.do_show()
+            newth.do_show("")
         return newth

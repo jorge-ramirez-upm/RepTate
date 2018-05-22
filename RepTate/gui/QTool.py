@@ -190,7 +190,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
     [description]
     """
 
-    def __init__(self, name="QTool", parent_dataset=None, axarr=None):
+    def __init__(self, name="QTool"):
         """
         **Constructor**
         
@@ -199,7 +199,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - axarr {[type]} -- [description] (default: {None})
         """
-        super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
+        super().__init__(name=name)
         self.setupUi(self)
         self.extra_data = {} # Dictionary saved during "Save Project"
 

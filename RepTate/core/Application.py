@@ -573,7 +573,7 @@ class Application(CmdBase):
         """
         self.tool_available()
 
-    def do_tool_add(self, line, calculate=True):
+    def do_tool_add(self, line):
         """Add a new tool of the type specified to the list of tools"""
         tooltypes = list(self.availabletools.keys())
         if (line in tooltypes):
@@ -581,12 +581,15 @@ class Application(CmdBase):
             to_id = "%s%02d" % (line, self.num_tools)
             to = self.availabletools[line](to_id)
             self.tools.append(to)
-            if (self.mode == CmdMode.batch):
-                to.prompt = ''
+            if self.mode == CmdMode.GUI:
+                pass
             else:
-                to.prompt = self.prompt[:-2] + '/' + to.name + '> '
-            to.cmdloop()
-            #return to
+                if (self.mode == CmdMode.batch):
+                    to.prompt = ''
+                else:
+                    to.prompt = self.prompt[:-2] + '/' + to.name + '> '
+                to.cmdloop()
+            return to
         else:
             print("Tool \"%s\" does not exists" % line)
 
