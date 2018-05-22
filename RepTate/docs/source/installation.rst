@@ -36,7 +36,7 @@ Previous versions of the code can be downloaded from the following `folder
 The "scenic route"
 ==================
 
-This option will take you through the installation of Python 3, RepTate dependancies, 
+This option will take you through the installation of Python 3, RepTate dependencies, 
 and the "cloning" of RepTate's repository.
 
 Executive summary
