@@ -264,6 +264,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tool_name = self.cbtool.currentText()
         if tool_name != '':
             self.new_tool(tool_name)
+            self.update_all_ds_plots()
         
     def new_tool(self, tool_name, tool_tab_id=""):
         """Create new tool"""
@@ -286,6 +287,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tool_name = self.TooltabWidget.widget(index).name
         self.do_tool_delete(tool_name)  #call DataSet.do_theory_delete
         self.TooltabWidget.removeTab(index)
+        self.update_all_ds_plots()
         
         
     def handle_actionAutoscale(self, checked):

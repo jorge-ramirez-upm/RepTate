@@ -152,5 +152,7 @@ class GUIToolGradient(BaseToolGradient, QTool):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_app)
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:

@@ -119,6 +119,7 @@ class BaseToolIntegral:
             y2 = odeint(func, [0], xunique)
 
             y2 = np.reshape(y2,num_rows,1)
+            self.Qprint("I = %g"%y2[-1])
             return xunique, y2
         except TypeError as e:
             print("in ToolIntegral.calculate() ", e)
@@ -161,7 +162,7 @@ class GUIToolIntegral(BaseToolIntegral, QTool):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_app)
-        parent_app.update_all_ds_plots()
-
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
