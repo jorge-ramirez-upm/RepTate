@@ -64,7 +64,7 @@ class Tool(CmdBase):
 
     print_signal = pyqtSignal(str)
 
-    def __init__(self, name="Tool"):
+    def __init__(self, name="Tool", parent_app=None):
         """
         **Constructor**
         
@@ -77,8 +77,10 @@ class Tool(CmdBase):
         super().__init__()
 
         self.name = name
+        self.parent_application = parent_app
         self.parameters = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.active = True  #defines if the Tool is plotted
+        self.applytotheory = True # Do we also apply the tool to the theory?
 
         self.do_cite("")
 
@@ -174,6 +176,22 @@ class Tool(CmdBase):
         """
         pass
 
+    def calculate_all(self, n, x, y):
+        """Calculate the tool for all views"""
+        newxy = []
+        for i in range(n):
+            xcopy = x[:, i]
+            ycopy = y[:, i]
+            xcopy, ycopy = self.calculate(xcopy, ycopy)
+            newxy.append([xcopy,ycopy])
+        lenx = len(newxy[0][0])
+        x.resize((lenx,n))
+        y.resize((lenx,n))
+        for i in range(n):
+            x[:, i] = newxy[i][0]
+            y[:, i] = newxy[i][1]
+        return x, y
+
     def calculate(self, x, y):
         return x, y
 
@@ -229,6 +247,9 @@ class Tool(CmdBase):
 
     def do_activate(self, line):
         self.active = not self.active
+
+    def do_applytotheory(self, line):
+        self.applytotheory = not self.applytotheory
 
     def do_cite(self, line):
         """Print citation information

@@ -51,7 +51,7 @@ class ToolTemplate(CmdBase):
     description = 'Template Tool'
     citations = ''
 
-    def __new__(cls, name=''):
+    def __new__(cls, name='', parent_app=None):
         """[summary]
         
         [description]
@@ -64,7 +64,7 @@ class ToolTemplate(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        return GUIToolTemplate(name) if (CmdBase.mode == CmdMode.GUI) else CLToolTemplate(name)
+        return GUIToolTemplate(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolTemplate(name, parent_app)
 
 
 class BaseToolTemplate:
@@ -76,7 +76,7 @@ class BaseToolTemplate:
     toolname = ToolTemplate.toolname
     citations = ToolTemplate.citations
 
-    def __init__(self, name=''):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -85,7 +85,7 @@ class BaseToolTemplate:
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name)
+        super().__init__(name, parent_app)
         self.function = self.calculate  # main Tool function
         # self.parameters['param1'] = Parameter(
             # name='param1',
@@ -140,7 +140,7 @@ class CLToolTemplate(BaseToolTemplate, Tool):
     [description]
     """
 
-    def __init__(self, name=''):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -149,7 +149,7 @@ class CLToolTemplate(BaseToolTemplate, Tool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name)
+        super().__init__(name, parent_app)
 
     # This class usually stays empty
 
@@ -160,7 +160,7 @@ class GUIToolTemplate(BaseToolTemplate, QTool):
     [description]
     """
 
-    def __init__(self, name=''):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -169,6 +169,6 @@ class GUIToolTemplate(BaseToolTemplate, QTool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name)
+        super().__init__(name, parent_app)
 
     # add widgets specific to the Tool here:

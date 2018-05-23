@@ -41,13 +41,13 @@ from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
 from Tool import Tool
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel
-from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QToolBar
+from PyQt5.QtCore import Qt, QObject, QThread, QSize, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QDoubleValidator
 from Parameter import OptType, ParameterType, ShiftType
 import ast
 PATH = dirname(abspath(__file__))
-Ui_ToolTab, QWidget = loadUiType(join(PATH, 'Theorytab.ui'))
+Ui_ToolTab, QWidget = loadUiType(join(PATH, 'Tooltab.ui'))
 
 # def trap_exc_during_debug(*args):
 #     # when app raises uncaught exception, print info
@@ -162,35 +162,13 @@ class CalculationThread(QObject):
         self.sig_done.emit()
 
 
-class GetModesDialog(QDialog):
-    def __init__(self, parent=None, th_dict={}):
-        super(GetModesDialog, self).__init__(parent)
-
-        self.setWindowTitle("Get Maxwell modes")
-        layout = QVBoxLayout(self)
-
-        self.btngrp = QButtonGroup()
-
-        for item in th_dict.keys():
-            rb = QRadioButton(item, self)
-            layout.addWidget(rb)
-            self.btngrp.addButton(rb)
-
-        # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
-
-
 class QTool(Ui_ToolTab, QWidget, Tool):
     """[summary]
     
     [description]
     """
 
-    def __init__(self, name="QTool"):
+    def __init__(self, name="QTool", parent_app=None):
         """
         **Constructor**
         
@@ -199,16 +177,21 @@ class QTool(Ui_ToolTab, QWidget, Tool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - axarr {[type]} -- [description] (default: {None})
         """
-        super().__init__(name=name)
+        super().__init__(name=name, parent_app=parent_app)
         self.setupUi(self)
-        self.extra_data = {} # Dictionary saved during "Save Project"
+
+        tb = QToolBar()
+        tb.setIconSize(QSize(24,24))
+        self.actionActive.setChecked(True)
+        self.actionApplyToTheory.setChecked(True)
+        tb.addAction(self.actionActive)
+        tb.addAction(self.actionApplyToTheory)
+        self.verticalLayout_2.insertWidget(0, tb)
 
         #build the therory widget
         self.thParamTable.setIndentation(0)
-        self.thParamTable.setColumnCount(3)
-        self.thParamTable.setHeaderItem(
-            QTreeWidgetItem(["Parameter", "Value", "Error"]))
-        # self.thParamTable.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.thParamTable.setColumnCount(2)
+        self.thParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value"]))
         self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
         self.thParamTable.setAlternatingRowColors(True)
         self.thParamTable.setFrameShape(QFrame.NoFrame)
@@ -217,18 +200,13 @@ class QTool(Ui_ToolTab, QWidget, Tool):
 
         self.thTextBox.setReadOnly(True)
 
-        self.stop_Tool_calc_flag = False
-        self.thread_calc_busy = False
-        self.thread_fit_busy = False
+        connection_id = self.actionActive.triggered.connect(self.actionActivepressed)
+        connection_id = self.actionApplyToTheory.triggered.connect(self.actionApplyToTheorypressed)
 
         connection_id = self.thParamTable.itemDoubleClicked.connect(
             self.onTreeWidgetItemDoubleClicked)
         connection_id = self.thParamTable.itemChanged.connect(
             self.handle_parameterItemChanged)
-
-    def set_extra_data(self, extra_data):
-        """set the extra data dict at loading"""
-        self.extra_data = extra_data
 
     def handle_actionCalculate_Tool(self):
         if self.thread_calc_busy:
@@ -255,87 +233,6 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         elif CmdBase.calcmode == CalcMode.singlethread:
             self.do_calculate("")
             self.end_thread_calc()
-
-    def end_thread_calc(self):
-        if CmdBase.calcmode == CalcMode.multithread:
-            try:
-                self.thread_calc.quit()
-            except:
-                pass
-        if self.stop_Tool_calc_flag:  #calculation stopped by user
-            self.stop_Tool_calc_flag = False  #reset flag
-        else:
-            self.update_parameter_table()
-            for file in self.Tool_files(
-            ):  #copy Tool data to the plot series
-                tt = self.tables[file.file_name_short]
-                for nx in range(self.parent_dataset.nplots):
-                    view = self.parent_dataset.parent_application.multiviews[
-                        nx]
-                    x, y, success = view.view_proc(tt, file.file_parameters)
-                    for i in range(tt.MAX_NUM_SERIES):
-                        if (i < view.n):
-                            tt.series[nx][i].set_data(x[:, i], y[:, i])
-
-            self.parent_dataset.parent_application.update_Qplot()
-
-        self.thread_calc_busy = False
-        #enable buttons
-        self.parent_dataset.actionCalculate_Tool.setDisabled(False)
-        self.parent_dataset.actionNew_Tool.setDisabled(False)
-        try:
-            self.Tool_buttons_disabled(
-                False)  # TODO: Add that function to all theories
-        except AttributeError:  #the function is not defined in the current Tool
-            pass
-
-    def handle_actionMinimize_Error(self):
-        """Minimize the error
-        
-        [description]
-        """
-        if self.thread_fit_busy:
-            return
-        self.thread_fit_busy = True
-        #disable buttons
-        self.parent_dataset.actionMinimize_Error.setDisabled(True)
-        self.parent_dataset.actionNew_Tool.setDisabled(True)
-        try:
-            self.Tool_buttons_disabled(
-                True)  # TODO: Add that function to all theories
-        except AttributeError:  #the function is not defined in the current Tool
-            pass
-        if CmdBase.calcmode == CalcMode.multithread:
-            self.worker = CalculationThread(
-                self.do_fit,
-                "",
-            )
-            self.worker.sig_done.connect(self.end_thread_fit)
-            self.thread_fit = QThread()
-            self.worker.moveToThread(self.thread_fit)
-            self.thread_fit.started.connect(self.worker.work)
-            self.thread_fit.start()
-        elif CmdBase.calcmode == CalcMode.singlethread:
-            self.do_fit("")
-            self.end_thread_fit()
-
-    def end_thread_fit(self):
-        if CmdBase.calcmode == CalcMode.multithread:
-            try:
-                self.thread_fit.quit()
-            except:
-                pass
-        self.update_parameter_table()
-        self.parent_dataset.parent_application.update_Qplot()
-        self.thread_fit_busy = False
-        #enable buttons
-        self.parent_dataset.actionMinimize_Error.setDisabled(False)
-        self.parent_dataset.actionNew_Tool.setDisabled(False)
-        try:
-            self.Tool_buttons_disabled(
-                False)  # TODO: Add that function to all theories
-        except AttributeError:  #the function is not defined in the current Tool
-            pass
 
     def update_parameter_table(self):
         """Update the Tool parameter table
@@ -452,32 +349,10 @@ class QTool(Ui_ToolTab, QWidget, Tool):
             msg.exec_()
             item.setText(1, str(self.parameters[param_changed].value))
 
-    def Qcopy_modes(self):
-        """[summary]
-        
-        [description]
-        """
-        apmng = self.parent_dataset.parent_application.parent_manager
-        G, S = apmng.list_theories_Maxwell(th_exclude=self)
-        if G:
-            d = GetModesDialog(self, G)
-            if (d.exec_() and d.btngrp.checkedButton() != None):
-                item = d.btngrp.checkedButton().text()
-                tau, G0 = G[item]()
-                tauinds = (-tau).argsort()
-                tau = tau[tauinds]
-                G0 = G0[tauinds]
-                self.set_modes(tau, G0)
+    def actionActivepressed(self):
+        self.active = self.actionActive.isChecked()
+        self.parent_application.update_all_ds_plots()
 
-            #item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)
-            #print(item)
-
-            #d = QDialog(self, )
-            #layout = QVBoxLayout(d)
-            #d.setLayout(layout)
-            #for item in G.keys():
-            #    rb = QRadioButton(item, d)
-            #    layout.addWidget(rb)
-            #d.setWindowTitle("Select provider of Maxwell modes:")
-            #d.setWindowModality(Qt.ApplicationModal)
-            #d.exec_()
+    def actionApplyToTheorypressed(self):
+        self.applytotheory = self.actionApplyToTheory.isChecked()
+        self.parent_application.update_all_ds_plots()

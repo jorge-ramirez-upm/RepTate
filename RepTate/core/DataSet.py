@@ -407,20 +407,22 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     print("in do_plot()", e)
                     return
 
+                # Apply the currently active tools
                 for to in self.parent_application.tools:
                     if to.active:
-                        newxy = []
-                        for i in range(view.n):
-                            xcopy = x[:, i]
-                            ycopy = y[:, i]
-                            xcopy, ycopy = to.calculate(xcopy, ycopy)
-                            newxy.append([xcopy,ycopy])
-                        lenx = len(newxy[0][0])
-                        x.resize((lenx,view.n))
-                        y.resize((lenx,view.n))
-                        for i in range(view.n):
-                            x[:, i] = newxy[i][0]
-                            y[:, i] = newxy[i][1]
+                        x, y = to.calculate_all(view.n, x, y)
+                        #newxy = []
+                        #for i in range(view.n):
+                        #    xcopy = x[:, i]
+                        #    ycopy = y[:, i]
+                        #    xcopy, ycopy = to.calculate(xcopy, ycopy)
+                        #    newxy.append([xcopy,ycopy])
+                        #lenx = len(newxy[0][0])
+                        #x.resize((lenx,view.n))
+                        #y.resize((lenx,view.n))
+                        #for i in range(view.n):
+                        #    x[:, i] = newxy[i][0]
+                        #    y[:, i] = newxy[i][1]
 
 
                 for i in range(dt.MAX_NUM_SERIES):
@@ -467,6 +469,25 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     except Exception as e:
                         print("in do_plot th", e)
                         continue
+
+                    # Apply the currently active tools
+                    for to in self.parent_application.tools:
+                        if (to.active and to.applytotheory):
+                            x, y = to.calculate_all(view.n, x, y)
+                            #newxy = []
+                            #for i in range(view.n):
+                            #    xcopy = x[:, i]
+                            #    ycopy = y[:, i]
+                            #    xcopy, ycopy = to.calculate(xcopy, ycopy)
+                            #    newxy.append([xcopy,ycopy])
+                            #lenx = len(newxy[0][0])
+                            #x.resize((lenx,view.n))
+                            #y.resize((lenx,view.n))
+                            #for i in range(view.n):
+                            #    x[:, i] = newxy[i][0]
+                            #    y[:, i] = newxy[i][1]
+
+
                     for i in range(tt.MAX_NUM_SERIES):
                         if (i < view.n and file.active and th.active):
                             tt.series[nx][i].set_data(x[:, i], y[:, i])

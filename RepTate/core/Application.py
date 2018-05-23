@@ -579,7 +579,7 @@ class Application(CmdBase):
         if (line in tooltypes):
             self.num_tools += 1
             to_id = "%s%02d" % (line, self.num_tools)
-            to = self.availabletools[line](to_id)
+            to = self.availabletools[line](to_id, self)
             self.tools.append(to)
             if self.mode == CmdMode.GUI:
                 pass

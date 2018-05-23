@@ -255,6 +255,7 @@ class Theory(CmdBase):
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
+        tools = self.parent_dataset.parent_application.tools
         msg = "\n%14s %10s (%6s)\n" % ("File", "Error", "# Pts.")
         msg += "=================================="
         self.Qprint(msg)
