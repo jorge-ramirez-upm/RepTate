@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TheoryTab</class>
- <widget class="QWidget" name="TheoryTab">
+ <class>ToolTab</class>
+ <widget class="QWidget" name="ToolTab">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="thToolsLayout"/>
+    <layout class="QHBoxLayout" name="toolToolsLayout"/>
    </item>
    <item>
     <widget class="QSplitter" name="splitter">
@@ -43,14 +43,14 @@
      <property name="handleWidth">
       <number>3</number>
      </property>
-     <widget class="QTreeWidget" name="thParamTable">
+     <widget class="QTreeWidget" name="toolParamTable">
       <column>
        <property name="text">
         <string notr="true">1</string>
        </property>
       </column>
      </widget>
-     <widget class="QTextBrowser" name="thTextBox">
+     <widget class="QTextBrowser" name="toolTextBox">
       <property name="font">
        <font>
         <family>Courier</family>

@@ -40,7 +40,7 @@ from Parameter import Parameter, ParameterType
 from Tool import Tool
 from QTool import QTool
 from DataTable import DataTable
-
+from PyQt5.QtGui import QIcon
 
 class ToolFindPeaks(CmdBase):
     """[summary]
@@ -97,7 +97,12 @@ class BaseToolFindPeaks:
             value=5,
             description='minimum distance (in datapoints) between peaks',
             type=ParameterType.integer)
-
+        self.parameters["minpeaks"] = Parameter(
+            name="minpeaks",
+            value=False,
+            description="Find minimum peaks",
+            type=ParameterType.boolean,
+            display_flag=False)
 
     def destructor(self):
         """[summary]
@@ -112,11 +117,16 @@ class BaseToolFindPeaks:
     def calculate(self, x, y):
         threshold = self.parameters["threshold"].value
         minimum_distance = self.parameters["minimum_distance"].value
+        minpeaks = self.parameters["minpeaks"].value
+        if (minpeaks):
+            y = -y
         thresholdnow = threshold * (np.max(y) - np.min(y)) + np.min(y)
         dy = np.diff(y)
         zeros,=np.where(dy == 0)
         if len(zeros) == len(y) - 1:
             print("", end='')
+            if (minpeaks):
+                y = -y
             return x, y
         while len(zeros):
             zerosr = np.hstack([dy[1:], 0.])
@@ -140,8 +150,11 @@ class BaseToolFindPeaks:
                     rem[peak] = False
             peaks = np.arange(y.size)[~rem]
         y2 = np.zeros_like(y)
+        if (minpeaks):
+            y = -y
         for d in peaks:
             y2[d] = y[d]
+            self.Qprint("(%g, %g)"%(x[d],y[d]))
         return x, y2
 
 class CLToolFindPeaks(BaseToolFindPeaks, Tool):
@@ -181,6 +194,15 @@ class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
         """
         super().__init__(name, parent_app)
         self.update_parameter_table()
+        self.tb.addSeparator()
+        self.minpeaks = self.tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-vertical-shift.png'), 'Minimum peaks')
+        self.minpeaks.setCheckable(True)
+        self.minpeaks.setChecked(False)
+        connection_id = self.minpeaks.triggered.connect(self.do_minpeaks)
         self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
+
+    def do_minpeaks(self):
+        self.set_param_value("minpeaks", self.minpeaks.isChecked())
+        self.parent_application.update_all_ds_plots()

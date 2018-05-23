@@ -67,31 +67,31 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         super().__init__(name=name, parent_app=parent_app)
         self.setupUi(self)
 
-        tb = QToolBar()
-        tb.setIconSize(QSize(24,24))
+        self.tb = QToolBar()
+        self.tb.setIconSize(QSize(24,24))
         self.actionActive.setChecked(True)
         self.actionApplyToTheory.setChecked(True)
-        tb.addAction(self.actionActive)
-        tb.addAction(self.actionApplyToTheory)
-        self.verticalLayout_2.insertWidget(0, tb)
+        self.tb.addAction(self.actionActive)
+        self.tb.addAction(self.actionApplyToTheory)
+        self.verticalLayout_2.insertWidget(0, self.tb)
 
-        #build the therory widget
-        self.thParamTable.setIndentation(0)
-        self.thParamTable.setColumnCount(2)
-        self.thParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value"]))
-        self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
-        self.thParamTable.setAlternatingRowColors(True)
-        self.thParamTable.setFrameShape(QFrame.NoFrame)
-        self.thParamTable.setFrameShadow(QFrame.Plain)
-        self.thParamTable.setEditTriggers(self.thParamTable.NoEditTriggers)
+        #build the tool widget
+        self.toolParamTable.setIndentation(0)
+        self.toolParamTable.setColumnCount(2)
+        self.toolParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value"]))
+        self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+        self.toolParamTable.setAlternatingRowColors(True)
+        self.toolParamTable.setFrameShape(QFrame.NoFrame)
+        self.toolParamTable.setFrameShadow(QFrame.Plain)
+        self.toolParamTable.setEditTriggers(self.toolParamTable.NoEditTriggers)
 
-        self.thTextBox.setReadOnly(True)
+        self.toolTextBox.setReadOnly(True)
 
         connection_id = self.actionActive.triggered.connect(self.actionActivepressed)
         connection_id = self.actionApplyToTheory.triggered.connect(self.actionApplyToTheorypressed)
 
-        connection_id = self.thParamTable.itemChanged.connect(
-            self.handle_parameterItemChanged)
+        connection_id = self.toolParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
+        connection_id = self.toolParamTable.itemChanged.connect(self.handle_parameterItemChanged)
 
     def update_parameter_table(self):
         """Update the Tool parameter table
@@ -99,7 +99,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         [description]
         """
         #clean table
-        self.thParamTable.clear()
+        self.toolParamTable.clear()
 
         #populate table
         for param in self.parameters:
@@ -107,7 +107,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
             if p.display_flag:  #only allowed param enter the table
                 if p.opt_type == OptType.const:
                     item = QTreeWidgetItem(
-                        self.thParamTable,
+                        self.toolParamTable,
                         [p.name, "%0.3g" % p.value, "N/A"])
                     item.setCheckState(0, Qt.PartiallyChecked)
                     item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
@@ -117,7 +117,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
                     except:
                         err = "-"
                     item = QTreeWidgetItem(
-                        self.thParamTable,
+                        self.toolParamTable,
                         [p.name, "%0.3g" % p.value, err])
                     if p.opt_type == OptType.opt:
                         item.setCheckState(0, Qt.Checked)
@@ -125,7 +125,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
                         item.setCheckState(0, Qt.Unchecked)
 
                 item.setFlags(item.flags() | Qt.ItemIsEditable)
-        self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+        self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)
 
     def handle_parameterItemChanged(self, item, column):
         """Modify parameter values when changed in the Tool table
@@ -164,3 +164,9 @@ class QTool(Ui_ToolTab, QWidget, Tool):
     def actionApplyToTheorypressed(self):
         self.applytotheory = self.actionApplyToTheory.isChecked()
         self.parent_application.update_all_ds_plots()
+
+    def onTreeWidgetItemDoubleClicked(self, item, column):
+        """Start editing text when a table cell is double clicked
+        """
+        if column == 1:
+            self.toolParamTable.editItem(item, column)
