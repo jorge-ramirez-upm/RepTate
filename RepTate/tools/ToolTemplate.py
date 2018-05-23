@@ -86,7 +86,6 @@ class BaseToolTemplate:
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_app)
-        self.function = self.calculate  # main Tool function
         # self.parameters['param1'] = Parameter(
             # name='param1',
             # value=1,
@@ -105,33 +104,10 @@ class BaseToolTemplate:
         """
         pass
 
-    def calculate(self, f=None, v=None):
-        """Template function that returns the square of the y, according to the view
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
+    def calculate(self, x, y, ax=None, color=None):
+        """Template function that returns the square of the y, according to the view        
         """
-        n = v.n
-
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = n+1
-        # Here, we assume that all series have the same x axis
-        s = f.data_table.series[0][0]
-        x = np.array(s.get_xdata())
-        tt.num_rows = len(x)
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = x
-
-        for i in range(n):
-            s = f.data_table.series[0][i]
-            y = np.array(s.get_ydata())
-
-            tt.data[:, i+1] = y*y
+        return x, y*y
 
 
 class CLToolTemplate(BaseToolTemplate, Tool):

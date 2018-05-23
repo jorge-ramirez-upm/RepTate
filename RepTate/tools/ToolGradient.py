@@ -106,7 +106,7 @@ class BaseToolGradient:
         """
         pass
 
-    def calculate(self, x, y):
+    def calculate(self, x, y, ax=None, color=None):
         try:
             y2 = np.gradient(y,x)
             return x, y2

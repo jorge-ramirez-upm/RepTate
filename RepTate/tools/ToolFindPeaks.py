@@ -103,6 +103,14 @@ class BaseToolFindPeaks:
             description="Find minimum peaks",
             type=ParameterType.boolean,
             display_flag=False)
+        self.seriesarray=[]
+        self.axarray=[]
+
+    def clean_graphic_stuff(self):
+        for s,a in zip(self.seriesarray, self.axarray):
+            a.lines.remove(s)
+        self.seriesarray.clear()
+        self.axarray.clear()
 
     def destructor(self):
         """[summary]
@@ -114,7 +122,7 @@ class BaseToolFindPeaks:
         """
         pass
 
-    def calculate(self, x, y):
+    def calculate(self, x, y, ax=None, color=None):
         threshold = self.parameters["threshold"].value
         minimum_distance = self.parameters["minimum_distance"].value
         minpeaks = self.parameters["minpeaks"].value
@@ -152,10 +160,24 @@ class BaseToolFindPeaks:
         y2 = np.zeros_like(y)
         if (minpeaks):
             y = -y
-        for d in peaks:
+        xp=np.zeros(len(peaks))
+        yp=np.zeros(len(peaks))
+        for i,d in enumerate(peaks):
             y2[d] = y[d]
             self.Qprint("(%g, %g)"%(x[d],y[d]))
-        return x, y2
+            xp[i]=x[d]
+            yp[i]=y[d]
+        s = ax.plot(xp, yp)[0]
+        s.set_marker('D')
+        s.set_linestyle('')
+        s.set_markerfacecolor(color)
+        s.set_markeredgecolor('black')
+        s.set_markeredgewidth(3)
+        s.set_markersize(12)
+        s.set_alpha(0.5)
+        self.seriesarray.append(s)
+        self.axarray.append(ax)
+        return x, y
 
 class CLToolFindPeaks(BaseToolFindPeaks, Tool):
     """[summary]

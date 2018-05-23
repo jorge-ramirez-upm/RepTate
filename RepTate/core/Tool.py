@@ -176,13 +176,13 @@ class Tool(CmdBase):
         """
         pass
 
-    def calculate_all(self, n, x, y):
+    def calculate_all(self, n, x, y, ax=None, color=None):
         """Calculate the tool for all views"""
         newxy = []
         for i in range(n):
             xcopy = x[:, i]
             ycopy = y[:, i]
-            xcopy, ycopy = self.calculate(xcopy, ycopy)
+            xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color)
             newxy.append([xcopy,ycopy])
         lenx = len(newxy[0][0])
         x.resize((lenx,n))
@@ -192,9 +192,11 @@ class Tool(CmdBase):
             y[:, i] = newxy[i][1]
         return x, y
 
-    def calculate(self, x, y):
+    def calculate(self, x, y, ax=None, color=None):
         return x, y
 
+    def clean_graphic_stuff(self):
+        pass
 # SAVE Tool STUFF (IS THIS NEEDED?)
 
     # def do_save(self, line):

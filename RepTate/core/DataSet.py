@@ -381,6 +381,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         #theory settings
         th_linestyle = ThLineMode.linestyles.value[self.th_linestyle]
 
+        # TODO: JR --> WE NEED TO CLEAN THE TOOLS GRAPHIC OBJECTS
+        for to in self.parent_application.tools:
+            to.clean_graphic_stuff()
+
         for j, file in enumerate(self.files):
             dt = file.data_table
 
@@ -410,20 +414,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 # Apply the currently active tools
                 for to in self.parent_application.tools:
                     if to.active:
-                        x, y = to.calculate_all(view.n, x, y)
-                        #newxy = []
-                        #for i in range(view.n):
-                        #    xcopy = x[:, i]
-                        #    ycopy = y[:, i]
-                        #    xcopy, ycopy = to.calculate(xcopy, ycopy)
-                        #    newxy.append([xcopy,ycopy])
-                        #lenx = len(newxy[0][0])
-                        #x.resize((lenx,view.n))
-                        #y.resize((lenx,view.n))
-                        #for i in range(view.n):
-                        #    x[:, i] = newxy[i][0]
-                        #    y[:, i] = newxy[i][1]
-
+                        x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
 
                 for i in range(dt.MAX_NUM_SERIES):
                     if (i < view.n and file.active):
@@ -473,20 +464,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     # Apply the currently active tools
                     for to in self.parent_application.tools:
                         if (to.active and to.applytotheory):
-                            x, y = to.calculate_all(view.n, x, y)
-                            #newxy = []
-                            #for i in range(view.n):
-                            #    xcopy = x[:, i]
-                            #    ycopy = y[:, i]
-                            #    xcopy, ycopy = to.calculate(xcopy, ycopy)
-                            #    newxy.append([xcopy,ycopy])
-                            #lenx = len(newxy[0][0])
-                            #x.resize((lenx,view.n))
-                            #y.resize((lenx,view.n))
-                            #for i in range(view.n):
-                            #    x[:, i] = newxy[i][0]
-                            #    y[:, i] = newxy[i][1]
-
+                            x, y = to.calculate_all(view.n, x, y, color)
 
                     for i in range(tt.MAX_NUM_SERIES):
                         if (i < view.n and file.active and th.active):
