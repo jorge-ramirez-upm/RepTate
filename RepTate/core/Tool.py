@@ -185,8 +185,8 @@ class Tool(CmdBase):
             xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color)
             newxy.append([xcopy,ycopy])
         lenx = len(newxy[0][0])
-        x.resize((lenx,n))
-        y.resize((lenx,n))
+        x = np.resize(x, (lenx,n))
+        y = np.resize(y, (lenx,n))
         for i in range(n):
             x[:, i] = newxy[i][0]
             y[:, i] = newxy[i][1]
