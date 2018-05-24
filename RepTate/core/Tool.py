@@ -179,17 +179,18 @@ class Tool(CmdBase):
     def calculate_all(self, n, x, y, ax=None, color=None):
         """Calculate the tool for all views"""
         newxy = []
+        lenx=1e9
         for i in range(n):
             xcopy = x[:, i]
             ycopy = y[:, i]
             xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color)
             newxy.append([xcopy,ycopy])
-        lenx = len(newxy[0][0])
+            lenx=min(lenx, len(xcopy))
         x = np.resize(x, (lenx,n))
         y = np.resize(y, (lenx,n))
         for i in range(n):
-            x[:, i] = newxy[i][0]
-            y[:, i] = newxy[i][1]
+            x[:, i] = np.resize(newxy[i][0], lenx)
+            y[:, i] = np.resize(newxy[i][1], lenx)
         return x, y
 
     def calculate(self, x, y, ax=None, color=None):
