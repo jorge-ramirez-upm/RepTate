@@ -464,7 +464,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     # Apply the currently active tools
                     for to in self.parent_application.tools:
                         if (to.active and to.applytotheory):
-                            x, y = to.calculate_all(view.n, x, y, color)
+                            x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
 
                     for i in range(tt.MAX_NUM_SERIES):
                         if (i < view.n and file.active and th.active):
