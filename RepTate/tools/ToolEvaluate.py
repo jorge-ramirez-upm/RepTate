@@ -34,6 +34,7 @@
 
 Evaluate expression
 """
+import traceback
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
@@ -113,9 +114,14 @@ class BaseToolEvaluate:
         xexpr = self.parameters["x"].value
         yexpr = self.parameters["y"].value
         var = {'x':x, 'y':y}
-        x2 = eval(xexpr, var)
-        y2 = eval(yexpr, var)
-        return x2, y2
+        try:
+            x2 = eval(xexpr, var)
+            y2 = eval(yexpr, var)
+            return x2, y2
+        except Exception as e:
+            self.Qprint("in ToolEvaluate.calculate(): %s"%traceback.format_exc())
+            return x, y
+        
 
 
 class CLToolEvaluate(BaseToolEvaluate, Tool):

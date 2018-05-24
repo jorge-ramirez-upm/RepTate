@@ -987,7 +987,7 @@ class Theory(CmdBase):
         else:
             super(Theory, self).default(line)
 
-    def do_hide(self, line):
+    def do_hide(self, line=''):
         """Hide the theory artists and associated tools
         
         [description]

@@ -34,7 +34,7 @@
 
 Smooth data by applying a Savitzky-Golay filter
 """
-import sys 
+import traceback
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
@@ -117,9 +117,8 @@ class BaseToolSmooth:
         try:
             y2 = savgol_filter(y, window, order)
             return x, y2
-        except: 
-            e = sys.exc_info()[0]
-            self.Qprint("in ToolSmooth.calculate(): %s"%e)
+        except Exception as e:
+            self.Qprint("in ToolSmooth.calculate(): %s"%traceback.format_exc())
             return x, y
         
 
