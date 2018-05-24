@@ -1,0 +1,271 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>React: General description &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="React Theories" href="Theory/theory.html" />
+    <link rel="prev" title="React: Monte-Carlo polymerisation" href="React.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Theory/theory.html" title="React Theories"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="React.html" title="React: Monte-Carlo polymerisation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="React.html" accesskey="U"> React: Monte-Carlo polymerisation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">React: General description</a><ul>
+<li><a class="reference internal" href="#purpose">Purpose</a></li>
+<li><a class="reference internal" href="#data-files">Data Files</a><ul>
+<li><a class="reference internal" href="#reac-extension"><code class="docutils literal"><span class="pre">.reac</span></code> extension</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#views">Views</a><ul>
+<li><a class="reference internal" href="#w-m">w(M)</a></li>
+<li><a class="reference internal" href="#log-w-m">log(w(M))</a></li>
+<li><a class="reference internal" href="#g-m">g(M)</a></li>
+<li><a class="reference internal" href="#log-g-m">log(g(M))</a></li>
+<li><a class="reference internal" href="#br-1000c">br/1000C</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="React.html"
+                        title="previous chapter"> React: Monte-Carlo polymerisation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Theory/theory.html"
+                        title="next chapter">React Theories</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/manual/Applications/React/general.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="react-general-description">
+<h1>React: General description<a class="headerlink" href="#react-general-description" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#purpose" id="id1">Purpose</a></li>
+<li><a class="reference internal" href="#data-files" id="id2">Data Files</a><ul>
+<li><a class="reference internal" href="#reac-extension" id="id3"><code class="docutils literal"><span class="pre">.reac</span></code> extension</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#views" id="id4">Views</a><ul>
+<li><a class="reference internal" href="#w-m" id="id5">w(M)</a></li>
+<li><a class="reference internal" href="#log-w-m" id="id6">log(w(M))</a></li>
+<li><a class="reference internal" href="#g-m" id="id7">g(M)</a></li>
+<li><a class="reference internal" href="#log-g-m" id="id8">log(g(M))</a></li>
+<li><a class="reference internal" href="#br-1000c" id="id9">br/1000C</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="purpose">
+<h2><a class="toc-backref" href="#id1">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ApplicationReact.ApplicationReact">
+<em class="property">class </em><code class="descclassname">ApplicationReact.</code><code class="descname">ApplicationReact</code><a class="reference internal" href="../../../_modules/ApplicationReact.html#ApplicationReact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.ApplicationReact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application for Monte Carlo polymerisation</p>
+</dd></dl>
+
+</div>
+<div class="section" id="data-files">
+<h2><a class="toc-backref" href="#id2">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal"><span class="pre">;</span></code>).
+It may contain any number of parameters which will be read and saved as file-parameter in RepTate.</li>
+<li>Then the data columns should appear, separated by <strong>spaces</strong> or <strong>tabs</strong>.</li>
+</ul>
+<div class="section" id="reac-extension">
+<h3><a class="toc-backref" href="#id3"><code class="docutils literal"><span class="pre">.reac</span></code> extension</a><a class="headerlink" href="#reac-extension" title="Permalink to this headline">¶</a></h3>
+<p>Text files with <code class="docutils literal"><span class="pre">.reac</span></code> extension should be organised as follows:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">.reac</span></code> files are not expected to provide any specific parameter values.</li>
+<li>4 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:<ol class="arabic">
+<li>molar mass, <span class="math">\(M\)</span>,</li>
+<li>weight associated, <span class="math">\(\dfrac{\text d w(\log M)}{\text d \log M}\)</span>,</li>
+<li>the <cite>g</cite>-factor, <span class="math">\(g(M)=\dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></li>
+<li>number of branching points per 1000 carbon.</li>
+</ol>
+</li>
+</ul>
+<p>A correct <code class="docutils literal"><span class="pre">.reac</span></code> file looks like:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>0.1148E+03 0.5000E-03 0.1000E+01 0.0000E+00
+0.1514E+03 0.1500E-02 0.1000E+01 0.0000E+00
+0.1995E+03 0.1667E-02 0.1000E+01 0.0000E+00
+0.2630E+03 0.1750E-02 0.1000E+01 0.0000E+00
+0.3467E+03 0.5250E-02 0.1000E+01 0.0000E+00
+0.4571E+03 0.6750E-02 0.9977E+00 0.3765E+00
+...        ...        ...        ...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="views">
+<h2><a class="toc-backref" href="#id4">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="w-m">
+<h3><a class="toc-backref" href="#id5">w(M)</a><a class="headerlink" href="#w-m" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="ApplicationReact.BaseApplicationReact.view_wM">
+<code class="descclassname">BaseApplicationReact.</code><code class="descname">view_wM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_wM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_wM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Molecular weight distribution <span class="math">\(w(M)\)</span> vs molecular weight <span class="math">\(M\)</span> (in logarithmic scale)</p>
+</dd></dl>
+
+<a class="reference internal image-reference" href="../../../_images/React_wM.png"><img alt="../../../_images/React_wM.png" class="align-center" src="../../../_images/React_wM.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="log-w-m">
+<h3><a class="toc-backref" href="#id6">log(w(M))</a><a class="headerlink" href="#log-w-m" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\(\log_{10}(w(M))\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="ApplicationReact.BaseApplicationReact.view_logwM">
+<code class="descclassname">BaseApplicationReact.</code><code class="descname">view_logwM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_logwM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_logwM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the molecular weight distribution <span class="math">\(\log(w(M))\)</span> vs molecular weight <span class="math">\(M\)</span> (in logarithmic scale)</p>
+</dd></dl>
+
+<a class="reference internal image-reference" href="../../../_images/React_logwM.png"><img alt="../../../_images/React_logwM.png" class="align-center" src="../../../_images/React_logwM.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="g-m">
+<h3><a class="toc-backref" href="#id7">g(M)</a><a class="headerlink" href="#g-m" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\(g(M)\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="ApplicationReact.BaseApplicationReact.view_gM">
+<code class="descclassname">BaseApplicationReact.</code><code class="descname">view_gM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_gM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_gM" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math">\(g\)</span>-factor is defined as <span class="math">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+</dd></dl>
+
+<a class="reference internal image-reference" href="../../../_images/React_gM.png"><img alt="../../../_images/React_gM.png" class="align-center" src="../../../_images/React_gM.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="log-g-m">
+<h3><a class="toc-backref" href="#id8">log(g(M))</a><a class="headerlink" href="#log-g-m" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\(\log_{10}(g(M))\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="ApplicationReact.BaseApplicationReact.view_loggM">
+<code class="descclassname">BaseApplicationReact.</code><code class="descname">view_loggM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_loggM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_loggM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the <span class="math">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math">\(g\)</span>-factor is defined as <span class="math">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+</dd></dl>
+
+<a class="reference internal image-reference" href="../../../_images/React_LoggM.png"><img alt="../../../_images/React_LoggM.png" class="align-center" src="../../../_images/React_LoggM.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="br-1000c">
+<h3><a class="toc-backref" href="#id9">br/1000C</a><a class="headerlink" href="#br-1000c" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\(\text{br/1000C}\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="ApplicationReact.BaseApplicationReact.view_br_1000C">
+<code class="descclassname">BaseApplicationReact.</code><code class="descname">view_br_1000C</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_br_1000C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_br_1000C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of branching points per 1000 carbon as a function of the molecular weight</p>
+</dd></dl>
+
+<a class="reference internal image-reference" href="../../../_images/React_br_1000C.png"><img alt="../../../_images/React_br_1000C.png" class="align-center" src="../../../_images/React_br_1000C.png" style="width: 45%;" /></a>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Theory/theory.html" title="React Theories"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="React.html" title="React: Monte-Carlo polymerisation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="React.html" > React: Monte-Carlo polymerisation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

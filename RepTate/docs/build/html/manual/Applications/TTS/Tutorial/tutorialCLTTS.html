@@ -1,0 +1,275 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tutorial TTS Application Command Line &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Tutorial TTS Application" href="tutorialGUITTS.html" />
+    <link rel="prev" title="TTS Theories" href="../Theory/theory.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialGUITTS.html" title="Tutorial TTS Application"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../Theory/theory.html" title="TTS Theories"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../TTS.html" accesskey="U"> TTS: Time-Temperature Superposition</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../Theory/theory.html"
+                        title="previous chapter">TTS Theories</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorialGUITTS.html"
+                        title="next chapter">Tutorial TTS Application</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/TTS/Tutorial/tutorialCLTTS.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial-tts-application-command-line">
+<h1>Tutorial TTS Application Command Line<a class="headerlink" href="#tutorial-tts-application-command-line" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p>Tutorial command line (CL) files can be found in the <cite>tests/</cite> folder. They can be run in batch mode or in interactive mode.</p>
+<ul>
+<li><p class="first">To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal"><span class="pre">#</span></code> and the line <code class="docutils literal"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p>
+</li>
+<li><p class="first">To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span><span class="o">/</span><span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Linux or Mac</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span>\<span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Windows</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p class="last">(the difference is the use of backslash <code class="docutils literal"><span class="pre">\</span></code> instead of slash <code class="docutils literal"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
+</div>
+<p><strong>Time-Temperature shift</strong></p>
+<ol class="arabic">
+<li><p class="first">Start Reptate and create LVE Application:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">RepTate</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Reptate</span> <span class="n">Version</span> <span class="mf">0.5</span> <span class="n">command</span> <span class="n">processor</span>
+<span class="n">help</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span> <span class="k">for</span> <span class="n">instructions</span>
+<span class="n">TAB</span> <span class="k">for</span> <span class="n">completions</span>
+<span class="n">reptate</span><span class="o">&gt;</span> <span class="n">new</span> <span class="n">LVE</span>
+<span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>A new plot window for the new application is opened.</p>
+<a class="reference internal image-reference" href="../../../../_images/newTTS.png"><img alt="Empty Graph window" class="align-center" src="../../../../_images/newTTS.png" style="width: 400pt;" /></a>
+<ol class="arabic">
+<li><p class="first">Create Dataset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">&gt;</span> <span class="n">new</span>
+<span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add files to the dataset (oscillatory shear files):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">&gt;</span> <span class="nb">open</span> <span class="n">data</span><span class="o">/</span><span class="n">PI_LINEAR</span><span class="o">/</span><span class="n">osc</span><span class="o">/</span><span class="n">PI</span><span class="o">*</span><span class="n">osc</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Plot the files using the default LVE Application view:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">&gt;</span> <span class="n">plot</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The files are plotted (no legend is shown by default).</p>
+<a class="reference internal image-reference" href="../../../../_images/plotOSCfiles.png"><img alt="Empty Graph window" class="align-center" src="../../../../_images/plotOSCfiles.png" style="width: 400pt;" /></a>
+<ol class="arabic">
+<li><p class="first">Create new WLF theory (the shift is calculated with the default values of the parameters):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">&gt;</span> <span class="n">theory_new</span> <span class="n">WLFShift</span>
+
+                <span class="n">Mw</span>      <span class="n">Error</span> <span class="p">(</span>  <span class="c1"># Points)</span>
+<span class="o">=============================================</span>
+               <span class="mf">1.9</span><span class="n">k</span>          <span class="o">-</span> <span class="p">(</span>         <span class="mi">0</span><span class="p">)</span>
+               <span class="mf">2.4</span><span class="n">k</span>    <span class="mf">0.12155</span> <span class="p">(</span>       <span class="mi">104</span><span class="p">)</span>
+               <span class="mf">5.1</span><span class="n">k</span>   <span class="mf">0.089966</span> <span class="p">(</span>        <span class="mi">78</span><span class="p">)</span>
+              <span class="mf">13.5</span><span class="n">k</span>   <span class="mf">0.093077</span> <span class="p">(</span>       <span class="mi">168</span><span class="p">)</span>
+              <span class="mf">23.4</span><span class="n">k</span>   <span class="mf">0.038122</span> <span class="p">(</span>       <span class="mi">262</span><span class="p">)</span>
+              <span class="mf">33.6</span><span class="n">k</span>   <span class="mf">0.021255</span> <span class="p">(</span>       <span class="mi">274</span><span class="p">)</span>
+              <span class="mf">94.9</span><span class="n">k</span>  <span class="mf">0.0028873</span> <span class="p">(</span>       <span class="mi">538</span><span class="p">)</span>
+             <span class="mf">225.9</span><span class="n">k</span>  <span class="mf">0.0030331</span> <span class="p">(</span>      <span class="mi">1070</span><span class="p">)</span>
+             <span class="mf">483.1</span><span class="n">k</span>  <span class="mf">0.0011465</span> <span class="p">(</span>       <span class="mi">438</span><span class="p">)</span>
+             <span class="mf">634.5</span><span class="n">k</span>  <span class="mf">0.0059321</span> <span class="p">(</span>       <span class="mi">326</span><span class="p">)</span>
+              <span class="mi">1131</span><span class="n">k</span> <span class="mf">0.00039522</span> <span class="p">(</span>       <span class="mi">546</span><span class="p">)</span>
+              <span class="n">TOTAL</span>   <span class="mf">0.015394</span> <span class="p">(</span>      <span class="mi">3804</span><span class="p">)</span>
+<span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">/</span><span class="n">WLFShift01</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<a class="reference internal image-reference" href="../../../../_images/WLFdefault.png"><img alt="WLF shift with default parameters" class="align-center" src="../../../../_images/WLFdefault.png" style="width: 400pt;" /></a>
+<ol class="arabic">
+<li><p class="first">Change the value of a theory parameter:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">/</span><span class="n">WLFShift01</span><span class="o">&gt;</span> <span class="n">T0</span><span class="o">=-</span><span class="mi">35</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Fit the theory to the data files (in this case, shift according to WLF). After the fit is finished, the optimal values of the theory parameters are shown. Only those parameters marked with a <code class="docutils literal"><span class="pre">*</span></code> have been optimized. Also, the error per Mw is shown in a table, along with the number of points that were used for the fit, and the total error of the fit (the objective of the optimization):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">/</span><span class="n">WLFShift01</span><span class="o">&gt;</span> <span class="n">fit</span>
+<span class="n">Solution</span> <span class="n">found</span> <span class="k">with</span> <span class="mi">134</span> <span class="n">function</span> <span class="n">evaluations</span> <span class="ow">and</span> <span class="n">error</span> <span class="mf">0.000308087</span>
+<span class="n">Parameter</span>        <span class="n">Value</span>
+<span class="o">===========================</span>
+<span class="o">*</span>       <span class="n">C1</span> <span class="o">=</span>     <span class="mf">8.6894</span>
+<span class="o">*</span>       <span class="n">C2</span> <span class="o">=</span>     <span class="mf">113.95</span>
+        <span class="n">C3</span> <span class="o">=</span>       <span class="mf">0.61</span>
+       <span class="n">CTg</span> <span class="o">=</span>      <span class="mf">14.65</span>
+        <span class="n">T0</span> <span class="o">=</span>        <span class="o">-</span><span class="mi">35</span>
+      <span class="n">dx12</span> <span class="o">=</span>          <span class="mi">0</span>
+      <span class="n">rho0</span> <span class="o">=</span>      <span class="mf">0.928</span>
+                <span class="n">Mw</span>      <span class="n">Error</span> <span class="p">(</span>  <span class="c1"># Points)</span>
+<span class="o">=============================================</span>
+               <span class="mf">1.9</span><span class="n">k</span>          <span class="o">-</span> <span class="p">(</span>         <span class="mi">0</span><span class="p">)</span>
+               <span class="mf">2.4</span><span class="n">k</span>  <span class="mf">0.0016871</span> <span class="p">(</span>        <span class="mi">86</span><span class="p">)</span>
+               <span class="mf">5.1</span><span class="n">k</span>   <span class="mf">0.001603</span> <span class="p">(</span>        <span class="mi">78</span><span class="p">)</span>
+              <span class="mf">13.5</span><span class="n">k</span>  <span class="mf">0.0017817</span> <span class="p">(</span>       <span class="mi">146</span><span class="p">)</span>
+              <span class="mf">23.4</span><span class="n">k</span> <span class="mf">0.00061732</span> <span class="p">(</span>       <span class="mi">246</span><span class="p">)</span>
+              <span class="mf">33.6</span><span class="n">k</span> <span class="mf">0.00027358</span> <span class="p">(</span>       <span class="mi">254</span><span class="p">)</span>
+              <span class="mf">94.9</span><span class="n">k</span> <span class="mf">7.7759e-05</span> <span class="p">(</span>       <span class="mi">498</span><span class="p">)</span>
+             <span class="mf">225.9</span><span class="n">k</span> <span class="mf">0.00017869</span> <span class="p">(</span>      <span class="mi">1056</span><span class="p">)</span>
+             <span class="mf">483.1</span><span class="n">k</span> <span class="mf">5.7601e-05</span> <span class="p">(</span>       <span class="mi">436</span><span class="p">)</span>
+             <span class="mf">634.5</span><span class="n">k</span> <span class="mf">0.00035651</span> <span class="p">(</span>       <span class="mi">326</span><span class="p">)</span>
+              <span class="mi">1131</span><span class="n">k</span> <span class="mf">2.1141e-05</span> <span class="p">(</span>       <span class="mi">546</span><span class="p">)</span>
+              <span class="n">TOTAL</span> <span class="mf">0.00030825</span> <span class="p">(</span>      <span class="mi">3672</span><span class="p">)</span>
+<span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">/</span><span class="n">WLFShift01</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<a class="reference internal image-reference" href="../../../../_images/WLFfit.png"><img alt="WLF shift with fitted parameters" class="align-center" src="../../../../_images/WLFfit.png" style="width: 400pt;" /></a>
+<ol class="arabic">
+<li><p class="first">Save theory predictions (by default, tts theory files are saved on the same folder from where the osc files were read):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">/</span><span class="n">WLFShift01</span><span class="o">&gt;</span> <span class="n">save</span>
+<span class="n">Saving</span> <span class="n">prediction</span> <span class="n">of</span> <span class="n">WLFShift</span> <span class="n">theory</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_1</span><span class="o">.</span><span class="mi">9</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_2</span><span class="o">.</span><span class="mi">4</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_5</span><span class="o">.</span><span class="mi">1</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_13</span><span class="o">.</span><span class="mi">5</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_23</span><span class="o">.</span><span class="mi">4</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_33</span><span class="o">.</span><span class="mi">6</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_94</span><span class="o">.</span><span class="mi">9</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_225</span><span class="o">.</span><span class="mi">9</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_483</span><span class="o">.</span><span class="mi">1</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_634</span><span class="o">.</span><span class="mi">5</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">File</span><span class="p">:</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Jorge</span> <span class="n">Ramírez</span>\<span class="n">OneDrive</span>\<span class="n">Codes</span>\<span class="n">Python</span>\<span class="n">RepTate</span>\<span class="n">RepTate</span>\<span class="n">data</span>\<span class="n">PI_LINEAR</span>\<span class="n">osc</span>\<span class="n">PI_1131</span><span class="o">.</span><span class="mi">0</span><span class="n">k_</span><span class="o">-</span><span class="mf">35.0</span><span class="o">.</span><span class="n">tts</span>
+<span class="n">reptate</span><span class="o">/</span><span class="n">LVE1</span><span class="o">/</span><span class="n">DataSet01</span><span class="o">/</span><span class="n">WLFShift01</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Exit Reptate (the y answer is needed):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>reptate/LVE1/DataSet01/WLFShift01&gt; quit
+Do you really want to exit RepTate? (y/N) y
+Exiting RepTate...
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialGUITTS.html" title="Tutorial TTS Application"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../Theory/theory.html" title="TTS Theories"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../TTS.html" > TTS: Time-Temperature Superposition</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

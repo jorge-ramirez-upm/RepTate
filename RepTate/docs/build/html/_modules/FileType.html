@@ -1,0 +1,398 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>FileType &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for FileType</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module FileType</span>
+
+<span class="sd">Module for the basic definition of file types. </span>
+
+<span class="sd">&quot;&quot;&quot;</span> 
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1">#import logging</span>
+<span class="kn">from</span> <span class="nn">openpyxl</span> <span class="k">import</span> <span class="n">load_workbook</span>
+<span class="kn">from</span> <span class="nn">File</span> <span class="k">import</span> <span class="n">File</span>
+
+<div class="viewcode-block" id="TXTColumnFile"><a class="viewcode-back" href="../developers/CodeCoreCL.html#FileType.TXTColumnFile">[docs]</a><span class="k">class</span> <span class="nc">TXTColumnFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Basic class for text-column based data files</span>
+<span class="sd">    </span>
+<span class="sd">    Columns should be separated by espaces or tabs</span>
+
+<span class="sd">    BASIC Structure of FILE::</span>
+<span class="sd">    </span>
+<span class="sd">        LINE    CONTENTS</span>
+<span class="sd">        0       Param1=434;Param2=4355;</span>
+<span class="sd">        1       # Header line and/or comments [OPTIONAL, ANY NUMBER OF HEADER LINES IS POSSIBLE]</span>
+<span class="sd">        2       col1 col2 col3 [NAMES OF COLUMNS, OPTIONAL]</span>
+<span class="sd">        3       4343 434.5 535e-434 [DATA, ONLY NUMBERS ALLOWED]</span>
+
+<span class="sd">    The following examples can be declared with the line::</span>
+
+<span class="sd">        ftype=TXTColumnFile(&quot;LVE files&quot;, &quot;tts&quot;, &quot;LVE files&quot;, [&#39;w&#39;,&#39;G\&#39;&#39;,&#39;G\&#39;\&#39;&#39;], [&#39;Mw&#39;,&#39;T&#39;], [&#39;rad/s&#39;,&#39;Pa&#39;,&#39;Pa&#39;])</span>
+<span class="sd">    </span>
+<span class="sd">    EXAMPLE 1: columns line, no header lines::</span>
+
+<span class="sd">        C1=8.77210163229153;C2=114.03;Rho0=0.928;C3=0.61;T=-35;CTg=14.65;dx12=0;isof=true;Mw=634.5;chem=PI;PDI=1.03;</span>
+<span class="sd">        w                           G&#39;                          G&#39;&#39;                        T                            g</span>
+<span class="sd">        4.29882628773180E-0008      1.44001856995549E+0002      3.70207627600662E+0003     -3.30000000000000E-0003      0.00000000000000E+0000     </span>
+<span class="sd">        6.30767835406968E-0008      2.56947504513849E+0002      5.39032089470917E+0003      3.14760000000000E-0004      0.00000000000000E+0000     </span>
+<span class="sd">        9.25946098215800E-0008      4.87031807130633E+0002      7.86538338583378E+0003     -1.01000000000000E-0002      0.00000000000000E+0000     </span>
+
+<span class="sd">    EXAMPLE 2: Neither columns line nor header lines::</span>
+
+<span class="sd">        C1=8.77210163229153;C2=114.03;Rho0=0.928;C3=0.61;T=-35;CTg=14.65;dx12=0;isof=true;Mw=23.4;chem=PI;PDI=1.03;</span>
+<span class="sd">        2.42782390212358E-0003      2.11182193155015E+0001      1.72559181398615E+0003      1.25000000000000E-0003      0.00000000000000E+0000     </span>
+<span class="sd">        3.56351666244471E-0003      4.30476548641552E+0001      2.53490824331357E+0003      1.48400000000000E-0002      0.00000000000000E+0000     </span>
+
+<span class="sd">    EXAMPLE 3: 2 Header lines, no column line::</span>
+<span class="sd">        </span>
+<span class="sd">        T=160;chem=PE;</span>
+<span class="sd">        # Header 1</span>
+<span class="sd">        # Header 2</span>
+<span class="sd">        4.23333e-05 1.05E+00 2.96E+01</span>
+<span class="sd">        6.7e-05 2.02E+00 3.97E+01 </span>
+<span class="sd">    </span>
+<span class="sd">    EXAMPLE 4: 2 Header lines + column line::</span>
+
+<span class="sd">        T=160;chem=PE;</span>
+<span class="sd">        # Header 1</span>
+<span class="sd">        # Header 2</span>
+<span class="sd">        w G&#39; G&#39;&#39;</span>
+<span class="sd">        4.23333e-05 1.05E+00 2.96E+01</span>
+<span class="sd">        6.7e-05 2.02E+00 3.97E+01</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TXTColumn&#39;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span> 
+                 <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Generic text file with columns&#39;</span><span class="p">,</span> 
+                 <span class="n">col_names</span><span class="o">=</span><span class="p">[],</span> <span class="n">basic_file_parameters</span><span class="o">=</span><span class="p">[],</span> <span class="n">col_units</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">    </span>
+<span class="sd">        [description]</span>
+
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {str} -- Name of file type</span>
+<span class="sd">            - extension {str} -- File extension</span>
+<span class="sd">            - description {str} -- Description of file contents</span>
+<span class="sd">            - col_names {list of str}: list with names of columns to read</span>
+<span class="sd">            - basic_file_parameters {list of str}: list with file parameters that should always be included in the header line</span>
+<span class="sd">            - col_units {list of str}: Default units of columns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extension</span><span class="o">=</span><span class="n">extension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_names_line</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_data_line</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="o">=</span><span class="n">col_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basic_file_parameters</span><span class="o">=</span><span class="n">basic_file_parameters</span> <span class="c1"># Those that will show by default in the dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_units</span><span class="o">=</span><span class="n">col_units</span>
+        <span class="c1">#self.logger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
+
+<div class="viewcode-block" id="TXTColumnFile.is_number"><a class="viewcode-back" href="../developers/CodeCoreCL.html#FileType.TXTColumnFile.is_number">[docs]</a>    <span class="k">def</span> <span class="nf">is_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - s {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+        
+<div class="viewcode-block" id="TXTColumnFile.get_parameters"><a class="viewcode-back" href="../developers/CodeCoreCL.html#FileType.TXTColumnFile.get_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - file {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="c1"># remove all spaces</span>
+        <span class="n">items</span><span class="o">=</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)):</span>
+            <span class="n">par</span><span class="o">=</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">par</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_number</span><span class="p">(</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+                
+<div class="viewcode-block" id="TXTColumnFile.find_col_names_and_first_data_lines"><a class="viewcode-back" href="../developers/CodeCoreCL.html#FileType.TXTColumnFile.find_col_names_and_first_data_lines">[docs]</a>    <span class="k">def</span> <span class="nf">find_col_names_and_first_data_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - lines {[type]} -- [description]</span>
+<span class="sd">            - file {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">colnameline</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">firstdata</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="p">):</span>
+                <span class="c1"># Column names line found</span>
+                <span class="n">colnameline</span><span class="o">=</span><span class="n">i</span>
+            <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_number</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()):</span>
+                <span class="c1"># Data lines have been found </span>
+                <span class="n">firstdata</span><span class="o">=</span><span class="n">i</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Otherwise, this must be a header line</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">header_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">colnameline</span><span class="p">,</span> <span class="n">firstdata</span>   </div>
+                
+<div class="viewcode-block" id="TXTColumnFile.read_file"><a class="viewcode-back" href="../developers/CodeCoreCL.html#FileType.TXTColumnFile.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - filename {[type]} -- [description]</span>
+<span class="sd">            - parent_dataset {[type]} -- [description]</span>
+<span class="sd">            - ax {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> does not exists&quot;</span><span class="o">%</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin-1&quot;</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_names_line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_data_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_col_names_and_first_data_lines</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_index</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_names_line</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">col_names_line</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">col</span> <span class="o">==</span> <span class="n">items</span><span class="p">[</span><span class="n">j</span><span class="p">]):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">col_index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+                        <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">col_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="p">)))</span>
+
+        <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_index</span><span class="p">)</span>
+        <span class="n">rawdata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_data_line</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)):</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_index</span><span class="p">:</span>
+                    <span class="n">rawdata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rawdata</span><span class="p">)</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_columns</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rawdata</span><span class="p">,</span><span class="n">newshape</span><span class="o">=</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>        
+        <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+
+        <span class="k">return</span> <span class="n">file</span></div></div>
+
+<div class="viewcode-block" id="ExcelFile"><a class="viewcode-back" href="../developers/CodeCoreCL.html#FileType.ExcelFile">[docs]</a><span class="k">class</span> <span class="nc">ExcelFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse and read contents from Excel file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ExcelFile&#39;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s1">&#39;xlsx&#39;</span><span class="p">,</span> 
+                 <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Generic Excel file&#39;</span><span class="p">,</span> 
+                 <span class="n">col_names</span><span class="o">=</span><span class="p">[],</span> <span class="n">basic_file_parameters</span><span class="o">=</span><span class="p">[],</span> <span class="n">col_units</span><span class="o">=</span><span class="p">[]):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extension</span><span class="o">=</span><span class="n">extension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="o">=</span><span class="n">col_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basic_file_parameters</span><span class="o">=</span><span class="n">basic_file_parameters</span> <span class="c1"># Those that will show by default in the dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_units</span><span class="o">=</span><span class="n">col_units</span>
+        <span class="c1">#self.logger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
+
+<div class="viewcode-block" id="ExcelFile.read_file"><a class="viewcode-back" href="../developers/CodeCoreCL.html#FileType.ExcelFile.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - filename {[type]} -- [description]</span>
+<span class="sd">            - parent_dataset {[type]} -- [description]</span>
+<span class="sd">            - ax {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> does not exists&quot;</span><span class="o">%</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">load_workbook</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wb</span><span class="o">.</span><span class="n">sheetnames</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Select the Sheet that contains the data (number between 0 and </span><span class="si">%d</span><span class="s2">) &gt; &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wb</span><span class="o">.</span><span class="n">sheetnames</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">opt</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">opt</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">wb</span><span class="o">.</span><span class="n">sheetnames</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid option!&quot;</span><span class="p">)</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="p">[</span><span class="n">wb</span><span class="o">.</span><span class="n">sheetnames</span><span class="p">[</span><span class="n">opt</span><span class="p">]]</span>
+        <span class="n">cexcelnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="s1">&#39;F&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">max_column</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%10s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">cexcelnames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">rows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                <span class="n">a</span><span class="o">=</span><span class="n">cell</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%10.5g</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">a</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%10s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">a</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%10d</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">a</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">j</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">4</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">max_row</span><span class="o">-</span><span class="mi">2</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_columns</span><span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_names</span><span class="p">):</span>
+            <span class="n">opt</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+            <span class="k">while</span> <span class="n">opt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cexcelnames</span><span class="p">:</span>
+                <span class="n">opt</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Column that contains the data for </span><span class="si">%s</span><span class="s2"> &gt; &quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">ws</span><span class="o">.</span><span class="n">max_row</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">cell_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">ws</span><span class="p">[</span><span class="n">cell_name</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">file</span></div></div>
+        
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

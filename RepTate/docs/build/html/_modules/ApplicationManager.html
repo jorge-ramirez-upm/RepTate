@@ -1,0 +1,541 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ApplicationManager &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ApplicationManager</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module ApplicationManager</span>
+
+<span class="sd">Module for the Main interface that contains all applications. Command line version.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="c1">#import logging</span>
+<span class="c1">#import logging.handlers</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">readline</span>
+
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">ApplicationTTS</span> <span class="k">import</span> <span class="n">ApplicationTTS</span>
+<span class="kn">from</span> <span class="nn">ApplicationLVE</span> <span class="k">import</span> <span class="n">ApplicationLVE</span>
+<span class="kn">from</span> <span class="nn">ApplicationNLVE</span> <span class="k">import</span> <span class="n">ApplicationNLVE</span>
+<span class="kn">from</span> <span class="nn">ApplicationMWD</span> <span class="k">import</span> <span class="n">ApplicationMWD</span>
+<span class="kn">from</span> <span class="nn">ApplicationGt</span> <span class="k">import</span> <span class="n">ApplicationGt</span>
+<span class="kn">from</span> <span class="nn">ApplicationCreep</span> <span class="k">import</span> <span class="n">ApplicationCreep</span>
+<span class="kn">from</span> <span class="nn">ApplicationSANS</span> <span class="k">import</span> <span class="n">ApplicationSANS</span>
+<span class="kn">from</span> <span class="nn">ApplicationReact</span> <span class="k">import</span> <span class="n">ApplicationReact</span>
+<span class="kn">from</span> <span class="nn">ApplicationDielectric</span> <span class="k">import</span> <span class="n">ApplicationDielectric</span>
+<span class="c1"># from ApplicationXY import ApplicationXY</span>
+<span class="c1">#from ApplicationFRS_I import *</span>
+<span class="kn">import</span> <span class="nn">Version</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+
+
+<div class="viewcode-block" id="ApplicationManager"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager">[docs]</a><span class="k">class</span> <span class="nc">ApplicationManager</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Main Reptate container of applications</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">DATE</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;reptate&gt; &#39;</span>
+    <span class="n">intro</span> <span class="o">=</span> <span class="s1">&#39;Reptate Version </span><span class="si">%s</span><span class="s1"> - </span><span class="si">%s</span><span class="s1"> command processor</span><span class="se">\n</span><span class="s1">help [command] for instructions</span><span class="se">\n</span><span class="s1">TAB for completions&#39;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">version</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># SETUP LOG</span>
+        <span class="c1">#self.reptatelogger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
+        <span class="c1">#self.reptatelogger.setLevel(logging.DEBUG)  # INFO, WARNING</span>
+        <span class="c1">#logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)</span>
+        <span class="c1">#log_file_name = &#39;reptate.log&#39;</span>
+        <span class="c1">#handler = logging.handlers.RotatingFileHandler(</span>
+        <span class="c1">#    log_file_name, maxBytes=20000, backupCount=2, mode=&#39;w&#39;)</span>
+        <span class="c1">#MainWindow.reptatelogger.addHandler(handler)</span>
+
+        <span class="c1"># SETUP READLINE, COMMAND HISTORY FILE, ETC</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;History file not found. Creating a new one&quot;</span><span class="p">)</span>
+
+        <span class="c1"># SETUP APPLICATIONS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">application_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">applications</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationMWD</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationMWD</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationTTS</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationTTS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationLVE</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationLVE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationNLVE</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationNLVE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationGt</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationGt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span>
+            <span class="n">ApplicationCreep</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationCreep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationSANS</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationSANS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span>
+            <span class="n">ApplicationReact</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationReact</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span>
+            <span class="n">ApplicationDielectric</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationDielectric</span>
+        <span class="c1"># self.available_applications[ApplicationXY.apname] = ApplicationXY</span>
+        <span class="c1">#self.available_applications[ApplicationFRS_I.apname]=ApplicationFRS_I</span>
+
+
+
+<span class="c1"># APPLICATION STUFF</span>
+
+<div class="viewcode-block" id="ApplicationManager.available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.available">[docs]</a>    <span class="k">def</span> <span class="nf">available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return list of available applications</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">appname</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">L</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available applications</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">L</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">app</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete an open application</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - name {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Application </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete an open application</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - name {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.complete_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.complete_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete delete application command</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - text {[type]} -- [description]</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - begidx {[type]} -- [description]</span>
+<span class="sd">            - endidx {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">app_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="n">app_names</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">app_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">completions</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.list">[docs]</a>    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List open applications</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">L</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List open applications</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">L</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">app</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.new">[docs]</a>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create new application</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - name {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">appname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">application_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">newapp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">appname</span><span class="p">](</span>
+                <span class="n">appname</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">application_counter</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="p">[</span><span class="n">newapp</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">newapp</span>
+            <span class="c1">#if CmdBase.mode != CmdMode.GUI:</span>
+            <span class="c1">#    newapp.do_new(&quot;&quot;)</span>
+            <span class="k">return</span> <span class="n">newapp</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Application </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> is not available&quot;</span> <span class="o">%</span> <span class="n">appname</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create new application</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - appname {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">newapp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">newapp</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">batch</span><span class="p">):</span>
+                <span class="n">newapp</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">newapp</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">newapp</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
+            <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+                <span class="n">newapp</span><span class="o">.</span><span class="n">do_new</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">newapp</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.complete_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.complete_new">[docs]</a>    <span class="k">def</span> <span class="nf">complete_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete new application command</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - text {[type]} -- [description]</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - begidx {[type]} -- [description]</span>
+<span class="sd">            - endidx {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">app_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="n">app_names</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">app_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">completions</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set focus to an open application</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - name {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Application </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.complete_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.complete_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - text {[type]} -- [description]</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - begidx {[type]} -- [description]</span>
+<span class="sd">            - endidx {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">completions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_delete</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">completions</span></div>
+
+<span class="c1"># MAXWELL MODES COPY</span>
+
+<div class="viewcode-block" id="ApplicationManager.do_copymodes"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_copymodes">[docs]</a>    <span class="k">def</span> <span class="nf">do_copymodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy maxwell modes from one theory to another.</span>
+<span class="sd">        </span>
+<span class="sd">        Both theories may live inside different applications and/or datasets</span>
+<span class="sd">        copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">apps</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">apps</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;Not enough parameters passed</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s2">&quot;Use &#39;copymodes App1.Dataset1.Theory1 App2.Dataset2.Theory2&#39;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;See &#39;list_theories_Maxwell&#39; for a list of availiable theories&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">apps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">apps</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Source format should be: &#39;App1.Dataset1.Theory1&#39;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;See &#39;list_theories_Maxwell&#39; for a list of availiable theories&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Target format should be: &#39;App2.Dataset2.Theory2&#39;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;See &#39;list_theories_Maxwell&#39; for a list of availiable theories&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">get_dict</span><span class="p">,</span> <span class="n">set_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_theories_Maxwell</span><span class="p">()</span>
+        <span class="n">dict_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">get_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>  <span class="c1">#get_dict and set_dict have the same keys</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">source</span> <span class="ow">in</span> <span class="n">dict_keys</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">target</span> <span class="ow">in</span> <span class="n">dict_keys</span><span class="p">)):</span>
+            <span class="n">tau</span><span class="p">,</span> <span class="n">G</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">[</span><span class="n">source</span><span class="p">]()</span>
+            <span class="n">set_dict</span><span class="p">[</span><span class="n">target</span><span class="p">](</span><span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Copied modes from </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source or Target not found</span><span class="se">\n</span><span class="s2">&quot;</span>
+                  <span class="s2">&quot;or theory does not have modes.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                  <span class="s2">&quot;No copy has been made&quot;</span><span class="p">)</span>
+            <span class="k">return</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.list_theories_Maxwell"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.list_theories_Maxwell">[docs]</a>    <span class="k">def</span> <span class="nf">list_theories_Maxwell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th_exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the theories in the current RepTate instance that provide and need</span>
+<span class="sd">        Maxwell modes</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">set_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">th</span><span class="o">.</span><span class="n">has_modes</span> <span class="ow">and</span> <span class="n">th</span> <span class="o">!=</span> <span class="n">th_exclude</span><span class="p">:</span>
+                        <span class="n">get_dict</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                               <span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">get_modes</span>
+                        <span class="n">set_dict</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                               <span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">set_modes</span>
+        <span class="k">return</span> <span class="n">get_dict</span><span class="p">,</span> <span class="n">set_dict</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_list_theories_Maxwell"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_list_theories_Maxwell">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_theories_Maxwell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the theories in the current RepTate instance that provide</span>
+<span class="sd">        Maxwell modes</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_theories_Maxwell</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
+
+
+<span class="c1"># OTHER STUFF</span>
+
+<div class="viewcode-block" id="ApplicationManager.help_tutorial"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.help_tutorial">[docs]</a>    <span class="k">def</span> <span class="nf">help_tutorial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;introduction&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a good place for a tutorial&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_about"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_about">[docs]</a>    <span class="k">def</span> <span class="nf">do_about</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show about info</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_info"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_info">[docs]</a>    <span class="k">def</span> <span class="nf">do_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show info about the current RepTate session</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##AVAILABLE APPLICATIONS:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_available</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">##OPEN APPLICATIONS&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_list</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_quit"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Exit from the application</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            args {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Do you really want to exit RepTate?&#39;</span>
+        <span class="n">shall</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">%s</span><span class="s2"> (y/N) &quot;</span> <span class="o">%</span> <span class="n">msg</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">shall</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exiting RepTate...&quot;</span><span class="p">)</span>
+            <span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">()</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
+
+    <span class="n">do_EOF</span> <span class="o">=</span> <span class="n">do_quit</span>
+    <span class="n">do_up</span> <span class="o">=</span> <span class="n">do_quit</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

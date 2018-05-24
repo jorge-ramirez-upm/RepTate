@@ -1,0 +1,182 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>General Description of RepTate &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Applications" href="../Applications/applications.html" />
+    <link rel="prev" title="User Manual" href="../manual.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../Applications/applications.html" title="Applications"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../manual.html" title="User Manual"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" accesskey="U">User Manual</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../manual.html"
+                        title="previous chapter">User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../Applications/applications.html"
+                        title="next chapter">Applications</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/manual/General/general.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="general-description-of-reptate">
+<h1>General Description of RepTate<a class="headerlink" href="#general-description-of-reptate" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory &amp; Experiment) is a software package for viewing, exchanging and analysing experimental data. Several of the classical and latest theories of polymer dynamics are included in RepTate, so they can be tested and fitted to the experimental data.</p>
+<p>The software is designed in a modular way, so it is easy to extend to analyze new types of data and fit with new theories.</p>
+<p>The main Reptate window is called the <em>Application Manager</em> and is a multiple document interface (MDI). All the applications can be opened from the Application Manager and will reside inside it. At the top of the Application Manager there is a toolbar that allows to open different applications, load and save projects, read the help and exit RepTate.</p>
+<p>Applications have three separate areas:</p>
+<ul class="simple">
+<li>The plot, in the center, is where the experimental data files and theoretical fits are shown.</li>
+<li>A vertical region at the right of the window, that allows to:<ul>
+<li>Select the current <em>View</em> (way of representing the data)</li>
+<li>Open data <em>Files</em> and arrange them into different <em>Datasets</em></li>
+<li>Create a <em>Theory</em> associated to a given Dataset and fit it (minimize the error with respect to the Files within that Dataset).</li>
+</ul>
+</li>
+<li>A vertical region at the left of the window, where the user can inspect the contents of the data of the selected File in the current Dataset. This region is hidden by default.</li>
+</ul>
+<p>RepTate makes extensive use of the following packages and libraries:</p>
+<ul class="simple">
+<li>Matplotlib: Text <a class="reference internal" href="#general-hunter-2007" id="id1">[1]</a>.</li>
+<li>Scipy: Text <a class="reference internal" href="#general-jones-2018" id="id2">[2]</a>.</li>
+<li>Numpy: Text <a class="reference internal" href="#general-oliphant-2006" id="id3">[3]</a>.</li>
+<li>Qt and Pyqt: Text <a class="reference internal" href="#general-pyqt-2018" id="id4">[4]</a>, Text <a class="reference internal" href="#general-qt-2018" id="id5">[5]</a>.</li>
+</ul>
+<p class="rubric">References</p>
+<p id="bibtex-bibliography-manual/General/general-0"><table class="docutils citation" frame="void" id="general-hunter-2007" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>J.&nbsp;D. Hunter. Matplotlib: a 2d graphics environment. <em>Computing In Science &amp; Engineering</em>, 9(3):90–95, 2007. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">doi:10.1109/MCSE.2007.55</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="general-jones-2018" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Eric Jones, Travis Oliphant, Pearu Peterson, and others. SciPy: open source scientific tools for Python. 2001–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="http://www.scipy.org/">http://www.scipy.org/</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="general-oliphant-2006" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Travis&nbsp;E. Oliphant. <em>Guide to NumPy</em>. Provo, UT, March 2006. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="http://web.mit.edu/dvp/Public/numpybook.pdf">http://web.mit.edu/dvp/Public/numpybook.pdf</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="general-pyqt-2018" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>Riverbank Computing. Pyqt. 2009–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="https://en.wikipedia.org/wiki/PyQt">https://en.wikipedia.org/wiki/PyQt</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="general-qt-2018" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td>The&nbsp;Qt Company. Qt. 1991–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="https://en.wikipedia.org/wiki/PyQt">https://en.wikipedia.org/wiki/PyQt</a>.</td></tr>
+</tbody>
+</table>
+</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../Applications/applications.html" title="Applications"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../manual.html" title="User Manual"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" >User Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

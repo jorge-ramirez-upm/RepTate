@@ -1,0 +1,158 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>RepTate for developers &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorial: Adding new functionality to RepTate" href="functionality.html" />
+    <link rel="prev" title="Theories common to all applications" href="../manual/All_Theories/basic_theories.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functionality.html" title="Tutorial: Adding new functionality to RepTate"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../manual/All_Theories/basic_theories.html" title="Theories common to all applications"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../manual/All_Theories/basic_theories.html"
+                        title="previous chapter">Theories common to all applications</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="functionality.html"
+                        title="next chapter">Tutorial: Adding new functionality to RepTate</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developers/developers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="reptate-for-developers">
+<h1>RepTate for developers<a class="headerlink" href="#reptate-for-developers" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="functionality.html">Tutorial: Adding new functionality to RepTate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functionality.html#goals">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functionality.html#new-application">New application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functionality.html#new-file-type">New file type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functionality.html#new-view">New view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functionality.html#new-theory">New theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functionality.html#new-icons">New Icons</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_c_interface.html">Tutorial: Interfacing Python and C code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python_c_interface.html#goals">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_c_interface.html#our-c-code">Our C code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_c_interface.html#compile-the-c-code-into-a-library">Compile the C code into a library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_c_interface.html#use-a-c-library-in-python">Use a C library in Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_c_interface.html#final-comments">Final comments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="callgraphGUI.html">Code Diagrams for GUI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Navigate the source Code of Reptate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html">Core classes (Command Line)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html">Core classes (Graphical User Interface)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html">Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTheories.html">Theories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTODO.html">TODO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#main-application">Main Application</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functionality.html" title="Tutorial: Adding new functionality to RepTate"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../manual/All_Theories/basic_theories.html" title="Theories common to all applications"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

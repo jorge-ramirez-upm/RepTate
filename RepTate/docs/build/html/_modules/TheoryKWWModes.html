@@ -1,0 +1,554 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TheoryKWWModes &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for TheoryKWWModes</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module TheoryKWWModes</span>
+
+<span class="sd">Module that defines theories related to Havriliak-Negami modes, in the frequency and time domains.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
+<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">ShiftType</span><span class="p">,</span> <span class="n">OptType</span>
+<span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
+<span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QStyle</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">QUrl</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QDesktopServices</span>
+<span class="kn">from</span> <span class="nn">DraggableArtists</span> <span class="k">import</span> <span class="n">DragType</span><span class="p">,</span> <span class="n">DraggableModesSeries</span>
+
+<span class="kn">from</span> <span class="nn">kww_ctypes_helper</span> <span class="k">import</span> <span class="n">kwwc</span><span class="p">,</span> <span class="n">kwws</span>
+
+
+<div class="viewcode-block" id="TheoryKWWModesFrequency"><a class="viewcode-back" href="../manual/Applications/Dielectric/Theory/theory.html#TheoryKWWModes.TheoryKWWModesFrequency">[docs]</a><span class="k">class</span> <span class="nc">TheoryKWWModesFrequency</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Fit a Kohlrausch-Williams-Watts (KWW, stretched exponential) model to a frequency dependent relaxation function. </span>
+<span class="sd">    </span>
+<span class="sd">    * **Function**</span>
+<span class="sd">        .. math::</span>
+<span class="sd">            \\epsilon (t) - \\epsilon_\\infty =  \\Delta\\epsilon \\left[ 1 - \\exp \\left( - \\frac{t}{\\tau} \\right)^\\beta\\right]</span>
+<span class="sd">    </span>
+<span class="sd">    * **Parameters**</span>
+<span class="sd">       - einf = :math:`\\epsilon_{\\infty}`: Unrelaxed permitivity</span>
+<span class="sd">       - :math:`n_{modes}`: number of Havriliak-Negami modes equally distributed in logarithmic scale between :math:`\\omega_{min}` and :math:`\\omega_{max}`.</span>
+<span class="sd">       - logwmin = :math:`\\log(\\omega_{min})`: decimal logarithm of the minimum frequency.</span>
+<span class="sd">       - logwmax = :math:`\\log(\\omega_{max})`: decimal logarithm of the maximum frequency.</span>
+<span class="sd">       - logDei = :math:`\\log(\\Delta\\epsilon_{i})`, where :math:`\\Delta\\epsilon_{i}=\\epsilon_{s,i}-\\epsilon_\\infty`: decimal logarithm of the relaxation strength of Debye mode :math:`i`, where :math:`\\epsilon_{s,i}` is the static permitivity of mode :math:`i`.</span>
+<span class="sd">       - :math:`\\beta`: stretched exponential parameter</span>
+<span class="sd">       </span>
+<span class="sd">    .. note::</span>
+<span class="sd">        It makes use of the libkww code, by Joachim Wuttke, CITE: doi:10.3390/a5040604</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;KWWModesFrequency&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Fit Havriliak-Negami modes to frequency dependent function&quot;</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GUITheoryKWWModesFrequency</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span>
+            <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLTheoryKWWModesFrequency</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">BaseTheoryKWWModesFrequency</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;[summary] </span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/Dielectric/Theory/theory.html#kolhrauch-williams-watts-kww-modes&#39;</span>
+    <span class="n">single_file</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryKWWModesFrequency</span><span class="o">.</span><span class="n">thname</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryKWWModesFrequency</span><span class="o">.</span><span class="n">citations</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">                </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">KWWModesFrequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MODES</span> <span class="o">=</span> <span class="mi">40</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_modes</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">wmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">minpositivecol</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">wmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">maxcol</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">nmodes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">wmax</span> <span class="o">/</span> <span class="n">wmin</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;einf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="s2">&quot;einf&quot;</span><span class="p">,</span>
+            <span class="mf">0.0</span><span class="p">,</span>
+            <span class="s2">&quot;Unrelaxed permittivity&quot;</span><span class="p">,</span>
+            <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
+            <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="s2">&quot;beta&quot;</span><span class="p">,</span>
+            <span class="mf">0.5</span><span class="p">,</span>
+            <span class="s2">&quot;???&quot;</span><span class="p">,</span>
+            <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
+            <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">min_value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">max_value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="s2">&quot;logwmin&quot;</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">wmin</span><span class="p">),</span>
+            <span class="s2">&quot;Log of frequency range minimum&quot;</span><span class="p">,</span>
+            <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmax&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="s2">&quot;logwmax&quot;</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">wmax</span><span class="p">),</span>
+            <span class="s2">&quot;Log of frequency range maximum&quot;</span><span class="p">,</span>
+            <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;nmodes&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">nmodes</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Number of Havriliak-Negami modes&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Interpolate modes from data</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">wmin</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">wmax</span><span class="p">),</span> <span class="n">nmodes</span><span class="p">)</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+                <span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">eps</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+                <span class="s2">&quot;Log of Mode </span><span class="si">%d</span><span class="s2"> amplitude&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span>
+                <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+                <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+
+        <span class="c1"># GRAPHIC MODES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artistmodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_graphic_modes</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">drag_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - dx {[type]} -- [description]</span>
+<span class="sd">            - dy {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">log_x</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;logwmin&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;logwmax&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dx</span><span class="p">[</span><span class="n">nmodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;logwmin&quot;</span><span class="p">,</span> <span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;logwmax&quot;</span><span class="p">,</span> <span class="n">dx</span><span class="p">[</span><span class="n">nmodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">log_y</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">setup_graphic_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nmodes</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="n">eps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">eps</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_marker</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_linestyle</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view_modes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_markerfacecolor</span><span class="p">(</span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_markeredgecolor</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_markeredgewidth</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_markersize</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artistmodes</span> <span class="o">=</span> <span class="n">DraggableModesSeries</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="p">,</span> <span class="n">DragType</span><span class="o">.</span><span class="n">special</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drag_mode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_theory_stuff</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when the theory tab is closed</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when the active theory is changed</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qhide_theory_extras</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes_visible</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">graphicmodes_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_modes</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view_modes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_modes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artistmodes</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artistmodes</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="c1"># self.do_calculate(&quot;&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">update_plot</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">freq</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nmodes</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="n">eps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tau</span><span class="p">,</span> <span class="n">eps</span>
+
+    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - tau {[type]} -- [description]</span>
+<span class="sd">            - eps {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;set_modes not allowed in this theory (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">KWWModesFrequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - f {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_rows</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">einf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;einf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">freq</span>
+
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">einf</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]):</span>
+                <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">kwwc</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">tau</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">beta</span><span class="p">)</span>
+                <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">kwws</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">tau</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">beta</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if not self.view_modes:</span>
+        <span class="c1">#     return</span>
+        <span class="n">data_table_tmp</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">)</span>
+        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">nmodes</span>
+        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nmodes</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
+        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span>
+                <span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">data_table_tmp</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data_table_tmp</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">data_table_tmp</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+
+
+<span class="k">class</span> <span class="nc">CLTheoryKWWModesFrequency</span><span class="p">(</span><span class="n">BaseTheoryKWWModesFrequency</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">GUITheoryKWWModesFrequency</span><span class="p">(</span><span class="n">BaseTheoryKWWModesFrequency</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+
+        <span class="c1"># add widgets specific to the theory</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MODES</span><span class="p">)</span>  <span class="c1"># min and max number of modes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s2">&quot; modes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>  <span class="c1">#initial value</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modesaction</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
+            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-visible.png&#39;</span><span class="p">),</span> <span class="s1">&#39;View modes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modesaction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modesaction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thToolsLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
+
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_spinboxValueChanged</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modesaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modesaction_change</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Uncheck the modeaction button. Called when curent theory is changed</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modesaction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">modesaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes_visible</span><span class="p">(</span><span class="n">checked</span><span class="p">)</span>
+        <span class="c1"># self.view_modes = self.modesaction.isChecked()</span>
+        <span class="c1"># self.graphicmodes.set_visible(self.view_modes)</span>
+        <span class="c1"># self.do_calculate(&quot;&quot;)</span>
+
+    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - value {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Handle a change of the parameter &#39;nmode&#39;&quot;&quot;&quot;</span>
+        <span class="n">nmodesold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">wminold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">wmaxold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">wold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">wminold</span><span class="p">,</span> <span class="n">wmaxold</span><span class="p">,</span> <span class="n">nmodesold</span><span class="p">)</span>
+        <span class="n">Gold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nmodesold</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodesold</span><span class="p">):</span>
+            <span class="n">Gold</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span>
+
+        <span class="n">nmodesnew</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;nmodes&quot;</span><span class="p">,</span> <span class="n">nmodesnew</span><span class="p">)</span>
+        <span class="n">wnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">wminold</span><span class="p">,</span> <span class="n">wmaxold</span><span class="p">,</span> <span class="n">nmodesnew</span><span class="p">)</span>
+
+        <span class="n">Gnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">wnew</span><span class="p">,</span> <span class="n">wold</span><span class="p">,</span> <span class="n">Gold</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodesnew</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+                <span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span>
+                <span class="n">Gnew</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;Log of Mode </span><span class="si">%d</span><span class="s2"> amplitude&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span>
+                <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+                <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

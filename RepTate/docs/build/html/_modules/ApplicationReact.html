@@ -1,0 +1,375 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ApplicationReact &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ApplicationReact</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module ApplicationReact</span>
+
+<span class="sd">React module</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">Application</span> <span class="k">import</span> <span class="n">Application</span>
+<span class="kn">from</span> <span class="nn">QApplicationWindow</span> <span class="k">import</span> <span class="n">QApplicationWindow</span>
+<span class="kn">from</span> <span class="nn">View</span> <span class="k">import</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">FileType</span> <span class="k">import</span> <span class="n">TXTColumnFile</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="nn">gridspec</span>
+
+
+<div class="viewcode-block" id="ApplicationReact"><a class="viewcode-back" href="../manual/Applications/React/general.html#ApplicationReact.ApplicationReact">[docs]</a><span class="k">class</span> <span class="nc">ApplicationReact</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Application for Monte Carlo polymerisation</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">appname</span> <span class="o">=</span> <span class="s1">&#39;React&#39;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;React Application&#39;</span>  <span class="c1">#used in the command-line Reptate</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="s1">&#39;reac&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;React&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;React&#39;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GUIApplicationReact</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLApplicationReact</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">BaseApplicationReact</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/React/React.html&#39;</span>
+    <span class="n">appname</span> <span class="o">=</span> <span class="n">ApplicationReact</span><span class="o">.</span><span class="n">appname</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;React&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;React&#39;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">TheoryLDPEBatch</span> <span class="k">import</span> <span class="n">TheoryTobitaBatch</span>
+        <span class="kn">from</span> <span class="nn">TheoryTobitaCSTR</span> <span class="k">import</span> <span class="n">TheoryTobitaCSTR</span>
+        <span class="kn">from</span> <span class="nn">TheoryMultiMetCSTR</span> <span class="k">import</span> <span class="n">TheoryMultiMetCSTR</span>
+        <span class="kn">from</span> <span class="nn">TheoryReactMix</span> <span class="k">import</span> <span class="n">TheoryReactMix</span>
+        <span class="kn">from</span> <span class="nn">TheoryCreatePolyconf</span> <span class="k">import</span> <span class="n">TheoryCreatePolyconf</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">nplots</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># will call Application.__init__ with these args</span>
+
+        <span class="c1"># VIEWS</span>
+        <span class="c1"># set the views that can be selected in the view combobox</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;w(M)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;w(M)&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Molecular weight distribution&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;w(M)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;g/mol&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_wM</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;w(M)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(w(M))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(w(M))&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Molecular weight distribution&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log w(M)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;g/mol&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_logwM</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;w(M)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;g(M)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;g(M)&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;g(M)&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;g(M)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;g/mol&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_gM</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;g(M)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(g(M))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(g(M))&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log(g(M))&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log g(M)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;g/mol&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_loggM</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;g(M)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;br/1000C&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;br/1000C&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;br/1000C(M)&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;br/1000C(M)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;g/mol&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_br_1000C</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;br/1000C(M)&quot;</span><span class="p">])</span>
+
+        <span class="c1">#set multiviews</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;w(M)&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;g(M)&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;br/1000C&#39;</span><span class="p">]</span>
+        <span class="p">]</span>  <span class="c1">#default view order in multiplot views</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">)</span>
+
+        <span class="c1"># FILES</span>
+        <span class="c1"># set the type of files that ApplicationReact can open</span>
+        <span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;React files&#39;</span><span class="p">,</span>
+            <span class="n">extension</span><span class="o">=</span><span class="s1">&#39;reac&#39;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Reatc file&#39;</span><span class="p">,</span>
+            <span class="n">col_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;w(M)&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;br/1000C&#39;</span><span class="p">],</span>
+            <span class="n">basic_file_parameters</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">col_units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;g/mol&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span>
+            <span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">ftype</span>  <span class="c1">#add each the file type to dictionary</span>
+
+        <span class="c1"># THEORIES</span>
+        <span class="c1"># add the theories related to ApplicationReact to the dictionary, e.g.:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryTobitaBatch</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryTobitaBatch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryTobitaCSTR</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryTobitaCSTR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryMultiMetCSTR</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryMultiMetCSTR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryReactMix</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryReactMix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryCreatePolyconf</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryCreatePolyconf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_common_theories</span><span class="p">()</span>
+
+        <span class="c1">#set the current view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BaseApplicationReact.view_wM"><a class="viewcode-back" href="../manual/Applications/React/general.html#ApplicationReact.BaseApplicationReact.view_wM">[docs]</a>    <span class="k">def</span> <span class="nf">view_wM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Molecular weight distribution :math:`w(M)` vs molecular weight :math:`M` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationReact.view_logwM"><a class="viewcode-back" href="../manual/Applications/React/general.html#ApplicationReact.BaseApplicationReact.view_logwM">[docs]</a>    <span class="k">def</span> <span class="nf">view_logwM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the molecular weight distribution :math:`\\log(w(M))` vs molecular weight :math:`M` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationReact.view_gM"><a class="viewcode-back" href="../manual/Applications/React/general.html#ApplicationReact.BaseApplicationReact.view_gM">[docs]</a>    <span class="k">def</span> <span class="nf">view_gM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:math:`g`-factor as a function of the molecular weight.</span>
+<span class="sd">        The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationReact.view_loggM"><a class="viewcode-back" href="../manual/Applications/React/general.html#ApplicationReact.BaseApplicationReact.view_loggM">[docs]</a>    <span class="k">def</span> <span class="nf">view_loggM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the :math:`g`-factor as a function of the molecular weight.</span>
+<span class="sd">        The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationReact.view_br_1000C"><a class="viewcode-back" href="../manual/Applications/React/general.html#ApplicationReact.BaseApplicationReact.view_br_1000C">[docs]</a>    <span class="k">def</span> <span class="nf">view_br_1000C</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Number of branching points per 1000 carbon as a function of the molecular weight</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+
+<span class="k">class</span> <span class="nc">CLApplicationReact</span><span class="p">(</span><span class="n">BaseApplicationReact</span><span class="p">,</span> <span class="n">Application</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;React&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;React&#39;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="c1">#usually this class stays empty</span>
+
+
+<span class="k">class</span> <span class="nc">GUIApplicationReact</span><span class="p">(</span><span class="n">BaseApplicationReact</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;React&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;React&#39;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1">#add the GUI-specific objects here:</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

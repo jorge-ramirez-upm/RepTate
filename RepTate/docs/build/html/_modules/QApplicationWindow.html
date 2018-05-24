@@ -1,0 +1,1262 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>QApplicationWindow &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for QApplicationWindow</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module QApplicationWindow</span>
+
+<span class="sd">Module that defines the basic GUI class from which all GUI applications are derived.</span>
+<span class="sd">It is the GUI counterpart of Application.</span>
+
+<span class="sd">&quot;&quot;&quot;</span> 
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">isfile</span>
+<span class="c1">#import logging</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QColor</span>
+<span class="kn">from</span> <span class="nn">PyQt5.uic</span> <span class="k">import</span> <span class="n">loadUiType</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.backends.backend_qt5agg</span> <span class="k">import</span> <span class="n">FigureCanvasQTAgg</span><span class="p">,</span> <span class="n">NavigationToolbar2QT</span>
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QColorDialog</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QTreeWidgetItem</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QComboBox</span>
+<span class="kn">from</span> <span class="nn">QDataSet</span> <span class="k">import</span> <span class="n">QDataSet</span>
+<span class="kn">from</span> <span class="nn">DataSetWidgetItem</span> <span class="k">import</span> <span class="n">DataSetWidgetItem</span>
+<span class="kn">from</span> <span class="nn">DataSet</span> <span class="k">import</span> <span class="n">ColorMode</span><span class="p">,</span> <span class="n">SymbolMode</span><span class="p">,</span> <span class="n">ThLineMode</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">Application</span> <span class="k">import</span> <span class="n">Application</span>
+<span class="kn">from</span> <span class="nn">DraggableArtists</span> <span class="k">import</span> <span class="n">DragType</span><span class="p">,</span> <span class="n">DraggableSeries</span><span class="p">,</span> <span class="n">DraggableNote</span>
+
+<span class="c1">#To recompile the symbol-settings dialog:</span>
+<span class="c1">#pyuic5 gui/markerSettings.ui -o gui/markerSettings.py</span>
+<span class="kn">from</span> <span class="nn">markerSettings</span> <span class="k">import</span> <span class="n">Ui_Dialog</span>
+
+<span class="kn">from</span> <span class="nn">SpreadsheetWidget</span> <span class="k">import</span> <span class="n">SpreadsheetWidget</span>
+
+<span class="c1"># I think the following lines are not needed anymore</span>
+<span class="c1">#try:</span>
+<span class="c1">#    _fromUtf8 = QtCore.QString.fromUtf8</span>
+<span class="c1">#except AttributeError:</span>
+<span class="c1">#    _fromUtf8 = lambda s: s</span>
+    
+<span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">Ui_AppWindow</span><span class="p">,</span> <span class="n">QMainWindow</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span><span class="s1">&#39;QApplicationWindow.ui&#39;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="QApplicationWindow"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow">[docs]</a><span class="k">class</span> <span class="nc">QApplicationWindow</span><span class="p">(</span><span class="n">Application</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">Ui_AppWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Application Template&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span><span class="o">!=</span><span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="n">QMainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Ui_AppWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#self.logger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curves</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zorder</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dir_start</span> <span class="o">=</span> <span class="s1">&#39;Data/&#39;</span> <span class="c1"># default folder opened</span>
+        
+        <span class="c1"># Accept Drag and drop events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAcceptDrops</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># DataSet Tabs behaviour ##########</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">setTabsClosable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1">#self.DataSettabWidget.setTabBarAutoHide(True)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">setUsesScrollButtons</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">setMovable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1">################</span>
+        <span class="c1"># SETUP TOOLBARS</span>
+        <span class="c1"># Data Inspector Toolbar</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">24</span><span class="p">))</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCopy</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionPaste</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionShiftVertically</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionShiftHorizontally</span><span class="p">)</span>
+        <span class="c1">#self.LayoutDataInspector.insertWidget(0, tb)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LayoutDataInspector</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+        <span class="c1">#custom QTable to have the copy/pastefeature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span> <span class="o">=</span> <span class="n">SpreadsheetWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#self.LayoutDataInspector.insertWidget(1, self.inspector_table)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LayoutDataInspector</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="p">)</span>
+
+        <span class="c1">################</span>
+        <span class="c1"># TOOLS TOOLBAR</span>
+        <span class="c1"># In the Data Inspector area (at the bottom)</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">24</span><span class="p">))</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionNew_Tool</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbtool</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbtool</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Choose a Tool&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tool_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">availabletools</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cbtool</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">tool_name</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cbtool</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LayoutDataInspector</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">setTabsClosable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">setTabShape</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LayoutDataInspector</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="p">)</span>
+        
+        <span class="c1"># Dataset Toolbar</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">24</span><span class="p">))</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionNew_Empty_Dataset</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionNew_Dataset_From_File</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionView_All_Sets</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionMarkerSettings</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionReload_Data</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionInspect_Data</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionShowFigureTools</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ViewDataTheoryLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ViewDataTheorydockWidget</span><span class="o">.</span><span class="n">Width</span><span class="o">=</span><span class="mi">500</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ViewDataTheorydockWidget</span><span class="o">.</span><span class="n">setTitleBarWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">())</span>                
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionAutoscale</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Images/Images/new_icons/icons8-padlock-96.png&#39;</span><span class="p">),</span> <span class="s2">&quot;Lock XY axes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionAutoscale</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+
+        <span class="c1"># Tests TableWidget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Hide Data Inspector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mplvl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span> <span class="o">=</span> <span class="n">NavigationToolbar2QT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionTrack_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAdd_Annotation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Legend</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCopyChart</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mplvl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="p">)</span>
+
+                
+        <span class="c1"># self.canvas.draw()</span>
+        <span class="c1"># self.update_Qplot()</span>
+        <span class="c1"># LEGEND STUFF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># leg=plt.legend(loc=&#39;upper left&#39;, frameon=True, ncol=2)</span>
+        <span class="c1"># if leg:</span>
+        <span class="c1">#     leg.draggable()</span>
+                
+
+        <span class="c1"># EVENT HANDLING</span>
+        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;button_press_event&#39;, self.onclick)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;resize_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resizeplot</span><span class="p">)</span>
+        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;motion_notify_event&#39;, self.on_plot_hover)   </span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShowFigureTools</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewMPLToolbar</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionInspect_Data</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showDataInspector</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionNew_Empty_Dataset</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_createNew_Empty_Dataset</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionNew_Dataset_From_File</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openDataset</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionReload_Data</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionReload_Data</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionAutoscale</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionAutoscale</span><span class="p">)</span>
+
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionNew_Tool</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionNewTool</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">tabCloseRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_toolTabCloseRequested</span><span class="p">)</span>
+
+        
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_view</span><span class="p">)</span>
+
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">tabCloseRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close_data_tab_handler</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">tabBarDoubleClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_doubleClickTab</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_currentChanged</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionView_All_Sets</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionView_All_Sets</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShiftVertically</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionShiftTriggered</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShiftHorizontally</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionShiftTriggered</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">visibilityChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_inspectorVisibilityChanged</span><span class="p">)</span>
+        
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionMarkerSettings</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionMarkerSettings</span><span class="p">)</span>
+        
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCopy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">copy</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionPaste</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">paste</span><span class="p">)</span>
+
+
+        <span class="c1"># Annotation stuff</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionTrack_data</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_annotation</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCopyChart</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">copy_chart</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphicnotes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artistnotes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionAdd_Annotation</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Legend</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_legend</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpl_motion_event</span><span class="p">)</span>
+
+        <span class="c1">#Setting up the marker-settings dialog</span>
+        <span class="c1"># self.marker_dic = {&#39;square&#39;: &#39;s&#39;, &#39;plus (filled)&#39;: &#39;P&#39;, &#39;point&#39;: &#39;.&#39;, &#39;triangle_right&#39;: &#39;&gt;&#39;, &#39;hline&#39;: &#39;_&#39;, &#39;vline&#39;: &#39;|&#39;, &#39;pentagon&#39;: &#39;p&#39;, &#39;tri_left&#39;: &#39;3&#39;, &#39;tri_up&#39;: &#39;2&#39;, &#39;circle&#39;: &#39;o&#39;, &#39;diamond&#39;: &#39;D&#39;, &#39;star&#39;: &#39;*&#39;, &#39;hexagon1&#39;: &#39;h&#39;, &#39;octagon&#39;: &#39;8&#39;, &#39;hexagon2&#39;: &#39;H&#39;, &#39;tri_right&#39;: &#39;4&#39;, &#39;x (filled)&#39;: &#39;X&#39;, &#39;thin_diamond&#39;: &#39;d&#39;, &#39;tri_down&#39;: &#39;1&#39;, &#39;triangle_left&#39;: &#39;&lt;&#39;, &#39;plus&#39;: &#39;+&#39;, &#39;triangle_down&#39;: &#39;v&#39;, &#39;triangle_up&#39;: &#39;^&#39;, &#39;x&#39;: &#39;x&#39;}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span> <span class="o">=</span> <span class="n">QDialog</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_Dialog</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populate_cbSymbolType</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populate_cbPalette</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populate_cbTheoryLine</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color1</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color2</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color_th</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># self.populate_markers() </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fparam_backup</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#temporary storage of the file parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">spinBox</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#increment in the marker size dialog</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pickColor1</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickColor1</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pickColor2</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickColor2</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pickThColor</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickThColor</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbEmpty</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">populate_cbSymbolType</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFilled</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">populate_cbSymbolType</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pushApply</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_apply_button_pressed</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_actions_disabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># connection_id = self.checkBoxColor.toggled.connect(self)</span>
+        <span class="c1"># TEST GET CLICKABLE OBJECTS ON THE X AXIS</span>
+        <span class="c1">#xaxis = self.ax.get_xticklabels()</span>
+        <span class="c1">#print (xaxis)  </span>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_actionNewTool"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionNewTool">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionNewTool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create new tool&quot;&quot;&quot;</span>
+        <span class="n">tool_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbtool</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tool_name</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_tool</span><span class="p">(</span><span class="n">tool_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_all_ds_plots</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="QApplicationWindow.new_tool"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.new_tool">[docs]</a>    <span class="k">def</span> <span class="nf">new_tool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tool_name</span><span class="p">,</span> <span class="n">tool_tab_id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create new tool&quot;&quot;&quot;</span>
+        <span class="n">newtool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_tool_add</span><span class="p">(</span><span class="n">tool_name</span><span class="p">)</span>
+
+        <span class="c1"># add new tool tab</span>
+        <span class="k">if</span> <span class="n">tool_tab_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">tool_tab_id</span> <span class="o">=</span> <span class="n">newtool</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">tool_tab_id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tool_tab_id</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>  <span class="c1">#get the upper case letters of tool_name</span>
+            <span class="n">tool_tab_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tool_tab_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tools</span><span class="p">)</span>  <span class="c1">#append number</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">newtool</span><span class="p">,</span> <span class="n">tool_tab_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>  <span class="c1">#set new tool tab as curent tab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">setTabToolTip</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">tool_name</span><span class="p">)</span>  <span class="c1">#set new-tab tool tip</span>
+        <span class="k">return</span> <span class="n">newtool</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_toolTabCloseRequested"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_toolTabCloseRequested">[docs]</a>    <span class="k">def</span> <span class="nf">handle_toolTabCloseRequested</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete a Tool tab&quot;&quot;&quot;</span>
+        <span class="n">tool_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_tool_delete</span><span class="p">(</span><span class="n">tool_name</span><span class="p">)</span>  <span class="c1">#call DataSet.do_theory_delete</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_all_ds_plots</span><span class="p">()</span></div>
+        
+        
+<div class="viewcode-block" id="QApplicationWindow.handle_actionAutoscale"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionAutoscale">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionAutoscale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">checked</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actionAutoscale</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Images/Images/new_icons/icons8-padlock-96.png&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actionAutoscale</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Images/Images/new_icons/icons8-lock-96.png&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.dataset_actions_disabled"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.dataset_actions_disabled">[docs]</a>    <span class="k">def</span> <span class="nf">dataset_actions_disabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Disable buttons when there is no file in the dataset</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - state {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionMarkerSettings</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionReload_Data</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionInspect_Data</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionShowFigureTools</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionView_All_Sets</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionAutoscale</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">actionNew_Theory</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">cbtheory</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.mpl_motion_event"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.mpl_motion_event">[docs]</a>    <span class="k">def</span> <span class="nf">mpl_motion_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - event {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_annotation</span><span class="o">.</span><span class="n">checked</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="sd">&quot;&quot;&quot;.. todo:: Code to draw annotation. It doesn&#39;t work!&quot;&quot;&quot;</span></div>
+        
+<div class="viewcode-block" id="QApplicationWindow.handle_annotation"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">handle_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Draw and hide the annotation box.</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - checked {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">checked</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ha</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                <span class="n">xytext</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">textcoords</span> <span class="o">=</span> <span class="s1">&#39;offset points&#39;</span><span class="p">,</span> <span class="n">va</span> <span class="o">=</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                <span class="n">bbox</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;roundtooth,pad=0.3&#39;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.20</span><span class="p">),</span>
+                <span class="n">arrowprops</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-|&gt;&quot;</span><span class="p">,</span> <span class="n">connectionstyle</span><span class="o">=</span><span class="s2">&quot;arc3,rad=-0.2&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.add_annotation"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.add_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">add_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">text</span><span class="p">,</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="o">.</span><span class="n">getText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Annotation (LaTeX allowed)&#39;</span><span class="p">,</span> <span class="s1">&#39;Enter the annotation text:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+            <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="n">xpos</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmin</span><span class="o">+</span><span class="n">xmax</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">ypos</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymin</span><span class="o">+</span><span class="n">ymax</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">ann</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graphicnotes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ann</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artistnotes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DraggableNote</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">DragType</span><span class="o">.</span><span class="n">both</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.show_legend"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.show_legend">[docs]</a>    <span class="k">def</span> <span class="nf">show_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># if self.current_viewtab == 0:</span>
+        <span class="c1">#     ax = self.axarr[0]</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     ax = self.axarr[self.current_viewtab - 1]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Legend</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">legend</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">],),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">draggable</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+                    
+<div class="viewcode-block" id="QApplicationWindow.populate_cbPalette"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.populate_cbPalette">[docs]</a>    <span class="k">def</span> <span class="nf">populate_cbPalette</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Populate the list color palettes in the marker-settings dialog</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">palette</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ColorMode</span><span class="o">.</span><span class="n">colorpalettes</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbPalette</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">palette</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.populate_cbTheoryLine"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.populate_cbTheoryLine">[docs]</a>    <span class="k">def</span> <span class="nf">populate_cbTheoryLine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Populate the list theory linestyle in the marker-settings dialog</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">ThLineMode</span><span class="o">.</span><span class="n">linestyles</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbTheoryLine</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.populate_cbSymbolType"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.populate_cbSymbolType">[docs]</a>    <span class="k">def</span> <span class="nf">populate_cbSymbolType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Populate the list of the markers in the marker-settings dialog</span>
+<span class="sd">        </span>
+<span class="sd">        Populate the list of the markers of the marker-settings dialog</span>
+<span class="sd">        with filled or empty markers, depending on the user&#39;s choice</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbSymbolType</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFilled</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span> <span class="c1">#combobox with fillable symbols only</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">filledmarkernames</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                <span class="n">ipath</span> <span class="o">=</span> <span class="s1">&#39;:/Markers/Images/Matplotlib_markers/marker_</span><span class="si">%s</span><span class="s1">.png&#39;</span><span class="o">%</span><span class="n">m</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbSymbolType</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="n">ipath</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#combobox with all symbols only</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">allmarkernames</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                <span class="n">ipath</span> <span class="o">=</span> <span class="s1">&#39;:/Markers/Images/Matplotlib_markers/marker_</span><span class="si">%s</span><span class="s1">.png&#39;</span><span class="o">%</span><span class="n">m</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbSymbolType</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="n">ipath</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="QApplicationWindow.handle_pickColor1"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_pickColor1">[docs]</a>    <span class="k">def</span> <span class="nf">handle_pickColor1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call the color picker and save the selected color to `color1` in RGB format</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showColorDialog</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">color</span><span class="p">:</span> <span class="c1">#check for none</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelPickedColor1</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">color1</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_pickColor2"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_pickColor2">[docs]</a>    <span class="k">def</span> <span class="nf">handle_pickColor2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call the color picker and save the selected color to `color2` in </span>
+<span class="sd">        RGB format used for gradient color type</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showColorDialog</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">color</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelPickedColor2</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">color2</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="QApplicationWindow.handle_pickThColor"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_pickThColor">[docs]</a>    <span class="k">def</span> <span class="nf">handle_pickThColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call the color picker and save the selected theory line color in </span>
+<span class="sd">        RGB format used for gradient color type</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showColorDialog</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">color</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelThPickedColor</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">color_th</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.showColorDialog"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.showColorDialog">[docs]</a>    <span class="k">def</span> <span class="nf">showColorDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show the color picker and return the picked QtColor or `None`</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="n">wtitle</span> <span class="o">=</span> <span class="s2">&quot;Select color for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">QColorDialog</span><span class="o">.</span><span class="n">getColor</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">wtitle</span><span class="p">,</span> 
+                <span class="n">options</span><span class="o">=</span><span class="n">QColorDialog</span><span class="o">.</span><span class="n">DontUseNativeDialog</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">color</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">color</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_actionMarkerSettings"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionMarkerSettings">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionMarkerSettings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show the dialog box where the user can change</span>
+<span class="sd">        the marker properties: size, shape, color, fill</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fparam_backup</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fparam_backup</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">file</span><span class="o">.</span><span class="n">color</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">marker</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">filled</span><span class="p">])</span>
+
+        <span class="c1">#preset the colors in the labels</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">color1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">color1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">color1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelPickedColor1</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">col</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">color2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">color2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">color2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelPickedColor2</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">col</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">th_color</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">th_color</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">th_color</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelThPickedColor</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">col</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+        <span class="c1">#preset the spinbox</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">spinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">spinBoxLineW</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">line_width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">sbThLineWidth</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">th_line_width</span><span class="p">)</span>
+        <span class="c1">#preset radioButtons</span>
+            <span class="c1">#symbols</span>
+        <span class="n">is_fixed</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">symbolmode</span> <span class="o">==</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">fixed</span><span class="o">.</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFixedSymbol</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">is_fixed</span><span class="p">)</span>
+        <span class="c1"># self.dialog.ui.rbVariableSymbol.setChecked(not is_fixed)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbSymbolType</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">is_fixed</span><span class="p">)</span>
+        <span class="c1">#preset the color combobox</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbPalette</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">palette_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbPalette</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+        <span class="c1">#preset radiobutton theory</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">th_line_mode</span> <span class="o">==</span> <span class="n">ThLineMode</span><span class="o">.</span><span class="n">as_data</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbThSameColor</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbThFixedColor</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+
+            <span class="c1">#colors</span>
+        <span class="c1"># self.dialog.ui.rbFixedColor.setChecked(False)</span>
+        <span class="c1"># self.dialog.ui.rbGradientColor.setChecked(False)</span>
+        <span class="c1"># self.dialog.ui.rbPalette.setChecked(False)</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">colormode</span> <span class="o">==</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">fixed</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFixedColor</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">ds</span><span class="o">.</span><span class="n">colormode</span> <span class="o">==</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbGradientColor</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbPalette</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+        
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span> <span class="c1">#this blocks the rest of the app as opposed to .show()</span>
+        <span class="k">if</span> <span class="n">success</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_apply_button_pressed</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_apply_button_pressed"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_apply_button_pressed">[docs]</a>    <span class="k">def</span> <span class="nf">handle_apply_button_pressed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply the selected marker properties to all the files in the current dataset</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="c1">#find the color mode</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFixedColor</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span> <span class="c1">#fixed color?</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">colormode</span> <span class="o">=</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">fixed</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">color1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color1</span> <span class="k">else</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">color1</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbPalette</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span> <span class="c1">#color from palette?</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">colormode</span> <span class="o">=</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">variable</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">palette_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbPalette</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+                <span class="c1"># ds.palette = ColorMode.colorpalettes.value[palette_name]</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># color from gradient</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">colormode</span> <span class="o">=</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">color1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color1</span> <span class="k">else</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">color1</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">color2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color2</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color2</span> <span class="k">else</span> <span class="n">ColorMode</span><span class="o">.</span><span class="n">color2</span><span class="o">.</span><span class="n">value</span>
+            
+            <span class="c1">#find Theory color mode</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbThSameColor</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">th_line_mode</span> <span class="o">=</span> <span class="n">ThLineMode</span><span class="o">.</span><span class="n">as_data</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">th_line_mode</span> <span class="o">=</span> <span class="n">ThLineMode</span><span class="o">.</span><span class="n">fixed</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">th_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color_th</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color_th</span> <span class="k">else</span> <span class="n">ThLineMode</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">value</span>
+
+            <span class="c1">#find the shape mode</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbVariableSymbol</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span> <span class="c1">#variable symbols?</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFilled</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span> <span class="c1">#filled?</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbolmode</span> <span class="o">=</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">variablefilled</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1">#empty</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbolmode</span> <span class="o">=</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">variable</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1">#single symbol</span>
+                <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbSymbolType</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFilled</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span> <span class="c1">#filled?</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbolmode</span> <span class="o">=</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">fixedfilled</span><span class="o">.</span><span class="n">value</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbol1</span> <span class="o">=</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">filledmarkers</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbol1_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbSymbolType</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1">#empty</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbolmode</span> <span class="o">=</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">fixed</span><span class="o">.</span><span class="n">value</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbol1</span> <span class="o">=</span> <span class="n">SymbolMode</span><span class="o">.</span><span class="n">allmarkers</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">symbol1_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbSymbolType</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+
+
+            <span class="c1">#get the marker size    </span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">spinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="c1">#get the line width </span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">line_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">spinBoxLineW</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="c1">#get the theory linestyle</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">th_linestyle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cbTheoryLine</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="c1">#get the theory line width</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">th_line_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">sbThLineWidth</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+
+            <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
+            <span class="c1"># ds.DataSettreeWidget.blockSignals(True) #avoid triggering &#39;itemChanged&#39; signal that causes a call to do_plot()</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">set_table_icons</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">table_icon_list</span><span class="p">)</span></div>
+            <span class="c1"># ds.DataSettreeWidget.blockSignals(False) </span>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_inspectorVisibilityChanged"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_inspectorVisibilityChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_inspectorVisibilityChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visible</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle the hide/show event of the data inspector</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - visible {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionInspect_Data</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">visible</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">populate_inspector</span><span class="p">()</span>           
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_curve_drag</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="QApplicationWindow.handle_actionShiftTriggered"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionShiftTriggered">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionShiftTriggered</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allow the current &#39;selected_file&#39; to be dragged</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">selected_file</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">moveH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShiftHorizontally</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="n">moveV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShiftVertically</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">moveH</span> <span class="ow">and</span> <span class="n">moveV</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">DragType</span><span class="o">.</span><span class="n">both</span>
+        <span class="k">elif</span> <span class="n">moveH</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">DragType</span><span class="o">.</span><span class="n">horizontal</span>
+        <span class="k">elif</span> <span class="n">moveV</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">DragType</span><span class="o">.</span><span class="n">vertical</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_curve_drag</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">curves</span><span class="p">:</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curves</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">selected_file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1">#drag allowed on axarr[0] only</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">selected_file</span><span class="o">.</span><span class="n">data_table</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">selected_file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">DraggableSeries</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">log_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">log_y</span><span class="p">,</span> <span class="n">xref</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">yref</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.disconnect_curve_drag"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.disconnect_curve_drag">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect_curve_drag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove the Matplotlib drag connections</span>
+<span class="sd">        and reset the shift buttons in the data inspector</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">curves</span><span class="p">:</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curves</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionShiftHorizontally</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionShiftVertically</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="QApplicationWindow.handle_actionReload_Data"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionReload_Data">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionReload_Data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reload the data files: remove and reopen the current files</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_curve_drag</span><span class="p">()</span>
+        <span class="n">paths_to_reopen</span><span class="p">,</span> <span class="n">th_to_reopen</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clear_files_and_th_from_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">paths_to_reopen</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">new_tables_from_files</span><span class="p">(</span><span class="n">paths_to_reopen</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">th_name</span><span class="p">,</span> <span class="n">tab_name</span> <span class="ow">in</span> <span class="n">th_to_reopen</span><span class="p">:</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">new_theory</span><span class="p">(</span><span class="n">th_name</span><span class="p">,</span> <span class="n">tab_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Reload Error&#39;</span><span class="p">,</span> <span class="s1">&#39;Error in locating some data files&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.clear_files_and_th_from_dataset"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.clear_files_and_th_from_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">clear_files_and_th_from_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove all files from dataset and widgetTree,</span>
+<span class="sd">        return a list with the full path of deleted files and opened theories</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - ds {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_paths_cleaned</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">th_cleaned</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#save file names</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+            <span class="n">fpath</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">file_full_path</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span>
+            <span class="n">file_paths_cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+        <span class="c1">#remove lines from figure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_ds_ax_lines</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> 
+        <span class="n">ds</span><span class="o">.</span><span class="n">set_no_limits</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">)</span> 
+        <span class="c1">#remove tables from ds</span>
+        <span class="n">ntable</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">topLevelItemCount</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntable</span><span class="p">):</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">takeTopLevelItem</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#save theory tabs of ds</span>
+        <span class="n">ntabs</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntabs</span><span class="p">):</span>
+            <span class="n">th</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">th</span><span class="o">.</span><span class="n">destructor</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">thname</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">thname</span>
+            <span class="n">thtabname</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">th_cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">thname</span><span class="p">,</span> <span class="n">thtabname</span><span class="p">))</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">file_paths_cleaned</span><span class="p">,</span> <span class="n">th_cleaned</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_actionView_All_Sets"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionView_All_Sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show all datasets simultaneously</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - checked {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">Qshow_all</span><span class="p">()</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">highlight_series</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#trigger a false change of tab to hide other dataset files from figure</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_currentChanged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_Qplot</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_currentChanged"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_currentChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_currentChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change figure when the active DataSet tab is changed</span>
+<span class="sd">        and empty the dataInspector</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - index {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionView_All_Sets</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="k">return</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="n">disable_buttons</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">files</span> <span class="k">else</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_actions_disabled</span><span class="p">(</span><span class="n">disable_buttons</span><span class="p">)</span> <span class="c1"># disable/activate buttons buttons</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">Qshow_all</span><span class="p">()</span> <span class="c1">#show all data of current dataset, except previously unticked files</span>
+            <span class="n">ntab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntab</span><span class="p">):</span> 
+                <span class="k">if</span> <span class="n">i</span><span class="o">!=</span><span class="n">index</span><span class="p">:</span>
+                    <span class="n">ds_to_hide</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="c1">#hide files of all datasets except current one</span>
+                    <span class="n">ds_to_hide</span><span class="o">.</span><span class="n">do_hide_all</span><span class="p">()</span>
+                    <span class="n">ds_to_hide</span><span class="o">.</span><span class="n">set_no_limits</span><span class="p">(</span><span class="n">ds_to_hide</span><span class="o">.</span><span class="n">current_theory</span><span class="p">)</span> 
+            <span class="n">ds</span><span class="o">.</span><span class="n">highlight_series</span><span class="p">()</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">populate_inspector</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># handle case where no dataset is left</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_actions_disabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#empty the inspector</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;File:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_Qplot</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.handle_doubleClickTab"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_doubleClickTab">[docs]</a>    <span class="k">def</span> <span class="nf">handle_doubleClickTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Edit DataSet name</span>
+<span class="sd">        </span>
+<span class="sd">        Edit the dataset tab name, leave the &#39;dataset&#39; dictionary keys unchanged.</span>
+<span class="sd">        Two datasets can share the sae name.</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - index {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">old_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Change DataSet Name&quot;</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">setLabelText</span><span class="p">(</span><span class="s2">&quot;New DataSet Name:&quot;</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">setTextValue</span><span class="p">(</span><span class="n">old_name</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+        <span class="n">new_tab_name</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">textValue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">success</span> <span class="ow">and</span> <span class="n">new_tab_name</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>    
+            <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">setTabText</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">new_tab_name</span><span class="p">)</span></div>
+            <span class="c1"># self.datasets[old_name].name = new_tab_name</span>
+            <span class="c1"># self.datasets[new_tab_name] = self.datasets.pop(old_name)</span>
+
+<div class="viewcode-block" id="QApplicationWindow.close_data_tab_handler"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.close_data_tab_handler">[docs]</a>    <span class="k">def</span> <span class="nf">close_data_tab_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete a dataset tab from the current application</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - index {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_curve_drag</span><span class="p">()</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">set_no_limits</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="c1">#call Application.delete to delete DataSet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.change_view"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.change_view">[docs]</a>    <span class="k">def</span> <span class="nf">change_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change plot view</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selected_view_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">:</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">is_xrange_visible</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">is_yrange_visible</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">set_xy_limits_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_switch</span><span class="p">(</span><span class="n">selected_view_name</span><span class="p">)</span> <span class="c1">#view_switch of Application</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_view_tools</span><span class="p">(</span><span class="n">selected_view_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_Qplot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_curve_drag</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">highlight_series</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.set_view_tools"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.set_view_tools">[docs]</a>    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.dragEnterEvent"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.dragEnterEvent">[docs]</a>    <span class="k">def</span> <span class="nf">dragEnterEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - e {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">mimeData</span><span class="p">()</span><span class="o">.</span><span class="n">hasUrls</span><span class="p">():</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">ignore</span><span class="p">()</span> </div>
+
+<div class="viewcode-block" id="QApplicationWindow.dropEvent"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.dropEvent">[docs]</a>    <span class="k">def</span> <span class="nf">dropEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - e {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#reptatelogger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
+        <span class="n">paths_to_open</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">mimeData</span><span class="p">()</span><span class="o">.</span><span class="n">urls</span><span class="p">():</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">toLocalFile</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="n">paths_to_open</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_tables_from_files</span><span class="p">(</span><span class="n">paths_to_open</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.update_Qplot"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.update_Qplot">[docs]</a>    <span class="k">def</span> <span class="nf">update_Qplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+        <span class="c1"># try:</span>
+        <span class="c1">#     plt.tight_layout(pad=1.2)</span>
+        <span class="c1"># except:</span>
+        <span class="c1">#     pass</span>
+        <span class="c1"># self.canvas = FigureCanvas(self.figure)</span>
+        <span class="c1">#self.mplvl.addWidget(self.canvas)</span>
+        <span class="c1"># self.canvas.draw()</span>
+
+<div class="viewcode-block" id="QApplicationWindow.addTableToCurrentDataSet"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet">[docs]</a>    <span class="k">def</span> <span class="nf">addTableToCurrentDataSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add file table to curent dataset tab</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - dt {[type]} -- [description]</span>
+<span class="sd">            - ext {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="n">lnew</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span><span class="o">.</span><span class="n">basic_file_parameters</span><span class="p">[:]:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">lnew</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">param</span><span class="p">]))</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="s2">&quot;Missing Parameter&quot;</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found in file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                
+        <span class="n">file_name_short</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">file_name_short</span>
+        <span class="n">lnew</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">file_name_short</span><span class="p">)</span>
+        <span class="n">newitem</span> <span class="o">=</span> <span class="n">DataSetWidgetItem</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="p">,</span> <span class="n">lnew</span><span class="p">)</span>
+        <span class="n">newitem</span><span class="o">.</span><span class="n">setCheckState</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_actions_disabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#activate buttons</span></div>
+
+
+        
+<div class="viewcode-block" id="QApplicationWindow.handle_createNew_Empty_Dataset"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_createNew_Empty_Dataset">[docs]</a>    <span class="k">def</span> <span class="nf">handle_createNew_Empty_Dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when button &#39;new dataset&#39; pushed&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createNew_Empty_Dataset</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="QApplicationWindow.createNew_Empty_Dataset"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.createNew_Empty_Dataset">[docs]</a>    <span class="k">def</span> <span class="nf">createNew_Empty_Dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tabname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add New empty tab to DataSettabWidget</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_datasets</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1">#increment counter of Application</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_datasets</span>
+        <span class="n">ds_name</span> <span class="o">=</span> <span class="s1">&#39;Set</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">num</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">QDataSet</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">ds_name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">ds_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span>
+        <span class="k">if</span> <span class="n">tabname</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">tabname</span> <span class="o">=</span> <span class="n">ds_name</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">tabname</span><span class="p">)</span>
+
+        <span class="c1">#Set the new tab the active tab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+        <span class="c1">#Define the tab column names (header)</span>
+        <span class="n">dfile</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> 
+        <span class="n">dataset_header</span><span class="o">=</span><span class="n">dfile</span><span class="o">.</span><span class="n">basic_file_parameters</span><span class="p">[:]</span>
+        <span class="n">dataset_header</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;File&quot;</span><span class="p">)</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">setHeaderItem</span><span class="p">(</span><span class="n">QTreeWidgetItem</span><span class="p">(</span><span class="n">dataset_header</span><span class="p">))</span>  
+        <span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">setSortingEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">hd</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">header</span><span class="p">()</span>
+        <span class="n">hd</span><span class="o">.</span><span class="n">setSectionsClickable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">w</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
+        <span class="n">w</span><span class="o">/=</span><span class="n">hd</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">hd</span><span class="o">.</span><span class="n">count</span><span class="p">()):</span>
+            <span class="n">hd</span><span class="o">.</span><span class="n">resizeSection</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+            <span class="c1">#hd.setTextAlignment(i, Qt.AlignHCenter)</span>
+        
+        <span class="c1">#Define the inspector column names (header)</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1">#inspect_header = dfile.col_names[:]</span>
+            <span class="n">inspect_header</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="s1">&#39; [&#39;</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dfile</span><span class="o">.</span><span class="n">col_names</span><span class="p">,</span><span class="n">dfile</span><span class="o">.</span><span class="n">col_units</span><span class="p">)]</span>
+            <span class="n">inspec_tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="n">inspect_header</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.openDataset"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.openDataset">[docs]</a>    <span class="k">def</span> <span class="nf">openDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># &#39;allowed_ext&#39; defines the allowed file extensions</span>
+        <span class="c1"># should be of form, e.g., &quot;LVE (*.tts *.osc);;Text file (*.txt)&quot;</span>
+        <span class="n">allowed_ext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ftype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">allowed_ext</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (*</span><span class="si">%s</span><span class="s2">);;&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ftype</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">)</span>
+        <span class="n">allowed_ext</span> <span class="o">=</span> <span class="n">allowed_ext</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">paths_to_open</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openFileNamesDialog</span><span class="p">(</span><span class="n">allowed_ext</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">paths_to_open</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_tables_from_files</span><span class="p">(</span><span class="n">paths_to_open</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="QApplicationWindow.new_tables_from_files"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.new_tables_from_files">[docs]</a>    <span class="k">def</span> <span class="nf">new_tables_from_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths_to_open</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - paths_to_open {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">createNew_Empty_Dataset</span><span class="p">()</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="n">success</span><span class="p">,</span> <span class="n">newtables</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">do_open</span><span class="p">(</span><span class="n">paths_to_open</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">success</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_no_param_missing</span><span class="p">(</span><span class="n">newtables</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">newtables</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">addTableToCurrentDataSet</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_Qplot</span><span class="p">()</span>
+            <span class="c1"># ds.DataSettreeWidget.blockSignals(True) #avoid triggering &#39;itemChanged&#39; signal that causes a call to do_plot()</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">set_table_icons</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">table_icon_list</span><span class="p">)</span>
+            <span class="c1"># ds.DataSettreeWidget.blockSignals(False)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">about</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Open&quot;</span><span class="p">,</span> <span class="n">success</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="QApplicationWindow.check_no_param_missing"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.check_no_param_missing">[docs]</a>    <span class="k">def</span> <span class="nf">check_no_param_missing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newtables</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - newtables {[type]} -- [description]</span>
+<span class="sd">            - ext {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">newtables</span><span class="p">:</span>
+            <span class="n">e_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span><span class="o">.</span><span class="n">basic_file_parameters</span><span class="p">[:]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">temp</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="ow">or</span> <span class="n">temp</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span> <span class="c1"># case where no value is provided (end line)</span>
+                        <span class="n">e_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">e_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">e_list</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Parameter(s) {</span><span class="si">%s</span><span class="s2">} not found in file &#39;</span><span class="si">%s</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2"> Value(s) set to 0&quot;</span><span class="o">%</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">e_list</span><span class="p">),</span> <span class="n">dt</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="s2">&quot;Missing Parameter&quot;</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">e_param</span> <span class="ow">in</span> <span class="n">e_list</span><span class="p">:</span>
+                    <span class="n">dt</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">e_param</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.openFileNamesDialog"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.openFileNamesDialog">[docs]</a>    <span class="k">def</span> <span class="nf">openFileNamesDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ext_filter</span><span class="o">=</span><span class="s2">&quot;All Files (*)&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># file browser window  </span>
+        <span class="n">qfdlg</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#options = QFileDialog.Options()</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">qfdlg</span><span class="o">.</span><span class="n">Options</span><span class="p">()</span>
+        <span class="c1">#options |= QFileDialog.DontUseNativeDialog</span>
+        <span class="n">dilogue_name</span> <span class="o">=</span> <span class="s2">&quot;Open&quot;</span>
+        <span class="c1">#selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)</span>
+        <span class="n">selected_files</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">qfdlg</span><span class="o">.</span><span class="n">getOpenFileNames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dilogue_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_start</span><span class="p">,</span> <span class="n">ext_filter</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">selected_files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dir_start</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">selected_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">selected_files</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.showDataInspector"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.showDataInspector">[docs]</a>    <span class="k">def</span> <span class="nf">showDataInspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - checked {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.viewMPLToolbar"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.viewMPLToolbar">[docs]</a>    <span class="k">def</span> <span class="nf">viewMPLToolbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            checked {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="QApplicationWindow.printPlot"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.printPlot">[docs]</a>    <span class="k">def</span> <span class="nf">printPlot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fileName</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;Export plot&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Image (*.png);;PDF (*.pdf);; Postscript (*.ps);; EPS (*.eps);; Vector graphics (*.svg)&quot;</span><span class="p">);</span>
+        <span class="c1"># TODO: Set DPI, FILETYPE, etc</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fileName</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+        
+<div class="viewcode-block" id="QApplicationWindow.on_plot_hover"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.on_plot_hover">[docs]</a>    <span class="k">def</span> <span class="nf">on_plot_hover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - event {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+        
+    <span class="c1"># def onpick (self, event):</span>
+    <span class="c1">#     &quot;&quot;&quot;Copy series data to clipboard</span>
+        
+    <span class="c1">#     [description]</span>
+        
+    <span class="c1">#     Arguments:</span>
+    <span class="c1">#         event {[type]} -- [description]</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if event.mouseevent.button == 3:</span>
+    <span class="c1">#         answer = QMessageBox.question(self, &quot;Copy data&quot;, &quot;Copy series data to clipboard?&quot;)</span>
+    <span class="c1">#         if answer == QMessageBox.Yes:</span>
+    <span class="c1">#             x, y = event.artist.get_data()</span>
+    <span class="c1">#             line_strings=[]</span>
+    <span class="c1">#             for i in range(len(x)):</span>
+    <span class="c1">#                 line_strings.append(str(x[i])+&quot;\t&quot;+str(y[i]))</span>
+    <span class="c1">#             array_string = &quot;\n&quot;.join(line_strings)</span>
+    <span class="c1">#             QApplication.clipboard().setText(array_string)</span>
+
+    <span class="c1"># def onclick(self, event):</span>
+    <span class="c1">#     &quot;&quot;&quot;[summary]</span>
+        
+    <span class="c1">#     [description]</span>
+        
+    <span class="c1">#     Arguments:</span>
+    <span class="c1">#         event {[type]} -- [description]</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if event.dblclick:</span>
+    <span class="c1">#         pickedtick = event.artist</span>
+    <span class="c1">#         print(event)</span>
+    <span class="c1">#         print(pickedtick)</span>
+
+<div class="viewcode-block" id="QApplicationWindow.resizeplot"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.resizeplot">[docs]</a>    <span class="k">def</span> <span class="nf">resizeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#large window settings</span>
+        <span class="n">w_large</span> <span class="o">=</span> <span class="mi">900</span>
+        <span class="n">h_large</span> <span class="o">=</span> <span class="mi">650</span>
+        <span class="n">font_large</span> <span class="o">=</span> <span class="mi">16</span>
+        <span class="c1">#small window settings</span>
+        <span class="n">w_small</span> <span class="o">=</span> <span class="mi">300</span>
+        <span class="n">h_small</span> <span class="o">=</span> <span class="mi">400</span>
+        <span class="n">font_small</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="c1">#interpolate for current window size</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">width</span> 
+        <span class="n">height</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">scale_w</span> <span class="o">=</span> <span class="n">font_small</span> <span class="o">+</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="n">w_small</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">font_large</span> <span class="o">-</span> <span class="n">font_small</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">w_large</span> <span class="o">-</span> <span class="n">w_small</span><span class="p">)</span>
+        <span class="n">scale_h</span> <span class="o">=</span> <span class="n">font_small</span> <span class="o">+</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">h_small</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">font_large</span> <span class="o">-</span> <span class="n">font_small</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">h_large</span> <span class="o">-</span> <span class="n">h_small</span><span class="p">)</span>
+        <span class="n">font_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">scale_w</span><span class="p">,</span> <span class="n">scale_h</span><span class="p">)</span>
+        <span class="c1">#resize plot fonts</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">()):</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span></div>
+
+    <span class="c1"># def No_Limits(self):</span>
+    <span class="c1">#     self.actionShow_Limits.setIcon(self.actionNo_Limits.icon())</span>
+
+    <span class="c1"># def Vertical_Limits(self):</span>
+    <span class="c1">#     self.actionShow_Limits.setIcon(self.actionVertical_Limits.icon())</span>
+
+    <span class="c1"># def Horizontal_Limits(self):</span>
+    <span class="c1">#     self.actionShow_Limits.setIcon(self.actionHorizontal_Limits.icon())</span>
+
+    <span class="c1"># def Both_Limits(self):</span>
+    <span class="c1">#     self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())</span>
+        
+<div class="viewcode-block" id="QApplicationWindow.Smaller_Symbols"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.Smaller_Symbols">[docs]</a>    <span class="k">def</span> <span class="nf">Smaller_Symbols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tab</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">msize</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span> <span class="o">-</span> <span class="mi">5</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span> <span class="o">=</span> <span class="n">msize</span> <span class="k">if</span> <span class="n">msize</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">2</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span></div>
+        <span class="c1"># self.actionData_Representation.setIcon(self.actionShow_Smaller_Symbols.icon())</span>
+
+<div class="viewcode-block" id="QApplicationWindow.ResetSymbolsSize"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.ResetSymbolsSize">[docs]</a>    <span class="k">def</span> <span class="nf">ResetSymbolsSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tab</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>        
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span> <span class="o">=</span> <span class="mi">12</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span></div>
+        <span class="c1"># self.actionData_Representation.setIcon(self.actionResetSymbolsSize.icon()) </span>
+   
+<div class="viewcode-block" id="QApplicationWindow.Larger_Symbols"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.Larger_Symbols">[docs]</a>    <span class="k">def</span> <span class="nf">Larger_Symbols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tab</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">msize</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span> <span class="o">+</span> <span class="mi">5</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span> <span class="o">=</span> <span class="n">msize</span> <span class="k">if</span> <span class="n">msize</span><span class="o">&lt;</span><span class="mi">26</span> <span class="k">else</span> <span class="mi">26</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span></div></div>
+        <span class="c1"># self.actionData_Representation.setIcon(self.actionShow_Larger_Symbols.icon())</span>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

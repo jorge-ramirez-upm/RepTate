@@ -1,0 +1,350 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ApplicationCreep &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ApplicationCreep</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module ApplicationCreep</span>
+
+<span class="sd">Module for the analysis of data from Creep experiments</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">Application</span> <span class="k">import</span> <span class="n">Application</span>
+<span class="kn">from</span> <span class="nn">QApplicationWindow</span> <span class="k">import</span> <span class="n">QApplicationWindow</span>
+<span class="kn">from</span> <span class="nn">View</span> <span class="k">import</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">FileType</span> <span class="k">import</span> <span class="n">TXTColumnFile</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="ApplicationCreep"><a class="viewcode-back" href="../manual/Applications/Creep/general.html#ApplicationCreep.ApplicationCreep">[docs]</a><span class="k">class</span> <span class="nc">ApplicationCreep</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Application to Analyze Data from Creep experiments</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">appname</span> <span class="o">=</span> <span class="s2">&quot;Creep&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Creep Experiments&quot;</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;creep&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Creep&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;Creep&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GUIApplicationCreep</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLApplicationCreep</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">BaseApplicationCreep</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/Creep/Creep.html&#39;</span>
+    <span class="n">appname</span> <span class="o">=</span> <span class="n">ApplicationCreep</span><span class="o">.</span><span class="n">appname</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Creep&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;Creep&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">TheoryRetardationModes</span> <span class="k">import</span> <span class="n">TheoryRetardationModesTime</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1"># VIEWS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(gamma(t))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(gamma(t))&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log strain&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log(t)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\gamma$(t))&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogStraint</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;strain&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\gamma$(t)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewStraint</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(J(t))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(J(t))&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;creep compliance&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log(t)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(J(t))&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{Pa}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogJt</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;J(t)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;J(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;J(t)&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;creep compliance&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;J(t)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{Pa}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewJt</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;J(t)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;t/creep compliance&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa.s&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewt_Jt</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">])</span>
+
+        <span class="c1">#set multiviews</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(gamma(t))&quot;</span><span class="p">]</span>
+        <span class="p">]</span>  <span class="c1">#default view order in multiplot views, set only one item for single view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">)</span>
+
+        <span class="c1"># FILES</span>
+        <span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span><span class="s2">&quot;Creep files&quot;</span><span class="p">,</span> <span class="s2">&quot;creep&quot;</span><span class="p">,</span> <span class="s2">&quot;Creep files&quot;</span><span class="p">,</span>
+                              <span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;strain&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;stress&#39;</span><span class="p">,</span> <span class="s1">&#39;Mw&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">],</span>
+                              <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">ftype</span>
+
+        <span class="c1"># THEORIES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span>
+            <span class="n">TheoryRetardationModesTime</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryRetardationModesTime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_common_theories</span><span class="p">()</span>
+
+        <span class="c1">#set the current view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BaseApplicationCreep.viewLogStraint"><a class="viewcode-back" href="../manual/Applications/Creep/general.html#ApplicationCreep.BaseApplicationCreep.viewLogStraint">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogStraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationCreep.viewStraint"><a class="viewcode-back" href="../manual/Applications/Creep/general.html#ApplicationCreep.BaseApplicationCreep.viewStraint">[docs]</a>    <span class="k">def</span> <span class="nf">viewStraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applied strain :math:`\\gamma(t)` vs time :math:`t` (both axes in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationCreep.viewLogJt"><a class="viewcode-back" href="../manual/Applications/Creep/general.html#ApplicationCreep.BaseApplicationCreep.viewLogJt">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogJt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t` </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">file_parameters</span><span class="p">[</span><span class="s1">&#39;stress&#39;</span><span class="p">])</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationCreep.viewJt"><a class="viewcode-back" href="../manual/Applications/Creep/general.html#ApplicationCreep.BaseApplicationCreep.viewJt">[docs]</a>    <span class="k">def</span> <span class="nf">viewJt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs time :math:`t` (both axes in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">file_parameters</span><span class="p">[</span><span class="s1">&#39;stress&#39;</span><span class="p">])</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">sigma</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationCreep.viewt_Jt"><a class="viewcode-back" href="../manual/Applications/Creep/general.html#ApplicationCreep.BaseApplicationCreep.viewt_Jt">[docs]</a>    <span class="k">def</span> <span class="nf">viewt_Jt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Time divided by compliance :math:`t/J(t)` vs time :math:`t` (both axes in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">file_parameters</span><span class="p">[</span><span class="s1">&#39;stress&#39;</span><span class="p">])</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">sigma</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<span class="k">class</span> <span class="nc">CLApplicationCreep</span><span class="p">(</span><span class="n">BaseApplicationCreep</span><span class="p">,</span> <span class="n">Application</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Creep&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;Creep&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">GUIApplicationCreep</span><span class="p">(</span><span class="n">BaseApplicationCreep</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Creep&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;Creep&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

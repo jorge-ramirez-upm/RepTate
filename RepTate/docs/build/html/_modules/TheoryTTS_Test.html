@@ -1,0 +1,680 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TheoryTTS_Test &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for TheoryTTS_Test</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module TheoryTTS</span>
+
+<span class="sd">Module for the pseudo theory for Time-Temperature superposition shift of LVE data.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">getpass</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">interp</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
+<span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
+<span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QStyle</span><span class="p">,</span> <span class="n">QFileDialog</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QSize</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span>
+
+
+<div class="viewcode-block" id="TheoryWLFShiftTest"><a class="viewcode-back" href="../manual/Applications/TTS/Theory/theory.html#TheoryTTS_Test.TheoryWLFShiftTest">[docs]</a><span class="k">class</span> <span class="nc">TheoryWLFShiftTest</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.</span>
+<span class="sd">    </span>
+<span class="sd">    * **Function**</span>
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{eqnarray}</span>
+<span class="sd">            \\omega(T_r) &amp;= &amp; a_T \\omega(T) \\\\</span>
+<span class="sd">            G(T_r) &amp;= &amp; b_T G(T) \\\\</span>
+<span class="sd">            \\log_{10} a_T &amp;= &amp; \\frac{-B_1 (T-T_r)}{(B_2+T_r)(B_2+T)} \\\\</span>
+<span class="sd">            b_T &amp;= &amp; \\frac{\\rho(T_r)T_r}{\\rho(T)T} = \\frac{(1+\\alpha T)(T_r+273.15)}{(1+\\alpha T_r)(T+273.15)} \\\\</span>
+<span class="sd">            T_g &amp;= &amp;T_g^\\infty - \\frac{C_{T_g}}{M_w}</span>
+<span class="sd">            \\end{eqnarray}</span>
+<span class="sd">    </span>
+<span class="sd">    * **Parameters**</span>
+<span class="sd">       - :math:`T_r`: Reference temperature to which the experimental data will be shifted.</span>
+<span class="sd">       - :math:`B_1`: Material parameter, corresponding to :math:`C_1C_2`, :math:`C_1` and :math:`C_2` being the standard WLF material parameters.</span>
+<span class="sd">       - :math:`B_2`: Material parameter, corresponding to :math:`C_2-T_r`, :math:`C_2` being the standard WLF material parameter.</span>
+<span class="sd">       - logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.</span>
+<span class="sd">       - :math:`C_{T_g}`: Material parameter that describes the dependence of :math:`T_g` with :math:`M_w`.</span>
+<span class="sd">       - dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;WLFShiftTest&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Basic theory for Time-Temperature Superposition, based on the WLF equation&quot;</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GUITheoryWLFShiftTest</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span>
+            <span class="n">ax</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLTheoryWLFShiftTest</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">BaseTheoryWLFShiftTest</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift-test&#39;</span>
+    <span class="n">single_file</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryWLFShiftTest</span><span class="o">.</span><span class="n">thname</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryWLFShiftTest</span><span class="o">.</span><span class="n">citations</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TheoryWLFShiftTest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Tr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Tr&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Reference T to WLF shift the data to&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;B1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;B1&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">850</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Material parameter B1 for WLF Shift&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;B2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;B2&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">126</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Material parameter B2 for WLF Shift&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logalpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;logalpha&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=-</span><span class="mf">3.18</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Log_10 of the thermal expansion coefficient at 0 °C&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;CTg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;CTg&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mf">14.65</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Molecular weight dependence of Tg&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dx12&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dx12&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fraction 1,2 vinyl units (for PBd)&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;vert&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vert&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Shift vertically&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">boolean</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;iso&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;iso&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Isofrictional state&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">boolean</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">TheoryWLFShiftTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - f {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_rows</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+
+        <span class="n">Tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Tr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">B1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;B1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">B2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;B2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logalpha&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">CTg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;CTg&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">dx12</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dx12&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">iso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;iso&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">vert</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;vert&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">Tf</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span>
+        <span class="n">Mw</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">]</span>
+
+        <span class="c1">#if iso:</span>
+        <span class="c1">#    C2 += CTg / Mw - 68.7 * dx12</span>
+        <span class="c1">#    T0corrected = T0 - CTg / Mw + 68.7 * dx12</span>
+        <span class="c1">#else:</span>
+        <span class="c1">#    T0corrected = T0</span>
+        <span class="c1">#tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2)))</span>
+
+        <span class="c1"># Trying a new expression for the shift</span>
+        <span class="k">if</span> <span class="n">iso</span><span class="p">:</span>
+            <span class="n">B2</span> <span class="o">+=</span> <span class="n">CTg</span> <span class="o">/</span> <span class="n">Mw</span> <span class="o">-</span> <span class="mf">68.7</span> <span class="o">*</span> <span class="n">dx12</span>
+            <span class="n">Trcorrected</span> <span class="o">=</span> <span class="n">Tr</span> <span class="o">-</span> <span class="n">CTg</span> <span class="o">/</span> <span class="n">Mw</span> <span class="o">+</span> <span class="mf">68.7</span> <span class="o">*</span> <span class="n">dx12</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Trcorrected</span> <span class="o">=</span> <span class="n">Tr</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="n">B1</span> <span class="o">*</span>
+                                                 <span class="p">(</span><span class="n">Tf</span> <span class="o">-</span> <span class="n">Trcorrected</span><span class="p">)</span> <span class="o">/</span>
+                                                 <span class="p">(</span><span class="n">B2</span> <span class="o">+</span> <span class="n">Trcorrected</span><span class="p">)</span> <span class="o">/</span>
+                                                 <span class="p">(</span><span class="n">B2</span> <span class="o">+</span> <span class="n">Tf</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">vert</span><span class="p">:</span>
+            <span class="n">bT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">Tf</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Tr</span> <span class="o">+</span> <span class="mf">273.15</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">Tr</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="n">Tf</span> <span class="o">+</span> <span class="mf">273.15</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bT</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">bT</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">bT</span>
+
+    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Override the error calculation for TTS</span>
+<span class="sd">        </span>
+<span class="sd">        The error is calculated as the vertical distance between theory points, in the current view,\</span>
+<span class="sd">        calculated over all possible pairs of theory tables, when the theories overlap in the horizontal direction and\</span>
+<span class="sd">        they correspond to files with the same Mw (if the parameters Mw2 and phi exist, their values are also</span>
+<span class="sd">        used to classify the error). 1/2 of the error is added to each file.</span>
+<span class="sd">        Report the error of the current theory on all the files.\n\</span>
+<span class="sd">        File error is calculated as the mean square of the residual, averaged over all calculated points in the shifted tables.\n\</span>
+<span class="sd">        Total error is the mean square of the residual, averaged over all points considered in all files.</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total_error</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
+        <span class="n">nfiles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">)</span>
+        <span class="n">file_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nfiles</span><span class="p">)</span>
+        <span class="n">file_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nfiles</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">xth</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">yth</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Mw</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nfiles</span><span class="p">,</span> <span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nfiles</span><span class="p">,</span> <span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfiles</span><span class="p">):</span>
+            <span class="n">Filei</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">Mwi</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;Mw2&quot;</span> <span class="ow">in</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">:</span>
+                <span class="n">Mw2i</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw2&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Mw2i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s2">&quot;phi&quot;</span> <span class="ow">in</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">:</span>
+                <span class="n">phii</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">phii</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s2">&quot;phi2&quot;</span> <span class="ow">in</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">:</span>
+                <span class="n">phi2i</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;phi2&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">phi2i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">xthi</span><span class="p">,</span> <span class="n">ythi</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">Filei</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">],</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+            <span class="c1"># We need to sort arrays</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">xthi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+                <span class="n">xthi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">xthi</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+                <span class="n">ythi</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">ythi</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+            <span class="n">xth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xthi</span><span class="p">)</span>
+            <span class="n">yth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ythi</span><span class="p">)</span>
+            <span class="n">Mw</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Mwi</span><span class="p">,</span> <span class="n">Mw2i</span><span class="p">,</span> <span class="n">phii</span><span class="p">,</span> <span class="n">phi2i</span><span class="p">))</span>
+
+            <span class="n">xmin</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">xthi</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">xmax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xthi</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">MwUnique</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">Mw</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+            <span class="n">MwUnique</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfiles</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nfiles</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Mw</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">Mw</span><span class="p">[</span><span class="n">j</span><span class="p">]):</span> <span class="k">continue</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+                    <span class="n">condition</span> <span class="o">=</span> <span class="p">(</span><span class="n">xth</span><span class="p">[</span><span class="n">j</span><span class="p">][:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">xmin</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span>
+                        <span class="n">xth</span><span class="p">[</span><span class="n">j</span><span class="p">][:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">xmax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">xth</span><span class="p">[</span><span class="n">j</span><span class="p">][:,</span> <span class="n">k</span><span class="p">])</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">yth</span><span class="p">[</span><span class="n">j</span><span class="p">][:,</span> <span class="n">k</span><span class="p">])</span>
+                    <span class="n">yinterp</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xth</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">yth</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="n">k</span><span class="p">])</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">yinterp</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="n">npt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                    <span class="n">total_error</span> <span class="o">+=</span> <span class="n">error</span>
+                    <span class="n">npoints</span> <span class="o">+=</span> <span class="n">npt</span>
+                    <span class="n">MwUnique</span><span class="p">[</span><span class="n">Mw</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">error</span>
+                    <span class="n">MwUnique</span><span class="p">[</span><span class="n">Mw</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">npt</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%5s</span><span class="s2"> </span><span class="si">%5s</span><span class="s2"> </span><span class="si">%5s</span><span class="s2"> </span><span class="si">%5s</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> (</span><span class="si">%10s</span><span class="s2">)&quot;</span> <span class="o">%</span>
+                        <span class="p">(</span><span class="s2">&quot;Mw&quot;</span><span class="p">,</span> <span class="s2">&quot;Mw2&quot;</span><span class="p">,</span> <span class="s2">&quot;phi&quot;</span><span class="p">,</span> <span class="s2">&quot;phi2&quot;</span><span class="p">,</span> <span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="s2">&quot;# Points&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;=====================&quot;</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MwUnique</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">MwUnique</span><span class="p">[</span><span class="n">o</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%5g</span><span class="s2">k </span><span class="si">%5g</span><span class="s2">k </span><span class="si">%5g</span><span class="s2"> </span><span class="si">%5g</span><span class="s2"> </span><span class="si">%10.5g</span><span class="s2"> (</span><span class="si">%10d</span><span class="s2">)&quot;</span> <span class="o">%</span>
+                                <span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">o</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">o</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">o</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                                 <span class="n">MwUnique</span><span class="p">[</span><span class="n">o</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">MwUnique</span><span class="p">[</span><span class="n">o</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                 <span class="n">MwUnique</span><span class="p">[</span><span class="n">o</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%5g</span><span class="s2">k </span><span class="si">%5g</span><span class="s2">k </span><span class="si">%5g</span><span class="s2"> </span><span class="si">%5g</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> (</span><span class="si">%10d</span><span class="s2">)&quot;</span> <span class="o">%</span>
+                                <span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">o</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">o</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">o</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">npoints</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">total_error</span> <span class="o">/=</span> <span class="n">npoints</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">total_error</span> <span class="o">=</span> <span class="mf">1e10</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%21s</span><span class="s2"> </span><span class="si">%10.5g</span><span class="s2"> (</span><span class="si">%10d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span> <span class="n">total_error</span><span class="p">,</span> <span class="n">npoints</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">B1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;B1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">B2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;B2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">Tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Tr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;WLF Params @ Tr = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Tr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;C1 = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">B1</span> <span class="o">/</span> <span class="p">(</span><span class="n">B2</span> <span class="o">+</span> <span class="n">Tr</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;C2 = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">B2</span> <span class="o">+</span> <span class="n">Tr</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">total_error</span>
+
+    <span class="k">def</span> <span class="nf">func_fitTTS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">param_in</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - \*param_in {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">k</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">par</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">par</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
+                <span class="n">par</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">param_in</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ind</span><span class="p">]</span>
+                <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_error</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">error</span>
+
+    <span class="k">def</span> <span class="nf">do_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Minimize the error</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
+
+        <span class="c1"># Mount the vector of parameters (Active ones only)</span>
+        <span class="n">initial_guess</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">k</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">par</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">par</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
+                <span class="n">initial_guess</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">initial_guess</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;No parameter to minimize&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">return_full</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nfev</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fitTTS</span><span class="p">,</span> <span class="n">initial_guess</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder-Mead&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Solution not found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span>
+            <span class="s2">&quot;Solution found with </span><span class="si">%d</span><span class="s2"> function evaluations and error </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span>
+            <span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;nfev&#39;</span><span class="p">],</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span><span class="p">))</span>
+
+        <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%10s</span><span class="s2"> = </span><span class="si">%10s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;Parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;===========================&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">par</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">par</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
+                <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;*</span><span class="si">%9s</span><span class="s1"> = </span><span class="si">%10.5g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%10s</span><span class="s1"> = </span><span class="si">%10.5g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;---Fitting in </span><span class="si">%.3g</span><span class="s2"> seconds---&quot;</span> <span class="o">%</span>
+                    <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">do_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Print the theory table associated with the given file name</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">line</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Theory table for </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">complete_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - text {[type]} -- [description]</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - begidx {[type]} -- [description]</span>
+<span class="sd">            - endidx {[type]} -- [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="n">file_names</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">file_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">completions</span>
+
+    <span class="k">def</span> <span class="nf">do_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save the results from WLFShiftTest theory predictions to a TTS file</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving prediction of &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">thname</span> <span class="o">+</span> <span class="s1">&#39; theory&#39;</span><span class="p">)</span>
+        <span class="n">nfiles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">)</span>
+        <span class="n">Mw</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfiles</span><span class="p">):</span>
+            <span class="n">Filei</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">Mwi</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;Mw2&quot;</span> <span class="ow">in</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">:</span>
+                <span class="n">Mw2i</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw2&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Mw2i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s2">&quot;phi&quot;</span> <span class="ow">in</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">:</span>
+                <span class="n">phii</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">phii</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s2">&quot;phi2&quot;</span> <span class="ow">in</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">:</span>
+                <span class="n">phi2i</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;phi2&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">phi2i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Mw</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Mwi</span><span class="p">,</span> <span class="n">Mw2i</span><span class="p">,</span> <span class="n">phii</span><span class="p">,</span> <span class="n">phi2i</span><span class="p">))</span>
+        <span class="n">MwUnique</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">Mw</span><span class="p">))</span>
+        <span class="n">MwUnique</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MwUnique</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">fparam</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfiles</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Mw</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">):</span>
+                    <span class="n">Filei</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">ttable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">Filei</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ttable</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ttable</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+                    <span class="n">fparam</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Filei</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+            <span class="n">fparam</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;T0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+            <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">ofilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file_full_path</span>
+                <span class="p">)</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="n">fparam</span><span class="p">[</span><span class="s2">&quot;chem&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_Mw&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;k&#39;</span> <span class="o">+</span> <span class="s1">&#39;_Mw2&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_phi&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_phiB&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">fparam</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;.tts&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ofilename</span> <span class="o">=</span> <span class="n">line</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="n">fparam</span><span class="p">[</span><span class="s2">&quot;chem&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_Mw&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;k&#39;</span> <span class="o">+</span> <span class="s1">&#39;_Mw2&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_phi&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_phiB&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">fparam</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;.tts&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;File: &#39;</span> <span class="o">+</span> <span class="n">ofilename</span><span class="p">)</span>
+            <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofilename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fparam</span><span class="p">):</span>
+                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">fparam</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span><span class="p">)</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">k</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span><span class="p">)</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Master curve predicted with WLF Theory</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Date: &#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span> <span class="o">+</span>
+                       <span class="s1">&#39; - User: &#39;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">Filei</span><span class="o">.</span><span class="n">file_type</span><span class="o">.</span><span class="n">col_names</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">CLTheoryWLFShiftTest</span><span class="p">(</span><span class="n">BaseTheoryWLFShiftTest</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">GUITheoryWLFShiftTest</span><span class="p">(</span><span class="n">BaseTheoryWLFShiftTest</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;&quot;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+
+        <span class="c1"># add widgets specific to the theory</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verticalshift</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-vertical-shift.png&#39;</span><span class="p">),</span> <span class="s1">&#39;Vertical shift&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verticalshift</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verticalshift</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isofrictional</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-iso.png&#39;</span><span class="p">),</span>
+                                          <span class="s1">&#39;Shift to isofrictional state&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isofrictional</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isofrictional</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># self.savemaster = tb.addAction(self.style().standardIcon(</span>
+        <span class="c1">#     getattr(QStyle, &#39;SP_DialogSaveButton&#39;)), &#39;Save Master Curve&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thToolsLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verticalshift</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_vertical_shift</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isofrictional</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_isofrictional</span><span class="p">)</span>
+        <span class="c1"># connection_id = self.savemaster.triggered.connect(self.do_save_dialog)</span>
+
+    <span class="k">def</span> <span class="nf">do_vertical_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;vert&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">verticalshift</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">do_isofrictional</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;iso&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">isofrictional</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+
+    <span class="c1"># def do_save_dialog(self):</span>
+    <span class="c1">#     folder = str(</span>
+    <span class="c1">#         QFileDialog.getExistingDirectory(</span>
+    <span class="c1">#             self, &quot;Select Directory to save Master curves&quot;))</span>
+    <span class="c1">#     self.do_save(folder)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

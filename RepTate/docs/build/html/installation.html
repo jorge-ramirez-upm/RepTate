@@ -1,0 +1,301 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installation &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Manual" href="manual/manual.html" />
+    <link rel="prev" title="Features" href="features.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manual/manual.html" title="User Manual"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="features.html" title="Features"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#the-shortcut">The “shortcut”</a></li>
+<li><a class="reference internal" href="#the-scenic-route">The “scenic route”</a><ul>
+<li><a class="reference internal" href="#executive-summary">Executive summary</a></li>
+<li><a class="reference internal" href="#detailed-explanations">Detailed explanations</a><ul>
+<li><a class="reference internal" href="#install-python-3">Install Python 3</a></li>
+<li><a class="reference internal" href="#install-extra-packages">Install extra packages</a></li>
+<li><a class="reference internal" href="#install-git">Install Git</a></li>
+<li><a class="reference internal" href="#clone-reptate-repository">“Clone” RepTate repository</a></li>
+<li><a class="reference internal" href="#launch-reptate">Launch RepTate</a></li>
+<li><a class="reference internal" href="#update-reptate">Update RepTate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="features.html"
+                        title="previous chapter">Features</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manual/manual.html"
+                        title="next chapter">User Manual</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>RepTate can be installed in two ways:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>the “shortcut”, allows you to run RepTate in a couple of clicks;</li>
+<li>the “scenic route”, requires more steps and the use of the command-line interface.</li>
+</ol>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">RepTate is continuously updated by the developers. Option-2 will get you the latest version,
+while Option-1 is a “snapshot” in time of the software.</p>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">Ultimately, the “scenic route” is faster than the “shortcut”:
+To update your version of RepTate in the future, the “scenic route” offers
+the powerful <code class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></code> command.</p>
+</div>
+<div class="section" id="the-shortcut">
+<h2>The “shortcut”<a class="headerlink" href="#the-shortcut" title="Permalink to this headline">¶</a></h2>
+<p>Binary packages (containing all the needed files and libraries,
+as well as a Python interpreter), for the latest version (0.9.2 20180503) can be downloaded here:</p>
+<dl class="docutils">
+<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1">RepTate for Windows (Windows 7 64-bit or later)</a></dt>
+<dd>Unzip and uncompress the dowloaded file and look for the RepTate executable <code class="docutils literal"><span class="pre">RepTate.exe</span></code>.</dd>
+<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1">RepTate for Mac (OS X 10.10 or later)</a></dt>
+<dd>Drag-and-drop the RepTate application in your Applications folder.</dd>
+</dl>
+<p>Linux users are supposed to follow the instruction below.</p>
+<p>Previous versions of the code can be downloaded from the following <a class="reference external" href="https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz">folder</a>.</p>
+</div>
+<div class="section" id="the-scenic-route">
+<h2>The “scenic route”<a class="headerlink" href="#the-scenic-route" title="Permalink to this headline">¶</a></h2>
+<p>This option will take you through the installation of Python 3, RepTate dependencies,
+and the “cloning” of RepTate’s repository.</p>
+<div class="section" id="executive-summary">
+<h3>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Install Python 3.6 or later via <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a> (or your favourite method)</li>
+<li>Install RepTate’s package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl) via <code class="docutils literal"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code></li>
+<li>Install Git (version control system)  via <code class="docutils literal"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">git</span></code></li>
+<li>Clone RepTate’s repository via <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/jorge-ramirez-upm/RepTate.git</span></code></li>
+<li>Try launching RepTate application: <code class="docutils literal"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then again <code class="docutils literal"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then <code class="docutils literal"><span class="pre">python</span> <span class="pre">RepTate.py</span></code></li>
+<li>From time to time, check for updates via <code class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></code></li>
+</ol>
+<p>Should anything go wrong, please read the detailed explanations below.</p>
+</div>
+<div class="section" id="detailed-explanations">
+<h3>Detailed explanations<a class="headerlink" href="#detailed-explanations" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="install-python-3">
+<h4>Install Python 3<a class="headerlink" href="#install-python-3" title="Permalink to this headline">¶</a></h4>
+<p>To install Python 3, you can either install <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a> (requires 300 MB of disk space)
+or install the full <a class="reference external" href="https://www.anaconda.com/download/">Anaconda</a> Python (requires 3 GB of disk space). Note that depending on your
+operating system, other methods, not covered here, are available.</p>
+<p>We recommend you to install the former, <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a>, that contains Python only (and a small number of useful packages) and to
+install “manually” the extra packages that RepTate needs, as explained below.
+The latter contains Python and 100+ automatically installed open source scientific
+packages and their dependencies, not <em>all</em> used by RepTate.
+In either case you want to install <strong>Python 3.6 or a later version</strong> (not Python 2!).</p>
+<p>Once the installation is completed, open the command line interface “Anaconda prompt” (or equivalent).
+On Windows, this is usually found by clicking the Windows button and looking under
+“All Programmes -&gt; Anaconda3”.
+Verify that Python 3 has been correctly installed by typing in the command line interface:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">--</span><span class="n">version</span>
+</pre></div>
+</div>
+<p>It should print something like <code class="docutils literal"><span class="pre">Python</span> <span class="pre">3.x.x</span></code>. If it prints an error message or something
+like <code class="docutils literal"><span class="pre">Python</span> <span class="pre">2.x.x</span></code>, then try:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">--</span><span class="n">version</span>
+</pre></div>
+</div>
+<p>If it prints something like <code class="docutils literal"><span class="pre">Python</span> <span class="pre">3.x.x</span></code>, you will need to add the “3”
+at the end of <code class="docutils literal"><span class="pre">python</span></code> every time you see it in the “Anaconda prompt”.</p>
+</div>
+<div class="section" id="install-extra-packages">
+<h4>Install extra packages<a class="headerlink" href="#install-extra-packages" title="Permalink to this headline">¶</a></h4>
+<p>You need to install some extra packages to be able to run RepTate.
+Open an “Anaconda prompt” (or equivalent). On Windows, this is found by clicking the Windows
+button and looking under All Programmes -&gt; anaconda3.
+This will open up a window where you can type commands to install the extra packages:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pyqt</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">matplotlib</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">scipy</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">openpyxl</span>
+</pre></div>
+</div>
+<p>Additionally, on Windows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pyreadline</span>
+</pre></div>
+</div>
+<p>On  Mac or Linux:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">readline</span>
+</pre></div>
+</div>
+<p>If a package is missing and you try to run RepTate, Python will print an
+information message in the terminal telling you what went missing.
+For example, something like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ModuleNotFoundError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;openpyxl&#39;</span>
+</pre></div>
+</div>
+<p>tells you that you need to install the <code class="docutils literal"><span class="pre">openpyxl</span></code> package.</p>
+</div>
+<div class="section" id="install-git">
+<h4>Install Git<a class="headerlink" href="#install-git" title="Permalink to this headline">¶</a></h4>
+<p>Git is a free and open source distributed version control system. We use it
+for the development of RepTate. To install Git, do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">git</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="clone-reptate-repository">
+<h4>“Clone” RepTate repository<a class="headerlink" href="#clone-reptate-repository" title="Permalink to this headline">¶</a></h4>
+<p>RepTate developers keep track of the changes they make to the RepTate project
+using git as a version control system.
+When a developer make a change or bug-fix to RepTate, it is uploaded to an online
+repository, hosted by GitHub.
+The source code of RepTate is open access (see RepTate’s Licence) and can be found
+<a class="reference external" href="https://github.com/jorge-ramirez-upm/RepTate">here</a>.
+To download the full repository to your computer, type in the command line interface:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">jorge</span><span class="o">-</span><span class="n">ramirez</span><span class="o">-</span><span class="n">upm</span><span class="o">/</span><span class="n">RepTate</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>This will create a new folder called <code class="docutils literal"><span class="pre">RepTate</span></code> by default.</p>
+</div>
+<div class="section" id="launch-reptate">
+<h4>Launch RepTate<a class="headerlink" href="#launch-reptate" title="Permalink to this headline">¶</a></h4>
+<p>To launch RepTate, you should change the current working directory of the
+command line interface to <code class="docutils literal"><span class="pre">RepTate/RepTate/</span></code>. Type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">RepTate</span>
+<span class="n">cd</span> <span class="n">RepTate</span>
+<span class="n">python</span> <span class="n">RepTate</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Wait a little, and RepTate should appear on your screen! Note that you may need to use
+<code class="docutils literal"><span class="pre">python3</span> <span class="pre">RepTate.py</span></code> depending on your system</p>
+<p>Take a moment to read the <a class="reference external" href="http://reptate.readthedocs.io/en/latest/manual/manual.html">User Manual</a>.</p>
+</div>
+<div class="section" id="update-reptate">
+<h4>Update RepTate<a class="headerlink" href="#update-reptate" title="Permalink to this headline">¶</a></h4>
+<p>If you successfully went through this tutorial, you have the latest version of RepTate.
+However, from time to time, you can check for additions or bug-fix uploaded by RepTate’s developers.
+While you are in the <code class="docutils literal"><span class="pre">RepTate</span></code> folder (say <code class="docutils literal"><span class="pre">RepTate/RepTate/</span></code>), type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">pull</span>
+</pre></div>
+</div>
+<p>If there is no update available, it will print someting like <code class="docutils literal"><span class="pre">Already</span> <span class="pre">up</span> <span class="pre">to</span> <span class="pre">date.</span></code>, otherwise you will the full list of changes printed on your screen.</p>
+<p>Once this is done, you can launch RepTate as usual.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If anything go wrong during the installation, please contact the developers
+using the contact details given on the <a class="reference external" href="http://reptate.readthedocs.io">documentation’s main page</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manual/manual.html" title="User Manual"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="features.html" title="Features"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

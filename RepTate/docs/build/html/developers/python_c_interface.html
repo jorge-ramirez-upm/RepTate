@@ -1,0 +1,379 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tutorial: Interfacing Python and C code &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Code Diagrams for GUI" href="callgraphGUI.html" />
+    <link rel="prev" title="Tutorial: Adding new functionality to RepTate" href="functionality.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="callgraphGUI.html" title="Code Diagrams for GUI"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="functionality.html" title="Tutorial: Adding new functionality to RepTate"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" accesskey="U">RepTate for developers</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial: Interfacing Python and C code</a><ul>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#our-c-code">Our C code</a></li>
+<li><a class="reference internal" href="#compile-the-c-code-into-a-library">Compile the C code into a library</a></li>
+<li><a class="reference internal" href="#use-a-c-library-in-python">Use a C library in Python</a><ul>
+<li><a class="reference internal" href="#read-the-c-library">Read the C library</a></li>
+<li><a class="reference internal" href="#use-library-functions">Use library functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#final-comments">Final comments</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="functionality.html"
+                        title="previous chapter">Tutorial: Adding new functionality to RepTate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="callgraphGUI.html"
+                        title="next chapter">Code Diagrams for GUI</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developers/python_c_interface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial-interfacing-python-and-c-code">
+<h1>Tutorial: Interfacing Python and C code<a class="headerlink" href="#tutorial-interfacing-python-and-c-code" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#goals" id="id4">Goals</a></li>
+<li><a class="reference internal" href="#our-c-code" id="id5">Our C code</a></li>
+<li><a class="reference internal" href="#compile-the-c-code-into-a-library" id="id6">Compile the C code into a library</a></li>
+<li><a class="reference internal" href="#use-a-c-library-in-python" id="id7">Use a C library in Python</a><ul>
+<li><a class="reference internal" href="#read-the-c-library" id="id8">Read the C library</a></li>
+<li><a class="reference internal" href="#use-library-functions" id="id9">Use library functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#final-comments" id="id10">Final comments</a></li>
+</ul>
+</div>
+<div class="section" id="goals">
+<h2><a class="toc-backref" href="#id4">Goals</a><a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we will show how to create a new Python function that makes use of C code
+for computations and that can be later used in a theory or view.</p>
+<p>Python offers rapid application development because it easier to write, to read (and therefore to maintain) than C code.
+However, Python code used for number crunching might be 10 to 100 times slower than C
+when Python <a class="reference external" href="http://www.numpy.org">NumPy</a> or <a class="reference external" href="https://www.scipy.org/scipylib/index.html">SciPy</a>
+libraries (written in C/C++ or Fortran) cannot be used.</p>
+<p>Fortunately, there are many solutions availiable to write code that will run fast in Python.
+We can cite <a class="reference external" href="http://cython.org">Cython</a> or <a class="reference external" href="https://numba.pydata.org">Numba</a> that
+transform Python code into C executable and require minimal addition to the existing Python
+code. There is also <a class="reference external" href="https://docs.python.org/3.6/library/ctypes.html">Ctypes</a> that provides
+C compatible data types, and allows calling functions
+from external libraries, e.g. calling pre-compiled C functions. It is a very effective means to communicate with existing C code.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All these solutions require a C compiler installed on your machine.</p>
+</div>
+<p>In RepTate, some theories (most notably the React appplication thories) are written in C code and inferfaced with Python using,
+<a class="reference external" href="https://docs.python.org/3.6/library/ctypes.html">Ctypes</a>.</p>
+<p>In general, already-written C code will require <strong>no</strong> modifications to be used by Python.
+The only work we need to do to integrate C code in Python is on Python’s side.</p>
+<p>The steps for interfacing Python with C using
+<a class="reference external" href="https://docs.python.org/3.6/library/ctypes.html">Ctypes</a>. are:</p>
+<ol class="arabic simple">
+<li>write C code functions</li>
+<li>compile the C code as a shared library</li>
+<li>write some Python lines of code to “extract” the C functions from the library</li>
+<li>run!</li>
+</ol>
+</div>
+<div class="section" id="our-c-code">
+<h2><a class="toc-backref" href="#id5">Our C code</a><a class="headerlink" href="#our-c-code" title="Permalink to this headline">¶</a></h2>
+<p>As an example of C function, we write a simple function that takes as input
+an array of double and return the square. It is evident that such a simple function
+(that calculates the square of an array) does not justify the use of C, but it is a good place
+to start.</p>
+<p>In a new text file, write the code below and save it as <code class="docutils literal"><span class="pre">basic_function.c</span></code> in the folder
+<code class="docutils literal"><span class="pre">theories/</span></code> for example:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="kt">void</span> <span class="nf">c_square</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_in</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_out</span><span class="p">)</span>
+<span class="p">{</span> <span class="c1">//return the square of array_in of length n in array_out</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">array_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">array_in</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">array_in</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="compile-the-c-code-into-a-library">
+<h2><a class="toc-backref" href="#id6">Compile the C code into a library</a><a class="headerlink" href="#compile-the-c-code-into-a-library" title="Permalink to this headline">¶</a></h2>
+<p>First, make sure you have a C compiler installed on you machine.
+Mac and Linux machines usually have a C compiler installed by default.
+On Windows, we suggest to install <a class="reference external" href="https://anaconda.org/anaconda/mingw">MinGW</a>
+via Anaconda.</p>
+<p>To compile the above C function into a library that can later be used by Python,
+open a terminal and change the working directory to the folder where <code class="docutils literal"><span class="pre">basic_function.c</span></code>
+is located. Then compile the library.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>This new library can only be used by the same type of machine is was
+compiled on, i.e., a Windows machine creates libraries that cannot be
+used on Linux or Mac, and vice versa.
+To avoid problem, we name these library differently: we append to the
+library name</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">_win32</span></code> for Windows,</li>
+<li><code class="docutils literal"><span class="pre">_darwin</span></code> for Max,</li>
+<li><code class="docutils literal"><span class="pre">_linux</span></code> for Linux.</li>
+</ul>
+</div>
+<p>Compile the C file using either</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ gcc -o basic_function_win32.so -shared -fPIC -O2 basic_function.c <span class="c1"># Windows</span>
+
+$ gcc -o basic_function_darwin.so -shared -fPIC -O2 basic_function.c <span class="c1"># Mac</span>
+
+$ gcc -o basic_function_linux.so -shared -fPIC -O2 basic_function.c <span class="c1"># Linux</span>
+</pre></div>
+</div>
+<p>This created a new file <code class="docutils literal"><span class="pre">basic_function_***.so</span></code> containing our C function in the RepTate
+folder <code class="docutils literal"><span class="pre">theories/</span></code>.</p>
+</div>
+<div class="section" id="use-a-c-library-in-python">
+<h2><a class="toc-backref" href="#id7">Use a C library in Python</a><a class="headerlink" href="#use-a-c-library-in-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="read-the-c-library">
+<h3><a class="toc-backref" href="#id8">Read the C library</a><a class="headerlink" href="#read-the-c-library" title="Permalink to this headline">¶</a></h3>
+<p>We use the <code class="docutils literal"><span class="pre">basic_function.so</span></code> library via
+<a class="reference external" href="https://docs.python.org/3.6/library/ctypes.html">Ctypes</a>.
+In a new file, write the following and save it as, for example,
+<code class="docutils literal"><span class="pre">basic_function_helper.py</span></code></p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Define the C-variables and functions from the C-files that are needed in Python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">CDLL</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">lib_path</span> <span class="o">=</span> <span class="s1">&#39;theories/basic_function_</span><span class="si">%s</span><span class="s1">.so&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">basic_function_lib</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;OS </span><span class="si">%s</span><span class="s1"> not recognized&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">))</span>
+
+<span class="n">python_c_square</span> <span class="o">=</span> <span class="n">basic_function_lib</span><span class="o">.</span><span class="n">c_square</span>
+<span class="n">python_c_square</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</td></tr></table></div>
+<p>Some explainations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">CDLL</span>
+</pre></div>
+</div>
+<p>imports the Python Ctypes object we will be needing.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lib_path</span> <span class="o">=</span> <span class="s1">&#39;theories/basic_function_</span><span class="si">%s</span><span class="s1">.so&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>defines the path of our library file, and <code class="docutils literal"><span class="pre">sys.platform</span></code> returns either
+<code class="docutils literal"><span class="pre">win32</span></code>, <code class="docutils literal"><span class="pre">darwin</span></code> or <code class="docutils literal"><span class="pre">linux</span></code>. Note that the path is relative to the path of
+<code class="docutils literal"><span class="pre">RepTate.py</span></code> or <code class="docutils literal"><span class="pre">RepTateCL.py</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">basic_function_lib</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>defines the Python object <code class="docutils literal"><span class="pre">square_lib</span></code> where all the functions and variables
+from our C file <code class="docutils literal"><span class="pre">basic_function.c</span></code> are stored. In particular, the function
+<code class="docutils literal"><span class="pre">c_square</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python_c_square</span> <span class="o">=</span> <span class="n">basic_function_lib</span><span class="o">.</span><span class="n">c_square</span>
+</pre></div>
+</div>
+<p>defines the Python equivalent of the C function <code class="docutils literal"><span class="pre">c_square</span></code>. We name it
+<code class="docutils literal"><span class="pre">python_c_square</span></code> for clarity, but using the same name is acceptable.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python_c_square</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>defines what type of variables the C function returns.
+In our case, it is <code class="docutils literal"><span class="pre">void</span></code>, which translates in Python to <code class="docutils literal"><span class="pre">None</span></code>.
+See <a class="reference external" href="https://docs.python.org/3.6/library/ctypes.html#fundamental-data-types">fundamental-data-types</a> for
+a list of equivalence.</p>
+</div>
+<div class="section" id="use-library-functions">
+<h3><a class="toc-backref" href="#id9">Use library functions</a><a class="headerlink" href="#use-library-functions" title="Permalink to this headline">¶</a></h3>
+<p>Our C function <code class="docutils literal"><span class="pre">c_square</span></code> accepts three arguments: an <code class="docutils literal"><span class="pre">int</span></code> and two
+<code class="docutils literal"><span class="pre">double</span> <span class="pre">*</span></code>. Hence, our Python function <code class="docutils literal"><span class="pre">python_c_square</span></code> accepts three
+arguments too but they must by of type <code class="docutils literal"><span class="pre">c_int</span></code> and “array of c_double”
+defined by the <code class="docutils literal"><span class="pre">ctypes</span></code> Python library.</p>
+<p>Therefore, to use <code class="docutils literal"><span class="pre">python_c_square</span></code>, we have to convert Python integer into
+<code class="docutils literal"><span class="pre">c_int</span></code> type and Python list into an “array of c_double”.</p>
+<p>The best way to do so is to write a Python function, in the file
+<code class="docutils literal"><span class="pre">basic_function_helper.py</span></code></p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_square_using_c</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">list_in</span><span class="p">,</span> <span class="n">list_out</span><span class="p">):</span>
+
+    <span class="n">c_arr_in</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)()</span>
+    <span class="n">c_arr_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">c_arr_in</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_double</span><span class="p">(</span><span class="n">list_in</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">python_c_square</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_arr_in</span><span class="p">,</span> <span class="n">c_arr_out</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">list_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_arr_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>In details:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">c_arr_in</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)()</span>
+<span class="n">c_arr_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)()</span>
+</pre></div>
+</div>
+<p>defines two <code class="docutils literal"><span class="pre">ctypes</span></code> arrays of <code class="docutils literal"><span class="pre">double</span></code> of size <code class="docutils literal"><span class="pre">n</span></code>
+that can be used by the C function.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">c_arr_in</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_double</span><span class="p">(</span><span class="n">list_in</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>copies the values of the input Python list into the <code class="docutils literal"><span class="pre">ctypes</span></code> array.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python_c_square</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_arr_in</span><span class="p">,</span> <span class="n">c_arr_out</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>calls the C function that does the computation of the square of <code class="docutils literal"><span class="pre">c_arr_in</span></code>
+and put the result in <code class="docutils literal"><span class="pre">c_arr_out</span></code>. Note the conversion <code class="docutils literal"><span class="pre">c_int(n)</span></code> that
+transforms the Python integer into a <code class="docutils literal"><span class="pre">ctypes</span></code> <code class="docutils literal"><span class="pre">int</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">list_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_arr_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>copies the result into the Python list.</p>
+</div>
+</div>
+<div class="section" id="final-comments">
+<h2><a class="toc-backref" href="#id10">Final comments</a><a class="headerlink" href="#final-comments" title="Permalink to this headline">¶</a></h2>
+<p>Our C function <code class="docutils literal"><span class="pre">c_square</span></code> is now wrapped into a Python function
+<code class="docutils literal"><span class="pre">do_square_using_c</span></code>. To use it in a RepTate module, simply import the
+function by including in the module header</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">basic_function_helper</span> <span class="k">import</span> <span class="n">do_square_using_c</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="callgraphGUI.html" title="Code Diagrams for GUI"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="functionality.html" title="Tutorial: Adding new functionality to RepTate"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

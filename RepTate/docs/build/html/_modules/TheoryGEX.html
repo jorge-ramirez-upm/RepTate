@@ -1,0 +1,339 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TheoryGEX &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for TheoryGEX</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2018): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module TheoryGEX</span>
+
+<span class="sd">GEX file for creating a new theory</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">gamma</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
+<span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
+<span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
+<span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
+
+
+<span class="k">class</span> <span class="nc">TheoryGEX</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="s1">&#39;GEXTheory&#39;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Generalized Exponential Function (GEX)&#39;</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GUITheoryGEX</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span>
+            <span class="n">axarr</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLTheoryGEX</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseTheoryGEX"><a class="viewcode-back" href="../manual/Applications/MWD/Theory/theory.html#TheoryGEX.BaseTheoryGEX">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryGEX</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generalized Exponential Function (GEX) for experimental molecular weight distributions.</span>
+<span class="sd">    </span>
+<span class="sd">    * **Function**</span>
+<span class="sd">        .. math::</span>
+<span class="sd">            W(M) = W_0 \\frac{b}{M_0 \\Gamma\\left(\\frac{a}{b}\\right)} \\left(\\frac{M}{M_0}\\right)^{a-1} \\exp\\left[ -\\left(\\frac{M}{M_0}\\right)^b \\right]</span>
+<span class="sd">    </span>
+<span class="sd">    * **Parameters**</span>
+<span class="sd">       - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.</span>
+<span class="sd">       - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`: .</span>
+<span class="sd">       - ``a`` </span>
+<span class="sd">       - ``b``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function&#39;</span>
+    <span class="n">single_file</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># False if the theory can be applied to multiple files simultaneously</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryGEX</span><span class="o">.</span><span class="n">thname</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryGEX</span><span class="o">.</span><span class="n">citations</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GEX</span>  <span class="c1"># main theory function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># True if the theory has modes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;logW0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;logW0&#39;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s1">&#39;logW0&#39;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;logM0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;logM0&#39;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s1">&#39;logM0&#39;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
+            <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
+            <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">GEX</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;GEX function</span>
+
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - f {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_rows</span>
+        <span class="n">W0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logW0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">M0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logM0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">W0</span> <span class="o">*</span> <span class="n">b</span> <span class="o">/</span> <span class="n">M0</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">M0</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">M0</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">do_error</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">M0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logM0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">Mn</span> <span class="o">=</span> <span class="n">M0</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">(</span><span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>
+            <span class="n">Mw</span> <span class="o">=</span> <span class="n">M0</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>
+            <span class="n">Mz</span> <span class="o">=</span> <span class="n">M0</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Mn = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Mn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Mw = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Mw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Mz = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Mz</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;D  = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Mw</span> <span class="o">/</span> <span class="n">Mn</span><span class="p">))</span></div>
+
+
+<span class="k">class</span> <span class="nc">CLTheoryGEX</span><span class="p">(</span><span class="n">BaseTheoryGEX</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+
+    <span class="c1"># This class usually stays empty</span>
+
+
+<span class="k">class</span> <span class="nc">GUITheoryGEX</span><span class="p">(</span><span class="n">BaseTheoryGEX</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+
+    <span class="c1"># add widgets specific to the theory here:</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,620 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ApplicationLVE &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ApplicationLVE</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module ApplicationLVE</span>
+
+<span class="sd">Module for the analysis of small angle oscillatory shear data - Master curves</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">Application</span> <span class="k">import</span> <span class="n">Application</span>
+<span class="kn">from</span> <span class="nn">QApplicationWindow</span> <span class="k">import</span> <span class="n">QApplicationWindow</span>
+<span class="kn">from</span> <span class="nn">View</span> <span class="k">import</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">FileType</span> <span class="k">import</span> <span class="n">TXTColumnFile</span><span class="p">,</span> <span class="n">ExcelFile</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="ApplicationLVE"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.ApplicationLVE">[docs]</a><span class="k">class</span> <span class="nc">ApplicationLVE</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Application to Analyze Linear Viscoelastic Data</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">appname</span> <span class="o">=</span> <span class="s2">&quot;LVE&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Linear Viscoelasticity&quot;</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;tts&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GUIApplicationLVE</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLApplicationLVE</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseApplicationLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationLVE.BaseApplicationLVE">[docs]</a><span class="k">class</span> <span class="nc">BaseApplicationLVE</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html&#39;</span>
+    <span class="n">appname</span> <span class="o">=</span> <span class="n">ApplicationLVE</span><span class="o">.</span><span class="n">appname</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">TheoryMaxwellModes</span> <span class="k">import</span> <span class="n">TheoryMaxwellModesFrequency</span>
+        <span class="kn">from</span> <span class="nn">TheoryLikhtmanMcLeish2002</span> <span class="k">import</span> <span class="n">TheoryLikhtmanMcLeish2002</span>
+        <span class="kn">from</span> <span class="nn">TheoryTTS</span> <span class="k">import</span> <span class="n">TheoryWLFShift</span>
+        <span class="kn">from</span> <span class="nn">TheoryCarreauYasuda</span> <span class="k">import</span> <span class="n">TheoryCarreauYasuda</span>
+        <span class="kn">from</span> <span class="nn">TheoryRouse</span> <span class="k">import</span> <span class="n">TheoryRouseFrequency</span>
+        <span class="kn">from</span> <span class="nn">TheoryDTDStars</span> <span class="k">import</span> <span class="n">TheoryDTDStarsFreq</span>
+        <span class="kn">from</span> <span class="nn">TheoryBobLVE</span> <span class="k">import</span> <span class="n">TheoryBobLVE</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1"># VIEWS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G&#39;,G&#39;&#39;(w))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(G&#39;,G&#39;&#39;(w))&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log Storage,Loss moduli&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log($\omega$)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(G&#39;($\omega$),G&#39;&#39;($\omega$))&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1G2</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;,G&#39;&#39;(w)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;G&#39;,G&#39;&#39;(w)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Storage,Loss moduli&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;G&#39;($\omega$),G&#39;&#39;($\omega$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewG1G2</span><span class="p">,</span>
+            <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;etastar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;etastar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Complex Viscosity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$|\eta^*(\omega)|$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa.s&quot;</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewEtaStar</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;eta*(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;logetastar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;logetastar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log Complex Viscosity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log($\omega$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log$|\eta^*(\omega)|$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa.s&quot;</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewLogEtaStar</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;eta*(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;delta&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;delta&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\delta(\omega)$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewDelta</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;delta(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;tan(delta)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;tan(delta)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tan(delta)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tan($\delta$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewTanDelta</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;tan(delta((w))&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(tan(delta))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;log(tan(delta))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan(delta))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log($\omega$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan($\delta$))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewLogTanDelta</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(tan(delta((w)))&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G*)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;log(G*)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(G*(omega))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log($\omega$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(G*($\omega$))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewLogGstar</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(G*)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(tan(delta),G*)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;log(tan(delta),G*)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan($\delta$)(G*))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;G*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan($\delta$)(G*))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewLogtandeltaGstar</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(tan($\delta)(G*))&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;delta(G*)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;delta(G*)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\delta$(G*))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;G*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\delta$(G*))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;deg&quot;</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewdeltatanGstar</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;delta(G*)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;J&#39;,J&#39;&#39;(w)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;J&#39;,J&#39;&#39;(w)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;J moduli&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;J&#39;($\omega$),J&#39;&#39;($\omega$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$Pa^{-1}$&quot;</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewJ1J2</span><span class="p">,</span>
+            <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;J&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;J&#39;&#39;(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;Cole-Cole&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;Cole-Cole&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Cole-Cole plot&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\eta&#39;$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\eta&#39;&#39;$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa.s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa.s&quot;</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewColeCole</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;$eta&#39;$&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G&#39;)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(G&#39;)&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log Storage modulus&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log($\omega$)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(G&#39;($\omega$))&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;G&#39;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Storage modulus&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;G&#39;($\omega$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewG1</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G&#39;&#39;)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(G&#39;&#39;)&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log Loss modulus&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log($\omega$)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(G&#39;($\omega$))&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG2</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Loss modulus&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;G&#39;&#39;($\omega$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewG2</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G&#39;,G&#39;&#39;(w),tan(delta))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(G&#39;,G&#39;&#39;(w),tan(delta))&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log Storage,Loss moduli, tan(delta)&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log($\omega$)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(G&#39;($\omega$),G&#39;&#39;($\omega$),tan($\delta$))&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa,-&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1G2tandelta</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;G&#39;&#39;(w),tan(delta)&quot;</span><span class="p">])</span>
+
+        <span class="c1">#set multiviews</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G&#39;,G&#39;&#39;(w))&quot;</span><span class="p">]</span>
+        <span class="p">]</span>  <span class="c1">#default view order in multiplot views, set only one item for single view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">)</span>
+
+        <span class="c1"># FILES</span>
+        <span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span><span class="s2">&quot;LVE files&quot;</span><span class="p">,</span> <span class="s2">&quot;tts&quot;</span><span class="p">,</span> <span class="s2">&quot;LVE files&quot;</span><span class="p">,</span>
+                              <span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;G</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;G</span><span class="se">\&#39;\&#39;</span><span class="s1">&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Mw&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">],</span>
+                              <span class="p">[</span><span class="s1">&#39;rad/s&#39;</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">ftype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="s1">&#39;osc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span><span class="s2">&quot;OSC files&quot;</span><span class="p">,</span> <span class="s2">&quot;osc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Small-angle oscillatory masurements from the Rheometer&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;G</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;G</span><span class="se">\&#39;\&#39;</span><span class="s1">&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Mw&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;rad/s&#39;</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="s1">&#39;xlsx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ExcelFile</span><span class="p">(</span><span class="s2">&quot;Excel File&quot;</span><span class="p">,</span> <span class="s2">&quot;xlsx&quot;</span><span class="p">,</span> <span class="s2">&quot;ExcelFIle&quot;</span><span class="p">,</span>
+                                            <span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="s1">&#39;G</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;G</span><span class="se">\&#39;\&#39;</span><span class="s1">&#39;</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;rad/s&#39;</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">,</span> <span class="s1">&#39;Pa&#39;</span><span class="p">])</span>
+        
+        <span class="c1"># THEORIES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span>
+            <span class="n">TheoryMaxwellModesFrequency</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryMaxwellModesFrequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span>
+            <span class="n">TheoryLikhtmanMcLeish2002</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryLikhtmanMcLeish2002</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryCarreauYasuda</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryCarreauYasuda</span>
+        <span class="c1">#self.theories[TheoryWLFShift.thname]=TheoryWLFShift</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryRouseFrequency</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span><span class="o">=</span><span class="n">TheoryRouseFrequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryDTDStarsFreq</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span><span class="o">=</span><span class="n">TheoryDTDStarsFreq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryBobLVE</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span><span class="o">=</span><span class="n">TheoryBobLVE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_common_theories</span><span class="p">()</span>
+
+        <span class="c1">#set the current view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogG1G2"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogG1G2">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1G2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the storage modulus :math:`\\log(G&#39;(\\omega))` and loss modulus :math:`\\log(G&#39;&#39;(\\omega))` vs :math:`\\log(\\omega)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewG1G2"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewG1G2">[docs]</a>    <span class="k">def</span> <span class="nf">viewG1G2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Storage modulus :math:`G&#39;(\\omega)` and loss modulus :math:`G&#39;&#39;(\\omega)` (in logarithmic scale) vs :math:`\\omega`(in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewEtaStar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewEtaStar">[docs]</a>    <span class="k">def</span> <span class="nf">viewEtaStar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G&#39;^2 + G&#39;&#39;^2}/\\omega` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogEtaStar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogEtaStar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogEtaStar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G&#39;^2 + G&#39;&#39;^2}/\\omega` vs :math:`\\log(\\omega)` </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewDelta"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loss or phase angle :math:`\\delta(\\omega)=\\arctan(G&#39;&#39;/G&#39;)\\cdot 180/\\pi` (in degrees, in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewTanDelta"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewTanDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewTanDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tangent of the phase angle :math:`\\tan(\\delta(\\omega))=G&#39;&#39;/G&#39;` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogTanDelta"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogTanDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogTanDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G&#39;&#39;/G&#39;)` vs :math:`\\log(\\omega)` </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogGstar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}` vs :math:`\\log(\\omega)` </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogtandeltaGstar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogtandeltaGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G&#39;&#39;/G&#39;` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])))</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewdeltatanGstar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewdeltatanGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loss angle :math:`\\delta(\\omega)=\\arctan(G&#39;&#39;/G&#39;)` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])))</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewJ1J2"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewJ1J2">[docs]</a>    <span class="k">def</span> <span class="nf">viewJ1J2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Storage compliance :math:`J&#39;(\\omega)=G&#39;/(G&#39;^2+G&#39;&#39;^2)` and loss compliance :math:`J&#39;&#39;(\\omega)=G&#39;&#39;/(G&#39;^2+G&#39;&#39;^2)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]))</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewColeCole"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewColeCole">[docs]</a>    <span class="k">def</span> <span class="nf">viewColeCole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cole-Cole plot: out of phase viscosity :math:`\\eta&#39;&#39;(\\omega)=G&#39;(\\omega)/\\omega` vs dynamic viscosity :math:`\\eta&#39;(\\omega)=G&#39;&#39;(\\omega)/\\omega`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogG1"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogG1">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the storage modulus :math:`\\log(G&#39;(\\omega))` vs :math:`\\log(\\omega)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewG1"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewG1">[docs]</a>    <span class="k">def</span> <span class="nf">viewG1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Storage modulus :math:`G&#39;(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogG2"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogG2">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the loss modulus :math:`\\log(G&#39;&#39;(\\omega))` vs :math:`\\log(\\omega)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewG2"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewG2">[docs]</a>    <span class="k">def</span> <span class="nf">viewG2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loss modulus :math:`G&#39;&#39;(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseApplicationLVE.viewLogG1G2tandelta"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1G2tandelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the storage modulus :math:`\\log(G&#39;(\\omega))`, loss modulus :math:`\\log(G&#39;&#39;(\\omega))` and tangent of the loss angle :math:`\\log(\\tan(\\delta(\\omega)))=\\log(G&#39;&#39;/G&#39;)` vs :math:`\\log(\\omega)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="CLApplicationLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationLVE.CLApplicationLVE">[docs]</a><span class="k">class</span> <span class="nc">CLApplicationLVE</span><span class="p">(</span><span class="n">BaseApplicationLVE</span><span class="p">,</span> <span class="n">Application</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GUIApplicationLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationLVE.GUIApplicationLVE">[docs]</a><span class="k">class</span> <span class="nc">GUIApplicationLVE</span><span class="p">(</span><span class="n">BaseApplicationLVE</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
+<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

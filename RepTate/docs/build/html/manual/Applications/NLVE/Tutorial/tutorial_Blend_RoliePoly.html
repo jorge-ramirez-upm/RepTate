@@ -1,0 +1,313 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tutorial Blend of Rolie-Poly &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="NLVE Tutorial: Command Line" href="tutorialCLNLVE.html" />
+    <link rel="prev" title="Tutorial Rolie-Poly" href="tutorial_RoliePoly.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLNLVE.html" title="NLVE Tutorial: Command Line"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_RoliePoly.html" title="Tutorial Rolie-Poly"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="tutorialGUINLVE.html" accesskey="U">NLVE Tutorial: Graphical User Interface</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial_RoliePoly.html"
+                        title="previous chapter">Tutorial Rolie-Poly</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorialCLNLVE.html"
+                        title="next chapter">NLVE Tutorial: Command Line</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/NLVE/Tutorial/tutorial_Blend_RoliePoly.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial-blend-of-rolie-poly">
+<h1>Tutorial Blend of Rolie-Poly<a class="headerlink" href="#tutorial-blend-of-rolie-poly" title="Permalink to this headline">¶</a></h1>
+<p><strong>Nonlinear flow prediction</strong></p>
+<ol class="arabic">
+<li><p class="first">Start RepTate and create a new NLVE Application <a class="reference internal" href="../../../../_images/NLVE.png"><img alt="logo" class="align-bottom" src="../../../../_images/NLVE.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<a class="reference internal image-reference" href="../../../../_images/new_NLVE.png"><img alt="New application" class="align-center" src="../../../../_images/new_NLVE.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">Drag and drop shear (<code class="docutils literal"><span class="pre">.shear</span></code>) or uniaxial extension (<code class="docutils literal"><span class="pre">.uext</span></code>) data files,
+e.g. all the <code class="docutils literal"><span class="pre">Minegishi_spiked_PS_***.uext</span></code> files from the folder
+<code class="docutils literal"><span class="pre">data/NLVE_Extension/</span></code>. These are the uniaxial extension data for the
+PS686 spiked with 1.5% long chains from <a class="reference internal" href="#rpbtut-minegishi2001" id="id1">[1]</a></p>
+<p>The first column of the file should contain the time and the second
+column the stress (shear, or tensile, stress growth function).</p>
+<a class="reference internal image-reference" href="../../../../_images/load_uext_data_Minegishi.png"><img alt="Load data" class="align-center" src="../../../../_images/load_uext_data_Minegishi.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">Select the “BlendRoliePoly” theory <a class="reference internal" href="../../../../_images/select_BlendRoliePoly.png"><img alt="th_select" class="align-bottom" src="../../../../_images/select_BlendRoliePoly.png" style="height: 15pt;" /></a> and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
+<a class="reference internal image-reference" href="../../../../_images/new_RP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_RP_th.png" style="width: 400pt;" /></a>
+<p>At this point, you need to setup the relaxation times, <span class="math">\(\tau_i\)</span>, and
+weights, <span class="math">\(g_i\)</span>, for each mode <span class="math">\(i\)</span>.
+You can:</p>
+<ul>
+<li><p class="first">Input them manually by clicking:</p>
+<a class="reference internal image-reference" href="../../../../_images/edit_modes.png"><img alt="Edit modes" class="align-center" src="../../../../_images/edit_modes.png" style="width: 100pt;" /></a>
+<p>then select the number of modes, enter the values and click “OK”.</p>
+</li>
+<li><p class="first">Obtain an estimate of the linear rheology (i.e. the set of <span class="math">\(\tau_{\mathrm{d},i}\)</span>)
+from a the molecular weight distribution (MWD). In this case, for each molecular mass mode,
+a reptation time is assigned. For a molecular mass mode <span class="math">\(M_i\)</span>, the corresponding
+relaxation time is estimated as <span class="math">\(\tau_{\mathrm{d},i} = 3 Z_i^3 f_{\mu,i} \tau_\mathrm{e}\)</span>
+where <span class="math">\(Z_i = M_i/M_\mathrm{e}\)</span>, <span class="math">\(M_\mathrm{e}\)</span> the entanglement molecualar mass,
+<span class="math">\(\tau_\mathrm{e}\)</span> the entanglement relaxation time, and <span class="math">\(f_{\mu,i}\)</span> the contour
+length fluctuation (CLF) correction.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This works, broadly, within the “dynamic dilution” picture of tube dynamics, which
+considers that the effective “tube” constraint felt by a given test chain depends
+on the timescale of the motion being considered. After relaxation of shorter chains,
+they release their entanglements on longer chains and so, in some sense, act as “solvent”
+for the longer chains. Here, we consider repation along the thin tube, and CLF
+commensurate with the diluted tube (which speeds up the terminal relaxation because
+CLF shortens the distance required to reptate).</p>
+</div>
+<p>The stretch relaxation times are calculated as <span class="math">\(\tau_{\mathrm{s},i} = Z_i^2 \tau_\mathrm{e}\)</span>.</p>
+<p>It is possible to import the MWD form an open MWD application, or by copy-pasting
+MWD data into a table.
+<strong>In this tutorial we will use the latter method.</strong></p>
+</li>
+</ul>
+</li>
+<li><p class="first">To import the MWD form by copy-pasting MWD data, click right arrow of <a class="reference internal" href="../../../../_images/icons8-broadcasting.png"><img alt="import_modes" class="align-bottom" src="../../../../_images/icons8-broadcasting.png" style="width: 20pt; height: 20pt;" /></a> and select
+<a class="reference internal" href="../../../../_images/select_MWD_from_data.png"><img alt="MWD_from_data" class="align-bottom" src="../../../../_images/select_MWD_from_data.png" style="height: 15pt;" /></a>:</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../../../../_images/input_MWD_data.png"><img alt="input MWD data" class="align-center" src="../../../../_images/input_MWD_data.png" style="width: 250pt;" /></a>
+</div></blockquote>
+</li>
+<li><p class="first">Select the number of molecular mass modes and provide the entanglement molecualar weight
+and entanglement relaxation time, respectively <span class="math">\(16\,625\)</span> g/mol and <span class="math">\(3.4 \times 10^{−3}\)</span> s
+at 160 <span class="math">\(^\circ\mathrm{C}\)</span>.
+We use the 21 modes MWD provided in <a class="reference internal" href="#rpbtut-mishler2013" id="id2">[2]</a> and paste it in the table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><span class="math">\(M\)</span></th>
+<th class="head"><span class="math">\(\phi\)</span></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>11500</td>
+<td>0.00276</td>
+</tr>
+<tr class="row-odd"><td>14800</td>
+<td>0.00413</td>
+</tr>
+<tr class="row-even"><td>19200</td>
+<td>0.00649</td>
+</tr>
+<tr class="row-odd"><td>24800</td>
+<td>0.009</td>
+</tr>
+<tr class="row-even"><td>32300</td>
+<td>0.0133</td>
+</tr>
+<tr class="row-odd"><td>41800</td>
+<td>0.0214</td>
+</tr>
+<tr class="row-even"><td>53900</td>
+<td>0.031</td>
+</tr>
+<tr class="row-odd"><td>70400</td>
+<td>0.0452</td>
+</tr>
+<tr class="row-even"><td>90800</td>
+<td>0.0648</td>
+</tr>
+<tr class="row-odd"><td>118000</td>
+<td>0.0862</td>
+</tr>
+<tr class="row-even"><td>148000</td>
+<td>0.107</td>
+</tr>
+<tr class="row-odd"><td>196000</td>
+<td>0.119</td>
+</tr>
+<tr class="row-even"><td>255000</td>
+<td>0.12</td>
+</tr>
+<tr class="row-odd"><td>329000</td>
+<td>0.11</td>
+</tr>
+<tr class="row-even"><td>426000</td>
+<td>0.0929</td>
+</tr>
+<tr class="row-odd"><td>539000</td>
+<td>0.0691</td>
+</tr>
+<tr class="row-even"><td>696000</td>
+<td>0.0462</td>
+</tr>
+<tr class="row-odd"><td>915000</td>
+<td>0.027</td>
+</tr>
+<tr class="row-even"><td>1210000</td>
+<td>0.0138</td>
+</tr>
+<tr class="row-odd"><td>1570000</td>
+<td>0.00545</td>
+</tr>
+<tr class="row-even"><td>3200000</td>
+<td>0.0152</td>
+</tr>
+</tbody>
+</table>
+<p>that we select, copy, and paste in the table:</p>
+<a class="reference internal image-reference" href="../../../../_images/MWD_table_input.png"><img alt="Show LVE" class="align-center" src="../../../../_images/MWD_table_input.png" style="width: 250pt;" /></a>
+</li>
+<li><p class="first">Click “OK” to close the dialog. This launches the calculations of the relaxation times.
+You can look at the result by clicking <a class="reference internal" href="../../../../_images/check_relaxation_results.png"><img alt="relax_time" class="align-bottom" src="../../../../_images/check_relaxation_results.png" style="height: 50pt;" /></a>.</p>
+</li>
+<li><p class="first">Adjust the parameter <code class="docutils literal"><span class="pre">GN0</span></code>. We set it to <span class="math">\(2\times 10^5\)</span> Pa. Then, press “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a>
+to get the nonlinear rheology predictions.</p>
+<a class="reference internal image-reference" href="../../../../_images/RPB_pre_result.png"><img alt="Without fene, G" class="align-center" src="../../../../_images/RPB_pre_result.png" style="width: 400pt;" /></a>
+</li>
+<li><p class="first">The calculations can be done using “infinitely stretching chains” <a class="reference internal" href="../../../../_images/icons8-infinite.png"><img alt="no_fene" class="align-bottom" src="../../../../_images/icons8-infinite.png" style="height: 15pt;" /></a>
+or with finite extensibility <a class="reference internal" href="../../../../_images/icons8-facebook-f.png"><img alt="fene" class="align-bottom" src="../../../../_images/icons8-facebook-f.png" style="height: 15pt;" /></a>. In the latter case, the maximum extensibility
+parameter <code class="docutils literal"><span class="pre">lmax</span></code> is present in the parameter table.
+You can change its value and click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory
+predictions.</p>
+</li>
+<li><p class="first">Finally, it is possible to correct the modulus (given as the parameter <code class="docutils literal"><span class="pre">GN0</span></code>) by clicking
+<a class="reference internal" href="../../../../_images/icons8-circled-g-filled.png"><img alt="g-correction" class="align-bottom" src="../../../../_images/icons8-circled-g-filled.png" style="height: 15pt;" /></a>. The stress of each species <span class="math">\(i\)</span> is corrected by a factor <span class="math">\(f_{\mu,i}^{1/2}\)</span>
+(see Chapter 6 of <a class="reference internal" href="#rpbtut-dealy2018" id="id3">[3]</a>).
+Note that this option is only available if the relxations times were given via MWD.
+Click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory predictions:</p>
+<a class="reference internal image-reference" href="../../../../_images/RPB_result.png"><img alt="With fene, G" class="align-center" src="../../../../_images/RPB_result.png" style="width: 400pt;" /></a>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The minimisation procedure is inactive in this theory.</p>
+</div>
+<p id="bibtex-bibliography-manual/Applications/NLVE/Tutorial/tutorial_Blend_RoliePoly-0"><table class="docutils citation" frame="void" id="rpbtut-minegishi2001" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Akinari Minegishi, Akihiro Nishioka, Tatsuhiro Takahashi, Yuichi Masubuchi, Jun-ichi Takimoto, and Kiyohito Koyama. Uniaxial elongational viscosity of PS/a small amount of UHMW-PS blends. <em>Rheol. Acta</em>, 40(4):329–338, jul 2001. <a class="reference external" href="https://doi.org/10.1007/s003970100165">doi:10.1007/s003970100165</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="rpbtut-mishler2013" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>S.D. Mishler and D.W. Mead. Application of the MLD “toy” model to extensional flows of broadly polydisperse linear polymers: Part II. Comparison with experimental data. <em>J. Nonnewton. Fluid Mech.</em>, 197:80–90, 2013. <a class="reference external" href="https://doi.org/10.1016/j.jnnfm.2012.12.009">doi:10.1016/j.jnnfm.2012.12.009</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="rpbtut-dealy2018" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>John&nbsp;M Dealy, Daniel&nbsp;J Read, and Ronald&nbsp;G Larson. <em>Structure and rheology of molten polymers: from structure to flow behavior and back again</em>. Carl Hanser Verlag GmbH &amp; Co. KG, München, feb 2018. ISBN 978-1-56990-611-8. <a class="reference external" href="https://doi.org/10.3139/9781569906125.fm">doi:10.3139/9781569906125.fm</a>.</td></tr>
+</tbody>
+</table>
+</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLNLVE.html" title="NLVE Tutorial: Command Line"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_RoliePoly.html" title="Tutorial Rolie-Poly"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="tutorialGUINLVE.html" >NLVE Tutorial: Graphical User Interface</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>
