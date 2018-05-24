@@ -342,6 +342,9 @@ class Tool(CmdBase):
                 else:
                     p.value = False
                 return '', True
+            elif (p.type == ParameterType.string):
+                p.value = value
+                return '' , True
 
             else:
                 return '', False

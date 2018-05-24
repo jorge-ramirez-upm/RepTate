@@ -105,24 +105,10 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         for param in self.parameters:
             p = self.parameters[param]
             if p.display_flag:  #only allowed param enter the table
-                if p.opt_type == OptType.const:
-                    item = QTreeWidgetItem(
-                        self.toolParamTable,
-                        [p.name, "%0.3g" % p.value, "N/A"])
-                    item.setCheckState(0, Qt.PartiallyChecked)
-                    item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
+                if (p.type == ParameterType.string):
+                    item = QTreeWidgetItem(self.toolParamTable, [p.name, p.value])
                 else:
-                    try:
-                        err = "%0.3g" % p.error
-                    except:
-                        err = "-"
-                    item = QTreeWidgetItem(
-                        self.toolParamTable,
-                        [p.name, "%0.3g" % p.value, err])
-                    if p.opt_type == OptType.opt:
-                        item.setCheckState(0, Qt.Checked)
-                    elif p.opt_type == OptType.nopt:
-                        item.setCheckState(0, Qt.Unchecked)
+                    item = QTreeWidgetItem(self.toolParamTable, [p.name, "%0.3g" % p.value])
 
                 item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)

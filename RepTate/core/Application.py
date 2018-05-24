@@ -57,6 +57,7 @@ from ToolFindPeaks import ToolFindPeaks
 from ToolGradient import ToolGradient
 from ToolSmooth import ToolSmooth
 from ToolBounds import ToolBounds
+from ToolEvaluate import ToolEvaluate
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -111,6 +112,7 @@ class Application(CmdBase):
 
         # Tools available everywhere
         self.availabletools[ToolBounds.toolname] = ToolBounds
+        self.availabletools[ToolEvaluate.toolname] = ToolEvaluate
         self.availabletools[ToolFindPeaks.toolname] = ToolFindPeaks
         self.availabletools[ToolGradient.toolname] = ToolGradient
         self.availabletools[ToolIntegral.toolname] = ToolIntegral

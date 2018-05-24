@@ -112,9 +112,12 @@
     </Compile>
     <Compile Include="theories\TheoryTTS_Automatic.py" />
     <Compile Include="theories\TheoryTTS_Test.py" />
+    <Compile Include="tools\ToolBounds.py" />
+    <Compile Include="tools\ToolEvaluate.py" />
     <Compile Include="tools\ToolFindPeaks.py" />
     <Compile Include="tools\ToolGradient.py" />
     <Compile Include="tools\ToolIntegral.py" />
+    <Compile Include="tools\ToolSmooth.py" />
     <Compile Include="tools\ToolTemplate.py" />
   </ItemGroup>
   <ItemGroup>
