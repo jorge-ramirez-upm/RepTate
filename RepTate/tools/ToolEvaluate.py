@@ -35,6 +35,7 @@
 Evaluate expression
 """
 import traceback
+from numpy import *
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
@@ -97,7 +98,12 @@ class BaseToolEvaluate:
             description='Expression for ordinate',
             type=ParameterType.string)
 
-
+        safe_list = ['sin', 'cos', 'tan', 'arccos', 'arcsin', 'arctan', 'arctan2', 'deg2rad', 'rad2deg', 'sinh', 'cosh', 'tanh', 'arcsinh', 'arccosh', 'arctanh', 'around', 'round_', 'rint', 'floor', 'ceil','trunc', 'exp', 'log', 'log10', 'fabs', 'mod', 'e', 'pi', 'power', 'sqrt']
+        self.safe_dict = {}
+        for k in safe_list:
+            self.safe_dict[k] = globals().get(k, None)
+            
+            
     def destructor(self):
         """[summary]
         
@@ -113,10 +119,14 @@ class BaseToolEvaluate:
         """
         xexpr = self.parameters["x"].value
         yexpr = self.parameters["y"].value
-        var = {'x':x, 'y':y}
+        self.safe_dict['x']=x
+        self.safe_dict['y']=y
+        
         try:
-            x2 = eval(xexpr, var)
-            y2 = eval(yexpr, var)
+            x2 = eval(xexpr, {"__builtins__":None}, self.safe_dict)
+            #x2 = eval(xexpr, var)
+            y2 = eval(yexpr, {"__builtins__":None}, self.safe_dict)
+            #y2 = eval(yexpr, var)
             return x2, y2
         except Exception as e:
             self.Qprint("in ToolEvaluate.calculate(): %s"%traceback.format_exc())
