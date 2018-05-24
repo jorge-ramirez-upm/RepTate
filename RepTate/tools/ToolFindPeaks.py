@@ -163,9 +163,9 @@ class BaseToolFindPeaks:
         xp=np.zeros(len(peaks))
         yp=np.zeros(len(peaks))
         if minpeaks:
-            self.Qprint("Minimum(s):")
+            self.Qprint("%d Minimum(s) found" % len(peaks))
         else:
-            self.Qprint("Maximums(s):")
+            self.Qprint("%d Maximum(s) found" % len(peaks))
         for i,d in enumerate(peaks):
             y2[d] = y[d]
             self.Qprint("  (%.4e, %.4e)"%(x[d],y[d]))
@@ -232,10 +232,10 @@ class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
     def handle_minpeaks_button(self, checked):
         if checked:
             self.minpeaks.setIcon(
-                QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'))
+                QIcon(':/Icon8/Images/new_icons/icons8-peak-minimum.png'))
         else:
             self.minpeaks.setIcon(
-                QIcon(':/Icon8/Images/new_icons/icons8-maximum.png'))
+                QIcon(':/Icon8/Images/new_icons/icons8-peak-maximum.png'))
         self.minpeaks.setChecked(checked)
         self.set_param_value("minpeaks", checked)
         self.parent_application.update_all_ds_plots()
