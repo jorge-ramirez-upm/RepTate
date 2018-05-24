@@ -48,7 +48,7 @@ class ToolGradient(CmdBase):
     
     [description]
     """
-    toolname = 'GradientTool'
+    toolname = 'Gradient'
     description = 'Gradient Tool'
     citations = ''
 

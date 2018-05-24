@@ -30,9 +30,9 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
-"""Module ToolIntegral
+"""Module ToolSmooth
 
-Integral file for creating a new Tool
+Smooth data by applying a Savitzky-Golay filter
 """
 import sys 
 import numpy as np
@@ -41,42 +41,31 @@ from Parameter import Parameter, ParameterType, OptType
 from Tool import Tool
 from QTool import QTool
 from DataTable import DataTable
-from scipy.integrate import odeint, simps
-from scipy.interpolate import interp1d
+from scipy.signal import savgol_filter
 
-class ToolIntegral(CmdBase):
+class ToolSmooth(CmdBase):
     """[summary]
     
     [description]
     """
-    toolname = 'Integral'
-    description = 'Integral Tool'
+    toolname = 'Smooth'
+    description = 'Smooth Tool'
     citations = ''
 
     def __new__(cls, name='', parent_app=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
         """
-        return GUIToolIntegral(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolIntegral(name, parent_app)
+        """
+        return GUIToolSmooth(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolSmooth(name, parent_app)
 
 
-class BaseToolIntegral:
+class BaseToolSmooth:
     """[summary]
     
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/en/latest/manual/Tools/Integral.html'
-    toolname = ToolIntegral.toolname
-    citations = ToolIntegral.citations
+    #help_file = 'http://reptate.readthedocs.io/en/latest/manual/Tools/template.html'
+    toolname = ToolSmooth.toolname
+    citations = ToolSmooth.citations
 
     def __init__(self, name='', parent_app=None):
         """
@@ -88,14 +77,16 @@ class BaseToolIntegral:
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_app)
-
-        #self.function = self.integral  # main Tool function
-        # self.parameters['param1'] = Parameter(
-            # name='param1',
-            # value=1,
-            # description='parameter 1',
-            # type=ParameterType.real,
-            # opt_type=OptType.const)
+        self.parameters['window'] = Parameter(
+            name='window',
+            value=11,
+            description='Length of filter window. Positive odd integer, smaller than the size of y and larger than order',
+            type=ParameterType.integer)
+        self.parameters['order'] = Parameter(
+            name='order',
+            value=3,
+            description='Order of smoothing polynomial (must be smaller than window)',
+            type=ParameterType.integer)
 
 
     def destructor(self):
@@ -109,26 +100,31 @@ class BaseToolIntegral:
         pass
 
     def calculate(self, x, y, ax=None, color=None):
-        """Integral function that returns the square of the y, according to the view"""
-        xunique, indunique = np.unique(x, return_index=True)
-        num_rows = len(xunique)
-        yunique=y[indunique]
-        try:
-            ff = interp1d(xunique, yunique, bounds_error=False, kind='cubic', fill_value='extrapolate', assume_sorted=True)
-                
-            func = lambda y0, t: ff(t)
-            y2 = odeint(func, [0], xunique)
+        """Smooth function that returns the square of the y, according to the view        
+        """
+        window = self.parameters["window"].value
+        order = self.parameters["order"].value
+        if (window % 2 == 0):
+            self.Qprint("Invalid window (must be an odd number)")
+            return x, y
+        if (window >= len(y)):
+            self.Qprint("Invalid window (must be smaller than the length of the data)")
+            return x, y
+        if (window<=order):
+            self.Qprint("Invalid order (must be smaller than the window)")
+            return x, y
 
-            y2 = np.reshape(y2,num_rows,1)
-            self.Qprint("I = %g"%y2[-1])
-            return xunique, y2
+        try:
+            y2 = savgol_filter(y, window, order)
+            return x, y2
         except: 
             e = sys.exc_info()[0]
-            self.Qprint("in ToolIntegral.calculate(): %s"%e)
+            self.Qprint("in ToolSmooth.calculate(): %s"%e)
             return x, y
-           
+        
 
-class CLToolIntegral(BaseToolIntegral, Tool):
+
+class CLToolSmooth(BaseToolSmooth, Tool):
     """[summary]
     
     [description]
@@ -148,7 +144,7 @@ class CLToolIntegral(BaseToolIntegral, Tool):
     # This class usually stays empty
 
 
-class GUIToolIntegral(BaseToolIntegral, QTool):
+class GUIToolSmooth(BaseToolSmooth, QTool):
     """[summary]
     
     [description]

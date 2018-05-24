@@ -55,6 +55,7 @@ from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, The
 from ToolIntegral import ToolIntegral
 from ToolFindPeaks import ToolFindPeaks
 from ToolGradient import ToolGradient
+from ToolSmooth import ToolSmooth
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -108,9 +109,10 @@ class Application(CmdBase):
         self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
 
         # Tools available everywhere
-        self.availabletools[ToolIntegral.toolname] = ToolIntegral
         self.availabletools[ToolFindPeaks.toolname] = ToolFindPeaks
         self.availabletools[ToolGradient.toolname] = ToolGradient
+        self.availabletools[ToolIntegral.toolname] = ToolIntegral
+        self.availabletools[ToolSmooth.toolname] = ToolSmooth
         
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,

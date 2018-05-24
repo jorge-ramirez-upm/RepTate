@@ -47,7 +47,7 @@ class ToolFindPeaks(CmdBase):
     
     [description]
     """
-    toolname = 'FindPeaksTool'
+    toolname = 'FindPeaks'
     description = 'FindPeaks Tool'
     citations = ''
 
