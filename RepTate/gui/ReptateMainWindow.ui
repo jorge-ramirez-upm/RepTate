@@ -22,16 +22,7 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -371,7 +362,7 @@
      <normaloff>:/Icons/Images/new_icons/icons8-user-manual.png</normaloff>:/Icons/Images/new_icons/icons8-user-manual.png</iconset>
    </property>
    <property name="text">
-    <string>RepTate help</string>
+    <string>RepTate Documantation</string>
    </property>
    <property name="toolTip">
     <string>RepTate help</string>
@@ -383,7 +374,7 @@
      <normaloff>:/Icons/Images/new_icons/icons8-user-manualApp.png</normaloff>:/Icons/Images/new_icons/icons8-user-manualApp.png</iconset>
    </property>
    <property name="text">
-    <string>Current Application help</string>
+    <string>Current Application Documentation</string>
    </property>
    <property name="toolTip">
     <string>Current Application help</string>
@@ -395,7 +386,7 @@
      <normaloff>:/Icons/Images/new_icons/icons8-user-manualTh.png</normaloff>:/Icons/Images/new_icons/icons8-user-manualTh.png</iconset>
    </property>
    <property name="text">
-    <string>Current Theory help</string>
+    <string>Current Theory Documentation</string>
    </property>
    <property name="toolTip">
     <string>Current Theory help</string>
@@ -444,6 +435,18 @@
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionShow_offline_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-airplane-mode-on.png</normaloff>:/Icons/Images/new_icons/icons8-airplane-mode-on.png</iconset>
+   </property>
+   <property name="text">
+    <string>Offline Documentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Current Theory help</string>
    </property>
   </action>
  </widget>

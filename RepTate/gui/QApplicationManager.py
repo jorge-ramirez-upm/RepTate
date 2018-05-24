@@ -95,6 +95,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         menu = QMenu()
         menu.addAction(self.actionShow_app_help)
         menu.addAction(self.actionShow_th_help)
+        menu.addAction(self.actionShow_offline_help)
         tbut.setMenu(menu)
         #self.toolBarHelpAbout.insertWidget(self.actionAbout_Qt, tbut)
         self.toolBarHelpAbout.addWidget(tbut)
@@ -168,6 +169,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionShow_reptate_help.triggered.connect(self.handle_show_reptate_help)
         self.actionShow_app_help.triggered.connect(self.handle_show_app_help)
         self.actionShow_th_help.triggered.connect(self.handle_show_th_help)
+        self.actionShow_offline_help.triggered.connect(self.handle_actionShow_offline_help)
         
         # additional about buttons
         self.actionAboutMatplotlib.triggered.connect(self.handle_about_matplotlib)
@@ -214,6 +216,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             print('in "handle_show_help":', e)
             help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/All_Theories.html'
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+
+    def handle_actionShow_offline_help(self):
+        QDesktopServices.openUrl(QUrl.fromLocalFile('docs/build/html/index.html'))
 
     def handle_about_matplotlib(self):
         """Show matplotlib web site"""
