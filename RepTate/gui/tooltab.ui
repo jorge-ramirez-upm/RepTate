@@ -17,16 +17,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -85,7 +76,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="Tool.qrc">
-     <normaloff>:/Icon8/Images/new_icons/icons8-ok.png</normaloff>:/Icon8/Images/new_icons/icons8-ok.png</iconset>
+     <normaloff>:/Icon8/Images/new_icons/icons8-toggle-on.png</normaloff>:/Icon8/Images/new_icons/icons8-toggle-on.png</iconset>
    </property>
    <property name="text">
     <string>Active</string>
@@ -100,7 +91,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="Tool.qrc">
-     <normaloff>:/Icon8/Images/new_icons/icons8-thumbs-up.png</normaloff>:/Icon8/Images/new_icons/icons8-thumbs-up.png</iconset>
+     <normaloff>:/Icon8/Images/new_icons/icons8-einstein-yes.png</normaloff>:/Icon8/Images/new_icons/icons8-einstein-yes.png</iconset>
    </property>
    <property name="text">
     <string>Apply to Theory</string>

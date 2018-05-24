@@ -1,8 +1,14 @@
 <RCC>
-    <qresource prefix="/Icon8">
-        <file>Images/new_icons/icons8-ok.png</file>
-        <file>Images/new_icons/icons8-thumbs-up.png</file>
-        <file>Images/new_icons/icons8-thumbs-down.png</file>
-        <file>Images/new_icons/icons8-do-not-disturb.png</file>
-    </qresource>
+  <qresource prefix="/Icon8">
+    <file>Images/new_icons/icons8-maximum.png</file>
+    <file>Images/new_icons/icons8-minimum-value.png</file>
+    <file>Images/new_icons/icons8-toggle-on.png</file>
+    <file>Images/new_icons/icons8-toggle-off.png</file>
+    <file>Images/new_icons/icons8-einstein-yes.png</file>
+    <file>Images/new_icons/icons8-einstein-no.png</file>
+    <file>Images/new_icons/icons8-ok.png</file>
+    <file>Images/new_icons/icons8-thumbs-up.png</file>
+    <file>Images/new_icons/icons8-thumbs-down.png</file>
+    <file>Images/new_icons/icons8-do-not-disturb.png</file>
+  </qresource>
 </RCC>

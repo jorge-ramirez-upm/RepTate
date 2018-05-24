@@ -217,14 +217,21 @@ class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
         super().__init__(name, parent_app)
         self.update_parameter_table()
         self.tb.addSeparator()
-        self.minpeaks = self.tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-vertical-shift.png'), 'Minimum peaks')
+        self.minpeaks = self.tb.addAction('Minimum peaks')
         self.minpeaks.setCheckable(True)
-        self.minpeaks.setChecked(False)
-        connection_id = self.minpeaks.triggered.connect(self.do_minpeaks)
+        self.handle_minpeaks_button(checked=False)
+        connection_id = self.minpeaks.triggered.connect(self.handle_minpeaks_button)
         self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
 
-    def do_minpeaks(self):
-        self.set_param_value("minpeaks", self.minpeaks.isChecked())
+    def handle_minpeaks_button(self, checked):
+        if checked:
+            self.minpeaks.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'))
+        else:
+            self.minpeaks.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-maximum-value.png'))
+        self.minpeaks.setChecked(checked)
+        self.set_param_value("minpeaks", checked)
         self.parent_application.update_all_ds_plots()

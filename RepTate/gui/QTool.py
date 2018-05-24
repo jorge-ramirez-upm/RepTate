@@ -43,7 +43,7 @@ from Tool import Tool
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QToolBar
 from PyQt5.QtCore import Qt, QObject, QThread, QSize, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QDoubleValidator
+from PyQt5.QtGui import QDoubleValidator, QIcon
 from Parameter import OptType, ParameterType, ShiftType
 import ast
 PATH = dirname(abspath(__file__))
@@ -87,8 +87,8 @@ class QTool(Ui_ToolTab, QWidget, Tool):
 
         self.toolTextBox.setReadOnly(True)
 
-        connection_id = self.actionActive.triggered.connect(self.actionActivepressed)
-        connection_id = self.actionApplyToTheory.triggered.connect(self.actionApplyToTheorypressed)
+        connection_id = self.actionActive.triggered.connect(self.handle_actionActivepressed)
+        connection_id = self.actionApplyToTheory.triggered.connect(self.handle_actionApplyToTheorypressed)
 
         connection_id = self.toolParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         connection_id = self.toolParamTable.itemChanged.connect(self.handle_parameterItemChanged)
@@ -143,12 +143,30 @@ class QTool(Ui_ToolTab, QWidget, Tool):
             item.setText(1, str(self.parameters[param_changed].value))
         self.parent_application.update_all_ds_plots()
 
-    def actionActivepressed(self):
-        self.active = self.actionActive.isChecked()
+    def handle_actionActivepressed(self, checked):
+        if checked:
+            self.actionActive.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-toggle-on.png'))
+        else:
+            self.actionActive.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-toggle-off.png'))
+        self.actionActive.setChecked(checked)
+        self.active = checked
         self.parent_application.update_all_ds_plots()
 
-    def actionApplyToTheorypressed(self):
-        self.applytotheory = self.actionApplyToTheory.isChecked()
+    # def actionActivepressed(self):
+    #     self.active = self.actionActive.isChecked()
+    #     self.parent_application.update_all_ds_plots()
+
+    def handle_actionApplyToTheorypressed(self, checked):
+        if checked:
+            self.actionApplyToTheory.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-einstein-yes.png'))
+        else:
+            self.actionApplyToTheory.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-einstein-no.png'))
+        self.actionApplyToTheory.setChecked(checked)
+        self.applytotheory = checked
         self.parent_application.update_all_ds_plots()
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
