@@ -120,7 +120,7 @@ class BaseToolFindPeaks:
         Arguments:
 
         """
-        pass
+        self.clean_graphic_stuff()
 
     def calculate(self, x, y, ax=None, color=None):
         threshold = self.parameters["threshold"].value
