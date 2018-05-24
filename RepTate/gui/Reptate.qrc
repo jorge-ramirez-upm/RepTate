@@ -162,6 +162,7 @@
         <file>Images/new_icons/icons8-lock-96.png</file>
         <file>Images/new_icons/icons8-padlock-96.png</file>
         <file>Images/new_icons/icons8-file-reload.png</file>
+        <file>Images/new_icons/icons8-maintenance.png</file>
     </qresource>
     <qresource prefix="/Markers">
         <file>Images/Matplotlib_markers/marker_filled_thin_diamond.png</file>

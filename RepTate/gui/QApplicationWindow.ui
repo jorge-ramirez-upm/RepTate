@@ -395,6 +395,18 @@
     <string>Copy Chart</string>
    </property>
   </action>
+  <action name="actionNew_Tool">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-maintenance.png</normaloff>:/Images/Images/new_icons/icons8-maintenance.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Tool</string>
+   </property>
+   <property name="toolTip">
+    <string>New Tool</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>

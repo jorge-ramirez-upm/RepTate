@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>41d5c2f2-6dbc-423a-8657-cd5c56d3d66b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>RepTateCL.py</StartupFile>
+    <StartupFile>RepTate.py</StartupFile>
     <SearchPath>gui\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -80,6 +80,7 @@
     <Compile Include="gui\QApplicationWindow.py" />
     <Compile Include="gui\QDataSet.py" />
     <Compile Include="gui\QTheory.py" />
+    <Compile Include="gui\QTool.py" />
     <Compile Include="gui\SplashScreen.py" />
     <Compile Include="RepTate.py" />
     <Compile Include="RepTateCL.py" />
@@ -111,8 +112,12 @@
     </Compile>
     <Compile Include="theories\TheoryTTS_Automatic.py" />
     <Compile Include="theories\TheoryTTS_Test.py" />
+    <Compile Include="tools\ToolBounds.py" />
+    <Compile Include="tools\ToolEvaluate.py" />
     <Compile Include="tools\ToolFindPeaks.py" />
+    <Compile Include="tools\ToolGradient.py" />
     <Compile Include="tools\ToolIntegral.py" />
+    <Compile Include="tools\ToolSmooth.py" />
     <Compile Include="tools\ToolTemplate.py" />
   </ItemGroup>
   <ItemGroup>

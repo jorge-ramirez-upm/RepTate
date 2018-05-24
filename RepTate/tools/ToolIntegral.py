@@ -34,6 +34,7 @@
 
 Integral file for creating a new Tool
 """
+import traceback
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
@@ -48,11 +49,11 @@ class ToolIntegral(CmdBase):
     
     [description]
     """
-    toolname = 'IntegralTool'
+    toolname = 'Integral'
     description = 'Integral Tool'
     citations = ''
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_app=None):
         """[summary]
         
         [description]
@@ -65,10 +66,7 @@ class ToolIntegral(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        return GUIToolIntegral(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLToolIntegral(
-                name, parent_dataset, axarr)
+        return GUIToolIntegral(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolIntegral(name, parent_app)
 
 
 class BaseToolIntegral:
@@ -80,7 +78,7 @@ class BaseToolIntegral:
     toolname = ToolIntegral.toolname
     citations = ToolIntegral.citations
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -89,8 +87,9 @@ class BaseToolIntegral:
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, axarr)
-        self.function = self.integral  # main Tool function
+        super().__init__(name, parent_app)
+
+        #self.function = self.integral  # main Tool function
         # self.parameters['param1'] = Parameter(
             # name='param1',
             # value=1,
@@ -109,54 +108,24 @@ class BaseToolIntegral:
         """
         pass
 
-    def integral(self, f=None, v=None):
-        """Integral function that returns the square of the y, according to the view
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        n = v.n
-
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = n+1
-        # Here, we assume that all series have the same x axis
-        s = f.data_table.series[0][0]
-        x = np.array(s.get_xdata())
+    def calculate(self, x, y, ax=None, color=None):
+        """Integral function that returns the square of the y, according to the view"""
         xunique, indunique = np.unique(x, return_index=True)
-        tt.num_rows = len(xunique)
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = xunique
-
-        print("%20s"%"FILE", end='')
-        for i in range(n):
-            print (" %9s%1d"%("Int",i), end='')
-        print("") 
-        
-        print ("%20s"%f.file_name_short, end='')
-        for i in range(n):
-            s = f.data_table.series[0][i]
-            y = np.array(s.get_ydata())
-            yunique=y[indunique]
-            try:
-                ff = interp1d(xunique, yunique, kind='cubic', fill_value='extrapolate', assume_sorted=True)
+        num_rows = len(xunique)
+        yunique=y[indunique]
+        try:
+            ff = interp1d(xunique, yunique, bounds_error=False, kind='cubic', fill_value='extrapolate', assume_sorted=True)
                 
-                func = lambda y0, t: ff(t)
-                y2 = odeint(func, [0], xunique)
+            func = lambda y0, t: ff(t)
+            y2 = odeint(func, [0], xunique)
 
-                tt.data[:, i+1] = np.reshape(y2,tt.num_rows,1)
-            except TypeError as e:
-                print("in ToolIntegral.integral() ", e)
-                return
-
-            I = simps(yunique,xunique)
-            print (" %10g"%I, end='')
-        print("") 
-            
+            y2 = np.reshape(y2,num_rows,1)
+            self.Qprint("I = %g"%y2[-1])
+            return xunique, y2
+        except Exception as e:
+            self.Qprint("in ToolIntegral.calculate(): %s"%traceback.format_exc())
+            return x, y
+           
 
 class CLToolIntegral(BaseToolIntegral, Tool):
     """[summary]
@@ -164,7 +133,7 @@ class CLToolIntegral(BaseToolIntegral, Tool):
     [description]
     """
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -173,7 +142,7 @@ class CLToolIntegral(BaseToolIntegral, Tool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, axarr)
+        super().__init__(name, parent_app)
 
     # This class usually stays empty
 
@@ -184,7 +153,7 @@ class GUIToolIntegral(BaseToolIntegral, QTool):
     [description]
     """
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -193,6 +162,8 @@ class GUIToolIntegral(BaseToolIntegral, QTool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, axarr)
+        super().__init__(name, parent_app)
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:

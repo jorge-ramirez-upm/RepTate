@@ -48,11 +48,11 @@ class ToolGradient(CmdBase):
     
     [description]
     """
-    toolname = 'GradientTool'
+    toolname = 'Gradient'
     description = 'Gradient Tool'
     citations = ''
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
+    def __new__(cls, name='', parent_app=None):
         """[summary]
         
         [description]
@@ -65,10 +65,7 @@ class ToolGradient(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        return GUIToolGradient(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLToolGradient(
-                name, parent_dataset, axarr)
+        return GUIToolGradient(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolGradient(name, parent_app)
 
 
 class BaseToolGradient:
@@ -80,7 +77,7 @@ class BaseToolGradient:
     toolname = ToolGradient.toolname
     citations = ToolGradient.citations
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -89,8 +86,8 @@ class BaseToolGradient:
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, axarr)
-        self.function = self.gradient  # main Tool function
+        super().__init__(name, parent_app)
+        #self.function = self.gradient  # main Tool function
         # self.parameters['param1'] = Parameter(
             # name='param1',
             # value=1,
@@ -109,38 +106,15 @@ class BaseToolGradient:
         """
         pass
 
-    def gradient(self, f=None, v=None):
-        """Gradient function that returns the square of the y, according to the view
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        n = v.n
+    def calculate(self, x, y, ax=None, color=None):
+        try:
+            y2 = np.gradient(y,x)
+            return x, y2
 
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = n+1
-        # Here, we assume that all series have the same x axis
-        s = f.data_table.series[0][0]
-        x = np.array(s.get_xdata())
-        tt.num_rows = len(x)
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = x
-        
-        for i in range(n):
-            s = f.data_table.series[0][i]
-            y = np.array(s.get_ydata())
-            try:
-                y2 = np.gradient(y,x)
-
-                tt.data[:, i+1] = np.reshape(y2,tt.num_rows,1)
-            except TypeError as e:
-                print("in ToolGradient.Gradient() ", e)
-                return            
+        except TypeError as e:
+            print("in ToolGradient.Gradient() ", e)
+            return x, y
+ 
 
 class CLToolGradient(BaseToolGradient, Tool):
     """[summary]
@@ -148,7 +122,7 @@ class CLToolGradient(BaseToolGradient, Tool):
     [description]
     """
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -157,7 +131,7 @@ class CLToolGradient(BaseToolGradient, Tool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, axarr)
+        super().__init__(name, parent_app)
 
     # This class usually stays empty
 
@@ -168,7 +142,7 @@ class GUIToolGradient(BaseToolGradient, QTool):
     [description]
     """
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
+    def __init__(self, name='', parent_app=None):
         """
         **Constructor**
         
@@ -177,6 +151,8 @@ class GUIToolGradient(BaseToolGradient, QTool):
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
         """
-        super().__init__(name, parent_dataset, axarr)
+        super().__init__(name, parent_app)
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:

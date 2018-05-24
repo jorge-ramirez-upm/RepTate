@@ -64,104 +64,23 @@ class Tool(CmdBase):
 
     print_signal = pyqtSignal(str)
 
-    def __init__(self, name="Tool", parent_dataset=None, axarr=None):
+    def __init__(self, name="Tool", parent_app=None):
         """
         **Constructor**
         
         The following variables should be set by the particular realization of the Tool:
             - parameters     (dict): Parameters of the Tool
-            - function       (func): Function that calculates the Tool
-            - eps            (real): precision for the tool
         
         Keyword Arguments:
             - name {str} -- Name of Tool (default: {"Tool"})
-            - parent_dataset {DataSet} -- DataSet that contains the Tool (default: {None})
-            - ax {matplotlib axes} -- matplotlib graph (default: {None})
         """
         super().__init__()
 
         self.name = name
-        self.parent_dataset = parent_dataset
-        self.axarr = axarr
-        self.ax = axarr[0]  #Tool calculation only on this plot
+        self.parent_application = parent_app
         self.parameters = OrderedDict()  # keep the dictionary key in order for the parameter table
-        self.tables = {}
-        self.thtables = {}
-        self.function = None
         self.active = True  #defines if the Tool is plotted
-        self.axarr[0].autoscale(False)
-
-        # Tool OPTIONS
-        self.eps = 1e-4
-
-        ax = self.ax
-
-        # XRANGE for Calculation of the Tool (SHALL WE USE THE RANGE OF THE THEORY?)
-        self.xmin = 0.01
-        self.xmax = 1
-        self.xrange = ax.axvspan(
-            self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
-        self.xminline = ax.axvline(
-            self.xmin,
-            color='black',
-            linestyle='--',
-            marker='o',
-            visible=False)
-        self.xmaxline = ax.axvline(
-            self.xmax,
-            color='black',
-            linestyle='--',
-            marker='o',
-            visible=False)
-        self.xminlinedrag = DraggableVLine(self.xminline, DragType.horizontal,
-                                           self.change_xmin, self)
-        self.xmaxlinedrag = DraggableVLine(self.xmaxline, DragType.horizontal,
-                                           self.change_xmax, self)
-        self.is_xrange_visible = False
-
-        # YRANGE for Calculation of the Tool
-        self.ymin = 0.01
-        self.ymax = 1
-        self.yrange = ax.axhspan(
-            self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
-        self.yminline = ax.axhline(
-            self.ymin,
-            color='black',
-            linestyle='--',
-            marker='o',
-            visible=False)
-        self.ymaxline = ax.axhline(
-            self.ymax,
-            color='black',
-            linestyle='--',
-            marker='o',
-            visible=False)
-        self.yminlinedrag = DraggableHLine(self.yminline, DragType.vertical,
-                                           self.change_ymin, self)
-        self.ymaxlinedrag = DraggableHLine(self.ymaxline, DragType.vertical,
-                                           self.change_ymax, self)
-        self.is_yrange_visible = False
-
-        # Pre-create as many tables as files in the dataset (for both data and 1 active theory)
-        for f in parent_dataset.files:
-            self.tables[f.file_name_short] = DataTable(
-                axarr, "Tool-" + f.file_name_short)
-            #initiallize Tool table: important for 'single_file' theories
-            ft = f.data_table
-            tt = self.tables[f.file_name_short]
-            tt.num_columns = ft.num_columns
-            tt.num_rows = ft.num_rows
-            tt.data = np.zeros((tt.num_rows, tt.num_columns))
-
-            #Repeat the same for 1 active theory
-            self.thtables[f.file_name_short] = DataTable(
-                axarr, "Tool-TH-" + f.file_name_short)
-            #initiallize Tool table: important for 'single_file' theories
-            ft = f.data_table
-            tt = self.thtables[f.file_name_short]
-            tt.num_columns = ft.num_columns
-            tt.num_rows = ft.num_rows
-            tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        self.applytotheory = True # Do we also apply the tool to the theory?
 
         self.do_cite("")
 
@@ -191,63 +110,6 @@ class Tool(CmdBase):
         """
         pass
         
-    def handle_actionCalculate_Tool(self):
-        """Used only in non GUI mode"""
-        self.do_calculate("")
-
-    def do_calculate(self, line):
-        """Calculate the Tool"""
-        if not self.tables:
-            return
-
-        start_time = time.time()
-        view = self.parent_dataset.parent_application.current_view
-        for f in self.parent_dataset.files:
-            self.function(f, view)
-        self.do_plot(line)
-        self.Qprint("\n---Calculated in %.3g seconds---" %
-                               (time.time() - start_time))
-        self.do_cite("")
-
-    def do_print(self, line):
-        """Print the Tool table associated with the given file name
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
-        if line in self.tables:
-            print(self.tables[line].data)
-        else:
-            print("Tool table for \"%s\" not found" % line)
-
-        if line in self.thtables:
-            print(self.thtables[line].data)
-        else:
-            print("Tool table for theory of \"%s\" not found" % line)
-
-    def complete_print(self, text, line, begidx, endidx):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-        
-        Returns:
-            [type] -- [description]
-        """
-        file_names = list(self.tables.keys())
-        if not text:
-            completions = file_names[:]
-        else:
-            completions = [f for f in file_names if f.startswith(text)]
-        return completions
-
     def do_parameters(self, line):
         """View and switch the minimization state of the Tool parameters
            parameters A B
@@ -314,6 +176,28 @@ class Tool(CmdBase):
         """
         pass
 
+    def calculate_all(self, n, x, y, ax=None, color=None):
+        """Calculate the tool for all views"""
+        newxy = []
+        lenx=1e9
+        for i in range(n):
+            xcopy = x[:, i]
+            ycopy = y[:, i]
+            xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color)
+            newxy.append([xcopy,ycopy])
+            lenx=min(lenx, len(xcopy))
+        x = np.resize(x, (lenx,n))
+        y = np.resize(y, (lenx,n))
+        for i in range(n):
+            x[:, i] = np.resize(newxy[i][0], lenx)
+            y[:, i] = np.resize(newxy[i][1], lenx)
+        return x, y
+
+    def calculate(self, x, y, ax=None, color=None):
+        return x, y
+
+    def clean_graphic_stuff(self):
+        pass
 # SAVE Tool STUFF (IS THIS NEEDED?)
 
     # def do_save(self, line):
@@ -364,157 +248,11 @@ class Tool(CmdBase):
 
 # SPAN STUFF
 
-    def change_xmin(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
-        try:
-            self.xmin += dx
-            self.xminline.set_data([self.xmin, self.xmin], [0, 1])
-            self.xrange.set_xy([[self.xmin, 0], [self.xmin, 1], [self.xmax, 1],
-                                [self.xmax, 0], [self.xmin, 0]])
-        except:
-            pass
+    def do_activate(self, line):
+        self.active = not self.active
 
-    def change_xmax(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
-        try:
-            self.xmax += dx
-            self.xmaxline.set_data([self.xmax, self.xmax], [0, 1])
-            self.xrange.set_xy([[self.xmin, 0], [self.xmin, 1], [self.xmax, 1],
-                                [self.xmax, 0], [self.xmin, 0]])
-        except:
-            pass
-
-    def change_ymin(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
-        self.ymin += dy
-        self.yminline.set_data([0, 1], [self.ymin, self.ymin])
-        self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax],
-                            [1, self.ymin], [0, self.ymin]])
-
-    def change_ymax(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
-        self.ymax += dy
-        self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
-        self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax],
-                            [1, self.ymin], [0, self.ymin]])
-
-    def do_xrange(self, line):
-        """Set/show xrange for Tool calculation and shows limits
-        
-        With no arguments: switches ON/OFF the horizontal span
-        
-        Arguments:
-            - line {[xmin xmax]} -- Sets the limits of the span
-        """
-        if (line == ""):
-            """.. todo:: Set range to current view limits"""
-            self.xmin, self.xmax = self.ax.get_xlim()
-            self.xminline.set_data([self.xmin, self.xmin], [0, 1])
-            self.xmaxline.set_data([self.xmax, self.xmax], [0, 1])
-            self.xrange.set_xy([[self.xmin, 0], [self.xmin, 1], [self.xmax, 1],
-                                [self.xmax, 0], [self.xmin, 0]])
-            self.xrange.set_visible(not self.xrange.get_visible())
-            self.xminline.set_visible(not self.xminline.get_visible())
-            self.xmaxline.set_visible(not self.xmaxline.get_visible())
-        else:
-            items = line.split()
-            if len(items) < 2:
-                print("Not enough parameters")
-            else:
-                self.xmin = float(items[0])
-                self.xmax = float(items[1])
-                self.xminline.set_data([self.xmin, self.xmin], [0, 1])
-                self.xmaxline.set_data([self.xmax, self.xmax], [0, 1])
-                self.xrange.set_xy([[self.xmin, 0], [self.xmin, 1],
-                                    [self.xmax, 1], [self.xmax,
-                                                     0], [self.xmin, 0]])
-                if (not self.xrange.get_visible()):
-                    self.xrange.set_visible(True)
-                    self.xminline.set_visible(True)
-                    self.xmaxline.set_visible(True)
-        self.do_plot(line)
-
-    def do_yrange(self, line):
-        """Set/show yrange for Tool calculation and shows limits
-        
-        With no arguments: switches ON/OFF the vertical span
-        
-        Arguments:
-            - line {[ymin ymax]} -- Sets the limits of the span
-        """
-        if (line == ""):
-            self.ymin, self.ymax = self.ax.get_ylim()
-            self.yminline.set_data([0, 1], [self.ymin, self.ymin])
-            self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
-            self.yrange.set_xy([[0, self.ymin], [1, self.ymin], [1, self.ymax],
-                                [0, self.ymax], [0, self.ymin]])
-            self.yrange.set_visible(not self.yrange.get_visible())
-            self.yminline.set_visible(not self.yminline.get_visible())
-            self.ymaxline.set_visible(not self.ymaxline.get_visible())
-            print("Ymin=%g Ymax=%g" % (self.ymin, self.ymax))
-        else:
-            items = line.split()
-            if len(items) < 2:
-                print("Not enough parameters")
-            else:
-                self.ymin = float(items[0])
-                self.ymax = float(items[1])
-                self.yminline.set_data([0, 1], [self.ymin, self.ymin])
-                self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
-                self.yrange.set_xy([[0, self.ymin], [0, self.ymax],
-                                    [1, self.ymax], [1, self.ymin],
-                                    [0, self.ymin]])
-                if (not self.yrange.get_visible()):
-                    self.yrange.set_visible(True)
-                    self.yminline.set_visible(True)
-                    self.ymaxline.set_visible(True)
-        self.do_plot(line)
-
-    def set_xy_limits_visible(self, xstate=False, ystate=False):
-        """Hide the x- and y-range selectors
-        
-        [description]
-        """
-        self.xrange.set_visible(xstate)
-        self.xminline.set_visible(xstate)
-        self.xmaxline.set_visible(xstate)
-
-        self.yrange.set_visible(ystate)
-        self.yminline.set_visible(ystate)
-        self.ymaxline.set_visible(ystate)
-
-        #self.parent_dataset.actionVertical_Limits.setChecked(xstate)
-        #self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
-        #self.parent_dataset.set_limit_icon()
-
+    def do_applytotheory(self, line):
+        self.applytotheory = not self.applytotheory
 
     def do_cite(self, line):
         """Print citation information
@@ -526,16 +264,6 @@ class Tool(CmdBase):
         """
         if (self.citations != ""):
             self.Qprint("\nCITE: "+self.citations+"\n")
-
-    def do_plot(self, line):
-        """Call the plot from the parent Dataset
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
-        self.parent_dataset.do_plot(line)
 
     def set_param_value(self, name, value):
         """[summary]
@@ -615,6 +343,9 @@ class Tool(CmdBase):
                 else:
                     p.value = False
                 return '', True
+            elif (p.type == ParameterType.string):
+                p.value = value
+                return '' , True
 
             else:
                 return '', False
@@ -645,65 +376,6 @@ class Tool(CmdBase):
         else:
             super(Tool, self).default(line)
 
-    def do_hide(self, line=''):
-        """Hide the Tool artists and associated tools
-        
-        [description]
-        """
-        self.active = False
-        self.set_xy_limits_visible(False, False)  # hide xrange and yrange
-        for table in self.tables.values():
-            for i in range(table.MAX_NUM_SERIES):
-                for nx in range(self.parent_dataset.nplots):
-                    table.series[nx][i].set_visible(False)
-        try:
-            self.show_Tool_extras(False)
-        except:  # current Tool has no extras
-            # print("current Tool has no extras to hide")
-            pass
-
-    def set_tool_table_visible(self, fname, state):
-        """Show/Hide all Tool lines related to the file "fname" """
-        tt = self.tables[fname]
-        for i in range(tt.MAX_NUM_SERIES):
-            for nx in range(self.parent_dataset.nplots):
-                tt.series[nx][i].set_visible(state)
-        tt = self.thtables[fname]
-        for i in range(tt.MAX_NUM_SERIES):
-            for nx in range(self.parent_dataset.nplots):
-                tt.series[nx][i].set_visible(state)
-
-    def do_show(self, line=''):
-        """[summary]
-        
-        [description]
-        """
-        self.active = True
-        self.set_xy_limits_visible(self.is_xrange_visible,
-                                   self.is_yrange_visible)
-        for fname in self.tables:
-            if fname in self.parent_dataset.inactive_files:
-                return
-            else:
-                tt = self.tables[fname]
-                for i in range(tt.MAX_NUM_SERIES):
-                    for nx in range(self.parent_dataset.nplots):
-                        tt.series[nx][i].set_visible(True)
-        for fname in self.thtables:
-            if fname in self.parent_dataset.inactive_files:
-                return
-            else:
-                tt = self.thtables[fname]
-                for i in range(tt.MAX_NUM_SERIES):
-                    for nx in range(self.parent_dataset.nplots):
-                        tt.series[nx][i].set_visible(True)
-        try:
-            self.show_Tool_extras(True)
-        except:  # current Tool has no extras
-            # print("current Tool has no extras to show")
-            pass
-        self.parent_dataset.do_plot("")
-
     def Qprint(self, msg, end='\n'):
         """[summary]
         
@@ -719,7 +391,7 @@ class Tool(CmdBase):
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""
-        self.thTextBox.insertPlainText(msg)
-        self.thTextBox.verticalScrollBar().setValue(
-            self.thTextBox.verticalScrollBar().maximum())
-        self.thTextBox.moveCursor(QTextCursor.End)
+        self.toolTextBox.insertPlainText(msg)
+        self.toolTextBox.verticalScrollBar().setValue(
+            self.toolTextBox.verticalScrollBar().maximum())
+        self.toolTextBox.moveCursor(QTextCursor.End)

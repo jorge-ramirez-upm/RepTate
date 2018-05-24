@@ -63,6 +63,7 @@ class ParameterType(enum.Enum):
     discrete_real = 2
     discrete_integer = 3
     boolean = 4
+    string = 5
 
 class OptType(enum.Enum):
     """Store the optimization type that can be used in a Theory
@@ -118,6 +119,8 @@ class Parameter(object):
                 self.value=True
             else:
                 self.value=False
+        elif (self.type==ParameterType.string):
+            self.value=str(value)
 
         else:
             pass # NOT IMPLEMENTED YET

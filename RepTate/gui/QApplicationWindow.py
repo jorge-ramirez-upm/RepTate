@@ -44,7 +44,7 @@ from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox
 from QDataSet import QDataSet
 from DataSetWidgetItem import DataSetWidgetItem
 from DataSet import ColorMode, SymbolMode, ThLineMode
@@ -118,11 +118,30 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionPaste)
         tb.addAction(self.actionShiftVertically)
         tb.addAction(self.actionShiftHorizontally)
-        self.LayoutDataInspector.insertWidget(0, tb)
+        #self.LayoutDataInspector.insertWidget(0, tb)
+        self.LayoutDataInspector.addWidget(tb)
         #custom QTable to have the copy/pastefeature
         self.inspector_table = SpreadsheetWidget(self)
-        self.LayoutDataInspector.insertWidget(-1, self.inspector_table)
+        #self.LayoutDataInspector.insertWidget(1, self.inspector_table)
+        self.LayoutDataInspector.addWidget(self.inspector_table)
 
+        ################
+        # TOOLS TOOLBAR
+        # In the Data Inspector area (at the bottom)
+        tb = QToolBar()
+        tb.setIconSize(QtCore.QSize(24,24))
+        tb.addAction(self.actionNew_Tool)
+        self.cbtool = QComboBox()
+        self.cbtool.setToolTip("Choose a Tool")
+        for tool_name in self.availabletools.keys():
+            self.cbtool.addItem(tool_name)
+        tb.addWidget(self.cbtool)
+        self.LayoutDataInspector.addWidget(tb)
+        self.TooltabWidget = QTabWidget()
+        self.TooltabWidget.setTabsClosable(True)
+        self.TooltabWidget.setTabShape(1)
+        self.LayoutDataInspector.addWidget(self.TooltabWidget)
+        
         # Dataset Toolbar
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
@@ -182,6 +201,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
         connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
 
+        connection_id = self.actionNew_Tool.triggered.connect(self.handle_actionNewTool)
+        connection_id = self.TooltabWidget.tabCloseRequested.connect(self.handle_toolTabCloseRequested)
+
+        
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
@@ -236,6 +259,37 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)  
 
+    def handle_actionNewTool(self):
+        """Create new tool"""
+        tool_name = self.cbtool.currentText()
+        if tool_name != '':
+            self.new_tool(tool_name)
+            self.update_all_ds_plots()
+        
+    def new_tool(self, tool_name, tool_tab_id=""):
+        """Create new tool"""
+        newtool = self.do_tool_add(tool_name)
+
+        # add new tool tab
+        if tool_tab_id == "":
+            tool_tab_id = newtool.name
+            tool_tab_id = ''.join(
+                c for c in tool_tab_id
+                if c.isupper())  #get the upper case letters of tool_name
+            tool_tab_id = "%s%d" % (tool_tab_id, self.num_tools)  #append number
+        index = self.TooltabWidget.addTab(newtool, tool_tab_id)
+        self.TooltabWidget.setCurrentIndex(index)  #set new tool tab as curent tab
+        self.TooltabWidget.setTabToolTip(index, tool_name)  #set new-tab tool tip
+        return newtool
+
+    def handle_toolTabCloseRequested(self, index):
+        """Delete a Tool tab"""
+        tool_name = self.TooltabWidget.widget(index).name
+        self.do_tool_delete(tool_name)  #call DataSet.do_theory_delete
+        self.TooltabWidget.removeTab(index)
+        self.update_all_ds_plots()
+        
+        
     def handle_actionAutoscale(self, checked):
         self.autoscale = not checked
         if self.autoscale:
