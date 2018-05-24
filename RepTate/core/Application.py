@@ -56,6 +56,7 @@ from ToolIntegral import ToolIntegral
 from ToolFindPeaks import ToolFindPeaks
 from ToolGradient import ToolGradient
 from ToolSmooth import ToolSmooth
+from ToolBounds import ToolBounds
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -109,6 +110,7 @@ class Application(CmdBase):
         self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
 
         # Tools available everywhere
+        self.availabletools[ToolBounds.toolname] = ToolBounds
         self.availabletools[ToolFindPeaks.toolname] = ToolFindPeaks
         self.availabletools[ToolGradient.toolname] = ToolGradient
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
