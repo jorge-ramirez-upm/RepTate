@@ -162,9 +162,13 @@ class BaseToolFindPeaks:
             y = -y
         xp=np.zeros(len(peaks))
         yp=np.zeros(len(peaks))
+        if minpeaks:
+            self.Qprint("Minimum(s):")
+        else:
+            self.Qprint("Maximums(s):")
         for i,d in enumerate(peaks):
             y2[d] = y[d]
-            self.Qprint("(%g, %g)"%(x[d],y[d]))
+            self.Qprint("  (%.4e, %.4e)"%(x[d],y[d]))
             xp[i]=x[d]
             yp[i]=y[d]
         s = ax.plot(xp, yp)[0]
@@ -231,7 +235,7 @@ class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
                 QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'))
         else:
             self.minpeaks.setIcon(
-                QIcon(':/Icon8/Images/new_icons/icons8-maximum-value.png'))
+                QIcon(':/Icon8/Images/new_icons/icons8-maximum.png'))
         self.minpeaks.setChecked(checked)
         self.set_param_value("minpeaks", checked)
         self.parent_application.update_all_ds_plots()
