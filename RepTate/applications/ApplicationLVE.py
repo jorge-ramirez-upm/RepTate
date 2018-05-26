@@ -85,6 +85,7 @@ class BaseApplicationLVE:
         """
         from TheoryMaxwellModes import TheoryMaxwellModesFrequency
         from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
+        from TheoryLikhtmanMcLeish2002NEW import TheoryLikhtmanMcLeish2002NEW
         from TheoryTTS import TheoryWLFShift
         from TheoryCarreauYasuda import TheoryCarreauYasuda
         from TheoryRouse import TheoryRouseFrequency
@@ -304,10 +305,9 @@ class BaseApplicationLVE:
                                             ['w','G\'','G\'\''], [], ['rad/s', 'Pa', 'Pa'])
         
         # THEORIES
-        self.theories[
-            TheoryMaxwellModesFrequency.thname] = TheoryMaxwellModesFrequency
-        self.theories[
-            TheoryLikhtmanMcLeish2002.thname] = TheoryLikhtmanMcLeish2002
+        self.theories[TheoryMaxwellModesFrequency.thname] = TheoryMaxwellModesFrequency
+        self.theories[TheoryLikhtmanMcLeish2002.thname] = TheoryLikhtmanMcLeish2002
+        self.theories[TheoryLikhtmanMcLeish2002NEW.thname] = TheoryLikhtmanMcLeish2002NEW
         self.theories[TheoryCarreauYasuda.thname] = TheoryCarreauYasuda
         #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
         self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
