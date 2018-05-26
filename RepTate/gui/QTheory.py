@@ -41,7 +41,7 @@ from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
 from Theory import Theory
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog
+from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog, QApplication
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QDoubleValidator
 from Parameter import OptType, ParameterType, ShiftType
@@ -343,6 +343,28 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         except AttributeError:  #the function is not defined in the current theory
             pass
 
+    def copy_parameters(self):
+        text = ""
+        for param in self.parameters:
+            p = self.parameters[param]
+            text += "%s\t%g\n"%(p.name,p.value)
+        QApplication.clipboard().setText(text)    
+
+    def paste_parameters(self):
+        text = QApplication.clipboard().text()
+        if text == '':
+            return
+        rows = text.splitlines() # split on newlines
+        for i in range(len(rows)):
+            cols = rows[i].split() # split on whitespaces
+            if (len(cols)==2):
+                if (cols[0] in self.parameters):
+                    message, success = self.set_param_value(cols[0], cols[1])                          
+        self.update_parameter_table()
+        if self.autocalculate:
+            self.do_calculate('')
+
+            
     def update_parameter_table(self):
         """Update the theory parameter table
         

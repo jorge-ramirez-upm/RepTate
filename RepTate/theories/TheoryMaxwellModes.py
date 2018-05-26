@@ -162,7 +162,7 @@ class BaseTheoryMaxwellModesFrequency:
                 Gold[i] = self.parameters["logG%02d" % i].value
                 del self.parameters["logG%02d" % i]
 
-            nmodesnew = value
+            nmodesnew = int(value)
             message, success = super().set_param_value("nmodes", nmodesnew)
             wnew = np.logspace(wminold, wmaxold, nmodesnew)
 
@@ -176,7 +176,7 @@ class BaseTheoryMaxwellModesFrequency:
                     ParameterType.real,
                     opt_type=OptType.opt)
             if CmdBase.mode == CmdMode.GUI:
-                self.spinbox.setValue(value)
+                self.spinbox.setValue(nmodesnew)
         else:
             message, success = super().set_param_value(name, value)
         

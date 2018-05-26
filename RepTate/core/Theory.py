@@ -585,8 +585,8 @@ class Theory(CmdBase):
             completions = parameter_names[:]
         else:
             completions = [f for f in parameter_names if f.startswith(text)]
-        return completions
-
+        return completions        
+        
     def plot_theory_stuff(self):
         """[summary]
         
