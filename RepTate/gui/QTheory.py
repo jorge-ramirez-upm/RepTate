@@ -41,10 +41,12 @@ from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
 from Theory import Theory
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel
+from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QDoubleValidator
 from Parameter import OptType, ParameterType, ShiftType
+import Version
+import time
 import ast
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH, 'theorytab.ui'))
@@ -488,3 +490,35 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             #d.setWindowTitle("Select provider of Maxwell modes:")
             #d.setWindowModality(Qt.ApplicationModal)
             #d.exec_()
+            
+    def save_modes(self):
+        """Save Maxwell modes to a text file"""
+        fpath, _ = QFileDialog.getSaveFileName(self,
+                                               "Save Maxwell modes to a text file",
+                                               "data/", "Text (*.txt)")
+        if fpath == '':
+            return
+            
+        with open(fpath, 'w') as f:
+            times, G = self.get_modes()
+
+            header = '# Maxwell modes\n'
+            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
+                                                             Version.DATE)
+            header += '# At %s on %s\n' % (time.strftime("%X"),
+                                           time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n#number of modes\n')
+            n = len(times)
+            f.write('%d\n'%n)
+            f.write('\n#%4s\t%15s\t%15s\n'%('i','tau_i','G_i'))
+
+            for i in range(n):
+                f.write('%5d\t%15g\t%15g\n'%(i+1,times[i],G[i]))
+            
+            f.write('\n#end')
+
+        QMessageBox.information(self, 'Success',
+                                'Wrote Maxwell modes \"%s\"' % fpath)
+            

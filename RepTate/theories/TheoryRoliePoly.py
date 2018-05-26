@@ -650,6 +650,9 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.plot_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
             "Plot Modes")
+        self.save_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
@@ -691,6 +694,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.edit_modes_window)
         connection_id = self.plot_modes_action.triggered.connect(
             self.plot_modes_graph)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
         connection_id = self.linearenvelope.triggered.connect(
             self.show_linear_envelope)
         connection_id = self.spinbox.valueChanged.connect(
@@ -699,7 +704,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.handle_with_fene_button)
         connection_id = self.flowsolve_btn.triggered.connect(
             self.handle_flowsolve_btn)
-
+            
+            
     def handle_flowsolve_btn(self):
         """Save theory parameters in FlowSolve format"""
 
