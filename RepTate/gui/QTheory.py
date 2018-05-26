@@ -455,6 +455,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 msg.setText("Not a valid value")
             msg.exec_()
             item.setText(1, str(self.parameters[param_changed].value))
+        else:
+            if self.autocalculate:
+                self.do_calculate('')
 
     def Qcopy_modes(self):
         """[summary]
