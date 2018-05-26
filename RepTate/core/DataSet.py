@@ -414,6 +414,9 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 # Apply the currently active tools
                 for to in self.parent_application.tools:
                     if file.active and to.active:
+                        to.Qprint(file.file_name_short)
+                        strline = "-"*len(file.file_name_short)
+                        to.Qprint(strline)
                         x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
 
                 for i in range(dt.MAX_NUM_SERIES):
@@ -464,6 +467,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     # Apply the currently active tools
                     for to in self.parent_application.tools:
                         if (file.active and to.active and to.applytotheory):
+                            to.Qprint("* "+th.name)
                             x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
 
                     for i in range(tt.MAX_NUM_SERIES):

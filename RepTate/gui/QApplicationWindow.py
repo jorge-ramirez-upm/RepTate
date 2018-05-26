@@ -140,6 +140,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.TooltabWidget = QTabWidget()
         self.TooltabWidget.setTabsClosable(True)
         self.TooltabWidget.setTabShape(1)
+        self.TooltabWidget.setMovable(1)
+        self.qtabbar = self.TooltabWidget.tabBar()
         self.LayoutDataInspector.addWidget(self.TooltabWidget)
         
         # Dataset Toolbar
@@ -203,7 +205,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         connection_id = self.actionNew_Tool.triggered.connect(self.handle_actionNewTool)
         connection_id = self.TooltabWidget.tabCloseRequested.connect(self.handle_toolTabCloseRequested)
-
+        connection_id = self.qtabbar.tabMoved.connect(self.handle_toolTabMoved)
         
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
 
@@ -287,6 +289,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tool_name = self.TooltabWidget.widget(index).name
         self.do_tool_delete(tool_name)  #call DataSet.do_theory_delete
         self.TooltabWidget.removeTab(index)
+        self.update_all_ds_plots()
+        
+    def handle_toolTabMoved(self, f, t):
+        self.tools.insert(f, self.tools.pop(t))
         self.update_all_ds_plots()
         
         
