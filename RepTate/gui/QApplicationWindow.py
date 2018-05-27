@@ -400,7 +400,24 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #     ax = self.axarr[self.current_viewtab - 1]
 
         if self.actionShow_Legend.isChecked():
-            self.legend = plt.legend((self.axarr[0],), loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
+            L=[]
+            N=[]
+            ds = self.DataSettabWidget.currentWidget()
+            for j, file in enumerate(ds.files):
+                if file.active:
+                    dt = file.data_table
+                    s = dt.series[0][0]
+                    L.append(s)
+                    label = ""
+                    for pmt in file.file_type.basic_file_parameters:
+                        try:
+                            label += pmt + '=' + str(file.file_parameters[pmt]) + ' '
+                        except KeyError as e:  #if parameter missing from data file
+                            if CmdBase.mode != CmdMode.GUI:
+                                print("Parameter %s not found in data file" % (e))
+                    N.append(label)
+            #self.legend = plt.legend(L, N, loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
+            self.legend = plt.legend(L, N, loc='best', ncol=2, fontsize="xx-large", frameon=True)
             self.legend.draggable()
         else:
             self.legend.remove()
