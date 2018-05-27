@@ -10,5 +10,6 @@
         <file>Images/new_icons/icons8-do-not-disturb.png</file>
         <file>Images/new_icons/icons8-peak-minimum.png</file>
         <file>Images/new_icons/icons8-peak-maximum.png</file>
+        <file>Images/new_icons/icons8-bell-curve.png</file>
     </qresource>
 </RCC>

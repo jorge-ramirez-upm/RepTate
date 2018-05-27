@@ -384,6 +384,9 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         # TODO: JR --> WE NEED TO CLEAN THE TOOLS GRAPHIC OBJECTS
         for to in self.parent_application.tools:
             to.clean_graphic_stuff()
+            to.Qprint("\n=======================")
+            to.Qprint("Calculating the Tool...")
+            to.Qprint("=======================\n")
 
         for j, file in enumerate(self.files):
             dt = file.data_table
