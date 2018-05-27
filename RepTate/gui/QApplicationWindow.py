@@ -37,7 +37,7 @@ It is the GUI counterpart of Application.
 
 """ 
 import io
-from os.path import dirname, join, abspath, isfile
+from os.path import dirname, join, abspath, isfile, isdir
 #import logging
 from PyQt5.QtGui import QIcon, QColor
 from PyQt5.uic import loadUiType
@@ -125,6 +125,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #self.LayoutDataInspector.insertWidget(1, self.inspector_table)
         self.LayoutDataInspector.addWidget(self.inspector_table)
 
+        ######################
+        # VIEW Toolbar
+        self.saveViewtoolButton.setDefaultAction(self.actionSave_View)
+
         ################
         # TOOLS TOOLBAR
         # In the Data Inspector area (at the bottom)
@@ -208,6 +212,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.qtabbar.tabMoved.connect(self.handle_toolTabMoved)
         
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
+        connection_id = self.actionSave_View.triggered.connect(self.save_view)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
         connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
@@ -261,6 +266,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #xaxis = self.ax.get_xticklabels()
         #print (xaxis)  
 
+    def save_view(self):
+        dir_start = "data/"
+        dilogue_name = "Select Folder for Saving data in Current View as txt"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
+        if isdir(folder):
+            print('saving views...')
+            QMessageBox.warning(self, "Saving views", "Coming soon..." )
+            
+
     def handle_actionNewTool(self):
         """Create new tool"""
         tool_name = self.cbtool.currentText()
@@ -313,6 +327,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """
         self.actionMarkerSettings.setDisabled(state)
         self.viewComboBox.setDisabled(state)
+        self.actionSave_View.setDisabled(state)
         self.actionReload_Data.setDisabled(state)
         self.actionInspect_Data.setDisabled(state)
         self.actionShowFigureTools.setDisabled(state)
