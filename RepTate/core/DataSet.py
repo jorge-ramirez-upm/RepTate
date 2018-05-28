@@ -381,7 +381,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         #theory settings
         th_linestyle = ThLineMode.linestyles.value[self.th_linestyle]
 
-        # TODO: JR --> WE NEED TO CLEAN THE TOOLS GRAPHIC OBJECTS
         for to in self.parent_application.tools:
             to.clean_graphic_stuff()
             to.Qprint("\n=======================")
@@ -432,6 +431,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                 face = color
                             elif face == color:
                                 face = 'none'
+                        if i>1:
+                            face = color
+                            fillstyles=["left", "right", "bottom", "top"]
+                            fs = fillstyles[i-2]
+                            dt.series[nx][i].set_fillstyle(fs)
                         dt.series[nx][i].set_markerfacecolor(face)
                         dt.series[nx][i].set_markeredgecolor(color)
                         dt.series[nx][i].set_markeredgewidth(width)
