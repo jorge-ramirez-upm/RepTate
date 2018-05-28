@@ -37,6 +37,7 @@ It is the GUI counterpart of Application.
 
 """ 
 import io
+import re
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
 from PyQt5.QtGui import QIcon, QColor
@@ -248,12 +249,18 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.color1 = None
         self.color2 = None
         self.color_th = None
+        self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':16, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
+        self.legend_draggable = True
+        self.default_legend_labels = True
+        self.legend_labels = ""
         # self.populate_markers() 
         self.fparam_backup = [] #temporary storage of the file parameters
         self.dialog.ui.spinBox.setSingleStep(3) #increment in the marker size dialog
         connection_id = self.dialog.ui.pickColor1.clicked.connect(self.handle_pickColor1)
         connection_id = self.dialog.ui.pickColor2.clicked.connect(self.handle_pickColor2)
         connection_id = self.dialog.ui.pickThColor.clicked.connect(self.handle_pickThColor)
+        connection_id = self.dialog.ui.pickFaceColor.clicked.connect(self.handle_pickFaceColor)
+        connection_id = self.dialog.ui.pickEdgeColor.clicked.connect(self.handle_pickEdgeColor)
         connection_id = self.dialog.ui.rbEmpty.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
@@ -403,22 +410,20 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             L=[]
             N=[]
             ds = self.DataSettabWidget.currentWidget()
+            params = re.findall(r"\[([A-Za-z0-9_]+)\]", self.legend_labels)
             for j, file in enumerate(ds.files):
                 if file.active:
                     dt = file.data_table
                     s = dt.series[0][0]
                     L.append(s)
-                    label = ""
-                    for pmt in file.file_type.basic_file_parameters:
-                        try:
-                            label += pmt + '=' + str(file.file_parameters[pmt]) + ' '
-                        except KeyError as e:  #if parameter missing from data file
-                            if CmdBase.mode != CmdMode.GUI:
-                                print("Parameter %s not found in data file" % (e))
+                    label = self.legend_labels
+                    for p in params:
+                        if p in file.file_parameters:
+                            val = file.file_parameters[p]
+                            label = label.replace('['+p+']', str(val))
                     N.append(label)
-            #self.legend = plt.legend(L, N, loc='best', frameon=True, fancybox=True, shadow=True, ncol=1)
-            self.legend = plt.legend(L, N, loc='best', ncol=2, fontsize="xx-large", frameon=True)
-            self.legend.draggable()
+            self.legend = plt.legend(L, N, **self.legend_opts)            
+            self.legend.draggable(self.legend_draggable)
         else:
             self.legend.remove()
         self.canvas.draw()
@@ -487,6 +492,25 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelThPickedColor.setStyleSheet("background: %s"%color.name())
             self.color_th = color.getRgbF()
 
+    def handle_pickFaceColor(self):
+        """Call the color picker and save the selected legend face color in 
+        RGB format in the dataset legend info.
+        """
+        color = self.showColorDialog()
+        if color:
+            self.dialog.ui.labelFaceColor.setStyleSheet("background: %s"%color.name())
+            self.legend_opts['facecolor']=color.getRgbF()            
+            
+    def handle_pickEdgeColor(self):
+        """Call the color picker and save the selected legend face color in 
+        RGB format in the dataset legend info.
+        """
+        color = self.showColorDialog()
+        if color:
+            self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s"%color.name())
+            self.legend_opts['edgecolor']=color.getRgbF()            
+            
+            
     def showColorDialog(self):
         """Show the color picker and return the picked QtColor or `None`
         
@@ -555,6 +579,70 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             self.dialog.ui.rbPalette.click()
         
+        # Legend stuff
+        self.dialog.ui.locationComboBox.setCurrentText(self.legend_opts['loc'])
+        self.dialog.ui.colSpinBox.setValue(self.legend_opts['ncol'])
+        self.dialog.ui.fontsizeSpinBox.setValue(self.legend_opts['fontsize'])
+        self.dialog.ui.markerfirstCheckBox.setChecked(self.legend_opts['markerfirst'])
+        self.dialog.ui.frameonCheckBox.setChecked(self.legend_opts['frameon'])
+        self.dialog.ui.fancyboxCheckBox.setChecked(self.legend_opts['fancybox'])
+        self.dialog.ui.shadowCheckBox.setChecked(self.legend_opts['shadow'])
+        if (self.legend_opts['framealpha']==None):
+            self.dialog.ui.framealphaCheckBox.setChecked(False)
+            self.dialog.ui.framealphaSpinBox.setValue(0.0)
+        else:
+            self.dialog.ui.framealphaCheckBox.setChecked(True)
+            self.dialog.ui.framealphaSpinBox.setValue(self.legend_opts['framealpha'])
+        if (self.legend_opts['facecolor']==None):
+            self.dialog.ui.facecolorCheckBox.setChecked(False)
+        else:
+            self.dialog.ui.facecolorCheckBox.setChecked(True)
+            col = QColor(self.legend_opts['facecolor'][0]*255, self.legend_opts['facecolor'][1]*255, self.legend_opts['facecolor'][2]*255)
+            self.dialog.ui.labelFaceColor.setStyleSheet("background: %s"%col.name())
+        if (self.legend_opts['edgecolor']==None):
+            self.dialog.ui.edgecolorCheckBox.setChecked(False)
+        else:
+            self.dialog.ui.edgecolorCheckBox.setChecked(True)
+            col = QColor(self.legend_opts['edgecolor'][0]*255, self.legend_opts['edgecolor'][1]*255, self.legend_opts['edgecolor'][2]*255)
+            self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s"%col.name())
+        self.dialog.ui.modeCheckBox.setChecked(self.legend_opts['mode']=='expand')
+        if (self.legend_opts['title']==None):
+            self.dialog.ui.legendtitleCheckBox.setChecked(False)
+        else:
+            self.dialog.ui.legendtitleCheckBox.setChecked(True)
+            self.dialog.ui.legendtitleStr.setText(self.legend_opts['title'])
+        if (self.legend_opts['borderpad']==None):
+            self.dialog.ui.borderpadCheckBox.setChecked(False)
+        else:
+            self.dialog.ui.borderpadCheckBox.setChecked(True)
+            self.dialog.ui.borderpadSpinBox.setValue(self.legend_opts['borderpad'])
+        if (self.legend_opts['labelspacing']==None):
+            self.dialog.ui.labelspacingCheckBox.setChecked(False)
+        else:
+            self.dialog.ui.labelspacingCheckBox.setChecked(True)
+            self.dialog.ui.labelspacingSpinBox.setValue(self.legend_opts['labelspacing'])
+        if (self.legend_opts['handletextpad']==None):
+            self.dialog.ui.handletextpadCheckBox.setChecked(False)
+        else:
+            self.dialog.ui.handletextpadCheckBox.setChecked(True)
+            self.dialog.ui.handletextpadSpinBox.setValue(self.legend_opts['handletextpad'])
+        if (self.legend_opts['columnspacing']==None):
+            self.dialog.ui.columnspacingCheckBox.setChecked(False)
+        else:
+            self.dialog.ui.columnspacingCheckBox.setChecked(True)
+            self.dialog.ui.columnspacingSpinBox.setValue(self.legend_opts['columnspacing'])
+        if (self.default_legend_labels == True):
+            self.dialog.ui.legendlabelCheckBox.setChecked(False)
+            str = ""
+            ftype = list(self.filetypes.values())[0]
+            for p in ftype.basic_file_parameters:
+                str += p + ' = [' + p + '] '
+            self.dialog.ui.legendlabelStr.setText(str)
+        else:
+            self.dialog.ui.legendlabelCheckBox.setChecked(True)
+            self.dialog.ui.legendlabelStr.setText(self.legend_labels)
+        self.dialog.ui.draggableCheckBox.setChecked(self.legend_draggable)
+        
         success = self.dialog.exec_() #this blocks the rest of the app as opposed to .show()
         if success == 1:
             self.handle_apply_button_pressed()
@@ -619,7 +707,62 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
             ds.set_table_icons(ds.table_icon_list)
             # ds.DataSettreeWidget.blockSignals(False) 
-
+        
+        # Legend stuff
+        self.legend_opts['loc'] = self.dialog.ui.locationComboBox.currentText()
+        self.legend_opts['ncol'] = self.dialog.ui.colSpinBox.value()
+        self.legend_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox.value()
+        self.legend_opts['markerfirst'] = self.dialog.ui.markerfirstCheckBox.isChecked()
+        self.legend_opts['frameon'] = self.dialog.ui.frameonCheckBox.isChecked()
+        self.legend_opts['fancybox'] = self.dialog.ui.fancyboxCheckBox.isChecked()
+        self.legend_opts['shadow'] = self.dialog.ui.shadowCheckBox.isChecked()
+        if (self.dialog.ui.framealphaCheckBox.isChecked()):
+            self.legend_opts['framealpha'] = self.dialog.ui.framealphaSpinBox.value()
+        else:
+            self.legend_opts['framealpha'] = None
+        if (self.dialog.ui.facecolorCheckBox.isChecked()):
+            pass
+        else:
+            self.legend_opts['facecolor'] = None
+        if (self.dialog.ui.edgecolorCheckBox.isChecked()):
+            pass
+        else:
+            self.legend_opts['edgecolor'] = None
+        if (self.dialog.ui.modeCheckBox.isChecked()):
+            self.legend_opts['mode'] = 'expand'
+        else:
+            self.legend_opts['mode'] = None
+        if (self.dialog.ui.legendtitleCheckBox.isChecked()):
+            self.legend_opts['title'] = self.dialog.ui.legendtitleStr.text()
+        else:
+            self.legend_opts['title'] = None
+        if (self.dialog.ui.borderpadCheckBox.isChecked()):
+            self.legend_opts['borderpad'] = self.dialog.ui.borderpadSpinBox.value()
+        else:
+            self.legend_opts['borderpad'] = None
+        if (self.dialog.ui.labelspacingCheckBox.isChecked()):
+            self.legend_opts['labelspacing'] = self.dialog.ui.labelspacingSpinBox.value()
+        else:
+            self.legend_opts['labelspacing'] = None
+        if (self.dialog.ui.handletextpadCheckBox.isChecked()):
+            self.legend_opts['handletextpad'] = self.dialog.ui.handletextpadSpinBox.value()
+        else:
+            self.legend_opts['handletextpad'] = None
+        if (self.dialog.ui.columnspacingCheckBox.isChecked()):
+            self.legend_opts['columnspacing'] = self.dialog.ui.columnspacingSpinBox.value()
+        else:
+            self.legend_opts['columnspacing'] = None
+        if (self.dialog.ui.legendlabelCheckBox.isChecked()):
+            self.default_legend_labels = False
+            self.legend_labels = self.dialog.ui.legendlabelStr.text()
+        else:
+            self.default_legend_labels = True
+            self.legend_labels = ""
+            ftype = list(self.filetypes.values())[0]
+            for p in ftype.basic_file_parameters:
+                self.legend_labels += p + ' = [' + p + '] '
+        self.legend_draggable = self.dialog.ui.draggableCheckBox.isChecked()
+                
     def handle_inspectorVisibilityChanged(self, visible):
         """Handle the hide/show event of the data inspector
         
