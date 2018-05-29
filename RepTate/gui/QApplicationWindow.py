@@ -38,6 +38,7 @@ It is the GUI counterpart of Application.
 """ 
 import io
 import re
+import traceback
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
 from PyQt5.QtGui import QIcon, QColor
@@ -423,10 +424,20 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                             label = label.replace('['+p+']', str(val))
                     N.append(label)
             self.legend = plt.legend(L, N, **self.legend_opts)            
+                
             self.legend.draggable(self.legend_draggable)
         else:
             self.legend.remove()
-        self.canvas.draw()
+        try:
+            self.canvas.draw()
+        except Exception as e:
+            txt=""
+            txt+="Exception: %s\n"%traceback.format_exc()
+            txt+="\nPlease, check the TITLE and/or LEGEND below:\n\n"
+            if (self.legend_opts["title"]!=None):
+                txt+="TITLE: "+self.legend_opts["title"]+"\n"
+            txt+="FIRST LEGEND ITEM: "+N[0]
+            QMessageBox.warning(self, 'Wrong Title or labels in legend', txt)
                     
     def populate_cbPalette(self):
         """Populate the list color palettes in the marker-settings dialog
@@ -733,7 +744,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             self.legend_opts['mode'] = None
         if (self.dialog.ui.legendtitleCheckBox.isChecked()):
-            self.legend_opts['title'] = self.dialog.ui.legendtitleStr.text()
+            self.legend_opts['title'] = r""+self.dialog.ui.legendtitleStr.text()
         else:
             self.legend_opts['title'] = None
         if (self.dialog.ui.borderpadCheckBox.isChecked()):
@@ -757,7 +768,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.legend_labels = self.dialog.ui.legendlabelStr.text()
         else:
             self.default_legend_labels = True
-            self.legend_labels = ""
+            self.legend_labels = r""
             ftype = list(self.filetypes.values())[0]
             for p in ftype.basic_file_parameters:
                 self.legend_labels += p + ' = [' + p + '] '
