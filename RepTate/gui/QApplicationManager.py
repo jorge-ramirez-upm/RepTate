@@ -353,19 +353,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 #SAVE/LOAD REPTATE SESSION
 ############################
 
-#    def add_save_load_buttons(self):
-#        """Add "save" and "open" project buttons"""
-#        icon = QIcon(':/Icons/Images/new_icons/icons8-save.png')
-#        self.save_button = QAction(icon, 'Save Project', self)
-#        self.save_button.triggered.connect(self.launch_save_dialog)
-
-#        icon = QIcon(':/Icons/Images/new_icons/icons8-open.png')
-#        self.open_button = QAction(icon, 'Open Project', self)
-#        self.open_button.triggered.connect(self.launch_open_dialog)
-        
-#        self.toolBarTools.addAction(self.save_button)
-#        self.toolBarTools.addAction(self.open_button)
-
 
     def closeEvent(self, event):
         """Ask if we want to save project before closing RepTate (uncomment the rest)"""

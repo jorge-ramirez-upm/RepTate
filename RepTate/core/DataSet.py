@@ -381,9 +381,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         #theory settings
         th_linestyle = ThLineMode.linestyles.value[self.th_linestyle]
 
-        # TODO: JR --> WE NEED TO CLEAN THE TOOLS GRAPHIC OBJECTS
         for to in self.parent_application.tools:
             to.clean_graphic_stuff()
+            to.Qprint("\n=======================")
+            to.Qprint("Calculating the Tool...")
+            to.Qprint("=======================\n")
 
         for j, file in enumerate(self.files):
             dt = file.data_table
@@ -414,6 +416,9 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 # Apply the currently active tools
                 for to in self.parent_application.tools:
                     if file.active and to.active:
+                        to.Qprint(file.file_name_short)
+                        strline = "-"*len(file.file_name_short)
+                        to.Qprint(strline)
                         x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
 
                 for i in range(dt.MAX_NUM_SERIES):
@@ -426,6 +431,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                 face = color
                             elif face == color:
                                 face = 'none'
+                        if i>1:
+                            face = color
+                            fillstyles=["left", "right", "bottom", "top"]
+                            fs = fillstyles[i-2]
+                            dt.series[nx][i].set_fillstyle(fs)
                         dt.series[nx][i].set_markerfacecolor(face)
                         dt.series[nx][i].set_markeredgecolor(color)
                         dt.series[nx][i].set_markeredgewidth(width)
@@ -464,6 +474,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     # Apply the currently active tools
                     for to in self.parent_application.tools:
                         if (file.active and to.active and to.applytotheory):
+                            to.Qprint("* "+th.name)
                             x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
 
                     for i in range(tt.MAX_NUM_SERIES):

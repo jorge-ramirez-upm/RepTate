@@ -35,5 +35,7 @@
         <file>Images/new_icons/icons8-save-flowsolve.png</file>
         <file>Images/new_icons/icon-uext.png</file>
         <file>Images/new_icons/icon-shear.png</file>
+        <file>Images/new_icons/icons8-save-Maxwell.png</file>
+        <file>Images/new_icons/icons8-save.png</file>
     </qresource>
 </RCC>

@@ -222,6 +222,36 @@
     <string>Change limits for fit</string>
    </property>
   </action>
+  <action name="actionCopy_Parameters">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-copy.png</normaloff>:/Images/Images/new_icons/icons8-copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Parameters</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy Parameters</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste_Parameters">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-paste.png</normaloff>:/Images/Images/new_icons/icons8-paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste Parameters</string>
+   </property>
+   <property name="toolTip">
+    <string>Paste Parameters</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Theory.qrc"/>

@@ -202,8 +202,16 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         menu.addAction(self.actionHorizontal_Limits)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
+        tbut2 = QToolButton()
+        tbut2.setPopupMode(QToolButton.MenuButtonPopup)
         self.action_save_theory_data = QAction(QIcon(':/Icon8/Images/new_icons/icons8-save_TH.png'), "Save Theory Data", self)
-        tb.addAction(self.action_save_theory_data)
+        tbut2.setDefaultAction(self.action_save_theory_data)
+        menu2 = QMenu()
+        menu2.addAction(self.actionCopy_Parameters)
+        menu2.addAction(self.actionPaste_Parameters)
+        tbut2.setMenu(menu2)
+        tb.addWidget(tbut2)
+        
         self.TheoryLayout.insertWidget(0, tb)
         self.splitter.setSizes((1000, 3000))
 
@@ -235,12 +243,30 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.handle_actionCalculate_Theory)
         connection_id = self.action_save_theory_data.triggered.connect(
             self.handle_action_save_theory_data)
+        connection_id = self.actionCopy_Parameters.triggered.connect(
+            self.copy_parameters)
+        connection_id = self.actionPaste_Parameters.triggered.connect(
+            self.paste_parameters)
+            
 
         connection_id = self.actionVertical_Limits.triggered.connect(
             self.toggle_vertical_limits)
         connection_id = self.actionHorizontal_Limits.triggered.connect(
             self.toggle_horizontal_limits)
 
+    def copy_parameters(self):
+        """Copy the parameters of the currently active theory to the clipboard"""
+        th = self.current_theory
+        if th:
+            self.theories[th].copy_parameters()
+
+    def paste_parameters(self):
+        """Paste the parameters from the clipboard to the currently active theory"""
+        th = self.current_theory
+        if th:
+            self.theories[th].paste_parameters()
+            
+            
     def handle_action_save_theory_data(self):
         """Save theory data of current theory"""
         th = self.current_theory

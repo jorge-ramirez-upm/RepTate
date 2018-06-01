@@ -162,7 +162,7 @@ class BaseTheoryMaxwellModesFrequency:
                 Gold[i] = self.parameters["logG%02d" % i].value
                 del self.parameters["logG%02d" % i]
 
-            nmodesnew = value
+            nmodesnew = int(value)
             message, success = super().set_param_value("nmodes", nmodesnew)
             wnew = np.logspace(wminold, wmaxold, nmodesnew)
 
@@ -176,7 +176,7 @@ class BaseTheoryMaxwellModesFrequency:
                     ParameterType.real,
                     opt_type=OptType.opt)
             if CmdBase.mode == CmdMode.GUI:
-                self.spinbox.setValue(value)
+                self.spinbox.setValue(nmodesnew)
         else:
             message, success = super().set_param_value(name, value)
         
@@ -403,6 +403,9 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+        self.save_modes_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")            
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
@@ -411,6 +414,8 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
             self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(
             self.modesaction_change)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed
@@ -791,6 +796,9 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+        self.save_modes_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")            
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
@@ -799,6 +807,8 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
             self.handle_spinboxValueChanged)
         connection_id = self.modesaction.triggered.connect(
             self.modesaction_change)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed

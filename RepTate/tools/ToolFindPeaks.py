@@ -35,6 +35,7 @@
 FindPeaks file for creating a new Tool
 """
 import numpy as np
+from scipy.optimize import curve_fit
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType
 from Tool import Tool
@@ -103,6 +104,12 @@ class BaseToolFindPeaks:
             description="Find minimum peaks",
             type=ParameterType.boolean,
             display_flag=False)
+        self.parameters["parabola"] = Parameter(
+            name="parabola",
+            value=False,
+            description="Fit Parabola to peak",
+            type=ParameterType.boolean,
+            display_flag=False)
         self.seriesarray=[]
         self.axarray=[]
 
@@ -126,6 +133,7 @@ class BaseToolFindPeaks:
         threshold = self.parameters["threshold"].value
         minimum_distance = self.parameters["minimum_distance"].value
         minpeaks = self.parameters["minpeaks"].value
+        parabola = self.parameters["parabola"].value
         if (minpeaks):
             y = -y
         thresholdnow = threshold * (np.max(y) - np.min(y)) + np.min(y)
@@ -157,20 +165,35 @@ class BaseToolFindPeaks:
                     rem[sl] = True
                     rem[peak] = False
             peaks = np.arange(y.size)[~rem]
-        y2 = np.zeros_like(y)
-        if (minpeaks):
-            y = -y
+        
         xp=np.zeros(len(peaks))
         yp=np.zeros(len(peaks))
         if minpeaks:
             self.Qprint("%d Minimum(s) found" % len(peaks))
         else:
             self.Qprint("%d Maximum(s) found" % len(peaks))
-        for i,d in enumerate(peaks):
-            y2[d] = y[d]
-            self.Qprint("  (%.4e, %.4e)"%(x[d],y[d]))
-            xp[i]=x[d]
-            yp[i]=y[d]
+        if (minpeaks):
+            y = -y
+        if parabola:
+            ################################################################
+            # Fit parabola to each peak and find analytical position of peak
+            func = lambda xx, a, tau, c: a * ((xx - tau) ** 2) + c
+            for i, d in enumerate(peaks):
+                x_data = x[d - minimum_distance // 2: d + minimum_distance // 2 + 1]
+                y_data = y[d - minimum_distance // 2: d + minimum_distance // 2 + 1]
+                tau = x[d] # approximation of tau (peak position in x)
+                c = y[d]    # approximation of peak amplitude
+                a = np.sign(c) * (-1) * (np.sqrt(abs(c))/(x_data[-1]-x_data[0]))**2
+                p0 = (a, tau, c)
+                popt, pcov = curve_fit(func, x_data, y_data, p0)
+                xp[i], yp[i] = popt[1:3]
+                self.Qprint("  (%.4e, %.4e)"%(xp[i],yp[i]))
+            #################################################################
+        else:
+            for i,d in enumerate(peaks):
+                xp[i]=x[d]
+                yp[i]=y[d]
+                self.Qprint("  (%.4e, %.4e)"%(xp[i],yp[i]))
         s = ax.plot(xp, yp)[0]
         s.set_marker('D')
         s.set_linestyle('')
@@ -225,6 +248,11 @@ class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
         self.minpeaks.setCheckable(True)
         self.handle_minpeaks_button(checked=False)
         connection_id = self.minpeaks.triggered.connect(self.handle_minpeaks_button)
+        self.parabola = self.tb.addAction('Fit Parabola')
+        self.parabola.setIcon(QIcon(':/Icon8/Images/new_icons/icons8-bell-curve.png'))
+        self.parabola.setCheckable(True)
+        self.parabola.setChecked(False)
+        connection_id = self.parabola.triggered.connect(self.handle_parabola_button)
         self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
@@ -239,3 +267,8 @@ class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
         self.minpeaks.setChecked(checked)
         self.set_param_value("minpeaks", checked)
         self.parent_application.update_all_ds_plots()
+        
+    def handle_parabola_button(self, checked):
+        self.parabola.setChecked(checked)
+        self.set_param_value("parabola", checked)
+        self.parent_application.update_all_ds_plots()        

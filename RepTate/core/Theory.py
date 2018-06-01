@@ -104,6 +104,7 @@ class Theory(CmdBase):
         self.active = True  #defines if the theorie is plotted
         self.calculate_is_busy = False
         self.axarr[0].autoscale(False)
+        self.autocalculate = True
 
         # THEORY OPTIONS
         self.npoints = 100
@@ -584,8 +585,8 @@ class Theory(CmdBase):
             completions = parameter_names[:]
         else:
             completions = [f for f in parameter_names if f.startswith(text)]
-        return completions
-
+        return completions        
+        
     def plot_theory_stuff(self):
         """[summary]
         
