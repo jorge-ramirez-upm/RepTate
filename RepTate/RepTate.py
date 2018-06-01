@@ -39,6 +39,7 @@ import os
 import sys
 import glob
 import argparse
+import traceback
 from logging import *
 basicConfig(level=INFO)
  
@@ -52,7 +53,9 @@ sys.path.append('tools')
 from CmdBase import CmdBase, CalcMode
 from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtGui import QDesktopServices
+from PyQt5.QtCore import QUrl
 from SplashScreen import SplashScreen
 # from time import time, sleep
 
@@ -136,6 +139,22 @@ def start_RepTate(argv):
             ex.applications[appname].new_tables_from_files(dictfiles[k])
         else:
             print("File type %s cannot be opened"%k)
+
+    def my_excepthook(type, value, tb):
+        """Catch exceptions and print error message. Open email client to report bug to devlopers"""
+        tb_msg = ''
+        for e in traceback.format_tb(tb):
+            tb_msg += str(e)
+        print(tb_msg)
+        msg = 'Sorry, something went wrong. Try to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?'
+        ans = QMessageBox.critical(ex, 'Critical Error', msg, QMessageBox.Yes | QMessageBox.No )
+        if ans == QMessageBox.Yes:
+            address = "reptate.rheology@gmail.com"
+            subject = "Something went wrong"
+            body = "%s\nIf you can, please describe below what you were doing with RepTate when the error happened (apps and theories or tools open if any) and send the message\n%s\nError Traceback:\n %s" % ("-"*60, "-"*60 + "\n"*10 + "-"*60,  tb_msg)
+            QDesktopServices.openUrl(QUrl("mailto:?to=%s&subject=%s&body=%s" % (address, subject, body), QUrl.TolerantMode))
+            
+    sys.excepthook = my_excepthook
 
     ex.showMaximized()
     sys.exit(app.exec_())
