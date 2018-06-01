@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>355</width>
-    <height>483</height>
+    <width>367</width>
+    <height>544</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,6 +73,9 @@
                  <bold>false</bold>
                 </font>
                </property>
+               <property name="toolTip">
+                <string>Empty symbol</string>
+               </property>
               </widget>
              </item>
              <item>
@@ -82,6 +85,9 @@
                  <weight>50</weight>
                  <bold>false</bold>
                 </font>
+               </property>
+               <property name="toolTip">
+                <string>Fixed symbol shape</string>
                </property>
                <property name="text">
                 <string>Fixed</string>
@@ -98,6 +104,9 @@
                  <weight>50</weight>
                  <bold>false</bold>
                 </font>
+               </property>
+               <property name="toolTip">
+                <string>Variable symbol shape</string>
                </property>
                <property name="text">
                 <string>Variable</string>
@@ -188,6 +197,9 @@
                  <bold>false</bold>
                 </font>
                </property>
+               <property name="toolTip">
+                <string>Filled symbol</string>
+               </property>
                <property name="text">
                 <string>Filled</string>
                </property>
@@ -229,6 +241,9 @@
                  <bold>false</bold>
                 </font>
                </property>
+               <property name="toolTip">
+                <string>Fixed color</string>
+               </property>
                <property name="text">
                 <string>Fixed</string>
                </property>
@@ -241,6 +256,9 @@
                  <weight>50</weight>
                  <bold>false</bold>
                 </font>
+               </property>
+               <property name="toolTip">
+                <string>Gradient color between Color1 and Color2</string>
                </property>
                <property name="text">
                 <string>Gradient</string>
@@ -372,6 +390,9 @@
                  <bold>false</bold>
                 </font>
                </property>
+               <property name="toolTip">
+                <string>Choose color palette</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -452,6 +473,9 @@
                 <bold>false</bold>
                </font>
               </property>
+              <property name="toolTip">
+               <string>Same color as the data points</string>
+              </property>
               <property name="text">
                <string>Same as Data</string>
               </property>
@@ -465,6 +489,9 @@
                 <weight>50</weight>
                 <bold>false</bold>
                </font>
+              </property>
+              <property name="toolTip">
+               <string>Theory in fixed color</string>
               </property>
               <property name="text">
                <string>Fixed</string>
@@ -535,16 +562,7 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
@@ -637,22 +655,13 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
               <widget class="QLabel" name="label_2">
                <property name="toolTip">
-                <string>The number of columns that the legend has</string>
+                <string>Number of columns in the legend</string>
                </property>
                <property name="text">
                 <string>Number of columns</string>
@@ -690,22 +699,13 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
               <widget class="QLabel" name="label_3">
                <property name="toolTip">
-                <string>Font size of the legend</string>
+                <string>Legend font size</string>
                </property>
                <property name="text">
                 <string>Font Size</string>
@@ -737,16 +737,7 @@
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <property name="spacing">
@@ -764,16 +755,7 @@
                 <property name="spacing">
                  <number>20</number>
                 </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
+                <property name="margin">
                  <number>0</number>
                 </property>
                 <item>
@@ -868,17 +850,17 @@
              <item row="2" column="0">
               <widget class="QCheckBox" name="fancyboxCheckBox">
                <property name="toolTip">
-                <string>Draw legend frame with round edges?</string>
+                <string>Draw legend frame with round edges</string>
                </property>
                <property name="text">
-                <string>Francy Box</string>
+                <string>Fancy Box</string>
                </property>
               </widget>
              </item>
              <item row="0" column="0">
               <widget class="QCheckBox" name="markerfirstCheckBox">
                <property name="toolTip">
-                <string>If True, legend marker is placed to the left of the legend label</string>
+                <string>Place legend marker to the left of the legend label</string>
                </property>
                <property name="text">
                 <string>Marker First</string>
@@ -888,7 +870,7 @@
              <item row="1" column="0">
               <widget class="QCheckBox" name="frameonCheckBox">
                <property name="toolTip">
-                <string>Draw the legend inside a patch (frame)?</string>
+                <string>Draw the legend inside a patch (frame)</string>
                </property>
                <property name="text">
                 <string>Draw Frame</string>
@@ -907,16 +889,7 @@
                 <property name="spacing">
                  <number>0</number>
                 </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
+                <property name="margin">
                  <number>0</number>
                 </property>
                 <item>
@@ -954,17 +927,17 @@
              <item row="9" column="0">
               <widget class="QCheckBox" name="modeCheckBox">
                <property name="toolTip">
-                <string>Expand the legend horizontally to fill the axes area?</string>
+                <string>Expand the legend horizontally to fill the axes area</string>
                </property>
                <property name="text">
-                <string>Expand mode</string>
+                <string>Expand Mode</string>
                </property>
               </widget>
              </item>
              <item row="3" column="0">
               <widget class="QCheckBox" name="shadowCheckBox">
                <property name="toolTip">
-                <string>Draw a shadow behind the legend?</string>
+                <string>Draw a shadow behind the legend</string>
                </property>
                <property name="text">
                 <string>Shadow</string>
@@ -986,16 +959,7 @@
              <property name="spacing">
               <number>6</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
@@ -1033,16 +997,7 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
@@ -1089,22 +1044,13 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
               <widget class="QCheckBox" name="labelspacingCheckBox">
                <property name="text">
-                <string>Space bertween entries</string>
+                <string>Space Bertween Entries</string>
                </property>
               </widget>
              </item>
@@ -1142,22 +1088,13 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
               <widget class="QCheckBox" name="handletextpadCheckBox">
                <property name="text">
-                <string>Space handle-label</string>
+                <string>Space Handle-Label</string>
                </property>
               </widget>
              </item>
@@ -1195,22 +1132,13 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
               <widget class="QCheckBox" name="columnspacingCheckBox">
                <property name="text">
-                <string>Space between columns</string>
+                <string>Space Between Columns</string>
                </property>
               </widget>
              </item>
@@ -1248,16 +1176,7 @@
              <property name="spacing">
               <number>6</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
@@ -1295,7 +1214,7 @@
           <item>
            <widget class="QCheckBox" name="draggableCheckBox">
             <property name="toolTip">
-             <string>Can the user move the legend with the mouse?</string>
+             <string>Can the user move the legend with the mouse</string>
             </property>
             <property name="text">
              <string>Draggable Legend</string>
