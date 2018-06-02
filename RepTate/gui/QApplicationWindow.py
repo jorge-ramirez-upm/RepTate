@@ -46,7 +46,7 @@ from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter
 from QDataSet import QDataSet
 from DataSetWidgetItem import DataSetWidgetItem
 from DataSet import ColorMode, SymbolMode, ThLineMode
@@ -111,21 +111,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.DataSettabWidget.setUsesScrollButtons(True)
         self.DataSettabWidget.setMovable(True)
         
-        ################
-        # SETUP TOOLBARS
+        ############################
+        # SETUP DATA INSPECTOR PANEL
         # Data Inspector Toolbar
+        self.data_inspector_panel_widget = QWidget(self)
+        vblayout = QVBoxLayout()
+
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionCopy)
         tb.addAction(self.actionPaste)
         tb.addAction(self.actionShiftVertically)
         tb.addAction(self.actionShiftHorizontally)
-        #self.LayoutDataInspector.insertWidget(0, tb)
-        self.LayoutDataInspector.addWidget(tb)
+        vblayout.addWidget(tb)
         #custom QTable to have the copy/pastefeature
         self.inspector_table = SpreadsheetWidget(self)
-        #self.LayoutDataInspector.insertWidget(1, self.inspector_table)
-        self.LayoutDataInspector.addWidget(self.inspector_table)
+        vblayout.addWidget(self.inspector_table)
+        self.data_inspector_panel_widget.setLayout(vblayout)
 
         ######################
         # VIEW Toolbar
@@ -134,6 +136,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ################
         # TOOLS TOOLBAR
         # In the Data Inspector area (at the bottom)
+        self.tool_panel_widget = QWidget(self)
+        vblayout2 = QVBoxLayout()
+
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionNew_Tool)
@@ -142,14 +147,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for tool_name in self.availabletools.keys():
             self.cbtool.addItem(tool_name)
         tb.addWidget(self.cbtool)
-        self.LayoutDataInspector.addWidget(tb)
+        vblayout2.addWidget(tb)
         self.TooltabWidget = QTabWidget()
         self.TooltabWidget.setTabsClosable(True)
         self.TooltabWidget.setTabShape(1)
         self.TooltabWidget.setMovable(1)
         self.qtabbar = self.TooltabWidget.tabBar()
-        self.LayoutDataInspector.addWidget(self.TooltabWidget)
-        
+        vblayout2.addWidget(self.TooltabWidget)
+        self.tool_panel_widget.setLayout(vblayout2)
+
+        # Data inspector and Tool panels separated by spliter
+        spliter = QSplitter(QtCore.Qt.Vertical)
+        spliter.addWidget(self.data_inspector_panel_widget)
+        spliter.addWidget(self.tool_panel_widget)
+        spliter.setStretchFactor(0, 1)
+        spliter.setStretchFactor(1, 6)
+        self.LayoutDataInspector.addWidget(spliter)
+
         # Dataset Toolbar
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
