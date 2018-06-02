@@ -118,7 +118,7 @@
 <span class="kn">from</span> <span class="nn">DataSetWidget</span> <span class="k">import</span> <span class="n">DataSetWidget</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 
-<span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
 <span class="n">Ui_DataSet</span><span class="p">,</span> <span class="n">QWidget</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="s1">&#39;DataSet.ui&#39;</span><span class="p">))</span>
 
 
@@ -126,7 +126,7 @@
     <span class="sd">&quot;&quot;&quot;Create the form that is used to modify the file parameters&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">createFormGroupBox</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
         <span class="n">buttonBox</span> <span class="o">=</span> <span class="n">QDialogButtonBox</span><span class="p">(</span><span class="n">QDialogButtonBox</span><span class="o">.</span><span class="n">Ok</span>
@@ -169,7 +169,7 @@
             <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">EditFileParametersDialog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EditFileParametersDialog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Parameters - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -216,9 +216,9 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;QDataSet&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
-        <span class="n">QWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">Ui_DataSet</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">QWidget</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Ui_DataSet</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -274,8 +274,16 @@
         <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionHorizontal_Limits</span><span class="p">)</span>
         <span class="n">tbut</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
         <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tbut</span><span class="p">)</span>
+        <span class="n">tbut2</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
+        <span class="n">tbut2</span><span class="o">.</span><span class="n">setPopupMode</span><span class="p">(</span><span class="n">QToolButton</span><span class="o">.</span><span class="n">MenuButtonPopup</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_save_theory_data</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-save_TH.png&#39;</span><span class="p">),</span> <span class="s2">&quot;Save Theory Data&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_save_theory_data</span><span class="p">)</span>
+        <span class="n">tbut2</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_save_theory_data</span><span class="p">)</span>
+        <span class="n">menu2</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">()</span>
+        <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCopy_Parameters</span><span class="p">)</span>
+        <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionPaste_Parameters</span><span class="p">)</span>
+        <span class="n">tbut2</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu2</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tbut2</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">TheoryLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">splitter</span><span class="o">.</span><span class="n">setSizes</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">))</span>
 
@@ -307,12 +315,30 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_save_theory_data</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_action_save_theory_data</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCopy_Parameters</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copy_parameters</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionPaste_Parameters</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paste_parameters</span><span class="p">)</span>
+            
 
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionVertical_Limits</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toggle_vertical_limits</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionHorizontal_Limits</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toggle_horizontal_limits</span><span class="p">)</span>
 
+<div class="viewcode-block" id="QDataSet.copy_parameters"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.QDataSet.copy_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">copy_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy the parameters of the currently active theory to the clipboard&quot;&quot;&quot;</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span>
+        <span class="k">if</span> <span class="n">th</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">th</span><span class="p">]</span><span class="o">.</span><span class="n">copy_parameters</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QDataSet.paste_parameters"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.QDataSet.paste_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">paste_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Paste the parameters from the clipboard to the currently active theory&quot;&quot;&quot;</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span>
+        <span class="k">if</span> <span class="n">th</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">th</span><span class="p">]</span><span class="o">.</span><span class="n">paste_parameters</span><span class="p">()</span></div>
+            
+            
 <div class="viewcode-block" id="QDataSet.handle_action_save_theory_data"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.QDataSet.handle_action_save_theory_data">[docs]</a>    <span class="k">def</span> <span class="nf">handle_action_save_theory_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save theory data of current theory&quot;&quot;&quot;</span>
         <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span>
@@ -783,7 +809,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

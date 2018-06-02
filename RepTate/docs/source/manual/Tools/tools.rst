@@ -2,6 +2,9 @@
 RepTate tools
 =============
 
+.. contents:: Contents
+    :local:
+
 .. toctree::
    :maxdepth: 2
 

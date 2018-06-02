@@ -111,6 +111,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="o">*</span>
 <span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">INFO</span><span class="p">)</span>
  
@@ -124,7 +125,9 @@
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CalcMode</span>
 <span class="kn">from</span> <span class="nn">QApplicationManager</span> <span class="k">import</span> <span class="n">QApplicationManager</span>
 <span class="c1">#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QApplication</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMessageBox</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QDesktopServices</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QUrl</span>
 <span class="kn">from</span> <span class="nn">SplashScreen</span> <span class="k">import</span> <span class="n">SplashScreen</span>
 <span class="c1"># from time import time, sleep</span>
 
@@ -209,10 +212,27 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File type </span><span class="si">%s</span><span class="s2"> cannot be opened&quot;</span><span class="o">%</span><span class="n">k</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">my_excepthook</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Catch exceptions and print error message. Open email client to report bug to devlopers&quot;&quot;&quot;</span>
+        <span class="n">tb_msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_tb</span><span class="p">(</span><span class="n">tb</span><span class="p">):</span>
+            <span class="n">tb_msg</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">tb_msg</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tb_msg</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Sorry, something went wrong (</span><span class="si">%s</span><span class="s1">). Try to save your work and quit RepTate.</span><span class="se">\n</span><span class="s1">Do you want to help RepTate developers by reporting this bug?&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="s1">&#39;Critical Error&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
+            <span class="n">address</span> <span class="o">=</span> <span class="s2">&quot;reptate.rheology@gmail.com&quot;</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;Something went wrong&quot;</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">If you can, please describe below what you were doing with RepTate when the error happened (apps and theories or tools open if any) and send the message</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s2">Error Traceback:</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">60</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">*</span><span class="mi">10</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span>  <span class="n">tb_msg</span><span class="p">)</span>
+            <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="p">(</span><span class="s2">&quot;mailto:?to=</span><span class="si">%s</span><span class="s2">&amp;subject=</span><span class="si">%s</span><span class="s2">&amp;body=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">body</span><span class="p">),</span> <span class="n">QUrl</span><span class="o">.</span><span class="n">TolerantMode</span><span class="p">))</span>
+            
+    <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">my_excepthook</span>
+
     <span class="n">ex</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span></div>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">start_RepTate</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 </pre></div>
 
@@ -236,7 +256,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

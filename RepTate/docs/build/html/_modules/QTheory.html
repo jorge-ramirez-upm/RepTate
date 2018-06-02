@@ -113,12 +113,14 @@
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CalcMode</span>
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">abspath</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QTreeWidget</span><span class="p">,</span> <span class="n">QTreeWidgetItem</span><span class="p">,</span> <span class="n">QFrame</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QRadioButton</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QButtonGroup</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QLabel</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QTreeWidget</span><span class="p">,</span> <span class="n">QTreeWidgetItem</span><span class="p">,</span> <span class="n">QFrame</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QRadioButton</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QButtonGroup</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QApplication</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">QThread</span><span class="p">,</span> <span class="n">pyqtSignal</span><span class="p">,</span> <span class="n">pyqtSlot</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QDoubleValidator</span>
 <span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">OptType</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">ShiftType</span>
+<span class="kn">import</span> <span class="nn">Version</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">ast</span>
-<span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
 <span class="n">Ui_TheoryTab</span><span class="p">,</span> <span class="n">QWidget</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="s1">&#39;theorytab.ui&#39;</span><span class="p">))</span>
 
 <span class="c1"># def trap_exc_during_debug(*args):</span>
@@ -133,7 +135,7 @@
     <span class="sd">&quot;&quot;&quot;Create the form that is used to modify the theorys parameters&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">p_name</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_theory</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tabs</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_pattr</span> <span class="o">=</span> <span class="p">{}</span>
@@ -161,7 +163,7 @@
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
 
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_theory</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p_name</span><span class="p">]</span>
-        <span class="n">p_attributes</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="n">p_attributes</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">__dict__</span>
         <span class="n">attr_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">a_new</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
@@ -225,7 +227,7 @@
     <span class="n">sig_done</span> <span class="o">=</span> <span class="n">pyqtSignal</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fthread</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="n">fthread</span>
 
@@ -236,7 +238,7 @@
 
 <div class="viewcode-block" id="GetModesDialog"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QTheory.GetModesDialog">[docs]</a><span class="k">class</span> <span class="nc">GetModesDialog</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">th_dict</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GetModesDialog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GetModesDialog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Get Maxwell modes&quot;</span><span class="p">)</span>
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -271,7 +273,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - axarr {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="n">axarr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># Dictionary saved during &quot;Save Project&quot;</span>
 
@@ -413,6 +415,28 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1">#the function is not defined in the current theory</span>
             <span class="k">pass</span></div>
 
+<div class="viewcode-block" id="QTheory.copy_parameters"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QTheory.QTheory.copy_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">copy_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%g</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">QApplication</span><span class="o">.</span><span class="n">clipboard</span><span class="p">()</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>    </div>
+
+<div class="viewcode-block" id="QTheory.paste_parameters"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QTheory.QTheory.paste_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">paste_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">QApplication</span><span class="o">.</span><span class="n">clipboard</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="c1"># split on newlines</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)):</span>
+            <span class="n">cols</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="c1"># split on whitespaces</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">):</span>
+                    <span class="n">message</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cols</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>                          
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+            
 <div class="viewcode-block" id="QTheory.update_parameter_table"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QTheory.QTheory.update_parameter_table">[docs]</a>    <span class="k">def</span> <span class="nf">update_parameter_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the theory parameter table</span>
 <span class="sd">        </span>
@@ -526,7 +550,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Not a valid value&quot;</span><span class="p">)</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
-            <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">param_changed</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">))</span></div>
+            <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">param_changed</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QTheory.Qcopy_modes"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QTheory.QTheory.Qcopy_modes">[docs]</a>    <span class="k">def</span> <span class="nf">Qcopy_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -543,7 +570,7 @@
                 <span class="n">tauinds</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
                 <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="n">tauinds</span><span class="p">]</span>
                 <span class="n">G0</span> <span class="o">=</span> <span class="n">G0</span><span class="p">[</span><span class="n">tauinds</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">set_modes</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">G0</span><span class="p">)</span></div></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_modes</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">G0</span><span class="p">)</span></div>
 
             <span class="c1">#item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)</span>
             <span class="c1">#print(item)</span>
@@ -557,6 +584,38 @@
             <span class="c1">#d.setWindowTitle(&quot;Select provider of Maxwell modes:&quot;)</span>
             <span class="c1">#d.setWindowModality(Qt.ApplicationModal)</span>
             <span class="c1">#d.exec_()</span>
+            
+<div class="viewcode-block" id="QTheory.save_modes"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QTheory.QTheory.save_modes">[docs]</a>    <span class="k">def</span> <span class="nf">save_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save Maxwell modes to a text file&quot;&quot;&quot;</span>
+        <span class="n">fpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                               <span class="s2">&quot;Save Maxwell modes to a text file&quot;</span><span class="p">,</span>
+                                               <span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="s2">&quot;Text (*.txt)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fpath</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span>
+            
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">times</span><span class="p">,</span> <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modes</span><span class="p">()</span>
+
+            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# Maxwell modes</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# Generated with RepTate v</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span>
+                                                             <span class="n">Version</span><span class="o">.</span><span class="n">DATE</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# At </span><span class="si">%s</span><span class="s1"> on </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%X</span><span class="s2">&quot;</span><span class="p">),</span>
+                                           <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a %b </span><span class="si">%d</span><span class="s2">, %Y&quot;</span><span class="p">))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">#number of modes</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">#</span><span class="si">%4s</span><span class="se">\t</span><span class="si">%15s</span><span class="se">\t</span><span class="si">%15s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span><span class="s1">&#39;tau_i&#39;</span><span class="p">,</span><span class="s1">&#39;G_i&#39;</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%5d</span><span class="se">\t</span><span class="si">%15g</span><span class="se">\t</span><span class="si">%15g</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">times</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">#end&#39;</span><span class="p">)</span>
+
+        <span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;Wrote Maxwell modes </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fpath</span><span class="p">)</span></div></div>
+            
 </pre></div>
 
           </div>
@@ -579,7 +638,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

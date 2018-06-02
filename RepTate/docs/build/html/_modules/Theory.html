@@ -163,7 +163,7 @@
 <span class="sd">            - parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})</span>
 <span class="sd">            - ax {matplotlib axes} -- matplotlib graph (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span> <span class="o">=</span> <span class="n">parent_dataset</span>
@@ -176,12 +176,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#defines if the theorie is plotted</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calculate_is_busy</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># THEORY OPTIONS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">100</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="mf">0.001</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt_min</span> <span class="o">=</span> <span class="mf">1e-6</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_min</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">4</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop_steady</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>
@@ -656,8 +657,8 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="n">parameter_names</span><span class="p">[:]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">parameter_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">completions</span></div>
-
+        <span class="k">return</span> <span class="n">completions</span>        </div>
+        
 <div class="viewcode-block" id="Theory.plot_theory_stuff"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.plot_theory_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
@@ -1055,7 +1056,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">elif</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">line</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">line</span><span class="p">]</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">line</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">super</span><span class="p">(</span><span class="n">Theory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
 
@@ -1147,7 +1148,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

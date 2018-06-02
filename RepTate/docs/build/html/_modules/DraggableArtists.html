@@ -298,7 +298,7 @@
 <span class="sd">            - logy {[type]} -- [description] (default: {False})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logx</span> <span class="o">=</span> <span class="n">logx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logy</span> <span class="o">=</span> <span class="n">logy</span>
     
@@ -478,7 +478,7 @@
 <span class="sd">            - logy {[type]} -- [description] (default: {False})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableModesSeries</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableModesSeries</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span> <span class="o">=</span> <span class="n">parent_application</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_logx_logy</span><span class="p">()</span>
     
@@ -660,7 +660,7 @@
 <span class="sd">            - logx {[type]} -- [description] (default: {False})</span>
 <span class="sd">            - logy {[type]} -- [description] (default: {False})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableSeries</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableSeries</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">note</span> <span class="o">=</span> <span class="n">artist</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logx</span> <span class="o">=</span> <span class="n">logx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logy</span> <span class="o">=</span> <span class="n">logy</span>
@@ -823,7 +823,7 @@
 <span class="sd">            - mode {[type]} -- [description] (default: {DragType})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggablePatch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggablePatch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DraggablePatch.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggablePatch.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -860,7 +860,7 @@
 <span class="sd">            - mode {[type]} -- [description] (default: {DragType})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableRectangle</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableRectangle</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DraggableRectangle.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableRectangle.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -898,7 +898,7 @@
 <span class="sd">            - mode {[type]} -- [description] (default: {DragType})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableVLine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">parent_theory</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableVLine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">parent_theory</span><span class="p">)</span>
     
 <div class="viewcode-block" id="DraggableVLine.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVLine.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -960,7 +960,7 @@
 <span class="sd">            - mode {[type]} -- [description] (default: {DragType})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableHLine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">parent_theory</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableHLine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">parent_theory</span><span class="p">)</span>
     
 <div class="viewcode-block" id="DraggableHLine.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHLine.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -1021,7 +1021,7 @@
 <span class="sd">            - mode {[type]} -- [description] (default: {DragType})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableVSpan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableVSpan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DraggableVSpan.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVSpan.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -1060,7 +1060,7 @@
 <span class="sd">            - mode {[type]} -- [description] (default: {DragType})</span>
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableHSpan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableHSpan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DraggableHSpan.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHSpan.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -1100,7 +1100,7 @@
 <span class="sd">            - function {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - function2 {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableNote</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DraggableNote</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function2</span><span class="o">=</span><span class="n">function2</span>
 
 <div class="viewcode-block" id="DraggableNote.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1170,7 +1170,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

@@ -145,7 +145,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Fit Dynamic Tube Dilution theory for stars, frequency domain&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -183,19 +183,19 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;G0&quot;</span><span class="p">,</span>
-            <span class="mf">1e1</span><span class="p">,</span>
+            <span class="mi">1</span><span class="n">e1</span><span class="p">,</span>
             <span class="s2">&quot;Modulus c*kB*T/N&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;tau_e&quot;</span><span class="p">,</span>
-            <span class="mf">2e-6</span><span class="p">,</span>
+            <span class="mi">2</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span>
             <span class="s2">&quot;Entanglement relaxation time&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
@@ -285,7 +285,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
 
     <span class="c1"># This class usually stays empty</span>
 
@@ -305,7 +305,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
 
     <span class="c1"># add widgets specific to the theory here:</span>
 
@@ -340,7 +340,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Fit Dynamic Tube Dilution theory for stars, time domain&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -378,19 +378,19 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;G0&quot;</span><span class="p">,</span>
-            <span class="mf">1e1</span><span class="p">,</span>
+            <span class="mi">1</span><span class="n">e1</span><span class="p">,</span>
             <span class="s2">&quot;Modulus c*kB*T/N&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;tau_e&quot;</span><span class="p">,</span>
-            <span class="mf">2e-6</span><span class="p">,</span>
+            <span class="mi">2</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span>
             <span class="s2">&quot;Entanglement relaxation time&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
@@ -476,7 +476,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
 
     <span class="c1"># This class usually stays empty</span>
 
@@ -496,7 +496,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
 
     <span class="c1"># add widgets specific to the theory here:</span>
 </pre></div>
@@ -521,7 +521,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

@@ -166,7 +166,7 @@
 <span class="sd">        Keyword Arguments:</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
         <span class="n">delims</span> <span class="o">=</span> <span class="n">readline</span><span class="o">.</span><span class="n">get_completer_delims</span><span class="p">()</span>
         <span class="n">delims</span> <span class="o">=</span> <span class="n">delims</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -347,7 +347,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">exec</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="c1">#in self._locals, self._globals</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span></div>
+            <span class="nb">print</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CmdBase.do_console"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_console">[docs]</a>    <span class="k">def</span> <span class="nf">do_console</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print/Set current &amp; available Console modes</span>
@@ -394,7 +394,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>
