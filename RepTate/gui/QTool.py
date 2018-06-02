@@ -42,7 +42,7 @@ from CmdBase import CmdBase, CalcMode
 from Tool import Tool
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QToolBar
-from PyQt5.QtCore import Qt, QObject, QThread, QSize, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import Qt, QObject, QThread, QSize, pyqtSignal, pyqtSlot, QEvent
 from PyQt5.QtGui import QDoubleValidator, QIcon
 from Parameter import OptType, ParameterType, ShiftType
 import ast
@@ -92,7 +92,11 @@ class QTool(Ui_ToolTab, QWidget, Tool):
 
         connection_id = self.toolParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         connection_id = self.toolParamTable.itemChanged.connect(self.handle_parameterItemChanged)
-
+        self.toolParamTable.setEditTriggers(QTreeWidget.EditKeyPressed)
+        
+    def editItem(self, item, column):
+        print(column)
+        
     def update_parameter_table(self):
         """Update the Tool parameter table
         
