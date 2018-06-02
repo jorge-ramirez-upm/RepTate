@@ -267,7 +267,7 @@
     <string>Show/Hide Figure Toolbar</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionShiftVertically">
@@ -344,6 +344,9 @@
    <property name="toolTip">
     <string>View all sets simultaneously</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
   </action>
   <action name="actionReload_Data">
    <property name="icon">
@@ -355,6 +358,9 @@
    </property>
    <property name="toolTip">
     <string>Reload data files and theories</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
   <action name="actionInspect_Data">
@@ -371,6 +377,9 @@
    <property name="toolTip">
     <string>Inspect contents of data files</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
   </action>
   <action name="actionMarkerSettings">
    <property name="icon">
@@ -382,6 +391,9 @@
    </property>
    <property name="toolTip">
     <string>Select Dataset Plot Style</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
    </property>
   </action>
   <action name="actionTrack_data">
@@ -448,6 +460,9 @@
    </property>
    <property name="toolTip">
     <string>New Tool</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+T</string>
    </property>
   </action>
   <action name="actionSave_View">

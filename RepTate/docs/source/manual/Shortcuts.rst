@@ -8,9 +8,9 @@ Reptate Keyboard Shortcuts
 ..	toctree::
    	:maxdepth: 2
 
--------------------
-Application Manager
--------------------
+---------------------------------
+Application Manager (Main Window)
+---------------------------------
 
 ==============  ==============================
 Press this key  To do this
@@ -28,6 +28,21 @@ Ctrl+0          New S(q,t) Application
 Ctrl+Q          Quit Reptate
 ==============  ==============================
 
+-----------
+Application
+-----------
+
+==============  ==============================
+Press this key  To do this
+==============  ==============================
+Alt+T           New Tool (selected from dropdown box)
+Ctrl+A          View All Data Sets
+Ctrl+F          Show Figure Tools
+Ctrl+I          Open Data Inspector
+Ctrl+N          New Empty Data Set
+Ctrl+O          Add files to New Data Set (if no Data Set is available)
+==============  ==============================
+
 --------
 Data Set
 --------
@@ -35,9 +50,10 @@ Data Set
 ==============  ==============================
 Press this key  To do this
 ==============  ==============================
-Ctrl+N          New Data Set
-Ctrl+O          Add files to current dataset
-Alt+N           New theory (from dropdown box)
+Alt+N           New theory (selected from dropdown box)
+Ctrl+M          Open Marker/Legend settings
+Ctrl+O          Add files to current Data Set
+Ctrl+R          Reload Data in current Data Set
 ==============  ==============================
 
 ------
@@ -49,8 +65,20 @@ Press this key  To do this
 ==============  ==============================
 Alt+C           Calculate current theory
 Alt+M           Fit current theory
+Ctrl+C          Copy Parameters
+Ctrl+V          Paste Parameters
 ==============  ==============================
 
+
+----
+Tool
+----
+
+==============  ==============================
+Press this key  To do this
+==============  ==============================
+F2              Edit Tool Parameter
+==============  ==============================
 
 
 
