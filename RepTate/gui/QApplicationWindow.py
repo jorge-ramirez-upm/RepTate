@@ -420,10 +420,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.canvas.draw()
 
     def show_legend(self):
-        # if self.current_viewtab == 0:
-        #     ax = self.axarr[0]
-        # else:
-        #     ax = self.axarr[self.current_viewtab - 1]
+        if self.current_viewtab == 0:
+            ax = self.axarr[0]
+        else:
+            ax = self.axarr[self.current_viewtab - 1]
 
         if self.actionShow_Legend.isChecked():
             L=[]
@@ -441,7 +441,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                             val = file.file_parameters[p]
                             label = label.replace('['+p+']', str(val))
                     N.append(label)
-            self.legend = plt.legend(L, N, **self.legend_opts)            
+            self.legend = ax.legend(L, N, **self.legend_opts)            
                 
             self.legend.draggable(self.legend_draggable)
         else:
