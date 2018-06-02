@@ -116,7 +116,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # Data Inspector Toolbar
         self.data_inspector_panel_widget = QWidget(self)
         vblayout = QVBoxLayout()
-
+        vblayout.setContentsMargins(0, 0, 0, 0)
+        vblayout.setSpacing(0)
+        
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionCopy)
@@ -138,6 +140,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # In the Data Inspector area (at the bottom)
         self.tool_panel_widget = QWidget(self)
         vblayout2 = QVBoxLayout()
+        vblayout2.setContentsMargins(0, 0, 0, 0)
+        vblayout2.setSpacing(0)
 
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
