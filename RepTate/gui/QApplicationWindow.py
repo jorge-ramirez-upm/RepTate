@@ -254,7 +254,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.graphicnotes = []
         self.artistnotes = []
         connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
-        connection_id = self.actionShow_Legend.triggered.connect(self.show_legend)
+        connection_id = self.actionShow_Legend.triggered.connect(self.handle_actionShow_Legend)
         plt.connect('motion_notify_event', self.mpl_motion_event)
 
         #Setting up the marker-settings dialog
@@ -268,7 +268,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.color1 = None
         self.color2 = None
         self.color_th = None
-        self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':16, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
+        self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':12, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
         self.legend_draggable = True
         self.default_legend_labels = True
         self.legend_labels = ""
@@ -419,16 +419,33 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.artistnotes.append(DraggableNote(ann, DragType.both, None, None))
             self.canvas.draw()
 
-    def show_legend(self):
+    def handle_actionShow_Legend(self):
+        """toogle view/hide the legend"""
+        self.dialog.ui.cb_show_legend.setChecked(not self.dialog.ui.cb_show_legend.isChecked())
+        self.update_legend()
+
+    def update_legend(self):
         if self.current_viewtab == 0:
             ax = self.axarr[0]
         else:
             ax = self.axarr[self.current_viewtab - 1]
 
-        if self.actionShow_Legend.isChecked():
+        if not (self.dialog.ui.cb_show_legend.isChecked() and self.DataSettabWidget.currentWidget()):
+            # remove legend when button unchecked or when no dataset
+            try:
+                self.legend.remove()
+            except:
+                pass # no legend to remove
+        else:
             L=[]
             N=[]
             ds = self.DataSettabWidget.currentWidget()
+            if self.default_legend_labels:
+                # set default legend from app parameters
+                self.legend_labels = r""
+                ftype = list(self.filetypes.values())[0]
+                for p in ftype.basic_file_parameters:
+                    self.legend_labels += p + ' = [' + p + '] '
             params = re.findall(r"\[([A-Za-z0-9_]+)\]", self.legend_labels)
             for j, file in enumerate(ds.files):
                 if file.active:
@@ -444,8 +461,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.legend = ax.legend(L, N, **self.legend_opts)            
                 
             self.legend.draggable(self.legend_draggable)
-        else:
-            self.legend.remove()
+
         try:
             self.canvas.draw()
         except Exception as e:
@@ -732,66 +748,63 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             #get the theory line width
             ds.th_line_width = self.dialog.ui.sbThLineWidth.value()
 
-            ds.do_plot()
             # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
             ds.set_table_icons(ds.table_icon_list)
             # ds.DataSettreeWidget.blockSignals(False) 
-        
-        # Legend stuff
-        self.legend_opts['loc'] = self.dialog.ui.locationComboBox.currentText()
-        self.legend_opts['ncol'] = self.dialog.ui.colSpinBox.value()
-        self.legend_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox.value()
-        self.legend_opts['markerfirst'] = self.dialog.ui.markerfirstCheckBox.isChecked()
-        self.legend_opts['frameon'] = self.dialog.ui.frameonCheckBox.isChecked()
-        self.legend_opts['fancybox'] = self.dialog.ui.fancyboxCheckBox.isChecked()
-        self.legend_opts['shadow'] = self.dialog.ui.shadowCheckBox.isChecked()
-        if (self.dialog.ui.framealphaCheckBox.isChecked()):
-            self.legend_opts['framealpha'] = self.dialog.ui.framealphaSpinBox.value()
-        else:
-            self.legend_opts['framealpha'] = None
-        if (self.dialog.ui.facecolorCheckBox.isChecked()):
-            pass
-        else:
-            self.legend_opts['facecolor'] = None
-        if (self.dialog.ui.edgecolorCheckBox.isChecked()):
-            pass
-        else:
-            self.legend_opts['edgecolor'] = None
-        if (self.dialog.ui.modeCheckBox.isChecked()):
-            self.legend_opts['mode'] = 'expand'
-        else:
-            self.legend_opts['mode'] = None
-        if (self.dialog.ui.legendtitleCheckBox.isChecked()):
-            self.legend_opts['title'] = r""+self.dialog.ui.legendtitleStr.text()
-        else:
-            self.legend_opts['title'] = None
-        if (self.dialog.ui.borderpadCheckBox.isChecked()):
-            self.legend_opts['borderpad'] = self.dialog.ui.borderpadSpinBox.value()
-        else:
-            self.legend_opts['borderpad'] = None
-        if (self.dialog.ui.labelspacingCheckBox.isChecked()):
-            self.legend_opts['labelspacing'] = self.dialog.ui.labelspacingSpinBox.value()
-        else:
-            self.legend_opts['labelspacing'] = None
-        if (self.dialog.ui.handletextpadCheckBox.isChecked()):
-            self.legend_opts['handletextpad'] = self.dialog.ui.handletextpadSpinBox.value()
-        else:
-            self.legend_opts['handletextpad'] = None
-        if (self.dialog.ui.columnspacingCheckBox.isChecked()):
-            self.legend_opts['columnspacing'] = self.dialog.ui.columnspacingSpinBox.value()
-        else:
-            self.legend_opts['columnspacing'] = None
-        if (self.dialog.ui.legendlabelCheckBox.isChecked()):
-            self.default_legend_labels = False
-            self.legend_labels = self.dialog.ui.legendlabelStr.text()
-        else:
-            self.default_legend_labels = True
-            self.legend_labels = r""
-            ftype = list(self.filetypes.values())[0]
-            for p in ftype.basic_file_parameters:
-                self.legend_labels += p + ' = [' + p + '] '
-        self.legend_draggable = self.dialog.ui.draggableCheckBox.isChecked()
-                
+            
+            # Legend stuff
+            self.legend_opts['loc'] = self.dialog.ui.locationComboBox.currentText()
+            self.legend_opts['ncol'] = self.dialog.ui.colSpinBox.value()
+            self.legend_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox.value()
+            self.legend_opts['markerfirst'] = self.dialog.ui.markerfirstCheckBox.isChecked()
+            self.legend_opts['frameon'] = self.dialog.ui.frameonCheckBox.isChecked()
+            self.legend_opts['fancybox'] = self.dialog.ui.fancyboxCheckBox.isChecked()
+            self.legend_opts['shadow'] = self.dialog.ui.shadowCheckBox.isChecked()
+            if (self.dialog.ui.framealphaCheckBox.isChecked()):
+                self.legend_opts['framealpha'] = self.dialog.ui.framealphaSpinBox.value()
+            else:
+                self.legend_opts['framealpha'] = None
+            if (self.dialog.ui.facecolorCheckBox.isChecked()):
+                pass
+            else:
+                self.legend_opts['facecolor'] = None
+            if (self.dialog.ui.edgecolorCheckBox.isChecked()):
+                pass
+            else:
+                self.legend_opts['edgecolor'] = None
+            if (self.dialog.ui.modeCheckBox.isChecked()):
+                self.legend_opts['mode'] = 'expand'
+            else:
+                self.legend_opts['mode'] = None
+            if (self.dialog.ui.legendtitleCheckBox.isChecked()):
+                self.legend_opts['title'] = r""+self.dialog.ui.legendtitleStr.text()
+            else:
+                self.legend_opts['title'] = None
+            if (self.dialog.ui.borderpadCheckBox.isChecked()):
+                self.legend_opts['borderpad'] = self.dialog.ui.borderpadSpinBox.value()
+            else:
+                self.legend_opts['borderpad'] = None
+            if (self.dialog.ui.labelspacingCheckBox.isChecked()):
+                self.legend_opts['labelspacing'] = self.dialog.ui.labelspacingSpinBox.value()
+            else:
+                self.legend_opts['labelspacing'] = None
+            if (self.dialog.ui.handletextpadCheckBox.isChecked()):
+                self.legend_opts['handletextpad'] = self.dialog.ui.handletextpadSpinBox.value()
+            else:
+                self.legend_opts['handletextpad'] = None
+            if (self.dialog.ui.columnspacingCheckBox.isChecked()):
+                self.legend_opts['columnspacing'] = self.dialog.ui.columnspacingSpinBox.value()
+            else:
+                self.legend_opts['columnspacing'] = None
+            if (self.dialog.ui.legendlabelCheckBox.isChecked()):
+                self.default_legend_labels = False
+                self.legend_labels = self.dialog.ui.legendlabelStr.text()
+            else:
+                self.default_legend_labels = True
+            self.legend_draggable = self.dialog.ui.draggableCheckBox.isChecked()
+
+            ds.do_plot() # update plot and legend
+
     def handle_inspectorVisibilityChanged(self, visible):
         """Handle the hide/show event of the data inspector
         
@@ -996,6 +1009,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.set_no_limits(ds.current_theory) 
         self.delete(ds.name) #call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
+        self.update_legend()
 
     def change_view(self):
         """Change plot view

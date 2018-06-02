@@ -695,6 +695,8 @@ class Application(CmdBase):
         """
         self.set_axes_properties(self.autoscale)
         #self.set_legend_properties()
+        if CmdBase.mode == CmdMode.GUI:
+            self.update_legend()
         self.canvas.draw()
 
     def set_axes_properties(self, autoscale=True):

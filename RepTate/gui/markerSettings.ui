@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>367</width>
-    <height>544</height>
+    <height>568</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -536,6 +536,22 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
+        <widget class="QCheckBox" name="cb_show_legend">
+         <property name="toolTip">
+          <string>Show Legend on Figure</string>
+         </property>
+         <property name="text">
+          <string>Show Legend</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <property name="tristate">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
           <string>Legend Properties</string>
@@ -743,6 +759,46 @@
              <property name="spacing">
               <number>0</number>
              </property>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="fancyboxCheckBox">
+               <property name="toolTip">
+                <string>Draw legend frame with round edges</string>
+               </property>
+               <property name="text">
+                <string>Fancy Box</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="markerfirstCheckBox">
+               <property name="toolTip">
+                <string>Place legend marker to the left of the legend label</string>
+               </property>
+               <property name="text">
+                <string>Marker First</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0">
+              <widget class="QCheckBox" name="modeCheckBox">
+               <property name="toolTip">
+                <string>Expand the legend horizontally to fill the axes area</string>
+               </property>
+               <property name="text">
+                <string>Expand Mode</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="shadowCheckBox">
+               <property name="toolTip">
+                <string>Draw a shadow behind the legend</string>
+               </property>
+               <property name="text">
+                <string>Shadow</string>
+               </property>
+              </widget>
+             </item>
              <item row="7" column="0">
               <widget class="QFrame" name="frameColors">
                <property name="frameShape">
@@ -847,36 +903,6 @@
                </layout>
               </widget>
              </item>
-             <item row="2" column="0">
-              <widget class="QCheckBox" name="fancyboxCheckBox">
-               <property name="toolTip">
-                <string>Draw legend frame with round edges</string>
-               </property>
-               <property name="text">
-                <string>Fancy Box</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="markerfirstCheckBox">
-               <property name="toolTip">
-                <string>Place legend marker to the left of the legend label</string>
-               </property>
-               <property name="text">
-                <string>Marker First</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="frameonCheckBox">
-               <property name="toolTip">
-                <string>Draw the legend inside a patch (frame)</string>
-               </property>
-               <property name="text">
-                <string>Draw Frame</string>
-               </property>
-              </widget>
-             </item>
              <item row="4" column="0">
               <widget class="QFrame" name="frameTransparency">
                <property name="frameShape">
@@ -924,23 +950,13 @@
                </layout>
               </widget>
              </item>
-             <item row="9" column="0">
-              <widget class="QCheckBox" name="modeCheckBox">
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="frameonCheckBox">
                <property name="toolTip">
-                <string>Expand the legend horizontally to fill the axes area</string>
+                <string>Draw the legend inside a patch (frame)</string>
                </property>
                <property name="text">
-                <string>Expand Mode</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QCheckBox" name="shadowCheckBox">
-               <property name="toolTip">
-                <string>Draw a shadow behind the legend</string>
-               </property>
-               <property name="text">
-                <string>Shadow</string>
+                <string>Draw Frame</string>
                </property>
               </widget>
              </item>
@@ -956,9 +972,6 @@
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_11">
-             <property name="spacing">
-              <number>6</number>
-             </property>
              <property name="margin">
               <number>0</number>
              </property>
@@ -1173,9 +1186,6 @@
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_12">
-             <property name="spacing">
-              <number>6</number>
-             </property>
              <property name="margin">
               <number>0</number>
              </property>
@@ -1231,9 +1241,9 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QPushButton" name="pushApply">
+      <widget class="QPushButton" name="pushOK">
        <property name="text">
-        <string>Apply</string>
+        <string>OK</string>
        </property>
       </widget>
      </item>
@@ -1245,9 +1255,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushOK">
+      <widget class="QPushButton" name="pushApply">
        <property name="text">
-        <string>OK</string>
+        <string>Apply</string>
        </property>
       </widget>
      </item>
