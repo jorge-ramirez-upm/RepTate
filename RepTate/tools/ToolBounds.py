@@ -43,9 +43,7 @@ from DataTable import DataTable
 
 
 class ToolBounds(CmdBase):
-    """[summary]
-    
-    [description]
+    """Remove points in the current view ïf :math:`x \notin [x_{min}, x_{max}]` or :math:`y \notin [y_{min}, y_{max}]`
     """
     toolname = 'Bounds'
     description = 'Bounds Tool'

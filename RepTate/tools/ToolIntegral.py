@@ -45,9 +45,8 @@ from scipy.integrate import odeint, simps
 from scipy.interpolate import interp1d
 
 class ToolIntegral(CmdBase):
-    """[summary]
-    
-    [description]
+    """Calculate the integral of y with respect to x, where y is the ordinate and x is the abcissa in the current view. Repeated points in the data are removed before the integral is performed. The data between the point is interpolated with a cubic spline. The total value of the definite integral is shown in the Tool output region. 
+    If a different integration interval is needed, the Bounds tool can be used before the Integral tool.
     """
     toolname = 'Integral'
     description = 'Integral Tool'

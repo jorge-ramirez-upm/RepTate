@@ -44,9 +44,7 @@ from DataTable import DataTable
 from scipy.signal import savgol_filter
 
 class ToolSmooth(CmdBase):
-    """[summary]
-    
-    [description]
+    """Smooths the current view data by applying a Savitzky-Golay filter. The smoothing procedure is controlled by means of two parameters: the **window** length (a positive, odd integer), which represents the number of convolution coefficients of the filter, and the **order** of the polynomial used to fit the samples (must be smaller than the window length).
     """
     toolname = 'Smooth'
     description = 'Smooth Tool'
@@ -100,7 +98,7 @@ class BaseToolSmooth:
         pass
 
     def calculate(self, x, y, ax=None, color=None):
-        """Smooth function that returns the square of the y, according to the view        
+        """Smooth the x, y data
         """
         window = self.parameters["window"].value
         order = self.parameters["order"].value
@@ -163,3 +161,27 @@ class GUIToolSmooth(BaseToolSmooth, QTool):
         self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
+
+    def set_param_value(self, name, value):
+        p = self.parameters[name]
+        old_value = p.value
+        try:
+            new_value = int(value)
+        except ValueError:
+            return "Value must be a integer", False        
+        message, success = super().set_param_value(name, value)
+        if success:
+            if name == 'window':
+                order = self.parameters['order'].value
+                if (new_value <= order or new_value < 0 or new_value%2==0):
+                    p.value = old_value
+                    message = "window must be a positive, odd integer, larger than order"
+                    success = False
+            elif name == 'order':
+                window = self.parameters['window'].value
+                if (new_value >= window or new_value<0):
+                    p.value = old_value
+                    message = "order must be >=0 and smaller than window"
+                    success = False
+           
+        return message, success

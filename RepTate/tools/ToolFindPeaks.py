@@ -44,9 +44,9 @@ from DataTable import DataTable
 from PyQt5.QtGui import QIcon
 
 class ToolFindPeaks(CmdBase):
-    """[summary]
+    """Find peaks (maxima or minima) in the data, as represented by the current view. The option to find the maxima or the minima is specified by the min/max check button (the minpeaks parameter in the command line version). The **threshold** controls the relative height that a peak must have (with respect to the data span) in order to be detected. The **minimum_distance** parameter controls how far from each other the peaks must be in order to be distinguished. The returned peaks correspond to the maximum/minimum data point in the current view. Alternatively, the user can select to fit a parabola to the peaks and find the analytical maximum or minimum of the parabola. The parameter **minimum_distance** also controls the number of points around the maximum data point used to fit the parabola. The peaks are returned in the Tool information area and shown as symbols in the chart.
     
-    [description]
+    The algorithm used to find the peaks can be very inaccurate and slow if the data is noisy and has many local peaks. It is recommended to smooth the data first before finding the peaks. 
     """
     toolname = 'FindPeaks'
     description = 'FindPeaks Tool'
