@@ -172,3 +172,39 @@ class GUIToolBounds(BaseToolBounds, QTool):
         self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
+
+    def set_param_value(self, name, value):
+        p = self.parameters[name]
+        old_value = p.value
+        try:
+            new_value = float(value)
+        except ValueError:
+            return "Value must be a float", False        
+        message, success = super().set_param_value(name, value)
+        if success:
+            if name == 'xmax':
+                xmin = self.parameters['xmin'].value
+                if new_value <= xmin:
+                    p.value = old_value
+                    message = "xmax must be > xmin"
+                    success = False
+            elif name == 'xmin':
+                xmax = self.parameters['xmax'].value
+                if new_value >= xmax:
+                    p.value = old_value
+                    message = "xmin must be < xmax"
+                    success = False
+            elif name == 'ymax':
+                ymin = self.parameters['ymin'].value
+                if new_value <= ymin:
+                    p.value = old_value
+                    message = "ymax must be > ymin"
+                    success = False
+            elif name == 'ymin':
+                ymax = self.parameters['ymax'].value
+                if new_value >= ymax:
+                    p.value = old_value
+                    message = "ymin must be < ymax"
+                    success = False
+           
+        return message, success
