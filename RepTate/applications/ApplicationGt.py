@@ -103,30 +103,30 @@ class BaseApplicationGt:
         self.tmax_view = np.inf
 
         # VIEWS
-        self.views["log[G(t)]"] = View(
-            name="log[G(t)]",
+        self.views["log(G(t))"] = View(
+            name="log(G(t))",
             description="log Relaxation modulus",
             x_label="log(t)",
-            y_label="log(G(t))",
+            y_label="log(G)",
             x_units="s",
             y_units="Pa",
             log_x=False,
             log_y=False,
             view_proc=self.viewLogGt,
             n=1,
-            snames=["log(G(t))"])
+            snames=["log(G)"])
         self.views["G(t)"] = View(
             name="G(t)",
             description="Relaxation modulus",
             x_label="t",
-            y_label="G(t)",
+            y_label="G",
             x_units="s",
             y_units="Pa",
             log_x=True,
             log_y=True,
             view_proc=self.viewGt,
             n=1,
-            snames=["G(t)"])
+            snames=["G"])
         self.views["Schwarzl G',G''"] = View(
             name="Schwarzl G',G''",
             description="G', G'' from Schwarzl transformation of G(t)",

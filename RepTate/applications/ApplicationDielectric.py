@@ -102,19 +102,19 @@ class BaseApplicationDielectric:
             name="log(e',e''(w))",
             description="log Relative permittivity, Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="log($\epsilon'(\omega),\epsilon''(\omega)$)",
+            y_label="log($\epsilon',\epsilon''$)",
             x_units="rad/s",
             y_units="-",
             log_x=False,
             log_y=False,
             view_proc=self.viewLogE1E2,
             n=2,
-            snames=["e'(w)", "e''(w)"])
+            snames=["log(e')", "log(e'')"])
         self.views["semilog(e',e''(w))"] = View(
             name="semilog(e',e''(w))",
             description="semilog Relative permittivity, Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="$\epsilon'(\omega),\epsilon''(\omega)$",
+            y_label="$\epsilon',\epsilon''$",
             x_units="rad/s",
             y_units="-",
             log_x=False,
@@ -126,7 +126,7 @@ class BaseApplicationDielectric:
             "e',e''(w)",
             "Relative permittivity, Dielectric Loss",
             "$\omega$",
-            "$\epsilon'(\omega),\epsilon''(\omega)$",
+            "$\epsilon',\epsilon''$",
             "rad/s",
             "-",
             True,
@@ -137,72 +137,72 @@ class BaseApplicationDielectric:
             name="log(e')",
             description="log Relative Permittivity",
             x_label="log($\omega$)",
-            y_label="log($\epsilon'(\omega)$)",
+            y_label="log($\epsilon'$)",
             x_units="rad/s",
             y_units="-",
             log_x=False,
             log_y=False,
             view_proc=self.viewLogE1,
             n=1,
-            snames=["e'(w)"])
+            snames=["log(e')"])
         self.views["semilog(e')"] = View(
             name="semilog(e')",
             description="log Relative Permittivity",
             x_label="log($\omega$)",
-            y_label="$\epsilon'(\omega)$",
+            y_label="$\epsilon'$",
             x_units="rad/s",
             y_units="-",
             log_x=False,
             log_y=False,
             view_proc=self.viewSemiLogE1,
             n=1,
-            snames=["e'(w)"])
+            snames=["e'"])
         self.views["e'"] = View(
             "e'",
             "Relative Permittivity",
             "$\omega$",
-            "$\epsilon'(\omega)$",
+            "$\epsilon'$",
             "rad/s",
             "-",
             True,
             True,
             self.viewE1,
-            1, ["e'(w)"])
+            1, ["e'"])
         self.views["log(e'')"] = View(
             name="log(e'')",
             description="log Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="log($\epsilon''(\omega)$)",
+            y_label="log($\epsilon''$)",
             x_units="rad/s",
             y_units="-",
             log_x=False,
             log_y=False,
             view_proc=self.viewLogE2,
             n=1,
-            snames=["e''(w)"])
+            snames=["log(e'')"])
         self.views["semilog(e'')"] = View(
             name="semilog(e'')",
             description="semilog Dielectric Loss",
             x_label="log($\omega$)",
-            y_label="$\epsilon''(\omega)$",
+            y_label="$\epsilon''$",
             x_units="rad/s",
             y_units="-",
             log_x=False,
             log_y=False,
             view_proc=self.viewSemiLogE2,
             n=1,
-            snames=["e''(w)"])
+            snames=["e''"])
         self.views["e''"] = View(
             "e''",
             "Dielectric Loss",
             "$\omega$",
-            "$\epsilon''(\omega)$",
+            "$\epsilon''$",
             "rad/s",
             "-",
             True,
             True,
             self.viewE2,
-            1, ["e''(w)"])
+            1, ["e''"])
         self.views["Cole-Cole"] = View(
             "Cole-Cole",
             "Cole-Cole plot",
@@ -213,7 +213,7 @@ class BaseApplicationDielectric:
             False,
             False,
             self.viewColeCole,
-            1, ["Cole-Cole"])
+            1, ["e''"])
 
         #set multiviews
         self.multiviews = [

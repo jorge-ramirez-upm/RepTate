@@ -103,7 +103,7 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG1G2,
             n=2,
-            snames=["G'(w)", "G''(w)"])
+            snames=["log(G'(w))", "log(G''(w))"])
         self.views["G',G''(w)"] = View(
             "G',G''(w)",
             "Storage,Loss moduli",
@@ -136,7 +136,7 @@ class BaseApplicationTTS:
             False,
             False,
             self.viewLogEtaStar,
-            1, ["eta*(w)"])
+            1, ["log(eta*(w))"])
         self.views["delta"] = View(
             "delta",
             "delta",
@@ -183,26 +183,26 @@ class BaseApplicationTTS:
             1, ["log(G*)"])
         self.views["log(tan(delta),G*)"] = View(
             "log(tan(delta),G*)",
-            "log(tan($\delta$)(G*))",
-            "G*",
-            "log(tan($\delta$)(G*))",
+            "log(tan($\delta$))",
+            "log(G*)",
+            "log(tan($\delta$))",
             "Pa",
             "-",
             False,
             False,
             self.viewLogtandeltaGstar,
-            1, ["log(tan($\delta)(G*))"])
+            1, ["log(tan($\delta))"])
         self.views["delta(G*)"] = View(
             "delta(G*)",
             "$\delta$(G*))",
-            "G*",
+            "log(G*)",
             "$\delta$(G*))",
             "Pa",
             "deg",
             False,
             False,
             self.viewdeltatanGstar,
-            1, ["delta(G*)"])
+            1, ["delta"])
         self.views["J',J''(w)"] = View(
             "J',J''(w)",
             "J moduli",
@@ -236,7 +236,7 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG1,
             n=1,
-            snames=["G'(w)"])
+            snames=["log(G'(w))"])
         self.views["G'"] = View(
             "G'",
             "Storage modulus",
@@ -259,7 +259,7 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG2,
             n=1,
-            snames=["G''(w)"])
+            snames=["log(G''(w))"])
         self.views["G''"] = View(
             "G''",
             "Loss modulus",
@@ -282,7 +282,7 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG1G2tandelta,
             n=3,
-            snames=["G'(w)", "G''(w),tan(delta)"])
+            snames=["log(G'(w))", "log(G''(w)),log(tan(delta))"])
 
         #set multiviews
         self.multiviews = [
