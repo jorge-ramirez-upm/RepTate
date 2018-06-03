@@ -133,7 +133,7 @@ class TXTColumnFile(object):
             return True
         except ValueError:
             return False
-        
+
     def get_parameters(self, line, file):
         """[summary]
         
