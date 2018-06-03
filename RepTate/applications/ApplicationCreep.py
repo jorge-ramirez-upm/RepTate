@@ -37,11 +37,15 @@ Module for the analysis of data from Creep experiments
 """
 from CmdBase import CmdBase, CmdMode
 from Application import Application
-from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
+from QApplicationWindow import QApplicationWindow
 import numpy as np
+from scipy import interpolate
 
+from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
+from PyQt5.QtGui import QDoubleValidator
+from math import log10, sin, cos
 
 class ApplicationCreep(CmdBase):
     """Application to Analyze Data from Creep experiments
@@ -88,6 +92,11 @@ class BaseApplicationCreep:
         from TheoryRetardationModes import TheoryRetardationModesTime
         super().__init__(name, parent)
 
+        # time range for view conversion to frequency domain
+        self.eta = 10000
+        self.tmin_view = -np.inf
+        self.tmax_view = np.inf
+        
         # VIEWS
         self.views["log(gamma(t))"] = View(
             name="log(gamma(t))",
@@ -149,6 +158,22 @@ class BaseApplicationCreep:
             view_proc=self.viewt_Jt,
             n=1, 
             snames=["t/J"])
+        self.views["i-Rheo-Over G',G''"] = View(
+            name="i-Rheo-Over G',G''",
+            description=
+            "G', G'' from i-Rheo transformation of J(t) with Oversampling",
+            x_label="$\omega$",
+            y_label="G',G''",
+            x_units="rad/s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewiRheoOver,
+            n=2,
+            snames=["G',G''"])
+        self.OVER = 100  # initial oversampling
+        self.MIN_OVER = 1  # min oversampling
+        self.MAX_OVER = 10000  # max oversampling
 
         #set multiviews
         self.multiviews = [
@@ -218,6 +243,63 @@ class BaseApplicationCreep:
         y[:, 0] = dt.data[:, 0]/dt.data[:, 1]*sigma
         return x, y, True
 
+    def viewiRheoOver(self, dt, file_parameters):
+        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
+        """
+        data_x, data_y = self.get_xy_data_in_xrange(dt)
+        xunique, indunique = np.unique(data_x, return_index=True)
+        n = len(xunique)
+        sigma = float(file_parameters['stress'])
+        yunique=data_y[indunique]/sigma
+        data_x = xunique
+        data_y = yunique
+        x = np.zeros((n, 2))
+        y = np.zeros((n, 2))
+
+        f = interpolate.interp1d(
+            data_x,
+            data_y,
+            kind='cubic',
+            assume_sorted=True,
+            fill_value='extrapolate')
+        j0 = f(0)
+        ind1 = np.argmax(data_x > 0)
+        t1 = data_x[ind1]
+        j1 = data_y[ind1]
+        tN = np.max(data_x)
+        wp = np.logspace(np.log10(1 / tN), np.log10(1 / t1), n)
+        x[:, 0] = wp[:]
+        x[:, 1] = wp[:]
+
+        # Create oversampled data
+        xdata = np.zeros(1)
+        xdata[0] = data_x[ind1]
+        for i in range(ind1 + 1, n):
+            tmp = np.logspace(
+                log10(data_x[i - 1]), log10(data_x[i]),
+                self.OVER + 1)
+            xdata = np.append(xdata, tmp[1:])
+        ydata = f(xdata)
+
+        coeff = (ydata[1:] - ydata[:-1]) / (xdata[1:] - xdata[:-1])
+        for i, w in enumerate(wp):
+            a = j0 + sin(w * t1) * (j1 - j0) / w / t1 - sin(w*tN)/self.eta/w + np.dot(
+                coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
+            b = -(1 - cos(w * t1)) * (j1 - j0) / w / t1 - cos(w*tN)/self.eta/w - np.dot(
+                coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
+            modab = a*a + b*b
+            y[i, 0] = a/modab
+            y[i, 1] = -b/modab
+        return x, y, True
+
+    def get_xy_data_in_xrange(self, dt):
+        """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
+        #get indices of data in xrange
+        args = np.where(np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view))
+        x_in_range = dt.data[:, 0][args]
+        y_in_range = dt.data[:, 1][args]
+        return x_in_range, y_in_range
+        
 class CLApplicationCreep(BaseApplicationCreep, Application):
     """[summary]
     
@@ -234,6 +316,11 @@ class CLApplicationCreep(BaseApplicationCreep, Application):
         """
         super().__init__(name, parent)
 
+    def show_sb_oversampling(self):
+        pass
+
+    def hide_sb_oversampling(self):
+        pass
 
 class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
     """[summary]
@@ -250,3 +337,128 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
             - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
+
+        self.add_oversampling_widget()
+        self.set_oversampling_widget_visible(False)
+        
+        self.add_xrange_widget_view()
+        self.set_xrange_widgets_view_visible(False)
+
+    def add_oversampling_widget(self):
+        """Add spinbox for the oversampling ratio"""
+        self.sb_oversampling = QSpinBox()
+        self.sb_oversampling.setRange(self.MIN_OVER, self.MAX_OVER)
+        self.sb_oversampling.setValue(self.OVER)
+        self.sb_oversampling.valueChanged.connect(self.change_oversampling)
+
+        self.viewLayout.insertWidget(2, self.sb_oversampling)
+
+    def add_xrange_widget_view(self):
+        """Add widgets below the view combobox to select the 
+        x-range applied to view transformation"""
+        hlayout = QHBoxLayout()
+        
+        hlayout.addStretch()
+        #eta
+        self.eta_view = QLineEdit("4")
+        self.eta_view.textChanged.connect(self.change_eta)
+        self.eta_view.setValidator(QDoubleValidator())
+        self.eta_view.setMaximumWidth(35)
+        self.eta_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.eta_label = QLabel("<b>log(eta)</b>")
+        hlayout.addWidget(self.eta_label)
+        hlayout.addWidget(self.eta_view)
+        #space
+        hlayout.addSpacing(5)
+        #xmin
+        self.xmin_view = QLineEdit("-inf")
+        self.xmin_view.textChanged.connect(self.change_xmin)
+        self.xmin_view.setValidator(QDoubleValidator())
+        self.xmin_view.setMaximumWidth(35)
+        self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
+        hlayout.addWidget(self.xmin_label)
+        hlayout.addWidget(self.xmin_view)
+        #space
+        hlayout.addSpacing(5)
+        #xmax
+        self.xmax_view = QLineEdit("inf")
+        self.xmax_view.textChanged.connect(self.change_xmax)
+        self.xmax_view.setValidator(QDoubleValidator())
+        self.xmax_view.setMaximumWidth(35)
+        self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
+        hlayout.addWidget(self.xmax_label)
+        hlayout.addWidget(self.xmax_view)
+        #push button to refresh view
+        self.pb = QPushButton("GO")
+        self.pb.setMaximumWidth(25)
+        self.pb.clicked.connect(self.update_all_ds_plots)
+        hlayout.addWidget(self.pb)
+        self.hlayout_view = hlayout
+        self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
+
+    def change_eta(self, text):
+        """Update the value of eta"""
+        if text in "-np.inf -inf":
+            self.eta = -np.inf
+        else:
+            try:
+                self.eta = 10**float(text)
+            except:
+                pass
+
+    def change_xmin(self, text):
+        """Update the value of t_min"""
+        if text in "-np.inf -inf":
+            self.tmin_view = -np.inf
+        else:
+            try:
+                self.tmin_view = 10**float(text)
+            except:
+                pass
+
+    def change_xmax(self, text):
+        """Update the value of t_max"""
+        if text in "np.inf inf":
+            self.tmax_view = np.inf
+        else:
+            try:
+                self.tmax_view = 10**float(text)
+            except:
+                pass
+
+    def change_oversampling(self, val):
+        """Change the value of the oversampling ratio.
+        Called when the spinbox value is changed"""
+        self.OVER = val
+
+    def set_oversampling_widget_visible(self, state):
+        """Show/Hide the extra widget "sampling ratio" """
+        self.sb_oversampling.setVisible(state)
+
+    def set_xrange_widgets_view_visible(self, state):
+        """Show/Hide the extra widgets for xrange selection"""
+        self.pb.setVisible(state)
+        self.xmin_label.setVisible(state)
+        self.eta_label.setVisible(state)
+        self.xmax_label.setVisible(state)
+        self.eta_view.setVisible(state)
+        self.xmin_view.setVisible(state)
+        self.xmax_view.setVisible(state)
+        
+    def set_view_tools(self, view_name):
+        """Show/Hide extra view widgets depending on the current view"""
+        if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
+            self.set_xrange_widgets_view_visible(True)
+            self.set_oversampling_widget_visible(False)
+        elif view_name == "i-Rheo-Over G',G''":
+            self.set_xrange_widgets_view_visible(True)
+            self.set_oversampling_widget_visible(True)
+        else:
+            try:
+                self.set_xrange_widgets_view_visible(False)
+                self.set_oversampling_widget_visible(False)
+            except AttributeError:
+                pass
+        
