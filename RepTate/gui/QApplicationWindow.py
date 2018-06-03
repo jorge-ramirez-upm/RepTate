@@ -297,8 +297,55 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         dilogue_name = "Select Folder for Saving data in Current View as txt"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
         if isdir(folder):
-            print('saving views...')
-            QMessageBox.warning(self, "Saving views", "Coming soon..." )
+            ds = self.DataSettabWidget.currentWidget()
+            if ds:
+                nfout = 0
+                for f in ds.files:
+                    if f.active:
+                        series = f.data_table.series
+                        all_views_data = {}
+                        max_row_len = 0
+                        max_view_name_len = 0
+                        for nx, view in enumerate(self.multiviews):
+                            max_view_name_len = max(max_view_name_len, len(view.name) + 3)
+                            data_view = []
+                            for i in range(view.n):
+                                data_view.append(series[nx][i].get_data())
+                                max_row_len = max(max_row_len, len(series[nx][i].get_data()[0]) )
+                            all_views_data[view.name] = data_view
+                        
+                        nviews = len(self.multiviews)
+                        with open(join(folder, f.file_name_short) + '_VIEW.txt', 'w') as fout:
+                            # header with file parameters
+                            fout.write('#')
+                            for pname in f.file_parameters:
+                                fout.write('%s=%s;' % (pname, f.file_parameters[pname]))
+                            fout.write('\n')
+                           
+                            # column titles
+                            for view_name in all_views_data:
+                                field_width = len(view_name) + 3
+                                for i in range(len(all_views_data[view_name])):
+                                    fout.write('{0:{1}s}\t'.format('%s_x%d' %(view_name, i + 1), field_width))
+                                    fout.write('{0:{1}s}\t'.format('%s_y%d' %(view_name, i + 1), field_width))
+                            fout.write('\n')
+                           
+                            # data lines
+                            for i in range(max_row_len):
+                                for view_name in all_views_data:
+                                    field_width = len(view_name) + 3
+                                    data_view = all_views_data[view_name]
+                                    for xy in range(len(data_view)):
+                                        try:
+                                            fout.write('{0:{1}.6g}\t'.format(data_view[xy][0][i], field_width))
+                                            fout.write('{0:{1}.6g}\t'.format(data_view[xy][1][i], field_width))
+                                        except:
+                                            fout.write('{0:{1}s}\t'.format('', field_width))
+                                            fout.write('{0:{1}s}\t'.format('', field_width))
+                                fout.write('\n')
+                        nfout += 1
+
+            QMessageBox.warning(self, "Saving views", "Wrote %d file(s) ending \"_VIEW.txt\" in \"%s\"" % (nfout, folder))
             
 
     def handle_actionNewTool(self):
@@ -1277,37 +1324,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             - event {[type]} -- [description]
         """
         pass
-        
-    # def onpick (self, event):
-    #     """Copy series data to clipboard
-        
-    #     [description]
-        
-    #     Arguments:
-    #         event {[type]} -- [description]
-    #     """
-    #     if event.mouseevent.button == 3:
-    #         answer = QMessageBox.question(self, "Copy data", "Copy series data to clipboard?")
-    #         if answer == QMessageBox.Yes:
-    #             x, y = event.artist.get_data()
-    #             line_strings=[]
-    #             for i in range(len(x)):
-    #                 line_strings.append(str(x[i])+"\t"+str(y[i]))
-    #             array_string = "\n".join(line_strings)
-    #             QApplication.clipboard().setText(array_string)
-
-    # def onclick(self, event):
-    #     """[summary]
-        
-    #     [description]
-        
-    #     Arguments:
-    #         event {[type]} -- [description]
-    #     """
-    #     if event.dblclick:
-    #         pickedtick = event.artist
-    #         print(event)
-    #         print(pickedtick)
 
     def resizeplot(self, event=""):
         """[summary]
@@ -1332,57 +1348,4 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for ax in self.axarr:
             for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
                 item.set_fontsize(font_size)
-
-    # def No_Limits(self):
-    #     self.actionShow_Limits.setIcon(self.actionNo_Limits.icon())
-
-    # def Vertical_Limits(self):
-    #     self.actionShow_Limits.setIcon(self.actionVertical_Limits.icon())
-
-    # def Horizontal_Limits(self):
-    #     self.actionShow_Limits.setIcon(self.actionHorizontal_Limits.icon())
-
-    # def Both_Limits(self):
-    #     self.actionShow_Limits.setIcon(self.actionBoth_Limits.icon())
-        
-    def Smaller_Symbols(self):
-        """[summary]
-        
-        [description]
-        """
-        tab = self.DataSettabWidget.currentWidget()
-        if tab == None:
-            return
-        ds = self.datasets[tab.name]
-        msize = ds.marker_size - 5
-        ds.marker_size = msize if msize>0 else 2
-        ds.do_plot()
-        # self.actionData_Representation.setIcon(self.actionShow_Smaller_Symbols.icon())
-
-    def ResetSymbolsSize(self):
-        """[summary]
-        
-        [description]
-        """
-        tab = self.DataSettabWidget.currentWidget()
-        if tab == None:
-            return        
-        ds = self.datasets[tab.name]
-        ds.marker_size = 12
-        ds.do_plot()
-        # self.actionData_Representation.setIcon(self.actionResetSymbolsSize.icon()) 
-   
-    def Larger_Symbols(self):
-        """[summary]
-        
-        [description]
-        """
-        tab = self.DataSettabWidget.currentWidget()
-        if tab == None:
-            return
-        ds = self.datasets[tab.name]
-        msize = ds.marker_size + 5
-        ds.marker_size = msize if msize<26 else 26
-        ds.do_plot()
-        # self.actionData_Representation.setIcon(self.actionShow_Larger_Symbols.icon())
-    
+  
