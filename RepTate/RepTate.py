@@ -147,7 +147,7 @@ def start_RepTate(argv):
             tb_msg += str(e)
         tb_msg += "%s\n" % str(value)
         print(tb_msg)
-        msg = 'Sorry, something went wrong (%s). Try to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?' % str(value)
+        msg = 'Sorry, something went wrong:\n \"%s\".\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?' % str(value)
         ans = QMessageBox.critical(ex, 'Critical Error', msg, QMessageBox.Yes | QMessageBox.No )
         if ans == QMessageBox.Yes:
             address = "reptate.rheology@gmail.com"
