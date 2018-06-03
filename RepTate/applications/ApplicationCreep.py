@@ -170,7 +170,7 @@ class BaseApplicationCreep:
             log_y=True,
             view_proc=self.viewiRheoOver,
             n=2,
-            snames=["G',G''"])
+            snames=["G'","G''"])
         self.OVER = 100  # initial oversampling
         self.MIN_OVER = 1  # min oversampling
         self.MAX_OVER = 10000  # max oversampling

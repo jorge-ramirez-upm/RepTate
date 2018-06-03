@@ -138,7 +138,7 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewSchwarzl_Gt,
             n=2,
-            snames=["G',G''"])
+            snames=["G'","G''"])
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
             description="G', G'' from i-Rheo transformation of G(t)",
@@ -150,7 +150,7 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewiRheo,
             n=2,
-            snames=["G',G''"])
+            snames=["G'","G''"])
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
             description=
@@ -163,7 +163,7 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewiRheoOver,
             n=2,
-            snames=["G',G''"])
+            snames=["G'","G''"])
         self.OVER = 100  # initial oversampling
         self.MIN_OVER = 1  # min oversampling
         self.MAX_OVER = 10000  # max oversampling

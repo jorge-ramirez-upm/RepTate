@@ -39,6 +39,7 @@ It is the GUI counterpart of Application.
 import io
 import re
 import traceback
+import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
 from PyQt5.QtGui import QIcon, QColor
@@ -53,6 +54,7 @@ from DataSet import ColorMode, SymbolMode, ThLineMode
 from CmdBase import CmdBase, CmdMode
 from Application import Application
 from DraggableArtists import DragType, DraggableSeries, DraggableNote
+from collections import OrderedDict
 
 #To recompile the symbol-settings dialog:
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
@@ -303,49 +305,82 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 for f in ds.files:
                     if f.active:
                         series = f.data_table.series
-                        all_views_data = {}
+                        all_views_data = OrderedDict()
                         max_row_len = 0
                         max_view_name_len = 0
                         for nx, view in enumerate(self.multiviews):
                             max_view_name_len = max(max_view_name_len, len(view.name) + 3)
                             data_view = []
                             for i in range(view.n):
-                                data_view.append(series[nx][i].get_data())
+                                x, y = series[nx][i].get_data()
+                                if i > 0 and np.array_equal(x, data_view[0][0]):
+                                    # if x1=x2, only use y
+                                    data_view.append([y,])
+                                else:
+                                    data_view.append([x,y])
                                 max_row_len = max(max_row_len, len(series[nx][i].get_data()[0]) )
                             all_views_data[view.name] = data_view
                         
                         nviews = len(self.multiviews)
                         with open(join(folder, f.file_name_short) + '_VIEW.txt', 'w') as fout:
                             # header with file parameters
-                            fout.write('#')
+                            fout.write('#view(s)=[%s];' % (', '.join([v.name for v in self.multiviews])))
                             for pname in f.file_parameters:
                                 fout.write('%s=%s;' % (pname, f.file_parameters[pname]))
                             fout.write('\n')
                            
                             # column titles
+                            field_width = []
                             for view_name in all_views_data:
-                                field_width = len(view_name) + 3
-                                for i in range(len(all_views_data[view_name])):
-                                    fout.write('{0:{1}s}\t'.format('%s_x%d' %(view_name, i + 1), field_width))
-                                    fout.write('{0:{1}s}\t'.format('%s_y%d' %(view_name, i + 1), field_width))
+                                view = self.views[view_name]
+                                snames_index = 0
+                                for xy in all_views_data[view_name]:
+                                    # loop over the different series in the view "view_name"
+                                    if len(xy) > 1:
+                                        # case where there is x and y series
+                                        fw1 = max(len(view.x_label), 15)
+                                        fw2 = max(len(view.snames[snames_index]), 15)
+                                        fout.write('{0:<{1}s}\t'.format(view.x_label, fw1))
+                                        fout.write('{0:<{1}s}\t'.format(view.snames[snames_index], fw2))
+                                        field_width.append(fw1)
+                                        field_width.append(fw2)
+                                    else:
+                                        # case where there is y series only
+                                        fw = max(len(view.snames[snames_index]), 15)
+                                        fout.write('{0:{1}s}\t'.format(view.snames[snames_index], fw))
+                                        field_width.append(fw)
+                                    snames_index += 1
                             fout.write('\n')
                            
                             # data lines
                             for i in range(max_row_len):
+                                fw_index = 0 # field_width index
                                 for view_name in all_views_data:
-                                    field_width = len(view_name) + 3
                                     data_view = all_views_data[view_name]
-                                    for xy in range(len(data_view)):
-                                        try:
-                                            fout.write('{0:{1}.6g}\t'.format(data_view[xy][0][i], field_width))
-                                            fout.write('{0:{1}.6g}\t'.format(data_view[xy][1][i], field_width))
-                                        except:
-                                            fout.write('{0:{1}s}\t'.format('', field_width))
-                                            fout.write('{0:{1}s}\t'.format('', field_width))
+                                    for xy in data_view:
+                                        if len(xy) > 1:
+                                            # case where there is x and y series
+                                            fw1 = field_width[fw_index]
+                                            fw2 = field_width[fw_index + 1]
+                                            fw_index += 2
+                                            try:
+                                                fout.write('{0:<{1}.8e}\t'.format(xy[0][i], fw1))
+                                                fout.write('{0:<{1}.8e}\t'.format(xy[1][i], fw2))
+                                            except:
+                                                fout.write('{0:{1}s}\t'.format('', fw1))
+                                                fout.write('{0:{1}s}\t'.format('', fw2))
+                                        else:
+                                            # case where there is y series only
+                                            fw = field_width[fw_index]
+                                            fw_index += 1
+                                            try:
+                                                fout.write('{0:<{1}.8e}\t'.format(xy[0][i], fw1))
+                                            except:
+                                                fout.write('{0:{1}s}\t'.format('', fw))
                                 fout.write('\n')
                         nfout += 1
 
-            QMessageBox.warning(self, "Saving views", "Wrote %d file(s) ending \"_VIEW.txt\" in \"%s\"" % (nfout, folder))
+            QMessageBox.warning(self, "Saving views", "Wrote %d file(s) ending \"_VIEW.txt\" in \"%s/\"" % (nfout, folder))
             
 
     def handle_actionNewTool(self):
@@ -509,16 +544,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
             self.legend.draggable(self.legend_draggable)
 
-        try:
-            self.canvas.draw()
-        except Exception as e:
-            txt=""
-            txt+="Exception: %s\n"%traceback.format_exc()
-            txt+="\nPlease, check the TITLE and/or LEGEND below:\n\n"
-            if (self.legend_opts["title"]!=None):
-                txt+="TITLE: "+self.legend_opts["title"]+"\n"
-            txt+="FIRST LEGEND ITEM: "+N[0]
-            QMessageBox.warning(self, 'Wrong Title or labels in legend', txt)
+            try:
+                self.canvas.draw()
+            except Exception as e:
+                txt=""
+                txt+="Exception: %s\n"%traceback.format_exc()
+                txt+="\nPlease, check the TITLE and/or LEGEND below:\n\n"
+                if (self.legend_opts["title"]!=None):
+                    txt+="TITLE: "+self.legend_opts["title"]+"\n"
+                txt+="FIRST LEGEND ITEM: "+N[0]
+                QMessageBox.warning(self, 'Wrong Title or labels in legend', txt)
                     
     def populate_cbPalette(self):
         """Populate the list color palettes in the marker-settings dialog
