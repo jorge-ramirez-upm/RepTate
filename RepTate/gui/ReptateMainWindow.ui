@@ -95,6 +95,7 @@
    <addaction name="actionReact"/>
    <addaction name="actionDielectric"/>
    <addaction name="actionDynamicStructureFactor"/>
+   <addaction name="actionLAOS"/>
   </widget>
   <widget class="QToolBar" name="toolBarTools">
    <property name="windowTitle">
@@ -447,6 +448,18 @@
    </property>
    <property name="toolTip">
     <string>Current Theory help</string>
+   </property>
+  </action>
+  <action name="actionLAOS">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/LAOS.png</normaloff>:/Icons/Images/new_icons/LAOS.png</iconset>
+   </property>
+   <property name="text">
+    <string>LAOS</string>
+   </property>
+   <property name="toolTip">
+    <string>Large Amplitude Oscillatory Shear</string>
    </property>
   </action>
  </widget>

@@ -51,6 +51,7 @@ from ApplicationCreep import ApplicationCreep
 from ApplicationSANS import ApplicationSANS
 from ApplicationReact import ApplicationReact
 from ApplicationDielectric import ApplicationDielectric
+from ApplicationLAOS import ApplicationLAOS
 # from ApplicationXY import ApplicationXY
 #from ApplicationFRS_I import *
 import Version
@@ -111,6 +112,8 @@ class ApplicationManager(CmdBase):
             ApplicationReact.appname] = ApplicationReact
         self.available_applications[
             ApplicationDielectric.appname] = ApplicationDielectric
+        self.available_applications[
+            ApplicationLAOS.appname] = ApplicationLAOS
         # self.available_applications[ApplicationXY.apname] = ApplicationXY
         #self.available_applications[ApplicationFRS_I.apname]=ApplicationFRS_I
 

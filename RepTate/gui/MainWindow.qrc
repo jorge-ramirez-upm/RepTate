@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/Icons">
+    <file>Images/new_icons/LAOS.png</file>
     <file>Images/new_icons/icons8-airplane-mode-on.png</file>
     <file>Images/Clip.ico</file>
     <file>Images/Exit.ico</file>
