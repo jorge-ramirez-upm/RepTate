@@ -170,7 +170,7 @@ class BaseApplicationGt:
 
         #set multiviews
         self.multiviews = [
-            self.views["log[G(t)]"], self.views["i-Rheo G',G''"]
+            self.views["log(G(t))"], self.views["i-Rheo G',G''"]
         ]  #default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews)
 
@@ -229,7 +229,11 @@ class BaseApplicationGt:
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig).
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
-        n = len(data_x)
+        xunique, indunique = np.unique(data_x, return_index=True)
+        n = len(xunique)
+        yunique=data_y[indunique]
+        data_x = xunique
+        data_y = yunique
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
@@ -267,7 +271,11 @@ class BaseApplicationGt:
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
-        n = len(data_x)
+        xunique, indunique = np.unique(data_x, return_index=True)
+        n = len(xunique)
+        yunique=data_y[indunique]
+        data_x = xunique
+        data_y = yunique
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
