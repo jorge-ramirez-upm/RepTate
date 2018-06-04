@@ -176,7 +176,7 @@ class BaseApplicationGt:
 
         # FILES
         ftype = TXTColumnFile("G(t) files", "gt", "Relaxation modulus",
-                              ['t', 'Gt'], ['Mw', 'ncontri'], ['s', 'Pa'])
+                              ['t', 'Gt'], ['Mw', 'gamma'], ['s', 'Pa'])
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
@@ -194,8 +194,12 @@ class BaseApplicationGt:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
+        try:
+            gamma = float(file_parameters["gamma"])
+        except:
+            gamma = 1
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 1]
+        y[:, 0] = dt.data[:, 1]/gamma
         return x, y, True
 
     def viewLogGt(self, dt, file_parameters):
@@ -203,8 +207,12 @@ class BaseApplicationGt:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
+        try:
+            gamma = float(file_parameters["gamma"])
+        except:
+            gamma = 1
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(dt.data[:, 1])
+        y[:, 0] = np.log10(dt.data[:, 1]/gamma)
         return x, y, True
 
     def viewSchwarzl_Gt(self, dt, file_parameters):
@@ -213,6 +221,11 @@ class BaseApplicationGt:
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         n = len(data_x)
+        try:
+            gamma = float(file_parameters["gamma"])
+        except:
+            gamma = 1
+        data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
@@ -234,6 +247,11 @@ class BaseApplicationGt:
         yunique=data_y[indunique]
         data_x = xunique
         data_y = yunique
+        try:
+            gamma = float(file_parameters["gamma"])
+        except:
+            gamma = 1
+        data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
@@ -276,6 +294,11 @@ class BaseApplicationGt:
         yunique=data_y[indunique]
         data_x = xunique
         data_y = yunique
+        try:
+            gamma = float(file_parameters["gamma"])
+        except:
+            gamma = 1
+        data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
