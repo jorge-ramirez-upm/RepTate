@@ -158,6 +158,18 @@ class BaseApplicationCreep:
             view_proc=self.viewt_Jt,
             n=1, 
             snames=["t/J"])
+        self.views["i-Rheo G',G''"] = View(
+            name="i-Rheo G',G''",
+            description="G', G'' from i-Rheo transformation of J(t)",
+            x_label="$\omega$",
+            y_label="G',G''",
+            x_units="rad/s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewiRheo,
+            n=2,
+            snames=["G'","G''"])
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
             description=
@@ -243,53 +255,90 @@ class BaseApplicationCreep:
         y[:, 0] = dt.data[:, 0]/dt.data[:, 1]*sigma
         return x, y, True
 
-    def viewiRheoOver(self, dt, file_parameters):
-        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
+    def viewiRheo(self, dt, file_parameters):
+        """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig).
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
         sigma = float(file_parameters['stress'])
         yunique=data_y[indunique]/sigma
-        data_x = xunique
-        data_y = yunique
+        t = xunique
+        j = yunique
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
         f = interpolate.interp1d(
-            data_x,
-            data_y,
+            t,
+            j,
             kind='cubic',
             assume_sorted=True,
             fill_value='extrapolate')
-        j0 = f(0)
-        ind1 = np.argmax(data_x > 0)
-        t1 = data_x[ind1]
-        j1 = data_y[ind1]
-        tN = np.max(data_x)
-        wp = np.logspace(np.log10(1 / tN), np.log10(1 / t1), n)
-        x[:, 0] = wp[:]
-        x[:, 1] = wp[:]
+        j0 = f([0])[0]
+        ind1 = np.argmax(t > 0)
+        t1 = t[ind1]
+        j1 = j[ind1]
+        tN = np.max(t)
+        w = np.logspace(log10(1 / tN), log10(1 / t1), n)
+        x[:, 0] = w[:]
+        x[:, 1] = w[:]
+
+        aux=1j*w*j0 + (1-np.exp(-1j*w*t1))*(j1-j0)/t1 + np.exp(-1j*w*tN)/self.eta
+        for i in range(ind1+1,n):
+            aux += (np.exp(-1j*w*t[i-1])-np.exp(-1j*w*t[i]))*(j[i]-j[i-1])/(t[i]-t[i-1])
+        Gstar=1j*w/aux
+        
+        y[:,0]=Gstar.real
+        y[:,1]=Gstar.imag
+        
+        return x, y, True
+        
+    def viewiRheoOver(self, dt, file_parameters):
+        """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
+        """
+        data_x, data_y = self.get_xy_data_in_xrange(dt)
+        xunique, indunique = np.unique(data_x, return_index=True)
+        n = len(xunique)
+        sigma = float(file_parameters['stress'])
+        yunique=data_y[indunique]/sigma
+        t = xunique
+        j = yunique
+        x = np.zeros((n, 2))
+        y = np.zeros((n, 2))
+
+        f = interpolate.interp1d(
+            t,
+            j,
+            kind='cubic',
+            assume_sorted=True,
+            fill_value='extrapolate')
+        j0 = f([0])[0]
+        ind1 = np.argmax(t > 0)
+        t1 = t[ind1]
+        j1 = j[ind1]
+        tN = np.max(t)
+        w = np.logspace(np.log10(1 / tN), np.log10(1 / t1), n)
+        x[:, 0] = w[:]
+        x[:, 1] = w[:]
 
         # Create oversampled data
-        xdata = np.zeros(1)
-        xdata[0] = data_x[ind1]
+        tover = np.zeros(1)
+        tover[0] = t[ind1]
         for i in range(ind1 + 1, n):
             tmp = np.logspace(
-                log10(data_x[i - 1]), log10(data_x[i]),
-                self.OVER + 1)
-            xdata = np.append(xdata, tmp[1:])
-        ydata = f(xdata)
+                log10(t[i - 1]), log10(t[i]), self.OVER + 1)
+            tover = np.append(tover, tmp[1:])
+        jover = f(tover)
+        nover = len(tover)
 
-        coeff = (ydata[1:] - ydata[:-1]) / (xdata[1:] - xdata[:-1])
-        for i, w in enumerate(wp):
-            a = j0 + sin(w * t1) * (j1 - j0) / w / t1 - sin(w*tN)/self.eta/w + np.dot(
-                coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
-            b = -(1 - cos(w * t1)) * (j1 - j0) / w / t1 - cos(w*tN)/self.eta/w - np.dot(
-                coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
-            modab = a*a + b*b
-            y[i, 0] = a/modab
-            y[i, 1] = -b/modab
+        aux=1j*w*j0 + (1-np.exp(-1j*w*t1))*(j1-j0)/t1 + np.exp(-1j*w*tN)/self.eta
+        for i in range(1,nover):
+            aux += (np.exp(-1j*w*tover[i-1])-np.exp(-1j*w*tover[i]))*(jover[i]-jover[i-1])/(tover[i]-tover[i-1])
+        Gstar=1j*w/aux
+
+        y[:,0]=Gstar.real
+        y[:,1]=Gstar.imag
+
         return x, y, True
 
     def get_xy_data_in_xrange(self, dt):

@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|VisualStudio|Miniconda</InterpreterId>
+    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>
     </CommandLineArguments>
@@ -75,7 +75,6 @@
     </Compile>
     <Compile Include="gui\DataSetWidget.py" />
     <Compile Include="gui\DataSetWidgetItem.py" />
-    <Compile Include="gui\InspectorTableWidget.py" />
     <Compile Include="gui\markerSettings.py" />
     <Compile Include="gui\QApplicationWindow.py" />
     <Compile Include="gui\QDataSet.py" />
@@ -129,7 +128,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|Miniconda" />
+    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />
