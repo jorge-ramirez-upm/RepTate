@@ -712,6 +712,13 @@ class BaseTheoryMaxwellModesTime:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
+        try:
+            gamma = float(f.file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
+        except:
+            gamma = 1
+
         nmodes = self.parameters["nmodes"].value
         tau = np.logspace(self.parameters["logtmin"].value,
                           self.parameters["logtmax"].value, nmodes)
@@ -719,7 +726,7 @@ class BaseTheoryMaxwellModesTime:
         for i in range(nmodes):
             expT_tau = np.exp(-tt.data[:, 0] / tau[i])
             G = np.power(10, self.parameters["logG%02d" % i].value)
-            tt.data[:, 1] += G * expT_tau
+            tt.data[:, 1] += G * expT_tau * gamma
 
     def plot_theory_stuff(self):
         """[summary]

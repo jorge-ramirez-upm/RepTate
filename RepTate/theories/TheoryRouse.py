@@ -212,12 +212,18 @@ class BaseTheoryRouseTime:
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
+        try:
+            gamma = float(f.file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
+        except:
+            gamma = 1
 
         t = ft.data[:, 0]
         params = [G0, tau0, Mw / M0, t]
 
         tt.data[:, 0] = t
-        tt.data[:, 1] = rh.approx_rouse_time(params)
+        tt.data[:, 1] = gamma*rh.approx_rouse_time(params)
 
 
 class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):

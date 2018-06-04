@@ -196,6 +196,8 @@ class BaseApplicationGt:
         y = np.zeros((dt.num_rows, 1))
         try:
             gamma = float(file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
         except:
             gamma = 1
         x[:, 0] = dt.data[:, 0]
@@ -209,6 +211,8 @@ class BaseApplicationGt:
         y = np.zeros((dt.num_rows, 1))
         try:
             gamma = float(file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
         except:
             gamma = 1
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -223,6 +227,8 @@ class BaseApplicationGt:
         n = len(data_x)
         try:
             gamma = float(file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
         except:
             gamma = 1
         data_y /= gamma
@@ -249,6 +255,8 @@ class BaseApplicationGt:
         data_y = yunique
         try:
             gamma = float(file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
         except:
             gamma = 1
         data_y /= gamma
@@ -296,6 +304,8 @@ class BaseApplicationGt:
         data_y = yunique
         try:
             gamma = float(file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
         except:
             gamma = 1
         data_y /= gamma

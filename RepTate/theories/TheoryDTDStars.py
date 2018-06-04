@@ -378,6 +378,12 @@ class BaseTheoryDTDStarsTime:
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
+        try:
+            gamma = float(f.file_parameters["gamma"])
+            if (gamma==0):
+                gamma=1
+        except:
+            gamma = 1
         # self.Z = int(np.rint(Mw / self.Me))
         times = ft.data[:, 0]
         params = [self.G0, self.alpha, self.tau_e, Mw / self.Me, times]
@@ -386,7 +392,7 @@ class BaseTheoryDTDStarsTime:
             self.Qprint("Too many steps in routine qtrap")
             return
         tt.data[:, 0] = times
-        tt.data[:, 1] = gt[:]
+        tt.data[:, 1] = gamma*gt[:]
 
 
 class CLTheoryDTDStarsTime(BaseTheoryDTDStarsTime, Theory):
