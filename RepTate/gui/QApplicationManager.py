@@ -154,6 +154,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionSANS.triggered.connect(lambda: self.handle_new_app('SANS'))
         self.actionReact.triggered.connect(lambda: self.handle_new_app('React'))
         self.actionDielectric.triggered.connect(lambda: self.handle_new_app('Dielectric'))
+        # self.actionLAOS.triggered.connect(lambda: self.handle_new_app('LAOS'))
+        self.actionLAOS.triggered.connect(lambda: self.handle_app_coming_soon('LAOS'))
         self.actionDynamicStructureFactor.triggered.connect(lambda: self.handle_app_coming_soon('DynamicStructureFactor'))
 
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)
@@ -345,7 +347,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
     def handle_app_coming_soon(self, appname=''):
         """Show message"""
-        QMessageBox.warning(self, "new %s application"% appname, "Coming soon..." )
+        QMessageBox.warning(self, "new %s application"% appname, "%s coming soon..." % appname)
 
 
 

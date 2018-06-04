@@ -51,6 +51,7 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
 
 from collections import OrderedDict
+from math import log
 
 
 class Theory(CmdBase):
@@ -257,7 +258,7 @@ class Theory(CmdBase):
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools
-        msg = "\n%14s %10s (%6s)\n" % ("File", "Error", "# Pts.")
+        msg = "\n%14s %12s (%6s)\n" % ("File", "Error (RSS)", "# Pts.")
         msg += "=================================="
         self.Qprint(msg)
 
@@ -283,14 +284,24 @@ class Theory(CmdBase):
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt
-            self.Qprint("%14s %10.5g (%6d)" % (f.file_name_short,
+            self.Qprint("%14s %12.5g (%6d)" % (f.file_name_short,
                                                           f_error, npt))
 
+        #count number of fitting parameters
+        free_p = 0
+        for p in self.parameters.values():
+            if p.opt_type == OptType.opt:
+                free_p += 1
+
         if npoints != 0:
-            self.Qprint("%14s %10.5g (%6d)" %
+            self.Qprint("%14s %12.5g (%6d)" %
                                    ("TOTAL", total_error / npoints, npoints))
+            # Bayesian information criterion (BIC) penalise free parametters (overfitting)
+            # Model with lowest BIC number is prefered
+            self.Qprint("%14s %12.5g" %
+                                   ("Bayesian IC", npoints * log(total_error / npoints) + free_p * log(npoints)))
         else:
-            self.Qprint("%14s %10s (%6d)" % ("TOTAL", "N/A",
+            self.Qprint("%14s %12s (%6d)" % ("TOTAL", "N/A",
                                                         npoints))
 
     def func_fit(self, x, *param_in):
