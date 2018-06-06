@@ -945,24 +945,25 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             curve.disconnect()
         self.curves.clear()
 
-        for curve in ds.selected_file.data_table.series[0]: #drag allowed on axarr[0] only
+        for i, curve in enumerate(ds.selected_file.data_table.series[0]): #drag allowed on axarr[0] only
             x, y, success = self.current_view.view_proc(ds.selected_file.data_table, ds.selected_file.file_parameters)
-            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y, xref=x[0], yref=y[0], function=self.update_shifts, functionendshift=self.finish_shifts)
+            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y, xref=x[0], yref=y[0], function=self.update_shifts, functionendshift=self.finish_shifts, index=i)
             self.curves.append(cur)
 
-    def update_shifts(self, dx, dy):
+    def update_shifts(self, dx, dy, index):
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return        
-        self.xshiftLineEdit.setText("%g"%(ds.selected_file.xshift+dx))
-        self.yshiftLineEdit.setText("%g"%(ds.selected_file.yshift+dy))
+        self.xshiftLineEdit.setText("%g"%(ds.selected_file.xshift[index]+dx))
+        self.yshiftLineEdit.setText("%g"%(ds.selected_file.yshift[index]+dy))
 
-    def finish_shifts(self, dx, dy):
+    def finish_shifts(self, dx, dy, index):
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return  
-        ds.selected_file.xshift+=dx
-        ds.selected_file.yshift+=dy
+        ds.selected_file.xshift[index]+=dx
+        ds.selected_file.yshift[index]+=dy
+        ds.selected_file.isshifted[index] = True
 
     def disconnect_curve_drag(self):
         """Remove the Matplotlib drag connections

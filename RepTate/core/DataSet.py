@@ -413,6 +413,18 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     print("in do_plot()", e)
                     return
 
+                # Apply current shifts to data
+                for i in range(view.n):
+                    if file.isshifted[i]:
+                        if view.log_x:
+                            x[:,i]*=np.power(10, file.xshift[i])
+                        else:
+                            x[:,i]+=file.xshift[i]
+                        if view.log_y:
+                            y[:,i]*=np.power(10, file.yshift[i])
+                        else:
+                            y[:,i]+=file.yshift[i]
+
                 # Apply the currently active tools
                 for to in self.parent_application.tools:
                     if file.active and to.active:

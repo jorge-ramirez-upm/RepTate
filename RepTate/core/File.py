@@ -70,12 +70,9 @@ class File(object):
         self.size = None
 
         # Shift variables
-        self.isshiftingx = False
-        self.isshiftingy = False
-        self.isshiftedx = False
-        self.isshiftedy = False
-        self.xshift = 0
-        self.yshift = 0
+        self.isshifted = [False]*DataTable.MAX_NUM_SERIES
+        self.xshift = [0]*DataTable.MAX_NUM_SERIES
+        self.yshift = [0]*DataTable.MAX_NUM_SERIES
 
         self.header_lines=[]
         self.file_parameters={}

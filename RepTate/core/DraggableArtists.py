@@ -575,7 +575,7 @@ class DraggableSeries(DraggableArtist):
     
     [description]
     """
-    def __init__(self, artist, mode=DragType.none, logx=False, logy=False, xref=0, yref=0, function=None, functionendshift=None):
+    def __init__(self, artist, mode=DragType.none, logx=False, logy=False, xref=0, yref=0, function=None, functionendshift=None, index=0):
         """[summary]
         
         [description]
@@ -594,6 +594,7 @@ class DraggableSeries(DraggableArtist):
         self.xref = xref
         self.yref = yref
         self.functionendshift = functionendshift
+        self.index = index
 
         self.dx = 0
         self.dy = 0
@@ -653,16 +654,16 @@ class DraggableSeries(DraggableArtist):
 
         if (self.mode==DragType.none):   
             self.modify_artist(0, 0)
-            self.function(0, 0)
+            self.function(0, 0, self.index)
         elif (self.mode==DragType.horizontal):
             self.modify_artist(self.dx, 0)
-            self.function(self.dx, 0)
+            self.function(self.dx, 0, self.index)
         elif (self.mode==DragType.vertical):
             self.modify_artist(0, self.dy)
-            self.function(0, self.dy)
+            self.function(0, self.dy, self.index)
         elif (self.mode==DragType.both):
             self.modify_artist(self.dx, self.dy)
-            self.function(self.dx, self.dy)
+            self.function(self.dx, self.dy, self.index)
         
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
@@ -701,13 +702,13 @@ class DraggableSeries(DraggableArtist):
         """
         if DraggableArtist.lock is not self: return
         if (self.mode==DragType.none):   
-            self.functionendshift(0, 0)
+            self.functionendshift(0, 0, self.index)
         elif (self.mode==DragType.horizontal):
-            self.functionendshift(self.dx, 0)
+            self.functionendshift(self.dx, 0, self.index)
         elif (self.mode==DragType.vertical):
-            self.functionendshift(0, self.dy)
+            self.functionendshift(0, self.dy, self.index)
         elif (self.mode==DragType.both):
-            self.functionendshift(self.dx, self.dy)
+            self.functionendshift(self.dx, self.dy, self.index)
         self.press = None
         DraggableArtist.lock = None
         self.artist.set_animated(False)
