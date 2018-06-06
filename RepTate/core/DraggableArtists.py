@@ -575,7 +575,7 @@ class DraggableSeries(DraggableArtist):
     
     [description]
     """
-    def __init__(self, artist, mode=DragType.none, logx=False, logy=False, xref=0, yref=0):
+    def __init__(self, artist, mode=DragType.none, logx=False, logy=False, xref=0, yref=0, function=None, functionendshift=None):
         """[summary]
         
         [description]
@@ -588,12 +588,15 @@ class DraggableSeries(DraggableArtist):
             - logx {[type]} -- [description] (default: {False})
             - logy {[type]} -- [description] (default: {False})
         """
-        super(DraggableSeries, self).__init__(artist, mode, function=None)
-        self.note = artist.axes.annotate('', xycoords='axes fraction', xy=(0,0), textcoords='axes fraction', xytext=(0.01, 0.95))
+        super(DraggableSeries, self).__init__(artist, mode, function)
         self.logx = logx
         self.logy = logy
         self.xref = xref
         self.yref = yref
+        self.functionendshift = functionendshift
+
+        self.dx = 0
+        self.dy = 0
 
     def get_data(self):
         """[summary]
@@ -621,18 +624,9 @@ class DraggableSeries(DraggableArtist):
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
         self.artist.set_animated(True)
-        try:
-            self.note.set_visible(False)
-        except ValueError:
-            pass
         canvas.draw()
         self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
         # redraw just the curve
-        try:
-            self.note.set_visible(True)
-        except ValueError:
-            pass
-        axes.draw_artist(self.note)
         axes.draw_artist(self.artist)
         #canvas.blit(axes.bbox)
 
@@ -649,34 +643,32 @@ class DraggableSeries(DraggableArtist):
         if event.inaxes != self.artist.axes: return
         xpress, ypress = self.press
         if self.logx:
-            dx = np.log10(event.xdata) - np.log10(xpress)
+            self.dx = np.log10(event.xdata) - np.log10(xpress)
         else:
-            dx = event.xdata - xpress
+            self.dx = event.xdata - xpress
         if self.logy:
-            dy = np.log10(event.ydata) - np.log10(ypress)
+            self.dy = np.log10(event.ydata) - np.log10(ypress)
         else:
-            dy = event.ydata - ypress
+            self.dy = event.ydata - ypress
 
         if (self.mode==DragType.none):   
             self.modify_artist(0, 0)
-            text = ''
+            self.function(0, 0)
         elif (self.mode==DragType.horizontal):
-            self.modify_artist(dx, 0)
-            text = '$\Delta x=$%.2e $\Delta y=$%.2e'%(self.data[0][0] - self.xref, 0)
+            self.modify_artist(self.dx, 0)
+            self.function(self.dx, 0)
         elif (self.mode==DragType.vertical):
-            self.modify_artist(0, dy)
-            text = '$\Delta x=$%.2e $\Delta y=$%.2e'%(0,  self.data[1][0] - self.yref)
+            self.modify_artist(0, self.dy)
+            self.function(0, self.dy)
         elif (self.mode==DragType.both):
-            self.modify_artist(dx, dy)
-            text = '$\Delta x=$%.2e $\Delta y=$%.2e'%(self.data[0][0] - self.xref,  self.data[1][0] - self.yref)     
+            self.modify_artist(self.dx, self.dy)
+            self.function(self.dx, self.dy)
         
         canvas = self.artist.figure.canvas
         axes = self.artist.axes
         # restore the background
         canvas.restore_region(self.background)
         # draw the curve only
-        self.note.set_text(text)
-        axes.draw_artist(self.note)
         axes.draw_artist(self.artist)
         canvas.update()
 
@@ -708,6 +700,14 @@ class DraggableSeries(DraggableArtist):
             - event {[type]} -- [description]
         """
         if DraggableArtist.lock is not self: return
+        if (self.mode==DragType.none):   
+            self.functionendshift(0, 0)
+        elif (self.mode==DragType.horizontal):
+            self.functionendshift(self.dx, 0)
+        elif (self.mode==DragType.vertical):
+            self.functionendshift(0, self.dy)
+        elif (self.mode==DragType.both):
+            self.functionendshift(self.dx, self.dy)
         self.press = None
         DraggableArtist.lock = None
         self.artist.set_animated(False)
@@ -728,10 +728,6 @@ class DraggableSeries(DraggableArtist):
         
         [description]
         """
-        try:
-            self.note.remove()
-        except ValueError:
-            pass
         super().disconnect()
 
 class DraggablePatch(DraggableArtist):

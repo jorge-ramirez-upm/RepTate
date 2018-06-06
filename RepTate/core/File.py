@@ -69,6 +69,14 @@ class File(object):
         self.filled = None
         self.size = None
 
+        # Shift variables
+        self.isshiftingx = False
+        self.isshiftingy = False
+        self.isshiftedx = False
+        self.isshiftedy = False
+        self.xshift = 0
+        self.yshift = 0
+
         self.header_lines=[]
         self.file_parameters={}
         self.active = True

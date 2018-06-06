@@ -47,7 +47,7 @@ from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel
 from QDataSet import QDataSet
 from DataSetWidgetItem import DataSetWidgetItem
 from DataSet import ColorMode, SymbolMode, ThLineMode
@@ -128,6 +128,24 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionShiftVertically)
         tb.addAction(self.actionShiftHorizontally)
         vblayout.addWidget(tb)
+        self.shiftToolBar = QToolBar()
+        self.shiftToolBar.addWidget(QLabel("<b>xshift</b>"))
+        self.xshiftLineEdit = QLineEdit()
+        self.xshiftLineEdit.setReadOnly(True)
+        self.xshiftLineEdit.setStyleSheet("QLineEdit { background: rgb(255, 255, 204);}")
+        self.xshiftLineEdit.setText("0")
+        self.xshiftLineEdit.setMaximumWidth(80)
+        self.shiftToolBar.addWidget(self.xshiftLineEdit) 
+        self.shiftToolBar.addSeparator()
+        self.shiftToolBar.addWidget(QLabel("<b>yshift</b>"))
+        self.yshiftLineEdit = QLineEdit()
+        self.yshiftLineEdit.setReadOnly(True)
+        self.yshiftLineEdit.setStyleSheet("QLineEdit { background: rgb(255, 255, 204);}")
+        self.yshiftLineEdit.setText("0")
+        self.yshiftLineEdit.setMaximumWidth(80)
+        self.shiftToolBar.addWidget(self.yshiftLineEdit)      
+        self.shiftToolBar.setVisible(False)
+        vblayout.addWidget(self.shiftToolBar)
         #custom QTable to have the copy/pastefeature
         self.inspector_table = SpreadsheetWidget(self)
         vblayout.addWidget(self.inspector_table)
@@ -908,6 +926,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
+        self.shiftToolBar.setVisible((self.actionShiftHorizontally.isChecked() or self.actionShiftVertically.isChecked()))
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return
@@ -928,8 +947,22 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         for curve in ds.selected_file.data_table.series[0]: #drag allowed on axarr[0] only
             x, y, success = self.current_view.view_proc(ds.selected_file.data_table, ds.selected_file.file_parameters)
-            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y, xref=x[0], yref=y[0])
+            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y, xref=x[0], yref=y[0], function=self.update_shifts, functionendshift=self.finish_shifts)
             self.curves.append(cur)
+
+    def update_shifts(self, dx, dy):
+        ds = self.DataSettabWidget.currentWidget()
+        if not ds.selected_file:
+            return        
+        self.xshiftLineEdit.setText("%g"%(ds.selected_file.xshift+dx))
+        self.yshiftLineEdit.setText("%g"%(ds.selected_file.yshift+dy))
+
+    def finish_shifts(self, dx, dy):
+        ds = self.DataSettabWidget.currentWidget()
+        if not ds.selected_file:
+            return  
+        ds.selected_file.xshift+=dx
+        ds.selected_file.yshift+=dy
 
     def disconnect_curve_drag(self):
         """Remove the Matplotlib drag connections
