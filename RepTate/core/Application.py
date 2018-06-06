@@ -49,6 +49,7 @@ from Tool import *
 from MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
 from PyQt5.QtGui import QCursor, QImage
+from PyQt5.QtCore import Qt
 
 from collections import OrderedDict
 from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
@@ -452,6 +453,7 @@ class Application(CmdBase):
             #add view name to the list of views avaliable
             if CmdBase.mode == CmdMode.GUI:
                 self.viewComboBox.insertItem(i, view_name)
+                self.viewComboBox.setItemData(i, self.views[view_name].description, Qt.ToolTipRole)
 
         if CmdBase.mode == CmdMode.GUI:
             #index 0 is the defaut selection

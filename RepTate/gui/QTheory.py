@@ -383,6 +383,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                         [p.name, "%0.3g" % p.value, "N/A"])
                     item.setCheckState(0, Qt.PartiallyChecked)
                     item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
+                    item.setToolTip(0, p.description)
                 else:
                     try:
                         err = "%0.3g" % p.error

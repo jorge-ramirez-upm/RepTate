@@ -170,10 +170,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tb.addAction(self.actionNew_Theory)
         self.cbtheory = QComboBox()
         self.cbtheory.setToolTip("Choose a Theory")
-
+        
+        i = 0
         for th_name in self.parent_application.theories:
             if th_name not in self.parent_application.common_theories:
                 self.cbtheory.addItem(th_name)
+                self.cbtheory.setItemData(i, self.parent_application.theories[th_name].description, Qt.ToolTipRole)
+                i += 1
         flag_first = True
         for th_name in self.parent_application.theories:
             if th_name in self.parent_application.common_theories:
@@ -182,6 +185,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     self.cbtheory.insertSeparator(self.cbtheory.count())
                     flag_first = False
                 self.cbtheory.addItem(th_name)
+                self.cbtheory.setItemData(i, self.parent_application.theories[th_name].description, Qt.ToolTipRole)
+                i += 1
         self.cbtheory.setCurrentIndex(0)
 
         ###
