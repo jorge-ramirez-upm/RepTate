@@ -357,20 +357,18 @@ class BaseTheoryTTSShiftAutomatic:
             Filenames = [x[2] for x in self.Tdict[case]]
             Files = [x[3] for x in self.Tdict[case]]
             indices = np.argsort(Temps)
-            #print(case, indices, Temps, Filenames)
+
             # first master curve is built from first file in indices list
             fname = Filenames[indices[0]]
             self.parent_dataset
-            #self.current_master_curve = np.array(self.tables[fname].data, copy=True)
+
             self.current_master_curve = np.array(
                 Files[indices[0]].data_table.data, copy=True)
             self.current_master_curve.view('i8,i8,i8').sort(
                 order=['f1'], axis=0)
             self.shiftParameters[fname] = (0.0, 0.0)
-            #print(self.current_master_curve) #DEBUG
-            #print(Temps0[indices[0]], 0.0, 0.0)
+
             self.Qprint('%6s %11s %11s' % ('T', 'log(Hshift)', 'log(Vshift)'))
-            self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[indices[0]], 0.0, 0.0))
             indices = np.delete(indices, 0, None)
 
             for i in indices:
@@ -379,7 +377,7 @@ class BaseTheoryTTSShiftAutomatic:
                 if (Temps[i] == 0):
                     # Add to current_master_curve
                     fname = Filenames[i]
-                    #tt = np.array(self.tables[fname].data, copy=True)
+
                     tt = np.array(Files[i].data_table.data, copy=True)
                     self.current_master_curve = np.concatenate(
                         (self.current_master_curve, tt), axis=0)
@@ -389,34 +387,27 @@ class BaseTheoryTTSShiftAutomatic:
 
                 else:
                     fname = Filenames[i]
-                    #tt = np.array(self.tables[fname].data, copy=True)
                     tt = np.array(Files[i].data_table.data, copy=True)
                     # Calculate preliminary shift factors (horizontal and vertical)
-                    # Calculate mid-point of tt
-                    #print(tt)
-                    #print(len(tt[:,0]))
-                    indmiddle = int(len(tt[:, 0]) / 2)
-                    #print(indmiddle, tt[indmiddle,:])
-                    xmid = tt[indmiddle, 0]
-                    ymid = tt[indmiddle, 1]
-                    xmidinterp = interp(ymid, self.current_master_curve[:, 1],
-                                        self.current_master_curve[:, 0])
-                    xshift = np.log10(xmidinterp / xmid)
-                    #print(xmid, ymid, xmidinterp, xshift)
-                    # minimize shift factors so the overlap is maximum
-                    initial_guess = [xshift]
-                    if self.parameters["vert"].value:
-                        initial_guess.append(0)
+                    if (any(Files[i].isshifted)):
+                        initial_guess = [Files[i].xshift[0], Files[i].yshift[0]]
+                    else:
+                        # Calculate mid-point of tt
+                        indmiddle = int(len(tt[:, 0]) / 2)
+                        xmid = tt[indmiddle, 0]
+                        ymid = tt[indmiddle, 1]
+                        xmidinterp = interp(ymid, self.current_master_curve[:, 1],
+                                            self.current_master_curve[:, 0])
+                        xshift = np.log10(xmidinterp / xmid)
+
+                        # minimize shift factors so the overlap is maximum
+                        initial_guess = [xshift]
+                        if self.parameters["vert"].value:
+                            initial_guess.append(0)
+
                     self.current_table = tt
                     self.current_file_min = fname
-                    #print(initial_guess)
-                    res = minimize(
-                        self.func_fitTTS_one,
-                        initial_guess,
-                        method='Nelder-Mead')
-                    #res = minimize(
-                    #    self.func_fitTTS_one,
-                    #    initial_guess)
+                    res = minimize(self.func_fitTTS_one, initial_guess, method='Nelder-Mead')
                     if (not res['success']):
                         self.Qprint("Solution not found: %s" % res['message'])
                         return
@@ -425,7 +416,7 @@ class BaseTheoryTTSShiftAutomatic:
                         YSHIFT = res.x[1]
                     else:
                         YSHIFT = 0.0
-                    #print(res.x)
+
                     # Add to current_master_curve
                     # Set the theory file for that particular file
                     ttcopy = np.array(tt, copy=True)
@@ -436,12 +427,14 @@ class BaseTheoryTTSShiftAutomatic:
                         (self.current_master_curve, ttcopy), axis=0)
                     self.current_master_curve = self.current_master_curve[
                         self.current_master_curve[:, 0].argsort()]
-                    #self.shiftParameters[fname] = (xshift, 0)
                     self.shiftParameters[fname] = (XSHIFT, YSHIFT)
 
-                #print(Temps0[i], XSHIFT, YSHIFT)
-                self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], XSHIFT,
-                                                     YSHIFT))
+            # Print final table of T and shift factors
+            indTsorted = sorted(range(len(Temps0)), key=lambda k: Temps0[k])
+            for i in indTsorted:
+                fname = Filenames[i]
+                sparam = self.shiftParameters[fname]
+                self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], sparam[0], sparam[1]))
 
         self.fitting = False
         self.do_calculate(line)
