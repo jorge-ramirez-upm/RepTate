@@ -115,7 +115,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="ApplicationNLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.ApplicationNLVE">[docs]</a><span class="k">class</span> <span class="nc">ApplicationNLVE</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ApplicationNLVE"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.ApplicationNLVE">[docs]</a><span class="k">class</span> <span class="nc">ApplicationNLVE</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application to Analyze Start up of Nonlinear flow</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -123,7 +123,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Non-Linear Flow&quot;</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;shear&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NLVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NLVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -163,81 +163,81 @@
         <span class="kn">from</span> <span class="nn">TheoryPomPom</span> <span class="k">import</span> <span class="n">TheoryPomPom</span>
         <span class="kn">from</span> <span class="nn">TheoryBlendRoliePoly</span> <span class="k">import</span> <span class="n">TheoryBlendRoliePoly</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1"># VIEWS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(eta(t))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(eta(t))&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log transient viscosity&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log(t)&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\eta$(t))&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\eta$)&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa$\cdot$s&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogeta</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;$\eta$(t)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(eta)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;eta(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;eta(t)&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;transient viscosity&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\eta$(t)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\eta$&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa$\cdot$s&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vieweta</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;$\eta$(t)&quot;</span><span class="p">])</span>            
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;eta&quot;</span><span class="p">])</span>            
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(sigma(gamma))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(sigma(gamma))&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log transient shear stress vs gamma&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log($\gamma$)&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\sigma_</span><span class="si">{xy}</span><span class="s2">$($\gamma$))&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\sigma$)&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogSigmaGamma</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;$\sigma_</span><span class="si">{xy}</span><span class="s2">$($\gamma$)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(sigma)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;sigma(gamma)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma(gamma)&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;transient shear stress vs gamma&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;$\gamma$&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\sigma_</span><span class="si">{xy}</span><span class="s2">$($\gamma$)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\sigma$&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewSigmaGamma</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;$\sigma_</span><span class="si">{xy}</span><span class="s2">$($\gamma$)&quot;</span><span class="p">])</span>            
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">])</span>            
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(sigma(t))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(sigma(t))&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log transient shear stress vs time&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log(t)&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\sigma_</span><span class="si">{xy}</span><span class="s2">$(t))&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\sigma$)&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogSigmaTime</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;$\sigma_</span><span class="si">{xy}</span><span class="s2">$($\gamma$)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(sigma)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;sigma(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma(t)&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;transient shear stress vs time&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\sigma_</span><span class="si">{xy}</span><span class="s2">$(t)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\sigma$(t)&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewSigmaTime</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;$\sigma_</span><span class="si">{xy}</span><span class="s2">$(t)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">])</span>
 
         <span class="c1">#set multiviews</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
@@ -266,7 +266,7 @@
         <span class="c1">#set the current view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseApplicationNLVE.viewLogeta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewLogeta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogeta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewLogeta"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewLogeta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogeta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -279,7 +279,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">flow_rate</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationNLVE.vieweta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.vieweta">[docs]</a>    <span class="k">def</span> <span class="nf">vieweta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.vieweta"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.vieweta">[docs]</a>    <span class="k">def</span> <span class="nf">vieweta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -292,7 +292,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">flow_rate</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaTime"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaTime"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -301,7 +301,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaTime"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaTime"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs time :math:`t`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -310,7 +310,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaGamma"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaGamma"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -323,7 +323,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaGamma"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaGamma"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -351,7 +351,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GUIApplicationNLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.GUIApplicationNLVE">[docs]</a><span class="k">class</span> <span class="nc">GUIApplicationNLVE</span><span class="p">(</span><span class="n">BaseApplicationNLVE</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
@@ -368,7 +368,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -391,7 +391,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

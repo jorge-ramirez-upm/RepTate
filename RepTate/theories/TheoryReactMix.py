@@ -108,7 +108,7 @@ class BaseTheoryReactMix:
         self.parameters['nbin'] = Parameter(
             name='nbin',
             value=100,
-            description='number of bins',
+            description='Number of molecular weight bins',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.reactname = 'ReactMix'

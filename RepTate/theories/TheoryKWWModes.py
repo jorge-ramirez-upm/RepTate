@@ -128,7 +128,7 @@ class BaseTheoryKWWModesFrequency:
         self.parameters["beta"] = Parameter(
             "beta",
             0.5,
-            "???",
+            'Stretched exponential parameter',
             ParameterType.real,
             opt_type=OptType.opt,
             bracketed=True,
@@ -149,7 +149,7 @@ class BaseTheoryKWWModesFrequency:
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=nmodes,
-            description="Number of Havriliak-Negami modes",
+            description="Number of KWW modes",
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False)

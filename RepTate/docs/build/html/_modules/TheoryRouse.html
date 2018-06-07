@@ -136,11 +136,11 @@
 <span class="sd">            - :math:`N=M_w/M_0`: number of segments par chain</span>
 <span class="sd">            - :math:`M_w`: weight-average molecular mass</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;RouseTime&quot;</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Fit Rouse modes to time dependent function&quot;</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;Rouse&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Rouse model&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -178,19 +178,19 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span>  <span class="c1"># main theory function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># True if the theory has modes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;G0&quot;</span><span class="p">,</span>
-            <span class="mi">1</span><span class="n">e6</span><span class="p">,</span>
+            <span class="mf">1e6</span><span class="p">,</span>
             <span class="s2">&quot;Modulus c*kB*T/N&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;tau0&quot;</span><span class="p">,</span>
-            <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+            <span class="mf">1e-3</span><span class="p">,</span>
             <span class="s2">&quot;segment relaxation time&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
@@ -284,12 +284,18 @@
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Invalid Mw value&quot;</span><span class="p">)</span>
             <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">gamma</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                <span class="n">gamma</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">G0</span><span class="p">,</span> <span class="n">tau0</span><span class="p">,</span> <span class="n">Mw</span> <span class="o">/</span> <span class="n">M0</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span>
 
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
-        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rh</span><span class="o">.</span><span class="n">approx_rouse_time</span><span class="p">(</span><span class="n">params</span><span class="p">)</span></div></div>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">*</span><span class="n">rh</span><span class="o">.</span><span class="n">approx_rouse_time</span><span class="p">(</span><span class="n">params</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="CLTheoryRouseTime"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRouse.CLTheoryRouseTime">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryRouseTime</span><span class="p">(</span><span class="n">BaseTheoryRouseTime</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
@@ -308,7 +314,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
 
     <span class="c1"># This class usually stays empty</span>
 
@@ -328,7 +334,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
 
     <span class="c1"># add widgets specific to the theory here:</span>
 
@@ -360,11 +366,11 @@
 <span class="sd">            - :math:`N=M_w/M_0`: number of segments par chain</span>
 <span class="sd">            - :math:`M_w`: weight-average molecular mass</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;RouseFrequency&quot;</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Fit Maxwell modes to frequency dependent function&quot;</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;Rouse&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Rouse model&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -401,7 +407,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1"># self.parameters[&quot;logwmin&quot;] = Parameter(</span>
@@ -418,14 +424,14 @@
         <span class="c1">#     opt_type=OptType.nopt)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;G0&quot;</span><span class="p">,</span>
-            <span class="mi">1</span><span class="n">e6</span><span class="p">,</span>
+            <span class="mf">1e6</span><span class="p">,</span>
             <span class="s2">&quot;Modulus c*kB*T/N&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;tau0&quot;</span><span class="p">,</span>
-            <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+            <span class="mf">1e-3</span><span class="p">,</span>
             <span class="s2">&quot;segment relaxation time&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
@@ -519,7 +525,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
 
     <span class="c1"># This class usually stays empty</span>
 
@@ -540,7 +546,7 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
 
     <span class="c1"># add widgets specific to the theory here:</span>
 </pre></div>
@@ -565,7 +571,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

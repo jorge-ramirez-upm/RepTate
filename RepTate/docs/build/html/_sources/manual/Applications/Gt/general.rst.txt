@@ -29,19 +29,19 @@ Text files with ``.gt`` extension should be organised as follows:
 - ``.gt`` files should provide at least parameter values for
 
   #. Molecular weight, :math:`M_w`
-  #. Strain applied, :math:`\gamma`. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress.
+  #. Strain applied, :math:`\gamma`. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress, and the value of :math:`\gamma` is assumed to be equal to 1.
 
 - 2 columns separated by **spaces** or **tabs** containing respectively:
 
   #. time, :math:`t`,
-  #. shear stress, :math:`G(t)`,
+  #. shear stress, :math:`\sigma_{xy}`,
 
 A correct ``.gt`` file looks like:
 
 .. code-block:: none
   
   ncontri=1;Mw=224;gamma=1;
-  t Gt
+  t sxy
   0.0E+0      1.28146E+10     
   5.0E-6      1.13402E+10     
   1.0E-5      7.57171E+9     

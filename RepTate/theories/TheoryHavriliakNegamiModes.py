@@ -61,7 +61,7 @@ class TheoryHavriliakNegamiModesFrequency(CmdBase):
        - logwmax = :math:`\\log(\\omega_{max})`: decimal logarithm of the maximum frequency.
        - logDei = :math:`\\log(\\Delta\\epsilon_{i})`, where :math:`\\Delta\\epsilon_{i}=\\epsilon_{s,i}-\\epsilon_\\infty`: decimal logarithm of the relaxation strength of Debye mode :math:`i`, where :math:`\\epsilon_{s,i}` is the static permitivity of mode :math:`i`.
        - :math:`\\alpha`: Asymmetry parameter
-       - :math:`\\gamma\: Broadness parameter
+       - :math:`\\gamma`: Broadness parameter
     
     """
     thname = "Havriliak-Negami modes"
@@ -126,7 +126,7 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         self.parameters["alpha"] = Parameter(
             "alpha",
             1.0,
-            "???",
+            'Asymmetry parameter',
             ParameterType.real,
             opt_type=OptType.opt,
             bracketed=True,
@@ -134,7 +134,7 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         self.parameters["gamma"] = Parameter(
             "gamma",
             1.0,
-            "???",
+            'Broadness parameter',
             ParameterType.real,
             opt_type=OptType.opt,
             bracketed=True,

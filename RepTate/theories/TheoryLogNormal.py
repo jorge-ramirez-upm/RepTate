@@ -101,11 +101,11 @@ class BaseTheoryLogNormal:
         self.parameters['logW0'] = Parameter(
             name='logW0',
             value=5,
-            description='logW0',
+            description='Normalization constant',
             type=ParameterType.real,
             opt_type=OptType.opt)
         self.parameters['logM0'] = Parameter(
-            name='logM0',
+            name='Log mean molecular weight',
             value=5,
             description='logM0',
             type=ParameterType.real,
@@ -113,7 +113,7 @@ class BaseTheoryLogNormal:
         self.parameters['sigma'] = Parameter(
             name='sigma',
             value=1,
-            description='sigma',
+            description='Standard deviation',
             type=ParameterType.real,
             opt_type=OptType.opt,
             bracketed=True,

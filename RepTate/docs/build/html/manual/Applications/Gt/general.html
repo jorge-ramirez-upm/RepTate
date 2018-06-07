@@ -156,18 +156,18 @@ It may contain any number of parameters which will be read and saved as file-par
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">.gt</span></code> files should provide at least parameter values for<ol class="arabic">
 <li>Molecular weight, <span class="math">\(M_w\)</span></li>
-<li>Strain applied, <span class="math">\(\gamma\)</span>. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress.</li>
+<li>Strain applied, <span class="math">\(\gamma\)</span>. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress, and the value of <span class="math">\(\gamma\)</span> is assumed to be equal to 1.</li>
 </ol>
 </li>
 <li>2 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:<ol class="arabic">
 <li>time, <span class="math">\(t\)</span>,</li>
-<li>shear stress, <span class="math">\(G(t)\)</span>,</li>
+<li>shear stress, <span class="math">\(\sigma_{xy}\)</span>,</li>
 </ol>
 </li>
 </ul>
 <p>A correct <code class="docutils literal"><span class="pre">.gt</span></code> file looks like:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>ncontri=1;Mw=224;gamma=1;
-t Gt
+t sxy
 0.0E+0      1.28146E+10
 5.0E-6      1.13402E+10
 1.0E-5      7.57171E+9

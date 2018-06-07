@@ -123,7 +123,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Small Angle Neutron Scattering Experiments&quot;</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;sans&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SANS&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SANS&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -158,57 +158,57 @@
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">TheoryDebye</span> <span class="k">import</span> <span class="n">TheoryDebye</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1"># VIEWS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(I(q))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(I(q))&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log Intensity&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log(q)&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(I(q))&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(I)&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm{\AA}^{-1}$&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogSANS</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I(q)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(I)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;I(q)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;I(q)&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Intensity&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;q&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;I(q)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm{\AA}^{-1}$&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewSANS</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I(q)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;Zimm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Zimm&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Zimm plot (1/I(q) vs q^2)&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{q}</span><span class="s2">^2$&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;1/I(q)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;1/I&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm{\AA}^{-2}$&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewZimm</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Zimm&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;1/I&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;Kratky&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Kratky&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Kratky plot (q^2*I(q) vs q)&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;q&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{q}</span><span class="s2">^2\cdot \mathrm{I(q)}$&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{q}</span><span class="s2">^2\cdot \mathrm</span><span class="si">{I}</span><span class="s2">$&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm{\AA}^{-1}$&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm{\AA}^{-2}$&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewKratky</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Kratky&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q2*I&quot;</span><span class="p">])</span>
 
         <span class="c1">#set multiviews</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
@@ -280,7 +280,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;SANS&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">GUIApplicationSANS</span><span class="p">(</span><span class="n">BaseApplicationSANS</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
@@ -297,7 +297,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;SANS&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -320,7 +320,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

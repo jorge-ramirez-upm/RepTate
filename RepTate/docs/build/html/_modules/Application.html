@@ -121,6 +121,7 @@
 <span class="kn">from</span> <span class="nn">MultiView</span> <span class="k">import</span> <span class="n">MultiView</span><span class="p">,</span> <span class="n">PlotOrganizationType</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QApplication</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QCursor</span><span class="p">,</span> <span class="n">QImage</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">Qt</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">TheoryBasic</span> <span class="k">import</span> <span class="n">TheoryPolynomial</span><span class="p">,</span> <span class="n">TheoryPowerLaw</span><span class="p">,</span> <span class="n">TheoryExponential</span><span class="p">,</span> <span class="n">TheoryTwoExponentials</span>
@@ -153,7 +154,7 @@
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_manager</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="c1">#self.logger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
@@ -524,6 +525,7 @@
             <span class="c1">#add view name to the list of views avaliable</span>
             <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">insertItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">view_name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">setItemData</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="n">view_name</span><span class="p">]</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ToolTipRole</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
             <span class="c1">#index 0 is the defaut selection</span>
@@ -767,6 +769,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_axes_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span><span class="p">)</span>
         <span class="c1">#self.set_legend_properties()</span>
+        <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_legend</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Application.set_axes_properties"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_axes_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_axes_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoscale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -849,7 +853,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

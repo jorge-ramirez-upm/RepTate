@@ -123,7 +123,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Linear Viscoelasticity&quot;</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;tts&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -163,7 +163,7 @@
         <span class="kn">from</span> <span class="nn">TheoryRouse</span> <span class="k">import</span> <span class="n">TheoryRouseFrequency</span>
         <span class="kn">from</span> <span class="nn">TheoryDTDStars</span> <span class="k">import</span> <span class="n">TheoryDTDStarsFreq</span>
         <span class="kn">from</span> <span class="nn">TheoryBobLVE</span> <span class="k">import</span> <span class="n">TheoryBobLVE</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1"># VIEWS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G&#39;,G&#39;&#39;(w))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
@@ -177,7 +177,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1G2</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;(w))&quot;</span><span class="p">,</span> <span class="s2">&quot;log(G&#39;&#39;(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;,G&#39;&#39;(w)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;G&#39;,G&#39;&#39;(w)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Storage,Loss moduli&quot;</span><span class="p">,</span>
@@ -210,7 +210,7 @@
             <span class="kc">False</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewLogEtaStar</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;eta*(w)&quot;</span><span class="p">])</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(eta*(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;delta&quot;</span><span class="p">,</span>
             <span class="s2">&quot;delta&quot;</span><span class="p">,</span>
@@ -257,26 +257,26 @@
             <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(G*)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(tan(delta),G*)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;log(tan(delta),G*)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;log(tan($\delta$)(G*))&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;G*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;log(tan($\delta$)(G*))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan($\delta$))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(G*)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan($\delta$))&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewLogtandeltaGstar</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(tan($\delta)(G*))&quot;</span><span class="p">])</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(tan($\delta))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;delta(G*)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;delta(G*)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$\delta$(G*))&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;G*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$\delta$(G*))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\delta$)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(G*)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$\delta$)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="s2">&quot;deg&quot;</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewdeltatanGstar</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;delta(G*)&quot;</span><span class="p">])</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;J&#39;,J&#39;&#39;(w)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;J&#39;,J&#39;&#39;(w)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;J moduli&quot;</span><span class="p">,</span>
@@ -310,7 +310,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;G&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Storage modulus&quot;</span><span class="p">,</span>
@@ -333,7 +333,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG2</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;&#39;(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Loss modulus&quot;</span><span class="p">,</span>
@@ -356,7 +356,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1G2tandelta</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;G&#39;&#39;(w),tan(delta)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;(w))&quot;</span><span class="p">,</span> <span class="s2">&quot;log(G&#39;&#39;(w)),log(tan(delta))&quot;</span><span class="p">])</span>
 
         <span class="c1">#set multiviews</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
@@ -574,7 +574,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GUIApplicationLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationLVE.GUIApplicationLVE">[docs]</a><span class="k">class</span> <span class="nc">GUIApplicationLVE</span><span class="p">(</span><span class="n">BaseApplicationLVE</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
@@ -591,7 +591,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;LVE&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -614,7 +614,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

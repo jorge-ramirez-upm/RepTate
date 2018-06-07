@@ -109,11 +109,15 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
 <span class="kn">from</span> <span class="nn">Application</span> <span class="k">import</span> <span class="n">Application</span>
-<span class="kn">from</span> <span class="nn">QApplicationWindow</span> <span class="k">import</span> <span class="n">QApplicationWindow</span>
 <span class="kn">from</span> <span class="nn">View</span> <span class="k">import</span> <span class="n">View</span>
 <span class="kn">from</span> <span class="nn">FileType</span> <span class="k">import</span> <span class="n">TXTColumnFile</span>
+<span class="kn">from</span> <span class="nn">QApplicationWindow</span> <span class="k">import</span> <span class="n">QApplicationWindow</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">interpolate</span>
 
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QSizePolicy</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QDoubleValidator</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log10</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
 
 <div class="viewcode-block" id="ApplicationCreep"><a class="viewcode-back" href="../manual/Applications/Creep/general.html#ApplicationCreep.ApplicationCreep">[docs]</a><span class="k">class</span> <span class="nc">ApplicationCreep</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application to Analyze Data from Creep experiments</span>
@@ -123,7 +127,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Creep Experiments&quot;</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;creep&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Creep&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Creep&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -158,69 +162,102 @@
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">TheoryRetardationModes</span> <span class="k">import</span> <span class="n">TheoryRetardationModesTime</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
+        <span class="c1"># time range for view conversion to frequency domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="mi">10000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmin_view</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax_view</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        
         <span class="c1"># VIEWS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(gamma(t))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(gamma(t))&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;log strain&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log(t)&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\gamma$(t))&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log($\gamma$)&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogStraint</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(gamma)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;strain&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\gamma$(t)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;$\gamma$&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewStraint</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gamma(t)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(J(t))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log(J(t))&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;creep compliance&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;log(t)&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(J(t))&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;log(J)&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{Pa}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogJt</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;J(t)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(J)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;J(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;J(t)&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;creep compliance&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;J(t)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;J&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{Pa}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewJt</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;J(t)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;J&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;t/creep compliance&quot;</span><span class="p">,</span>
             <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
-            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;t/J&quot;</span><span class="p">,</span>
             <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa.s&quot;</span><span class="p">,</span>
             <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewt_Jt</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;t/J(t)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;t/J&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;i-Rheo G&#39;,G&#39;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;i-Rheo G&#39;,G&#39;&#39;&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;G&#39;, G&#39;&#39; from i-Rheo transformation of J(t)&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;G&#39;,G&#39;&#39;&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewiRheo</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;&quot;</span><span class="p">,</span><span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;i-Rheo-Over G&#39;,G&#39;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;i-Rheo-Over G&#39;,G&#39;&#39;&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span>
+            <span class="s2">&quot;G&#39;, G&#39;&#39; from i-Rheo transformation of J(t) with Oversampling&quot;</span><span class="p">,</span>
+            <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span>
+            <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;G&#39;,G&#39;&#39;&quot;</span><span class="p">,</span>
+            <span class="n">x_units</span><span class="o">=</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span>
+            <span class="n">y_units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="n">log_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">log_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewiRheoOver</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;&quot;</span><span class="p">,</span><span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">OVER</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># initial oversampling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MIN_OVER</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># min oversampling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MAX_OVER</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># max oversampling</span>
 
         <span class="c1">#set multiviews</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
@@ -290,6 +327,100 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">sigma</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
+    <span class="k">def</span> <span class="nf">viewiRheo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G&#39;(\\omega)` and loss modulus :math:`G&#39;&#39;(\\omega)` (no oversamplig).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_x</span><span class="p">,</span> <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_xy_data_in_xrange</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">xunique</span><span class="p">,</span> <span class="n">indunique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data_x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xunique</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">file_parameters</span><span class="p">[</span><span class="s1">&#39;stress&#39;</span><span class="p">])</span>
+        <span class="n">yunique</span><span class="o">=</span><span class="n">data_y</span><span class="p">[</span><span class="n">indunique</span><span class="p">]</span><span class="o">/</span><span class="n">sigma</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">xunique</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">yunique</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span>
+            <span class="n">t</span><span class="p">,</span>
+            <span class="n">j</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
+            <span class="n">assume_sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">)</span>
+        <span class="n">j0</span> <span class="o">=</span> <span class="n">f</span><span class="p">([</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span>
+        <span class="n">j1</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span>
+        <span class="n">tN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">tN</span><span class="p">),</span> <span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">t1</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[:]</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[:]</span>
+
+        <span class="n">aux</span><span class="o">=</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">j0</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">t1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">j1</span><span class="o">-</span><span class="n">j0</span><span class="p">)</span><span class="o">/</span><span class="n">t1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">tN</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ind1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">aux</span> <span class="o">+=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">j</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">Gstar</span><span class="o">=</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">/</span><span class="n">aux</span>
+        
+        <span class="n">y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">Gstar</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">Gstar</span><span class="o">.</span><span class="n">imag</span>
+        
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span>
+        
+    <span class="k">def</span> <span class="nf">viewiRheoOver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G&#39;(\\omega)` and loss modulus :math:`G&#39;&#39;(\\omega)` (with user selected oversamplig).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_x</span><span class="p">,</span> <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_xy_data_in_xrange</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">xunique</span><span class="p">,</span> <span class="n">indunique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data_x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xunique</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">file_parameters</span><span class="p">[</span><span class="s1">&#39;stress&#39;</span><span class="p">])</span>
+        <span class="n">yunique</span><span class="o">=</span><span class="n">data_y</span><span class="p">[</span><span class="n">indunique</span><span class="p">]</span><span class="o">/</span><span class="n">sigma</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">xunique</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">yunique</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span>
+            <span class="n">t</span><span class="p">,</span>
+            <span class="n">j</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
+            <span class="n">assume_sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">)</span>
+        <span class="n">j0</span> <span class="o">=</span> <span class="n">f</span><span class="p">([</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span>
+        <span class="n">j1</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span>
+        <span class="n">tN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">tN</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">t1</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[:]</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[:]</span>
+
+        <span class="c1"># Create oversampled data</span>
+        <span class="n">tover</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">tover</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ind1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span>
+                <span class="n">log10</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">log10</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">OVER</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">tover</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tover</span><span class="p">,</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">jover</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">tover</span><span class="p">)</span>
+        <span class="n">nover</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tover</span><span class="p">)</span>
+
+        <span class="n">aux</span><span class="o">=</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">j0</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">t1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">j1</span><span class="o">-</span><span class="n">j0</span><span class="p">)</span><span class="o">/</span><span class="n">t1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">tN</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nover</span><span class="p">):</span>
+            <span class="n">aux</span> <span class="o">+=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">tover</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">tover</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">*</span><span class="p">(</span><span class="n">jover</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">jover</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">tover</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">tover</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">Gstar</span><span class="o">=</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">/</span><span class="n">aux</span>
+
+        <span class="n">y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">Gstar</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">Gstar</span><span class="o">.</span><span class="n">imag</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">get_xy_data_in_xrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the x and y data that with t in [self.tmin_view, self.tmax_view]&quot;&quot;&quot;</span>
+        <span class="c1">#get indices of data in xrange</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmin_view</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax_view</span><span class="p">))</span>
+        <span class="n">x_in_range</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][</span><span class="n">args</span><span class="p">]</span>
+        <span class="n">y_in_range</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">][</span><span class="n">args</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x_in_range</span><span class="p">,</span> <span class="n">y_in_range</span>
+        
 <span class="k">class</span> <span class="nc">CLApplicationCreep</span><span class="p">(</span><span class="n">BaseApplicationCreep</span><span class="p">,</span> <span class="n">Application</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
@@ -304,8 +435,13 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;Creep&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">show_sb_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">hide_sb_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
 
 <span class="k">class</span> <span class="nc">GUIApplicationCreep</span><span class="p">(</span><span class="n">BaseApplicationCreep</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -321,7 +457,132 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;Creep&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_oversampling_widget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_oversampling_widget_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_xrange_widget_view</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_oversampling_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add spinbox for the oversampling ratio&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MIN_OVER</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_OVER</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OVER</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_oversampling</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_xrange_widget_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add widgets below the view combobox to select the </span>
+<span class="sd">        x-range applied to view transformation&quot;&quot;&quot;</span>
+        <span class="n">hlayout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="c1">#eta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_eta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;log(eta)&lt;/b&gt;&quot;</span><span class="p">)</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eta_label</span><span class="p">)</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span><span class="p">)</span>
+        <span class="c1">#space</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addSpacing</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1">#xmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_xmin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;log(t&lt;sub&gt;min&lt;/sub&gt;)&lt;/b&gt;&quot;</span><span class="p">)</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin_label</span><span class="p">)</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span><span class="p">)</span>
+        <span class="c1">#space</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addSpacing</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1">#xmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_xmax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot; &lt;b&gt;log(t&lt;sub&gt;max&lt;/sub&gt;)&lt;/b&gt;&quot;</span><span class="p">)</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax_label</span><span class="p">)</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span><span class="p">)</span>
+        <span class="c1">#push button to refresh view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;GO&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_all_ds_plots</span><span class="p">)</span>
+        <span class="n">hlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hlayout_view</span> <span class="o">=</span> <span class="n">hlayout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ViewDataTheoryLayout</span><span class="o">.</span><span class="n">insertLayout</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hlayout_view</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">change_eta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the value of eta&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="s2">&quot;-np.inf -inf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">change_xmin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the value of t_min&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="s2">&quot;-np.inf -inf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tmin_view</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tmin_view</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">change_xmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the value of t_max&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="s2">&quot;np.inf inf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tmax_view</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tmax_view</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">change_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the value of the oversampling ratio.</span>
+<span class="sd">        Called when the spinbox value is changed&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">OVER</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">set_oversampling_widget_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show/Hide the extra widget &quot;sampling ratio&quot; &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show/Hide the extra widgets for xrange selection&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_label</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_label</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_label</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show/Hide extra view widgets depending on the current view&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">view_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;i-Rheo G&#39;,G&#39;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;Schwarzl G&#39;,G&#39;&#39;&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_oversampling_widget_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">view_name</span> <span class="o">==</span> <span class="s2">&quot;i-Rheo-Over G&#39;,G&#39;&#39;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_oversampling_widget_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_oversampling_widget_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        
 </pre></div>
 
           </div>
@@ -344,7 +605,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

@@ -47,8 +47,8 @@ Hence, there are five parameters which control the results of the reaction:
 .. math::
     \tau &= \dfrac{R_{\mathrm{td}}+R_{\mathrm{f}}}{R_{\mathrm{p}}},\\
     \beta &= \dfrac{R_{\mathrm{tc}}}{R_{\mathrm{p}}},\\
-    C_\text{b} &= \dfrac{k_{\mathrm{b}}}{k_{\mathrm{p}}},\\
-    C_\text{s} &= \dfrac{k_{\mathrm{s}}}{k_{\mathrm{p}}},
+    C_\text{b} &= \dfrac{R_{\mathrm{b}}}{R_{\mathrm{p}}},\\
+    C_\text{s} &= \dfrac{R_{\mathrm{s}}}{R_{\mathrm{p}}},
 
 where :math:`C_\text{b}` is the ratio of the
 branching and polymerisation rate constants and 
