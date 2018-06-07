@@ -123,6 +123,7 @@
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">pyqtSignal</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log</span>
 
 
 <div class="viewcode-block" id="Theory"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory">[docs]</a><span class="k">class</span> <span class="nc">Theory</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
@@ -163,7 +164,7 @@
 <span class="sd">            - parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})</span>
 <span class="sd">            - ax {matplotlib axes} -- matplotlib graph (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span> <span class="o">=</span> <span class="n">parent_dataset</span>
@@ -181,8 +182,8 @@
         <span class="c1"># THEORY OPTIONS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">100</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="mf">0.001</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt_min</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_min</span> <span class="o">=</span> <span class="mf">1e-6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-4</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop_steady</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>
@@ -329,7 +330,7 @@
         <span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
         <span class="n">tools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">tools</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> (</span><span class="si">%6s</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;File&quot;</span><span class="p">,</span> <span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="s2">&quot;# Pts.&quot;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12s</span><span class="s2"> (</span><span class="si">%6s</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;File&quot;</span><span class="p">,</span> <span class="s2">&quot;Error (RSS)&quot;</span><span class="p">,</span> <span class="s2">&quot;# Pts.&quot;</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;==================================&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
@@ -355,14 +356,24 @@
             <span class="n">npt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">yth</span><span class="p">)</span>
             <span class="n">total_error</span> <span class="o">+=</span> <span class="n">f_error</span> <span class="o">*</span> <span class="n">npt</span>
             <span class="n">npoints</span> <span class="o">+=</span> <span class="n">npt</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%10.5g</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12.5g</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span>
                                                           <span class="n">f_error</span><span class="p">,</span> <span class="n">npt</span><span class="p">))</span>
 
+        <span class="c1">#count number of fitting parameters</span>
+        <span class="n">free_p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
+                <span class="n">free_p</span> <span class="o">+=</span> <span class="mi">1</span>
+
         <span class="k">if</span> <span class="n">npoints</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%10.5g</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12.5g</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span>
                                    <span class="p">(</span><span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span> <span class="n">total_error</span> <span class="o">/</span> <span class="n">npoints</span><span class="p">,</span> <span class="n">npoints</span><span class="p">))</span>
+            <span class="c1"># Bayesian information criterion (BIC) penalise free parametters (overfitting)</span>
+            <span class="c1"># Model with lowest BIC number is prefered</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12.5g</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                   <span class="p">(</span><span class="s2">&quot;Bayesian IC&quot;</span><span class="p">,</span> <span class="n">npoints</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">total_error</span> <span class="o">/</span> <span class="n">npoints</span><span class="p">)</span> <span class="o">+</span> <span class="n">free_p</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">npoints</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12s</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">,</span>
                                                         <span class="n">npoints</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Theory.func_fit"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.func_fit">[docs]</a>    <span class="k">def</span> <span class="nf">func_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">param_in</span><span class="p">):</span>
@@ -1056,7 +1067,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">elif</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">line</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">line</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">())</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">line</span><span class="p">]</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">super</span><span class="p">(</span><span class="n">Theory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
 
@@ -1148,7 +1159,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

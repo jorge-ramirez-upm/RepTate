@@ -141,6 +141,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="c1"># Shift variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isshifted</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="n">DataTable</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xshift</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DataTable</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yshift</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DataTable</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">header_lines</span><span class="o">=</span><span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_parameters</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
@@ -196,7 +201,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

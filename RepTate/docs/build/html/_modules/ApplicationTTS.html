@@ -116,7 +116,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="ApplicationTTS"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.ApplicationTTS">[docs]</a><span class="k">class</span> <span class="nc">ApplicationTTS</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ApplicationTTS"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.ApplicationTTS">[docs]</a><span class="k">class</span> <span class="nc">ApplicationTTS</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application to Analyze Linear Viscoelastic Data</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -124,7 +124,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Linear Viscoelasticity&quot;</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="s1">&#39;osc&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;TTS&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;TTS&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 
 <span class="sd">        [description]</span>
@@ -161,7 +161,7 @@
         <span class="kn">from</span> <span class="nn">TheoryTTS</span> <span class="k">import</span> <span class="n">TheoryWLFShift</span>
         <span class="kn">from</span> <span class="nn">TheoryTTS_Test</span> <span class="k">import</span> <span class="n">TheoryWLFShiftTest</span>
         <span class="kn">from</span> <span class="nn">TheoryTTS_Automatic</span> <span class="k">import</span> <span class="n">TheoryTTSShiftAutomatic</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1"># VIEWS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(G&#39;,G&#39;&#39;(w))&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
@@ -175,7 +175,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1G2</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;(w))&quot;</span><span class="p">,</span> <span class="s2">&quot;log(G&#39;&#39;(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;,G&#39;&#39;(w)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;G&#39;,G&#39;&#39;(w)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Storage,Loss moduli&quot;</span><span class="p">,</span>
@@ -208,7 +208,7 @@
             <span class="kc">False</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewLogEtaStar</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;eta*(w)&quot;</span><span class="p">])</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(eta*(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;delta&quot;</span><span class="p">,</span>
             <span class="s2">&quot;delta&quot;</span><span class="p">,</span>
@@ -255,26 +255,26 @@
             <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(G*)&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(tan(delta),G*)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;log(tan(delta),G*)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;log(tan($\delta$)(G*))&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;G*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;log(tan($\delta$)(G*))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan($\delta$))&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(G*)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(tan($\delta$))&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="s2">&quot;-&quot;</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewLogtandeltaGstar</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(tan($\delta)(G*))&quot;</span><span class="p">])</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;log(tan($\delta))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;delta(G*)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;delta(G*)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$\delta$(G*))&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;G*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log(G*)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$\delta$(G*))&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
             <span class="s2">&quot;deg&quot;</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewdeltatanGstar</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;delta(G*)&quot;</span><span class="p">])</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;J&#39;,J&#39;&#39;(w)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;J&#39;,J&#39;&#39;(w)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;J moduli&quot;</span><span class="p">,</span>
@@ -308,7 +308,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;G&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Storage modulus&quot;</span><span class="p">,</span>
@@ -331,7 +331,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG2</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;&#39;(w)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;&#39;(w))&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
             <span class="s2">&quot;G&#39;&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Loss modulus&quot;</span><span class="p">,</span>
@@ -354,7 +354,7 @@
             <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewLogG1G2tandelta</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;G&#39;(w)&quot;</span><span class="p">,</span> <span class="s2">&quot;G&#39;&#39;(w),tan(delta)&quot;</span><span class="p">])</span>
+            <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log(G&#39;(w))&quot;</span><span class="p">,</span> <span class="s2">&quot;log(G&#39;&#39;(w)),log(tan(delta))&quot;</span><span class="p">])</span>
 
         <span class="c1">#set multiviews</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
@@ -378,7 +378,7 @@
         <span class="c1">#set the current view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogG1G2"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogG1G2">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1G2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogG1G2"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogG1G2">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1G2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the storage modulus :math:`\\log(G&#39;(\\omega))` and loss modulus :math:`\\log(G&#39;&#39;(\\omega))` vs :math:`\\log(\\omega)`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
@@ -389,7 +389,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewG1G2"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewG1G2">[docs]</a>    <span class="k">def</span> <span class="nf">viewG1G2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewG1G2"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewG1G2">[docs]</a>    <span class="k">def</span> <span class="nf">viewG1G2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Storage modulus :math:`G&#39;(\\omega)` and loss modulus :math:`G&#39;&#39;(\\omega)` (in logarithmic scale) vs :math:`\\omega`(in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
@@ -400,7 +400,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewEtaStar"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewEtaStar">[docs]</a>    <span class="k">def</span> <span class="nf">viewEtaStar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewEtaStar"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewEtaStar">[docs]</a>    <span class="k">def</span> <span class="nf">viewEtaStar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G&#39;^2 + G&#39;&#39;^2}/\\omega` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -409,7 +409,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogEtaStar"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogEtaStar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogEtaStar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogEtaStar"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogEtaStar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogEtaStar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G&#39;^2 + G&#39;&#39;^2}/\\omega` vs :math:`\\log(\\omega)` </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -419,7 +419,7 @@
             <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewDelta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewDelta"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Loss or phase angle :math:`\\delta(\\omega)=\\arctan(G&#39;&#39;/G&#39;)\\cdot 180/\\pi` (in degrees, in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -428,7 +428,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewTanDelta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewTanDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewTanDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewTanDelta"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewTanDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewTanDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Tangent of the phase angle :math:`\\tan(\\delta(\\omega))=G&#39;&#39;/G&#39;` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -437,7 +437,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogTanDelta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogTanDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogTanDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogTanDelta"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogTanDelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogTanDelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G&#39;&#39;/G&#39;)` vs :math:`\\log(\\omega)` </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -446,7 +446,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogGstar"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogGstar"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}` vs :math:`\\log(\\omega)` </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -456,7 +456,7 @@
             <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])))</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogtandeltaGstar"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogtandeltaGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogtandeltaGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogtandeltaGstar"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogtandeltaGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogtandeltaGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G&#39;&#39;/G&#39;` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -466,7 +466,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewdeltatanGstar"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewdeltatanGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewdeltatanGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewdeltatanGstar"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewdeltatanGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewdeltatanGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Loss angle :math:`\\delta(\\omega)=\\arctan(G&#39;&#39;/G&#39;)` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -476,7 +476,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewJ1J2"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewJ1J2">[docs]</a>    <span class="k">def</span> <span class="nf">viewJ1J2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewJ1J2"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewJ1J2">[docs]</a>    <span class="k">def</span> <span class="nf">viewJ1J2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Storage compliance :math:`J&#39;(\\omega)=G&#39;/(G&#39;^2+G&#39;&#39;^2)` and loss compliance :math:`J&#39;&#39;(\\omega)=G&#39;&#39;/(G&#39;^2+G&#39;&#39;^2)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
@@ -489,7 +489,7 @@
             <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]))</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewColeCole"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewColeCole">[docs]</a>    <span class="k">def</span> <span class="nf">viewColeCole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewColeCole"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewColeCole">[docs]</a>    <span class="k">def</span> <span class="nf">viewColeCole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Cole-Cole plot: out of phase viscosity :math:`\\eta&#39;&#39;(\\omega)=G&#39;(\\omega)/\\omega` vs dynamic viscosity :math:`\\eta&#39;(\\omega)=G&#39;&#39;(\\omega)/\\omega`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -498,7 +498,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogG1"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogG1">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogG1"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogG1">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the storage modulus :math:`\\log(G&#39;(\\omega))` vs :math:`\\log(\\omega)`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -507,7 +507,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewG1"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewG1">[docs]</a>    <span class="k">def</span> <span class="nf">viewG1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewG1"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewG1">[docs]</a>    <span class="k">def</span> <span class="nf">viewG1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Storage modulus :math:`G&#39;(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -516,7 +516,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogG2"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogG2">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogG2"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogG2">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the loss modulus :math:`\\log(G&#39;&#39;(\\omega))` vs :math:`\\log(\\omega)`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -525,7 +525,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewG2"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewG2">[docs]</a>    <span class="k">def</span> <span class="nf">viewG2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewG2"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewG2">[docs]</a>    <span class="k">def</span> <span class="nf">viewG2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Loss modulus :math:`G&#39;&#39;(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -534,7 +534,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationTTS.viewLogG1G2tandelta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1G2tandelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationTTS.viewLogG1G2tandelta"><a class="viewcode-back" href="../manual/Applications/TTS/general.html#ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogG1G2tandelta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the storage modulus :math:`\\log(G&#39;(\\omega))`, loss modulus :math:`\\log(G&#39;&#39;(\\omega))` and tangent of the loss angle :math:`\\log(\\tan(\\delta(\\omega)))=\\log(G&#39;&#39;/G&#39;)` vs :math:`\\log(\\omega)`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
@@ -562,7 +562,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;TTS&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GUIApplicationTTS"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationTTS.GUIApplicationTTS">[docs]</a><span class="k">class</span> <span class="nc">GUIApplicationTTS</span><span class="p">(</span><span class="n">BaseApplicationTTS</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
@@ -579,7 +579,7 @@
 <span class="sd">            - name {[type]} -- [description] (default: {&quot;TTS&quot;})</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -602,7 +602,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

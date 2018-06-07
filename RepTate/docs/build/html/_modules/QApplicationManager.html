@@ -124,7 +124,7 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">Ui_MainWindow</span><span class="p">,</span> <span class="n">QMainWindow</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="s1">&#39;ReptateMainWindow.ui&#39;</span><span class="p">))</span>
 
 
@@ -144,9 +144,9 @@
 <span class="sd">        Keyword Arguments:</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
-        <span class="n">QMainWindow</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">Ui_MainWindow</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">QMainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Ui_MainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span>  <span class="c1">#set GUI mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -226,6 +226,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">actionSANS</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;SANS&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionReact</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;React&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionDielectric</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;Dielectric&#39;</span><span class="p">))</span>
+        <span class="c1"># self.actionLAOS.triggered.connect(lambda: self.handle_new_app(&#39;LAOS&#39;))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionLAOS</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_app_coming_soon</span><span class="p">(</span><span class="s1">&#39;LAOS&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionDynamicStructureFactor</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_app_coming_soon</span><span class="p">(</span><span class="s1">&#39;DynamicStructureFactor&#39;</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">tabCloseRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close_app_tab</span><span class="p">)</span>
@@ -417,7 +419,7 @@
 
 <div class="viewcode-block" id="QApplicationManager.handle_app_coming_soon"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_app_coming_soon">[docs]</a>    <span class="k">def</span> <span class="nf">handle_app_coming_soon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show message&quot;&quot;&quot;</span>
-        <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;new </span><span class="si">%s</span><span class="s2"> application&quot;</span><span class="o">%</span> <span class="n">appname</span><span class="p">,</span> <span class="s2">&quot;Coming soon...&quot;</span> <span class="p">)</span></div>
+        <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;new </span><span class="si">%s</span><span class="s2"> application&quot;</span><span class="o">%</span> <span class="n">appname</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> coming soon...&quot;</span> <span class="o">%</span> <span class="n">appname</span><span class="p">)</span></div>
 
 
 
@@ -726,7 +728,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

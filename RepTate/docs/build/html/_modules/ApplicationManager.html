@@ -123,6 +123,7 @@
 <span class="kn">from</span> <span class="nn">ApplicationSANS</span> <span class="k">import</span> <span class="n">ApplicationSANS</span>
 <span class="kn">from</span> <span class="nn">ApplicationReact</span> <span class="k">import</span> <span class="n">ApplicationReact</span>
 <span class="kn">from</span> <span class="nn">ApplicationDielectric</span> <span class="k">import</span> <span class="n">ApplicationDielectric</span>
+<span class="kn">from</span> <span class="nn">ApplicationLAOS</span> <span class="k">import</span> <span class="n">ApplicationLAOS</span>
 <span class="c1"># from ApplicationXY import ApplicationXY</span>
 <span class="c1">#from ApplicationFRS_I import *</span>
 <span class="kn">import</span> <span class="nn">Version</span>
@@ -149,7 +150,7 @@
 <span class="sd">        Keyword Arguments:</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># SETUP LOG</span>
         <span class="c1">#self.reptatelogger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
@@ -164,7 +165,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;History file not found. Creating a new one&quot;</span><span class="p">)</span>
 
         <span class="c1"># SETUP APPLICATIONS</span>
@@ -183,6 +184,8 @@
             <span class="n">ApplicationReact</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationReact</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span>
             <span class="n">ApplicationDielectric</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationDielectric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span>
+            <span class="n">ApplicationLAOS</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationLAOS</span>
         <span class="c1"># self.available_applications[ApplicationXY.apname] = ApplicationXY</span>
         <span class="c1">#self.available_applications[ApplicationFRS_I.apname]=ApplicationFRS_I</span>
 
@@ -535,7 +538,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>
