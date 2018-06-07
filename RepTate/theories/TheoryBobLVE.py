@@ -196,6 +196,8 @@ class BaseTheoryBobLVE:
             tt.data[:, 1] = gp[:]
             tt.data[:, 2] = gpp[:]
 
+    def do_fit(self, line=''):
+        self.Qprint("Fitting not allowed in this theory")
 
 class CLTheoryBobLVE(BaseTheoryBobLVE, Theory):
     """[summary]
@@ -237,9 +239,10 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         #create temp folder if does not exist
         if not os.path.exists(temp_dir):
             os.makedirs(temp_dir)
+        self.selected_file = None
         self.setup_dialog()
 
-    def get_file_path(self):
+    def get_file_name(self):
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
         # file browser window
         options = QFileDialog.Options()
@@ -248,7 +251,8 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(
             self, dilogue_name, dir_start, ext_filter, options=options)
-        return selected_file
+        self.selected_file = selected_file
+        self.d.selected_file.setText(os.path.basename(selected_file))
 
     def num_file_lines(self, fname):
         """Return the number of lines in the file `fname`"""
@@ -264,6 +268,30 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         self.dialog.ui = bob_LVE.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         self.d = self.dialog.ui
+        self.d.pb_pick_file.clicked.connect(self.get_file_name)
+        self.d.selected_file.setStyleSheet("color : blue ;")
+        # connect button OK
+        self.d.pb_ok.clicked.connect(self.handle_pb_ok)
+        # connect button Cancel
+        self.d.pb_cancel.clicked.connect(self.dialog.reject)
+        # connect button Help
+        self.d.pb_help.clicked.connect(
+            self.handle_help_button)
+
+    def handle_pb_ok(self):
+        """Define the OK button role. If something is wrong, keep the dialog open"""
+        if self.selected_file is None:
+            QMessageBox.warning(
+                self, 'Select Input Polyconf',
+                'Please select a file for BoB to read the polymer configuration')
+        else:    
+            self.dialog.accept()
+
+    def handle_help_button(self):
+        """When Help button of dialog box is clicked, show BoB manual (pdf)"""
+        bob_manual_pdf = 'docs%ssource%smanual%sApplications%sReact%sbob2.3.pdf' % (
+            (os.sep, ) * 5)
+        QDesktopServices.openUrl(QUrl.fromLocalFile(bob_manual_pdf))
 
     def create_bob_input_file(self, nlines, inpf):
         """Create a file containing the input BoB parameters from the form dialog"""
@@ -295,7 +323,7 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         if not self.dialog.exec_():
             self.success_dialog = False
             return
-        conffile = self.get_file_path()
+        conffile = self.selected_file
         if not self.is_ascii(conffile):
             ok_path = os.path.join('theories', 'temp', 'target_polyconf.dat')
             copy2(conffile, ok_path)

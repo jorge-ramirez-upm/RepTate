@@ -321,18 +321,22 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         self.dialog.ui = bob_gen_poly.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         self.d = self.dialog.ui
+        self.d.pb_pick_file.clicked.connect(self.get_file_name)
+        self.d.selected_file.setStyleSheet("color : blue ;")
         self.d.polymer_tab.setTabsClosable(True)
         # connect close tab
         self.d.polymer_tab.tabCloseRequested.connect(
             self.handle_close_polymer_tab)
         # connect button Apply
-        self.d.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(
+        self.d.pb_apply.clicked.connect(
             self.handle_apply_button)
         # connect button Help
-        self.d.buttonBox.button(QDialogButtonBox.Help).clicked.connect(
+        self.d.pb_help.clicked.connect(
             self.handle_help_button)
         # connect button OK
-        # self.d.buttonBox.accepted.connect(self.accept_)
+        self.d.pb_ok.clicked.connect(self.handle_pb_ok)
+        # connect button Cancel
+        self.d.pb_cancel.clicked.connect(self.dialog.reject)
         # connect button Add component
         self.d.add_button.clicked.connect(self.handle_add_component)
         # connect combobox architecture type
@@ -356,9 +360,20 @@ FunH
 2 3 -1 -1 2 13000 1.05
 """)
 
+    def handle_pb_ok(self):
+        """Define the OK button role. If something is wrong, keep the dialog open"""
+        if self.handle_apply_button():
+            self.dialog.accept()
+
     def handle_apply_button(self):
         """When Apply button of dialog box is clicked,
         fill the "Result" widget with the data expected by BoB"""
+        if self.polyconf_file_out is None:
+            QMessageBox.warning(
+                self, 'Select Output Polyconf',
+                'Please select a file for BoB to save the polymer configuration'
+            )
+            return False
         ncomponents = self.d.polymer_tab.count()
         if ncomponents < 1:
             QMessageBox.warning(
@@ -598,6 +613,7 @@ FunH
         return True  # success
 
     def get_file_path(self):
+        """Select a polyconf file for BoB to read"""
         # file browser window
         options = QFileDialog.Options()
         dir_start = "data/React/"
@@ -651,12 +667,6 @@ FunH
         and all the relevant parameters for each component.
         This function is called via a pyqtSignal for multithread compatibility"""
         if self.dialog.exec_():
-            success = self.handle_apply_button()
-            if not success:
-                # there is no polymer component in the mix
-                self.success_dialog = False
-                return
-
             # create temporary file for BoB input
             temp_dir = os.path.join('theories', 'temp')
             #create temp folder if does not exist
@@ -673,7 +683,7 @@ FunH
                 self.dump_text_to_file(temp_proto, self.d.proto_text)
 
             # ask where to save the polymer config file
-            out_file = self.polyconf_file_out = self.get_file_name()
+            out_file = self.polyconf_file_out
             if self.polyconf_file_out is not None:
                 if not self.is_ascii(self.polyconf_file_out):
                     # to avoid path name troubles
@@ -704,11 +714,8 @@ FunH
         ext_filter = 'Data Files (*.dat)'
         out_file = QFileDialog.getSaveFileName(
             self, dilogue_name, dir_start, ext_filter, options=options)
-        if out_file[0] == '':
-            self.Qprint('Invalid filename')
-            return None
-        else:
-            return out_file[0]
+        self.polyconf_file_out = out_file[0]
+        self.d.selected_file.setText(os.path.basename(out_file[0]))
 
     def is_ascii(self, s):
         """Check if `s` contains non ASCII characters"""
