@@ -115,26 +115,26 @@ class BaseTheoryMultiMetCSTR:
         self.parameters['num_to_make'] = Parameter(
             name='num_to_make',
             value=1000,
-            description='number of molecules made in the simulation',
+            description='Number of molecules made in the simulation',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters['mon_mass'] = Parameter(
             name='mon_mass',
             value=28,
             description=
-            'this is the mass, in a.m.u., of a monomer (usually set to 28 for PE)',
+            'Mass, in a.m.u., of a monomer (usually set to 28 for PE)',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters['Me'] = Parameter(
             name='Me',
             value=1000,
-            description='the entanglement molecular weight',
+            description='Entanglement molecular weight',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters['nbin'] = Parameter(
             name='nbin',
             value=50,
-            description='number of bins',
+            description='Number of molecular weight bins',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.NUMCAT_MAX = 30

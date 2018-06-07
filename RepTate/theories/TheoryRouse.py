@@ -360,14 +360,14 @@ class BaseTheoryRouseFrequency:
         self.parameters["tau0"] = Parameter(
             "tau0",
             1e-3,
-            "segment relaxation time",
+            "Segment relaxation time",
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0)
         self.parameters["M0"] = Parameter(
             "M0",
             0.2,
-            "segment molar mass",
+            "Segment molar mass",
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0)

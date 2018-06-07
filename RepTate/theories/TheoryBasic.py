@@ -127,7 +127,7 @@ class BaseTheoryPolynomial:
                 self.parameters["A%02d" % i] = Parameter(
                     "A%02d" % i,
                     Aval,
-                    "Coefficient order %d" % i,
+                    "Coefficient degree %d" % i,
                     ParameterType.real,
                     opt_type=OptType.opt)
         else:
