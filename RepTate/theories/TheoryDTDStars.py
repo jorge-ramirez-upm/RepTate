@@ -71,7 +71,7 @@ class TheoryDTDStarsFreq(CmdBase):
     """
     thname = "DTD Stars"
     description = "Dynamic Tube Dilution for stars, frequency domain"
-    citations = "Milnet S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
+    citations = "Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
     
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
