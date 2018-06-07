@@ -60,9 +60,9 @@ class TheoryBobLVE(CmdBase):
     
     [description]
     """
-    thname = 'BobLVETheory'
-    description = 'BobLVE Theory'
-    citations = ''
+    thname = 'BOB'
+    description = 'Branch-On-Branch rheology'
+    citations = 'Das C., Inkson N.J., Read D.J., Kelmanson M.A. and McLeish T.C.B., J. Rheol. 2006, 50, 207-234'
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

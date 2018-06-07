@@ -52,7 +52,7 @@ class TheoryDiscrMWD(CmdBase):
     
     [description]
     """
-    thname = "MWDiscr"
+    thname = "Discretize MWD"
     description = "Discretize a Molecular Weight Distribution"
     citations = ""
 

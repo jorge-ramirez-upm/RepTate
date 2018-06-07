@@ -234,7 +234,7 @@ class TheoryPowerLaw(CmdBase):
        - :math:`b`: exponent.
 
     """
-    thname = "PowerLaw"
+    thname = "Power Law"
     description = "Fit Power Law"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
@@ -481,7 +481,7 @@ class TheoryTwoExponentials(CmdBase):
        - :math:`T_1`, :math:`T_2`: exponential "time" constants.
 
     """
-    thname = "TwoExponentials"
+    thname = "Two Exponentials"
     description = "Fit two exponentials"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):

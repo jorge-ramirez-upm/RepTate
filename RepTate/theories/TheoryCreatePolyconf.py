@@ -112,8 +112,8 @@ class TheoryCreatePolyconf(CmdBase):
     
     [description]
     """
-    thname = 'CreatePolyconfTheory'
-    description = 'CreatePolyconf Theory'
+    thname = 'Create Polyconf'
+    description = 'Create Polyconf'
     citations = ''
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):

@@ -53,8 +53,8 @@ class TheoryLikhtmanMcLeish2002NEW(CmdBase):
     
     [description]
     """
-    thname = "Likhtman-McLeishNEW"
-    description = "Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers"
+    thname = "Likhtman-McLeish TEST"
+    description = "Likhtman-McLeish theory for linear entangled polymers"
     citations = "Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):

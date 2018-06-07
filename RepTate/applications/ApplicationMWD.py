@@ -94,7 +94,7 @@ class BaseApplicationMWD:
         # VIEWS
         self.views["log-lin"] = View(
             name="log-lin",
-            description="Molecular weight distribution",
+            description="MWD lin W vs log M",
             x_label="M",
             y_label="W",
             x_units="g/mol",
@@ -106,7 +106,7 @@ class BaseApplicationMWD:
             snames=["W"])
         self.views["log-log"] = View(
             name="log-log",
-            description="Molecular weight distribution",
+            description="MWD log W vs log M",
             x_label="log(M)",
             y_label="log(W)",
             x_units="g/mol",
@@ -118,7 +118,7 @@ class BaseApplicationMWD:
             snames=["log(W)"])
         self.views["lin-lin"] = View(
             name="lin-lin",
-            description="Molecular weight distribution",
+            description="MWD lin W vs lin M",
             x_label="M",
             y_label="W",
             x_units="g/mol",

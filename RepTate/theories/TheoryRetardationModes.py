@@ -66,7 +66,7 @@ class TheoryRetardationModesTime(CmdBase):
        - logJi = :math:`\\log(J_{i})`: decimal logarithm of the compliance of Retardation mode :math:`i`.
     
     """
-    thname = "RetardationModesTime"
+    thname = "Retardation Modes"
     description = "Fit Retardation modes to time dependent creep data"
     citations = ""
 

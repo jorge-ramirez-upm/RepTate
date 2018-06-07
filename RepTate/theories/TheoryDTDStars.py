@@ -69,9 +69,9 @@ class TheoryDTDStarsFreq(CmdBase):
          - :math:`k_\\mathrm B T`: thermal energy
          - :math:`M_0`: molar mass of an elementary segment
     """
-    thname = "DTDStarsFreq"
-    description = "Fit Dynamic Tube Dilution theory for stars, frequency domain"
-    citations = ""
+    thname = "DTD Stars"
+    description = "Dynamic Tube Dilution for stars, frequency domain"
+    citations = "Milnet S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
     
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -264,9 +264,9 @@ class TheoryDTDStarsTime(CmdBase):
          - :math:`k_\\mathrm B T`: thermal energy
          - :math:`M_0`: molar mass of an elementary segment
     """
-    thname = "DTDStarsTime"
-    description = "Fit Dynamic Tube Dilution theory for stars, time domain"
-    citations = ""
+    thname = "DTD Stars"
+    description = "Dynamic Tube Dilution for stars, time domain"
+    citations = "Milnet S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
     
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

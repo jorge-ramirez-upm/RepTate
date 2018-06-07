@@ -65,8 +65,8 @@ class TheoryDebyeModesFrequency(CmdBase):
        - logDei = :math:`\\log(\\Delta\\epsilon_{i})`, where :math:`\\Delta\\epsilon_{i}=\\epsilon_{s,i}-\\epsilon_\\infty`: decimal logarithm of the relaxation strength of Debye mode :math:`i`, where :math:`\\epsilon_{s,i}` is the static permitivity of mode :math:`i`.
     
     """
-    thname = "DebyeModesFrequency"
-    description = "Fit Debye modes to frequency dependent function"
+    thname = "Debye modes"
+    description = "Fit Debye modes"
     citations = ""
     
     def __new__(cls, name="", parent_dataset=None, ax=None):

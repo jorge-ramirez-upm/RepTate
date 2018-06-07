@@ -64,8 +64,8 @@ class TheoryRouseTime(CmdBase):
             - :math:`N=M_w/M_0`: number of segments par chain
             - :math:`M_w`: weight-average molecular mass
     """
-    thname = "RouseTime"
-    description = "Fit Rouse modes to time dependent function"
+    thname = "Rouse"
+    description = "Rouse model"
     citations = ""
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
@@ -294,8 +294,8 @@ class TheoryRouseFrequency(CmdBase):
             - :math:`N=M_w/M_0`: number of segments par chain
             - :math:`M_w`: weight-average molecular mass
     """
-    thname = "RouseFrequency"
-    description = "Fit Maxwell modes to frequency dependent function"
+    thname = "Rouse"
+    description = "Rouse model"
     citations = ""
     
     def __new__(cls, name='', parent_dataset=None, axarr=None):

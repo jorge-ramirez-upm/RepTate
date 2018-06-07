@@ -60,9 +60,9 @@ reactor during free-radical polymerisation.
     
     [description]
     """
-    thname = 'TobitaCSTRTheory'
+    thname = 'Tobita CSTR'
     description = 'Tobita LDPE CSTR reaction theory'
-    citations = 'J. Pol. Sci. Part B, 39, 391-403 (2001)'
+    citations = 'Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403'
 
     def __new__(cls, name='', parent_dataset=None, ax=None):
         """[summary]

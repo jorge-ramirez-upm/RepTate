@@ -46,7 +46,7 @@ class TheoryLogNormal(CmdBase):
     
     [description]
     """
-    thname = 'LogNormalTheory'
+    thname = 'LogNormal'
     description = 'LogNormal distribution'
     citations = ''
 

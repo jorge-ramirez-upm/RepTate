@@ -64,9 +64,9 @@ class TheoryHavriliakNegamiModesFrequency(CmdBase):
        - :math:`\\gamma\: Broadness parameter
     
     """
-    thname = "HavriliakNegamiModesFrequency"
-    description = "Fit Havriliak-Negami modes to frequency dependent function"
-    citations = ""
+    thname = "Havriliak-Negami modes"
+    description = "Fit Havriliak-Negami modes"
+    citations = "Havriliak S. and Negami S., Polymer 1967, 8, 161-210"
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

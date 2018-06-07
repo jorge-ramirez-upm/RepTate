@@ -137,8 +137,8 @@ class TheoryRoliePoly(CmdBase):
     
     [description]
     """
-    thname = "RoliePoly"
-    description = "RoliePoly"
+    thname = "Rolie-Poly"
+    description = "Rolie-Poly constitutuve equation"
     citations = "Likhtman, A.E. & Graham, R.S., J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):

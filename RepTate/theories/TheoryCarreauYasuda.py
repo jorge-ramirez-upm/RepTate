@@ -60,8 +60,8 @@ class TheoryCarreauYasuda(CmdBase):
         - :math:`a`: Dimensionless parameter (2 in most cases)
 
     """
-    thname = 'CarreauYasudaTheory'
-    description = 'Carreau-Yasuda Theory'
+    thname = 'Carreau-Yasuda'
+    description = 'Carreau-Yasuda equation'
     citations = ''
 
     def __new__(cls, name='', parent_dataset=None, ax=None):

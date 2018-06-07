@@ -64,8 +64,8 @@ class TheoryMaxwellModesFrequency(CmdBase):
        - logGi = :math:`\\log(G_{i})`: decimal logarithm of the amplitude of Maxwell mode :math:`i`.
     
     """
-    thname = "MaxwellModesFrequency"
-    description = "Fit Maxwell modes to frequency dependent function"
+    thname = "Maxwell Modes"
+    description = "Maxwell modes, frequency dependent"
     citations = ""
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
@@ -469,8 +469,8 @@ class TheoryMaxwellModesTime(CmdBase):
        - logGi = :math:`\\log(G_{i})`: decimal logarithm of the amplitude of Maxwell mode :math:`i`.
     
     """
-    thname = "MaxwellModesTime"
-    description = "Fit Maxwell modes to time dependent function"
+    thname = "Maxwell Modes"
+    description = "Maxwell modes, time dependent"
     citations = ""
 
     def __new__(cls, name="", parent_dataset=None, ax=None):

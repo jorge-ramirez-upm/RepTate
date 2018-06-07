@@ -58,8 +58,8 @@ class TheoryTTSShiftAutomatic(CmdBase):
        - This theory has no parameters.
     
     """
-    thname = "TTSShiftAutomatic"
-    description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
+    thname = "Automatic TTS Shift"
+    description = "Shift data automatically for best overlap"
     citations = ""
 
     def __new__(cls, name="", parent_dataset=None, ax=None):

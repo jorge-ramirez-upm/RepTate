@@ -68,9 +68,9 @@ class TheoryKWWModesFrequency(CmdBase):
         It makes use of the libkww code, by Joachim Wuttke, CITE: doi:10.3390/a5040604
     
     """
-    thname = "KWWModesFrequency"
-    description = "Fit Havriliak-Negami modes to frequency dependent function"
-    citations = ""
+    thname = "KWW modes"
+    description = "Fit Kohlrausch-Williams-Watts modes"
+    citations = "Kohlrausch, R. Annalen der Physik und Chemie 1854, 91, 56-82\nWilliams G. and Watts D.C., Trans. Faraday Soc. 1970, 66, 80-85"
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

@@ -65,9 +65,9 @@ class TheoryTobitaBatch(CmdBase):
     approximation for a tubular reactor. One possibility when modelling a real
     tubular reactor is to mix several batch reactions with different conversions.
     """
-    thname = 'TobitaBatchTheory'
+    thname = 'Tobita Batch'
     description = 'The LDPE batch reaction theory'
-    citations = 'J. Pol. Sci. Part B, 39, 391-403 (2001)'
+    citations = 'Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403'
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

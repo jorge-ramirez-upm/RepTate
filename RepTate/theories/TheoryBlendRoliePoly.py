@@ -273,8 +273,8 @@ class TheoryBlendRoliePoly(CmdBase):
        - ``tauD_i`` :math:`\\equiv\\tau_{\\mathrm d,i}`: Maxwell relaxation times for the stress of species :math:`i` (includes both reptation and constraint release mechamisms)
        - ``tauR_i`` :math:`\\equiv\\tau_{\\mathrm s,i}`: Stretch relaxation time of species :math:`i`
     """
-    thname = "BlendRoliePoly"
-    description = "BlendRoliePoly"
+    thname = "Rolie-Poly Blends"
+    description = "Rolie-Poly const. eq. for blends"
     citations = ""
 
     def __new__(cls, name="", parent_dataset=None, ax=None):

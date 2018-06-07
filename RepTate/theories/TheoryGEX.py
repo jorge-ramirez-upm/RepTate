@@ -48,8 +48,8 @@ class TheoryGEX(CmdBase):
     
     [description]
     """
-    thname = 'GEXTheory'
-    description = 'Generalized Exponential Function (GEX)'
+    thname = 'GEX'
+    description = 'Generalized Exponential Function distribution'
     citations = ''
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):

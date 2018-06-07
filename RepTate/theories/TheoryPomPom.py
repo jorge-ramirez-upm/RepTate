@@ -135,9 +135,9 @@ class TheoryPomPom(CmdBase):
             the ratio of orientation to stretch relaxation times of each mode
 
     """
-    thname = "PomPom"
-    description = "PomPom"
-    citations = ""
+    thname = "Pom-Pom"
+    description = "Pom-Pom constitutive equation"
+    citations = "McLeish T.C.B. and Larson R.G., J. Rheol. 1998, 42, 81-110"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

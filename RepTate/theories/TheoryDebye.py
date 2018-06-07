@@ -72,9 +72,9 @@ class TheoryDebye(CmdBase):
              I(q) = \\frac {(b_H-b_D)^2}{V} \\left( \\frac{1}{N \\phi(1-\\phi) g_D(R_g,q)}-2\\chi \\right)^{-1} + \\mathrm{Bckgrnd}     
     
     """
-    thname = 'DebyeTheory'
+    thname = 'Debye'
     description = 'Debye theory for neutron scattering from ideal polymer chains'
-    citations = ''
+    citations = 'Debye P., J. Phys. Chem. 1947, 51, 18-32'
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

@@ -73,8 +73,8 @@ class TheoryWLFShift(CmdBase):
        - dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).
     
     """
-    thname = "WLFShift"
-    description = "Basic theory for Time-Temperature Superposition, based on the WLF equation"
+    thname = "WLF Shift"
+    description = "TTS shift based on the WLF equation"
     citations = ""
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
