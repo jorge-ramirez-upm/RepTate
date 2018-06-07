@@ -184,6 +184,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     # add separator if common theories are added
                     self.cbtheory.insertSeparator(self.cbtheory.count())
                     flag_first = False
+                    i += 1
                 self.cbtheory.addItem(th_name)
                 self.cbtheory.setItemData(i, self.parent_application.theories[th_name].description, Qt.ToolTipRole)
                 i += 1
