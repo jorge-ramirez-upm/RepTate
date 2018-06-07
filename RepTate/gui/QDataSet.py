@@ -42,6 +42,7 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel, QFileDialog
 from DataSet import DataSet
+from DataTable import DataTable
 from QTheory import QTheory
 from DataSetWidget import DataSetWidget
 import threading
@@ -562,7 +563,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         inspec_tab.resizeColumnsToContents()
         inspec_tab.resizeRowsToContents()
         # Update shift factors
-        self.parent_application.update_shifts(0, 0, 0)
+        for i in range(DataTable.MAX_NUM_SERIES):
+            self.parent_application.update_shifts(0, 0, i)
              
     def handle_itemChanged(self, item, column):
         """[summary]

@@ -47,8 +47,9 @@ from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel, QTableWidget, QTableWidgetItem
 from QDataSet import QDataSet
+from DataTable import DataTable
 from DataSetWidgetItem import DataSetWidgetItem
 from DataSet import ColorMode, SymbolMode, ThLineMode
 from CmdBase import CmdBase, CmdMode
@@ -132,24 +133,22 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionSaveShiftFactors)
         tb.addAction(self.actionResetShiftFactors)
         vblayout.addWidget(tb)
-        self.shiftToolBar = QToolBar()
-        self.shiftToolBar.addWidget(QLabel("<b>xshift</b>"))
-        self.xshiftLineEdit = QLineEdit()
-        self.xshiftLineEdit.setReadOnly(True)
-        self.xshiftLineEdit.setStyleSheet("QLineEdit { background: rgb(255, 255, 204);}")
-        self.xshiftLineEdit.setText("0")
-        self.xshiftLineEdit.setMaximumWidth(80)
-        self.shiftToolBar.addWidget(self.xshiftLineEdit) 
-        self.shiftToolBar.addSeparator()
-        self.shiftToolBar.addWidget(QLabel("<b>yshift</b>"))
-        self.yshiftLineEdit = QLineEdit()
-        self.yshiftLineEdit.setReadOnly(True)
-        self.yshiftLineEdit.setStyleSheet("QLineEdit { background: rgb(255, 255, 204);}")
-        self.yshiftLineEdit.setText("0")
-        self.yshiftLineEdit.setMaximumWidth(80)
-        self.shiftToolBar.addWidget(self.yshiftLineEdit)      
-        self.shiftToolBar.setVisible(False)
-        vblayout.addWidget(self.shiftToolBar)
+        # Shift factors stuff
+        self.shiftTable = QTableWidget(DataTable.MAX_NUM_SERIES,2, self)
+        self.shiftTable.setHorizontalHeaderLabels(["Xshift", "Yshift"])
+        self.shiftTable.horizontalHeader().setStyleSheet("color: blue; font: bold;")
+        self.shiftTable.verticalHeader().setStyleSheet("color: blue; font: bold;")
+        for i in range(DataTable.MAX_NUM_SERIES):
+            for j in range(2):
+                item = QTableWidgetItem()
+                item.setText("0")
+                item.setBackground(QColor(255,255,205))
+                self.shiftTable.setItem(i, j, item)
+        self.shiftTable.resizeRowsToContents()
+        self.shiftTable.setFixedHeight(60)
+        self.shiftTable.setVisible(False)
+        vblayout.addWidget(self.shiftTable)
+
         #custom QTable to have the copy/pastefeature
         self.inspector_table = SpreadsheetWidget(self)
         vblayout.addWidget(self.inspector_table)
@@ -935,14 +934,21 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         pass
 
     def handle_actionResetShiftTriggered(self):
-        pass
+        ds = self.DataSettabWidget.currentWidget()
+        if ds is None:
+            return
+        for file in ds.files:        
+            file.xshift = [0]*DataTable.MAX_NUM_SERIES
+            file.yshift = [0]*DataTable.MAX_NUM_SERIES
+            file.isshifted = [False]*DataTable.MAX_NUM_SERIES
+            ds.do_plot()
     
     def handle_actionShiftTriggered(self):
         """Allow the current 'selected_file' to be dragged
         
         [description]
         """
-        self.shiftToolBar.setVisible((self.actionShiftHorizontally.isChecked() or self.actionShiftVertically.isChecked()))
+        self.shiftTable.setVisible((self.actionShiftHorizontally.isChecked() or self.actionShiftVertically.isChecked()))
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return
@@ -970,8 +976,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return        
-        self.xshiftLineEdit.setText("%g"%(ds.selected_file.xshift[index]+dx))
-        self.yshiftLineEdit.setText("%g"%(ds.selected_file.yshift[index]+dy))
+        item = self.shiftTable.item(index, 0)
+        item.setText("%g"%(ds.selected_file.xshift[index]+dx))
+        item = self.shiftTable.item(index, 1)
+        item.setText("%g"%(ds.selected_file.yshift[index]+dy))
+
 
     def finish_shifts(self, dx, dy, index):
         ds = self.DataSettabWidget.currentWidget()

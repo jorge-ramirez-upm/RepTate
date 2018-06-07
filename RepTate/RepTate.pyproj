@@ -28,6 +28,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="applications\ApplicationCreep.py" />
+    <Compile Include="applications\ApplicationDielectric.py" />
+    <Compile Include="applications\ApplicationLAOS.py" />
     <Compile Include="applications\ApplicationReact.py" />
     <Compile Include="applications\ApplicationSANS.py" />
     <Compile Include="applications\ApplicationTTS.py" />
@@ -73,6 +75,7 @@
     <Compile Include="core\View.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gui\bob_gen_poly.py" />
     <Compile Include="gui\DataSetWidget.py" />
     <Compile Include="gui\DataSetWidgetItem.py" />
     <Compile Include="gui\markerSettings.py" />
@@ -81,27 +84,44 @@
     <Compile Include="gui\QTheory.py" />
     <Compile Include="gui\QTool.py" />
     <Compile Include="gui\SplashScreen.py" />
+    <Compile Include="gui\SpreadsheetWidget.py" />
     <Compile Include="RepTate.py" />
     <Compile Include="RepTateCL.py" />
     <Compile Include="tests\RepTate_Test_LVE.py" />
     <Compile Include="tests\RepTate_Test_React.py" />
     <Compile Include="tests\RepTate_Test_TTS.py" />
+    <Compile Include="theories\BobCtypesHelper.py" />
+    <Compile Include="theories\react_ctypes_helper.py" />
+    <Compile Include="theories\react_gui_tools.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="theories\TheoryBlendRoliePoly.py" />
+    <Compile Include="theories\TheoryBobLVE.py" />
     <Compile Include="theories\TheoryCarreauYasuda.py" />
+    <Compile Include="theories\TheoryCreatePolyconf.py" />
     <Compile Include="theories\TheoryDebye.py" />
+    <Compile Include="theories\TheoryDebyeModes.py" />
     <Compile Include="theories\TheoryDiscrMWD.py" />
     <Compile Include="theories\TheoryDTDStars.py" />
     <Compile Include="theories\TheoryGEX.py" />
+    <Compile Include="theories\TheoryGiesekus.py" />
     <Compile Include="theories\TheoryHavriliakNegamiModes.py" />
+    <Compile Include="theories\TheoryKWWModes.py" />
+    <Compile Include="theories\TheoryLDPEBatch.py" />
     <Compile Include="theories\TheoryLikhtmanMcLeish2002.py" />
+    <Compile Include="theories\TheoryLikhtmanMcLeish2002NEW.py" />
+    <Compile Include="theories\TheoryLogNormal.py" />
     <Compile Include="theories\TheoryMaxwellModes.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="theories\TheoryMultiMetCSTR.py" />
+    <Compile Include="theories\TheoryPomPom.py" />
+    <Compile Include="theories\TheoryReactMix.py" />
     <Compile Include="theories\TheoryRetardationModes.py" />
     <Compile Include="theories\TheoryRoliePoly.py" />
     <Compile Include="theories\TheoryRouse.py" />
+    <Compile Include="theories\TheoryTobitaCSTR.py" />
     <Compile Include="theories\TheoryTTS.py">
       <SubType>Code</SubType>
     </Compile>
@@ -111,6 +131,7 @@
     </Compile>
     <Compile Include="theories\TheoryTTS_Automatic.py" />
     <Compile Include="theories\TheoryTTS_Test.py" />
+    <Compile Include="theories\TheoryUCM.py" />
     <Compile Include="tools\ToolBounds.py" />
     <Compile Include="tools\ToolEvaluate.py" />
     <Compile Include="tools\ToolFindPeaks.py" />
