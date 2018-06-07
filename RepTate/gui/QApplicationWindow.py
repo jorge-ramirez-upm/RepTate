@@ -125,8 +125,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionCopy)
         tb.addAction(self.actionPaste)
+        tb.addSeparator()
         tb.addAction(self.actionShiftVertically)
         tb.addAction(self.actionShiftHorizontally)
+        tb.addAction(self.actionViewShiftFactors)
+        tb.addAction(self.actionSaveShiftFactors)
+        tb.addAction(self.actionResetShiftFactors)
         vblayout.addWidget(tb)
         self.shiftToolBar = QToolBar()
         self.shiftToolBar.addWidget(QLabel("<b>xshift</b>"))
@@ -260,6 +264,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
         connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
         connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
+        connection_id = self.actionViewShiftFactors.triggered.connect(self.handle_actionViewShiftTriggered)
+        connection_id = self.actionSaveShiftFactors.triggered.connect(self.handle_actionSaveShiftTriggered)
+        connection_id = self.actionResetShiftFactors.triggered.connect(self.handle_actionResetShiftTriggered)
         connection_id = self.DataInspectordockWidget.visibilityChanged.connect(self.handle_inspectorVisibilityChanged)
         
         connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
@@ -920,6 +927,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 ds.populate_inspector()           
         else:
             self.disconnect_curve_drag()
+
+    def handle_actionViewShiftTriggered(self):
+        pass
+
+    def handle_actionSaveShiftTriggered(self):
+        pass
+
+    def handle_actionResetShiftTriggered(self):
+        pass
     
     def handle_actionShiftTriggered(self):
         """Allow the current 'selected_file' to be dragged
@@ -974,8 +990,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for curve in self.curves:
             curve.disconnect()
         self.curves.clear()
-        self.actionShiftHorizontally.setChecked(False)
-        self.actionShiftVertically.setChecked(False)
+        #self.actionShiftHorizontally.setChecked(False)
+        #self.actionShiftVertically.setChecked(False)
         
     def handle_actionReload_Data(self):
         """Reload the data files: remove and reopen the current files

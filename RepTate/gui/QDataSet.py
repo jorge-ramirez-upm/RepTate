@@ -503,6 +503,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 self.selected_file = f
                 self.highlight_series()
                 self.populate_inspector()
+                self.parent_application.handle_actionShiftTriggered()
+
 
     def highlight_series(self):
         """Highligh the data series of the selected file
@@ -519,8 +521,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     if (i < view.n and file.active):
                         dt.series[nx][i].set_marker('.')
                         # dt.series[nx][i].set_linestyle(":")
-                        dt.series[nx][i].set_markerfacecolor("black")
-                        dt.series[nx][i].set_markeredgecolor("black")
+                        dt.series[nx][i].set_markerfacecolor(dt.series[nx][i].get_markeredgecolor())
+                        dt.series[nx][i].set_markeredgecolor("peachpuff")
+                        dt.series[nx][i].set_markersize(self.marker_size+3)
+                        dt.series[nx][i].set_markeredgewidth(2)
                         dt.series[nx][i].set_zorder(
                             self.parent_application.zorder)  #put series on top
             self.parent_application.zorder += 1
@@ -557,6 +561,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
              self.parent_application.DataSettabWidget.tabText(ds_index)))
         inspec_tab.resizeColumnsToContents()
         inspec_tab.resizeRowsToContents()
+        # Update shift factors
+        self.parent_application.update_shifts(0, 0, 0)
              
     def handle_itemChanged(self, item, column):
         """[summary]

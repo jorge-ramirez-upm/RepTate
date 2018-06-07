@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'gui/markerSettings.ui'
+# Form implementation generated from reading ui file 'markerSettings.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -28,6 +28,7 @@ class Ui_Dialog(object):
         self.data = QtWidgets.QWidget()
         self.data.setObjectName("data")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.data)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.groupBox = QtWidgets.QGroupBox(self.data)
         font = QtGui.QFont()
@@ -214,6 +215,7 @@ class Ui_Dialog(object):
         self.theory = QtWidgets.QWidget()
         self.theory.setObjectName("theory")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.theory)
+        self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
         self.groupBox_8 = QtWidgets.QGroupBox(self.theory)
         self.groupBox_8.setObjectName("groupBox_8")
@@ -281,6 +283,7 @@ class Ui_Dialog(object):
         self.legend = QtWidgets.QWidget()
         self.legend.setObjectName("legend")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.legend)
+        self.verticalLayout_9.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
         self.cb_show_legend = QtWidgets.QCheckBox(self.legend)
         self.cb_show_legend.setChecked(False)
