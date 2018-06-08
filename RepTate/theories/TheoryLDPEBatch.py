@@ -123,6 +123,7 @@ class BaseTheoryTobitaBatch():
         self.dist_exists = False
         self.ndist = 0
         self.has_modes = False  # True if the theory has modes
+        self.autocalculate = False
 
         self.parameters['tau'] = Parameter(
             name='tau',
@@ -241,7 +242,7 @@ class BaseTheoryTobitaBatch():
         # make numtomake polymers
         i = 0
         while i < numtomake:
-            if self.stop_theory_calc_flag:
+            if self.stop_theory_flag:
                 self.Qprint('Polymer creation stopped by user')
                 break
             # get a polymer
@@ -417,14 +418,9 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)
 
-
     def theory_buttons_disabled(self, state):
         """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
-
-    def handle_stop_calulation(self):
-        """Kindly request the stop of the calculation thread."""
-        rgt.handle_stop_calulation(self)
 
     def handle_save_bob_configuration(self):
         """Save polymer configuraions to a file"""

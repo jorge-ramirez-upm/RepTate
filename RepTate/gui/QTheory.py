@@ -220,7 +220,6 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.thTextBox.setReadOnly(True)
         self.thTextBox.setOpenExternalLinks(True)
 
-        self.stop_theory_calc_flag = False
         self.thread_calc_busy = False
         self.thread_fit_busy = False
 
@@ -234,21 +233,21 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.extra_data = extra_data
     
     def get_extra_data(self):
-        """get the extra data dict before saving (defined in Child class if needed"""
+        """get the extra data dict before saving (defined in Child class if needed)"""
         pass
 
+    def theory_buttons_disabled(self, state):
+        """Disable theory button inside the theory"""
+        pass
+    
     def handle_actionCalculate_Theory(self):
         if self.thread_calc_busy:
             return
         self.thread_calc_busy = True
         #disable buttons
-        self.parent_dataset.actionCalculate_Theory.setDisabled(True)
-        self.parent_dataset.actionNew_Theory.setDisabled(True)
-        try:
-            self.theory_buttons_disabled(
-                True)  # TODO: Add that function to all theories
-        except AttributeError:  #the function is not defined in the current theory
-            pass
+        self.parent_dataset.actionNew_Theory.setDisabled(True) #only needed for theories using shared libraries
+        self.theory_buttons_disabled(True) 
+
         if CmdBase.calcmode == CalcMode.multithread:
             self.worker = CalculationThread(
                 self.do_calculate,
@@ -269,8 +268,6 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 self.thread_calc.quit()
             except:
                 pass
-        if self.stop_theory_calc_flag:  #calculation stopped by user
-            self.stop_theory_calc_flag = False  #reset flag
         else:
             self.update_parameter_table()
             for file in self.theory_files(
@@ -285,16 +282,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                             tt.series[nx][i].set_data(x[:, i], y[:, i])
 
             self.parent_dataset.parent_application.update_Qplot()
-
         self.thread_calc_busy = False
         #enable buttons
-        self.parent_dataset.actionCalculate_Theory.setDisabled(False)
         self.parent_dataset.actionNew_Theory.setDisabled(False)
-        try:
-            self.theory_buttons_disabled(
-                False)  # TODO: Add that function to all theories
-        except AttributeError:  #the function is not defined in the current theory
-            pass
+        self.theory_buttons_disabled(False)
+        self.parent_dataset.end_of_computation(self.name)
 
     def handle_actionMinimize_Error(self):
         """Minimize the error
@@ -305,13 +297,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             return
         self.thread_fit_busy = True
         #disable buttons
-        self.parent_dataset.actionMinimize_Error.setDisabled(True)
-        self.parent_dataset.actionNew_Theory.setDisabled(True)
-        try:
-            self.theory_buttons_disabled(
-                True)  # TODO: Add that function to all theories
-        except AttributeError:  #the function is not defined in the current theory
-            pass
+        self.parent_dataset.actionNew_Theory.setDisabled(True) #only needed for theories using shared libraries
+        self.theory_buttons_disabled(True)
+
         if CmdBase.calcmode == CalcMode.multithread:
             self.worker = CalculationThread(
                 self.do_fit,
@@ -336,13 +324,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.parent_dataset.parent_application.update_Qplot()
         self.thread_fit_busy = False
         #enable buttons
-        self.parent_dataset.actionMinimize_Error.setDisabled(False)
         self.parent_dataset.actionNew_Theory.setDisabled(False)
-        try:
-            self.theory_buttons_disabled(
-                False)  # TODO: Add that function to all theories
-        except AttributeError:  #the function is not defined in the current theory
-            pass
+        self.theory_buttons_disabled(False)
+        self.parent_dataset.end_of_computation(self.name)
 
     def copy_parameters(self):
         text = ""
@@ -363,7 +347,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                     message, success = self.set_param_value(cols[0], cols[1])                          
         self.update_parameter_table()
         if self.autocalculate:
-            self.do_calculate('')
+            self.self.parent_dataset.handle_actionCalculate_Theory()
 
             
     def update_parameter_table(self):
@@ -483,7 +467,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             item.setText(1, str(self.parameters[param_changed].value))
         else:
             if self.autocalculate:
-                self.do_calculate('')
+                self.parent_dataset.handle_actionCalculate_Theory()
 
     def Qcopy_modes(self):
         """[summary]

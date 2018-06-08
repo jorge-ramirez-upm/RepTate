@@ -181,6 +181,8 @@ class Theory(CmdBase):
 
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
+        # flag for requesting end of computations
+        self.stop_theory_flag = False
 
     def precmd(self, line):
         """Calculations before the theory is calculated
@@ -207,6 +209,11 @@ class Theory(CmdBase):
     def handle_actionCalculate_Theory(self):
         """Used only in non GUI mode"""
         self.do_calculate("")
+
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        self.Qprint("Stop current calculation requested")
+        self.stop_theory_flag = True
 
     def do_calculate(self, line, timing=True):
         """Calculate the theory"""

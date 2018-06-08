@@ -117,6 +117,7 @@ class BaseTheoryTobitaCSTR:
         self.dist_exists = False
         self.ndist = 0
         self.has_modes = False  # True if the theory has modes
+        self.autocalculate = False
 
         self.parameters['tau'] = Parameter(
             name='tau',
@@ -258,7 +259,7 @@ class BaseTheoryTobitaCSTR:
         # make numtomake polymers
         i = 0
         while i < numtomake:
-            if self.stop_theory_calc_flag:
+            if self.stop_theory_flag:
                 self.Qprint('Polymer creation stopped by user')
                 break
             # get a polymer
@@ -368,7 +369,6 @@ class BaseTheoryTobitaCSTR:
         """Return arms to pool"""
         rch.return_dist(ct.c_int(self.ndist))
 
-
 class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
     """[summary]
     
@@ -410,10 +410,6 @@ class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):
     def theory_buttons_disabled(self, state):
         """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
-
-    def handle_stop_calulation(self):
-        """Kindly request the stop of the calculation thread."""
-        rgt.handle_stop_calulation(self)
 
     def handle_save_bob_configuration(self):
         """Save polymer configuraions to a file"""
