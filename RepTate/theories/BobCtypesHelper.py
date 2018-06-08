@@ -83,7 +83,7 @@ class BobCtypesHelper:
         Called during normal BoB execution
         """
         msg = '%s' % (char.decode())
-        self.parent_theory.Qprint(msg, end='')
+        self.parent_theory.Qprint(msg)
 
     def link_c_functions(self):
         """Declare the Python functions equivalents to the C functions"""
@@ -98,14 +98,21 @@ class BobCtypesHelper:
 
         # ask BoB to stop calculations
         self.set_flag_stop_bob = self.bob_lib.set_flag_stop_bob
-        self.set_flag_stop_bob = None
+        self.set_flag_stop_bob.restype = None
+        
+        self.link_c_callback()
 
-        # callback C function from Python function
+    def link_c_callback(self):
+        """Callback C function from Python function.
+        Must call it before each run to make sure the prints are directed
+        towards the correct theory textbox.
+        """
         self.cb_err_func = self.CB_FTYPE(self.print_err_from_c)
         self.bob_lib.def_pyprint_err_func(self.cb_err_func)
 
         self.cb_func = self.CB_FTYPE(self.print_from_c)
         self.bob_lib.def_pyprint_func(self.cb_func)
+    
 
     def save_polyconf_and_return_gpc(self, arg_list, npol_tot):
         """Run BoB asking for a polyconf file only (no relaxation etc) and

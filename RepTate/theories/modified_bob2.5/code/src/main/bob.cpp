@@ -31,6 +31,7 @@ int bob_main(int, char **);
 void init_static(void);
 bool reptate_flag = true; // if false, "end_code()" is called at the end of bob_main()
 int nnp_size;
+bool flag_stop_bob;
 
 bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn_out, double *mw_out, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out)
 {
@@ -123,16 +124,29 @@ int bob_main(int argc, char *argv[])
     {
       if ((Snipping != 0) && (CalcNlin != 0))
       {
-        fprintf(infofl, "Following relaxation to calculate linear rheology\n");
+        if (reptate_flag)
+          print_to_python((char *)"<br>Following relaxation to calculate linear rheology...");
+        else
+          fprintf(infofl, "Following relaxation to calculate linear rheology\n");
       }
       if ((Snipping == 0) && (CalcNlin != 0))
       {
-        fprintf(infofl, "Following relaxation to calculate linear rheology\n");
-        fprintf(infofl, "and saving segment relaxation times for nonlinear flow \n");
+        if (reptate_flag)
+        {
+          print_to_python((char *)"<br>Following relaxation to calculate linear rheology and saving segment relaxation times for nonlinear flow...");
+        }
+        else
+        {
+          fprintf(infofl, "Following relaxation to calculate linear rheology");
+          fprintf(infofl, "and saving segment relaxation times for nonlinear flow");
+        }
       }
       if (CalcNlin == 0)
       {
-        fprintf(infofl, "Following relaxation to calculate nonlinear flow predictions\n");
+        if (reptate_flag)
+          print_to_python((char *)"<br>Following relaxation to calculate nonlinear flow predictions...");
+        else
+          fprintf(infofl, "Following relaxation to calculate nonlinear flow predictions\n");
       }
 
 /* ******************** Snipping  ********************  */
@@ -264,8 +278,9 @@ int bob_main(int argc, char *argv[])
         sample_alt_taus();
       }
 
-      double progres = 1;
+      double progres = 0.9;
       char info_progres[256];
+      print_to_python((char *)"  0% done");
       while (num_alive > 0)
       {
         if ((phi_ST + 0.05) <= progres)
@@ -274,7 +289,8 @@ int bob_main(int argc, char *argv[])
           print_to_python(info_progres);
           progres -= 0.1;
         }
-        if (flag_stop_bob){
+        if (flag_stop_bob)
+        {
           my_abort((char *)"Calculations interrupted by user\n");
         }
 
@@ -348,7 +364,7 @@ int bob_main(int argc, char *argv[])
           fprintf(phifl, "%e %e %e %e  \n", cur_time, 0.0, 0.0, 0.0);
         }
       }
-      print_to_python((char *)"100% done\n");
+      print_to_python((char *)"100% done<br>");
 
       if ((CalcNlin != 0) && (Snipping == 0))
       {

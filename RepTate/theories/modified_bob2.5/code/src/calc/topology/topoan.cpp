@@ -16,6 +16,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 */
 
 #include "../../../include/bob.h"
+#include "../../RepTate/reptate_func.h"
 #include <stdio.h>
 void topoan(void)
 {
@@ -79,5 +80,12 @@ void topoan(void)
   }
 
   extern FILE *infofl;
+  extern bool reptate_flag;
+  if (reptate_flag)
+  {
+    char line[128];
+    sprintf(line, "<b>Maximum priority=%d<b><br><b>Maximum seniority=%d</b><br>", max_prio_var, max_senio_var);
+    print_to_python(line);
+  }
   fprintf(infofl, "maximum priority = %d \n maximum seniority = %d \n", max_prio_var, max_senio_var);
 }

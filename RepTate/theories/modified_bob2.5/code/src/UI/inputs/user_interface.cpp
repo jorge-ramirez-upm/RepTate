@@ -17,6 +17,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 #include <stdio.h>
 #include <math.h>
+#include "../../RepTate/reptate_func.h"
+
 void user_interface(void)
 {
   //First initialize a few things
@@ -38,8 +40,15 @@ void user_interface(void)
   extern void get_material(void); // chemistry : M_e, \tau_e ...
   get_material();
 
-  extern void print_io(void); // dump input to output
-  print_io();
+  // extern bool reptate_flag;
+  if (reptate_flag){
+    extern void print_io_to_reptate(void); // dump input to output
+    print_io_to_reptate();
+  }
+  else{
+    extern void print_io(void); // dump input to output
+    print_io();
+  }
 
   // Ready to generate /read polymer configuration
 

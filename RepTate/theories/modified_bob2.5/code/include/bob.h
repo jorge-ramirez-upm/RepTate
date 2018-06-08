@@ -10,7 +10,6 @@ const char *const bob_version = "bob-2.5";
 const char *const bob_date = "18 Nov 2011";
 double const tiny = 1.0e-16;
 
-extern bool reptate_flag;
 void my_abort(char *s);
 
 // flag to stop BoB calculations

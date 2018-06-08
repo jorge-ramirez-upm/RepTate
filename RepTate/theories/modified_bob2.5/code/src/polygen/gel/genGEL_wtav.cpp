@@ -40,7 +40,6 @@ void genGEL_wtav(int ni, int nf)
     fscanf(inpfl, "%le %le", &mn_arm, &b_u);
   }
   fprintf(infofl, "Selected weight averaged gelation ensemble \n");
-
   fprintf(infofl, "M_{N,S} = %e \n", mn_arm);
   fprintf(infofl, "p = %e \n", b_u);
 

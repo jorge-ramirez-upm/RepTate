@@ -17,6 +17,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 // dump input to info file. Open info strem out here.
 #include <stdio.h>
+#include "../../RepTate/reptate_func.h"
+
 void print_io(void)
 {
   extern FILE *infofl;
@@ -64,4 +66,78 @@ void print_io(void)
     break;
   }
   fprintf(infofl, "\n End of input parameters \n");
+}
+
+void print_io_to_reptate(void)
+{
+  char table[1024];
+  char line[256];
+  strcpy(table, "<br><hr><br>");
+  snprintf(table, sizeof table, "%s%s", table, "<table border=\"1\" width=\"100%\">");
+  snprintf(table, sizeof table, "%s%s", table, "<tr><th>Input Parameter</th><th>Value</th></tr>");
+  extern double Alpha, RetLim, PSquare, mass_mono, N_e, G_0_unit, temp;
+  extern double unit_time, rho_poly, ReptAmount;
+  extern int PrefMode, ReptScheme;
+  extern int GenPolyOnly;
+  sprintf(line, "<tr><td>Mass of monomer</td><td>%9.4g g/mol</td></tr>", mass_mono);
+  snprintf(table, sizeof table, "%s%s", table, line);
+
+  sprintf(line, "<tr><td>N_e</td><td>%9.4g</td></tr>", N_e);
+  snprintf(table, sizeof table, "%s%s", table, line);
+  if (GenPolyOnly != 0)
+  {
+    G_0_unit = 6651.58 * (rho_poly * temp / (N_e * mass_mono)); //Pa
+    sprintf(line, "<tr><td>Temperature</td><td>%9.4gºC</td></tr>", temp);
+    snprintf(table, sizeof table, "%s%s", table, line);
+
+    sprintf(line, "<tr><td>G_0</td><td>%9.4g Pa</td></tr>", G_0_unit);
+    snprintf(table, sizeof table, "%s%s", table, line);
+
+    sprintf(line, "<tr><td>tau_e</td><td>%9.4g s</td></tr>", unit_time);
+    snprintf(table, sizeof table, "%s%s", table, line);
+
+    sprintf(line, "<tr><td>alpha</td><td>%9.4g</td></tr>\n", Alpha);
+    snprintf(table, sizeof table, "%s%s", table, line);
+
+    sprintf(line, "<tr><td>R_L</td><td>%9.4g</td></tr>", RetLim);
+    snprintf(table, sizeof table, "%s%s", table, line);
+
+    sprintf(line, "<tr><td>p^2</td><td>%9.4g</td></tr>", 2.0 * PSquare);
+    snprintf(table, sizeof table, "%s%s", table, line);
+  }
+  snprintf(table, sizeof table,  "%s%s", table, "</table>");
+  if (GenPolyOnly != 0)
+  {
+  switch (PrefMode)
+  {
+  case 0:
+    sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor same as outermost arm<br>");
+    break;
+  case 1:
+    sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor includes effective armlen<br>");
+    break;
+  case 2:
+    sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor includes effective friction<br>");
+    break;
+  }
+  snprintf(table, sizeof table, "%s%s", table, line);
+
+  switch (ReptScheme)
+  {
+  case 1:
+    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in thin tube.<br>");
+    break;
+  case 2:
+    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in current tube<br>");
+    break;
+  case 3:
+    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in tube from time at which %le lengh chain reptate <br>", ReptAmount);
+    break;
+  case 4:
+    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in tube from time at which %le lengh chain reptate <br>", ReptAmount);
+    break;
+  }
+  snprintf(table, sizeof table, "%s%s", table, line);
+  }
+  print_to_python(table);
 }

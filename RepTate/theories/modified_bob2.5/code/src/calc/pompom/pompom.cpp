@@ -18,6 +18,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "./pompom.h"
 #define kkmax 101
 #include <stdlib.h>
+#include "../../RepTate/reptate_func.h"
+
 void pompom(void)
 {
   extern double CalcEtaStar(double);
@@ -74,6 +76,13 @@ void pompom(void)
     eta_lin = CalcEtaStar(rate);
     if (shearcode == 0)
     {
+      extern bool reptate_flag;
+      if (reptate_flag){
+        char line[256];
+        sprintf(line,"<b>Shear thinning at %9.4g s<sup>-1</sup>: %9.4g</b><br>", rate, (stress[kmax - 2] / rate) / (eta_lin));
+        print_to_python(line);
+      }
+
       fprintf(infofl, "shear thinning at %e /s : %e \n", rate, (stress[kmax - 2] / rate) / (eta_lin));
       strcpy(fname, "shear");
       inttochar(irt, extn);
@@ -129,6 +138,11 @@ void pompom(void)
 
     else
     {
+      if (reptate_flag){
+        char line[256];
+        sprintf(line,"<b>Extension hardening at %9.4g s<sup>-1</sup>: %9.4g</b><br>", rate, (stress[kmax - 2] / rate) / (3.0 * eta_lin));
+        print_to_python(line);
+      }
       fprintf(infofl, "Extension hardening at %e /s : %e \n", rate, (stress[kmax - 2] / rate) / (3.0 * eta_lin));
       strcpy(fname, "extn");
       inttochar(irt, extn);

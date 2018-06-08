@@ -226,14 +226,14 @@ class Theory(CmdBase):
             return
 
         self.calculate_is_busy = True
-        start_time = time.time()
+        self.start_time_cal = time.time()
         for f in self.theory_files():
             self.function(f)
         if not self.is_fitting:
             self.do_plot(line)
             self.do_error(line)
         if timing:
-            self.Qprint('''<i>---Calculated in %.3g seconds---</i><br>''' % (time.time() - start_time))
+            self.Qprint('''<i>---Calculated in %.3g seconds---</i><br>''' % (time.time() - self.start_time_cal))
             self.do_cite("")
         self.calculate_is_busy = False
 
