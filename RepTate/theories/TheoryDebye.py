@@ -75,6 +75,7 @@ class TheoryDebye(CmdBase):
     thname = 'Debye'
     description = 'Debye theory for neutron scattering from ideal polymer chains'
     citations = 'Debye P., J. Phys. Chem. 1947, 51, 18-32'
+    doi = "http://dx.doi.org/10.1021/j150451a002"
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -104,6 +105,7 @@ class BaseTheoryDebye:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDebye.thname
     citations = TheoryDebye.citations
+    doi = TheoryDebye.doi
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """

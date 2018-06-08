@@ -58,6 +58,7 @@ class TheoryMultiMetCSTR(CmdBase):
     thname = 'Multi-Met CSTR'
     description = 'Multiple Metallocene CSTR Reaction Theory'
     citations = 'Read D.J. and Soares J.B.P., Macromolecules 2003, 36, 10037–10051'
+    doi = "http://dx.doi.org/10.1021/ma030354l"
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -87,6 +88,7 @@ class BaseTheoryMultiMetCSTR:
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryMultiMetCSTR.thname
     citations = TheoryMultiMetCSTR.citations
+    doi = TheoryMultiMetCSTR.doi
 
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)

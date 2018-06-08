@@ -115,6 +115,7 @@ class TheoryCreatePolyconf(CmdBase):
     thname = 'Create Polyconf'
     description = 'Create Polyconf'
     citations = ''
+    doi = ''
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -143,6 +144,7 @@ class BaseTheoryCreatePolyconf:
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryCreatePolyconf.thname
     citations = TheoryCreatePolyconf.citations
+    doi = TheoryCreatePolyconf.doi
 
     signal_param_dialog = pyqtSignal(object)
 

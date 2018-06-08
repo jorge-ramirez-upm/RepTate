@@ -55,6 +55,7 @@ class TheoryDiscrMWD(CmdBase):
     thname = "Discretize MWD"
     description = "Discretize a Molecular Weight Distribution"
     citations = ""
+    doi = ''
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -84,6 +85,7 @@ class BaseTheoryDiscrMWD:
     single_file = True
     thname = TheoryDiscrMWD.thname
     citations = TheoryDiscrMWD.citations
+    doi = TheoryDiscrMWD.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
@@ -375,11 +377,12 @@ class BaseTheoryDiscrMWD:
         if line == "":
             return Mn / 1000, Mw / 1000, PDI, Mz / Mw
         else:
-            self.Qprint("Characteristics of the %s MWD:\n"
-                        "%7s %7s %7s %7s\n"
-                        "\n%6.3gk %6.3gk %7.3g %7.3g\n" %
-                        (line, "Mn", "Mw", "Mw/Mn", "Mz/Mw", Mn / 1000,
-                         Mw / 1000, PDI, Mz / Mw))
+            self.Qprint('''<h3>Characteristics of the %s MWD</h3>'''%line)
+            table='''<table border="1" width="100%">'''
+            table+='''<tr><th>Mn</th><th>Mw</th><th>Mw/Mn</th><th>Mz/Mw</th></tr>'''
+            table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw)
+            table+='''</table><br>'''
+            self.Qprint(table)
 
     def discretise_mwd(self, f=None):
         """Discretize a molecular weight distribution

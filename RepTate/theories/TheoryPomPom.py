@@ -138,6 +138,7 @@ class TheoryPomPom(CmdBase):
     thname = "Pom-Pom"
     description = "Pom-Pom constitutive equation"
     citations = "McLeish T.C.B. and Larson R.G., J. Rheol. 1998, 42, 81-110"
+    doi = "http://dx.doi.org/10.1122/1.550933"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -167,6 +168,7 @@ class BaseTheoryPomPom:
     single_file = False
     thname = TheoryPomPom.thname
     citations = TheoryPomPom.citations
+    doi = TheoryPomPom.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """

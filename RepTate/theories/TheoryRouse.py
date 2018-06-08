@@ -66,7 +66,8 @@ class TheoryRouseTime(CmdBase):
     """
     thname = "Rouse"
     description = "Rouse model"
-    citations = ""
+    citations = "Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"
+    doi = "http://dx.doi.org/10.1063/1.1699180"
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -96,6 +97,7 @@ class BaseTheoryRouseTime:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryRouseTime.thname
     citations = TheoryRouseTime.citations
+    doi = TheoryRouseTime.doi
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """
@@ -296,8 +298,9 @@ class TheoryRouseFrequency(CmdBase):
     """
     thname = "Rouse"
     description = "Rouse model"
-    citations = ""
-    
+    citations = "Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"
+    doi = "http://dx.doi.org/10.1063/1.1699180"    
+
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
         
@@ -325,6 +328,7 @@ class BaseTheoryRouseFrequency:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryRouseFrequency.thname
     citations = TheoryRouseFrequency.citations
+    doi = TheoryRouseFrequency.doi
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """

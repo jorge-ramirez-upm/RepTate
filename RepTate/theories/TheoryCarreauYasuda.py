@@ -63,6 +63,7 @@ class TheoryCarreauYasuda(CmdBase):
     thname = 'Carreau-Yasuda'
     description = 'Carreau-Yasuda equation'
     citations = ''
+    doi = ''
 
     def __new__(cls, name='', parent_dataset=None, ax=None):
         """[summary]
@@ -92,6 +93,7 @@ class BaseTheoryCarreauYasuda:
     single_file = False # False if the theory can be applied to multiple files simultaneously
     thname = TheoryCarreauYasuda.thname
     citations = TheoryCarreauYasuda.citations
+    doi = TheoryCarreauYasuda.doi 
 
     def __init__(self, name='', parent_dataset=None, ax=None):
         """

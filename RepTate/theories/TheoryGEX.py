@@ -51,6 +51,7 @@ class TheoryGEX(CmdBase):
     thname = 'GEX'
     description = 'Generalized Exponential Function distribution'
     citations = ''
+    doi = ''
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -88,6 +89,7 @@ class BaseTheoryGEX:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryGEX.thname
     citations = TheoryGEX.citations
+    doi = TheoryGEX.doi
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """
@@ -188,17 +190,18 @@ class BaseTheoryGEX:
     def do_error(self, line):
         super().do_error(line)
         if (line == ""):
-            self.Qprint("")
+            self.Qprint('''<h3>Characteristics of the fitted MWD</h3>''')
             M0 = np.power(10.0, self.parameters["logM0"].value)
             a = self.parameters["a"].value
             b = self.parameters["b"].value
             Mn = M0 * gamma((a + 1) / b) / gamma(a / b)
             Mw = M0 * gamma((a + 2) / b) / gamma((a + 1) / b)
             Mz = M0 * gamma((a + 3) / b) / gamma((a + 2) / b)
-            self.Qprint("Mn = %g" % Mn)
-            self.Qprint("Mw = %g" % Mw)
-            self.Qprint("Mz = %g" % Mz)
-            self.Qprint("D  = %g" % (Mw / Mn))
+            table='''<table border="1" width="100%">'''
+            table+='''<tr><th>Mn</th><th>Mw</th><th>Mz</th><th>D</th></tr>'''
+            table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, Mz/1000 , Mw/Mn)
+            table+='''</table><br>'''
+            self.Qprint(table)
 
 
 class CLTheoryGEX(BaseTheoryGEX, Theory):

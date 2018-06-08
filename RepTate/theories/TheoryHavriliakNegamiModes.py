@@ -67,6 +67,7 @@ class TheoryHavriliakNegamiModesFrequency(CmdBase):
     thname = "Havriliak-Negami modes"
     description = "Fit Havriliak-Negami modes"
     citations = "Havriliak S. and Negami S., Polymer 1967, 8, 161-210"
+    doi = "http://dx.doi.org/10.1016/0032-3861(67)90021-3"
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -96,6 +97,7 @@ class BaseTheoryHavriliakNegamiModesFrequency:
     single_file = True
     thname = TheoryHavriliakNegamiModesFrequency.thname
     citations = TheoryHavriliakNegamiModesFrequency.citations
+    doi = TheoryHavriliakNegamiModesFrequency.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

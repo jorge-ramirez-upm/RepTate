@@ -68,6 +68,7 @@ class TheoryTobitaBatch(CmdBase):
     thname = 'Tobita Batch'
     description = 'The LDPE batch reaction theory'
     citations = 'Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403'
+    doi = "http://dx.doi.org/10.1002/1099-0488(20010115)39:4<391::AID-POLB1011>3.0.CO;2-3"
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -98,6 +99,7 @@ class BaseTheoryTobitaBatch():
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryTobitaBatch.thname
     citations = TheoryTobitaBatch.citations
+    doi = TheoryTobitaBatch.doi
 
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)

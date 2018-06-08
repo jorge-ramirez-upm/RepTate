@@ -68,6 +68,7 @@ class TheoryDebyeModesFrequency(CmdBase):
     thname = "Debye modes"
     description = "Fit Debye modes"
     citations = ""
+    doi = ''
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -95,6 +96,7 @@ class BaseTheoryDebyeModesFrequency:
     single_file = True
     thname = TheoryDebyeModesFrequency.thname
     citations = TheoryDebyeModesFrequency.citations
+    doi = TheoryDebyeModesFrequency.doi
     
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

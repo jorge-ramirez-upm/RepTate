@@ -63,6 +63,7 @@ class TheoryBobLVE(CmdBase):
     thname = 'BOB'
     description = 'Branch-On-Branch rheology'
     citations = 'Das C., Inkson N.J., Read D.J., Kelmanson M.A. and McLeish T.C.B., J. Rheol. 2006, 50, 207-234'
+    doi = "http://dx.doi.org/10.1122/1.2167487"
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -92,6 +93,7 @@ class BaseTheoryBobLVE:
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobLVE.thname
     citations = TheoryBobLVE.citations
+    doi = TheoryBobLVE.doi 
 
     signal_param_dialog = pyqtSignal(object)
 

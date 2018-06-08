@@ -75,6 +75,7 @@ class TheoryWLFShiftTest(CmdBase):
     thname = "WLF Shift Test"
     description = "TTS shift based on the WLF equation"
     citations = ""
+    doi = ''
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -104,6 +105,7 @@ class BaseTheoryWLFShiftTest:
     single_file = False
     thname = TheoryWLFShiftTest.thname
     citations = TheoryWLFShiftTest.citations
+    doi = TheoryWLFShiftTest.doi
     
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

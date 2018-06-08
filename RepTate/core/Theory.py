@@ -65,6 +65,8 @@ class Theory(CmdBase):
     """ description {str} -- Description of theory """
     citations = ""
     """ citations {str} -- Articles that should be cited """
+    doi = ""
+    """ doicode {str} -- Doi code of the article """
     nfev = 0
     """ nfev {int} -- Number of function evaluations """
 
@@ -221,8 +223,7 @@ class Theory(CmdBase):
             self.do_plot(line)
             self.do_error(line)
         if timing:
-            self.Qprint("\n---Calculated in %.3g seconds---" %
-                                   (time.time() - start_time))
+            self.Qprint('''<i>---Calculated in %.3g seconds---</i><br>''' % (time.time() - start_time))
             self.do_cite("")
         self.calculate_is_busy = False
 
@@ -257,10 +258,12 @@ class Theory(CmdBase):
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
-        tools = self.parent_dataset.parent_application.tools
-        msg = "\n%14s %12s (%6s)\n" % ("File", "Error (RSS)", "# Pts.")
-        msg += "=================================="
-        self.Qprint(msg)
+        tools = self.parent_dataset.parent_application.tools       
+        table='''<table border="1" width="100%">'''
+        table+='''<tr><th>File</th><th>Error (RSS)</th><th>(# Pts)</th></tr>'''
+        #msg = "\n%14s %10s (%5s)\n" % ("File", "Err (RSS)", "# Pts")
+        #msg += "=================================="
+        #self.Qprint(msg)
 
         for f in self.theory_files():
             xexp, yexp, success = view.view_proc(f.data_table,
@@ -284,8 +287,10 @@ class Theory(CmdBase):
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt
-            self.Qprint("%14s %12.5g (%6d)" % (f.file_name_short,
-                                                          f_error, npt))
+            #self.Qprint("%.14s %10.4g (%5d)" % (f.file_name_short, f_error, npt))
+            table+= '''<tr><td>%14s</td><td>%10.4g</td><td>(%5d)</td></tr>'''% (f.file_name_short, f_error, npt)
+        table+='''</table><br>'''
+        self.Qprint(table)
 
         #count number of fitting parameters
         free_p = 0
@@ -294,15 +299,12 @@ class Theory(CmdBase):
                 free_p += 1
 
         if npoints != 0:
-            self.Qprint("%14s %12.5g (%6d)" %
-                                   ("TOTAL", total_error / npoints, npoints))
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)" % (total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
-            self.Qprint("%14s %12.5g" %
-                                   ("Bayesian IC", npoints * log(total_error / npoints) + free_p * log(npoints)))
+            self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
         else:
-            self.Qprint("%14s %12s (%6d)" % ("TOTAL", "N/A",
-                                                        npoints))
+            self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
 
     def func_fit(self, x, *param_in):
         """[summary]
@@ -377,10 +379,7 @@ class Theory(CmdBase):
         self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
-        msg = "\n==================================\n"
-        msg += "PARAMETER FITTING"
-        msg += "\n==================================\n"
-        self.Qprint(msg)
+        self.Qprint('''<h2>Parameter Fitting</h2>''')
         # Vectors that contain all X and Y in the files & view
         x = []
         y = []
@@ -390,15 +389,13 @@ class Theory(CmdBase):
                 temp = self.xmin
                 self.xmin = self.xmax
                 self.xmax = temp
-            self.Qprint("xrange=[%0.3g, %0.3g]" % (self.xmin,
-                                                              self.xmax))
+            self.Qprint("xrange=[%0.3g, %0.3g]" % (self.xmin, self.xmax))
         if self.yrange.get_visible():
             if self.ymin > self.ymax:
                 temp = self.ymin
                 self.ymin = self.ymax
                 self.ymax = temp
-            self.Qprint("yrange=[%.03g, %0.3g]" % (self.ymin,
-                                                              self.ymax))
+            self.Qprint("yrange=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
         for f in th_files:
             if f.active:
@@ -466,12 +463,14 @@ class Theory(CmdBase):
         fres0 = sum(residuals**2)
         residuals = y - self.func_fit(x, *pars)
         fres1 = sum(residuals**2)
-        self.Qprint('Initial Error = %g -->' % (fres0))
-        self.Qprint('Final Error   = %g' % (fres1))
-        self.Qprint('%g function evaluations' % (self.nfev))
-        # fiterror = np.mean((infodict['fvec'])**2)
-        # funcev = infodict['nfev']
-        # print("Solution found with %d function evaluations and error %g"%(funcev,fiterror))
+
+        table='''<table border="1" width="100%">'''
+        table+='''<tr><th>Initial Error</th><th>Final Error</th></tr>'''
+        table+='''<tr><td>%g</td><td>%g</td></tr>'''%(fres0, fres1)
+        table+='''</table><br>'''
+        self.Qprint(table)
+
+        self.Qprint('<b>%g</b> function evaluations' % (self.nfev))
 
         alpha = 0.05  # 95% confidence interval = 100*(1-alpha)
         n = len(y)  # number of data points
@@ -487,22 +486,26 @@ class Theory(CmdBase):
             par_error.append(sigma * tval)
 
         ind = 0
-        self.Qprint("\n%9s = %10s ± %-9s" % ("Parameter", "Value",
-                                                        "Error"))
-        self.Qprint("==================================")
+        table='''<table border="1" width="100%">'''
+        table+='''<tr><th>Parameter</th><th>Value ± Error</th></tr>'''
+        #self.Qprint("\n%9s = %10s ± %-9s" % ("Parameter", "Value", "Error"))
+        #self.Qprint("==================================")
         for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 par.error = par_error[ind]
                 ind += 1
-                self.Qprint('%9s = %10.4g ± %-9.4g' %
-                                       (par.name, par.value, par.error))
+                table+='''<tr><td>%s</td><td>%10.4g ± %-9.4g</td></tr>'''%(par.name, par.value, par.error)
+                #self.Qprint('%9s = %10.4g ± %-9.4g' % (par.name, par.value, par.error))
             else:
-                self.Qprint('%9s = %10.4g' % (par.name, par.value))
+                table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
+                #self.Qprint('%9s = %10.4g' % (par.name, par.value))
+        table+='''</table><br>'''
+        self.Qprint(table)        
         self.is_fitting = False
         self.do_calculate(line, timing=False)
-        self.Qprint("\n---Fitting in %.3g seconds---" %
-                               (time.time() - start_time))
+        self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
+        #self.Qprint("\n---Fitting in %.3g seconds---" % (time.time() - start_time))
         self.do_cite("")
 
     def do_print(self, line):
@@ -874,7 +877,7 @@ class Theory(CmdBase):
             - line {[type]} -- [description]
         """
         if (self.citations != ""):
-            self.Qprint("\nCITE: "+self.citations+"\n")
+            self.Qprint('''\n<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset
@@ -1046,7 +1049,7 @@ class Theory(CmdBase):
             pass
         self.parent_dataset.do_plot("")
 
-    def Qprint(self, msg, end='\n'):
+    def Qprint(self, msg, end='<br>'):
         """[summary]
         
         [description]
@@ -1061,7 +1064,7 @@ class Theory(CmdBase):
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""
-        self.thTextBox.insertPlainText(msg)
+        self.thTextBox.insertHtml(msg)
         self.thTextBox.verticalScrollBar().setValue(
             self.thTextBox.verticalScrollBar().maximum())
         self.thTextBox.moveCursor(QTextCursor.End)

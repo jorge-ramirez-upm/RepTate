@@ -218,6 +218,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.thParamTable.setEditTriggers(self.thParamTable.NoEditTriggers)
 
         self.thTextBox.setReadOnly(True)
+        self.thTextBox.setOpenExternalLinks(True)
 
         self.stop_theory_calc_flag = False
         self.thread_calc_busy = False

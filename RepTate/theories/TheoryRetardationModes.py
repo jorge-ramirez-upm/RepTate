@@ -69,6 +69,7 @@ class TheoryRetardationModesTime(CmdBase):
     thname = "Retardation Modes"
     description = "Fit Retardation modes to time dependent creep data"
     citations = ""
+    doi = ''
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -98,6 +99,7 @@ class BaseTheoryRetardationModesTime:
     single_file = True
     thname = TheoryRetardationModesTime.thname
     citations = TheoryRetardationModesTime.citations
+    doi = TheoryRetardationModesTime.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """

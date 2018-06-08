@@ -140,6 +140,7 @@ class TheoryRoliePoly(CmdBase):
     thname = "Rolie-Poly"
     description = "Rolie-Poly constitutuve equation"
     citations = "Likhtman, A.E. & Graham, R.S., J. Non-Newtonian Fluid Mech., 2003, 114, 1-12"
+    doi = "http://dx.doi.org/10.1016/S0377-0257(03)00114-9"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -169,6 +170,7 @@ class BaseTheoryRoliePoly:
     single_file = False
     thname = TheoryRoliePoly.thname
     citations = TheoryRoliePoly.citations
+    doi = TheoryRoliePoly.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """

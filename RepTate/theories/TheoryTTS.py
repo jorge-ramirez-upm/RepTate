@@ -76,6 +76,7 @@ class TheoryWLFShift(CmdBase):
     thname = "WLF Shift"
     description = "TTS shift based on the WLF equation"
     citations = ""
+    doi = ''
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -105,6 +106,7 @@ class BaseTheoryWLFShift:
     single_file = False
     thname = TheoryWLFShift.thname
     citations = TheoryWLFShift.citations
+    doi = TheoryWLFShift.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
@@ -299,26 +301,32 @@ class BaseTheoryWLFShift:
                     MwUnique[Mw[i]][1] += npt
 
         if (line == ""):
-            self.Qprint("%4s %4s %4s %4s %8s (%5s)" %
-                        ("Mw", "Mw2", "phi", "phi2", "Error", "# Pts."))
-            self.Qprint("==================================")
+            table='''<table border="1" width="100%">'''
+            table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
+            #self.Qprint("%4s %4s %4s %4s %8s (%5s)" %
+            #            ("Mw", "Mw2", "phi", "phi2", "Error", "# Pts."))
+            #self.Qprint("==================================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1] > 0):
-                    self.Qprint("%4g %4g %4g %4g %8.3g (%5d)" %
-                                (o[0], o[1], o[2], o[3],
-                                 MwUnique[o][0] / MwUnique[o][1],
-                                 MwUnique[o][1]))
+                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%8.3g</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], MwUnique[o][0] / MwUnique[o][1], MwUnique[o][1])
+                    #self.Qprint("%4g %4g %4g %4g %8.3g (%5d)" %
+                    #            (o[0], o[1], o[2], o[3],
+                    #             MwUnique[o][0] / MwUnique[o][1],
+                    #             MwUnique[o][1]))
                 else:
-                    self.Qprint("%4g %4g %4g %4g %8s (%5d)" %
-                                (o[0], o[1], o[2], o[3], "-", 0))
+                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
+                    #self.Qprint("%4g %4g %4g %4g %8s (%5d)" %
+                    #            (o[0], o[1], o[2], o[3], "-", 0))
+            table+='''</table><br>'''
+            self.Qprint(table)
         if (npoints > 0):
             total_error /= npoints
         else:
             total_error = 1e10
         if (line == ""):
-            self.Qprint("%19s %8.3g (%5d)" % ("TOTAL", total_error, npoints))
+            self.Qprint("<b>TOTAL ERROR</b>: %8.3g (%5d)" % (total_error, npoints))
         return total_error
 
     def func_fitTTS(self, *param_in):

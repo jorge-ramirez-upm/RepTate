@@ -58,6 +58,7 @@ class TheoryReactMix(CmdBase):
     thname = 'React Mix'
     description = 'Combine other active React theories'
     citations = '-'
+    doi = ''
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -87,6 +88,7 @@ class BaseTheoryReactMix:
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryReactMix.thname
     citations = TheoryReactMix.citations
+    doi = TheoryReactMix.doi
 
     signal_mix_dialog = pyqtSignal(object)
 
