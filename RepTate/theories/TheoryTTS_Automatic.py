@@ -39,6 +39,7 @@ import os
 import time
 import getpass
 import numpy as np
+from os.path import dirname, join, abspath, isfile, isdir
 from scipy import interp
 from scipy.optimize import minimize
 from CmdBase import CmdBase, CmdMode
@@ -588,15 +589,14 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         self.cbTemp.setToolTip("Select a goal Temperature")
         tb.addWidget(self.cbTemp)
         self.refreshT = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-reset.png'), 'Refresh T list')
+        self.saveShiftFactors = tb.addAction(QIcon(':/Icon8/Images/new_icons/TTSFactors.png'), 'Save shift factors')
 
         self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.verticalshift.triggered.connect(
-            self.do_vertical_shift)
+        connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
         # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
-        connection_id = self.cbTemp.currentIndexChanged.connect(
-            self.change_temperature)
-        connection_id = self.refreshT.triggered.connect(
-            self.refresh_temperatures)
+        connection_id = self.cbTemp.currentIndexChanged.connect(self.change_temperature)
+        connection_id = self.refreshT.triggered.connect(self.refresh_temperatures)
+        connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
 
     def populate_TempComboBox(self):
         k = list(self.Tdict.keys())
@@ -629,3 +629,39 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
     def refresh_temperatures(self):
         self.Mwset, self.Mw, self.Tdict = self.get_cases()
         self.populate_TempComboBox()
+
+    def save_shift_factors(self):
+        dir_start = "data/"
+        dilogue_name = "Select Folder for Saving shift factors of current dataset as txt"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
+        if (not isdir(folder)):
+            return
+        for case in self.Tdict.keys():
+            fname=""
+            if (case[0]>0):
+                fname+="Mw%g"%case[0]
+            if (case[1]>0):
+                fname+="MwB%g"%case[1]
+            if (case[2]>0):
+                fname+="phi%g"%case[2]
+            if (case[3]>0):
+                fname+="phiB%g"%case[3]
+            with open(join(folder, fname+'.ttsfactor'), 'w') as fout:
+                Temps0 = [x[0] for x in self.Tdict[case]]
+                Filenames = [x[2] for x in self.Tdict[case]]
+                Files = [x[3] for x in self.Tdict[case]]
+                indTsorted = sorted(range(len(Temps0)), key=lambda k: Temps0[k])
+
+                f0 = Files[0]              
+                for pname in f0.file_parameters:
+                    if pname != 'T':
+                        fout.write('%s=%s;' % (pname, f0.file_parameters[pname]))
+                fout.write('\n')
+                fout.write('T aT bT\n')
+                for i in indTsorted:
+                    fname = Filenames[i]
+                    sparam = self.shiftParameters[fname]
+                    fout.write('%6.3g %11.3g %11.3g\n'%(Temps0[i], sparam[0], sparam[1]))
+                    
+                
+            
