@@ -389,13 +389,13 @@ class Theory(CmdBase):
                 temp = self.xmin
                 self.xmin = self.xmax
                 self.xmax = temp
-            self.Qprint("xrange=[%0.3g, %0.3g]" % (self.xmin, self.xmax))
+            self.Qprint("<b>xrange</b>=[%0.3g, %0.3g]" % (self.xmin, self.xmax))
         if self.yrange.get_visible():
             if self.ymin > self.ymax:
                 temp = self.ymin
                 self.ymin = self.ymax
                 self.ymax = temp
-            self.Qprint("yrange=[%.03g, %0.3g]" % (self.ymin, self.ymax))
+            self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
         for f in th_files:
             if f.active:

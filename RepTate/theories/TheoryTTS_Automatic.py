@@ -245,26 +245,23 @@ class BaseTheoryTTSShiftAutomatic:
                     MwUnique[self.Mw[i]][1] += npt
 
         if (line == ""):
-            self.Qprint("")
-            self.Qprint("%17s %8s (%5s)" % ("Mw,Mw2,phi,phi2", "Error",
-                                            "#Pts."))
-            self.Qprint("==================================")
+            table='''<table border="1" width="100%">'''
+            table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
-                s = "%gk,%gk,%g,%g" % (o[0], o[1], o[2], o[3])
                 if (MwUnique[o][1] > 0):
-                    self.Qprint("%17s %8.3g (%5d)" %
-                                (s, MwUnique[o][0] / MwUnique[o][1],
-                                 MwUnique[o][1]))
+                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%8.3g</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], MwUnique[o][0] / MwUnique[o][1], MwUnique[o][1])
                 else:
-                    self.Qprint("%17s %8s (%5d)" % (s, "-", 0))
+                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
+            table+='''</table><br>'''
+            self.Qprint(table)
         if (npoints > 0):
             total_error /= npoints
         else:
             total_error = 1e10
         if (line == ""):
-            self.Qprint("%17s %8.3g (%5d)" % ("TOTAL", total_error, npoints))
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)<br>" % (total_error, npoints))
         return total_error
 
     def func_fitTTS(self, *param_in):
@@ -342,17 +339,16 @@ class BaseTheoryTTSShiftAutomatic:
             - line {[type]} -- [description]
         """
         self.fitting = True
+        start_time = time.time()
         #view = self.parent_dataset.parent_application.current_view
+        self.Qprint('''<h2>Parameter Fitting</h2>''')
 
         # Case by case, T by T, we optimize the overlap of all files with the
         # corresponding cases at the selected temperature
         Tdesired = self.parameters["T"].value
         #print (self.Tdict)
         for case in self.Tdict.keys():
-            self.Qprint("")
-            self.Qprint('Mw=%g Mw2=%g phi=%g phi2=%g' % (case[0], case[1],
-                                                         case[2], case[3]))
-            self.Qprint('==================================')
+            self.Qprint('<h3>Mw=%g Mw2=%g phi=%g phi2=%g</h3>' % (case[0], case[1], case[2], case[3]))
             Temps0 = [x[0] for x in self.Tdict[case]]
             Temps = np.abs(
                 np.array([x[0] for x in self.Tdict[case]]) - Tdesired)
@@ -370,7 +366,9 @@ class BaseTheoryTTSShiftAutomatic:
                 order=['f1'], axis=0)
             self.shiftParameters[fname] = (0.0, 0.0)
 
-            self.Qprint('%6s %11s %11s' % ('T', 'log(Hshift)', 'log(Vshift)'))
+            table='''<table border="1" width="100%">'''
+            table+='''<tr><th>T</th><th>log(Hshift)</th><th>log(Vshift)</th></tr>'''
+            #self.Qprint('%6s %11s %11s' % ('T', 'log(Hshift)', 'log(Vshift)'))
             indices = np.delete(indices, 0, None)
 
             for i in indices:
@@ -436,10 +434,15 @@ class BaseTheoryTTSShiftAutomatic:
             for i in indTsorted:
                 fname = Filenames[i]
                 sparam = self.shiftParameters[fname]
-                self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], sparam[0], sparam[1]))
+                table+='''<tr><td>%6.3g</td><td>%11.3g</td><td>%11.3g</td></tr>'''%(Temps0[i], sparam[0], sparam[1])
+                #self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], sparam[0], sparam[1]))
+
+            table+='''</table><br>'''
+            self.Qprint(table)        
 
         self.fitting = False
-        self.do_calculate(line)
+        self.do_calculate(line, timing=False)
+        self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
