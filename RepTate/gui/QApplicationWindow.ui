@@ -264,7 +264,7 @@
     <string>Print</string>
    </property>
    <property name="toolTip">
-    <string>Show/Hide Figure Toolbar</string>
+    <string>Show/Hide Figure Toolbar (Ctrl+F)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
@@ -309,7 +309,7 @@
     <string>New Empty Dataset</string>
    </property>
    <property name="toolTip">
-    <string>Create an empty Data set</string>
+    <string>Create an empty Data set (Ctrl+N)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -324,7 +324,7 @@
     <string>New Dataset From File</string>
    </property>
    <property name="toolTip">
-    <string>Open Data File</string>
+    <string>Open Data File (Ctrl+O)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -342,7 +342,7 @@
     <string>View All Sets</string>
    </property>
    <property name="toolTip">
-    <string>View all sets simultaneously</string>
+    <string>View all sets simultaneously (Ctrl+A)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
@@ -357,7 +357,7 @@
     <string>Reload Data</string>
    </property>
    <property name="toolTip">
-    <string>Reload data files and theories</string>
+    <string>Reload data files and theories (Ctrl+R)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -375,7 +375,7 @@
     <string>Inspect Data</string>
    </property>
    <property name="toolTip">
-    <string>Inspect contents of data files</string>
+    <string>Inspect contents of data files (Ctrl+I)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -390,7 +390,7 @@
     <string>Select Symbols Color</string>
    </property>
    <property name="toolTip">
-    <string>Select Dataset Plot Style</string>
+    <string>Select Dataset Plot Style (Ctrl+M)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
@@ -456,7 +456,7 @@
     <string>New Tool</string>
    </property>
    <property name="toolTip">
-    <string>New Tool</string>
+    <string>New Tool (Alt+T)</string>
    </property>
    <property name="shortcut">
     <string>Alt+T</string>

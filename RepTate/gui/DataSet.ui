@@ -108,7 +108,7 @@
     <string>New Theory</string>
    </property>
    <property name="toolTip">
-    <string>Create Selected Theory</string>
+    <string>Create Selected Theory (Alt+N)</string>
    </property>
    <property name="shortcut">
     <string>Alt+N</string>
@@ -123,7 +123,7 @@
     <string>Calculate Theory</string>
    </property>
    <property name="toolTip">
-    <string>Calculate Theory</string>
+    <string>Calculate Theory (Alt+C)</string>
    </property>
    <property name="shortcut">
     <string>Alt+C</string>
@@ -138,7 +138,7 @@
     <string>Minimize Error</string>
    </property>
    <property name="toolTip">
-    <string>Minimize Error</string>
+    <string>Minimize Error (Alt+M)</string>
    </property>
    <property name="shortcut">
     <string>Alt+M</string>
@@ -231,7 +231,7 @@
     <string>Copy Parameters</string>
    </property>
    <property name="toolTip">
-    <string>Copy Parameters</string>
+    <string>Copy Parameters (Ctrl+C)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -246,7 +246,7 @@
     <string>Paste Parameters</string>
    </property>
    <property name="toolTip">
-    <string>Paste Parameters</string>
+    <string>Paste Parameters (Ctrl+V)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
