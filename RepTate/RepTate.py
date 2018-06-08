@@ -99,6 +99,7 @@ def start_RepTate(argv):
     parser = argparse.ArgumentParser(
         description='RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.',
         epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
+    parser.add_argument('-s', '--single', help='Run Reptate as a single thread application', action='store_true')
     parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
     parser.add_argument('finlist', nargs='*')
@@ -120,7 +121,8 @@ def start_RepTate(argv):
     splash.show()
     
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
-    CmdBase.calcmode = CalcMode.singlethread
+    if args.single:
+        CmdBase.calcmode = CalcMode.singlethread
 
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
