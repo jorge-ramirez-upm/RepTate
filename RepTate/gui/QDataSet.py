@@ -395,6 +395,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
     
     def end_of_computation(self, th_name):
         """Action when theory has finished computations"""
+        try:
+            th = self.theories[th_name]
+            th.stop_theory_flag = False
+        except KeyError:
+            pass
         if self.current_theory == th_name:
             self.icon_calculate_is_stop(False)
             self.icon_fit_is_stop(False)

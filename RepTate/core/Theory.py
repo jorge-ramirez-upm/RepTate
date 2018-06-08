@@ -53,6 +53,9 @@ from PyQt5.QtCore import pyqtSignal
 from collections import OrderedDict
 from math import log
 
+class EndComputationRequested(Exception):
+    """Exception class to end computations"""
+    pass
 
 class Theory(CmdBase):
     """Abstract class to describe a theory
@@ -267,7 +270,7 @@ class Theory(CmdBase):
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools       
         table='''<table border="1" width="100%">'''
-        table+='''<tr><th>File</th><th>Error (RSS)</th><th>(# Pts)</th></tr>'''
+        table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
         #msg = "\n%14s %10s (%5s)\n" % ("File", "Err (RSS)", "# Pts")
         #msg += "=================================="
         #self.Qprint(msg)
@@ -295,7 +298,7 @@ class Theory(CmdBase):
             total_error += f_error * npt
             npoints += npt
             #self.Qprint("%.14s %10.4g (%5d)" % (f.file_name_short, f_error, npt))
-            table+= '''<tr><td>%14s</td><td>%10.4g</td><td>(%5d)</td></tr>'''% (f.file_name_short, f_error, npt)
+            table+= '''<tr><td>%14s</td><td>%10.4g</td><td>%5d</td></tr>'''% (f.file_name_short, f_error, npt)
         table+='''</table><br>'''
         self.Qprint(table)
 
