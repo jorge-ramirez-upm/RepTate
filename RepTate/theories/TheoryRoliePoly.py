@@ -52,7 +52,7 @@ from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
 import Version
 import time
-
+from Theory import EndComputationRequested
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -351,6 +351,8 @@ class BaseTheoryRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         sxx, syy, sxy = sigma
         lmax, tauD, tauR, beta, delta, gammadot = p
 
@@ -381,6 +383,8 @@ class BaseTheoryRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         sxx, syy, sxy = sigma
         _, tauD, _, beta, _, gammadot = p
 
@@ -406,6 +410,8 @@ class BaseTheoryRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         sxx, syy = sigma
         lmax, tauD, tauR, beta, delta, epsilon_dot = p
 
@@ -435,6 +441,8 @@ class BaseTheoryRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, epsilon_dot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         sxx, syy = sigma
         _, tauD, tauR, beta, delta, epsilon_dot = p
 
@@ -496,25 +504,33 @@ class BaseTheoryRoliePoly:
         nmodes = self.parameters["nmodes"].value
         nstretch = self.parameters["nstretch"].value
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             tauD = self.parameters["tauD%02d" % i].value
             tauR = self.parameters["tauR%02d" % i].value
             p = [lmax, tauD, tauR, beta, delta, flow_rate]
             if i < nstretch:
-                sig = odeint(
-                    pde_stretch,
-                    sigma0,
-                    t,
-                    args=(p, ),
-                    atol=abserr,
-                    rtol=relerr)
+                try:
+                    sig = odeint(
+                        pde_stretch,
+                        sigma0,
+                        t,
+                        args=(p, ),
+                        atol=abserr,
+                        rtol=relerr)
+                except EndComputationRequested:
+                    break
             else:
-                sig = odeint(
-                    pde_nostretch,
-                    sigma0,
-                    t,
-                    args=(p, ),
-                    atol=abserr,
-                    rtol=relerr)
+                try:
+                    sig = odeint(
+                        pde_nostretch,
+                        sigma0,
+                        t,
+                        args=(p, ),
+                        atol=abserr,
+                        rtol=relerr)
+                except EndComputationRequested:
+                    break
 
             sxx = np.delete(sig[:, 0], [0])
             syy = np.delete(sig[:, 1], [0])

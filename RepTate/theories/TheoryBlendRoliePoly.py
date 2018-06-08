@@ -54,6 +54,8 @@ import time
 import Version
 
 import rp_blend_ctypes_helper as rpch
+from Theory import EndComputationRequested
+
 
 
 class FlowMode(Enum):
@@ -691,6 +693,8 @@ class BaseTheoryBlendRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         tmax = p[-1]
         if t >= tmax * self.count:
             self.Qprint("--", end='')
@@ -714,6 +718,8 @@ class BaseTheoryBlendRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         tmax = p[-1]
         if t >= tmax * self.count:
             self.Qprint("--", end='')
