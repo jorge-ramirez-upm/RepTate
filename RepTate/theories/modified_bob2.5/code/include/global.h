@@ -59,4 +59,10 @@ std::vector<polycopy> br_copy;
 int FlowPriority;
 double FlowTime; // FlowTime is immediately copied to SnipTime
                  // to retain old codes
+
+/* static to global */
+bool supertube_activated;
+double phi_ST_0;
+double ST_activ_time;
+
 #endif

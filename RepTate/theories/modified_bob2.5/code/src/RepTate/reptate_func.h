@@ -37,11 +37,12 @@
 #include <vector>
 
 // callback function
-typedef void pyfunc(char *s);
-extern pyfunc *py_callback;
+typedef void pyprint_func(char *s);
+extern pyprint_func *print_to_python;
 
 // functions used by Python
-extern "C" void def_pycallback_func(pyfunc F);
+extern "C" void def_pyprint_func(pyprint_func F);
+extern "C" void def_pyprint_err_func(pyprint_func F);
 extern "C" bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn, double *mw, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
 extern "C" bool run_bob_lve(int argc, char **argv, int *n);
 extern "C" bool get_bob_lve(double *omega_out, double *gp_out, double *gpp_out);
