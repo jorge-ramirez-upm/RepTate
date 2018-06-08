@@ -18,6 +18,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 #include <math.h>
 #include "./lin_rheo.h"
+#include "../../RepTate/reptate_func.h"
+
 void lin_rheology(int ndata)
 {
   FILE *phifl;
@@ -36,7 +38,15 @@ void lin_rheology(int ndata)
   calc_viscosity(ndata, tp, phip, phip_ST);
   extern double CalcEtaStar(double);
   extern FILE *infofl;
-  fprintf(infofl, "|complex-viscosity|(1.0e-6) = %e \n", CalcEtaStar(1.0e-6));
+  extern bool reptate_flag;
+  if (reptate_flag)
+  {
+    char line[256];
+    sprintf(line, "<b>|complex-viscosity|(1.0e-6) = %9.4g</b><br>", CalcEtaStar(1.0e-6));
+    print_to_python(line);
+  }
+  else
+    fprintf(infofl, "|complex-viscosity|(1.0e-6) = %e \n", CalcEtaStar(1.0e-6));
 #ifdef NBETA
   extern int DefinedMaxwellModes;
   if (DefinedMaxwellModes != 0)

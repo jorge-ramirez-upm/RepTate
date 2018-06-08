@@ -47,8 +47,9 @@ from collections import OrderedDict
 import time
 
 import bob_gen_poly  # dialog
+import ctypes
 from BobCtypesHelper import BobCtypesHelper, BobError
-from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
+from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit, QApplication
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
 from PyQt5.QtCore import QUrl, pyqtSignal
 from shutil import copy2
@@ -171,6 +172,12 @@ class BaseTheoryCreatePolyconf:
             min_value=1)
         self.polyconf_file_out = None  # full path of target polyconf file
         self.autocalculate = False
+        self.bch = BobCtypesHelper(self)
+
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        self.Qprint("Stop current calculation requested")
+        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
     def get_modes(self):
         """[summary]
@@ -239,9 +246,11 @@ class BaseTheoryCreatePolyconf:
             self.Qprint('Operation cancelled')
             return
 
-        self.bch = BobCtypesHelper(self)
         # Run BoB C++ code
         gpc_out = []
+        QApplication.processEvents()
+        self.bch.link_c_callback()
+        self.start_time_cal = time.time()
         try:
             mn, mw, gpc_out = self.bch.save_polyconf_and_return_gpc(
             self.argv, self.npol_tot)
@@ -257,12 +266,12 @@ class BaseTheoryCreatePolyconf:
                                              'temp_polyconf.dat')
                 copy2(temp_polyconf, self.polyconf_file_out)
 
-            self.Qprint("Polymer configuration written in \"%s\"" %
-                        self.polyconf_file_out)
             try:
-                self.Qprint("\nMn=%.3g, Mw=%.3g, PDI=%.3g" % (mn, mw, mw / mn))
+                self.Qprint("<br><b>Mn=%.3g, Mw=%.3g, PDI=%.3g</b>" % (mn, mw, mw / mn))
             except ZeroDivisionError:
-                self.Qprint("\nMn=%.3g, Mw=%.3g" % (mn, mw))
+                self.Qprint("<br><b>Mn=%.3g, Mw=%.3g</b>" % (mn, mw))
+            self.Qprint("<br><b>Polymer configuration written in</b><i>\"%s\"</i><br>" %
+                        self.polyconf_file_out)
 
             # copy results to data series
             lgmid_out, wtbin_out, brbin_out, gbin_out = gpc_out

@@ -18,6 +18,8 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "../../RepTate/reptate_func.h"
+
 double CalcEtaStar(double freq)
 {
   // calculate complex viscosity at a particular frequency
@@ -27,8 +29,15 @@ double CalcEtaStar(double freq)
   double eta = 0.0;
   if (fid == 0)
   {
+    extern bool reptate_flag;
+    if (reptate_flag){
+      print_to_python((char*)"In CalcEtaStar: Did not find gtp.dat");
+      print_to_python((char*)"Something has gone quite wrong!\n");
+    }
+    else{
     fprintf(infofl, "In CalcEtaStar: Did not find gtp.dat \n");
     fprintf(infofl, "Something has gone quite wrong! \n\n");
+    }
   }
   else
   {

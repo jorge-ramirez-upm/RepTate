@@ -17,6 +17,10 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 #include <stdio.h>
 #include <math.h>
+#include "../../RepTate/reptate_func.h"
+
+extern bool reptate_flag;
+
 void calc_viscosity(int ndata, double *tp, double *phip, double *phip_ST)
 {
   // calculate viscosity : go to low frequency till viscosity is constant
@@ -82,7 +86,16 @@ void calc_viscosity(int ndata, double *tp, double *phip, double *phip_ST)
   extern FILE *infofl;
   if (num_try > 19)
   {
-    fprintf(infofl, "Warning : viscosity estimate may not be reliable \n");
+    if (reptate_flag)
+    print_to_python((char *)"<b>Warning:</b><br>Viscosity estimate may not be reliable<br>");
+    else
+    fprintf(infofl, "Warning: viscosity estimate may not be reliable \n");
   }
+    if (reptate_flag){
+    char line[256];
+    sprintf(line, "<b>Zero-shear viscosity = %9.4g</b><br>", (sxx * sy - sxy * sx) / (5.0 * sxx - sx * sx));
+    print_to_python(line);
+    }
+    else
   fprintf(infofl, "zero-shear viscosity = %le \n", (sxx * sy - sxy * sx) / (5.0 * sxx - sx * sx));
 }

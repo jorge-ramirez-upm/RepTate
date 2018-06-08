@@ -47,6 +47,7 @@ from collections import OrderedDict
 import time
 
 import bob_LVE  # dialog
+import ctypes
 from BobCtypesHelper import BobCtypesHelper, BobError
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
@@ -111,6 +112,12 @@ class BaseTheoryBobLVE:
         self.has_modes = False  # True if the theory has modes
         self.signal_param_dialog.connect(self.launch_param_dialog)
         self.polyconf_file_out = None  # full path of target polyconf file
+        self.bch = BobCtypesHelper(self)
+
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        self.Qprint("Stop current calculation requested")
+        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
     def get_modes(self):
         """[summary]
@@ -180,11 +187,11 @@ class BaseTheoryBobLVE:
             self.Qprint('Operation cancelled')
             return
         QApplication.processEvents()
-
+        self.bch.link_c_callback()
         # Run BoB C++ code
-        bch = BobCtypesHelper(self)
+        self.start_time_cal = time.time()
         try:
-            omega, gp, gpp = bch.return_bob_lve(self.argv)
+            omega, gp, gpp = self.bch.return_bob_lve(self.argv)
         except BobError:
             self.Qprint('Operation cancelled')
             return

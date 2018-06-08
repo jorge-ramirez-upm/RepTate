@@ -56,5 +56,6 @@ void return_gpchist(int ncomp, int n_cur_comp, double *mass_ar, double *gfac_ar,
 
 extern std::vector<double> omega, g_p, g_pp;
 extern int n_lve_out;
+extern bool reptate_flag;
 
 #endif

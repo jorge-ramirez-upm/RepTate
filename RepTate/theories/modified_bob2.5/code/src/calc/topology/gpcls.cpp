@@ -21,6 +21,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 #include <math.h>
 #include "../../../include/bob.h"
+#include "../../RepTate/reptate_func.h"
 #include "./gpcls.h"
 
 void gpcls(int ncomp, int ni, int nf, int number_based)
@@ -66,27 +67,58 @@ void gpcls(int ncomp, int ni, int nf, int number_based)
   pdi = mwav / mnav;
 
   extern FILE *infofl;
+  extern bool reptate_flag;
+  char table[1024];
+  char line[128];
   if (ncomp < 0)
   { // global average
-    fprintf(infofl, "GPC module for entire system  : \n");
+    if (reptate_flag)
+      print_to_python((char *)"<b>GPC module for entire system</b><br>");
+    else
+      fprintf(infofl, "GPC module for entire system: \n");
   }
   else
   {
+    if (reptate_flag)
+    {
+      char line[128];
+      sprintf(line, "<b>GPC module for component %d:</b><br>", ncomp);
+      print_to_python(line);
+    }
     fprintf(infofl, "GPC module for component %d  : \n", ncomp);
+  }
+  if (reptate_flag)
+  {
+    sprintf(line, "<b>Mw=%9.4g, Mn=%9.4g, PDI=%.4g</b><br>", mwav, mnav, pdi);
+    print_to_python(line);
   }
   fprintf(infofl, "Mw = %e ,   Mn =  %e, PDI = %e \n", mwav, mnav, pdi);
 
+  // if (reptate_flag){
+  // snprintf(table, sizeof table, "%s%s", table,
+  // }
   extern int ForceGPCTrace;
   if ((ForceGPCTrace != 0) && ((pdi - 1.0) < 1.0e-4))
   {
-    fprintf(infofl, "Too small PDI for useful GPC trace. \n");
-    fprintf(infofl, "  You can force GPC trace output by setting ForceGPCTrace in bob.rc\n");
+    if (reptate_flag)
+    {
+      print_to_python((char *)"Too small PDI for useful GPC trace.\n");
+      print_to_python((char *)"You can force GPC trace output by setting ForceGPCTrace in bob.rc\n");
+    }
+    else
+    {
+      fprintf(infofl, "Too small PDI for useful GPC trace. \n");
+      fprintf(infofl, "  You can force GPC trace output by setting ForceGPCTrace in bob.rc\n");
+    }
   }
   else
   { // Calculate histograms.
     if (n_cur_comp < 20)
     {
-      fprintf(infofl, "Too few polymers for GPC histogram. \n");
+      if (reptate_flag)
+        print_to_python((char *)"Too few polymers for GPC histogram.\n");
+      else
+        fprintf(infofl, "Too few polymers for GPC histogram. \n");
     }
     else
     {
