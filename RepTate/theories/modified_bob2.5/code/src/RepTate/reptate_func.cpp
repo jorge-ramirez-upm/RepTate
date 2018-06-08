@@ -40,20 +40,32 @@
 #include "../calc/topology/gpcls.h"
 #include "reptate_func.h"
 
-pyfunc *py_callback;
+// flag stop bob calculation
+void set_flag_stop_bob(bool b){
+    extern bool flag_stop_bob;
+    flag_stop_bob = b;
+}
 
 // callback function
-void def_pycallback_func(pyfunc F)
+pyprint_func *print_to_python;
+pyprint_func *print_err_to_python;
+
+void def_pyprint_func(pyprint_func F)
 {
-    py_callback = F;
+    // a normal bob output printed to Python
+    print_to_python = F;
+}
+void def_pyprint_err_func(pyprint_func F)
+{
+    // used to print a error message to Python
+    print_err_to_python = F;
 }
 
 void my_abort(char *s)
 {
     if (reptate_flag)
     {
-        printf("calling callback\n");
-        py_callback(s);
+        print_err_to_python(s);
         throw std::exception();
     }
     else

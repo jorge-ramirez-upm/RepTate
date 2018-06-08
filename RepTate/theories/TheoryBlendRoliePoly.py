@@ -982,6 +982,9 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         self.plot_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
             "Plot Modes")
+        self.save_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
@@ -1031,6 +1034,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             self.plot_modes_graph)
         connection_id = self.linearenvelope.triggered.connect(
             self.show_linear_envelope)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
         # connection_id = self.spinbox.valueChanged.connect(
         #     self.handle_spinboxValueChanged)
         connection_id = self.with_fene_button.triggered.connect(

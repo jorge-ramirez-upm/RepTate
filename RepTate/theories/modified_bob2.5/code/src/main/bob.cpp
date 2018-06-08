@@ -28,15 +28,17 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish, V. Boudara
 #include "../RepTate/reptate_func.h"
 
 int bob_main(int, char **);
+void init_static(void);
 bool reptate_flag = true; // if false, "end_code()" is called at the end of bob_main()
-
 int nnp_size;
+
 bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn_out, double *mw_out, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out)
 {
   try
   {
     infofl = fopen("info.txt", "w");
     rcread();
+    set_flag_stop_bob(false);
     bob_main(argc, argv);
     return_gpcls(nbin, ncomp, ni, nf, lgmid_out, wtbin_out, brbin_out, gbin_out);
     get_mn_mw(mn_out, mw_out);
@@ -82,6 +84,7 @@ bool run_bob_lve(int argc, char **argv, int *n)
     rcread();
     extern int OutMode;
     OutMode = 3;
+    set_flag_stop_bob(false);
     bob_main(argc, argv);
     *n = n_lve_out;
     return true;
@@ -92,9 +95,20 @@ bool run_bob_lve(int argc, char **argv, int *n)
   }
 }
 
+void init_static()
+{
+  // These variables were static in "origanal BoB"
+  extern bool supertube_activated;
+  extern double phi_ST_0;
+  extern double ST_activ_time;
+  supertube_activated = false;
+  phi_ST_0 = 1.0;
+  ST_activ_time = 1.0;
+}
+
 int bob_main(int argc, char *argv[])
 {
-
+  init_static();
   int cont_exec = parser(argc, argv);
   if (cont_exec == 1)
   {
@@ -250,8 +264,19 @@ int bob_main(int argc, char *argv[])
         sample_alt_taus();
       }
 
+      double progres = 1;
+      char info_progres[256];
       while (num_alive > 0)
       {
+        if ((phi_ST + 0.05) <= progres)
+        {
+          sprintf(info_progres, "%3g%% done\n", (1 - progres) * 100);
+          print_to_python(info_progres);
+          progres -= 0.1;
+        }
+        if (flag_stop_bob){
+          my_abort((char *)"Calculations interrupted by user\n");
+        }
 
 #ifdef NBETA
         if (CalcNlin == 0)
@@ -323,6 +348,8 @@ int bob_main(int argc, char *argv[])
           fprintf(phifl, "%e %e %e %e  \n", cur_time, 0.0, 0.0, 0.0);
         }
       }
+      print_to_python((char *)"100% done\n");
+
       if ((CalcNlin != 0) && (Snipping == 0))
       {
         extern void calcsnipprio(void);

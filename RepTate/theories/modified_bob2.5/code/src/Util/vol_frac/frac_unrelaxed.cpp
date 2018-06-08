@@ -24,9 +24,12 @@ Else returns the fraction at the begining of supertube activation */
 
 double frac_unrelaxed(void)
 {
-  static bool supertube_activated = false;
-  static double phi_ST_0 = 1.0;
-  static double ST_activ_time = 1.0;
+  extern bool supertube_activated;
+  extern double phi_ST_0;
+  extern double ST_activ_time;
+  // static bool supertube_activated = false;
+  // static double phi_ST_0 = 1.0;
+  // static double ST_activ_time = 1.0;
   extern int num_poly;
   extern std::vector<arm> arm_pool;
   extern std::vector<polymer> branched_poly;
