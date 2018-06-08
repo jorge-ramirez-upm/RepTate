@@ -22,7 +22,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -86,7 +95,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionMWD"/>
-   <addaction name="actionTTS"/>
    <addaction name="actionLVE"/>
    <addaction name="actionNLVE"/>
    <addaction name="actionGt"/>
@@ -460,6 +468,18 @@
    </property>
    <property name="toolTip">
     <string>Large Amplitude Oscillatory Shear</string>
+   </property>
+  </action>
+  <action name="actionTTSFactors">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/TTSFactors.png</normaloff>:/Icons/Images/new_icons/TTSFactors.png</iconset>
+   </property>
+   <property name="text">
+    <string>TTS Factors</string>
+   </property>
+   <property name="toolTip">
+    <string>Time-Temperature Superposition Factors</string>
    </property>
   </action>
  </widget>
