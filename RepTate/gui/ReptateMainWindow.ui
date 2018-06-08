@@ -22,7 +22,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -86,7 +95,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionMWD"/>
-   <addaction name="actionTTS"/>
    <addaction name="actionLVE"/>
    <addaction name="actionNLVE"/>
    <addaction name="actionGt"/>
@@ -147,7 +155,7 @@
     <string>&amp;Quit</string>
    </property>
    <property name="toolTip">
-    <string>Exit Reptate</string>
+    <string>Exit Reptate (Ctrl+Q)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -162,7 +170,7 @@
     <string>TTS</string>
    </property>
    <property name="toolTip">
-    <string>Time-Temperature Superposition</string>
+    <string>Time-Temperature Superposition (Ctrl+2)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+2</string>
@@ -177,7 +185,7 @@
     <string>LVE</string>
    </property>
    <property name="toolTip">
-    <string>Linear Viscoelasticity</string>
+    <string>Linear Viscoelasticity (Ctrl+3)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+3</string>
@@ -192,7 +200,7 @@
     <string>NLVE</string>
    </property>
    <property name="toolTip">
-    <string>Start up of shear/extension</string>
+    <string>Start up of shear/extension (Ctrl+4)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+4</string>
@@ -207,7 +215,7 @@
     <string>Gt</string>
    </property>
    <property name="toolTip">
-    <string>Stress relaxation</string>
+    <string>Stress relaxation (Ctrl+5)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+5</string>
@@ -240,7 +248,7 @@
     <string>MWD</string>
    </property>
    <property name="toolTip">
-    <string>Molecular Weight Distribution</string>
+    <string>Molecular Weight Distribution (Ctrl+1)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+1</string>
@@ -255,7 +263,7 @@
     <string>Creep</string>
    </property>
    <property name="toolTip">
-    <string>Creep experiments</string>
+    <string>Creep experiments (Ctrl+6)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+6</string>
@@ -270,7 +278,7 @@
     <string>SANS</string>
    </property>
    <property name="toolTip">
-    <string>Small Angle Neutron Scattering</string>
+    <string>Small Angle Neutron Scattering (Ctrl+7)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+7</string>
@@ -297,7 +305,7 @@
     <string>React</string>
    </property>
    <property name="toolTip">
-    <string>React module</string>
+    <string>React module (Ctrl+8)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+8</string>
@@ -312,7 +320,7 @@
     <string>Dielectric</string>
    </property>
    <property name="toolTip">
-    <string>Dielectric spectroscopy</string>
+    <string>Dielectric spectroscopy (Ctrl+9)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+9</string>
@@ -327,7 +335,7 @@
     <string>DynamicStructureFactor</string>
    </property>
    <property name="toolTip">
-    <string>Dynamic Structure Factor</string>
+    <string>Dynamic Structure Factor (Ctrl+0)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+0</string>
@@ -460,6 +468,18 @@
    </property>
    <property name="toolTip">
     <string>Large Amplitude Oscillatory Shear</string>
+   </property>
+  </action>
+  <action name="actionTTSFactors">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/TTSFactors.png</normaloff>:/Icons/Images/new_icons/TTSFactors.png</iconset>
+   </property>
+   <property name="text">
+    <string>TTS Factors</string>
+   </property>
+   <property name="toolTip">
+    <string>Time-Temperature Superposition Factors</string>
    </property>
   </action>
  </widget>

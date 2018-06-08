@@ -303,22 +303,13 @@ class BaseTheoryWLFShift:
         if (line == ""):
             table='''<table border="1" width="100%">'''
             table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
-            #self.Qprint("%4s %4s %4s %4s %8s (%5s)" %
-            #            ("Mw", "Mw2", "phi", "phi2", "Error", "# Pts."))
-            #self.Qprint("==================================")
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1] > 0):
                     table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%8.3g</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], MwUnique[o][0] / MwUnique[o][1], MwUnique[o][1])
-                    #self.Qprint("%4g %4g %4g %4g %8.3g (%5d)" %
-                    #            (o[0], o[1], o[2], o[3],
-                    #             MwUnique[o][0] / MwUnique[o][1],
-                    #             MwUnique[o][1]))
                 else:
                     table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
-                    #self.Qprint("%4g %4g %4g %4g %8s (%5d)" %
-                    #            (o[0], o[1], o[2], o[3], "-", 0))
             table+='''</table><br>'''
             self.Qprint(table)
         if (npoints > 0):
@@ -326,7 +317,7 @@ class BaseTheoryWLFShift:
         else:
             total_error = 1e10
         if (line == ""):
-            self.Qprint("<b>TOTAL ERROR</b>: %8.3g (%5d)" % (total_error, npoints))
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)<br>" % (total_error, npoints))
         return total_error
 
     def func_fitTTS(self, *param_in):
@@ -362,7 +353,8 @@ class BaseTheoryWLFShift:
         """
         self.is_fitting = True
         start_time = time.time()
-        view = self.parent_dataset.parent_application.current_view
+        #view = self.parent_dataset.parent_application.current_view
+        self.Qprint('''<h2>Parameter Fitting</h2>''')
 
         # Mount the vector of parameters (Active ones only)
         initial_guess = []
@@ -384,25 +376,24 @@ class BaseTheoryWLFShift:
             self.Qprint("Solution not found: %s" % res['message'])
             return
 
-        self.Qprint(
-            "Solution found with %d function evaluations and error %g" %
-            (res['nfev'], res.fun))
+        self.Qprint('<b>%g</b> function evaluations' % (res['nfev']))
 
         ind = 0
-        self.Qprint("%10s = %10s" % ("Parameter", "Value"))
-        self.Qprint("===========================")
+        table='''<table border="1" width="100%">'''
+        table+='''<tr><th>Parameter</th><th>Value</th></tr>'''
         for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 ind += 1
-                self.Qprint('*%9s = %10.5g' % (par.name, par.value))
+                table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
             else:
-                self.Qprint('%10s = %10.5g' % (par.name, par.value))
+                #table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
+                pass
+        table+='''</table><br>'''
+        self.Qprint(table)        
         self.is_fitting = False
         self.do_calculate(line, timing=False)
-        self.Qprint("")
-        self.Qprint("---Fitting in %.3g seconds---" %
-                    (time.time() - start_time))
+        self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
