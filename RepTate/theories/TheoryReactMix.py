@@ -290,11 +290,6 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
         This is relevant in multithread mode only.
         """
         self.save_bob_configuration_button.setDisabled(state)
-        self.stop_calulation_button.setDisabled(not state)
-
-    def handle_stop_calulation(self):
-        """Kindly request the stop of the calculation thread."""
-        rgt.handle_stop_calulation(self)
 
     def handle_save_bob_configuration(self):
         """Save polymer configuraions to a file"""

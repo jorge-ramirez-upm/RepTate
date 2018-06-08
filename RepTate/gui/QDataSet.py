@@ -392,11 +392,26 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th.do_yrange("")
             th.is_yrange_visible = self.actionHorizontal_Limits.isChecked()
             self.set_limit_icon()
+    
+    def end_of_computation(self, th_name):
+        """Action when theory has finished computations"""
+        try:
+            th = self.theories[th_name]
+            th.stop_theory_flag = False
+        except KeyError:
+            pass
+        if self.current_theory == th_name:
+            self.icon_calculate_is_stop(False)
+            self.icon_fit_is_stop(False)
 
     def handle_actionCalculate_Theory(self):
         if self.current_theory and self.files:
             th = self.theories[self.current_theory]
-            if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy:  #do nothing if already busy in do_calculate or do_fit
+            if th.thread_calc_busy: # request stop if in do_calculate
+                th.request_stop_computations()
+                return
+            elif th.is_fitting or th.thread_fit_busy:  #do nothing if already busy in do_fit
+                th.Qprint("Busy minimising theory...")
                 return
             if th.single_file and (
                     len(self.files) - len(self.inactive_files)) > 1:
@@ -404,6 +419,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 message = "<p>Too many active files: \"%s\" uses only one data file.</p>\
                     <p>The theory will be applied to the highlighted file if any or to the first active file.</p>" % th.thname
                 QMessageBox.warning(self, header, message)
+            self.icon_calculate_is_stop(True)
             th.handle_actionCalculate_Theory()
 
     def handle_actionMinimize_Error(self):
@@ -413,7 +429,11 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         if self.current_theory and self.files:
             th = self.theories[self.current_theory]
-            if th.calculate_is_busy or th.is_fitting or th.thread_calc_busy or th.thread_fit_busy:  #do nothing if already busy in do_calculate or do_fit
+            if th.is_fitting or th.thread_fit_busy: # request stop if in do_fit
+                th.request_stop_computations()
+                return
+            elif th.calculate_is_busy or th.thread_calc_busy:  #do nothing if already busy in do_calculate
+                th.Qprint("Busy calculating theory...")
                 return
             if th.single_file and (
                     len(self.files) - len(self.inactive_files)) > 1:
@@ -421,7 +441,22 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 message = "<p>Too many active files: \"%s\" uses only one data file.</p>\
                     <p>The theory will be applied to the highlighted file if any or to the first active file.</p>" % th.thname
                 QMessageBox.warning(self, header, message)
+            self.icon_fit_is_stop(True)
             th.handle_actionMinimize_Error()
+
+    def icon_calculate_is_stop(self, ans):
+        """Change the "calculate" button to "stop" button"""
+        if ans:
+            self.actionCalculate_Theory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
+        else:
+            self.actionCalculate_Theory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-abacus.png"))
+
+    def icon_fit_is_stop(self, ans):
+        """Change the "fit" button to "stop" button"""
+        if ans:
+            self.actionMinimize_Error.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
+        else:
+            self.actionMinimize_Error.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-minimum-value.png"))
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed
@@ -431,6 +466,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         Arguments:
             - index {[type]} -- [description]
         """
+        self.icon_calculate_is_stop(False)
+        self.icon_fit_is_stop(False)
         th = self.TheorytabWidget.widget(index)
         if th:
             self.current_theory = th.name
@@ -441,7 +478,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     th_to_hide = self.TheorytabWidget.widget(i)
                     th_to_hide.do_hide()
             th.do_show()  #must be called last, after hiding other theories
+
             if th.thread_calc_busy or th.thread_fit_busy:
+                self.icon_calculate_is_stop(th.thread_calc_busy)
+                self.icon_fit_is_stop(th.thread_fit_busy)
                 return
         else:
             self.current_theory = None
@@ -483,7 +523,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th_name = self.TheorytabWidget.widget(index).name
         th = self.theories[th_name]
         th.Qprint("Close theory tab requested")
-        th.stop_theory_calc_flag = True
+        th.request_stop_computations(True)
         self.set_no_limits(th_name)
         self.do_theory_delete(th_name)  #call DataSet.do_theory_delete
         self.TheorytabWidget.removeTab(index)

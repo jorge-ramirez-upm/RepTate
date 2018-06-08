@@ -133,21 +133,12 @@ def initialise_tool_bar(parent_theory):
     parent_theory.save_bob_configuration_button = tb.addAction(
         QIcon(':/Icon8/Images/new_icons/icons8-save-BoB.png'),
         'Save Polymer Configuration for BoB')
-    #stop calculation button
-    parent_theory.stop_calulation_button = tb.addAction(
-        QIcon(':/Icon8/Images/new_icons/icons8-stop-sign.png'),
-        'Stop Current Calulation')
-    parent_theory.stop_calulation_button.setDisabled(True)
-
 
     #signals
     connection_id = parent_theory.bob_settings_button.triggered.connect(
         parent_theory.handle_edit_bob_settings)
     connection_id = parent_theory.save_bob_configuration_button.triggered.connect(
         parent_theory.handle_save_bob_configuration)
-    connection_id = parent_theory.stop_calulation_button.triggered.connect(
-        parent_theory.handle_stop_calulation)
-
 
 def theory_buttons_disabled(parent_theory, state):
     """
@@ -156,17 +147,6 @@ def theory_buttons_disabled(parent_theory, state):
     """
     parent_theory.bob_settings_button.setDisabled(state)
     parent_theory.save_bob_configuration_button.setDisabled(state)
-    parent_theory.stop_calulation_button.setDisabled(not state)
-
-def handle_stop_calulation(parent_theory):
-    """
-    Raise a flag to kindly notify the thread Calc routine to stop.
-    This is relevant in multithread mode only.
-    """
-    parent_theory.Qprint("Stop current calculation requested")
-    parent_theory.stop_theory_calc_flag = True
-    parent_theory.stop_calulation_button.setDisabled(True)
-
 
 def handle_save_mix_configuration(parent_theory):
     """

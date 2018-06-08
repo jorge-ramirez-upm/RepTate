@@ -13,6 +13,11 @@ double const tiny = 1.0e-16;
 extern bool reptate_flag;
 void my_abort(char *s);
 
+// flag to stop BoB calculations
+extern bool flag_stop_bob;
+extern "C" void set_flag_stop_bob(bool b);
+
+
 #include "./class_def.h"
 #include "./routines.h"
 #include <vector>

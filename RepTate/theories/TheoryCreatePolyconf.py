@@ -170,6 +170,7 @@ class BaseTheoryCreatePolyconf:
             opt_type=OptType.const,
             min_value=1)
         self.polyconf_file_out = None  # full path of target polyconf file
+        self.autocalculate = False
 
     def get_modes(self):
         """[summary]

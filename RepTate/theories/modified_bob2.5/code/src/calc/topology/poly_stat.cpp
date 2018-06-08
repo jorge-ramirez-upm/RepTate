@@ -55,6 +55,9 @@ void poly_stat(void)
   fprintf(infofl, "Branching topology of the polymers\n");
   for (int i = 0; i < num_poly; i++)
   {
+    if (flag_stop_bob){
+      my_abort((char *)"Calculations interrupted by user\n");
+    }
     if (branched_poly[i].num_branch == 2)
     {
       nlin++;

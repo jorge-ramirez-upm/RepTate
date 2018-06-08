@@ -70,13 +70,20 @@ class BobCtypesHelper:
         # link the C function to Python
         self.link_c_functions()
 
-    def print_from_c(self, char):
+    def print_err_from_c(self, char):
         """Function called by BoB from the C++ code. 
         Called when error occured during BoB execution
         """
         err_msg = '\nERROR encountered in BoB:\n%s\n---------------' % (
             char.decode())
         self.parent_theory.Qprint(err_msg)
+
+    def print_from_c(self, char):
+        """Function called by BoB from the C++ code. 
+        Called during normal BoB execution
+        """
+        msg = '%s' % (char.decode())
+        self.parent_theory.Qprint(msg, end='')
 
     def link_c_functions(self):
         """Declare the Python functions equivalents to the C functions"""
@@ -89,9 +96,16 @@ class BobCtypesHelper:
         self.get_bob_lve = self.bob_lib.get_bob_lve
         self.get_bob_lve.restype = c_bool
 
+        # ask BoB to stop calculations
+        self.set_flag_stop_bob = self.bob_lib.set_flag_stop_bob
+        self.set_flag_stop_bob = None
+
         # callback C function from Python function
-        self.cbfunc = self.CB_FTYPE(self.print_from_c)
-        self.bob_lib.def_pycallback_func(self.cbfunc)
+        self.cb_err_func = self.CB_FTYPE(self.print_err_from_c)
+        self.bob_lib.def_pyprint_err_func(self.cb_err_func)
+
+        self.cb_func = self.CB_FTYPE(self.print_from_c)
+        self.bob_lib.def_pyprint_func(self.cb_func)
 
     def save_polyconf_and_return_gpc(self, arg_list, npol_tot):
         """Run BoB asking for a polyconf file only (no relaxation etc) and

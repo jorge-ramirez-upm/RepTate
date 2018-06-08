@@ -54,6 +54,8 @@ import time
 import Version
 
 import rp_blend_ctypes_helper as rpch
+from Theory import EndComputationRequested
+
 
 
 class FlowMode(Enum):
@@ -691,6 +693,8 @@ class BaseTheoryBlendRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         tmax = p[-1]
         if t >= tmax * self.count:
             self.Qprint("--", end='')
@@ -714,6 +718,8 @@ class BaseTheoryBlendRoliePoly:
             - t {float} -- time
             - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
         """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         tmax = p[-1]
         if t >= tmax * self.count:
             self.Qprint("--", end='')
@@ -788,8 +794,11 @@ class BaseTheoryBlendRoliePoly:
         ]
         self.count = 0.2
         self.Qprint('Rate %.3g\n  0%% ' % flow_rate, end='')
-        sig = odeint(
-            pde_stretch, sigma0, t, args=(p, ), atol=abserr, rtol=relerr)
+        try:
+            sig = odeint(
+                pde_stretch, sigma0, t, args=(p, ), atol=abserr, rtol=relerr)
+        except EndComputationRequested:
+            return
         self.Qprint(' 100%')
         # sig.shape is (len(t), 3*n^2) in shear
         if self.flow_mode == FlowMode.shear:
@@ -982,6 +991,9 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         self.plot_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
             "Plot Modes")
+        self.save_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
@@ -1031,6 +1043,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             self.plot_modes_graph)
         connection_id = self.linearenvelope.triggered.connect(
             self.show_linear_envelope)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
         # connection_id = self.spinbox.valueChanged.connect(
         #     self.handle_spinboxValueChanged)
         connection_id = self.with_fene_button.triggered.connect(
