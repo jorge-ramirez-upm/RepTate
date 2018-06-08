@@ -523,7 +523,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th_name = self.TheorytabWidget.widget(index).name
         th = self.theories[th_name]
         th.Qprint("Close theory tab requested")
-        th.request_stop_computations(True)
+        th.request_stop_computations()
         self.set_no_limits(th_name)
         self.do_theory_delete(th_name)  #call DataSet.do_theory_delete
         self.TheorytabWidget.removeTab(index)
@@ -741,7 +741,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.set_no_limits(
                 self.current_theory)  #remove the xy-range limits
         self.theory_actions_disabled(False)  #enable theory buttons
-        newth = self.do_theory_new(th_name, calculate)
+        newth = self.do_theory_new(th_name, calculate=False)
 
         # add new theory tab
         if th_tab_id == "":
@@ -768,4 +768,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if show:
             newth.update_parameter_table()
             newth.do_show("")
+        if calculate:
+            self.handle_actionCalculate_Theory()
         return newth
