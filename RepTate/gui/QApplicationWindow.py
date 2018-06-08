@@ -47,7 +47,8 @@ from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel, QTableWidget, QTableWidgetItem
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel, QTableWidget, QTableWidgetItem
 from QDataSet import QDataSet
 from DataTable import DataTable
 from DataSetWidgetItem import DataSetWidgetItem
@@ -55,6 +56,7 @@ from DataSet import ColorMode, SymbolMode, ThLineMode
 from CmdBase import CmdBase, CmdMode
 from Application import Application
 from DraggableArtists import DragType, DraggableSeries, DraggableNote
+from SpreadsheetWidget import SpreadsheetWidget
 from collections import OrderedDict
 
 #To recompile the symbol-settings dialog:
@@ -71,6 +73,43 @@ from SpreadsheetWidget import SpreadsheetWidget
     
 PATH = dirname(abspath(__file__))
 Ui_AppWindow, QMainWindow = loadUiType(join(PATH,'QApplicationWindow.ui'))
+
+class ViewShiftFactors(QDialog):
+    def __init__(self, parent=None, fnames=None, factorsx=None, factorsy=None):
+        super(ViewShiftFactors, self).__init__(parent)
+    
+        self.setWindowTitle("View/Edit Shift Factors")
+        layout = QVBoxLayout(self)
+
+        nfiles = len(fnames)
+        ncurves = len(factorsx[0])
+        
+        self.table = SpreadsheetWidget()  #allows copy/paste
+        self.table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.table.setRowCount(nfiles)
+        self.table.setColumnCount(2*ncurves)
+        hlabels=[]
+        for i in range(ncurves):
+            hlabels.append("x%d"%(i+1))
+        self.table.setHorizontalHeaderLabels(hlabels)
+        self.table.setVerticalHeaderLabels(fnames)
+        for i in range(nfiles):
+            for j in range(ncurves):
+                self.table.setItem(i, 2*j, QTableWidgetItem("%g"%factorsx[i][j]))
+                self.table.setItem(i, 2*j+1, QTableWidgetItem("%g"%factorsy[i][j]))
+        self.table.resizeRowsToContents()
+        self.table.resizeColumnsToContents() 
+        layout.addWidget(self.table)
+
+        # OK and Cancel buttons
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
+        self.adjustSize()
+
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     """[summary]
@@ -145,7 +184,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 item.setBackground(QColor(255,255,205))
                 self.shiftTable.setItem(i, j, item)
         self.shiftTable.resizeRowsToContents()
-        self.shiftTable.setFixedHeight(60)
+        iHeight = 0
+        for i in range(DataTable.MAX_NUM_SERIES):
+            iHeight += self.shiftTable.verticalHeader().sectionSize(i)
+        iHeight += self.shiftTable.horizontalHeader().height()
+        self.shiftTable.setFixedHeight(iHeight)
+        iWidth = 0
+        for i in range(2):
+            iWidth += self.shiftTable.horizontalHeader().sectionSize(i)
+        iWidth += self.shiftTable.verticalHeader().width()
+        self.shiftTable.setMinimumWidth(iWidth)
         self.shiftTable.setVisible(False)
         vblayout.addWidget(self.shiftTable)
 
@@ -928,10 +976,51 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.disconnect_curve_drag()
 
     def handle_actionViewShiftTriggered(self):
-        pass
+        ds = self.DataSettabWidget.currentWidget()
+        if ds is None:
+            return
+        fnames = [file.file_name_short for file in ds.files]
+        factorsx = [file.xshift for file in ds.files] 
+        factorsy = [file.yshift for file in ds.files] 
+        d = ViewShiftFactors(self, fnames, factorsx, factorsy)
+        if d.exec_():
+            nfiles = len(fnames)
+            ncurves = len(factorsx[0])
+            for i in range(nfiles):
+                f = ds.files[i]
+                for j in range(ncurves):
+                    f.xshift[j] = float(d.table.item(i, 2*j).text())
+                    f.yshift[j] = float(d.table.item(i, 2*j+1).text())
 
     def handle_actionSaveShiftTriggered(self):
-        pass
+        ds = self.DataSettabWidget.currentWidget()
+        if ds is None:
+            return
+        dir_start = "data/"
+        dilogue_name = "Select Folder for Saving shift factors of current dataset as txt"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
+        if isdir(folder):
+            with open(join(folder, 'Shift_Factors.txt'), 'w') as fout:
+                f0 = ds.files[0]
+                fparam = f0.file_type.basic_file_parameters
+                for pname in f0.file_parameters:
+                    if pname not in fparam:
+                        fout.write('%s=%s;' % (pname, f0.file_parameters[pname]))
+                fout.write('\n')
+                for p in fparam:
+                    fout.write('%s '%p)
+                ncurves = len(f0.xshift)
+                for i in range(ncurves):
+                    fout.write('x%d y%d '%(i+1,i+1))
+                fout.write('\n')
+                for i, f in enumerate(ds.files):
+                    if f.active:
+                        for p in fparam:
+                            fout.write('%s '%f.file_parameters[p])
+                        for j in range(ncurves):
+                            fout.write('%g %g '%(f.xshift[j], f.yshift[j]))
+                        fout.write('\n')
+                        
 
     def handle_actionResetShiftTriggered(self):
         ds = self.DataSettabWidget.currentWidget()
