@@ -794,8 +794,11 @@ class BaseTheoryBlendRoliePoly:
         ]
         self.count = 0.2
         self.Qprint('Rate %.3g\n  0%% ' % flow_rate, end='')
-        sig = odeint(
-            pde_stretch, sigma0, t, args=(p, ), atol=abserr, rtol=relerr)
+        try:
+            sig = odeint(
+                pde_stretch, sigma0, t, args=(p, ), atol=abserr, rtol=relerr)
+        except EndComputationRequested:
+            return
         self.Qprint(' 100%')
         # sig.shape is (len(t), 3*n^2) in shear
         if self.flow_mode == FlowMode.shear:
