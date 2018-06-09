@@ -17,6 +17,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 // dump input to info file. Open info strem out here.
 #include <stdio.h>
+#include <string.h>
 #include "../../RepTate/reptate_func.h"
 
 void print_io(void)

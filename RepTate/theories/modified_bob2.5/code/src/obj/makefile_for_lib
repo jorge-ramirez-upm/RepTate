@@ -1,4 +1,4 @@
-cpp=g++ -Wall -g -O3 -DNBETA -shared -fPIC
+cpp=g++ -std=c++11 -Wall -g -O3 -DNBETA -shared -fPIC
 include fl_UI
 include fl_Util
 include fl_polygen

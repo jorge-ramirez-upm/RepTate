@@ -14,7 +14,6 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
   GNU General Public License for more details. You can find a copy
   of the license at <http://www.gnu.org/licenses/gpl.txt>
 */
-
 #include <stdio.h>
 #include <math.h>
 #include <string.h>

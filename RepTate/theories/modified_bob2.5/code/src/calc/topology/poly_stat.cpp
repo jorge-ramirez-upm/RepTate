@@ -17,6 +17,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 // Find out branching topology of the polymers in consideration
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include "../../../include/bob.h"
 #include "../../RepTate/reptate_func.h"
