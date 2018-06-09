@@ -119,7 +119,7 @@ class BaseToolIntegral:
             y2 = odeint(func, [0], xunique)
 
             y2 = np.reshape(y2,num_rows,1)
-            self.Qprint("I = %g"%y2[-1])
+            self.Qprint("<b>I</b> = %g"%y2[-1])
             return xunique, y2
         except Exception as e:
             self.Qprint("in ToolIntegral.calculate(): %s"%traceback.format_exc())

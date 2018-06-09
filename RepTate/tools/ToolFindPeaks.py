@@ -169,11 +169,13 @@ class BaseToolFindPeaks:
         xp=np.zeros(len(peaks))
         yp=np.zeros(len(peaks))
         if minpeaks:
-            self.Qprint("%d Minimum(s) found" % len(peaks))
+            self.Qprint("<b>%d</b> Minimum(s) found" % len(peaks))
         else:
-            self.Qprint("%d Maximum(s) found" % len(peaks))
+            self.Qprint("<b>%d</b> Maximum(s) found" % len(peaks))
         if (minpeaks):
             y = -y
+        table='''<table border="1" width="100%">'''
+        table+='''<tr><th>x</th><th>y</th></tr>'''
         if parabola:
             ################################################################
             # Fit parabola to each peak and find analytical position of peak
@@ -187,13 +189,15 @@ class BaseToolFindPeaks:
                 p0 = (a, tau, c)
                 popt, pcov = curve_fit(func, x_data, y_data, p0)
                 xp[i], yp[i] = popt[1:3]
-                self.Qprint("  (%.4e, %.4e)"%(xp[i],yp[i]))
+                table+='''<tr><td>%.4e</td><td>%.4e</td></tr>'''%(xp[i],yp[i])
             #################################################################
         else:
             for i,d in enumerate(peaks):
                 xp[i]=x[d]
                 yp[i]=y[d]
-                self.Qprint("  (%.4e, %.4e)"%(xp[i],yp[i]))
+                table+='''<tr><td>%.4e</td><td>%.4e</td></tr>'''%(xp[i],yp[i])
+        table+='''</table><br>'''
+        self.Qprint(table)
         s = ax.plot(xp, yp)[0]
         s.set_marker('D')
         s.set_linestyle('')

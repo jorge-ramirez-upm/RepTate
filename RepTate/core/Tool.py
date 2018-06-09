@@ -384,7 +384,6 @@ class Tool(CmdBase):
         Arguments:
             - msg {[type]} -- [description]
         """
-        end='\n'
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.emit(msg + end)
         else:
