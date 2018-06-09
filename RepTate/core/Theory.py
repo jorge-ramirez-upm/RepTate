@@ -271,9 +271,6 @@ class Theory(CmdBase):
         tools = self.parent_dataset.parent_application.tools       
         table='''<table border="1" width="100%">'''
         table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
-        #msg = "\n%14s %10s (%5s)\n" % ("File", "Err (RSS)", "# Pts")
-        #msg += "=================================="
-        #self.Qprint(msg)
 
         for f in self.theory_files():
             xexp, yexp, success = view.view_proc(f.data_table,
@@ -297,7 +294,6 @@ class Theory(CmdBase):
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt
-            #self.Qprint("%.14s %10.4g (%5d)" % (f.file_name_short, f_error, npt))
             table+= '''<tr><td>%14s</td><td>%10.4g</td><td>%5d</td></tr>'''% (f.file_name_short, f_error, npt)
         table+='''</table><br>'''
         self.Qprint(table)
@@ -389,7 +385,7 @@ class Theory(CmdBase):
         self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
-        self.Qprint('''<h2>Parameter Fitting</h2>''')
+        self.Qprint('''<hr><h2>Parameter Fitting</h2>''')
         # Vectors that contain all X and Y in the files & view
         x = []
         y = []
@@ -498,24 +494,19 @@ class Theory(CmdBase):
         ind = 0
         table='''<table border="1" width="100%">'''
         table+='''<tr><th>Parameter</th><th>Value ± Error</th></tr>'''
-        #self.Qprint("\n%9s = %10s ± %-9s" % ("Parameter", "Value", "Error"))
-        #self.Qprint("==================================")
         for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 par.error = par_error[ind]
                 ind += 1
                 table+='''<tr><td>%s</td><td>%10.4g ± %-9.4g</td></tr>'''%(par.name, par.value, par.error)
-                #self.Qprint('%9s = %10.4g ± %-9.4g' % (par.name, par.value, par.error))
             else:
                 table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
-                #self.Qprint('%9s = %10.4g' % (par.name, par.value))
         table+='''</table><br>'''
         self.Qprint(table)        
         self.is_fitting = False
         self.do_calculate(line, timing=False)
         self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
-        #self.Qprint("\n---Fitting in %.3g seconds---" % (time.time() - start_time))
         self.do_cite("")
 
     def do_print(self, line):
