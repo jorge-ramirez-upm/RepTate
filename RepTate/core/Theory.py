@@ -1070,6 +1070,8 @@ class Theory(CmdBase):
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.emit(msg + end)
         else:
+            if end == '<br>':
+                end = '\n'
             print(msg, end=end)
 
     def print_qtextbox(self, msg):

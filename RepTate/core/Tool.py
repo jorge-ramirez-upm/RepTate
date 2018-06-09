@@ -376,7 +376,7 @@ class Tool(CmdBase):
         else:
             super(Tool, self).default(line)
 
-    def Qprint(self, msg):
+    def Qprint(self, msg, end='<br>'):
         """[summary]
         
         [description]
@@ -388,11 +388,13 @@ class Tool(CmdBase):
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.emit(msg + end)
         else:
+            if end == '<br>':
+                end = '\n'
             print(msg, end=end)
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""
-        self.toolTextBox.insertPlainText(msg)
+        self.toolTextBox.insertHtml(msg)
         self.toolTextBox.verticalScrollBar().setValue(
             self.toolTextBox.verticalScrollBar().maximum())
         self.toolTextBox.moveCursor(QTextCursor.End)
