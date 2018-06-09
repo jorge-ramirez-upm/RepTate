@@ -570,7 +570,8 @@ class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
     def handle_spinboxValueChanged(self, value):
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("nstretch", min(nmodes, value))
-        self.handle_actionCalculate_Theory()
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
 
     def select_shear_flow(self):
         self.flow_mode = FlowMode.shear

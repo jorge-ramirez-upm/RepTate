@@ -51,6 +51,8 @@ from File import File
 from QAboutReptate import AboutWindow
 from collections import OrderedDict
 import numpy as np
+import time
+import Version
 
 PATH = dirname(abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(join(PATH, 'ReptateMainWindow.ui'))
@@ -456,13 +458,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                             ('th_tabname', ds.TheorytabWidget.tabText(k)),
                             ('thname', th.thname),
                             ('th_param', param_dic),
-                            ('th_textbox', str(th.thTextBox.toPlainText())),
+                            ('th_textbox', str(th.thTextBox.toHtml()) + '<br><i>Saved at %s on %s<i><br><' % (time.strftime("%X"), time.strftime("%a %b %d, %Y") )),
                             ('th_tables', th_table_dic),
                             ('extra_data', e_dic)
                         ]
                     )
                     theories_dic[th.name] = th_dic
-                
                 ds_markers = OrderedDict(
                     [
                         ('marker_size', ds.marker_size),
@@ -506,7 +507,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             apps_dic[app.name] = app_dic
 
         current_app_indx = self.ApplicationtabWidget.currentIndex()
-        out = OrderedDict([('current_app_indx', current_app_indx), ('apps', apps_dic)])
+        out = OrderedDict([('RepTate_version', Version.VERSION + '_' + Version.DATE), 
+            ('current_app_indx', current_app_indx), ('apps', apps_dic)])
 
         # zip output file
         import json, zipfile, tempfile
@@ -556,7 +558,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
     def restore_theories(self, ds, theories):
         """Open theories"""
-        import time
         for th_dic in theories.values():
             th_tabname = th_dic['th_tabname']
             thname = th_dic['thname']
@@ -571,6 +572,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     extra_data[key] = np.asarray(val)
 
             new_th = ds.new_theory(thname, th_tabname, calculate=False, show=False)
+            autocal = new_th.autocalculate
+            new_th.autocalculate = False
             for pname in th_param:
                 new_th.set_param_value(pname, th_param[pname])
             for fname in th_tables:
@@ -579,9 +582,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 tt.num_rows, tt.num_columns = tt.data.shape
             new_th.set_extra_data(extra_data)
             new_th.update_parameter_table()
-            new_th.thTextBox.insertPlainText(th_textbox)
-            new_th.Qprint('\n***Restored at %s on %s****\n' % 
-                (time.strftime("%X"), time.strftime("%a %b %d, %Y")))
+            new_th.thTextBox.insertHtml(th_textbox)
+            new_th.autocalculate = autocal
     
     def restore_marker_settings(self, ds, marker_dic):
         """Restore the dataset marker settings"""

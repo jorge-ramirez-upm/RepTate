@@ -446,5 +446,6 @@ class GUITheoryDebyeModesFrequency(BaseTheoryDebyeModesFrequency, QTheory):
                 ParameterType.real,
                 opt_type=OptType.opt)
 
-        self.do_calculate("")
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()

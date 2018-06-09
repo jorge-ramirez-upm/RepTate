@@ -518,7 +518,7 @@ class BaseTheoryBlendRoliePoly:
             self.set_param_value("tauR%02d" % i, taus[i])
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
-        self.Qprint("Press calculate to update theory")
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def set_modes(self, tau, G):
         """[summary]
@@ -793,7 +793,7 @@ class BaseTheoryBlendRoliePoly:
             tmax
         ]
         self.count = 0.2
-        self.Qprint('Rate %.3g\n  0%% ' % flow_rate, end='')
+        self.Qprint('Rate %.3g<br>  0%% ' % flow_rate, end='')
         try:
             sig = odeint(
                 pde_stretch, sigma0, t, args=(p, ), atol=abserr, rtol=relerr)
@@ -926,7 +926,7 @@ class BaseTheoryBlendRoliePoly:
 
     def do_fit(self, line):
         """Minimisation procedure disabled in this theory"""
-        pass
+        self.Qprint("<font color=red><b>Minimisation procedure disabled in this theory</b></font>")
 
 
 class CLTheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, Theory):
@@ -1005,12 +1005,12 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
-        #Show LVE button
-        self.linearenvelope = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'),
-            'Show Linear Envelope')
-        self.linearenvelope.setCheckable(True)
-        self.linearenvelope.setChecked(False)
+        # #Show LVE button
+        # self.linearenvelope = tb.addAction(
+        #     QIcon(':/Icon8/Images/new_icons/icons8-visible.png'),
+        #     'Show Linear Envelope')
+        # self.linearenvelope.setCheckable(True)
+        # self.linearenvelope.setChecked(False)
         #Finite extensibility button
         self.with_fene_button = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'),
@@ -1021,13 +1021,6 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
             'Modulus Correction')
         self.with_gcorr_button.setCheckable(True)
-        # #SpinBox "nmodes"
-        # self.spinbox = QSpinBox()
-        # self.spinbox.setRange(0, self.parameters["nmodes"].value)  # min and max number of modes
-        # self.spinbox.setSuffix(" stretch")
-        # self.spinbox.setToolTip("Number of stretching modes")
-        # self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
-        # tb.addWidget(self.spinbox)
 
         #Save to flowsolve button
         self.flowsolve_btn = tb.addAction(
@@ -1049,12 +1042,10 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             self.edit_modes_window)
         connection_id = self.plot_modes_action.triggered.connect(
             self.plot_modes_graph)
-        connection_id = self.linearenvelope.triggered.connect(
-            self.show_linear_envelope)
+        # connection_id = self.linearenvelope.triggered.connect(
+        #     self.show_linear_envelope)
         connection_id = self.save_modes_action.triggered.connect(
             self.save_modes)
-        # connection_id = self.spinbox.valueChanged.connect(
-        #     self.handle_spinboxValueChanged)
         connection_id = self.with_fene_button.triggered.connect(
             self.handle_with_fene_button)
         connection_id = self.with_gcorr_button.triggered.connect(
@@ -1117,12 +1108,12 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 # if Zeff contains something
                 self.with_gcorr = GcorrMode.with_gcorr
             else:
-                self.Qprint("Modulus correction needs Z from MWD")
+                self.Qprint('<font color=orange><b>Modulus correction needs Z from MWD</b></font>')
                 self.with_gcorr_button.setChecked(False)
                 return
         else:
             self.with_gcorr = GcorrMode.none
-        self.Qprint("Press calculate to update theory")
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def handle_with_fene_button(self, checked):
         if checked:
@@ -1139,13 +1130,7 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
-        self.Qprint("Press calculate to update theory")
-        # self.parent_dataset.handle_actionCalculate_Theory()
-
-    # def handle_spinboxValueChanged(self, value):
-    #     nmodes = self.parameters["nmodes"].value
-    #     self.set_param_value("nstretch", min(nmodes, value))
-    #     self.handle_actionCalculate_Theory()
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def Qhide_theory_extras(self, state):
         """Uncheck the LVE button. Called when curent theory is changed

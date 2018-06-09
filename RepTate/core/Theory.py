@@ -215,7 +215,7 @@ class Theory(CmdBase):
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
-        self.Qprint('<span style="color: Red"><b>Stop current calculation requested</b></span>')
+        self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
         self.stop_theory_flag = True
 
     def do_calculate(self, line, timing=True):
@@ -309,7 +309,7 @@ class Theory(CmdBase):
                 free_p += 1
 
         if npoints != 0:
-            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)" % (total_error / npoints, npoints))
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
             self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
@@ -884,7 +884,7 @@ class Theory(CmdBase):
             - line {[type]} -- [description]
         """
         if (self.citations != ""):
-            self.Qprint('''\n<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
+            self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset

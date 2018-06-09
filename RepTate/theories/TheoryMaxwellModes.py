@@ -450,7 +450,8 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         """
         """Handle a change of the parameter 'nmodes'"""
         self.set_param_value('nmodes', value)
-        self.do_calculate("")
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
 
 
@@ -855,5 +856,6 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
             - value {[type]} -- [description]
         """
         self.set_param_value('nmodes', value)
-        self.do_calculate("")
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
