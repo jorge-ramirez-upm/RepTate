@@ -809,6 +809,8 @@ class BaseTheoryBlendRoliePoly:
             if self.with_fene == FeneMode.with_fene:
                 #calculate lambda^2
                 for i in range(nmodes):
+                    if self.stop_theory_flag:
+                        break
                     I = c * nmodes * i
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
@@ -818,6 +820,8 @@ class BaseTheoryBlendRoliePoly:
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
+                if self.stop_theory_flag:
+                    break
                 I = c * nmodes * i
                 sig_i = np.zeros(nt)
                 for j in range(nmodes):
@@ -842,6 +846,8 @@ class BaseTheoryBlendRoliePoly:
             lsq = np.zeros((nt, nmodes))
             if self.with_fene == FeneMode.with_fene:
                 for i in range(nmodes):
+                    if self.stop_theory_flag:
+                        break
                     I = c * nmodes * i
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
@@ -850,6 +856,8 @@ class BaseTheoryBlendRoliePoly:
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
+                if self.stop_theory_flag:
+                    break
                 I = c * nmodes * i
                 sig_i = np.zeros(nt)
                 for j in range(nmodes):

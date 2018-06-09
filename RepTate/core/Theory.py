@@ -215,7 +215,7 @@ class Theory(CmdBase):
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
-        self.Qprint("Stop current calculation requested")
+        self.Qprint('<span style="color: Red"><b>Stop current calculation requested</b></span>')
         self.stop_theory_flag = True
 
     def do_calculate(self, line, timing=True):
@@ -228,6 +228,8 @@ class Theory(CmdBase):
         self.calculate_is_busy = True
         self.start_time_cal = time.time()
         for f in self.theory_files():
+            if self.stop_theory_flag:
+                break
             self.function(f)
         if not self.is_fitting:
             self.do_plot(line)
@@ -276,6 +278,8 @@ class Theory(CmdBase):
         #self.Qprint(msg)
 
         for f in self.theory_files():
+            if self.stop_theory_flag:
+                break
             xexp, yexp, success = view.view_proc(f.data_table,
                                                  f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short],
@@ -408,6 +412,8 @@ class Theory(CmdBase):
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
         for f in th_files:
+            if self.stop_theory_flag:
+                return
             if f.active:
                 xexp, yexp, success = view.view_proc(f.data_table,
                                                      f.file_parameters)

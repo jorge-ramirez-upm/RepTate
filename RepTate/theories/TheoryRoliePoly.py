@@ -831,6 +831,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         fparamaux = {}
         fparamaux["gdot"] = 1e-6
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             G = self.parameters["G%02d" % i].value
             tauD = self.parameters["tauD%02d" % i].value
             data_table_tmp.data[:, 1] += G * tauD * (

@@ -50,7 +50,7 @@ from Theory_rc import *
 from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
-
+from Theory import EndComputationRequested
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -304,6 +304,8 @@ class BaseTheoryGiesekus:
 
     def sigmadot_shear(self, sigma, times, p):
         """Giesekus model in shear"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         alpha, _, tau, gdot = p
         sxx, syy, sxy = sigma
 
@@ -320,6 +322,8 @@ class BaseTheoryGiesekus:
 
     def sigmadot_uext(self, sigma, times, p):
         """Giesekus model in uniaxial extension"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         alpha, _, tau, edot = p
         sxx, syy = sigma
 
@@ -378,19 +382,23 @@ class BaseTheoryGiesekus:
         nmodes = self.parameters["nmodes"].value
         nstretch = self.parameters["nstretch"].value
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             G = self.parameters["G%02d" % i].value
             tauD = self.parameters["tauD%02d" % i].value
             alpha = self.parameters["alpha%02d" % i].value
             p = [alpha, G, tauD, flow_rate]
             if i < nstretch:
-                sig = odeint(
-                    pde_stretch,
-                    sigma0,
-                    t,
-                    args=(p, ),
-                    atol=abserr,
-                    rtol=relerr)
-
+                try:
+                    sig = odeint(
+                        pde_stretch,
+                        sigma0,
+                        t,
+                        args=(p, ),
+                        atol=abserr,
+                        rtol=relerr)
+                except EndComputationRequested:
+                    break
                 if self.flow_mode == FlowMode.shear:
                     sxy = np.delete(sig[:, 2], [0])
                     tt.data[:, 1] += G * sxy

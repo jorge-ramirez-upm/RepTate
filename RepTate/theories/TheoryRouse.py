@@ -408,7 +408,7 @@ class BaseTheoryRouseFrequency:
         pass
 
     def calculate(self, f=None):
-        """RouseFrequency function that returns the square of y
+        """RouseFrequency function 
         
         [description]
         
