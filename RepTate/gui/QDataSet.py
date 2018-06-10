@@ -46,6 +46,7 @@ from DataTable import DataTable
 from QTheory import QTheory
 from DataSetWidget import DataSetWidget
 import threading
+import matplotlib.patheffects as pe
 
 PATH = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(join(PATH, 'DataSet.ui'))
@@ -554,8 +555,15 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         self.do_plot()  #remove current series highlight
         file = self.selected_file
+        thname = self.current_theory
+        if thname:
+            th = self.theories[thname]
+        else:
+            th = None
         if file is not None:
             dt = file.data_table
+            if th:
+                tt = th.tables[file.file_name_short]
             for i in range(dt.MAX_NUM_SERIES):
                 for nx in range(self.nplots):
                     view = self.parent_application.multiviews[nx]
@@ -563,11 +571,18 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                         dt.series[nx][i].set_marker('.')
                         # dt.series[nx][i].set_linestyle(":")
                         dt.series[nx][i].set_markerfacecolor(dt.series[nx][i].get_markeredgecolor())
-                        dt.series[nx][i].set_markeredgecolor("peachpuff")
+                        dt.series[nx][i].set_markeredgecolor((1, 0.855, 0.725, 0.8)) #peachpuff + alpha
                         dt.series[nx][i].set_markersize(self.marker_size+3)
                         dt.series[nx][i].set_markeredgewidth(2)
                         dt.series[nx][i].set_zorder(
                             self.parent_application.zorder)  #put series on top
+                        if th:
+                            if th.active:
+                                tt.series[nx][i].set_color('k')
+                                tt.series[nx][i].set_path_effects([pe.Stroke(linewidth=self.th_line_width+5, foreground=(0.498, 1, 0, 0.7)), pe.Normal()]) #chartreuse + alpha
+                                tt.series[nx][i].set_zorder(
+                                    self.parent_application.zorder)
+
             self.parent_application.zorder += 1
         self.parent_application.update_plot()
 
