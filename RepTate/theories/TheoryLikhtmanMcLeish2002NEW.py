@@ -46,7 +46,7 @@ from Parameter import Parameter, ParameterType, OptType
 from PyQt5.QtWidgets import QToolBar, QAction, QStyle, QLabel, QLineEdit
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
-
+from ToolMaterialsDatabase import materials_database, materials_user_database
 
 class TheoryLikhtmanMcLeish2002NEW(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
@@ -99,8 +99,8 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
         super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002NEW
 
-        self.parameters["taue"] = Parameter(
-            "taue",
+        self.parameters["tau_e"] = Parameter(
+            "tau_e",
             2e-6,
             "Rouse time of one Entanglement",
             ParameterType.real,
@@ -123,8 +123,8 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
             opt_type=OptType.opt,
             min_value=0.0,
             max_value=np.inf)
-        self.parameters["cnu"] = Parameter(
-            name="cnu",
+        self.parameters["c_nu"] = Parameter(
+            name="c_nu",
             value=0.1,
             description="Constraint Release parameter",
             type=ParameterType.discrete_real,
@@ -150,18 +150,31 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
         self.cnuarray = f['cnu']
         self.data = f['data']
 
-        # Estimate initial values of the theory
-        w = self.parent_dataset.files[0].data_table.data[:, 0]
-        Gp = self.parent_dataset.files[0].data_table.data[:, 1]
-        Gpp = self.parent_dataset.files[0].data_table.data[:, 2]
+        if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
+            chem=self.parent_dataset.files[0].file_parameters['chem']
+            if chem in materials_user_database.keys():
+                self.set_param_value('tau_e', materials_user_database[chem].data['tau_e']) 
+                self.set_param_value('Ge', materials_user_database[chem].data['Ge']) 
+                self.set_param_value('Me', materials_user_database[chem].data['Me'])
+                self.set_param_value('c_nu', materials_user_database[chem].data['c_nu']) 
+            elif chem in materials_database.keys():
+                self.set_param_value('tau_e', materials_database[chem].data['tau_e']) 
+                self.set_param_value('Ge', materials_database[chem].data['Ge']) 
+                self.set_param_value('Me', materials_database[chem].data['Me'])
+                self.set_param_value('c_nu', materials_database[chem].data['c_nu']) 
+        else:
+            # Estimate initial values of the theory
+            w = self.parent_dataset.files[0].data_table.data[:, 0]
+            Gp = self.parent_dataset.files[0].data_table.data[:, 1]
+            Gpp = self.parent_dataset.files[0].data_table.data[:, 2]
 
-        Gpp_Gp = Gpp / Gp
-        ind = len(Gpp_Gp) - np.argmax(np.flipud(Gpp_Gp) < 0.8)
-        if (ind < len(w)):
-            taue = 1.0 / w[ind]
-            Ge = Gp[ind]
-            self.set_param_value("taue", taue)
-            self.set_param_value("Ge", Ge)
+            Gpp_Gp = Gpp / Gp
+            ind = len(Gpp_Gp) - np.argmax(np.flipud(Gpp_Gp) < 0.8)
+            if (ind < len(w)):
+                taue = 1.0 / w[ind]
+                Ge = Gp[ind]
+                self.set_param_value("tau_e", taue)
+                self.set_param_value("Ge", Ge)
 
     def LikhtmanMcLeish2002NEW(self, f=None):
         """[summary]
@@ -178,10 +191,10 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        taue = self.parameters["taue"].value
+        taue = self.parameters["tau_e"].value
         Ge = self.parameters["Ge"].value
         Me = self.parameters["Me"].value
-        cnu = self.parameters["cnu"].value
+        cnu = self.parameters["c_nu"].value
         rho = self.parameters["rho"].value
         linkMeGe = self.parameters["linkMeGe"].value
         Mw = float(f.file_parameters["Mw"])

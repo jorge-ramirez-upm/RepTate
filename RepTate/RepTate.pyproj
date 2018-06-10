@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
+    <InterpreterId>Global|VisualStudio|Miniconda</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>--single</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
@@ -90,8 +90,13 @@
     <Compile Include="tests\RepTate_Test_React.py" />
     <Compile Include="tests\RepTate_Test_TTS.py" />
     <Compile Include="theories\BobCtypesHelper.py" />
+    <Compile Include="theories\dtd_ctypes_helper.py" />
+    <Compile Include="theories\kww_ctypes_helper.py" />
     <Compile Include="theories\react_ctypes_helper.py" />
     <Compile Include="theories\react_gui_tools.py" />
+    <Compile Include="theories\rouse_ctypes_helper.py" />
+    <Compile Include="theories\rp_blend_ctypes_helper.py" />
+    <Compile Include="theories\schwarzl_ctypes_helper.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
@@ -136,6 +141,7 @@
     <Compile Include="tools\ToolFindPeaks.py" />
     <Compile Include="tools\ToolGradient.py" />
     <Compile Include="tools\ToolIntegral.py" />
+    <Compile Include="tools\ToolMaterialsDatabase.py" />
     <Compile Include="tools\ToolSmooth.py" />
     <Compile Include="tools\ToolTemplate.py" />
   </ItemGroup>
@@ -148,7 +154,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
+    <InterpreterReference Include="Global|VisualStudio|Miniconda" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />

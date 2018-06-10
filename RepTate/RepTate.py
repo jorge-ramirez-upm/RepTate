@@ -41,7 +41,7 @@ import glob
 import argparse
 import traceback
 from logging import *
-basicConfig(level=INFO)
+basicConfig(level=WARNING)
  
 # os.chdir(os.path.dirname(sys.argv[0])) # set cwd as *this* dir
 sys.path.append('core')

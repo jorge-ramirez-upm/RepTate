@@ -59,6 +59,7 @@ from ToolGradient import ToolGradient
 from ToolSmooth import ToolSmooth
 from ToolBounds import ToolBounds
 from ToolEvaluate import ToolEvaluate
+from ToolMaterialsDatabase import ToolMaterialsDatabase
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -90,6 +91,7 @@ class Application(CmdBase):
         self.filetypes = OrderedDict() # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order
         self.availabletools = OrderedDict()     # keep tools combobox in order
+        self.extratools = OrderedDict()     # keep tools combobox in order
         self.datasets = {}
         self.tools = []
         self.num_tools = 0
@@ -118,6 +120,7 @@ class Application(CmdBase):
         self.availabletools[ToolGradient.toolname] = ToolGradient
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
         self.availabletools[ToolSmooth.toolname] = ToolSmooth
+        self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
         
         # MATPLOTLIB STUFF
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
@@ -570,6 +573,8 @@ class Application(CmdBase):
         """
         for t in list(self.availabletools.values()):
             print("%s:\t%s" % (t.toolname, t.description))
+        for t in list(self.extratools.values()):
+            print("%s:\t%s" % (t.toolname, t.description))
 
     def do_tool_available(self, line):
         """List available tools in the current application
@@ -584,10 +589,14 @@ class Application(CmdBase):
     def do_tool_add(self, line):
         """Add a new tool of the type specified to the list of tools"""
         tooltypes = list(self.availabletools.keys())
-        if (line in tooltypes):
+        extratooltypes = list(self.extratools.keys())
+        if ((line in tooltypes) or (line in extratooltypes)):
             self.num_tools += 1
             to_id = "%s%02d" % (line, self.num_tools)
-            to = self.availabletools[line](to_id, self)
+            if (line in tooltypes):
+                to = self.availabletools[line](to_id, self)
+            elif (line in extratooltypes):
+                to = self.extratools[line](to_id, self)
             self.tools.append(to)
             if self.mode == CmdMode.GUI:
                 pass
@@ -603,7 +612,7 @@ class Application(CmdBase):
 
     def complete_tool_add(self, text, line, begidx, endidx):
         """Complete new tool command"""
-        tool_names = list(self.availabletools.keys())
+        tool_names = list(self.availabletools.keys()) + list(self.extratools.keys()) 
         if not text:
             completions = tool_names[:]
         else:

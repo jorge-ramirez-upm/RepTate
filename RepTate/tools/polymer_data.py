@@ -25,25 +25,26 @@ class polymer:
             **kwargs {[type]} -- [description]
         """
         self.data = {
-            'short'       : '',     # Short name
+            # Basic info
+            'name'       : '',      # Short name
             'long'        : '',     # Full name
-            'chem'        : '',     # Short hand Chemistry
-            'M0'          : 0,      # Monomer molecular weight
-            'description' : '',     # Description of parameters
             'author'      : '',     # Who added/Modified the parameters
             'date'        : '',     # Date of parameter modification
+            'source'      : '',     # Source/paper from where the data was obtained
+            'comment'     : '',     # Additional comments about the parameters            
+            'chem'        : '',     # Short hand Chemistry
+            # WLF Parameters
+            'B1'          : 0,      # Material parameter B1 for WLF Shift
+            'B2'          : 0,      # Material parameter B2 for WLF Shift
+            'logalpha'    : 0,      # Log_10 of the thermal expansion coefficient at 0 °C
+            'CTg'         : 0,      # Molecular weight dependence of Tg
             # Likhtman-McLeish parameters
             'tau_e'       : 0,      # Rouse time of one entanglement
             'Ge'          : 0,      # Entanglement modulus
             'Me'          : 0,      # Entanglemnet molecular while
             'c_nu'        : 0,      # Constraint release parameter
-            # WLF Parameters
-            'C1'          : 0,      # Material parameter C1 for WLF Shift
-            'C2'          : 0,      # Material parameter C2 for WLF Shift
-            'Rho0'        : 0,      # Density of polymer at 0 °C
-            'C3'          : 0,      # Density parameter TODO: Meaning of this?
-            'T0'          : 0,      # Reference temperature?
-            'CTg'         : 0,      # Molecular weight dependence of Tg
+            'rho0'        : 0,      # Density of polymer at 0 °C
+            'M0'          : 0,      # Molecular weight of repeating unit
         }
 
         self.data.update(kwargs)

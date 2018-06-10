@@ -231,10 +231,7 @@
     <string>Copy Parameters</string>
    </property>
    <property name="toolTip">
-    <string>Copy Parameters (Ctrl+C)</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+C</string>
+    <string>Copy Parameters</string>
    </property>
   </action>
   <action name="actionPaste_Parameters">
@@ -246,10 +243,7 @@
     <string>Paste Parameters</string>
    </property>
    <property name="toolTip">
-    <string>Paste Parameters (Ctrl+V)</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+V</string>
+    <string>Paste Parameters</string>
    </property>
   </action>
  </widget>

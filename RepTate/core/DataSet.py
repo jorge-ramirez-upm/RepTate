@@ -383,7 +383,8 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
         for to in self.parent_application.tools:
             to.clean_graphic_stuff()
-            to.Qprint("<hr><h2>Calculating...</h2>")
+            if to.active:
+                to.Qprint("<hr><h2>Calculating...</h2>")
 
         for j, file in enumerate(self.files):
             dt = file.data_table

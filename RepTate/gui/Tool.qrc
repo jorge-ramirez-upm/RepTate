@@ -11,5 +11,8 @@
         <file>Images/new_icons/icons8-peak-minimum.png</file>
         <file>Images/new_icons/icons8-peak-maximum.png</file>
         <file>Images/new_icons/icons8-bell-curve.png</file>
+        <file>Images/new_icons/icons8-add-file.png</file>
+        <file>Images/new_icons/icons8-edit-property.png</file>
+        <file>Images/new_icons/icons8-save.png</file>
     </qresource>
 </RCC>

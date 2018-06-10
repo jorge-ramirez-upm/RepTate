@@ -47,7 +47,7 @@ class ToolGradient(CmdBase):
     """Calculate the derivative of y with respect to x, where y is the ordinate and x is the abcissa in the current view. The gradient function from numpy is used, where the derivative is computed using second order accurate central differences in the interior points and first order accurate one-sides (forward or backwards) differences at the boundaries. 
     """
     toolname = 'Gradient'
-    description = 'Gradient Tool'
+    description = 'Take derivative of current data/view'
     citations = ''
 
     def __new__(cls, name='', parent_app=None):
