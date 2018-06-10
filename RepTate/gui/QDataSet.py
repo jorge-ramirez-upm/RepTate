@@ -37,7 +37,7 @@ Module that defines the GUI counterpart of Dataset.
 """
 from os.path import dirname, join, abspath
 import os
-from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon, QIntValidator, QDoubleValidator
+from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon, QIntValidator, QDoubleValidator, QStandardItem
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel, QFileDialog
@@ -171,25 +171,28 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tb.setIconSize(QSize(24, 24))
         tb.addAction(self.actionNew_Theory)
         self.cbtheory = QComboBox()
+        model = self.cbtheory.model()
         self.cbtheory.setToolTip("Choose a Theory")
-        
-        i = 0
+
+        item = QStandardItem('Select:')
+        item.setForeground(QColor('grey'))
+        model.appendRow(item)
+        i = 1
         for th_name in self.parent_application.theories:
             if th_name not in self.parent_application.common_theories:
-                self.cbtheory.addItem(th_name)
-                self.cbtheory.setItemData(i, self.parent_application.theories[th_name].description, Qt.ToolTipRole)
-                i += 1
+                item = QStandardItem(th_name)
+                item.setToolTip(self.parent_application.theories[th_name].description)
+                model.appendRow(item)
         flag_first = True
         for th_name in self.parent_application.theories:
             if th_name in self.parent_application.common_theories:
                 if flag_first:
-                    # add separator if common theories are added
+                    # add separator if al least one common theories is added
                     self.cbtheory.insertSeparator(self.cbtheory.count())
                     flag_first = False
-                    i += 1
-                self.cbtheory.addItem(th_name)
-                self.cbtheory.setItemData(i, self.parent_application.theories[th_name].description, Qt.ToolTipRole)
-                i += 1
+                item = QStandardItem(th_name)
+                item.setToolTip(self.parent_application.theories[th_name].description)
+                model.appendRow(item)
         self.cbtheory.setCurrentIndex(0)
 
         ###
@@ -733,11 +736,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         
         [description]
         """
-        #if self.cbtheory.currentIndex() == 0:
-        #    return
         self.actionNew_Theory.setDisabled(True)
-        th_name = self.cbtheory.currentText()
-        #self.cbtheory.setCurrentIndex(0) # reset the combobox selection
+        if self.cbtheory.currentIndex() == 0:
+            # by default, open first theory in the list
+            th_name = self.cbtheory.itemText(1) 
+        else:
+            th_name = self.cbtheory.currentText()
+        self.cbtheory.setCurrentIndex(0) # reset the combobox selection
         if th_name != '':
             self.new_theory(th_name)
         self.actionNew_Theory.setDisabled(False)

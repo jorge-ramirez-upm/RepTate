@@ -414,14 +414,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """Save RepTate project to 'fpath'"""
         apps_dic = OrderedDict()
         napps = self.ApplicationtabWidget.count()
+        nth_saved = 0
+        nfile_saved = 0
+        ntool_saved = 0
         for i in range(napps):
             app = self.ApplicationtabWidget.widget(i)
+
+            # Save DataSets in application
             datasets_dic = OrderedDict()
             ndatasets = app.DataSettabWidget.count()
             for j in range(ndatasets):
                 ds = app.DataSettabWidget.widget(j)
                 files_dic = OrderedDict()
                 for f in ds.files:
+                    nfile_saved += 1
                     param_dic = OrderedDict([ (pname, f.file_parameters[pname]) for pname in f.file_parameters])
 
                     file_dic = OrderedDict(
@@ -434,9 +440,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     )
                     files_dic[f.file_name_short] = file_dic
 
+                # Save theories in DataSet
                 theories_dic = OrderedDict()
                 ntheories = ds.TheorytabWidget.count()
                 for k in range(ntheories):
+                    nth_saved += 1
                     th = ds.TheorytabWidget.widget(k)
                     param_dic = OrderedDict([(pname, th.parameters[pname].value) for pname in th.parameters])
                     th_table_dic = OrderedDict( 
@@ -455,12 +463,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                             ('th_tabname', ds.TheorytabWidget.tabText(k)),
                             ('thname', th.thname),
                             ('th_param', param_dic),
-                            ('th_textbox', str(th.thTextBox.toHtml()) + '<br><i>Saved at %s on %s<i><br><' % (time.strftime("%X"), time.strftime("%a %b %d, %Y") )),
+                            ('th_textbox', str(th.thTextBox.toHtml()) + '<br><i>Saved at %s on %s<i><br>' % (time.strftime("%X"), time.strftime("%a %b %d, %Y") )),
                             ('th_tables', th_table_dic),
                             ('extra_data', e_dic)
                         ]
                     )
                     theories_dic[th.name] = th_dic
+                
+                # Save figure markers
                 ds_markers = OrderedDict(
                     [
                         ('marker_size', ds.marker_size),
@@ -478,6 +488,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                         ('th_line_width', ds.th_line_width)
                     ]
                 )
+                # Save full DataSet
                 ds_dict = OrderedDict(
                     [
                         ('ds_tabname', app.DataSettabWidget.tabText(j)),
@@ -489,7 +500,32 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 )
                 datasets_dic[ds.name] = ds_dict
 
-
+            # Save Tools
+            tools_dic = OrderedDict() # contain all the tools
+            for tool in app.tools:
+                ntool_saved += 1
+                param_dic = OrderedDict()
+                for pname in tool.parameters:
+                    param_dic[pname] = tool.parameters[pname].value
+                tool_dic = OrderedDict(
+                    [
+                        ('tool_name', tool.toolname), # what tool
+                        ('tool_tab_name', app.TooltabWidget.tabText(app.TooltabWidget.indexOf(tool))),
+                        ('tool_to_th', int(tool.actionApplyToTheory.isChecked())),
+                        ('tool_active', int(tool.actionActive.isChecked())),
+                        ('tool_param', param_dic),
+                        ('tool_txtbox', str(tool.toolTextBox.toHtml() + '<br><i>Saved at %s on %s<i><br>' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))))
+                    ]
+                ) 
+                #add to global tools dic
+                tools_dic[tool.name] = tool_dic
+            
+            # all tools plus extra
+            tools = {
+                'tools_dic': tools_dic,
+                'cur_tab_index': app.TooltabWidget.currentIndex()
+            }
+            
             app_dic = OrderedDict(
                 [
                     ('app_tabname', self.ApplicationtabWidget.tabText(i)),
@@ -497,15 +533,25 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     ('appname', app.appname), 
                     ('current_view_names', [v.name for v in app.multiviews]), 
                     ('current_ds_indx', app.DataSettabWidget.currentIndex()),
-                    ('datasets', datasets_dic)
+                    ('datasets', datasets_dic),
+                    ('tools', tools),
+                    ('show_inspector', int(app.DataInspectordockWidget.isVisible()))
                 ]
             )
 
             apps_dic[app.name] = app_dic
 
         current_app_indx = self.ApplicationtabWidget.currentIndex()
-        out = OrderedDict([('RepTate_version', Version.VERSION + '_' + Version.DATE), 
-            ('current_app_indx', current_app_indx), ('apps', apps_dic)])
+        out = OrderedDict(
+            [
+                ('RepTate_version', Version.VERSION + '_' + Version.DATE),
+                ('project_saved_at', '%s on %s' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))),
+                ('napp_saved', napps), ('nfile_saved', nfile_saved),
+                ('nth_saved', nth_saved),
+                ('ntool_saved', ntool_saved),
+                ('current_app_indx', current_app_indx), ('apps', apps_dic)
+                ]
+            )
 
         # zip output file
         import json, zipfile, tempfile
@@ -515,6 +561,23 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             with zipfile.ZipFile(fpath, 'w', compression=zipfile.ZIP_DEFLATED) as z:
                 z.write(tmp, self.REPTATE_PROJ_JSON)
 
+        if napps > 1: 
+            txtapp = 'Applications'
+        else:
+            txtapp = 'Application'
+        if nth_saved > 1: 
+            txtth = 'theories'
+        else:
+            txtth = 'theory'
+        if nfile_saved > 1: 
+            txtfiles = 'files'
+        else:
+            txtfiles = 'file'
+        if ntool_saved > 1: 
+            txttool = 'tools'
+        else:
+            txttool = 'tool'
+        QMessageBox.information(self, 'Save RepTate Project', 'Saved %d %s, %d %s, %d %s, and %d %s to \"%s\"' % (napps, txtapp, nth_saved, txtth, nfile_saved, txtfiles, ntool_saved, txttool, fpath))
 
     # load RepTate session
 ############################
@@ -524,7 +587,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         newapp = self.new(app_name)
         icon = QIcon(':/Icons/Images/new_icons/%s.png' % app_name)
         ind = self.ApplicationtabWidget.addTab(newapp, icon, app_tabname)
-        self.ApplicationtabWidget.setCurrentIndex(ind)
+        # self.ApplicationtabWidget.setCurrentIndex(ind)
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
         return self.ApplicationtabWidget.widget(ind), ind
 
@@ -598,6 +661,25 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         ds.th_linestyle = marker_dic['th_linestyle']
         ds.th_line_width = marker_dic['th_line_width']
 
+    def restore_tools(self, app, tools):
+        """Restore the tools"""
+        for tdic in tools['tools_dic'].values():
+            toolname = tdic['tool_name']
+            tool_tab_name = tdic['tool_tab_name']
+            tool_to_th = tdic['tool_to_th']
+            tool_active = tdic['tool_active']
+            tool_param = tdic['tool_param']
+            tool_txtbox = tdic['tool_txtbox']
+
+            # create new tool and set state
+            to = app.new_tool(toolname, tool_tab_name)
+            to.handle_actionApplyToTheorypressed(bool(tool_to_th))
+            to.handle_actionActivepressed(bool(tool_active))
+            to.toolTextBox.insertHtml(tool_txtbox)
+            for pname in tool_param:
+                to.set_param_value(pname, tool_param[pname])
+        app.TooltabWidget.setCurrentIndex(tools['cur_tab_index'])
+
     def open_project(self, project_path):
         """Open file and load project"""
         import json, zipfile, tempfile
@@ -617,7 +699,32 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         except KeyError:
             print("Could not find data in \"%s\"" % project_path)
             return
-
+        napps = int(data['napp_saved'])
+        nth_saved = int(data['nth_saved'])
+        nfile_saved = int(data['nfile_saved'])
+        ntool_saved = int(data['ntool_saved'])
+        if napps > 1: 
+            txtapp = 'Applications'
+        else:
+            txtapp = 'Application'
+        if nth_saved > 1: 
+            txtth = 'theories'
+        else:
+            txtth = 'theory'
+        if nfile_saved > 1: 
+            txtfiles = 'files'
+        else:
+            txtfiles = 'file'
+        if ntool_saved > 1: 
+            txttool = 'tools'
+        else:
+            txttool = 'tool'
+        ans = QMessageBox.question(self, 'Load Project', 
+            'Will load %d %s, %d %s, %d %s, and %d %s.\nDo you want to continue?' % (napps, 
+            txtapp, nth_saved, txtth, nfile_saved, txtfiles, ntool_saved, txttool), 
+            QMessageBox.Yes|QMessageBox.No)
+        if ans != QMessageBox.Yes:
+            return
         for app_dic in apps_dic.values():
             app_tabname = app_dic['app_tabname']
             app_indx = app_dic['app_indx'] 
@@ -625,6 +732,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             current_view_names = app_dic['current_view_names']
             current_ds_indx = app_dic['current_ds_indx']
             datasets = app_dic['datasets']
+            tools = app_dic['tools']
+            show_inspector = bool(app_dic['show_inspector'])
 
             new_app_tab, ind = self.restore_app(appname, app_tabname)
             if app_indx == current_app_indx:
@@ -643,7 +752,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 self.restore_theories(new_ds_tab, theories)
                 new_ds_tab.TheorytabWidget.setCurrentIndex(current_th_indx)
                 self.restore_marker_settings(new_ds_tab, ds_markers)
-
+            self.restore_tools(new_app_tab, tools)
+            new_app_tab.DataInspectordockWidget.setVisible(show_inspector)
+            
             #set app views
             new_app_tab.multiviews = [new_app_tab.views[v] for v in current_view_names]
             new_app_tab.viewComboBox.setCurrentText(current_view_names[0])
@@ -651,7 +762,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             #set current ds_tab index
             new_app_tab.DataSettabWidget.setCurrentIndex(current_ds_indx)
             # new_app_tab.update_all_ds_plots() # not needed ?
-    
+            
+            QApplication.processEvents()
+
         self.ApplicationtabWidget.setCurrentIndex(app_indx_now)
 
 #################

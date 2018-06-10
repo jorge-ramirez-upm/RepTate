@@ -218,9 +218,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionNew_Tool)
         self.cbtool = QComboBox()
-        self.cbtool.setToolTip("Choose a Tool")
         model = self.cbtool.model()
-        i = 0
+        self.cbtool.setToolTip("Choose a Tool")
+
+        item = QStandardItem('Select:')
+        item.setForeground(QColor('grey'))
+        model.appendRow(item)
+        i = 1
         for tool_name in self.availabletools.keys():
             item = QStandardItem(tool_name)
             item.setToolTip(self.availabletools[tool_name].description)
@@ -469,7 +473,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def handle_actionNewTool(self):
         """Create new tool"""
-        tool_name = self.cbtool.currentText()
+        if self.cbtool.currentIndex() == 0:
+            # by default, open first tool in the list
+            tool_name = self.cbtool.itemText(1)
+        else:
+            tool_name = self.cbtool.currentText()
+        # reset the combobox selection
+        self.cbtool.setCurrentIndex(0)
         if tool_name != '':
             self.new_tool(tool_name)
             self.update_all_ds_plots()
