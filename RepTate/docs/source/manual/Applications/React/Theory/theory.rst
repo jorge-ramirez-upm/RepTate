@@ -9,3 +9,4 @@ React Theories
   tobitaCSTR
   mixture
   MetalloceneCSTR
+  BoB_polyconf
