@@ -52,6 +52,7 @@ from PyQt5.QtCore import pyqtSignal
 
 from collections import OrderedDict
 from math import log
+from ToolMaterialsDatabase import materials_database, materials_user_database
 
 class EndComputationRequested(Exception):
     """Exception class to end computations"""
@@ -1077,3 +1078,22 @@ class Theory(CmdBase):
         self.thTextBox.verticalScrollBar().setValue(
             self.thTextBox.verticalScrollBar().maximum())
         self.thTextBox.moveCursor(QTextCursor.End)
+
+    def get_material_parameters(self):
+        """Get theory parameters from materials database"""
+        if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
+            chem=self.parent_dataset.files[0].file_parameters['chem']
+            if chem in materials_user_database.keys():
+                for p in self.parameters.keys():
+                    if p in materials_user_database[chem].data.keys():
+                        self.set_param_value(p, materials_user_database[chem].data[p]) 
+                return True
+            elif chem in materials_database.keys():
+                for p in self.parameters.keys():
+                    if p in materials_database[chem].data.keys():
+                        self.set_param_value(p, materials_database[chem].data[p]) 
+                return True
+            else:
+                return False
+        else:
+            return False

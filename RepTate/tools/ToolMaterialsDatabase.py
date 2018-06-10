@@ -41,10 +41,22 @@ from Tool import Tool
 from QTool import QTool
 from DataTable import DataTable
 from PyQt5.QtWidgets import QComboBox, QLabel, QToolBar, QLineEdit, QAction
+from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QStandardItem, QFont, QIcon
 
 materials_database = np.load('tools/materials_database.npy').item()
 materials_user_database = np.load('tools/user_database.npy').item()
+
+def get_material_parameter(chem, param, file_parameters, user=False):
+    """Get theory parameter. Handle special cases (T, Mw dependence)"""
+    if user:
+        if param=='tau_e':
+            pass
+        elif param=='Ge':
+            pass
+        return materials_user_database[chem].data[param]
+    else:
+        return materials_database[chem].data[param]
 
 class ToolMaterialsDatabase(CmdBase):
     """[summary]
@@ -106,6 +118,7 @@ class BaseToolMaterialsDatabase:
         self.parameters['c_nu'] = Parameter(name='c_nu', description='Constraint release parameter')
         self.parameters['rho0'] = Parameter(name='rho0', description='Density of the polymer melt (kg/m3) at 0 °C')
         self.parameters['chem'] = Parameter(name='chem', description='Repeating unit', type=ParameterType.string)
+        self.parameters['Te'] = Parameter(name='Te', description='Temperature at which the tube parameters have been determined')
         self.parameters['M0'] = Parameter(name='M0', description='Mass of Repeating unit (g/mol)')
         self.parameters['C_inf'] = Parameter(name='C_inf', description='Characteristic ratio')
 
@@ -184,25 +197,30 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             item.setToolTip(materials_user_database[polymer].data['long'])
             model.appendRow(item)
         self.tb.addWidget(self.cbmaterial)
+        connection_id = self.cbmaterial.currentIndexChanged.connect(self.change_material)
+
+        self.actionCalculate = QAction(QIcon(':/Icon8/Images/new_icons/icons8-ok.png'), "Calculate stuff", self)
+        self.tb.addAction(self.actionCalculate)
         self.actionNew = QAction(QIcon(':/Icon8/Images/new_icons/icons8-add-file.png'), "New Material", self)
         self.tb.addAction(self.actionNew)
         self.actionEdit = QAction(QIcon(':/Icon8/Images/new_icons/icons8-edit-property.png'), "Edit/View Material Properties", self)
         self.tb.addAction(self.actionEdit)
         self.actionSave = QAction(QIcon(':/Icon8/Images/new_icons/icons8-save.png'), "Save User Material Database", self)
         self.tb.addAction(self.actionSave)
+        connection_id = self.actionCalculate.triggered.connect(self.calculate_stuff)
 
         self.labelPolymer = QLabel("None")
         self.labelPolymer.setFont(QFont("Times",weight=QFont.Bold))
         self.verticalLayout.insertWidget(1, self.labelPolymer)
-        connection_id = self.cbmaterial.currentIndexChanged.connect(self.change_material)
 
         self.tbMwT = QToolBar()
+        self.tbMwT.setIconSize(QSize(24, 24))
         lbl1 = QLabel("Mw (kDa)")
         lbl1.setFont(QFont("Times",weight=QFont.Bold))
         self.tbMwT.addWidget(lbl1)
         self.editMw = QLineEdit("1")
         self.editMw.setStyleSheet("QLineEdit { background: rgb(255, 255, 205);}");
-        self.editMw.setFixedWidth(60)
+        self.editMw.setFixedWidth(40)
         self.tbMwT.addWidget(self.editMw)
         lbl2 = QLabel("T (°C)")
         lbl2.setFont(QFont("Times",weight=QFont.Bold))
@@ -211,7 +229,15 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.editT.setStyleSheet("QLineEdit { background: rgb(255, 255, 205);}");
         self.editT.setFixedWidth(40)
         self.tbMwT.addWidget(self.editT)
+        self.verticalshift = self.tbMwT.addAction(QIcon(':/Icon8/Images/new_icons/icons8-vertical-shift.png'), 'Vertical shift')
+        self.verticalshift.setCheckable(True)
+        self.verticalshift.setChecked(True)
+        self.isofrictional = self.tbMwT.addAction(QIcon(':/Icon8/Images/new_icons/icons8-iso.png'), "Shift to isofrictional state")
+        self.isofrictional.setCheckable(True)
+        self.isofrictional.setChecked(True)
         self.verticalLayout.insertWidget(2, self.tbMwT)
+
+
 
         self.change_material()
 
@@ -221,3 +247,55 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         for k in materials_database[selected_material_name].data.keys():
             self.set_param_value(k, materials_database[selected_material_name].data[k])
         self.update_parameter_table()
+
+    def calculate_stuff(self):
+        Mw = float(self.editMw.text())
+        T = float(self.editT.text())
+        B1 = self.parameters['B1'].value
+        B2 = self.parameters['B2'].value
+        logalpha = self.parameters['logalpha'].value
+        alpha = np.power(10.0, logalpha)
+        CTg = self.parameters['CTg'].value
+        tau_e = self.parameters['tau_e'].value
+        Ge = self.parameters['Ge'].value
+        Me = self.parameters['Me'].value
+        c_nu = self.parameters['c_nu'].value
+        rho0 = self.parameters['rho0'].value
+        Te = self.parameters['Te'].value
+        iso = self.isofrictional.isChecked()
+        vert = self.verticalshift.isChecked()
+
+        if iso:
+            B2 += CTg / Mw #- 68.7 * dx12
+            Trcorrected = T - CTg / Mw #+ 68.7 * dx12
+        else:
+            Trcorrected = T
+        
+        aT = np.power(10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te))
+        if vert:
+            bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
+        else:
+            bT = 1
+
+        self.Qprint('<h3>WLF TTS Shift Factors</h3>')
+        # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
+        self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
+        self.Qprint("<b>C2</b> = %g" % (B2 + T))
+
+        self.Qprint('<h3>Tube Theory parameters</h3>')
+        Ge /= bT;
+        tau_e /= aT;
+        self.Qprint("<b>tau_e</b> = %g" % tau_e)
+        self.Qprint("<b>Ge</b> = %g" % Ge)
+
+        self.Qprint('<h3>Other Results</h3>')
+        CC1 = 1.69
+        CC2 = 4.17
+        CC3 = -1.55
+        Z = Mw / Me;
+        tR = tau_e * Z*Z;
+        tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
+        self.Qprint("<b>Z</b> = %g" % Z)
+        self.Qprint("<b>tau_R</b> = %g" % tR)
+        self.Qprint("<b>tau_D</b> = %g" % tD)
+        

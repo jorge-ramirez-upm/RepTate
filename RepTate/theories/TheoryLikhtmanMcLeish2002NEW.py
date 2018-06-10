@@ -150,18 +150,22 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
         self.cnuarray = f['cnu']
         self.data = f['data']
 
-        if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
-            chem=self.parent_dataset.files[0].file_parameters['chem']
-            if chem in materials_user_database.keys():
-                self.set_param_value('tau_e', materials_user_database[chem].data['tau_e']) 
-                self.set_param_value('Ge', materials_user_database[chem].data['Ge']) 
-                self.set_param_value('Me', materials_user_database[chem].data['Me'])
-                self.set_param_value('c_nu', materials_user_database[chem].data['c_nu']) 
-            elif chem in materials_database.keys():
-                self.set_param_value('tau_e', materials_database[chem].data['tau_e']) 
-                self.set_param_value('Ge', materials_database[chem].data['Ge']) 
-                self.set_param_value('Me', materials_database[chem].data['Me'])
-                self.set_param_value('c_nu', materials_database[chem].data['c_nu']) 
+        self.get_material_parameters()
+
+        if self.get_material_parameters():
+            pass
+        #if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
+        #    chem=self.parent_dataset.files[0].file_parameters['chem']
+        #    if chem in materials_user_database.keys():
+        #        self.set_param_value('tau_e', materials_user_database[chem].data['tau_e']) 
+        #        self.set_param_value('Ge', materials_user_database[chem].data['Ge']) 
+        #        self.set_param_value('Me', materials_user_database[chem].data['Me'])
+        #        self.set_param_value('c_nu', materials_user_database[chem].data['c_nu']) 
+        #    elif chem in materials_database.keys():
+        #        self.set_param_value('tau_e', materials_database[chem].data['tau_e']) 
+        #        self.set_param_value('Ge', materials_database[chem].data['Ge']) 
+        #        self.set_param_value('Me', materials_database[chem].data['Me'])
+        #        self.set_param_value('c_nu', materials_database[chem].data['c_nu']) 
         else:
             # Estimate initial values of the theory
             w = self.parent_dataset.files[0].data_table.data[:, 0]

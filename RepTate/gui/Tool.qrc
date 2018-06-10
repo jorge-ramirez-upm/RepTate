@@ -14,5 +14,7 @@
         <file>Images/new_icons/icons8-add-file.png</file>
         <file>Images/new_icons/icons8-edit-property.png</file>
         <file>Images/new_icons/icons8-save.png</file>
+        <file>Images/new_icons/icons8-iso.png</file>
+        <file>Images/new_icons/icons8-vertical-shift.png</file>
     </qresource>
 </RCC>

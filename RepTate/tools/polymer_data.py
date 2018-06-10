@@ -44,6 +44,7 @@ class polymer:
             'Me'          : 0,      # Entanglemnet molecular while
             'c_nu'        : 0,      # Constraint release parameter
             'rho0'        : 0,      # Density of polymer at 0 °C
+            'Te'          : 0,      # Temperature at which the tube parameters have been determined
             'M0'          : 0,      # Molecular weight of repeating unit
         }
 
