@@ -571,7 +571,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                         dt.series[nx][i].set_marker('.')
                         # dt.series[nx][i].set_linestyle(":")
                         dt.series[nx][i].set_markerfacecolor(dt.series[nx][i].get_markeredgecolor())
-                        dt.series[nx][i].set_markeredgecolor((1, 0.855, 0.725, 0.8)) #peachpuff + alpha
+                        dt.series[nx][i].set_markeredgecolor('peachpuff')
                         dt.series[nx][i].set_markersize(self.marker_size+3)
                         dt.series[nx][i].set_markeredgewidth(2)
                         dt.series[nx][i].set_zorder(
@@ -579,7 +579,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                         if th:
                             if th.active:
                                 tt.series[nx][i].set_color('k')
-                                tt.series[nx][i].set_path_effects([pe.Stroke(linewidth=self.th_line_width+5, foreground=(0.498, 1, 0, 0.7)), pe.Normal()]) #chartreuse + alpha
+                                tt.series[nx][i].set_path_effects([pe.Stroke(linewidth=self.th_line_width+3, foreground='chartreuse'), pe.Normal()])
                                 tt.series[nx][i].set_zorder(
                                     self.parent_application.zorder)
 
