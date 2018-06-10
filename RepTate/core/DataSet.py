@@ -511,6 +511,8 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                     th_linestyle = ThLineMode.linestyles.value['dashed']
                                 else:
                                     th_linestyle = ThLineMode.linestyles.value['solid']
+                            else:
+                                th_linestyle = self.th_linestyle
                             tt.series[nx][i].set_linestyle(th_linestyle)
                             tt.series[nx][i].set_linewidth(self.th_line_width)
                             tt.series[nx][i].set_color(th_color)
@@ -982,7 +984,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             self.theories[th.name] = th
             self.current_theory = th.name
             if self.mode == CmdMode.GUI:
-                if calculate:
+                if calculate and th.autocalculate:
                     th.do_calculate('')
             else:
                 if (self.mode == CmdMode.batch):

@@ -113,6 +113,7 @@ class BaseTheoryBobLVE:
         self.signal_param_dialog.connect(self.launch_param_dialog)
         self.polyconf_file_out = None  # full path of target polyconf file
         self.bch = BobCtypesHelper(self)
+        self.autocalculate = False
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""

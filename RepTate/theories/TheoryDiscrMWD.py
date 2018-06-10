@@ -361,13 +361,13 @@ class BaseTheoryDiscrMWD:
         Mz = tempMz / Mw
         PDI = Mw / Mn
 
-        if line == "input" and CmdBase.mode == CmdMode.GUI:
-            file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
-            self.parent_dataset.DataSettreeWidget.blockSignals(True)
-            file_table.setText(1, "%0.3g" % (Mn / 1000))
-            file_table.setText(2, "%0.3g" % (Mw / 1000))
-            file_table.setText(3, "%0.3g" % PDI)
-            self.parent_dataset.DataSettreeWidget.blockSignals(False)
+        # if line == "input" and CmdBase.mode == CmdMode.GUI:
+        #     file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
+        #     self.parent_dataset.DataSettreeWidget.blockSignals(True)
+        #     file_table.setText(1, "%0.3g" % (Mn / 1000))
+        #     file_table.setText(2, "%0.3g" % (Mw / 1000))
+        #     file_table.setText(3, "%0.3g" % PDI)
+        #     self.parent_dataset.DataSettreeWidget.blockSignals(False)
 
         if line == "discretized":
             self.set_param_value("Mn", Mn / 1000)
