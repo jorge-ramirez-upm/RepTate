@@ -316,6 +316,8 @@ class BaseTheoryKWWModesFrequency:
 
         tt.data[:, 1] += einf
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             eps = np.power(10, self.parameters["logDe%02d" % i].value)
             for j, w in enumerate(tt.data[:, 0]):
                 tt.data[j, 1] += eps * kwwc(w * tau[i], beta)
@@ -337,6 +339,8 @@ class BaseTheoryKWWModesFrequency:
                            self.parameters["logwmax"].value, nmodes)
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
                 10, self.parameters["logDe%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
@@ -454,5 +458,6 @@ class GUITheoryKWWModesFrequency(BaseTheoryKWWModesFrequency, QTheory):
                 ParameterType.real,
                 opt_type=OptType.opt)
 
-        self.do_calculate("")
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()

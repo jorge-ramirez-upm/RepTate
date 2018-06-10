@@ -324,6 +324,8 @@ class BaseTheoryMaxwellModesFrequency:
         tau = 1.0 / freq
 
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             wT = tt.data[:, 0] * tau[i]
             wTsq = wT**2
             G = np.power(10, self.parameters["logG%02d" % i].value)
@@ -346,6 +348,8 @@ class BaseTheoryMaxwellModesFrequency:
                            self.parameters["logwmax"].value, nmodes)
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
                 10, self.parameters["logG%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
@@ -446,7 +450,8 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         """
         """Handle a change of the parameter 'nmodes'"""
         self.set_param_value('nmodes', value)
-        self.do_calculate("")
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
 
 
@@ -726,6 +731,8 @@ class BaseTheoryMaxwellModesTime:
                           self.parameters["logtmax"].value, nmodes)
 
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             expT_tau = np.exp(-tt.data[:, 0] / tau[i])
             G = np.power(10, self.parameters["logG%02d" % i].value)
             tt.data[:, 1] += G * expT_tau * gamma
@@ -746,6 +753,8 @@ class BaseTheoryMaxwellModesTime:
                           self.parameters["logtmax"].value, nmodes)
         data_table_tmp.data[:, 0] = tau
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             data_table_tmp.data[i, 1] = np.power(
                 10, self.parameters["logG%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
@@ -847,5 +856,6 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
             - value {[type]} -- [description]
         """
         self.set_param_value('nmodes', value)
-        self.do_calculate("")
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()

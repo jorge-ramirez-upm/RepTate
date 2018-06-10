@@ -323,6 +323,8 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         sol = np.zeros(tt.num_rows, dtype='complex128')
         sol += einf
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             eps = np.power(10, self.parameters["logDe%02d" % i].value)
             sol += eps / np.power(
                 1.0 + np.power(1j * tt.data[:, 0] * tau[i], alpha), gamma)
@@ -346,6 +348,8 @@ class BaseTheoryHavriliakNegamiModesFrequency:
                            self.parameters["logwmax"].value, nmodes)
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
                 10, self.parameters["logDe%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
@@ -465,5 +469,6 @@ class GUITheoryHavriliakNegamiModesFrequency(
                 ParameterType.real,
                 opt_type=OptType.opt)
 
-        self.do_calculate("")
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()

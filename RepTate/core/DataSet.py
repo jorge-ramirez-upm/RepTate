@@ -53,6 +53,7 @@ from collections import OrderedDict
 
 import numpy as np
 from scipy.integrate import simps
+import matplotlib.patheffects as pe
 
 class ColorMode(Enum):
     """[summary]
@@ -505,10 +506,16 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                             tt.series[nx][i].set_data(x[:, i], y[:, i])
                             tt.series[nx][i].set_visible(True)
                             tt.series[nx][i].set_marker('')
+                            if i == 1: # 2nd theory line with different style
+                                if self.th_linestyle == 'solid':
+                                    th_linestyle = ThLineMode.linestyles.value['dashed']
+                                else:
+                                    th_linestyle = ThLineMode.linestyles.value['solid']
                             tt.series[nx][i].set_linestyle(th_linestyle)
                             tt.series[nx][i].set_linewidth(self.th_line_width)
                             tt.series[nx][i].set_color(th_color)
                             tt.series[nx][i].set_label('')
+                            tt.series[nx][i].set_path_effects([pe.Normal()])
                         else:
                             tt.series[nx][i].set_visible(False)
                             tt.series[nx][i].set_label('')

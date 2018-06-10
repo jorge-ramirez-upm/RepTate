@@ -101,12 +101,6 @@ class EditModesDialog(QDialog):
             self.table.setItem(i, 1, QTableWidgetItem(mod))
 
         layout.addWidget(self.table)
-        #self.btngrp = QButtonGroup()
-
-        #for item in th_dict.keys():
-        #    rb = QRadioButton(item, self)
-        #    layout.addWidget(rb)
-        #    self.btngrp.addButton(rb)
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
@@ -123,14 +117,6 @@ class EditModesDialog(QDialog):
         for i in range(nrow_old, value):  #create extra rows with defaut values
             self.table.setItem(i, 0, QTableWidgetItem("10"))
             self.table.setItem(i, 1, QTableWidgetItem("1000"))
-
-    # static method to create the dialog and return (date, time, accepted)
-    #@staticmethod
-    #def getMaxwellModesProvider(self, parent = None, th_dict = {}):
-    #    dialog = GetModesDialog(parent, th_dict)
-    #    result = dialog.exec_()
-    #    return (self.btngrp.checkedButton().text(), result == QDialog.Accepted)
-
 
 class TheoryRoliePoly(CmdBase):
     """Rolie-Poly
@@ -799,7 +785,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
     def handle_spinboxValueChanged(self, value):
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("nstretch", min(nmodes, value))
-        self.handle_actionCalculate_Theory()
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
 
     def Qhide_theory_extras(self, state):
         """Uncheck the LVE button. Called when curent theory is changed
@@ -831,6 +818,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         fparamaux = {}
         fparamaux["gdot"] = 1e-6
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             G = self.parameters["G%02d" % i].value
             tauD = self.parameters["tauD%02d" % i].value
             data_table_tmp.data[:, 1] += G * tauD * (

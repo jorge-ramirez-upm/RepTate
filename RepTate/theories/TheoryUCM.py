@@ -324,6 +324,8 @@ class BaseTheoryUCM:
         flow_rate = float(f.file_parameters["gdot"])
         nmodes = self.parameters["nmodes"].value
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             G = self.parameters["G%02d" % i].value
             tauD = self.parameters["tauD%02d" % i].value
 

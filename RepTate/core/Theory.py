@@ -215,7 +215,7 @@ class Theory(CmdBase):
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
-        self.Qprint("Stop current calculation requested")
+        self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
         self.stop_theory_flag = True
 
     def do_calculate(self, line, timing=True):
@@ -228,6 +228,8 @@ class Theory(CmdBase):
         self.calculate_is_busy = True
         self.start_time_cal = time.time()
         for f in self.theory_files():
+            if self.stop_theory_flag:
+                break
             self.function(f)
         if not self.is_fitting:
             self.do_plot(line)
@@ -273,6 +275,8 @@ class Theory(CmdBase):
         table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
 
         for f in self.theory_files():
+            if self.stop_theory_flag:
+                break
             xexp, yexp, success = view.view_proc(f.data_table,
                                                  f.file_parameters)
             xth, yth, success = view.view_proc(self.tables[f.file_name_short],
@@ -305,7 +309,7 @@ class Theory(CmdBase):
                 free_p += 1
 
         if npoints != 0:
-            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)" % (total_error / npoints, npoints))
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
             self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
@@ -404,6 +408,8 @@ class Theory(CmdBase):
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
         for f in th_files:
+            if self.stop_theory_flag:
+                return
             if f.active:
                 xexp, yexp, success = view.view_proc(f.data_table,
                                                      f.file_parameters)
@@ -878,7 +884,7 @@ class Theory(CmdBase):
             - line {[type]} -- [description]
         """
         if (self.citations != ""):
-            self.Qprint('''\n<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
+            self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset
@@ -1061,6 +1067,8 @@ class Theory(CmdBase):
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.emit(msg + end)
         else:
+            if end == '<br>':
+                end = '\n'
             print(msg, end=end)
 
     def print_qtextbox(self, msg):

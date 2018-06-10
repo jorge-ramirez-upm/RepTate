@@ -176,7 +176,7 @@ class BaseTheoryCreatePolyconf:
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
-        self.Qprint("Stop current calculation requested")
+        self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
         self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
     def get_modes(self):

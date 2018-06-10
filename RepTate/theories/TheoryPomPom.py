@@ -51,6 +51,7 @@ from Theory_rc import *
 from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
+from Theory import EndComputationRequested
 import Version
 import time
 
@@ -285,6 +286,8 @@ class BaseTheoryPomPom:
 
     def sigmadot_shear(self, l, t, p):
         """PomPom model in shear"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         q, tauB, tauS, gdot = p
         if (l >= q) or (q == 1):
             l = q
@@ -309,6 +312,8 @@ class BaseTheoryPomPom:
 
     def sigmadot_uext(self, l, t, p):
         """PomPom model in uniaxial extension"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
         q, tauB, tauS, edot = p
 
         if (l >= q) or (q == 1):
@@ -370,6 +375,8 @@ class BaseTheoryPomPom:
         flow_rate = float(f.file_parameters["gdot"])
         nmodes = self.parameters["nmodes"].value
         for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
             G = self.parameters["G%02d" % i].value
             q = self.parameters["q%02d" % i].value
             tauB = self.parameters["tauB%02d" % i].value
@@ -378,14 +385,16 @@ class BaseTheoryPomPom:
 
             #solve ODEs
             stretch_ini = 1
-            l = odeint(
-                pde_stretch,
-                stretch_ini,
-                times,
-                args=(p, ),
-                atol=abserr,
-                rtol=relerr)
-
+            try:
+                l = odeint(
+                    pde_stretch,
+                    stretch_ini,
+                    times,
+                    args=(p, ),
+                    atol=abserr,
+                    rtol=relerr)
+            except EndComputationRequested:
+                break
             # write results in table
             l = np.delete(l, [0])  # delete the t=0 value
             t = np.delete(times, [0])  # delete the t=0 value

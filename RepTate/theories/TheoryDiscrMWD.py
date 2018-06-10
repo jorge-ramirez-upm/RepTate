@@ -208,10 +208,9 @@ class BaseTheoryDiscrMWD:
                     ParameterType.real,
                     opt_type=OptType.const,
                     display_flag=False)
-            self.do_calculate("")
-        return '', True
-
-        if (name == 'logmmin') or (
+            if self.autocalculate:
+                self.do_calculate("")
+        elif (name == 'logmmin') or (
                 name == 'logmmax'):  #make bins equally spaced again
             nbin = self.parameters["nbin"].value
             mmin = self.parameters["logmmin"].value
@@ -219,7 +218,9 @@ class BaseTheoryDiscrMWD:
             mnew = np.logspace(mmin, mmax, nbin + 1)
             for i in range(nbin + 1):
                 self.parameters["logM%02d" % i].value = np.log10(mnew[i])
-            self.do_calculate("")
+            if self.autocalculate:
+                self.do_calculate("")
+        return '', True
 
     def setup_graphic_bins(self):
         """[summary]
@@ -377,7 +378,7 @@ class BaseTheoryDiscrMWD:
         if line == "":
             return Mn / 1000, Mw / 1000, PDI, Mz / Mw
         else:
-            self.Qprint('''<h3>Characteristics of the %s MWD</h3>'''%line)
+            self.Qprint('''<h3>Characteristics of the %s MWD</h3>'''%line, end='')
             table='''<table border="1" width="100%">'''
             table+='''<tr><th>Mn</th><th>Mw</th><th>Mw/Mn</th><th>Mz/Mw</th></tr>'''
             table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw)
