@@ -48,8 +48,8 @@ class ToolFindPeaks(CmdBase):
     
     The algorithm used to find the peaks can be very inaccurate and slow if the data is noisy and has many local peaks. It is recommended to smooth the data first before finding the peaks. 
     """
-    toolname = 'FindPeaks'
-    description = 'FindPeaks Tool'
+    toolname = 'Find Peaks'
+    description = 'Find Peaks in current data/view'
     citations = ''
 
     def __new__(cls, name='', parent_app=None):

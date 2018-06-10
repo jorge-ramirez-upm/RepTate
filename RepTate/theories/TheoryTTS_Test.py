@@ -48,7 +48,7 @@ from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
-
+from ToolMaterialsDatabase import materials_database, materials_user_database
 
 class TheoryWLFShiftTest(CmdBase):
     """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
@@ -168,6 +168,19 @@ class BaseTheoryWLFShiftTest:
             type=ParameterType.boolean,
             opt_type=OptType.const,
             display_flag=False)
+
+        if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
+            chem=self.parent_dataset.files[0].file_parameters['chem']
+            if chem in materials_user_database.keys():
+                self.set_param_value('B1', materials_user_database[chem].data['B1']) 
+                self.set_param_value('B2', materials_user_database[chem].data['B2']) 
+                self.set_param_value('logalpha', materials_user_database[chem].data['logalpha'])
+                self.set_param_value('CTg', materials_user_database[chem].data['CTg']) 
+            elif chem in materials_database.keys():
+                self.set_param_value('B1', materials_database[chem].data['B1']) 
+                self.set_param_value('B2', materials_database[chem].data['B2']) 
+                self.set_param_value('logalpha', materials_database[chem].data['logalpha'])
+                self.set_param_value('CTg', materials_database[chem].data['CTg'])        
 
     def TheoryWLFShiftTest(self, f=None):
         """[summary]
@@ -361,7 +374,7 @@ class BaseTheoryWLFShiftTest:
         self.is_fitting = True
         start_time = time.time()
         #view = self.parent_dataset.parent_application.current_view
-        self.Qprint('''<h2>Parameter Fitting</h2>''')
+        self.Qprint('''<hr><h2>Parameter Fitting</h2>''')
 
         # Mount the vector of parameters (Active ones only)
         initial_guess = []

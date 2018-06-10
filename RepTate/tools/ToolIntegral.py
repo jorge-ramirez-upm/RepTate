@@ -49,7 +49,7 @@ class ToolIntegral(CmdBase):
     If a different integration interval is needed, the Bounds tool can be used before the Integral tool.
     """
     toolname = 'Integral'
-    description = 'Integral Tool'
+    description = 'Integral of current data/view'
     citations = ''
 
     def __new__(cls, name='', parent_app=None):

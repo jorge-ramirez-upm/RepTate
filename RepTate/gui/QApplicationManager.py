@@ -138,7 +138,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.toolBarProject.setContextMenuPolicy(Qt.PreventContextMenu)
         self.toolBarApps.setContextMenuPolicy(Qt.PreventContextMenu)
         self.toolBarHelpAbout.setContextMenuPolicy(Qt.PreventContextMenu)
-        self.toolBarTools.setContextMenuPolicy(Qt.PreventContextMenu)
         
         # # ApplicationXY button
         # #choose the button icon
@@ -165,8 +164,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionOpenProject.triggered.connect(self.launch_open_dialog)
         self.actionSaveProject.triggered.connect(self.launch_save_dialog)
 
-        self.actionMaterials_Database.triggered.connect(lambda: self.handle_app_coming_soon('Materials Database'))
-        
         # Generate action buttons from dict of available applications
         self.actionMWD.triggered.connect(lambda: self.handle_new_app('MWD'))
         self.actionTTS.triggered.connect(lambda: self.handle_new_app('TTS'))

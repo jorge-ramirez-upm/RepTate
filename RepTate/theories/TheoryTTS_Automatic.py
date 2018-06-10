@@ -342,7 +342,7 @@ class BaseTheoryTTSShiftAutomatic:
         self.fitting = True
         start_time = time.time()
         #view = self.parent_dataset.parent_application.current_view
-        self.Qprint('''<h2>Parameter Fitting</h2>''')
+        self.Qprint('''<hr><h2>Parameter Fitting</h2>''')
 
         # Case by case, T by T, we optimize the overlap of all files with the
         # corresponding cases at the selected temperature

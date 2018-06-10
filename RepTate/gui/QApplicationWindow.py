@@ -42,7 +42,7 @@ import traceback
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
-from PyQt5.QtGui import QIcon, QColor
+from PyQt5.QtGui import QIcon, QColor, QStandardItem
 from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
@@ -219,8 +219,20 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionNew_Tool)
         self.cbtool = QComboBox()
         self.cbtool.setToolTip("Choose a Tool")
+        model = self.cbtool.model()
+        i = 0
         for tool_name in self.availabletools.keys():
-            self.cbtool.addItem(tool_name)
+            item = QStandardItem(tool_name)
+            item.setToolTip(self.availabletools[tool_name].description)
+            model.appendRow(item)
+            i += 1
+        self.cbtool.insertSeparator(i)
+        for tool_name in self.extratools.keys():
+            item = QStandardItem(tool_name)
+            item.setForeground(QColor('blue'))
+            item.setToolTip(self.extratools[tool_name].description)
+            model.appendRow(item)
+
         tb.addWidget(self.cbtool)
         vblayout2.addWidget(tb)
         self.TooltabWidget = QTabWidget()

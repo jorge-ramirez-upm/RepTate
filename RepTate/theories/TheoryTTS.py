@@ -354,7 +354,7 @@ class BaseTheoryWLFShift:
         self.is_fitting = True
         start_time = time.time()
         #view = self.parent_dataset.parent_application.current_view
-        self.Qprint('''<h2>Parameter Fitting</h2>''')
+        self.Qprint('''<hr><h2>Parameter Fitting</h2>''')
 
         # Mount the vector of parameters (Active ones only)
         initial_guess = []

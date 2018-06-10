@@ -73,7 +73,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         self.actionApplyToTheory.setChecked(True)
         self.tb.addAction(self.actionActive)
         self.tb.addAction(self.actionApplyToTheory)
-        self.verticalLayout_2.insertWidget(0, self.tb)
+        self.verticalLayout.insertWidget(0, self.tb)
 
         #build the tool widget
         self.toolParamTable.setIndentation(0)
@@ -113,6 +113,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
                     item = QTreeWidgetItem(self.toolParamTable, [p.name, p.value])
                 else:
                     item = QTreeWidgetItem(self.toolParamTable, [p.name, "%0.3g" % p.value])
+                item.setToolTip(0, p.description)
 
                 item.setFlags(item.flags() | Qt.ItemIsEditable)
         self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)

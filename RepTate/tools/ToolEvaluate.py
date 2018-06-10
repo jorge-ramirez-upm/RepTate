@@ -46,7 +46,7 @@ from DataTable import DataTable
 class ToolEvaluate(CmdBase):
     """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser. 
     """
-    toolname = 'EvalExp'
+    toolname = 'Eval Exp'
     description = 'Evaluate Expression Tool'
     citations = ''
 
