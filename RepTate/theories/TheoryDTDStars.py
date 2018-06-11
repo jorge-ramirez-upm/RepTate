@@ -72,6 +72,7 @@ class TheoryDTDStarsFreq(CmdBase):
     thname = "DTD Stars"
     description = "Dynamic Tube Dilution for stars, frequency domain"
     citations = "Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
+    doi = "http://dx.doi.org/10.1021/ma961559f"
     
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -101,6 +102,7 @@ class BaseTheoryDTDStarsFreq:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDTDStarsFreq.thname
     citations = TheoryDTDStarsFreq.citations
+    doi = TheoryDTDStarsFreq.doi
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """
@@ -142,6 +144,8 @@ class BaseTheoryDTDStarsFreq:
             ParameterType.real,
             opt_type=OptType.const,
             min_value=0)
+
+        self.get_material_parameters()
 
         self.G0 = self.parameters["G0"].value
         self.tau_e = self.parameters["tau_e"].value
@@ -297,6 +301,7 @@ class BaseTheoryDTDStarsTime:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDTDStarsTime.thname
     citations = TheoryDTDStarsTime.citations
+    doi = TheoryDTDStarsTime.doi
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """
@@ -338,6 +343,8 @@ class BaseTheoryDTDStarsTime:
             ParameterType.real,
             opt_type=OptType.const,
             min_value=0)
+
+        self.get_material_parameters()
 
         self.G0 = self.parameters["G0"].value
         self.tau_e = self.parameters["tau_e"].value

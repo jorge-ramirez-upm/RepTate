@@ -48,7 +48,6 @@ from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
-from ToolMaterialsDatabase import materials_database, materials_user_database
 
 class TheoryWLFShiftTest(CmdBase):
     """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
@@ -169,18 +168,8 @@ class BaseTheoryWLFShiftTest:
             opt_type=OptType.const,
             display_flag=False)
 
-        if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
-            chem=self.parent_dataset.files[0].file_parameters['chem']
-            if chem in materials_user_database.keys():
-                self.set_param_value('B1', materials_user_database[chem].data['B1']) 
-                self.set_param_value('B2', materials_user_database[chem].data['B2']) 
-                self.set_param_value('logalpha', materials_user_database[chem].data['logalpha'])
-                self.set_param_value('CTg', materials_user_database[chem].data['CTg']) 
-            elif chem in materials_database.keys():
-                self.set_param_value('B1', materials_database[chem].data['B1']) 
-                self.set_param_value('B2', materials_database[chem].data['B2']) 
-                self.set_param_value('logalpha', materials_database[chem].data['logalpha'])
-                self.set_param_value('CTg', materials_database[chem].data['CTg'])        
+        self.get_material_parameters()
+     
 
     def TheoryWLFShiftTest(self, f=None):
         """[summary]
@@ -207,13 +196,6 @@ class BaseTheoryWLFShiftTest:
 
         Tf = f.file_parameters["T"]
         Mw = f.file_parameters["Mw"]
-
-        #if iso:
-        #    C2 += CTg / Mw - 68.7 * dx12
-        #    T0corrected = T0 - CTg / Mw + 68.7 * dx12
-        #else:
-        #    T0corrected = T0
-        #tt.data[:,0] = ft.data[:,0]*np.power(10.0, -(T - T0corrected) * (C1 / (T + C2)))
 
         # Trying a new expression for the shift
         if iso:
@@ -336,7 +318,7 @@ class BaseTheoryWLFShiftTest:
             Tr = self.parameters["Tr"].value
             self.Qprint("<h3>WLF Params @ Tr = %g</h3>" % Tr)
             self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + Tr)))
-            self.Qprint("<b>C2</b> = %g" % (B2 + Tr))
+            self.Qprint("<b>C2</b> = %g<br>" % (B2 + Tr))
 
         return total_error
 

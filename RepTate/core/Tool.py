@@ -393,6 +393,7 @@ class Tool(CmdBase):
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""
+        self.toolTextBox.moveCursor(QTextCursor.End)
         self.toolTextBox.insertHtml(msg)
         self.toolTextBox.verticalScrollBar().setValue(
             self.toolTextBox.verticalScrollBar().maximum())

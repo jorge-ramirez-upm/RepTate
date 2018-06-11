@@ -46,7 +46,6 @@ from Parameter import Parameter, ParameterType, OptType
 from PyQt5.QtWidgets import QToolBar, QAction, QStyle, QLabel, QLineEdit
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
-from ToolMaterialsDatabase import materials_database, materials_user_database
 
 class TheoryLikhtmanMcLeish2002NEW(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
@@ -137,9 +136,9 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
             type=ParameterType.boolean,
             opt_type=OptType.const,
             display_flag=False)
-        self.parameters["rho"] = Parameter(
-            name="rho",
-            value=1000.0,
+        self.parameters["rho0"] = Parameter(
+            name="rho0",
+            value=1.0,
             description="Density of the polymer melt (kg/m3)",
             type=ParameterType.real,
             opt_type=OptType.const,
@@ -150,23 +149,7 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
         self.cnuarray = f['cnu']
         self.data = f['data']
 
-        self.get_material_parameters()
-
-        if self.get_material_parameters():
-            pass
-        #if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
-        #    chem=self.parent_dataset.files[0].file_parameters['chem']
-        #    if chem in materials_user_database.keys():
-        #        self.set_param_value('tau_e', materials_user_database[chem].data['tau_e']) 
-        #        self.set_param_value('Ge', materials_user_database[chem].data['Ge']) 
-        #        self.set_param_value('Me', materials_user_database[chem].data['Me'])
-        #        self.set_param_value('c_nu', materials_user_database[chem].data['c_nu']) 
-        #    elif chem in materials_database.keys():
-        #        self.set_param_value('tau_e', materials_database[chem].data['tau_e']) 
-        #        self.set_param_value('Ge', materials_database[chem].data['Ge']) 
-        #        self.set_param_value('Me', materials_database[chem].data['Me'])
-        #        self.set_param_value('c_nu', materials_database[chem].data['c_nu']) 
-        else:
+        if not self.get_material_parameters():
             # Estimate initial values of the theory
             w = self.parent_dataset.files[0].data_table.data[:, 0]
             Gp = self.parent_dataset.files[0].data_table.data[:, 1]
@@ -199,12 +182,12 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
         Ge = self.parameters["Ge"].value
         Me = self.parameters["Me"].value
         cnu = self.parameters["c_nu"].value
-        rho = self.parameters["rho"].value
+        rho0 = self.parameters["rho0"].value
         linkMeGe = self.parameters["linkMeGe"].value
         Mw = float(f.file_parameters["Mw"])
         T = float(f.file_parameters["T"]) + 273.15
         if (linkMeGe):
-            Ge = rho*T*8.314/Me
+            Ge = 1000.0*rho0*T*8.314/Me
 
         indcnu = (np.where(self.cnuarray == cnu))[0][0]
         indcnu1 = 1 + indcnu * 2
@@ -286,9 +269,9 @@ class GUITheoryLikhtmanMcLeish2002NEW(BaseTheoryLikhtmanMcLeish2002NEW, QTheory)
             QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'Link Me-Ge')
         self.linkMeGeaction.setCheckable(True)
         self.linkMeGeaction.setChecked(False)
-        lbl = QLabel("<P><b>rho</b> (kg/m<sup>3</sup>)</P></br>", self)
+        lbl = QLabel("<P><b>rho</b> (g/cm<sup>3</sup>)</P></br>", self)
         tb.addWidget(lbl)
-        self.txtrho = QLineEdit(str(self.parameters["rho"].value))
+        self.txtrho = QLineEdit(str(self.parameters["rho0"].value))
         self.txtrho.setReadOnly(True)
         tb.addWidget(self.txtrho)
         self.thToolsLayout.insertWidget(0, tb)

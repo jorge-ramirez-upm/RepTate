@@ -46,17 +46,84 @@ from PyQt5.QtGui import QStandardItem, QFont, QIcon
 
 materials_database = np.load('tools/materials_database.npy').item()
 materials_user_database = np.load('tools/user_database.npy').item()
+materials_db = [materials_user_database, materials_database]
 
-def get_material_parameter(chem, param, file_parameters, user=False):
-    """Get theory parameter. Handle special cases (T, Mw dependence)"""
-    if user:
-        if param=='tau_e':
-            pass
-        elif param=='Ge':
-            pass
-        return materials_user_database[chem].data[param]
+def check_chemistry(chem):
+    """Check if the file contains chemistry. If so, check if the chemistry appears in 
+    the user or general materials database.
+        Arguments:
+            - chem {str} -- Chemistry
+        Returns:
+            - code {integer} -- -1 (not found) 0 (found in user's) 1 (found in general database)
+    """
+    if chem in materials_user_database.keys():
+        return 0
+    elif chem in materials_database.keys():
+        return 1
     else:
-        return materials_database[chem].data[param]
+        return -1
+
+def get_all_parameters(chem, theory, fparam, dbindex):
+    """Gets all possible parameters from the corresponding materials database. 
+    The function check_chemistry must be involed before this one, to get chem and dbindex.
+        Arguments:
+            - chem {str} -- Chemistry
+            - theory {Theory} -- A given theory
+            - file_parameters {dict} -- Parameters of the file
+            - dbindex {int} -- Index of the database to use (0 user, 1 general)
+        Returns:
+            - nothing
+    """
+    for p in theory.parameters.keys():
+        if p in materials_db[dbindex][chem].data.keys():
+            value, success = get_single_parameter(chem, p, fparam, dbindex)
+            if success:
+                theory.set_param_value(p, value) 
+
+def get_single_parameter(chem, param, fparam, dbindex):
+    """Returns the parameter 'param' of the chemistry 'chem' using the database 
+    given by dbindex (0 user, 1 general) and taking into account the parameters
+    of fparam (for example, T and Mw). 
+    The parameter 'param' must exist in the database. This is done when this function
+    is invoked from get_all_parameters. If this function is invoked directly, the 
+    condition must be chedked beforehand.
+        Arguments:
+            - chem {str} -- Chemistry
+            - param -- The theory parameter that we want to set
+            - file_parameters {dict} -- Parameters of the file
+            - dbindex {int} -- Index of the database to use (0 user, 1 general)
+        Returns:
+            - value -- The value of the parameter
+            - success {bool} -- A success flag
+    """
+    if param=='tau_e':
+        try:
+            T = float(fparam["T"])
+        except: # T was not found in the file parameters
+            return 0, False
+
+        tau_e = materials_db[dbindex][chem].data['tau_e']
+        B1 = materials_db[dbindex][chem].data['B1']
+        B2 = materials_db[dbindex][chem].data['B2']
+        Te = materials_db[dbindex][chem].data['Te']
+        aT = np.power(10.0, -B1 * (Te - T) / (B2 + T) / (B2 + Te))        
+        tau_e /= aT; # We don´t consider the effect of Tg in this estimate
+        return tau_e, True
+    elif param=='Ge':
+        try:
+            T = float(fparam["T"])
+        except: # T was not found in the file parameters
+            return 0, False
+        logalpha = materials_db[dbindex][chem].data['logalpha']
+        Ge = materials_db[dbindex][chem].data['Ge']
+        Te = materials_db[dbindex][chem].data['Te']
+        alpha = np.power(10.0, logalpha)
+        bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
+        Ge /= bT;
+        return Ge, True
+    else:
+        value = materials_db[dbindex][chem].data[param]
+        return value, True
 
 class ToolMaterialsDatabase(CmdBase):
     """[summary]
@@ -191,6 +258,7 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             item.setToolTip(materials_database[polymer].data['long'])
             model.appendRow(item)
             i += 1
+        self.num_materials_base = i
         self.cbmaterial.insertSeparator(i)
         for polymer in materials_user_database.keys():
             item = QStandardItem(polymer)
@@ -237,15 +305,17 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.isofrictional.setChecked(True)
         self.verticalLayout.insertWidget(2, self.tbMwT)
 
-
-
         self.change_material()
 
     def change_material(self):
         selected_material_name = self.cbmaterial.currentText()
-        self.labelPolymer.setText(materials_database[selected_material_name].data['long'])
-        for k in materials_database[selected_material_name].data.keys():
-            self.set_param_value(k, materials_database[selected_material_name].data[k])
+        if (self.cbmaterial.currentIndex() < self.num_materials_base):
+            dbindex = 1
+        else:
+            dbindex = 0
+        self.labelPolymer.setText(materials_db[dbindex][selected_material_name].data['long'])
+        for k in materials_db[dbindex][selected_material_name].data.keys():
+            self.set_param_value(k, materials_db[dbindex][selected_material_name].data[k])
         self.update_parameter_table()
 
     def calculate_stuff(self):
@@ -277,16 +347,16 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         else:
             bT = 1
 
-        self.Qprint('<h3>WLF TTS Shift Factors</h3>')
+        self.Qprint('<hr><h3>WLF TTS Shift Factors</h3>')
         # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
         self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
-        self.Qprint("<b>C2</b> = %g" % (B2 + T))
+        self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
 
         self.Qprint('<h3>Tube Theory parameters</h3>')
         Ge /= bT;
         tau_e /= aT;
         self.Qprint("<b>tau_e</b> = %g" % tau_e)
-        self.Qprint("<b>Ge</b> = %g" % Ge)
+        self.Qprint("<b>Ge</b> = %g<br>" % Ge)
 
         self.Qprint('<h3>Other Results</h3>')
         CC1 = 1.69
@@ -297,5 +367,5 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
         self.Qprint("<b>Z</b> = %g" % Z)
         self.Qprint("<b>tau_R</b> = %g" % tR)
-        self.Qprint("<b>tau_D</b> = %g" % tD)
+        self.Qprint("<b>tau_D</b> = %g<br>" % tD)
         
