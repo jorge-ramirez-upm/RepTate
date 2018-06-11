@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
+    <InterpreterId>Global|VisualStudio|Miniconda</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>--single</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
@@ -154,7 +154,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
+    <InterpreterReference Include="Global|VisualStudio|Miniconda" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />
