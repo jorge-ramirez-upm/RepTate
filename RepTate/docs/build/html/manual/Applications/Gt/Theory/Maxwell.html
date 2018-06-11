@@ -90,34 +90,6 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="TheoryMaxwellModes.TheoryMaxwellModesTime">
-<em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">TheoryMaxwellModesTime</code><a class="reference internal" href="../../../../_modules/TheoryMaxwellModes.html#TheoryMaxwellModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.TheoryMaxwellModesTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a generalized Maxwell model to a time dependent relaxation function.</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[\begin{eqnarray}
-G(t) &amp; = &amp; \sum_{i=1}^{n_{modes}} G_i \exp (-t/\tau_i)
-\end{eqnarray}\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
-<li>logtmin = <span class="math">\(\log(t_{min})\)</span>: decimal logarithm of the minimum time.</li>
-<li>logtmax = <span class="math">\(\log(t_{max})\)</span>: decimal logarithm of the maximum time.</li>
-<li>logGi = <span class="math">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math">\(i\)</span>.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>

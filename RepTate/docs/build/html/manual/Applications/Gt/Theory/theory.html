@@ -132,34 +132,6 @@
 </div>
 <div class="section" id="summary">
 <h3><a class="toc-backref" href="#id3">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryMaxwellModes.TheoryMaxwellModesTime">
-<em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">TheoryMaxwellModesTime</code><a class="reference internal" href="../../../../_modules/TheoryMaxwellModes.html#TheoryMaxwellModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.TheoryMaxwellModesTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a generalized Maxwell model to a time dependent relaxation function.</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[\begin{eqnarray}
-G(t) &amp; = &amp; \sum_{i=1}^{n_{modes}} G_i \exp (-t/\tau_i)
-\end{eqnarray}\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
-<li>logtmin = <span class="math">\(\log(t_{min})\)</span>: decimal logarithm of the minimum time.</li>
-<li>logtmax = <span class="math">\(\log(t_{max})\)</span>: decimal logarithm of the maximum time.</li>
-<li>logGi = <span class="math">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math">\(i\)</span>.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 <div class="section" id="description">
 <h3><a class="toc-backref" href="#id4">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
@@ -200,43 +172,6 @@ in flow simulations.</li>
 <h2><a class="toc-backref" href="#id5">Rouse Time</a><a class="headerlink" href="#rouse-time" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id1">
 <h3><a class="toc-backref" href="#id6">Summary</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryRouse.TheoryRouseTime">
-<em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">TheoryRouseTime</code><a class="reference internal" href="../../../../_modules/TheoryRouse.html#TheoryRouseTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.TheoryRouseTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit Rouse modes to a time dependent relaxation function</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math">\(N\)</span>):</p>
-<div class="last math">
-\[G(t) = G_0 \dfrac 1 N \sum_{p=1}^N \exp\left(\dfrac{-2p^2t}{N^2\tau_0}\right)\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first simple">
-<li><span class="math">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
-<li><span class="math">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
-<li><span class="math">\(M_0\)</span>: molar mass of an elementary segment</li>
-</ul>
-<dl class="last docutils">
-<dt>where</dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(c\)</span>: number of segments per unit volume</li>
-<li><span class="math">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
-<li><span class="math">\(T\)</span>: temperature</li>
-<li><span class="math">\(N=M_w/M_0\)</span>: number of segments par chain</li>
-<li><span class="math">\(M_w\)</span>: weight-average molecular mass</li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 </div>

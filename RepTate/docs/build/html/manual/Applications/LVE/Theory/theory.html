@@ -152,35 +152,6 @@
 </div>
 <div class="section" id="summary">
 <h3><a class="toc-backref" href="#id7">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryMaxwellModes.TheoryMaxwellModesFrequency">
-<em class="property">class </em><code class="descclassname">TheoryMaxwellModes.</code><code class="descname">TheoryMaxwellModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryMaxwellModes.html#TheoryMaxwellModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryMaxwellModes.TheoryMaxwellModesFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a generalized Maxwell model to a frequency dependent relaxation function.</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[\begin{split}\begin{eqnarray}
-G'(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} G_i \frac{(\omega\tau_i)^2}{1+(\omega\tau_i)^2} \\
-G''(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} G_i \frac{\omega\tau_i}{1+(\omega\tau_i)^2}
-\end{eqnarray}\end{split}\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(n_{modes}\)</span>: number of Maxwell modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
-<li>logwmin = <span class="math">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
-<li>logwmax = <span class="math">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
-<li>logGi = <span class="math">\(\log(G_{i})\)</span>: decimal logarithm of the amplitude of Maxwell mode <span class="math">\(i\)</span>.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 <div class="section" id="description">
 <h3><a class="toc-backref" href="#id8">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
@@ -226,33 +197,6 @@ should be enough to fit the terminal time.</li>
 </div>
 <div class="section" id="id1">
 <h3><a class="toc-backref" href="#id10">Summary</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryCarreauYasuda.TheoryCarreauYasuda">
-<em class="property">class </em><code class="descclassname">TheoryCarreauYasuda.</code><code class="descname">TheoryCarreauYasuda</code><a class="reference internal" href="../../../../_modules/TheoryCarreauYasuda.html#TheoryCarreauYasuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryCarreauYasuda.TheoryCarreauYasuda" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the complex viscosity with the Carreau-Yasuda equation.</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[\eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^{(n-1)/a}\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(\eta_0\)</span>: Viscosity at zero shear rate.</li>
-<li><span class="math">\(\eta_\infty\)</span>: Viscosity at infinite shear rate.</li>
-<li><span class="math">\(\lambda\)</span>: Relaxation time.</li>
-<li><span class="math">\(n\)</span>: Power law index.</li>
-<li><span class="math">\(a\)</span>: Dimensionless parameter (2 in most cases)</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 <div class="section" id="id2">
 <h3><a class="toc-backref" href="#id11">Description</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
@@ -292,91 +236,12 @@ the theory will be applied to the first one in the list of active files.</p>
 <h2><a class="toc-backref" href="#id13">Rouse Frequency</a><a class="headerlink" href="#rouse-frequency" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id4">
 <h3><a class="toc-backref" href="#id14">Summary</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryRouse.TheoryRouseFrequency">
-<em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">TheoryRouseFrequency</code><a class="reference internal" href="../../../../_modules/TheoryRouse.html#TheoryRouseFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.TheoryRouseFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit Rouse modes to a frequency dependent relaxation function</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math">\(N\)</span>):</p>
-<div class="last math">
-\[\begin{split}G'(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{(\omega\tau_p)^2} {1 +  (\omega\tau_p)^2}\\
-G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omega\tau_p)^2}\\
-\tau_p &amp;= \dfrac{N^2 \tau_0 }{ 2 p^2}\end{split}\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first simple">
-<li><span class="math">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
-<li><span class="math">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
-<li><span class="math">\(M_0\)</span>: molar mass of an elementary segment</li>
-</ul>
-<dl class="last docutils">
-<dt>where</dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(c\)</span>: number of segments per unit volume</li>
-<li><span class="math">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
-<li><span class="math">\(T\)</span>: temperature</li>
-<li><span class="math">\(N=M_w/M_0\)</span>: number of segments par chain</li>
-<li><span class="math">\(M_w\)</span>: weight-average molecular mass</li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 <div class="section" id="dynamic-dilution-equation-for-stars">
 <h2><a class="toc-backref" href="#id15">Dynamic dilution equation for stars</a><a class="headerlink" href="#dynamic-dilution-equation-for-stars" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id5">
 <h3><a class="toc-backref" href="#id16">Summary</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryDTDStars.TheoryDTDStarsFreq">
-<em class="property">class </em><code class="descclassname">TheoryDTDStars.</code><code class="descname">TheoryDTDStarsFreq</code><a class="reference internal" href="../../../../_modules/TheoryDTDStars.html#TheoryDTDStarsFreq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDTDStars.TheoryDTDStarsFreq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit DTD Theory for stars.
-Theory of stress relaxation in star polymer melts with no adjustable parameters beyond those measurable in linear melts</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><p class="first last">See <a class="reference external" href="http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf">Milner-McLeish (1997)</a>
-and
-<a class="reference external" href="http://www.personal.reading.ac.uk/~sms06al2/papers/definit.pdf">Larson et al. (2003)</a> for details.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first simple">
-<li><code class="docutils literal"><span class="pre">G0</span></code> <span class="math">\(\equiv G_N^0\)</span>: Plateau modulus</li>
-<li><code class="docutils literal"><span class="pre">tau_e</span></code> <span class="math">\(\equiv \tau_\mathrm e = \left(\dfrac{M_\mathrm e^\mathrm G}{M_0}\right)^2  \dfrac{\zeta b^2}{3\pi^2k_\mathrm B T}\)</span>: 
-Entanglement equilibration time</li>
-<li><code class="docutils literal"><span class="pre">Me</span></code> <span class="math">\(\equiv M_\mathrm e^\mathrm G = \dfrac 4 5 \dfrac{\rho R T} {G_N^0}\)</span>: Entanglement molecular weight</li>
-<li><code class="docutils literal"><span class="pre">alpha</span></code>: Dilution exponent</li>
-</ul>
-<dl class="last docutils">
-<dt>where:</dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(\rho\)</span>: polymer density</li>
-<li><span class="math">\(\zeta\)</span>: monomeric friction coefficient</li>
-<li><span class="math">\(b\)</span>: monomer-based segment length</li>
-<li><span class="math">\(k_\mathrm B T\)</span>: thermal energy</li>
-<li><span class="math">\(M_0\)</span>: molar mass of an elementary segment</li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 </div>

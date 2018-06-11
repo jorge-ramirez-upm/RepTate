@@ -141,120 +141,24 @@
 <h2><a class="toc-backref" href="#id4">Polynomial</a><a class="headerlink" href="#polynomial" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="summary">
 <h3><a class="toc-backref" href="#id5">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryBasic.TheoryPolynomial">
-<em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryPolynomial</code><a class="reference internal" href="../../_modules/TheoryBasic.html#TheoryPolynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryPolynomial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a polynomial of degree <span class="math">\(n\)</span> to the data</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[y(x) = \sum_{i=0}^n A_i x^i\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(n\)</span>: degree of the polynomial function.</li>
-<li><span class="math">\(A_i\)</span>: polynomial coefficeints.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 <div class="section" id="power-law">
 <h2><a class="toc-backref" href="#id6">Power Law</a><a class="headerlink" href="#power-law" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id1">
 <h3><a class="toc-backref" href="#id7">Summary</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryBasic.TheoryPowerLaw">
-<em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryPowerLaw</code><a class="reference internal" href="../../_modules/TheoryBasic.html#TheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a power law to the data</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[y(x) = a x^b\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(a\)</span>: prefactor.</li>
-<li><span class="math">\(b\)</span>: exponent.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 <div class="section" id="exponential">
 <h2><a class="toc-backref" href="#id8">Exponential</a><a class="headerlink" href="#exponential" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id2">
 <h3><a class="toc-backref" href="#id9">Summary</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryBasic.TheoryExponential">
-<em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryExponential</code><a class="reference internal" href="../../_modules/TheoryBasic.html#TheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryExponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a single exponential decay to the data</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[y(x) = a \exp(-x/T)\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(a\)</span>: prefactor.</li>
-<li><span class="math">\(T\)</span>: exponential “time” constant.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 <div class="section" id="double-exponential">
 <h2><a class="toc-backref" href="#id10">Double Exponential</a><a class="headerlink" href="#double-exponential" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id3">
 <h3><a class="toc-backref" href="#id11">Summary</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="TheoryBasic.TheoryTwoExponentials">
-<em class="property">class </em><code class="descclassname">TheoryBasic.</code><code class="descname">TheoryTwoExponentials</code><a class="reference internal" href="../../_modules/TheoryBasic.html#TheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBasic.TheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit <strong>two</strong> single exponential decay to the data</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[y(x) = a_1 \exp(x/T_1) + a_2 \exp(-x/T_2)\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(a_1\)</span>, <span class="math">\(a_2\)</span>: prefactors.</li>
-<li><span class="math">\(T_1\)</span>, <span class="math">\(T_2\)</span>: exponential “time” constants.</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 </div>

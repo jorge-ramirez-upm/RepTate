@@ -17,7 +17,7 @@ However, Python code used for number crunching might be 10 to 100 times slower t
 when Python `NumPy <http://www.numpy.org>`_ or `SciPy <https://www.scipy.org/scipylib/index.html>`_ 
 libraries (written in C/C++ or Fortran) cannot be used.
 
-Fortunately, there are many solutions availiable to write code that will run fast in Python. 
+Fortunately, there are many solutions available to write code that will run fast in Python. 
 We can cite `Cython <http://cython.org>`_ or `Numba <https://numba.pydata.org>`_ that
 transform Python code into C executable and require minimal addition to the existing Python 
 code. There is also `Ctypes <https://docs.python.org/3.6/library/ctypes.html>`_ that provides 
@@ -27,7 +27,7 @@ from external libraries, e.g. calling pre-compiled C functions. It is a very eff
 .. note::
     All these solutions require a C compiler installed on your machine.
 
-In RepTate, some theories (most notably the React appplication thories) are written in C code and inferfaced with Python using,
+In RepTate, some theories (most notably the React application theories) are written in C code and interfaced with Python using,
 `Ctypes <https://docs.python.org/3.6/library/ctypes.html>`_.
 
 In general, already-written C code will require **no** modifications to be used by Python.
@@ -194,37 +194,28 @@ The best way to do so is to write a Python function, in the file
 .. code-block:: python
     :lineno-start: 16
     
-    def do_square_using_c(n, list_in, list_out):
-
-        c_arr_in = (c_double * n)()
+    def do_square_using_c(list_in):
+        """Call C function to calculate squares"""
+        n = len(list_in)
+        c_arr_in = (c_double * n)(*list_in)
         c_arr_out = (c_double * n)()
 
-        for i in range(n):
-            c_arr_in[i] = c_double(list_in[i])
-
         python_c_square(c_int(n), c_arr_in, c_arr_out)
+        return c_arr_out[:]
 
-        for i in range(n):
-            list_out[i] = c_arr_out[i]
+In details::
 
-In details:
-
-::
-
-    c_arr_in = (c_double * n)()
+    c_arr_in = (c_double * n)(*list_in)
     c_arr_out = (c_double * n)()
 
 defines two ``ctypes`` arrays of ``double`` of size ``n``
-that can be used by the C function.
-
-::
+that can be used by the C function. The first one is initialised with the values of ``list_in``.
+It is equivalent to::
 
     for i in range(n):
         c_arr_in[i] = c_double(list_in[i])
 
-copies the values of the input Python list into the ``ctypes`` array.
-
-::
+This line::
 
     python_c_square(c_int(n), c_arr_in, c_arr_out)
 
@@ -232,12 +223,11 @@ calls the C function that does the computation of the square of ``c_arr_in``
 and put the result in ``c_arr_out``. Note the conversion ``c_int(n)`` that 
 transforms the Python integer into a ``ctypes`` ``int``.
 
-::
+This line::
 
-    for i in range(n):
-        list_out[i] = c_arr_out[i]
+    return c_arr_out[:]
 
-copies the result into the Python list.
+returns a copy of the results as a Python list.
 
 --------------
 Final comments
@@ -245,8 +235,144 @@ Final comments
 
 Our C function ``c_square`` is now wrapped into a Python function
 ``do_square_using_c``. To use it in a RepTate module, simply import the 
-function by including in the module header
+function by including in the module header.
 
-::
+As an example, the following calculates the square of numbers from 0 to 999::
 
     from basic_function_helper import do_square_using_c
+    ...
+    my_list = np.arange(1000)
+    squared_list = do_square_using_c(*my_list)
+
+------------------------
+Bonus: Callback function
+------------------------
+
+We presented above a method to have Python "request something from C", that is,
+Python calls a C function and get an answer. In the previous example, Python requested
+C to calculate the square of an array.
+Sometimes, it is convenient to do the other way around too. For instance, if the array
+is "big", the C function might take some time to finish the calculations, and we may want
+to inform Python of the advancement of the computations.
+
+We propose here to modify the above code to include a *callback* function that lets 
+the C code call a Python function.
+As a simple example, the C code will request Python to print the advancement of the
+calculations of the "square" function, previously introduced.
+It require more steps than what we have seen before, but it is reasonably simple.
+
+The C function will call a Python function with a ``double`` argument (the advancement in percent)
+and Python will return the percentage incremented by 20%.
+
+Modify the C code
+-----------------
+
+We need to define:
+
+- A proxy function that will be used to call the corresponding Python function
+- A function that Python will initially call to define the proxy function.
+    This is similar to what we have done so far.
+- A function *type* that defines how the proxy function "look" like, i.e.
+    arguments and return types (``int``, ``double``, etc.)
+
+Somewhere before the ``c_square`` function definition, we write:
+
+.. code-block:: c
+
+    typedef double give_and_take_double(double p); // type definition
+    give_and_take_double *tell_python;             // pointer to a function of type "give_and_take_double"
+    void def_python_callback(give_and_take_double *func)
+    {
+        // Called by Python
+        // Defines what "tell_python" is pointing to
+        tell_python = func;
+    }
+
+The first line defines a new type: a function that takes a single ``double`` as argument and returns a ``double``.
+This allows us to define the second line: a pointer to a function of type ``give_and_take_double``.
+At this point we do not know that the function will be, be we know it accepts a ``double`` as argument, and 
+it returns a ``double``. The last lines is the function that Python will have to call to actually define what ``tell_python`` is, 
+or rather, define towards what it is pointing to.
+
+
+Now we can decorate our ``c_square`` function with the ``tell_python`` function:
+
+.. code-block:: c
+
+
+    void c_square(int n, double *array_in, double *array_out)
+    { //return the square of array_in of length n in array_out
+        int i;
+        double percent = 0.2;
+        for (i = 0; i < n; i++)
+        {
+            if ((double)i / n > percent)
+            {
+                percent = tell_python(percent);
+            }
+            array_out[i] = array_in[i] * array_in[i];
+        }
+    }
+
+That is all we need to do on the C side. 
+
+.. warning::
+    Do not forget to recompile the shared library every time you modify the C code.
+
+
+Modify the Python code
+----------------------
+
+Last steps, we need to modify the Python code. 
+We make some addition to the file "basic_function_helper.py".
+We need to:
+
+- Define a "classic" Python function 
+- Define a C callback function that translates that Python function
+- Call the C function ``def_python_callback``, defined above to setup the callback function
+
+We add to the bottom of the file "basic_function_helper.py":
+
+.. code-block:: python
+
+    # Callback stuff
+    from ctypes import CFUNCTYPE, POINTER
+
+    def get_percent(percent):
+        """Print advancement and set the next call when C has advanced a further 20%"""
+        self.Qprint("Advancement of C calculations: %f%%" % (percent*100))
+        return percent + 0.2
+
+    CB_FTYPE_DOUBLE_DOUBLE = CFUNCTYPE(c_double, c_double) # define C pointer to a function type
+    cb_get_percent = CB_FTYPE_DOUBLE_DOUBLE(get_percent) # define a C function equivalent to the python function "get_percent"
+    basic_function_lib.def_python_callback(cb_get_percent)  # the the C code about that C function
+
+In these lines::
+
+    def get_percent(percent):
+        ...
+
+we define a "classic" Python function that take a ``float`` as argument, and return a ``float``.
+It prints the information in the theory text box of RepTate via the Qprint method.
+
+Then, in the line::
+
+    CB_FTYPE_DOUBLE_DOUBLE = CFUNCTYPE(c_double, POINTER(c_double))
+
+the first argument of the ctypes function ``CFUNCTYPE`` defines the return types (here ``double``) and the other arguments
+are the function arguments (here only one ``double``). ``CFUNCTYPE`` returns a pointer to a C functions::
+
+The following line defines a C function of type ``CB_FTYPE_DOUBLE_DOUBLE``, which is a proxy for the Python
+function ``get_percent``::
+
+    cb_get_percent = CB_FTYPE_DOUBLE_DOUBLE(get_percent)
+
+Then we tell our C code which is our callback function::
+
+    basic_function_lib.def_python_callback(cb_get_percent)
+
+
+Usage
+-----
+
+Now we can calculate the square of a "big" list and follow the advancement of the computations in the theory text box.

@@ -121,7 +121,7 @@
 <span class="sd">    If a different integration interval is needed, the Bounds tool can be used before the Integral tool.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">toolname</span> <span class="o">=</span> <span class="s1">&#39;Integral&#39;</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Integral Tool&#39;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Integral of current data/view&#39;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -191,7 +191,7 @@
             <span class="n">y2</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xunique</span><span class="p">)</span>
 
             <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span><span class="n">num_rows</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;I = </span><span class="si">%g</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">y2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;I&lt;/b&gt; = </span><span class="si">%g</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">y2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">return</span> <span class="n">xunique</span><span class="p">,</span> <span class="n">y2</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;in ToolIntegral.calculate(): </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>

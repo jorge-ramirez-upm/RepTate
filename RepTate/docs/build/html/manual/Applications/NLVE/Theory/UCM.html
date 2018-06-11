@@ -87,57 +87,6 @@
 <h1>Multi-mode Upper Convected Maxwell Model<a class="headerlink" href="#multi-mode-upper-convected-maxwell-model" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="TheoryUCM.TheoryUCM">
-<em class="property">class </em><code class="descclassname">TheoryUCM.</code><code class="descname">TheoryUCM</code><a class="reference internal" href="../../../../_modules/TheoryUCM.html#TheoryUCM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryUCM.TheoryUCM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multi-mode Upper Convected Maxwell model (see Chapter 1 of <a class="reference internal" href="theory.html#nlve-larson1988" id="id1">[1]</a>):</p>
-<div class="math">
-\[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol A_i\\
-\dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
-+ \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
- - \dfrac 1 {\tau_i} (\boldsymbol A_i - \boldsymbol I)\end{split}\]</div>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Functions</strong></dt>
-<dd><ul class="first">
-<li><p class="first">Analytical solution in shear</p>
-<div class="math">
-\[\eta^+(t) = \sum_{i=1}^n G_i \tau_i (1 - \exp(-t/\tau_i))\]</div>
-</li>
-<li><p class="first">Analytical solution in uniaxial extension</p>
-<div class="math">
-\[\eta^+_\mathrm E (t) = \dfrac 1 {\dot\varepsilon}
-\sum_{i=1}^n G_i (A_{xx, i}(t) - A_{yy, i}(t))\]</div>
-<p>with</p>
-<blockquote>
-<div><div class="math">
-\[\begin{split}A_{xx, i}(t) &amp;= \dfrac{ 1 - 2 \dot\varepsilon\tau_i 
-\exp(-(1 - 2 \dot\varepsilon\tau_i) t / \tau_i) } {1 - 2 \dot\varepsilon\tau_i }\\
-A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i 
-\exp(-(1 + \dot\varepsilon\tau_i)t/\tau_i) } { 1+ \dot\varepsilon\tau_i}\end{split}\]</div>
-</div></blockquote>
-</li>
-</ul>
-<dl class="last docutils">
-<dt>where for each mode <span class="math">\(i\)</span>:</dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(G_i\)</span>: weight of mode <span class="math">\(i\)</span></li>
-<li><span class="math">\(\tau_i\)</span>: relaxation time of mode <span class="math">\(i\)</span></li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><p class="first last">[none]</p>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 </div>
 
