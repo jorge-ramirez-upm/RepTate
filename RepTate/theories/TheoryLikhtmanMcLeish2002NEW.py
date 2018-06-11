@@ -274,9 +274,12 @@ class GUITheoryLikhtmanMcLeish2002NEW(BaseTheoryLikhtmanMcLeish2002NEW, QTheory)
         self.txtrho = QLineEdit(str(self.parameters["rho0"].value))
         self.txtrho.setReadOnly(True)
         tb.addWidget(self.txtrho)
+        self.calculateStuff = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'Calculate Tube Theory stuff')
         self.thToolsLayout.insertWidget(0, tb)
         
         connection_id = self.linkMeGeaction.triggered.connect(self.linkMeGeaction_change)
+        connection_id = self.calculateStuff.triggered.connect(self.calculate_tube_theory)
 
     def linkMeGeaction_change(self):
         self.set_param_value('linkMeGe', self.linkMeGeaction.isChecked())
@@ -289,4 +292,22 @@ class GUITheoryLikhtmanMcLeish2002NEW(BaseTheoryLikhtmanMcLeish2002NEW, QTheory)
             p = self.parameters['Ge']
             p.opt_type=OptType.opt
         self.update_parameter_table()
+
+    def calculate_tube_theory(self):
+        self.Qprint('<h3>Tube theory results</h3>')
+        CC1 = 1.69
+        CC2 = 4.17
+        CC3 = -1.55
+        taue = self.parameters["tau_e"].value
+        Me = self.parameters["Me"].value
+        table='''<table border="1" width="100%">'''
+        table+='''<tr><th>File</th><th>Z</th><th>&tau;<sub>R</sub></th><th>&tau;<sub>D</sub></th></tr>'''
+        for f in self.parent_dataset.files:
+            Mw = float(f.file_parameters["Mw"])
+            Z = Mw / Me;
+            tR = taue * Z*Z;
+            tD = 3 * taue * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5) 
+            table+= '''<tr><td>%.10s</td><td>%6.1f</td><td>%8.4g</td><td>%8.4g</td></tr>'''% (f.file_name_short, Z, tR, tD)
+        table+='''</table><br>'''
+        self.Qprint(table)
             
