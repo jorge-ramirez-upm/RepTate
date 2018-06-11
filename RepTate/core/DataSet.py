@@ -986,6 +986,8 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             if self.mode == CmdMode.GUI:
                 if calculate and th.autocalculate:
                     th.do_calculate('')
+                else:
+                    th.Qprint("<font color=green><b>Press \"Calculate\"</b></font>")
             else:
                 if (self.mode == CmdMode.batch):
                     th.prompt = ''

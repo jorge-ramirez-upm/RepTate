@@ -46,9 +46,17 @@ void set_flag_stop_bob(bool b){
     flag_stop_bob = b;
 }
 
-// callback function
+// callback function: print to Python
 pyprint_func *print_to_python;
 pyprint_func *print_err_to_python;
+// callback function: get double from Python
+pyget_double *get_freqmin;
+pyget_double *get_freqmax;
+pyget_double *get_freqint;
+
+void set_do_priority_seniority(bool b){
+    do_priority_seniority = b;
+}
 
 void def_pyprint_func(pyprint_func F)
 {
@@ -59,6 +67,21 @@ void def_pyprint_err_func(pyprint_func F)
 {
     // used to print a error message to Python
     print_err_to_python = F;
+}
+void def_get_freqmin(pyget_double F)
+{
+    // get a double from Python
+    get_freqmin = F;
+}
+void def_get_freqmax(pyget_double F)
+{
+    // get a double from Python
+    get_freqmax = F;
+}
+void def_get_freqint(pyget_double F)
+{
+    // get a double from Python
+    get_freqint = F;
 }
 
 void my_abort(char *s)

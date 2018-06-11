@@ -49,10 +49,10 @@ import time
 import bob_LVE  # dialog
 import ctypes
 from BobCtypesHelper import BobCtypesHelper, BobError
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QToolBar
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
-from PyQt5.QtCore import QUrl, pyqtSignal
+from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
+from PyQt5.QtCore import QUrl, pyqtSignal, QSize
 from shutil import copy2
 
 
@@ -114,6 +114,8 @@ class BaseTheoryBobLVE:
         self.polyconf_file_out = None  # full path of target polyconf file
         self.bch = BobCtypesHelper(self)
         self.autocalculate = False
+        self.freqint = 1.1 # BoB theory points spaced by log10(freqint)
+        self.do_priority_seniority = True
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -176,6 +178,8 @@ class BaseTheoryBobLVE:
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        self.freqmin = f.data_table.mincol(0)
+        self.freqmax = f.data_table.maxcol(0)
         #show form
         self.success_dialog = None
         self.argv = None
@@ -189,6 +193,7 @@ class BaseTheoryBobLVE:
             return
         QApplication.processEvents()
         self.bch.link_c_callback()
+        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
         # Run BoB C++ code
         self.start_time_cal = time.time()
         try:
@@ -251,6 +256,18 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
             os.makedirs(temp_dir)
         self.selected_file = None
         self.setup_dialog()
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.btn_prio_senio = tb.addAction(QIcon(':/Icon8/Images/new_icons/priority_seniority.png'), 'Calculate Priority and Seniority (can take some time)')
+        self.btn_prio_senio.setCheckable(True)
+        self.btn_prio_senio.setChecked(True)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        self.btn_prio_senio.triggered.connect(self.handle_btn_prio_senio)
+
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        self.do_priority_seniority = checked
 
     def get_file_name(self):
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
@@ -324,7 +341,7 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
             taue = float(self.d.taue.text())
             temperature = float(self.d.temperature.text())
             tmp.write('%f %f\n' % (taue, temperature))
-            #6 number of component(s) in blend = 0
+            #6 write "0" so BoB reads a polyconf file
             tmp.write('0\n')
 
     def launch_param_dialog(self):

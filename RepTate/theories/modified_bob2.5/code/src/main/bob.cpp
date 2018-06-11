@@ -32,6 +32,7 @@ void init_static(void);
 bool reptate_flag = true; // if false, "end_code()" is called at the end of bob_main()
 int nnp_size;
 bool flag_stop_bob;
+bool do_priority_seniority = true; // defines if priority and seniority are calculated
 
 bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn_out, double *mw_out, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out)
 {
@@ -83,7 +84,12 @@ bool run_bob_lve(int argc, char **argv, int *n)
   {
     infofl = fopen("info.txt", "w");
     rcread();
-    extern int OutMode;
+    extern double FreqMin, FreqMax, FreqInterval;
+    // get frequency parameters from Python
+    FreqMin = get_freqmin();
+    FreqMax = get_freqmax();
+    FreqInterval = get_freqint();
+
     OutMode = 3;
     set_flag_stop_bob(false);
     bob_main(argc, argv);

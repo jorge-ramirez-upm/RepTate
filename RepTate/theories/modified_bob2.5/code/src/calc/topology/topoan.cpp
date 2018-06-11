@@ -27,6 +27,10 @@ void topoan(void)
   extern void calc_seniority(int);
   for (int i = 0; i < num_poly; i++)
   {
+    if (flag_stop_bob)
+    {
+      my_abort((char *)"Calculations interrupted by user\n");
+    }
     calc_priority(i);
     calc_seniority(i);
   }
@@ -67,6 +71,10 @@ void topoan(void)
   // *** NOW redefine priority and seniority to start from 0 to conform with C array
   for (int i = 0; i < num_poly; i++)
   {
+    if (flag_stop_bob)
+    {
+      my_abort((char *)"Calculations interrupted by user\n");
+    }
     n1 = branched_poly[i].first_end;
     arm_pool[n1].seniority -= 1;
     arm_pool[n1].priority -= 1;
@@ -87,5 +95,6 @@ void topoan(void)
     sprintf(line, "<b>Maximum priority=%d<b><br><b>Maximum seniority=%d</b><br>", max_prio_var, max_senio_var);
     print_to_python(line);
   }
-  fprintf(infofl, "maximum priority = %d \n maximum seniority = %d \n", max_prio_var, max_senio_var);
+  else
+    fprintf(infofl, "maximum priority = %d \n maximum seniority = %d \n", max_prio_var, max_senio_var);
 }

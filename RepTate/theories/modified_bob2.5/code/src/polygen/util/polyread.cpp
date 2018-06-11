@@ -58,6 +58,10 @@ void polyread(void)
   fscanf(conffl, "%d", &num_poly);
   for (int i = 0; i < num_poly; i++)
   {
+    if (flag_stop_bob)
+    {
+      my_abort((char *)"Calculations interrupted by user\n");
+    }
     fscanf(conffl, "%d", &segnum);
     for (int j = 0; j < segnum; j++)
     {

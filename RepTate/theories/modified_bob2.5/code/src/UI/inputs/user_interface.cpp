@@ -41,11 +41,13 @@ void user_interface(void)
   get_material();
 
   // extern bool reptate_flag;
-  if (reptate_flag){
+  if (reptate_flag)
+  {
     extern void print_io_to_reptate(void); // dump input to output
     print_io_to_reptate();
   }
-  else{
+  else
+  {
     extern void print_io(void); // dump input to output
     print_io();
   }
@@ -54,9 +56,12 @@ void user_interface(void)
 
   extern void get_poly(void); // find out the polymer to use
   get_poly();
-
   extern void create_phi_hist(void);
   create_phi_hist();
-  extern void topoan(void);
-  topoan();
+  if (do_priority_seniority)
+  {
+    extern void topoan(void);
+    print_to_python((char *)"Calculating <b>priority</b> and <b>seniority</b>...<br>");
+    topoan();
+  }
 }

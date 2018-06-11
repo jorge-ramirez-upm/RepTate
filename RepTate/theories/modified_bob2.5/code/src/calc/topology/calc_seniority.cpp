@@ -30,6 +30,10 @@ void calc_seniority(int n)
   int n2 = arm_pool[n1].down;
   while (n2 != n1)
   {
+    if (flag_stop_bob)
+    {
+      my_abort((char *)"Calculations interrupted by user\n");
+    }
     set_seniority(n, n2);
     n2 = arm_pool[n2].down;
   }
