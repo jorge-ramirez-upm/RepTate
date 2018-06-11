@@ -33,7 +33,7 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
-from ctypes import CFUNCTYPE, CDLL, c_double, c_int, c_char_p, byref, c_bool
+from ctypes import CFUNCTYPE, CDLL, c_double, c_int, c_char_p, byref, c_bool, c_void_p
 import sys
 import os
 
@@ -46,8 +46,11 @@ class BobError(Exception):
 class BobCtypesHelper:
     """Wrapper class to call BoB C++ functions"""
 
-    CB_FTYPE = CFUNCTYPE(None,
+    CB_FTYPE_NONE_CHAR = CFUNCTYPE(None,
                          c_char_p)  # callback [return type, [args types]]
+
+    CB_FTYPE_DOUBLE_NONE = CFUNCTYPE(c_double,
+                         c_void_p)  # callback [return type, [args types]]
 
     def __init__(self, parent_theory):
 
@@ -69,6 +72,18 @@ class BobCtypesHelper:
             print('OS %s not recognized in BoB CH module' % (sys.platform))
         # link the C function to Python
         self.link_c_functions()
+
+    def get_freqmin(self, *arg):
+        """BoB LVE calls this function to get the min frequency"""
+        return self.parent_theory.freqmin
+
+    def get_freqmax(self, *arg):
+        """BoB LVE calls this function to get the max frequency"""
+        return self.parent_theory.freqmax
+
+    def get_freqint(self, *arg):
+        """BoB LVE calls this function to get the max frequency"""
+        return self.parent_theory.freqint
 
     def print_err_from_c(self, char):
         """Function called by BoB from the C++ code. 
@@ -99,20 +114,32 @@ class BobCtypesHelper:
         # ask BoB to stop calculations
         self.set_flag_stop_bob = self.bob_lib.set_flag_stop_bob
         self.set_flag_stop_bob.restype = None
+
+        # are priority and seniority calculated
+        self.set_do_priority_seniority = self.bob_lib.set_do_priority_seniority
+        self.set_do_priority_seniority.restype = None
         
         self.link_c_callback()
 
     def link_c_callback(self):
         """Callback C function from Python function.
-        Must call it before each run to make sure the prints are directed
-        towards the correct theory textbox.
+        Must call it before each run to make sure the prints and calls are directed
+        towards the correct theory.
         """
-        self.cb_err_func = self.CB_FTYPE(self.print_err_from_c)
+        self.cb_err_func = self.CB_FTYPE_NONE_CHAR(self.print_err_from_c)
         self.bob_lib.def_pyprint_err_func(self.cb_err_func)
 
-        self.cb_func = self.CB_FTYPE(self.print_from_c)
+        self.cb_func = self.CB_FTYPE_NONE_CHAR(self.print_from_c)
         self.bob_lib.def_pyprint_func(self.cb_func)
+
+        self.cb_get_freqmin = self.CB_FTYPE_DOUBLE_NONE(self.get_freqmin)
+        self.bob_lib.def_get_freqmin(self.cb_get_freqmin)
     
+        self.cb_get_freqmax = self.CB_FTYPE_DOUBLE_NONE(self.get_freqmax)
+        self.bob_lib.def_get_freqmax(self.cb_get_freqmax)
+
+        self.cb_get_freqint = self.CB_FTYPE_DOUBLE_NONE(self.get_freqint)
+        self.bob_lib.def_get_freqint(self.cb_get_freqint)
 
     def save_polyconf_and_return_gpc(self, arg_list, npol_tot):
         """Run BoB asking for a polyconf file only (no relaxation etc) and

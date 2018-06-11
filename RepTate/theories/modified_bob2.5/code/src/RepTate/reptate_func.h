@@ -38,11 +38,19 @@
 
 // callback function
 typedef void pyprint_func(char *s);
+typedef double pyget_double();
 extern pyprint_func *print_to_python;
+extern pyget_double *get_freqmin;
+extern pyget_double *get_freqmax;
+extern pyget_double *get_freqint;
 
 // functions used by Python
+extern "C" void set_do_priority_seniority(bool b);
 extern "C" void def_pyprint_func(pyprint_func F);
 extern "C" void def_pyprint_err_func(pyprint_func F);
+extern "C" void def_get_freqmin(pyget_double F);
+extern "C" void def_get_freqmax(pyget_double F);
+extern "C" void def_get_freqint(pyget_double F);
 extern "C" bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn, double *mw, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
 extern "C" bool run_bob_lve(int argc, char **argv, int *n);
 extern "C" bool get_bob_lve(double *omega_out, double *gp_out, double *gpp_out);
@@ -57,5 +65,6 @@ void return_gpchist(int ncomp, int n_cur_comp, double *mass_ar, double *gfac_ar,
 extern std::vector<double> omega, g_p, g_pp;
 extern int n_lve_out;
 extern bool reptate_flag;
+extern bool do_priority_seniority;
 
 #endif
