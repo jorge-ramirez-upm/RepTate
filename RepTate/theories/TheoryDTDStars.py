@@ -115,7 +115,7 @@ class BaseTheoryDTDStarsFreq:
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
-        self.has_modes = True
+        self.has_modes = False
         self.parameters["G0"] = Parameter(
             "G0",
             1e1,
@@ -314,7 +314,7 @@ class BaseTheoryDTDStarsTime:
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
-        self.has_modes = True
+        self.has_modes = False
         self.parameters["G0"] = Parameter(
             "G0",
             1e1,

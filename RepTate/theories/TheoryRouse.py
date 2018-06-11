@@ -341,7 +341,7 @@ class BaseTheoryRouseFrequency:
         """
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
-        self.has_modes = True
+        self.has_modes = False
         # self.parameters["logwmin"] = Parameter(
         #     "logwmin",
         #     -5,
