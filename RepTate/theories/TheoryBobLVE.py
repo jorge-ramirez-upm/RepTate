@@ -61,7 +61,7 @@ class TheoryBobLVE(CmdBase):
     using BoB v2.5 (Chinmay Das and Daniel Read).
     These files can be generated from the React application in RepTate.
 
-    The original documentation of BoB can be found here: `https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download`
+    The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
     """
     thname = 'BOB'
     description = 'Branch-On-Branch rheology'

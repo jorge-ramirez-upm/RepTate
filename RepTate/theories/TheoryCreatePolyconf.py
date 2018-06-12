@@ -113,7 +113,7 @@ class TheoryCreatePolyconf(CmdBase):
     The configuration file created with this theory can then be analysed
     in the BoB LVE theory, in the LVE application of RepTate.
 
-    The original documentation of BoB can be found here: `https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download`.
+    The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
     """
     thname = 'Create Polyconf'
     description = 'Create Polyconf'
