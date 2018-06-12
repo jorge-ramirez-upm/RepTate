@@ -181,6 +181,7 @@ class Tool(CmdBase):
         newxy = []
         lenx=1e9
         for i in range(n):
+            self.Qprint('<b>Series %d</b>'%(i+1))
             xcopy = x[:, i]
             ycopy = y[:, i]
             xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color)

@@ -429,8 +429,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 for to in self.parent_application.tools:
                     if file.active and to.active:
                         to.Qprint("<h3>"+file.file_name_short+"</h3>")
-                        #strline = "-"*len(file.file_name_short)
-                        #to.Qprint(strline)
                         x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
 
                 # Apply current shifts to data

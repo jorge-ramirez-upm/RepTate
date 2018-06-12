@@ -197,7 +197,8 @@ class BaseToolFindPeaks:
                 yp[i]=y[d]
                 table+='''<tr><td>%.4e</td><td>%.4e</td></tr>'''%(xp[i],yp[i])
         table+='''</table><br>'''
-        self.Qprint(table)
+        if len(peaks)>0:
+            self.Qprint(table)
         s = ax.plot(xp, yp)[0]
         s.set_marker('D')
         s.set_linestyle('')
