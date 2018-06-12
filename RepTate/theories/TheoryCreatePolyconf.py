@@ -109,9 +109,11 @@ class ArchitectureType(Enum):
 
 
 class TheoryCreatePolyconf(CmdBase):
-    """[summary]
-    
-    [description]
+    """Create polymer configuration files using BoB v2.5 (Chinmay Das and Daniel Read).
+    The configuration file created with this theory can then be analysed
+    in the BoB LVE theory, in the LVE application of RepTate.
+
+    The original documentation of BoB can be found here: `https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download`.
     """
     thname = 'Create Polyconf'
     description = 'Create Polyconf'
@@ -629,7 +631,7 @@ FunH
                 elif "PDI" in attr:
                     #add PDI line
                     self.add_new_qline(attr, "1.2", layout, pol_dict)
-                elif "Distr." in attr:
+                elif "Dist" in attr:
                     # add distribution combobox
                     self.add_cb_distribution(attr, layout, pol_dict)
                 elif "/mol" in attr:
