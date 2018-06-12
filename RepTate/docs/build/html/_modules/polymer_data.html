@@ -97,25 +97,27 @@
 <span class="sd">            **kwargs {[type]} -- [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;short&#39;</span>       <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Short name</span>
+            <span class="c1"># Basic info</span>
+            <span class="s1">&#39;name&#39;</span>       <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>      <span class="c1"># Short name</span>
             <span class="s1">&#39;long&#39;</span>        <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Full name</span>
-            <span class="s1">&#39;chem&#39;</span>        <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Short hand Chemistry</span>
-            <span class="s1">&#39;M0&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Monomer molecular weight</span>
-            <span class="s1">&#39;description&#39;</span> <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Description of parameters</span>
             <span class="s1">&#39;author&#39;</span>      <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Who added/Modified the parameters</span>
             <span class="s1">&#39;date&#39;</span>        <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Date of parameter modification</span>
+            <span class="s1">&#39;source&#39;</span>      <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Source/paper from where the data was obtained</span>
+            <span class="s1">&#39;comment&#39;</span>     <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Additional comments about the parameters            </span>
+            <span class="s1">&#39;chem&#39;</span>        <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>     <span class="c1"># Short hand Chemistry</span>
+            <span class="c1"># WLF Parameters</span>
+            <span class="s1">&#39;B1&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Material parameter B1 for WLF Shift</span>
+            <span class="s1">&#39;B2&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Material parameter B2 for WLF Shift</span>
+            <span class="s1">&#39;logalpha&#39;</span>    <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Log_10 of the thermal expansion coefficient at 0 °C</span>
+            <span class="s1">&#39;CTg&#39;</span>         <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Molecular weight dependence of Tg</span>
             <span class="c1"># Likhtman-McLeish parameters</span>
             <span class="s1">&#39;tau_e&#39;</span>       <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Rouse time of one entanglement</span>
             <span class="s1">&#39;Ge&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Entanglement modulus</span>
             <span class="s1">&#39;Me&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Entanglemnet molecular while</span>
             <span class="s1">&#39;c_nu&#39;</span>        <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Constraint release parameter</span>
-            <span class="c1"># WLF Parameters</span>
-            <span class="s1">&#39;C1&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Material parameter C1 for WLF Shift</span>
-            <span class="s1">&#39;C2&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Material parameter C2 for WLF Shift</span>
-            <span class="s1">&#39;Rho0&#39;</span>        <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Density of polymer at 0 °C</span>
-            <span class="s1">&#39;C3&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Density parameter TODO: Meaning of this?</span>
-            <span class="s1">&#39;T0&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Reference temperature?</span>
-            <span class="s1">&#39;CTg&#39;</span>         <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Molecular weight dependence of Tg</span>
+            <span class="s1">&#39;rho0&#39;</span>        <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Density of polymer at 0 °C</span>
+            <span class="s1">&#39;Te&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Temperature at which the tube parameters have been determined</span>
+            <span class="s1">&#39;M0&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># Molecular weight of repeating unit</span>
         <span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span></div>

@@ -90,35 +90,6 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="TheoryHavriliakNegamiModes.TheoryHavriliakNegamiModesFrequency">
-<em class="property">class </em><code class="descclassname">TheoryHavriliakNegamiModes.</code><code class="descname">TheoryHavriliakNegamiModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryHavriliakNegamiModes.html#TheoryHavriliakNegamiModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryHavriliakNegamiModes.TheoryHavriliakNegamiModesFrequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a generalized Havriliak-Negami model to a frequency dependent relaxation function.</p>
-<ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
-\[\epsilon^* (\omega) = \epsilon_\infty + \frac{\Delta\epsilon}{\left[ 1 + \left( i\omega\tau\right)^\alpha\right]^\gamma}\]</div>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li>einf = <span class="math">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</li>
-<li><span class="math">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
-<li>logwmin = <span class="math">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
-<li>logwmax = <span class="math">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
-<li>logDei = <span class="math">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math">\(i\)</span>, where <span class="math">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math">\(i\)</span>.</li>
-<li><span class="math">\(\alpha\)</span>: Asymmetry parameter</li>
-<li><span class="math">\(\gamma\)</span>: Broadness parameter</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
