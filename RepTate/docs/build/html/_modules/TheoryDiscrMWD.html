@@ -127,6 +127,7 @@
     <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;Discretize MWD&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Discretize a Molecular Weight Distribution&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -156,6 +157,7 @@
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryDiscrMWD</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryDiscrMWD</span><span class="o">.</span><span class="n">citations</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">TheoryDiscrMWD</span><span class="o">.</span><span class="n">doi</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -278,10 +280,9 @@
                     <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
                     <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
                     <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">True</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;logmmin&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;logmmin&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
                 <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;logmmax&#39;</span><span class="p">):</span>  <span class="c1">#make bins equally spaced again</span>
             <span class="n">nbin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nbin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">mmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logmmin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -289,7 +290,9 @@
             <span class="n">mnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">mmin</span><span class="p">,</span> <span class="n">mmax</span><span class="p">,</span> <span class="n">nbin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logM</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mnew</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="BaseTheoryDiscrMWD.setup_graphic_bins"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryDiscrMWD.BaseTheoryDiscrMWD.setup_graphic_bins">[docs]</a>    <span class="k">def</span> <span class="nf">setup_graphic_bins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -430,13 +433,13 @@
         <span class="n">Mz</span> <span class="o">=</span> <span class="n">tempMz</span> <span class="o">/</span> <span class="n">Mw</span>
         <span class="n">PDI</span> <span class="o">=</span> <span class="n">Mw</span> <span class="o">/</span> <span class="n">Mn</span>
 
-        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span> <span class="ow">and</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
-            <span class="n">file_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">topLevelItem</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">file_table</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%0.3g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">))</span>
-            <span class="n">file_table</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%0.3g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Mw</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">))</span>
-            <span class="n">file_table</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%0.3g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">PDI</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># if line == &quot;input&quot; and CmdBase.mode == CmdMode.GUI:</span>
+        <span class="c1">#     file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)</span>
+        <span class="c1">#     self.parent_dataset.DataSettreeWidget.blockSignals(True)</span>
+        <span class="c1">#     file_table.setText(1, &quot;%0.3g&quot; % (Mn / 1000))</span>
+        <span class="c1">#     file_table.setText(2, &quot;%0.3g&quot; % (Mw / 1000))</span>
+        <span class="c1">#     file_table.setText(3, &quot;%0.3g&quot; % PDI)</span>
+        <span class="c1">#     self.parent_dataset.DataSettreeWidget.blockSignals(False)</span>
 
         <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;discretized&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;Mn&quot;</span><span class="p">,</span> <span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
@@ -447,11 +450,12 @@
         <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">Mw</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">PDI</span><span class="p">,</span> <span class="n">Mz</span> <span class="o">/</span> <span class="n">Mw</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Characteristics of the </span><span class="si">%s</span><span class="s2"> MWD:</span><span class="se">\n</span><span class="s2">&quot;</span>
-                        <span class="s2">&quot;</span><span class="si">%7s</span><span class="s2"> </span><span class="si">%7s</span><span class="s2"> </span><span class="si">%7s</span><span class="s2"> </span><span class="si">%7s</span><span class="se">\n</span><span class="s2">&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%6.3g</span><span class="s2">k </span><span class="si">%6.3g</span><span class="s2">k </span><span class="si">%7.3g</span><span class="s2"> </span><span class="si">%7.3g</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span>
-                        <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s2">&quot;Mn&quot;</span><span class="p">,</span> <span class="s2">&quot;Mw&quot;</span><span class="p">,</span> <span class="s2">&quot;Mw/Mn&quot;</span><span class="p">,</span> <span class="s2">&quot;Mz/Mw&quot;</span><span class="p">,</span> <span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span>
-                         <span class="n">Mw</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">PDI</span><span class="p">,</span> <span class="n">Mz</span> <span class="o">/</span> <span class="n">Mw</span><span class="p">))</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;h3&gt;Characteristics of the </span><span class="si">%s</span><span class="s1"> MWD&lt;/h3&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">table</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
+            <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;Mn&lt;/th&gt;&lt;th&gt;Mw&lt;/th&gt;&lt;th&gt;Mw/Mn&lt;/th&gt;&lt;th&gt;Mz/Mw&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
+            <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;</span><span class="si">%6.3g</span><span class="s1">k&lt;/td&gt;&lt;td&gt;</span><span class="si">%6.3g</span><span class="s1">k&lt;/td&gt;&lt;td&gt;</span><span class="si">%7.3g</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%7.3g</span><span class="s1">&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">Mw</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">PDI</span><span class="p">,</span> <span class="n">Mz</span> <span class="o">/</span> <span class="n">Mw</span><span class="p">)</span>
+            <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseTheoryDiscrMWD.discretise_mwd"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryDiscrMWD.BaseTheoryDiscrMWD.discretise_mwd">[docs]</a>    <span class="k">def</span> <span class="nf">discretise_mwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Discretize a molecular weight distribution</span>

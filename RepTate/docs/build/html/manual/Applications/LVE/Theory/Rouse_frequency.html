@@ -87,6 +87,45 @@
 <h1>Rouse Frequency<a class="headerlink" href="#rouse-frequency" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryRouse.TheoryRouseFrequency">
+<em class="property">class </em><code class="descclassname">TheoryRouse.</code><code class="descname">TheoryRouseFrequency</code><a class="reference internal" href="../../../../_modules/TheoryRouse.html#TheoryRouseFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRouse.TheoryRouseFrequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit Rouse modes to a frequency dependent relaxation function</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Function</strong></dt>
+<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math">\(N\)</span>):</p>
+<div class="last math">
+\[\begin{split}G'(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{(\omega\tau_p)^2} {1 +  (\omega\tau_p)^2}\\
+G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omega\tau_p)^2}\\
+\tau_p &amp;= \dfrac{N^2 \tau_0 }{ 2 p^2}\end{split}\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first simple">
+<li><span class="math">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
+<li><span class="math">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
+<li><span class="math">\(M_0\)</span>: molar mass of an elementary segment</li>
+</ul>
+<dl class="last docutils">
+<dt>where</dt>
+<dd><ul class="first last simple">
+<li><span class="math">\(c\)</span>: number of segments per unit volume</li>
+<li><span class="math">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
+<li><span class="math">\(T\)</span>: temperature</li>
+<li><span class="math">\(N=M_w/M_0\)</span>: number of segments par chain</li>
+<li><span class="math">\(M_w\)</span>: weight-average molecular mass</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

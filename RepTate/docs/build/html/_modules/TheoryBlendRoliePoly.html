@@ -126,6 +126,8 @@
 <span class="kn">import</span> <span class="nn">Version</span>
 
 <span class="kn">import</span> <span class="nn">rp_blend_ctypes_helper</span> <span class="k">as</span> <span class="nn">rpch</span>
+<span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">EndComputationRequested</span>
+
 
 
 <span class="k">class</span> <span class="nc">FlowMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -588,7 +590,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tauR</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">taus</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">taud</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Got </span><span class="si">%d</span><span class="s2"> modes from MWD&quot;</span> <span class="o">%</span> <span class="n">nmodes</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Press calculate to update theory&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=green&gt;&lt;b&gt;Press &quot;Calculate&quot; to update theory&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -763,6 +765,8 @@
 <span class="sd">            - t {float} -- time</span>
 <span class="sd">            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
         <span class="n">tmax</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">tmax</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -786,6 +790,8 @@
 <span class="sd">            - t {float} -- time</span>
 <span class="sd">            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
         <span class="n">tmax</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">tmax</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -859,9 +865,12 @@
             <span class="n">tmax</span>
         <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mf">0.2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;Rate </span><span class="si">%.3g</span><span class="se">\n</span><span class="s1">  0</span><span class="si">%%</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="n">flow_rate</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">sig</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
-            <span class="n">pde_stretch</span><span class="p">,</span> <span class="n">sigma0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;Rate </span><span class="si">%.3g</span><span class="s1">&lt;br&gt;  0</span><span class="si">%%</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="n">flow_rate</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
+                <span class="n">pde_stretch</span><span class="p">,</span> <span class="n">sigma0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">EndComputationRequested</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39; 100%&#39;</span><span class="p">)</span>
         <span class="c1"># sig.shape is (len(t), 3*n^2) in shear</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">==</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span><span class="p">:</span>
@@ -872,6 +881,8 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_fene</span> <span class="o">==</span> <span class="n">FeneMode</span><span class="o">.</span><span class="n">with_fene</span><span class="p">:</span>
                 <span class="c1">#calculate lambda^2</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                        <span class="k">break</span>
                     <span class="n">I</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="n">nmodes</span> <span class="o">*</span> <span class="n">i</span>
                     <span class="n">trace_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
@@ -881,6 +892,8 @@
                     <span class="n">lsq</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">trace_arr</span> <span class="o">/</span> <span class="mf">3.0</span>  <span class="c1"># len(t) rows and n cols</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                    <span class="k">break</span>
                 <span class="n">I</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="n">nmodes</span> <span class="o">*</span> <span class="n">i</span>
                 <span class="n">sig_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
@@ -905,6 +918,8 @@
             <span class="n">lsq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_fene</span> <span class="o">==</span> <span class="n">FeneMode</span><span class="o">.</span><span class="n">with_fene</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                        <span class="k">break</span>
                     <span class="n">I</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="n">nmodes</span> <span class="o">*</span> <span class="n">i</span>
                     <span class="n">trace_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
@@ -913,6 +928,8 @@
                     <span class="n">lsq</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">trace_arr</span> <span class="o">/</span> <span class="mf">3.0</span>  <span class="c1"># len(t) rows and n cols</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                    <span class="k">break</span>
                 <span class="n">I</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="n">nmodes</span> <span class="o">*</span> <span class="n">i</span>
                 <span class="n">sig_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
@@ -981,7 +998,7 @@
 
     <span class="k">def</span> <span class="nf">do_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Minimisation procedure disabled in this theory&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;font color=red&gt;&lt;b&gt;Minimisation procedure disabled in this theory&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">CLTheoryBlendRoliePoly</span><span class="p">(</span><span class="n">BaseTheoryBlendRoliePoly</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
@@ -1054,15 +1071,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_modes_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
             <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-scatter-plot.png&#39;</span><span class="p">),</span>
             <span class="s2">&quot;Plot Modes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_modes_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
+            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-save-Maxwell.png&#39;</span><span class="p">),</span>
+            <span class="s2">&quot;Save Modes&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tbutmodes</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_modes_action</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tbutmodes</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
         <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tbutmodes</span><span class="p">)</span>
-        <span class="c1">#Show LVE button</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
-            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-visible.png&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;Show Linear Envelope&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># #Show LVE button</span>
+        <span class="c1"># self.linearenvelope = tb.addAction(</span>
+        <span class="c1">#     QIcon(&#39;:/Icon8/Images/new_icons/icons8-visible.png&#39;),</span>
+        <span class="c1">#     &#39;Show Linear Envelope&#39;)</span>
+        <span class="c1"># self.linearenvelope.setCheckable(True)</span>
+        <span class="c1"># self.linearenvelope.setChecked(False)</span>
         <span class="c1">#Finite extensibility button</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">with_fene_button</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
             <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-infinite.png&#39;</span><span class="p">),</span>
@@ -1073,13 +1093,6 @@
             <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-circled-g-filled.png&#39;</span><span class="p">),</span>
             <span class="s1">&#39;Modulus Correction&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">with_gcorr_button</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="c1"># #SpinBox &quot;nmodes&quot;</span>
-        <span class="c1"># self.spinbox = QSpinBox()</span>
-        <span class="c1"># self.spinbox.setRange(0, self.parameters[&quot;nmodes&quot;].value)  # min and max number of modes</span>
-        <span class="c1"># self.spinbox.setSuffix(&quot; stretch&quot;)</span>
-        <span class="c1"># self.spinbox.setToolTip(&quot;Number of stretching modes&quot;)</span>
-        <span class="c1"># self.spinbox.setValue(self.parameters[&quot;nmodes&quot;].value)  #initial value</span>
-        <span class="c1"># tb.addWidget(self.spinbox)</span>
 
         <span class="c1">#Save to flowsolve button</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flowsolve_btn</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
@@ -1101,10 +1114,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">edit_modes_window</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_modes_graph</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_linear_envelope</span><span class="p">)</span>
-        <span class="c1"># connection_id = self.spinbox.valueChanged.connect(</span>
-        <span class="c1">#     self.handle_spinboxValueChanged)</span>
+        <span class="c1"># connection_id = self.linearenvelope.triggered.connect(</span>
+        <span class="c1">#     self.show_linear_envelope)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_modes</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_fene_button</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_with_fene_button</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_gcorr_button</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
@@ -1167,12 +1180,12 @@
                 <span class="c1"># if Zeff contains something</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">with_gcorr</span> <span class="o">=</span> <span class="n">GcorrMode</span><span class="o">.</span><span class="n">with_gcorr</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Modulus correction needs Z from MWD&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=orange&gt;&lt;b&gt;Modulus correction needs Z from MWD&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">with_gcorr_button</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">with_gcorr</span> <span class="o">=</span> <span class="n">GcorrMode</span><span class="o">.</span><span class="n">none</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Press calculate to update theory&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=green&gt;&lt;b&gt;Press &quot;Calculate&quot; to update theory&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">handle_with_fene_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
@@ -1189,13 +1202,7 @@
                 <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-infinite.png&#39;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">display_flag</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">=</span> <span class="n">OptType</span><span class="o">.</span><span class="n">const</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Press calculate to update theory&quot;</span><span class="p">)</span>
-        <span class="c1"># self.parent_dataset.handle_actionCalculate_Theory()</span>
-
-    <span class="c1"># def handle_spinboxValueChanged(self, value):</span>
-    <span class="c1">#     nmodes = self.parameters[&quot;nmodes&quot;].value</span>
-    <span class="c1">#     self.set_param_value(&quot;nstretch&quot;, min(nmodes, value))</span>
-    <span class="c1">#     self.handle_actionCalculate_Theory()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=green&gt;&lt;b&gt;Press &quot;Calculate&quot; to update theory&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Uncheck the LVE button. Called when curent theory is changed</span>

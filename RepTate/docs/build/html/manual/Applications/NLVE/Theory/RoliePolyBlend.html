@@ -89,6 +89,47 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryBlendRoliePoly.TheoryBlendRoliePoly">
+<em class="property">class </em><code class="descclassname">TheoryBlendRoliePoly.</code><code class="descname">TheoryBlendRoliePoly</code><a class="reference internal" href="../../../../_modules/TheoryBlendRoliePoly.html#TheoryBlendRoliePoly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBlendRoliePoly.TheoryBlendRoliePoly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blend of Rolie-Poly equations for the nonlinear predictions of polydisperse melts</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Function</strong></dt>
+<dd><div class="first math">
+\[\boldsymbol \sigma = G_N^0 \sum_i \text{fene}(\lambda_i) \phi_i \boldsymbol A_i\]</div>
+<dl class="last docutils">
+<dt>where</dt>
+<dd><div class="first last math">
+\[\begin{split}\boldsymbol A_i &amp;= \sum_j \phi_j \boldsymbol A_{ij}\\
+\lambda_i &amp;= \left( \dfrac{\text{Tr}  \boldsymbol A_i}{3}  \right)^{1/2}\\
+\stackrel{\nabla}{\boldsymbol  A_{ij}} &amp;=
+-\dfrac{1}{2\tau_{\mathrm d,i}} (\boldsymbol A_{ij} - \boldsymbol I)
+-\dfrac{2}{\tau_{\mathrm s,i}} \dfrac{\lambda_i - 1}{\lambda_i} \boldsymbol A_{ij}
+-\left( \dfrac{\beta_\text{th}}{2\tau_{\mathrm d,j}} 
++ \beta_\text{CCR}\dfrac{2}{\tau_{\mathrm s,j}} \dfrac{\lambda_j - 1}{\lambda_j}\lambda_i^{2\delta} \right)
+(\boldsymbol A_{ij} - \boldsymbol I)\end{split}\]</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">GN0</span></code> <span class="math">\(\equiv G_N^0\)</span>: Plateau modulus</li>
+<li><code class="docutils literal"><span class="pre">beta</span></code> <span class="math">\(\equiv\beta_\text{CCR}\)</span>: Rolie-Poly CCR parameter</li>
+<li><code class="docutils literal"><span class="pre">delta</span></code> <span class="math">\(\equiv\delta\)</span>: Rolie-Poly CCR exponent</li>
+<li><code class="docutils literal"><span class="pre">phi_i</span></code> <span class="math">\(\equiv\phi_i\)</span>: Volume fraction of species <span class="math">\(i\)</span></li>
+<li><code class="docutils literal"><span class="pre">tauD_i</span></code> <span class="math">\(\equiv\tau_{\mathrm d,i}\)</span>: Maxwell relaxation times for the stress of species <span class="math">\(i\)</span> (includes both reptation and constraint release mechamisms)</li>
+<li><code class="docutils literal"><span class="pre">tauR_i</span></code> <span class="math">\(\equiv\tau_{\mathrm s,i}\)</span>: Stretch relaxation time of species <span class="math">\(i\)</span></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

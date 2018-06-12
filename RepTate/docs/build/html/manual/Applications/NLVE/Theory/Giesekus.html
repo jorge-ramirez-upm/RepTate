@@ -87,6 +87,39 @@
 <h1>Multi-mode Giesekus model<a class="headerlink" href="#multi-mode-giesekus-model" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryGiesekus.TheoryGiesekus">
+<em class="property">class </em><code class="descclassname">TheoryGiesekus.</code><code class="descname">TheoryGiesekus</code><a class="reference internal" href="../../../../_modules/TheoryGiesekus.html#TheoryGiesekus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryGiesekus.TheoryGiesekus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-mode Giesekus Model (see Chapter 6 of <a class="reference internal" href="theory.html#nlve-larson1988" id="id1">[1]</a>):</p>
+<blockquote>
+<div><div class="math">
+\[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol  {A_i},\\
+\dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
++ \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
+- \dfrac {1} {\tau_i}  (\boldsymbol A_i - \boldsymbol I)
+-  \dfrac {\alpha_i} {\tau_i} (\boldsymbol A_i - \boldsymbol I)^2,\end{split}\]</div>
+<dl class="docutils">
+<dt>where for each mode <span class="math">\(i\)</span>:</dt>
+<dd><ul class="first last simple">
+<li><span class="math">\(G_i\)</span>: weight of mode <span class="math">\(i\)</span></li>
+<li><span class="math">\(\tau_i\)</span>: relaxation time of mode <span class="math">\(i\)</span></li>
+<li><span class="math">\(\alpha_i\)</span>: constant of proportionality mode <span class="math">\(i\)</span></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">alpha_i</span></code> <span class="math">\(\equiv \alpha_i\)</span></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

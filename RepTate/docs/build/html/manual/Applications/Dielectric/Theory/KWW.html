@@ -90,6 +90,38 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryKWWModes.TheoryKWWModesFrequency">
+<em class="property">class </em><code class="descclassname">TheoryKWWModes.</code><code class="descname">TheoryKWWModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryKWWModes.html#TheoryKWWModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryKWWModes.TheoryKWWModesFrequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a Kohlrausch-Williams-Watts (KWW, stretched exponential) model to a frequency dependent relaxation function.</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Function</strong></dt>
+<dd><div class="first last math">
+\[\epsilon (t) - \epsilon_\infty =  \Delta\epsilon \left[ 1 - \exp \left( - \frac{t}{\tau} \right)^\beta\right]\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last simple">
+<li>einf = <span class="math">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</li>
+<li><span class="math">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
+<li>logwmin = <span class="math">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
+<li>logwmax = <span class="math">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
+<li>logDei = <span class="math">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math">\(i\)</span>, where <span class="math">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math">\(i\)</span>.</li>
+<li><span class="math">\(\beta\)</span>: stretched exponential parameter</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It makes use of the libkww code, by Joachim Wuttke, CITE: doi:10.3390/a5040604</p>
+</div>
+</dd></dl>
+
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>

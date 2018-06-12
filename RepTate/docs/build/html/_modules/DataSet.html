@@ -125,6 +125,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="k">import</span> <span class="n">simps</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patheffects</span> <span class="k">as</span> <span class="nn">pe</span>
 
 <div class="viewcode-block" id="ColorMode"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.ColorMode">[docs]</a><span class="k">class</span> <span class="nc">ColorMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -455,9 +456,8 @@
 
         <span class="k">for</span> <span class="n">to</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
             <span class="n">to</span><span class="o">.</span><span class="n">clean_graphic_stuff</span><span class="p">()</span>
-            <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=======================&quot;</span><span class="p">)</span>
-            <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Calculating the Tool...&quot;</span><span class="p">)</span>
-            <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;=======================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">to</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;hr&gt;&lt;h2&gt;Calculating...&lt;/h2&gt;&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">):</span>
             <span class="n">dt</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">data_table</span>
@@ -485,6 +485,24 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;in do_plot()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                     <span class="k">return</span>
 
+                <span class="c1">## Apply current shifts to data</span>
+                <span class="c1">#for i in range(view.n):</span>
+                <span class="c1">#    if file.isshifted[i]:</span>
+                <span class="c1">#        if view.log_x:</span>
+                <span class="c1">#            x[:,i]*=np.power(10, file.xshift[i])</span>
+                <span class="c1">#        else:</span>
+                <span class="c1">#            x[:,i]+=file.xshift[i]</span>
+                <span class="c1">#        if view.log_y:</span>
+                <span class="c1">#            y[:,i]*=np.power(10, file.yshift[i])</span>
+                <span class="c1">#        else:</span>
+                <span class="c1">#            y[:,i]+=file.yshift[i]</span>
+
+                <span class="c1"># Apply the currently active tools</span>
+                <span class="k">for</span> <span class="n">to</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">to</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                        <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;h3&gt;&quot;</span><span class="o">+</span><span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="o">+</span><span class="s2">&quot;&lt;/h3&gt;&quot;</span><span class="p">)</span>
+                        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">to</span><span class="o">.</span><span class="n">calculate_all</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">],</span> <span class="n">color</span><span class="p">)</span>
+
                 <span class="c1"># Apply current shifts to data</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">isshifted</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
@@ -496,14 +514,6 @@
                             <span class="n">y</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">*=</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">yshift</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">y</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="n">file</span><span class="o">.</span><span class="n">yshift</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="c1"># Apply the currently active tools</span>
-                <span class="k">for</span> <span class="n">to</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">to</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
-                        <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
-                        <span class="n">strline</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
-                        <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">strline</span><span class="p">)</span>
-                        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">to</span><span class="o">.</span><span class="n">calculate_all</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">],</span> <span class="n">color</span><span class="p">)</span>
 
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span><span class="p">):</span>
                     <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">view</span><span class="o">.</span><span class="n">n</span> <span class="ow">and</span> <span class="n">file</span><span class="o">.</span><span class="n">active</span><span class="p">):</span>
@@ -558,7 +568,7 @@
                     <span class="c1"># Apply the currently active tools</span>
                     <span class="k">for</span> <span class="n">to</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
                         <span class="k">if</span> <span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">to</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">to</span><span class="o">.</span><span class="n">applytotheory</span><span class="p">):</span>
-                            <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;* &quot;</span><span class="o">+</span><span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                            <span class="n">to</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;* &lt;i&gt;&quot;</span><span class="o">+</span><span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s2">&quot;&lt;/i&gt;&quot;</span><span class="p">)</span>
                             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">to</span><span class="o">.</span><span class="n">calculate_all</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">],</span> <span class="n">color</span><span class="p">)</span>
 
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span><span class="p">):</span>
@@ -566,10 +576,18 @@
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_marker</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># 2nd theory line with different style</span>
+                                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">th_linestyle</span> <span class="o">==</span> <span class="s1">&#39;solid&#39;</span><span class="p">:</span>
+                                    <span class="n">th_linestyle</span> <span class="o">=</span> <span class="n">ThLineMode</span><span class="o">.</span><span class="n">linestyles</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;dashed&#39;</span><span class="p">]</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">th_linestyle</span> <span class="o">=</span> <span class="n">ThLineMode</span><span class="o">.</span><span class="n">linestyles</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;solid&#39;</span><span class="p">]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">th_linestyle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">th_linestyle</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_linestyle</span><span class="p">(</span><span class="n">th_linestyle</span><span class="p">)</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_linewidth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th_line_width</span><span class="p">)</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">th_color</span><span class="p">)</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                            <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_path_effects</span><span class="p">([</span><span class="n">pe</span><span class="o">.</span><span class="n">Normal</span><span class="p">()])</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -1036,8 +1054,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">th</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">name</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">calculate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">calculate</span> <span class="ow">and</span> <span class="n">th</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
                     <span class="n">th</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">th</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;font color=green&gt;&lt;b&gt;Press </span><span class="se">\&quot;</span><span class="s2">Calculate</span><span class="se">\&quot;</span><span class="s2">&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">batch</span><span class="p">):</span>
                     <span class="n">th</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
