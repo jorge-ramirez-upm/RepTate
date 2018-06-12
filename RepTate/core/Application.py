@@ -131,10 +131,8 @@ class Application(CmdBase):
         self.axarr = self.multiplots.axarr  #
         self.canvas = self.multiplots.canvas
 
-        connection_id = self.figure.canvas.mpl_connect('pick_event',
-                                                       self.onpick)
-        connection_id = self.figure.canvas.mpl_connect('button_release_event',
-                                                       self.onrelease)
+        connection_id = self.figure.canvas.mpl_connect('pick_event', self.onpick)
+        connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
         connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
 
         if (CmdBase.mode == CmdMode.cmdline):
@@ -154,8 +152,7 @@ class Application(CmdBase):
     def onpick(self, event):
         """Called when clicking on a plot/artist"""
         if event.mouseevent.button == 3:  #right click in plot
-            self.artists_clicked.append(
-                event.artist)  #collect all artists under mouse
+            self.artists_clicked.append(event.artist)  #collect all artists under mouse
 
     def open_figure_popup_menu(self, event):
         """Open a menu to let the user copy data or chart to clipboard"""
