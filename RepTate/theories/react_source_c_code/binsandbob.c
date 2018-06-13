@@ -314,8 +314,8 @@ void polyconfwrite(int n, char *fname)
                 first = br_poly[i].first_end;
                 armwt = 0.5 * arm_pool[first].arm_len / br_poly[i].tot_len / npoly * enrich;
                 armz = 0.5 * arm_pool[first].arm_len / N_e;
-                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", -1, -1, 1, -1, armz, armwt);
-                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", 0, -1, -1, -1, armz, armwt);
+                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e %7d\n", -1, -1, 1, -1, armz, armwt, arm_pool[first].senio);
+                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e %7d\n", 0, -1, -1, -1, armz, armwt, arm_pool[arm_pool[first].down].senio);
             }
             else
             { // it's a branched polymer
@@ -379,7 +379,7 @@ void polyconfwrite(int n, char *fname)
                         mc = abs(arm_pool[m1].R2);
                         tR2 = arm_pool[mc].armnum;
                     }
-                    fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", tL1, tL2, tR1, tR2, armz, armwt);
+                    fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e %7d\n", tL1, tL2, tR1, tR2, armz, armwt, arm_pool[first].senio);
 
                     m1 = arm_pool[m1].down;
 

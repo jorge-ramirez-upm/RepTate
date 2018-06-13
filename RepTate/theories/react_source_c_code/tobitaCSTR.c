@@ -40,6 +40,7 @@
 #include "polybits.h"
 #include "polycleanup.h"
 #include "polymassrg.h"
+#include "calc_architecture.h"
 #include "ran3.h"
 
 tobitaCSTR_global tCSTR_global = {.tobCSTRnumber = 1, .tobitaCSTRerrorflag = false};
@@ -136,6 +137,7 @@ bool tobCSTR(int n, int n1)
         br_poly[n].gfactor = gfact;
 
         // check to see whether to save the polymer
+        calc_seniority(n);
         bobcount(n, n1);
         return true;
     }

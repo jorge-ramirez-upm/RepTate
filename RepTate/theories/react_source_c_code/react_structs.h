@@ -39,13 +39,13 @@
 typedef struct
 {
     double arm_len, arm_conv, arm_time, arm_tm, arm_tdb;
-    int L1, L2, R1, R2, up, down, armnum, armcat;
+    int L1, L2, R1, R2, up, down, armnum, armcat, senio, prio;
     bool ended, endfin, scission;
 } arm;
 
 typedef struct
 {
-    int first_end, num_br, bin, num_sat, num_unsat, armnum, nextpoly;
+    int first_end, num_br, bin, num_sat, num_unsat, armnum, nextpoly, max_senio, max_prio;
     double tot_len, gfactor;
     bool saved;
 } polymer;
