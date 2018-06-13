@@ -1032,6 +1032,7 @@ class DraggableNote(DraggableArtist):
             - function2 {[type]} -- [description] (default: {None})
         """
         super(DraggableNote, self).__init__(artist, mode, function)
+        self.cidpress = self.artist.figure.canvas.mpl_connect('button_press_event', self.on_press)
         self.function2=function2
 
     def get_data(self):
@@ -1052,6 +1053,25 @@ class DraggableNote(DraggableArtist):
         """
         self.artist.set_position([self.press[0]+dx, self.press[1]+dy])
 
+    def on_press(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - event {[type]} -- [description]
+        """
+        if not event.dblclick:
+            super(DraggableNote, self).on_press(event)
+            return
+
+        if event.inaxes != self.artist.axes: return
+        if DraggableArtist.lock is not None: return
+        if event.button != 1: return
+        contains, attrd = self.artist.contains(event)
+        if not contains: return
+        self.function2(self.artist)
+                    
     def on_release(self, event):
         """[summary]
         
@@ -1066,14 +1086,6 @@ class DraggableNote(DraggableArtist):
         if event.ydata is None: return
         dx = event.xdata - xpress
         dy = event.ydata - ypress
-        #if (self.mode==DragType.none):   
-        #    self.function(0, 0)
-        #elif (self.mode==DragType.horizontal):
-        #    self.function(dx, 0)
-        #elif (self.mode==DragType.vertical):
-        #    self.function(0, dy)
-        #elif (self.mode==DragType.both):
-        #    self.function(dx, dy)
         self.press = None
         DraggableArtist.lock = None
         self.artist.set_animated(False)

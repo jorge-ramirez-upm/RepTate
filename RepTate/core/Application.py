@@ -39,7 +39,6 @@ import io
 #import logging
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
-import math
 
 from CmdBase import CmdBase, CmdMode
 from Theory import Theory
@@ -49,7 +48,7 @@ from Tool import *
 
 from MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
-from PyQt5.QtGui import QCursor, QImage
+from PyQt5.QtGui import QImage
 from PyQt5.QtCore import Qt
 
 from collections import OrderedDict
@@ -104,7 +103,6 @@ class Application(CmdBase):
         self.ncols = ncols  #number of columns in the multiplot
         self.current_viewtab = 0
 
-        self.artists_clicked = []
         self.autoscale = True
 
         # Theories available everywhere
@@ -132,18 +130,6 @@ class Application(CmdBase):
         self.axarr = self.multiplots.axarr  #
         self.canvas = self.multiplots.canvas
 
-        connection_id = self.figure.canvas.mpl_connect('pick_event', self.onpick)
-        connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
-        connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
-        connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
-        connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
-
-        # For plot interaction
-        self._pressed_button = None # To store active button during interaction
-        self._axes = None # To store x and y axes concerned by interaction
-        self._event = None  # To store reference event during interaction
-        self._was_zooming = False 
-
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
             self.multiplots.show()
@@ -151,212 +137,7 @@ class Application(CmdBase):
     def add_common_theories(self):
         for th in self.common_theories.values():
             self.theories[th.thname] = th
-            
-    def _pan_update_limits(self, ax, axis_id, event, last_event):
-        """Compute limits with applied pan."""
-        assert axis_id in (0, 1)
-        if axis_id == 0:
-            lim = ax.get_xlim()
-            scale = ax.get_xscale()
-        else:
-            lim = ax.get_ylim()
-            scale = ax.get_yscale()
-
-        pixel_to_data = ax.transData.inverted()
-        data = pixel_to_data.transform_point((event.x, event.y))
-        last_data = pixel_to_data.transform_point((last_event.x, last_event.y))
-
-        if scale == 'linear':
-            delta = data[axis_id] - last_data[axis_id]
-            new_lim = lim[0] - delta, lim[1] - delta
-        elif scale == 'log':
-            try:
-                delta = math.log10(data[axis_id]) - \
-                    math.log10(last_data[axis_id])
-                new_lim = [pow(10., (math.log10(lim[0]) - delta)),
-                           pow(10., (math.log10(lim[1]) - delta))]
-            except (ValueError, OverflowError):
-                new_lim = lim  # Keep previous limits
-        else:
-            logging.warning('Pan not implemented for scale "%s"' % scale)
-            new_lim = lim
-        return new_lim
-        
-    def _axes_to_update(self, event):
-        """Returns two sets of Axes to update according to event.
-
-        Takes care of multiple axes and shared axes.
-
-        :param MouseEvent event: Matplotlib event to consider
-        :return: Axes for which to update xlimits and ylimits
-        :rtype: 2-tuple of set (xaxes, yaxes)
-
-        """
-        x_axes, y_axes = set(), set()
-
-        # Go through all axes to enable zoom for multiple axes subplots
-        for ax in self.figure.axes:
-            if ax.contains(event)[0]:
-                # For twin x axes, makes sure the zoom is applied once
-                shared_x_axes = set(ax.get_shared_x_axes().get_siblings(ax))
-                if x_axes.isdisjoint(shared_x_axes):
-                    x_axes.add(ax)
-
-                # For twin y axes, makes sure the zoom is applied once
-                shared_y_axes = set(ax.get_shared_y_axes().get_siblings(ax))
-                if y_axes.isdisjoint(shared_y_axes):
-                    y_axes.add(ax)
-
-        return x_axes, y_axes
-
-    def _zoom_area(self, event):
-        if event.name == 'button_press_event':  # begin drag
-            self._event = event
-            self._patch = plt.Rectangle(
-                xy=(event.xdata, event.ydata), width=0, height=0,
-                fill=False, linewidth=1., linestyle=':', color='gray')
-            self._event.inaxes.add_patch(self._patch)
-
-        elif event.name == 'button_release_event':  # end drag
-            self._patch.remove()
-            del self._patch
-
-            if (abs(event.x - self._event.x) < 3 or
-                    abs(event.y - self._event.y) < 3):
-                self._was_zooming = False
-                return  # No zoom when points are too close
-
-            x_axes, y_axes = self._axes
-
-            for ax in x_axes:
-                pixel_to_data = ax.transData.inverted()
-                begin_pt = pixel_to_data.transform_point((event.x, event.y))
-                end_pt = pixel_to_data.transform_point(
-                    (self._event.x, self._event.y))
-
-                min_ = min(begin_pt[0], end_pt[0])
-                max_ = max(begin_pt[0], end_pt[0])
-                if not ax.xaxis_inverted():
-                    ax.set_xlim(min_, max_)
-                else:
-                    ax.set_xlim(max_, min_)
-
-            for ax in y_axes:
-                pixel_to_data = ax.transData.inverted()
-                begin_pt = pixel_to_data.transform_point((event.x, event.y))
-                end_pt = pixel_to_data.transform_point(
-                    (self._event.x, self._event.y))
-
-                min_ = min(begin_pt[1], end_pt[1])
-                max_ = max(begin_pt[1], end_pt[1])
-                if not ax.yaxis_inverted():
-                    ax.set_ylim(min_, max_)
-                else:
-                    ax.set_ylim(max_, min_)
-
-            self._event = None
-            self._was_zooming = True
-
-        elif event.name == 'motion_notify_event':  # drag
-            if self._event is None:
-                return
-
-            if event.inaxes != self._event.inaxes:
-                return  # Ignore event outside plot
-
-            self._patch.set_width(event.xdata - self._event.xdata)
-            self._patch.set_height(event.ydata - self._event.ydata)
-
-        self.figure.canvas.draw()
-
-    def _pan(self, event):
-        if event.name == 'button_press_event':  # begin pan
-            self._event = event
-
-        elif event.name == 'button_release_event':  # end pan
-            self._event = None
-
-        elif event.name == 'motion_notify_event':  # pan
-            if self._event is None:
-                return
-
-            if event.x != self._event.x:
-                for ax in self._axes[0]:
-                    xlim = self._pan_update_limits(ax, 0, event, self._event)
-                    ax.set_xlim(xlim)
-
-            if event.y != self._event.y:
-                for ax in self._axes[1]:
-                    ylim = self._pan_update_limits(ax, 1, event, self._event)
-                    ax.set_ylim(ylim)
-
-            if event.x != self._event.x or event.y != self._event.y:
-                self.figure.canvas.draw()
-
-            self._event = event    
-            
-    def on_press(self, event):
-        if event.button == 2: # Pan
-            x_axes, y_axes = self._axes_to_update(event)
-            if x_axes or y_axes:
-                self._axes = x_axes, y_axes
-                self._pressed_button = event.button
-                self._pan(event)
-        elif event.button == 3: # Zoom
-            x_axes, y_axes = self._axes_to_update(event)
-            if x_axes or y_axes:
-                self._axes = x_axes, y_axes
-                self._pressed_button = event.button
-                self._zoom_area(event)
-
-    def on_motion(self, event):
-        if self._pressed_button == 2:  # pan
-            self._pan(event)
-        elif self._pressed_button == 3:  # zoom area
-            self._zoom_area(event)
-                
-    def onrelease(self, event):
-        """Called when releasing mouse"""
-        if event.button == 3:  #if release a right click
-            self._zoom_area(event)
-            if not self._was_zooming:
-                self.open_figure_popup_menu(event)
-            self.artists_clicked.clear()
-            self._was_zooming = False
-        elif event.button == 2:
-            self._pan(event)
-        self._pressed_button = None
-
-    def onpick(self, event):
-        """Called when clicking on a plot/artist"""
-        if event.mouseevent.button == 3:  #right click in plot
-            self.artists_clicked.append(event.artist)  #collect all artists under mouse
-
-    def open_figure_popup_menu(self, event):
-        """Open a menu to let the user copy data or chart to clipboard"""
-        main_menu = QMenu()
-
-        #copy chart action
-        copy_chart_action = main_menu.addAction("Copy Chart to Clipboard")
-        copy_chart_action.triggered.connect(self.copy_chart)
-
-        #copy data sub-menu
-        if self.artists_clicked:  #do nothing if list of artists is empty
-            menu = QMenu("Copy Data To Clipboard")
-            for artist in self.artists_clicked:
-                action_print_coordinates = menu.addAction(artist.aname)
-                action_print_coordinates.triggered.connect(
-                    lambda: self.clipboard_coordinates(artist))
-            main_menu.addMenu(menu)
-
-        main_menu.addSeparator()
-        refresh_chart_action = main_menu.addAction("Refresh plot")
-        refresh_chart_action.triggered.connect(self.refresh_plot)
-
-        #launch menu
-        if main_menu.exec_(QCursor.pos()):
-            self.artists_clicked.clear()
-
+                                                
     def refresh_plot(self):
         self.view_switch(self.current_view.name)
 
@@ -391,46 +172,6 @@ class Application(CmdBase):
         print("\nApplication window %s has been closed\n" % self.name)
         print(
             "Please, return to the RepTate prompt and delete the application")
-
-    def zoom_wheel(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
-        # get the current x and y limits
-        base_scale = 1.1
-        cur_xlim = self.axarr[0].get_xlim()
-        cur_ylim = self.axarr[0].get_ylim()
-        # set the range
-        #cur_xrange = (cur_xlim[1] - cur_xlim[0])*.5
-        #cur_yrange = (cur_ylim[1] - cur_ylim[0])*.5
-        xdata = event.xdata  # get event x location
-        ydata = event.ydata  # get event y location
-        if (xdata == None or ydata == None):
-            return
-        if event.button == 'up':
-            # deal with zoom in
-            scale_factor = 1 / base_scale
-        elif event.button == 'down':
-            # deal with zoom out
-            scale_factor = base_scale
-        else:
-            # deal with something that should never happen
-            scale_factor = 1
-        # Get distance from the cursor to the edge of the figure frame
-        x_left = xdata - cur_xlim[0]
-        x_right = cur_xlim[1] - xdata
-        y_top = ydata - cur_ylim[0]
-        y_bottom = cur_ylim[1] - ydata
-        # set new limits
-        self.axarr[0].set_xlim(
-            [xdata - x_left * scale_factor, xdata + x_right * scale_factor])
-        self.axarr[0].set_ylim(
-            [ydata - y_top * scale_factor, ydata + y_bottom * scale_factor])
-        self.axarr[0].figure.canvas.draw()  # force re-draw
 
     def new(self, line):
         """Create new empty dataset in the application

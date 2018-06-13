@@ -39,16 +39,17 @@ It is the GUI counterpart of Application.
 import io
 import re
 import traceback
+import math
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
-from PyQt5.QtGui import QIcon, QColor, QStandardItem
+from PyQt5.QtGui import QIcon, QColor, QCursor, QStandardItem
 from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QFrame, QHBoxLayout, QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel, QTableWidget, QTableWidgetItem
 from QDataSet import QDataSet
 from DataTable import DataTable
 from DataSetWidgetItem import DataSetWidgetItem
@@ -73,6 +74,77 @@ from SpreadsheetWidget import SpreadsheetWidget
     
 PATH = dirname(abspath(__file__))
 Ui_AppWindow, QMainWindow = loadUiType(join(PATH,'QApplicationWindow.ui'))
+Ui_EditAnnotation, QDialog = loadUiType(join(PATH,'annotationedit.ui'))
+
+class EditAnnotation(QDialog, Ui_EditAnnotation):
+    def __init__(self, parent=None, annotation=None):
+        super(EditAnnotation, self).__init__(parent)
+        QDialog.__init__(self)
+        Ui_EditAnnotation.__init__(self)
+        
+        self.setupUi(self)
+
+        self.annotation = annotation
+        self.textLineEdit.setText(annotation.get_text())
+        x, y = annotation.get_position()
+        self.xLineEdit.setText('%.4g'%x)
+        self.yLineEdit.setText('%.4g'%y)
+        color = annotation.get_color()
+        col = QColor(color[0]*255, color[1]*255, color[2]*255)
+        self.labelFontColor.setStyleSheet("background: %s"%col.name())
+        self.rotationSpinBox.setValue(annotation.get_rotation())
+        self.hacomboBox.setCurrentText(annotation.get_horizontalalignment())
+        self.vacomboBox.setCurrentText(annotation.get_verticalalignment())
+        self.fontweightComboBox.setCurrentText(annotation.get_fontweight())
+        self.fontstyleComboBox.setCurrentText(annotation.get_fontstyle())
+        self.fontsizeannotationSpinBox.setValue(annotation.get_fontsize())
+        self.framealphaannotationSpinBox.setValue(annotation.get_alpha())
+        self.fontfamilyComboBox.setCurrentText(annotation.get_fontfamily()[0])
+
+        connection_id = self.pickFontColor.clicked.connect(self.handle_pickFontColor)
+        connection_id = self.pushApply.clicked.connect(self.apply_changes)
+        connection_id = self.pushOK.clicked.connect(self.apply_changes)
+        connection_id = self.pushDelete.clicked.connect(self.delete)
+
+        self.color = None
+
+    def handle_pickFontColor(self):
+        self.color = self.showColorDialog()
+        if self.color:
+            self.labelFontColor.setStyleSheet("background: %s"%self.color.name())
+
+    def showColorDialog(self):
+        """Show the color picker and return the picked QtColor or `None`"""
+        wtitle = "Select color for the annotation \"%s\""%self.annotation.get_text()
+        color = QColorDialog.getColor(title=wtitle, 
+            options=QColorDialog.DontUseNativeDialog)
+        if not color.isValid():
+            color = None
+        return color
+
+    def apply_changes(self):
+        self.annotation.set_text(self.textLineEdit.text())
+        self.annotation.set_position((float(self.xLineEdit.text()),float(self.yLineEdit.text())))
+        if self.color:
+            self.annotation.set_color(self.color.getRgbF())
+        self.annotation.set_rotation(self.rotationSpinBox.value())
+        self.annotation.set_horizontalalignment(self.hacomboBox.currentText())
+        self.annotation.set_verticalalignment(self.vacomboBox.currentText())
+        self.annotation.set_fontweight(self.fontweightComboBox.currentText())
+        self.annotation.set_fontstyle(self.fontstyleComboBox.currentText())
+        self.annotation.set_fontsize(self.fontsizeannotationSpinBox.value())
+        self.annotation.set_alpha(self.framealphaannotationSpinBox.value())
+        self.annotation.set_family(self.fontfamilyComboBox.currentText())
+        self.annotation.figure.canvas.draw()
+
+    def delete(self):
+        btns = (QMessageBox.Yes | QMessageBox.No)
+        msg = "Do you want to delete the the annotation \"%s\""%self.annotation.get_text()
+        title = 'Delete annotation'
+        ans = QMessageBox.question(self, title, msg, buttons=btns)
+        if ans == QMessageBox.Yes:
+            self.annotation.remove()
+            self.pushCancel.click()
 
 class ViewShiftFactors(QDialog):
     def __init__(self, parent=None, fnames=None, factorsx=None, factorsy=None):
@@ -287,9 +359,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.mpl_toolbar.setFixedHeight(36)
         self.mpl_toolbar.layout().setSpacing(0)
         self.mpl_toolbar.addAction(self.actionTrack_data)
-        self.mpl_toolbar.addAction(self.actionAdd_Annotation)
-        self.mpl_toolbar.addAction(self.actionShow_Legend)
-        self.mpl_toolbar.addAction(self.actionCopyChart)
         self.mpl_toolbar.setVisible(False)
         self.mplvl.addWidget(self.mpl_toolbar)
 
@@ -304,9 +373,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 
 
         # EVENT HANDLING
-        #connection_id = self.figure.canvas.mpl_connect('button_press_event', self.onclick)
+        # Matplotlib events
         connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
-        #connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_plot_hover)   
+        connection_id = self.figure.canvas.mpl_connect('pick_event', self.onpick)
+        connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
+        connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
+        connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
+        connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
+
         connection_id = self.actionShowFigureTools.triggered.connect(self.viewMPLToolbar)
         connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
@@ -337,15 +411,18 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionCopy.triggered.connect(self.inspector_table.copy)
         connection_id = self.actionPaste.triggered.connect(self.inspector_table.paste)
 
+        # Variables used during matplotlib interaction
+        self.artists_clicked = []
+        self._pressed_button = None # To store active button during interaction
+        self._axes = None # To store x and y axes concerned by interaction
+        self._event = None  # To store reference event during interaction
+        self._was_zooming = False 
 
         # Annotation stuff
-        connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
-        connection_id = self.actionCopyChart.triggered.connect(self.copy_chart)
+        #connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
         self.graphicnotes = []
         self.artistnotes = []
-        connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
-        connection_id = self.actionShow_Legend.triggered.connect(self.handle_actionShow_Legend)
-        plt.connect('motion_notify_event', self.mpl_motion_event)
+        #plt.connect('motion_notify_event', self.mpl_motion_event)
 
         #Setting up the marker-settings dialog
         # self.marker_dic = {'square': 's', 'plus (filled)': 'P', 'point': '.', 'triangle_right': '>', 'hline': '_', 'vline': '|', 'pentagon': 'p', 'tri_left': '3', 'tri_up': '2', 'circle': 'o', 'diamond': 'D', 'star': '*', 'hexagon1': 'h', 'octagon': '8', 'hexagon2': 'H', 'tri_right': '4', 'x (filled)': 'X', 'thin_diamond': 'd', 'tri_down': '1', 'triangle_left': '<', 'plus': '+', 'triangle_down': 'v', 'triangle_up': '^', 'x': 'x'}
@@ -359,6 +436,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.color2 = None
         self.color_th = None
         self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':12, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
+        self.annotation_opts = {'alpha':1.0, 'color': QColor(0, 0, 0).getRgbF(), 'family':'sans-serif', 'horizontalalignment':'center', 'rotation': 0.0, 'fontsize':16, 'style': 'normal',  'verticalalignment': 'center', 'fontweight':'normal'}
         self.legend_draggable = True
         self.default_legend_labels = True
         self.legend_labels = ""
@@ -370,6 +448,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.dialog.ui.pickThColor.clicked.connect(self.handle_pickThColor)
         connection_id = self.dialog.ui.pickFaceColor.clicked.connect(self.handle_pickFaceColor)
         connection_id = self.dialog.ui.pickEdgeColor.clicked.connect(self.handle_pickEdgeColor)
+        connection_id = self.dialog.ui.pickFontColor.clicked.connect(self.handle_pickFontColor)
         connection_id = self.dialog.ui.rbEmpty.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
@@ -541,65 +620,26 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.actionNew_Theory.setDisabled(state)
             ds.cbtheory.setDisabled(state)
 
-    def mpl_motion_event(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
-        if not self.handle_annotation.checked:
-            return
-        """.. todo:: Code to draw annotation. It doesn't work!"""
-        
-    def handle_annotation(self, checked):
-        """Draw and hide the annotation box.
-        
-        [description]
-        
-        Arguments:
-            - checked {[type]} -- [description]
-        """
-        if self.current_viewtab == 0:
-            ax = self.axarr[0]
-        else:
-            ax = self.axarr[self.current_viewtab - 1]
-        if (checked):
-            self.annotation = ax.annotate(
-                '', xy=(0, 0), ha = 'left',
-                xytext = (-40, 40), textcoords = 'offset points', va = 'center',
-                bbox = dict(
-                    boxstyle='roundtooth,pad=0.3', fc='yellow', alpha=0.20),
-                arrowprops = dict(
-                    arrowstyle="-|>", connectionstyle="arc3,rad=-0.2")
-                )
-            self.canvas.draw()
-        else:
-            self.annotation.remove()
-            self.canvas.draw()
-
     def add_annotation(self):
+        if self._annotation_done:
+            return
         if self.current_viewtab == 0:
             ax = self.axarr[0]
         else:
             ax = self.axarr[self.current_viewtab - 1]
         text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
         if ok:
-            xmin, xmax = ax.get_xlim()
-            ymin, ymax = ax.get_ylim()
-            xpos = (xmin+xmax)/2
-            ypos = (ymin+ymax)/2
-            ann = ax.annotate(text, xy=(xpos, ypos), xytext=(xpos, ypos), size=20, va="center", ha="center")
+            ann = ax.annotate(text, xy=(self._event.xdata, self._event.ydata), xytext=(self._event.xdata, self._event.ydata), **self.annotation_opts)
             self.graphicnotes.append(ann)
-            self.artistnotes.append(DraggableNote(ann, DragType.both, None, None))
+            self.artistnotes.append(DraggableNote(ann, DragType.both, None, self.edit_annotation))
             self.canvas.draw()
+        self._annotation_done = True
 
-    def handle_actionShow_Legend(self):
-        """toogle view/hide the legend"""
-        self.dialog.ui.cb_show_legend.setChecked(not self.dialog.ui.cb_show_legend.isChecked())
-        self.update_legend()
-
+    def edit_annotation(self, artist):
+        d = EditAnnotation(self, artist)
+        d.exec_()
+        self.canvas.draw()
+            
     def update_legend(self):
         if self.current_viewtab == 0:
             ax = self.axarr[0]
@@ -731,6 +771,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s"%color.name())
             self.legend_opts['edgecolor']=color.getRgbF()            
             
+    def handle_pickFontColor(self):
+        """Call the color picker and save the selected legend face color in 
+        RGB format in the dataset legend info.
+        """
+        color = self.showColorDialog()
+        if color:
+            self.dialog.ui.labelFontColor.setStyleSheet("background: %s"%color.name())
+            self.annotation_opts['color']=color.getRgbF()            
             
     def showColorDialog(self):
         """Show the color picker and return the picked QtColor or `None`
@@ -863,6 +911,19 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.dialog.ui.legendlabelCheckBox.setChecked(True)
             self.dialog.ui.legendlabelStr.setText(self.legend_labels)
         self.dialog.ui.draggableCheckBox.setChecked(self.legend_draggable)
+
+
+        # Annotation stuff        
+        self.dialog.ui.rotationSpinBox.setValue(self.annotation_opts['rotation'])
+        self.dialog.ui.hacomboBox.setCurrentText(self.annotation_opts['horizontalalignment'])
+        self.dialog.ui.vacomboBox.setCurrentText(self.annotation_opts['verticalalignment'])
+        col = QColor(self.annotation_opts['color'][0]*255, self.annotation_opts['color'][1]*255, self.annotation_opts['color'][2]*255)
+        self.dialog.ui.labelFontColor.setStyleSheet("background: %s"%col.name())
+        self.dialog.ui.fontweightComboBox.setCurrentText(self.annotation_opts['fontweight'])
+        self.dialog.ui.fontstyleComboBox.setCurrentText(self.annotation_opts['style'])
+        self.dialog.ui.fontsizeannotationSpinBox.setValue(self.annotation_opts['fontsize'])
+        self.dialog.ui.framealphaannotationSpinBox.setValue(self.annotation_opts['alpha'])
+        self.dialog.ui.fontfamilyComboBox.setCurrentText(self.annotation_opts['family']) 
         
         success = self.dialog.exec_() #this blocks the rest of the app as opposed to .show()
         if success == 1:
@@ -978,6 +1039,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             else:
                 self.default_legend_labels = True
             self.legend_draggable = self.dialog.ui.draggableCheckBox.isChecked()
+            
+            # Annotation stuff
+            self.annotation_opts['alpha'] = self.dialog.ui.framealphaannotationSpinBox.value()
+            self.annotation_opts['family'] = self.dialog.ui.fontfamilyComboBox.currentText()
+            self.annotation_opts['horizontalalignment'] = self.dialog.ui.hacomboBox.currentText()
+            self.annotation_opts['rotation'] = self.dialog.ui.rotationSpinBox.value()
+            self.annotation_opts['fontsize'] = self.dialog.ui.fontsizeannotationSpinBox.value()
+            self.annotation_opts['style'] = self.dialog.ui.fontstyleComboBox.currentText()
+            self.annotation_opts['verticalalignment'] = self.dialog.ui.vacomboBox.currentText()
+            self.annotation_opts['fontweight'] = self.dialog.ui.fontweightComboBox.currentText()
 
             ds.do_plot() # update plot and legend
 
@@ -1520,15 +1591,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # TODO: Set DPI, FILETYPE, etc
         plt.savefig(fileName[0])
         
-    def on_plot_hover(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
-        pass
 
     def resizeplot(self, event=""):
         """[summary]
@@ -1554,3 +1616,248 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
                 item.set_fontsize(font_size)
   
+    def onpick(self, event):
+        """Called when clicking on a plot/artist"""
+        if event.mouseevent.button == 3:  #right click in plot
+            self.artists_clicked.append(event.artist)  #collect all artists under mouse
+
+    def onrelease(self, event):
+        """Called when releasing mouse"""
+        if event.button == 3:  #if release a right click
+            self._zoom_area(event)
+            if not self._was_zooming:
+                self.open_figure_popup_menu(event)
+            self.artists_clicked.clear()
+            self._was_zooming = False
+        elif event.button == 2:
+            self._pan(event)
+        self._pressed_button = None
+
+    def _zoom_area(self, event):
+        if event.name == 'button_press_event':  # begin drag
+            self._event = event
+            self._patch = plt.Rectangle(
+                xy=(event.xdata, event.ydata), width=0, height=0,
+                fill=False, linewidth=1., linestyle=':', color='gray')
+            self._event.inaxes.add_patch(self._patch)
+
+        elif event.name == 'button_release_event':  # end drag
+            self._patch.remove()
+            del self._patch
+
+            if (abs(event.x - self._event.x) < 3 or
+                    abs(event.y - self._event.y) < 3):
+                self._was_zooming = False
+                return  # No zoom when points are too close
+
+            x_axes, y_axes = self._axes
+
+            for ax in x_axes:
+                pixel_to_data = ax.transData.inverted()
+                begin_pt = pixel_to_data.transform_point((event.x, event.y))
+                end_pt = pixel_to_data.transform_point(
+                    (self._event.x, self._event.y))
+
+                min_ = min(begin_pt[0], end_pt[0])
+                max_ = max(begin_pt[0], end_pt[0])
+                if not ax.xaxis_inverted():
+                    ax.set_xlim(min_, max_)
+                else:
+                    ax.set_xlim(max_, min_)
+
+            for ax in y_axes:
+                pixel_to_data = ax.transData.inverted()
+                begin_pt = pixel_to_data.transform_point((event.x, event.y))
+                end_pt = pixel_to_data.transform_point(
+                    (self._event.x, self._event.y))
+
+                min_ = min(begin_pt[1], end_pt[1])
+                max_ = max(begin_pt[1], end_pt[1])
+                if not ax.yaxis_inverted():
+                    ax.set_ylim(min_, max_)
+                else:
+                    ax.set_ylim(max_, min_)
+
+            self._event = None
+            self._was_zooming = True
+
+        elif event.name == 'motion_notify_event':  # drag
+            if self._event is None:
+                return
+
+            if event.inaxes != self._event.inaxes:
+                return  # Ignore event outside plot
+
+            self._patch.set_width(event.xdata - self._event.xdata)
+            self._patch.set_height(event.ydata - self._event.ydata)
+
+        self.figure.canvas.draw()
+
+    def open_figure_popup_menu(self, event):
+        """Open a menu to let the user copy data or chart to clipboard"""
+        main_menu = QMenu()
+
+        #copy chart action
+        copy_chart_action = main_menu.addAction("Copy Chart to Clipboard")
+        copy_chart_action.triggered.connect(self.copy_chart)
+
+        #copy data sub-menu
+        if self.artists_clicked:  #do nothing if list of artists is empty
+            menu = QMenu("Copy Data To Clipboard")
+            for artist in self.artists_clicked:
+                action_print_coordinates = menu.addAction(artist.aname)
+                action_print_coordinates.triggered.connect(
+                    lambda: self.clipboard_coordinates(artist))
+            main_menu.addMenu(menu)
+
+        main_menu.addSeparator()
+        self._annotation_done = False
+        add_annotation = main_menu.addAction(self.actionAdd_Annotation)
+        connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
+        refresh_chart_action = main_menu.addAction("Refresh plot")
+        refresh_chart_action.triggered.connect(self.refresh_plot)
+
+        #launch menu
+        if main_menu.exec_(QCursor.pos()):
+            self.artists_clicked.clear()
+
+    def _pan(self, event):
+        if event.name == 'button_press_event':  # begin pan
+            self._event = event
+
+        elif event.name == 'button_release_event':  # end pan
+            self._event = None
+
+        elif event.name == 'motion_notify_event':  # pan
+            if self._event is None:
+                return
+
+            if event.x != self._event.x:
+                for ax in self._axes[0]:
+                    xlim = self._pan_update_limits(ax, 0, event, self._event)
+                    ax.set_xlim(xlim)
+
+            if event.y != self._event.y:
+                for ax in self._axes[1]:
+                    ylim = self._pan_update_limits(ax, 1, event, self._event)
+                    ax.set_ylim(ylim)
+
+            if event.x != self._event.x or event.y != self._event.y:
+                self.figure.canvas.draw()
+
+            self._event = event    
+
+    def _pan_update_limits(self, ax, axis_id, event, last_event):
+        """Compute limits with applied pan."""
+        assert axis_id in (0, 1)
+        if axis_id == 0:
+            lim = ax.get_xlim()
+            scale = ax.get_xscale()
+        else:
+            lim = ax.get_ylim()
+            scale = ax.get_yscale()
+
+        pixel_to_data = ax.transData.inverted()
+        data = pixel_to_data.transform_point((event.x, event.y))
+        last_data = pixel_to_data.transform_point((last_event.x, last_event.y))
+
+        if scale == 'linear':
+            delta = data[axis_id] - last_data[axis_id]
+            new_lim = lim[0] - delta, lim[1] - delta
+        elif scale == 'log':
+            try:
+                delta = math.log10(data[axis_id]) - \
+                    math.log10(last_data[axis_id])
+                new_lim = [pow(10., (math.log10(lim[0]) - delta)),
+                           pow(10., (math.log10(lim[1]) - delta))]
+            except (ValueError, OverflowError):
+                new_lim = lim  # Keep previous limits
+        else:
+            logging.warning('Pan not implemented for scale "%s"' % scale)
+            new_lim = lim
+        return new_lim
+
+    def zoom_wheel(self, event):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - event {[type]} -- [description]
+        """
+        # get the current x and y limits
+        base_scale = 1.1
+        cur_xlim = self.axarr[0].get_xlim()
+        cur_ylim = self.axarr[0].get_ylim()
+        # set the range
+        xdata = event.xdata  # get event x location
+        ydata = event.ydata  # get event y location
+        if (xdata == None or ydata == None):
+            return
+        if event.button == 'up':
+            # deal with zoom in
+            scale_factor = 1 / base_scale
+        elif event.button == 'down':
+            # deal with zoom out
+            scale_factor = base_scale
+        else:
+            # deal with something that should never happen
+            scale_factor = 1
+        # Get distance from the cursor to the edge of the figure frame
+        x_left = xdata - cur_xlim[0]
+        x_right = cur_xlim[1] - xdata
+        y_top = ydata - cur_ylim[0]
+        y_bottom = cur_ylim[1] - ydata
+        # set new limits
+        self.axarr[0].set_xlim(
+            [xdata - x_left * scale_factor, xdata + x_right * scale_factor])
+        self.axarr[0].set_ylim(
+            [ydata - y_top * scale_factor, ydata + y_bottom * scale_factor])
+        self.axarr[0].figure.canvas.draw()  # force re-draw
+
+    def on_press(self, event):
+        if event.button == 2: # Pan
+            x_axes, y_axes = self._axes_to_update(event)
+            if x_axes or y_axes:
+                self._axes = x_axes, y_axes
+                self._pressed_button = event.button
+                self._pan(event)
+        elif event.button == 3: # Zoom
+            x_axes, y_axes = self._axes_to_update(event)
+            if x_axes or y_axes:
+                self._axes = x_axes, y_axes
+                self._pressed_button = event.button
+                self._zoom_area(event)
+
+    def _axes_to_update(self, event):
+        """Returns two sets of Axes to update according to event.
+
+        Takes care of multiple axes and shared axes.
+
+        :param MouseEvent event: Matplotlib event to consider
+        :return: Axes for which to update xlimits and ylimits
+        :rtype: 2-tuple of set (xaxes, yaxes)
+
+        """
+        x_axes, y_axes = set(), set()
+
+        # Go through all axes to enable zoom for multiple axes subplots
+        for ax in self.figure.axes:
+            if ax.contains(event)[0]:
+                # For twin x axes, makes sure the zoom is applied once
+                shared_x_axes = set(ax.get_shared_x_axes().get_siblings(ax))
+                if x_axes.isdisjoint(shared_x_axes):
+                    x_axes.add(ax)
+
+                # For twin y axes, makes sure the zoom is applied once
+                shared_y_axes = set(ax.get_shared_y_axes().get_siblings(ax))
+                if y_axes.isdisjoint(shared_y_axes):
+                    y_axes.add(ax)
+
+        return x_axes, y_axes
+
+    def on_motion(self, event):
+        if self._pressed_button == 2:  # pan
+            self._pan(event)
+        elif self._pressed_button == 3:  # zoom area
+            self._zoom_area(event)
