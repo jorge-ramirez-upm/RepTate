@@ -49,9 +49,9 @@ import time
 import bob_gen_poly  # dialog
 import ctypes
 from BobCtypesHelper import BobCtypesHelper, BobError
-from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit, QApplication
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices
-from PyQt5.QtCore import QUrl, pyqtSignal
+from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit, QApplication, QToolBar
+from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
+from PyQt5.QtCore import QUrl, pyqtSignal, QSize, Qt, QVariant
 from shutil import copy2
 
 
@@ -67,51 +67,53 @@ class DistributionType(Enum):
 class ArchitectureType(Enum):
     """Type of polymer architecture and expected parameters as input for BoB"""
 
-    Linear = [0, 'Dist', 'Mw (g/mol)', 'PDI']
-    Star = [1, 'Dist', 'Mw (g/mol)', 'PDI', '', 'Num. arm']
-    Asym_Star = [
-        2, 'Dist long', 'Mw long (g/mol)', 'PDI long', '', 'Dist short',
+    Linear = {'name': "Linear Polymer", 'def': [0, 'Distr.', 'Mw (g/mol)', 'PDI'], 'descr': "Linear polymer"}
+    Star = {'name': "Star Polymer", 'def': [1, 'Distr.', 'Mw (g/mol)', 'PDI', '', 'Num. arm'], 'descr': "Star polymer"}
+    AsymStar = {'name': "Asymetric Star", 'def': [
+        2, 'Distr. long', 'Mw long (g/mol)', 'PDI long', '', 'Distr. short',
         'Mw short', 'PDI short'
-    ]
-    H = [
-        3, 'Dist side', 'Mw side (g/mol)', 'PDI side', '', 'Dist cross',
+    ], 'descr': "Star with two arms of equal length and the third arm having a different length. Only 3 arm stars are created"}
+    H = {'name': "H Polymer", 'def': [
+        3, 'Distr. side', 'Mw side (g/mol)', 'PDI side', '', 'Distr. cross',
         'Mw cross', 'PDI cross'
-    ]
-    Combs_Poisson = [
-        4, 'Dist backbone', 'Mw backbone (g/mol)', 'PDI backbone', '',
-        'Dist side', 'Mw side (g/mol)', 'PDI side', '', 'Num. arm'
-    ]
-    Combs_fixed = [
-        5, 'Dist backbone', 'Mw backbone (g/mol)', 'PDI backbone', '',
-        'Dist side', 'Mw side (g/mol)', 'PDI side', '', 'Num. arm'
-    ]
-    Combs_coupled = [
-        6, 'Dist backbone', 'Mw backbone (g/mol)', 'PDI backbone', '',
-        'Dist side', 'Mw side (g/mol)', 'PDI side', '', 'Num. arm'
-    ]
+    ], 'descr': "H polymers have one cross-bar and four segments attached to the crossbar"}
+    PoissComb = {'name': "Poisson Comb", 'def': [
+        4, 'Distr. backbone', 'Mw backbone (g/mol)', 'PDI backbone', '',
+        'Distr. side', 'Mw side (g/mol)', 'PDI side', '', 'Num. arm'
+    ], 'descr': "Comb having Poisson distr.ributed number of side arms connected at random places on the backbone"}
+    FixComb = {'name': "Fixed Comb", 'def': [
+        5, 'Distr. backbone', 'Mw backbone (g/mol)', 'PDI backbone', '',
+        'Distr. side', 'Mw side (g/mol)', 'PDI side', '', 'Num. arm'
+    ], 'descr': "Comb having fixed number of side arms connected at random places on the backbone"}
+    CouplComb = {'name': "Coupled Comb", 'def': [
+        6, 'Distr. backbone', 'Mw backbone (g/mol)', 'PDI backbone', '',
+        'Distr. side', 'Mw side (g/mol)', 'PDI side', '', 'Num. arm'
+    ], 'descr': "Attach two \"Poisson combs\" at some random point along the two backbones"}
     ##########################
     #Caylay type is handled in a special way. The strings below are not actually used.
-    Cayley_tree = [
-        10, 'Num. generation', '', 'Dist gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
-    ]
-    Cayley_lin = [
-        11, 'Num. generation', '', 'Dist gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
-    ]
-    Cayley_star4 = [
-        12, 'Num. generation', '', 'Dist gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
-    ]
+    Cayley3Arm = {'name': "Caley 3-arm Core", 'def': [
+        10, 'Num. generation', '', 'Distr. gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
+    ], 'descr': "Cayley trees with 3 arm star inner core"}
+    CayleyLin = {'name': "Caley Linear Core", 'def': [
+        11, 'Num. generation', '', 'Distr. gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
+    ], 'descr': "Cayley trees with linear inner core"}
+    Cayley4Arm = {'name': "Caley 4-arm Core", 'def': [
+        12, 'Num. generation', '', 'Distr. gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
+    ], 'descr': "Cayley trees with 4 arm star inner core"}
     ###########################
-    MPE_numav = [20, 'Mw (g/mol)', 'Branch/molecule']
-    MPE_wtav = [21, 'Mw (g/mol)', 'Branch/molecule']
-    GEL_wtav = [25, 'Mn (g/mol)', 'Up Branch. proba.']
-    Prototype = [40, 'Go to "Result" tab']
-    From_file = [60, 'From file']
+    MpeNum = {'name': "MPE num-average", 'def': [20, 'Mw (g/mol)', 'Branch/molecule'], 'descr': "Metallocene catalyzed polyethylene with number-based sampling"}
+    MpeWt = {'name': "MPE weight-average", 'def': [21, 'Mw (g/mol)', 'Branch/molecule'], 'descr': "Metallocene catalyzed polyethylene with weight-based sampling"}
+    Gel = {'name': "Gel", 'def': [25, 'Mn (g/mol)', 'Up Branch. proba.'], 'descr': "Gelation ensemble"}
+    Proto = {'name': "Prototype", 'def': [40, 'Go to "Result" tab'], 'descr': "Polymer prototype from file (user defined)"}
+    FromFile = {'name': "From File", 'def': [60, 'From file'], 'descr': "User supplied pre-generated polymers file"}
 
 
 class TheoryCreatePolyconf(CmdBase):
-    """[summary]
-    
-    [description]
+    """Create polymer configuration files using BoB v2.5 (Chinmay Das and Daniel Read).
+    The configuration file created with this theory can then be analysed
+    in the BoB LVE theory, in the LVE application of RepTate.
+
+    The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
     """
     thname = 'Create Polyconf'
     description = 'Create Polyconf'
@@ -173,6 +175,7 @@ class BaseTheoryCreatePolyconf:
         self.polyconf_file_out = None  # full path of target polyconf file
         self.autocalculate = False
         self.bch = BobCtypesHelper(self)
+        self.do_priority_seniority = True
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -250,6 +253,7 @@ class BaseTheoryCreatePolyconf:
         gpc_out = []
         QApplication.processEvents()
         self.bch.link_c_callback()
+        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
         self.start_time_cal = time.time()
         try:
             mn, mw, gpc_out = self.bch.save_polyconf_and_return_gpc(
@@ -326,6 +330,19 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         self.setup_dialog()
         self.flag_prototype = 0
 
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.btn_prio_senio = tb.addAction(QIcon(':/Icon8/Images/new_icons/priority_seniority.png'), 'Calculate Priority and Seniority (can take some time)')
+        self.btn_prio_senio.setCheckable(True)
+        self.btn_prio_senio.setChecked(True)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        self.btn_prio_senio.triggered.connect(self.handle_btn_prio_senio)
+
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        self.do_priority_seniority = checked
+
     def setup_dialog(self):
         """Create the dialog to setup the polymer configuration"""
         # create form
@@ -355,8 +372,11 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         self.d.cb_type.currentTextChanged.connect(
             self.handle_architecture_type_changed)
         # fill combobox
+        i = 0
         for e in ArchitectureType:
-            self.d.cb_type.addItem(e.name)
+            self.d.cb_type.addItem(e.value['name'], QVariant(e.name))
+            self.d.cb_type.setItemData(i, e.value['descr'], Qt.ToolTipRole)
+            i += 1
         # pre-fill the prototype text box
         self.d.proto_text.append("""FunStar
 3
@@ -419,7 +439,7 @@ FunH
 
         for pol_dict in self.dict_component.values():
             pol_type_list = ArchitectureType[pol_dict[
-                "type"]].value  # architecture type value
+                "type"]].value['def']  # architecture type value
             #8.. weight
             try:
                 w = float(pol_dict["Ratio"].text()) / tot_ratio
@@ -438,7 +458,7 @@ FunH
                 ngen = pol_dict["Num. generation"]
                 text = "%s\n" % ngen
                 for i in range(ngen + 1):
-                    text += self.poly_param_text(pol_dict, "Dist gen%d" % i)
+                    text += self.poly_param_text(pol_dict, "Distr. gen%d" % i)
                     text += self.poly_param_text(pol_dict,
                                                  "Mw gen%d (g/mol)" % i)
                     text += self.poly_param_text(
@@ -505,14 +525,14 @@ FunH
 
     def handle_add_component(self):
         """Add a tab with new polymer component in the dialog box"""
-        pol_type = self.d.cb_type.currentText()
+        pol_type = self.d.cb_type.currentData() # enum type name
         # re-use numbering of closed tabs (if any)
         if self.trash_indices:
             ind = min(self.trash_indices)
             self.trash_indices.remove(ind)
-            pol_id = "%s%s" % (pol_type, ind)
+            pol_id = "%s.%s" % (pol_type, ind)
         else:
-            pol_id = "%s%s" % (pol_type, self.ncomponent)
+            pol_id = "%s.%s" % (pol_type, self.ncomponent)
             self.ncomponent += 1
         # define a new tab widget
         tab_widget, success = self.create_new_tab(pol_id, pol_type)
@@ -531,7 +551,7 @@ FunH
         layout = QFormLayout()
         pol_dict = OrderedDict([
             ("type", pol_type),
-        ])  # Arch. type number
+        ])  # Arch. enum type number
 
         val_double = QDoubleValidator()
         val_double.setBottom(0)  #set smallest double allowed in the form
@@ -562,7 +582,7 @@ FunH
         to the form layout
         """
         # return a list with the expected input parameters
-        pol_attr = ArchitectureType[pol_type].value
+        pol_attr = ArchitectureType[pol_type].value['def']
 
         if pol_attr[0] in [10, 11, 12]:
             #handle the Cayley tree types
@@ -572,7 +592,7 @@ FunH
                 self.add_new_qline("Mw gen%d (g/mol)" % i, "1e4", layout,
                                    pol_dict)
                 self.add_new_qline("PDI gen%d" % i, "1.2", layout, pol_dict)
-                self.add_cb_distribution("Dist gen%d" % i, layout, pol_dict)
+                self.add_cb_distribution("Distr. gen%d" % i, layout, pol_dict)
 
         elif pol_attr[0] == 40:
             #type 40: give a text box that must be saved to a temp file

@@ -143,7 +143,8 @@
     <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;KWW modes&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Fit Kohlrausch-Williams-Watts modes&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;Kohlrausch, R. Annalen der Physik und Chemie 1854, 91, 56-82</span><span class="se">\n</span><span class="s2">Williams G. and Watts D.C., Trans. Faraday Soc. 1970, 66, 80-85&quot;</span>
-    
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;http://dx.doi.org/10.1039/TF9706600080&quot;</span>
+
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
@@ -170,6 +171,7 @@
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryKWWModesFrequency</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryKWWModesFrequency</span><span class="o">.</span><span class="n">citations</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">TheoryKWWModesFrequency</span><span class="o">.</span><span class="n">doi</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -200,7 +202,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;beta&quot;</span><span class="p">,</span>
             <span class="mf">0.5</span><span class="p">,</span>
-            <span class="s2">&quot;???&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;Stretched exponential parameter&#39;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
             <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -221,7 +223,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;nmodes&quot;</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">nmodes</span><span class="p">,</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Number of Havriliak-Negami modes&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Number of KWW modes&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
             <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -386,6 +388,8 @@
 
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">einf</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">break</span>
             <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]):</span>
                 <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">kwwc</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">tau</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">beta</span><span class="p">)</span>
@@ -407,6 +411,8 @@
                            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
         <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">break</span>
             <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span>
                 <span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logDe</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
@@ -524,7 +530,8 @@
                 <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
                 <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
 </pre></div>
 

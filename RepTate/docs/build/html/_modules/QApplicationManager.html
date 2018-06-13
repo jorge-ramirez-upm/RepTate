@@ -123,6 +123,8 @@
 <span class="kn">from</span> <span class="nn">QAboutReptate</span> <span class="k">import</span> <span class="n">AboutWindow</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">Version</span>
 
 <span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">Ui_MainWindow</span><span class="p">,</span> <span class="n">QMainWindow</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="s1">&#39;ReptateMainWindow.ui&#39;</span><span class="p">))</span>
@@ -155,6 +157,25 @@
                                 <span class="s1">&#39; - SINGLE THREAD!!&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;RepTate v&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+
+        <span class="c1"># Add Apps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionMWD</span><span class="p">)</span>
+        <span class="n">tbut</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
+        <span class="n">tbut</span><span class="o">.</span><span class="n">setPopupMode</span><span class="p">(</span><span class="n">QToolButton</span><span class="o">.</span><span class="n">MenuButtonPopup</span><span class="p">)</span>
+        <span class="n">tbut</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionTTS</span><span class="p">)</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">()</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionTTSFactors</span><span class="p">)</span>
+        <span class="n">tbut</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tbut</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLVE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionNLVE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionGt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCreep</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionSANS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionReact</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDielectric</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDynamicStructureFactor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLAOS</span><span class="p">)</span>
 
         <span class="c1">#help button</span>
         <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-user-manual.png&#39;</span><span class="p">)</span>
@@ -189,7 +210,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarProject</span><span class="o">.</span><span class="n">setContextMenuPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">PreventContextMenu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">setContextMenuPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">PreventContextMenu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarHelpAbout</span><span class="o">.</span><span class="n">setContextMenuPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">PreventContextMenu</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarTools</span><span class="o">.</span><span class="n">setContextMenuPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">PreventContextMenu</span><span class="p">)</span>
         
         <span class="c1"># # ApplicationXY button</span>
         <span class="c1"># #choose the button icon</span>
@@ -215,10 +235,11 @@
         <span class="c1"># Connect actions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionOpenProject</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">launch_open_dialog</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionSaveProject</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">launch_save_dialog</span><span class="p">)</span>
-        
+
         <span class="c1"># Generate action buttons from dict of available applications</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionMWD</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;MWD&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionTTS</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;TTS&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionTTSFactors</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_app_coming_soon</span><span class="p">(</span><span class="s1">&#39;TTS Factors&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionLVE</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;LVE&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionNLVE</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;NLVE&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionGt</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;Gt&#39;</span><span class="p">))</span>
@@ -465,14 +486,20 @@
         <span class="sd">&quot;&quot;&quot;Save RepTate project to &#39;fpath&#39;&quot;&quot;&quot;</span>
         <span class="n">apps_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="n">napps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">nth_saved</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">nfile_saved</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ntool_saved</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">napps</span><span class="p">):</span>
             <span class="n">app</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="c1"># Save DataSets in application</span>
             <span class="n">datasets_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
             <span class="n">ndatasets</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndatasets</span><span class="p">):</span>
                 <span class="n">ds</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
                 <span class="n">files_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+                    <span class="n">nfile_saved</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">param_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([</span> <span class="p">(</span><span class="n">pname</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">pname</span><span class="p">])</span> <span class="k">for</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">])</span>
 
                     <span class="n">file_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
@@ -485,9 +512,11 @@
                     <span class="p">)</span>
                     <span class="n">files_dic</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_dic</span>
 
+                <span class="c1"># Save theories in DataSet</span>
                 <span class="n">theories_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
                 <span class="n">ntheories</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntheories</span><span class="p">):</span>
+                    <span class="n">nth_saved</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">th</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
                     <span class="n">param_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="n">pname</span><span class="p">,</span> <span class="n">th</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">pname</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">th</span><span class="o">.</span><span class="n">parameters</span><span class="p">])</span>
                     <span class="n">th_table_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span> 
@@ -506,13 +535,14 @@
                             <span class="p">(</span><span class="s1">&#39;th_tabname&#39;</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span>
                             <span class="p">(</span><span class="s1">&#39;thname&#39;</span><span class="p">,</span> <span class="n">th</span><span class="o">.</span><span class="n">thname</span><span class="p">),</span>
                             <span class="p">(</span><span class="s1">&#39;th_param&#39;</span><span class="p">,</span> <span class="n">param_dic</span><span class="p">),</span>
-                            <span class="p">(</span><span class="s1">&#39;th_textbox&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">th</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">toPlainText</span><span class="p">())),</span>
+                            <span class="p">(</span><span class="s1">&#39;th_textbox&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">th</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">toHtml</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;&lt;br&gt;&lt;i&gt;Saved at </span><span class="si">%s</span><span class="s1"> on </span><span class="si">%s</span><span class="s1">&lt;i&gt;&lt;br&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%X</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a %b </span><span class="si">%d</span><span class="s2">, %Y&quot;</span><span class="p">)</span> <span class="p">)),</span>
                             <span class="p">(</span><span class="s1">&#39;th_tables&#39;</span><span class="p">,</span> <span class="n">th_table_dic</span><span class="p">),</span>
                             <span class="p">(</span><span class="s1">&#39;extra_data&#39;</span><span class="p">,</span> <span class="n">e_dic</span><span class="p">)</span>
                         <span class="p">]</span>
                     <span class="p">)</span>
                     <span class="n">theories_dic</span><span class="p">[</span><span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">th_dic</span>
                 
+                <span class="c1"># Save figure markers</span>
                 <span class="n">ds_markers</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
                     <span class="p">[</span>
                         <span class="p">(</span><span class="s1">&#39;marker_size&#39;</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">marker_size</span><span class="p">),</span>
@@ -530,6 +560,7 @@
                         <span class="p">(</span><span class="s1">&#39;th_line_width&#39;</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">th_line_width</span><span class="p">)</span>
                     <span class="p">]</span>
                 <span class="p">)</span>
+                <span class="c1"># Save full DataSet</span>
                 <span class="n">ds_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
                     <span class="p">[</span>
                         <span class="p">(</span><span class="s1">&#39;ds_tabname&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="n">j</span><span class="p">)),</span>
@@ -541,7 +572,32 @@
                 <span class="p">)</span>
                 <span class="n">datasets_dic</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_dict</span>
 
-
+            <span class="c1"># Save Tools</span>
+            <span class="n">tools_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span> <span class="c1"># contain all the tools</span>
+            <span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
+                <span class="n">ntool_saved</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">param_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">tool</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+                    <span class="n">param_dic</span><span class="p">[</span><span class="n">pname</span><span class="p">]</span> <span class="o">=</span> <span class="n">tool</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">pname</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">tool_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="p">(</span><span class="s1">&#39;tool_name&#39;</span><span class="p">,</span> <span class="n">tool</span><span class="o">.</span><span class="n">toolname</span><span class="p">),</span> <span class="c1"># what tool</span>
+                        <span class="p">(</span><span class="s1">&#39;tool_tab_name&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">indexOf</span><span class="p">(</span><span class="n">tool</span><span class="p">))),</span>
+                        <span class="p">(</span><span class="s1">&#39;tool_to_th&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">tool</span><span class="o">.</span><span class="n">actionApplyToTheory</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())),</span>
+                        <span class="p">(</span><span class="s1">&#39;tool_active&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">tool</span><span class="o">.</span><span class="n">actionActive</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())),</span>
+                        <span class="p">(</span><span class="s1">&#39;tool_param&#39;</span><span class="p">,</span> <span class="n">param_dic</span><span class="p">),</span>
+                        <span class="p">(</span><span class="s1">&#39;tool_txtbox&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">tool</span><span class="o">.</span><span class="n">toolTextBox</span><span class="o">.</span><span class="n">toHtml</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;&lt;br&gt;&lt;i&gt;Saved at </span><span class="si">%s</span><span class="s1"> on </span><span class="si">%s</span><span class="s1">&lt;i&gt;&lt;br&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%X</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a %b </span><span class="si">%d</span><span class="s2">, %Y&quot;</span><span class="p">))))</span>
+                    <span class="p">]</span>
+                <span class="p">)</span> 
+                <span class="c1">#add to global tools dic</span>
+                <span class="n">tools_dic</span><span class="p">[</span><span class="n">tool</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tool_dic</span>
+            
+            <span class="c1"># all tools plus extra</span>
+            <span class="n">tools</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;tools_dic&#39;</span><span class="p">:</span> <span class="n">tools_dic</span><span class="p">,</span>
+                <span class="s1">&#39;cur_tab_index&#39;</span><span class="p">:</span> <span class="n">app</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+            <span class="p">}</span>
+            
             <span class="n">app_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="p">(</span><span class="s1">&#39;app_tabname&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span>
@@ -549,14 +605,25 @@
                     <span class="p">(</span><span class="s1">&#39;appname&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">appname</span><span class="p">),</span> 
                     <span class="p">(</span><span class="s1">&#39;current_view_names&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">multiviews</span><span class="p">]),</span> 
                     <span class="p">(</span><span class="s1">&#39;current_ds_indx&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()),</span>
-                    <span class="p">(</span><span class="s1">&#39;datasets&#39;</span><span class="p">,</span> <span class="n">datasets_dic</span><span class="p">)</span>
+                    <span class="p">(</span><span class="s1">&#39;datasets&#39;</span><span class="p">,</span> <span class="n">datasets_dic</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;tools&#39;</span><span class="p">,</span> <span class="n">tools</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;show_inspector&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">isVisible</span><span class="p">()))</span>
                 <span class="p">]</span>
             <span class="p">)</span>
 
             <span class="n">apps_dic</span><span class="p">[</span><span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">app_dic</span>
 
         <span class="n">current_app_indx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s1">&#39;current_app_indx&#39;</span><span class="p">,</span> <span class="n">current_app_indx</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;apps&#39;</span><span class="p">,</span> <span class="n">apps_dic</span><span class="p">)])</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;RepTate_version&#39;</span><span class="p">,</span> <span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">Version</span><span class="o">.</span><span class="n">DATE</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;project_saved_at&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> on </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%X</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a %b </span><span class="si">%d</span><span class="s2">, %Y&quot;</span><span class="p">))),</span>
+                <span class="p">(</span><span class="s1">&#39;napp_saved&#39;</span><span class="p">,</span> <span class="n">napps</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;nfile_saved&#39;</span><span class="p">,</span> <span class="n">nfile_saved</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;nth_saved&#39;</span><span class="p">,</span> <span class="n">nth_saved</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;ntool_saved&#39;</span><span class="p">,</span> <span class="n">ntool_saved</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;current_app_indx&#39;</span><span class="p">,</span> <span class="n">current_app_indx</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;apps&#39;</span><span class="p">,</span> <span class="n">apps_dic</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
 
         <span class="c1"># zip output file</span>
         <span class="kn">import</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">zipfile</span><span class="o">,</span> <span class="nn">tempfile</span>
@@ -564,8 +631,25 @@
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">,</span> <span class="s1">&#39;tmp&#39;</span><span class="p">)</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
             <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
-                <span class="n">z</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">REPTATE_PROJ_JSON</span><span class="p">)</span></div>
+                <span class="n">z</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">REPTATE_PROJ_JSON</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">napps</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txtapp</span> <span class="o">=</span> <span class="s1">&#39;Applications&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txtapp</span> <span class="o">=</span> <span class="s1">&#39;Application&#39;</span>
+        <span class="k">if</span> <span class="n">nth_saved</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txtth</span> <span class="o">=</span> <span class="s1">&#39;theories&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txtth</span> <span class="o">=</span> <span class="s1">&#39;theory&#39;</span>
+        <span class="k">if</span> <span class="n">nfile_saved</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txtfiles</span> <span class="o">=</span> <span class="s1">&#39;files&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txtfiles</span> <span class="o">=</span> <span class="s1">&#39;file&#39;</span>
+        <span class="k">if</span> <span class="n">ntool_saved</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txttool</span> <span class="o">=</span> <span class="s1">&#39;tools&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txttool</span> <span class="o">=</span> <span class="s1">&#39;tool&#39;</span>
+        <span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save RepTate Project&#39;</span><span class="p">,</span> <span class="s1">&#39;Saved </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">, </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">, </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">, and </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> to </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">napps</span><span class="p">,</span> <span class="n">txtapp</span><span class="p">,</span> <span class="n">nth_saved</span><span class="p">,</span> <span class="n">txtth</span><span class="p">,</span> <span class="n">nfile_saved</span><span class="p">,</span> <span class="n">txtfiles</span><span class="p">,</span> <span class="n">ntool_saved</span><span class="p">,</span> <span class="n">txttool</span><span class="p">,</span> <span class="n">fpath</span><span class="p">))</span></div>
 
     <span class="c1"># load RepTate session</span>
 <span class="c1">############################</span>
@@ -575,7 +659,7 @@
         <span class="n">newapp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">app_name</span><span class="p">)</span>
         <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icons/Images/new_icons/</span><span class="si">%s</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="n">app_name</span><span class="p">)</span>
         <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">newapp</span><span class="p">,</span> <span class="n">icon</span><span class="p">,</span> <span class="n">app_tabname</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+        <span class="c1"># self.ApplicationtabWidget.setCurrentIndex(ind)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setTabToolTip</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">app_name</span> <span class="o">+</span> <span class="s2">&quot; app&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">ind</span><span class="p">),</span> <span class="n">ind</span></div>
 
@@ -606,7 +690,6 @@
 
 <div class="viewcode-block" id="QApplicationManager.restore_theories"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.restore_theories">[docs]</a>    <span class="k">def</span> <span class="nf">restore_theories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">theories</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open theories&quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">time</span>
         <span class="k">for</span> <span class="n">th_dic</span> <span class="ow">in</span> <span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">th_tabname</span> <span class="o">=</span> <span class="n">th_dic</span><span class="p">[</span><span class="s1">&#39;th_tabname&#39;</span><span class="p">]</span>
             <span class="n">thname</span> <span class="o">=</span> <span class="n">th_dic</span><span class="p">[</span><span class="s1">&#39;thname&#39;</span><span class="p">]</span>
@@ -621,6 +704,8 @@
                     <span class="n">extra_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 
             <span class="n">new_th</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">new_theory</span><span class="p">(</span><span class="n">thname</span><span class="p">,</span> <span class="n">th_tabname</span><span class="p">,</span> <span class="n">calculate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">autocal</span> <span class="o">=</span> <span class="n">new_th</span><span class="o">.</span><span class="n">autocalculate</span>
+            <span class="n">new_th</span><span class="o">.</span><span class="n">autocalculate</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">for</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">th_param</span><span class="p">:</span>
                 <span class="n">new_th</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="n">pname</span><span class="p">,</span> <span class="n">th_param</span><span class="p">[</span><span class="n">pname</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">th_tables</span><span class="p">:</span>
@@ -629,9 +714,8 @@
                 <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
             <span class="n">new_th</span><span class="o">.</span><span class="n">set_extra_data</span><span class="p">(</span><span class="n">extra_data</span><span class="p">)</span>
             <span class="n">new_th</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
-            <span class="n">new_th</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">insertPlainText</span><span class="p">(</span><span class="n">th_textbox</span><span class="p">)</span>
-            <span class="n">new_th</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">***Restored at </span><span class="si">%s</span><span class="s1"> on </span><span class="si">%s</span><span class="s1">****</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> 
-                <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%X</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a %b </span><span class="si">%d</span><span class="s2">, %Y&quot;</span><span class="p">)))</span></div>
+            <span class="n">new_th</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">insertHtml</span><span class="p">(</span><span class="n">th_textbox</span><span class="p">)</span>
+            <span class="n">new_th</span><span class="o">.</span><span class="n">autocalculate</span> <span class="o">=</span> <span class="n">autocal</span></div>
     
 <div class="viewcode-block" id="QApplicationManager.restore_marker_settings"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.restore_marker_settings">[docs]</a>    <span class="k">def</span> <span class="nf">restore_marker_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">marker_dic</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Restore the dataset marker settings&quot;&quot;&quot;</span>
@@ -648,6 +732,25 @@
         <span class="n">ds</span><span class="o">.</span><span class="n">symbol1_name</span> <span class="o">=</span> <span class="n">marker_dic</span><span class="p">[</span><span class="s1">&#39;symbol1_name&#39;</span><span class="p">]</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">th_linestyle</span> <span class="o">=</span> <span class="n">marker_dic</span><span class="p">[</span><span class="s1">&#39;th_linestyle&#39;</span><span class="p">]</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">th_line_width</span> <span class="o">=</span> <span class="n">marker_dic</span><span class="p">[</span><span class="s1">&#39;th_line_width&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.restore_tools"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.restore_tools">[docs]</a>    <span class="k">def</span> <span class="nf">restore_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">tools</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Restore the tools&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">tdic</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">[</span><span class="s1">&#39;tools_dic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">toolname</span> <span class="o">=</span> <span class="n">tdic</span><span class="p">[</span><span class="s1">&#39;tool_name&#39;</span><span class="p">]</span>
+            <span class="n">tool_tab_name</span> <span class="o">=</span> <span class="n">tdic</span><span class="p">[</span><span class="s1">&#39;tool_tab_name&#39;</span><span class="p">]</span>
+            <span class="n">tool_to_th</span> <span class="o">=</span> <span class="n">tdic</span><span class="p">[</span><span class="s1">&#39;tool_to_th&#39;</span><span class="p">]</span>
+            <span class="n">tool_active</span> <span class="o">=</span> <span class="n">tdic</span><span class="p">[</span><span class="s1">&#39;tool_active&#39;</span><span class="p">]</span>
+            <span class="n">tool_param</span> <span class="o">=</span> <span class="n">tdic</span><span class="p">[</span><span class="s1">&#39;tool_param&#39;</span><span class="p">]</span>
+            <span class="n">tool_txtbox</span> <span class="o">=</span> <span class="n">tdic</span><span class="p">[</span><span class="s1">&#39;tool_txtbox&#39;</span><span class="p">]</span>
+
+            <span class="c1"># create new tool and set state</span>
+            <span class="n">to</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">new_tool</span><span class="p">(</span><span class="n">toolname</span><span class="p">,</span> <span class="n">tool_tab_name</span><span class="p">)</span>
+            <span class="n">to</span><span class="o">.</span><span class="n">handle_actionApplyToTheorypressed</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">tool_to_th</span><span class="p">))</span>
+            <span class="n">to</span><span class="o">.</span><span class="n">handle_actionActivepressed</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">tool_active</span><span class="p">))</span>
+            <span class="n">to</span><span class="o">.</span><span class="n">toolTextBox</span><span class="o">.</span><span class="n">insertHtml</span><span class="p">(</span><span class="n">tool_txtbox</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">tool_param</span><span class="p">:</span>
+                <span class="n">to</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="n">pname</span><span class="p">,</span> <span class="n">tool_param</span><span class="p">[</span><span class="n">pname</span><span class="p">])</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">TooltabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">tools</span><span class="p">[</span><span class="s1">&#39;cur_tab_index&#39;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="QApplicationManager.open_project"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.open_project">[docs]</a>    <span class="k">def</span> <span class="nf">open_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open file and load project&quot;&quot;&quot;</span>
@@ -668,7 +771,32 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not find data in </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">project_path</span><span class="p">)</span>
             <span class="k">return</span>
-
+        <span class="n">napps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;napp_saved&#39;</span><span class="p">])</span>
+        <span class="n">nth_saved</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;nth_saved&#39;</span><span class="p">])</span>
+        <span class="n">nfile_saved</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;nfile_saved&#39;</span><span class="p">])</span>
+        <span class="n">ntool_saved</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ntool_saved&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">napps</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txtapp</span> <span class="o">=</span> <span class="s1">&#39;Applications&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txtapp</span> <span class="o">=</span> <span class="s1">&#39;Application&#39;</span>
+        <span class="k">if</span> <span class="n">nth_saved</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txtth</span> <span class="o">=</span> <span class="s1">&#39;theories&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txtth</span> <span class="o">=</span> <span class="s1">&#39;theory&#39;</span>
+        <span class="k">if</span> <span class="n">nfile_saved</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txtfiles</span> <span class="o">=</span> <span class="s1">&#39;files&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txtfiles</span> <span class="o">=</span> <span class="s1">&#39;file&#39;</span>
+        <span class="k">if</span> <span class="n">ntool_saved</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">txttool</span> <span class="o">=</span> <span class="s1">&#39;tools&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txttool</span> <span class="o">=</span> <span class="s1">&#39;tool&#39;</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Load Project&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;Will load </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">, </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">, </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">, and </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">.</span><span class="se">\n</span><span class="s1">Do you want to continue?&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">napps</span><span class="p">,</span> 
+            <span class="n">txtapp</span><span class="p">,</span> <span class="n">nth_saved</span><span class="p">,</span> <span class="n">txtth</span><span class="p">,</span> <span class="n">nfile_saved</span><span class="p">,</span> <span class="n">txtfiles</span><span class="p">,</span> <span class="n">ntool_saved</span><span class="p">,</span> <span class="n">txttool</span><span class="p">),</span> 
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="o">|</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ans</span> <span class="o">!=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="k">for</span> <span class="n">app_dic</span> <span class="ow">in</span> <span class="n">apps_dic</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">app_tabname</span> <span class="o">=</span> <span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;app_tabname&#39;</span><span class="p">]</span>
             <span class="n">app_indx</span> <span class="o">=</span> <span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;app_indx&#39;</span><span class="p">]</span> 
@@ -676,6 +804,8 @@
             <span class="n">current_view_names</span> <span class="o">=</span> <span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;current_view_names&#39;</span><span class="p">]</span>
             <span class="n">current_ds_indx</span> <span class="o">=</span> <span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;current_ds_indx&#39;</span><span class="p">]</span>
             <span class="n">datasets</span> <span class="o">=</span> <span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">]</span>
+            <span class="n">tools</span> <span class="o">=</span> <span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;tools&#39;</span><span class="p">]</span>
+            <span class="n">show_inspector</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;show_inspector&#39;</span><span class="p">])</span>
 
             <span class="n">new_app_tab</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">restore_app</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="n">app_tabname</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">app_indx</span> <span class="o">==</span> <span class="n">current_app_indx</span><span class="p">:</span>
@@ -694,7 +824,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">restore_theories</span><span class="p">(</span><span class="n">new_ds_tab</span><span class="p">,</span> <span class="n">theories</span><span class="p">)</span>
                 <span class="n">new_ds_tab</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">current_th_indx</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">restore_marker_settings</span><span class="p">(</span><span class="n">new_ds_tab</span><span class="p">,</span> <span class="n">ds_markers</span><span class="p">)</span>
-
+            <span class="bp">self</span><span class="o">.</span><span class="n">restore_tools</span><span class="p">(</span><span class="n">new_app_tab</span><span class="p">,</span> <span class="n">tools</span><span class="p">)</span>
+            <span class="n">new_app_tab</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">show_inspector</span><span class="p">)</span>
+            
             <span class="c1">#set app views</span>
             <span class="n">new_app_tab</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_app_tab</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">current_view_names</span><span class="p">]</span>
             <span class="n">new_app_tab</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="n">current_view_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -702,7 +834,9 @@
             <span class="c1">#set current ds_tab index</span>
             <span class="n">new_app_tab</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">current_ds_indx</span><span class="p">)</span>
             <span class="c1"># new_app_tab.update_all_ds_plots() # not needed ?</span>
-    
+            
+            <span class="n">QApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">app_indx_now</span><span class="p">)</span></div></div>
 
 <span class="c1">#################</span>

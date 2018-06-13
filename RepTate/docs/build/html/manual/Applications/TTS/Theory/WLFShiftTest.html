@@ -90,6 +90,40 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryTTS_Test.TheoryWLFShiftTest">
+<em class="property">class </em><code class="descclassname">TheoryTTS_Test.</code><code class="descname">TheoryWLFShiftTest</code><a class="reference internal" href="../../../../_modules/TheoryTTS_Test.html#TheoryWLFShiftTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS_Test.TheoryWLFShiftTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Function</strong></dt>
+<dd><div class="first last math">
+\[\begin{split}\begin{eqnarray}
+\omega(T_r) &amp;= &amp; a_T \omega(T) \\
+G(T_r) &amp;= &amp; b_T G(T) \\
+\log_{10} a_T &amp;= &amp; \frac{-B_1 (T-T_r)}{(B_2+T_r)(B_2+T)} \\
+b_T &amp;= &amp; \frac{\rho(T_r)T_r}{\rho(T)T} = \frac{(1+\alpha T)(T_r+273.15)}{(1+\alpha T_r)(T+273.15)} \\
+T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
+\end{eqnarray}\end{split}\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last simple">
+<li><span class="math">\(T_r\)</span>: Reference temperature to which the experimental data will be shifted.</li>
+<li><span class="math">\(B_1\)</span>: Material parameter, corresponding to <span class="math">\(C_1C_2\)</span>, <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> being the standard WLF material parameters.</li>
+<li><span class="math">\(B_2\)</span>: Material parameter, corresponding to <span class="math">\(C_2-T_r\)</span>, <span class="math">\(C_2\)</span> being the standard WLF material parameter.</li>
+<li>logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.</li>
+<li><span class="math">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math">\(T_g\)</span> with <span class="math">\(M_w\)</span>.</li>
+<li>dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>

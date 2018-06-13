@@ -122,7 +122,7 @@
 <span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
 <span class="kn">from</span> <span class="nn">SpreadsheetWidget</span> <span class="k">import</span> <span class="n">SpreadsheetWidget</span>
-
+<span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">EndComputationRequested</span>
 
 <span class="k">class</span> <span class="nc">FlowMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Defines the flow geometry used</span>
@@ -200,6 +200,7 @@
     <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;Giesekus&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Giesekus constitutive equation&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;Giesekus H., Rheol. Acta 1966, 5, 29&quot;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;http://dx.doi.org/10.1007/BF01973575&quot;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -229,6 +230,7 @@
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryGiesekus</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryGiesekus</span><span class="o">.</span><span class="n">citations</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">TheoryGiesekus</span><span class="o">.</span><span class="n">doi</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -374,6 +376,8 @@
 
     <span class="k">def</span> <span class="nf">sigmadot_shear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Giesekus model in shear&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
         <span class="n">alpha</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">gdot</span> <span class="o">=</span> <span class="n">p</span>
         <span class="n">sxx</span><span class="p">,</span> <span class="n">syy</span><span class="p">,</span> <span class="n">sxy</span> <span class="o">=</span> <span class="n">sigma</span>
 
@@ -390,6 +394,8 @@
 
     <span class="k">def</span> <span class="nf">sigmadot_uext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Giesekus model in uniaxial extension&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
         <span class="n">alpha</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">edot</span> <span class="o">=</span> <span class="n">p</span>
         <span class="n">sxx</span><span class="p">,</span> <span class="n">syy</span> <span class="o">=</span> <span class="n">sigma</span>
 
@@ -448,19 +454,23 @@
         <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="n">nstretch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nstretch&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">break</span>
             <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">tauD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;alpha</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">alpha</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">tauD</span><span class="p">,</span> <span class="n">flow_rate</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nstretch</span><span class="p">:</span>
-                <span class="n">sig</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
-                    <span class="n">pde_stretch</span><span class="p">,</span>
-                    <span class="n">sigma0</span><span class="p">,</span>
-                    <span class="n">t</span><span class="p">,</span>
-                    <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span>
-                    <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span>
-                    <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
-
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">sig</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
+                        <span class="n">pde_stretch</span><span class="p">,</span>
+                        <span class="n">sigma0</span><span class="p">,</span>
+                        <span class="n">t</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span>
+                        <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span>
+                        <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">EndComputationRequested</span><span class="p">:</span>
+                    <span class="k">break</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">==</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span><span class="p">:</span>
                     <span class="n">sxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sig</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                     <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">sxy</span>
@@ -632,7 +642,8 @@
     <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;nstretch&quot;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">nmodes</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">select_shear_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">=</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span>

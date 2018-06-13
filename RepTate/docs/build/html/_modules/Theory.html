@@ -124,7 +124,11 @@
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">ToolMaterialsDatabase</span> <span class="k">import</span> <span class="n">check_chemistry</span><span class="p">,</span> <span class="n">get_all_parameters</span>
 
+<div class="viewcode-block" id="EndComputationRequested"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.EndComputationRequested">[docs]</a><span class="k">class</span> <span class="nc">EndComputationRequested</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception class to end computations&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Theory"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory">[docs]</a><span class="k">class</span> <span class="nc">Theory</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Abstract class to describe a theory</span>
@@ -137,6 +141,8 @@
     <span class="sd">&quot;&quot;&quot; description {str} -- Description of theory &quot;&quot;&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="sd">&quot;&quot;&quot; citations {str} -- Articles that should be cited &quot;&quot;&quot;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; doicode {str} -- Doi code of the article &quot;&quot;&quot;</span>
     <span class="n">nfev</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="sd">&quot;&quot;&quot; nfev {int} -- Number of function evaluations &quot;&quot;&quot;</span>
 
@@ -251,6 +257,8 @@
 
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">print_signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_qtextbox</span><span class="p">)</span>  <span class="c1"># Asynchronous print when using multithread</span>
+        <span class="c1"># flag for requesting end of computations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="Theory.precmd"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.precmd">[docs]</a>    <span class="k">def</span> <span class="nf">precmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculations before the theory is calculated</span>
@@ -278,6 +286,11 @@
         <span class="sd">&quot;&quot;&quot;Used only in non GUI mode&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Theory.request_stop_computations"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.request_stop_computations">[docs]</a>    <span class="k">def</span> <span class="nf">request_stop_computations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when user wants to terminate the current computation&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=red&gt;&lt;b&gt;Stop current calculation requested&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span> <span class="o">=</span> <span class="kc">True</span></div>
+
 <div class="viewcode-block" id="Theory.do_calculate"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.do_calculate">[docs]</a>    <span class="k">def</span> <span class="nf">do_calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the theory&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_is_busy</span><span class="p">:</span>
@@ -286,15 +299,16 @@
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">calculate_is_busy</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time_cal</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theory_files</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">break</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">do_error</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">timing</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---Calculated in </span><span class="si">%.3g</span><span class="s2"> seconds---&quot;</span> <span class="o">%</span>
-                                   <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;i&gt;---Calculated in </span><span class="si">%.3g</span><span class="s1"> seconds---&lt;/i&gt;&lt;br&gt;&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time_cal</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">do_cite</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calculate_is_busy</span> <span class="o">=</span> <span class="kc">False</span></div>
 
@@ -329,12 +343,13 @@
         <span class="n">total_error</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
-        <span class="n">tools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">tools</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12s</span><span class="s2"> (</span><span class="si">%6s</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;File&quot;</span><span class="p">,</span> <span class="s2">&quot;Error (RSS)&quot;</span><span class="p">,</span> <span class="s2">&quot;# Pts.&quot;</span><span class="p">)</span>
-        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;==================================&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">tools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">tools</span>       
+        <span class="n">table</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
+        <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;File&lt;/th&gt;&lt;th&gt;Error (RSS)&lt;/th&gt;&lt;th&gt;# Pts&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
 
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theory_files</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">break</span>
             <span class="n">xexp</span><span class="p">,</span> <span class="n">yexp</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="p">,</span>
                                                  <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
             <span class="n">xth</span><span class="p">,</span> <span class="n">yth</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">],</span>
@@ -356,8 +371,9 @@
             <span class="n">npt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">yth</span><span class="p">)</span>
             <span class="n">total_error</span> <span class="o">+=</span> <span class="n">f_error</span> <span class="o">*</span> <span class="n">npt</span>
             <span class="n">npoints</span> <span class="o">+=</span> <span class="n">npt</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12.5g</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span>
-                                                          <span class="n">f_error</span><span class="p">,</span> <span class="n">npt</span><span class="p">))</span>
+            <span class="n">table</span><span class="o">+=</span> <span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;</span><span class="si">%14s</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%10.4g</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%5d</span><span class="s1">&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="n">f_error</span><span class="p">,</span> <span class="n">npt</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 
         <span class="c1">#count number of fitting parameters</span>
         <span class="n">free_p</span> <span class="o">=</span> <span class="mi">0</span>
@@ -366,15 +382,12 @@
                 <span class="n">free_p</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">npoints</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12.5g</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span>
-                                   <span class="p">(</span><span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span> <span class="n">total_error</span> <span class="o">/</span> <span class="n">npoints</span><span class="p">,</span> <span class="n">npoints</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;TOTAL ERROR&lt;/b&gt;: </span><span class="si">%12.5g</span><span class="s2"> (</span><span class="si">%d</span><span class="s2"> Pts)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">total_error</span> <span class="o">/</span> <span class="n">npoints</span><span class="p">,</span> <span class="n">npoints</span><span class="p">))</span>
             <span class="c1"># Bayesian information criterion (BIC) penalise free parametters (overfitting)</span>
             <span class="c1"># Model with lowest BIC number is prefered</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12.5g</span><span class="s2">&quot;</span> <span class="o">%</span>
-                                   <span class="p">(</span><span class="s2">&quot;Bayesian IC&quot;</span><span class="p">,</span> <span class="n">npoints</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">total_error</span> <span class="o">/</span> <span class="n">npoints</span><span class="p">)</span> <span class="o">+</span> <span class="n">free_p</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">npoints</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;Bayesian IC&lt;/b&gt;: </span><span class="si">%12.5g</span><span class="s2">&lt;br&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">npoints</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">total_error</span> <span class="o">/</span> <span class="n">npoints</span><span class="p">)</span> <span class="o">+</span> <span class="n">free_p</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">npoints</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%14s</span><span class="s2"> </span><span class="si">%12s</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">,</span>
-                                                        <span class="n">npoints</span><span class="p">))</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;TOTAL ERROR&lt;/b&gt;: </span><span class="si">%12s</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&lt;br&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">,</span> <span class="n">npoints</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Theory.func_fit"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.func_fit">[docs]</a>    <span class="k">def</span> <span class="nf">func_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">param_in</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -449,10 +462,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==================================</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;PARAMETER FITTING&quot;</span>
-        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==================================</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;hr&gt;&lt;h2&gt;Parameter Fitting&lt;/h2&gt;&#39;&#39;&#39;</span><span class="p">)</span>
         <span class="c1"># Vectors that contain all X and Y in the files &amp; view</span>
         <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
@@ -462,17 +472,17 @@
                 <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">temp</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;xrange=[</span><span class="si">%0.3g</span><span class="s2">, </span><span class="si">%0.3g</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span>
-                                                              <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;xrange&lt;/b&gt;=[</span><span class="si">%0.3g</span><span class="s2">, </span><span class="si">%0.3g</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">yrange</span><span class="o">.</span><span class="n">get_visible</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">:</span>
                 <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">=</span> <span class="n">temp</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;yrange=[</span><span class="si">%.03g</span><span class="s2">, </span><span class="si">%0.3g</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span>
-                                                              <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;yrange&lt;/b&gt;=[</span><span class="si">%.03g</span><span class="s2">, </span><span class="si">%0.3g</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">th_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">return</span>
             <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
                 <span class="n">xexp</span><span class="p">,</span> <span class="n">yexp</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="p">,</span>
                                                      <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
@@ -538,12 +548,14 @@
         <span class="n">fres0</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">residuals</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">residuals</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">pars</span><span class="p">)</span>
         <span class="n">fres1</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">residuals</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;Initial Error = </span><span class="si">%g</span><span class="s1"> --&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fres0</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;Final Error   = </span><span class="si">%g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fres1</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%g</span><span class="s1"> function evaluations&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfev</span><span class="p">))</span>
-        <span class="c1"># fiterror = np.mean((infodict[&#39;fvec&#39;])**2)</span>
-        <span class="c1"># funcev = infodict[&#39;nfev&#39;]</span>
-        <span class="c1"># print(&quot;Solution found with %d function evaluations and error %g&quot;%(funcev,fiterror))</span>
+
+        <span class="n">table</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
+        <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;Initial Error&lt;/th&gt;&lt;th&gt;Final Error&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
+        <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;</span><span class="si">%g</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%g</span><span class="s1">&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">fres0</span><span class="p">,</span> <span class="n">fres1</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;b&gt;</span><span class="si">%g</span><span class="s1">&lt;/b&gt; function evaluations&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfev</span><span class="p">))</span>
 
         <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1"># 95% confidence interval = 100*(1-alpha)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># number of data points</span>
@@ -559,22 +571,21 @@
             <span class="n">par_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">tval</span><span class="p">)</span>
 
         <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">%9s</span><span class="s2"> = </span><span class="si">%10s</span><span class="s2"> ± </span><span class="si">%-9s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;Parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">,</span>
-                                                        <span class="s2">&quot;Error&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;==================================&quot;</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
+        <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;Parameter&lt;/th&gt;&lt;th&gt;Value ± Error&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
             <span class="n">par</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">par</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
                 <span class="n">par</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">par_error</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
                 <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%9s</span><span class="s1"> = </span><span class="si">%10.4g</span><span class="s1"> ± </span><span class="si">%-9.4g</span><span class="s1">&#39;</span> <span class="o">%</span>
-                                       <span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
+                <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;</span><span class="si">%s</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%10.4g</span><span class="s1"> ± </span><span class="si">%-9.4g</span><span class="s1">&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%9s</span><span class="s1"> = </span><span class="si">%10.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+                <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;</span><span class="si">%s</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%10.4g</span><span class="s1">&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>        
         <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---Fitting in </span><span class="si">%.3g</span><span class="s2"> seconds---&quot;</span> <span class="o">%</span>
-                               <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;i&gt;---Fitted in </span><span class="si">%.3g</span><span class="s1"> seconds---&lt;/i&gt;&lt;br&gt;&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_cite</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Theory.do_print"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.do_print">[docs]</a>    <span class="k">def</span> <span class="nf">do_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
@@ -946,7 +957,7 @@
 <span class="sd">            - line {[type]} -- [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">citations</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">CITE: &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">citations</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;b&gt;&lt;font color=red&gt;CITE&lt;/font&gt;:&lt;/b&gt; &lt;a href=&quot;</span><span class="si">%s</span><span class="s1">&quot;&gt;</span><span class="si">%s</span><span class="s1">&lt;/a&gt;&lt;p&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">citations</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Theory.do_plot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.do_plot">[docs]</a>    <span class="k">def</span> <span class="nf">do_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call the plot from the parent Dataset</span>
@@ -1118,7 +1129,7 @@
             <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">do_plot</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Theory.Qprint"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.Qprint">[docs]</a>    <span class="k">def</span> <span class="nf">Qprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Theory.Qprint"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.Qprint">[docs]</a>    <span class="k">def</span> <span class="nf">Qprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -1129,14 +1140,52 @@
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">print_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="n">end</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">:</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Theory.print_qtextbox"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.print_qtextbox">[docs]</a>    <span class="k">def</span> <span class="nf">print_qtextbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print message in the GUI log text box&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">insertPlainText</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="n">QTextCursor</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">insertHtml</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">verticalScrollBar</span><span class="p">()</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">verticalScrollBar</span><span class="p">()</span><span class="o">.</span><span class="n">maximum</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="n">QTextCursor</span><span class="o">.</span><span class="n">End</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="n">QTextCursor</span><span class="o">.</span><span class="n">End</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theory.get_material_parameters"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.get_material_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_material_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get theory parameters from materials database&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fparam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file_parameters</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s1">&#39;chem&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fparam</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">chem</span> <span class="o">=</span> <span class="n">fparam</span><span class="p">[</span><span class="s1">&#39;chem&#39;</span><span class="p">]</span>
+        <span class="n">dbindex</span> <span class="o">=</span> <span class="n">check_chemistry</span><span class="p">(</span><span class="n">chem</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dbindex</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">get_all_parameters</span><span class="p">(</span><span class="n">chem</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fparam</span><span class="p">,</span> <span class="n">dbindex</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Theory.get_material_parametersOLD"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.get_material_parametersOLD">[docs]</a>    <span class="k">def</span> <span class="nf">get_material_parametersOLD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get theory parameters from materials database&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;chem&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file_parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">chem</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s1">&#39;chem&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">chem</span> <span class="ow">in</span> <span class="n">materials_user_database</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">materials_user_database</span><span class="p">[</span><span class="n">chem</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">materials_user_database</span><span class="p">[</span><span class="n">chem</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> 
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">chem</span> <span class="ow">in</span> <span class="n">materials_database</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">materials_database</span><span class="p">[</span><span class="n">chem</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">materials_database</span><span class="p">[</span><span class="n">chem</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> 
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div></div>
 </pre></div>
 
           </div>

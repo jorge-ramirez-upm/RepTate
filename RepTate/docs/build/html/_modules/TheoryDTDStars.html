@@ -144,6 +144,7 @@
     <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;DTD Stars&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Dynamic Tube Dilution for stars, frequency domain&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166&quot;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;http://dx.doi.org/10.1021/ma961559f&quot;</span>
     
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -173,6 +174,7 @@
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># False if the theory can be applied to multiple files simultaneously</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryDTDStarsFreq</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryDTDStarsFreq</span><span class="o">.</span><span class="n">citations</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">TheoryDTDStarsFreq</span><span class="o">.</span><span class="n">doi</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -185,7 +187,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;G0&quot;</span><span class="p">,</span>
             <span class="mf">1e1</span><span class="p">,</span>
@@ -214,6 +216,8 @@
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_material_parameters</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">G0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau_e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -339,6 +343,7 @@
     <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;DTD Stars&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Dynamic Tube Dilution for stars, time domain&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166&quot;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;http://dx.doi.org/10.1021/ma961559f&quot;</span>
     
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -368,6 +373,7 @@
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># False if the theory can be applied to multiple files simultaneously</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryDTDStarsTime</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryDTDStarsTime</span><span class="o">.</span><span class="n">citations</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">TheoryDTDStarsTime</span><span class="o">.</span><span class="n">doi</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -380,7 +386,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;G0&quot;</span><span class="p">,</span>
             <span class="mf">1e1</span><span class="p">,</span>
@@ -409,6 +415,8 @@
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_material_parameters</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">G0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau_e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>

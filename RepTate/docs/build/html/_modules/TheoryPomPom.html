@@ -123,6 +123,7 @@
 <span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
 <span class="kn">from</span> <span class="nn">SpreadsheetWidget</span> <span class="k">import</span> <span class="n">SpreadsheetWidget</span>
+<span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">EndComputationRequested</span>
 <span class="kn">import</span> <span class="nn">Version</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -210,6 +211,7 @@
     <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;Pom-Pom&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Pom-Pom constitutive equation&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;McLeish T.C.B. and Larson R.G., J. Rheol. 1998, 42, 81-110&quot;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;http://dx.doi.org/10.1122/1.550933&quot;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -239,6 +241,7 @@
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryPomPom</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryPomPom</span><span class="o">.</span><span class="n">citations</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">TheoryPomPom</span><span class="o">.</span><span class="n">doi</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -355,6 +358,8 @@
 
     <span class="k">def</span> <span class="nf">sigmadot_shear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;PomPom model in shear&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
         <span class="n">q</span><span class="p">,</span> <span class="n">tauB</span><span class="p">,</span> <span class="n">tauS</span><span class="p">,</span> <span class="n">gdot</span> <span class="o">=</span> <span class="n">p</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">q</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">l</span> <span class="o">=</span> <span class="n">q</span>
@@ -379,6 +384,8 @@
 
     <span class="k">def</span> <span class="nf">sigmadot_uext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;PomPom model in uniaxial extension&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
         <span class="n">q</span><span class="p">,</span> <span class="n">tauB</span><span class="p">,</span> <span class="n">tauS</span><span class="p">,</span> <span class="n">edot</span> <span class="o">=</span> <span class="n">p</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">q</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
@@ -440,6 +447,8 @@
         <span class="n">flow_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">])</span>
         <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">break</span>
             <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;q</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">tauB</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauB</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -448,14 +457,16 @@
 
             <span class="c1">#solve ODEs</span>
             <span class="n">stretch_ini</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">l</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
-                <span class="n">pde_stretch</span><span class="p">,</span>
-                <span class="n">stretch_ini</span><span class="p">,</span>
-                <span class="n">times</span><span class="p">,</span>
-                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span>
-                <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span>
-                <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
-
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
+                    <span class="n">pde_stretch</span><span class="p">,</span>
+                    <span class="n">stretch_ini</span><span class="p">,</span>
+                    <span class="n">times</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span>
+                    <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span>
+                    <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">EndComputationRequested</span><span class="p">:</span>
+                <span class="k">break</span>
             <span class="c1"># write results in table</span>
             <span class="n">l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># delete the t=0 value</span>
             <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># delete the t=0 value</span>

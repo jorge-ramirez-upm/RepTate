@@ -57,9 +57,11 @@ from shutil import copy2
 
 
 class TheoryBobLVE(CmdBase):
-    """[summary]
-    
-    [description]
+    """Analyse the relaxation of polymers read from a polymer configuration file
+    using BoB v2.5 (Chinmay Das and Daniel Read).
+    These files can be generated from the React application in RepTate.
+
+    The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
     """
     thname = 'BOB'
     description = 'Branch-On-Branch rheology'
@@ -115,7 +117,7 @@ class BaseTheoryBobLVE:
         self.bch = BobCtypesHelper(self)
         self.autocalculate = False
         self.freqint = 1.1 # BoB theory points spaced by log10(freqint)
-        self.do_priority_seniority = True
+        self.do_priority_seniority = False
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -261,7 +263,9 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         self.btn_prio_senio = tb.addAction(QIcon(':/Icon8/Images/new_icons/priority_seniority.png'), 'Calculate Priority and Seniority (can take some time)')
         self.btn_prio_senio.setCheckable(True)
         self.btn_prio_senio.setChecked(True)
-        self.thToolsLayout.insertWidget(0, tb)
+
+        # BoB LVE do not calculate priority & seniority (leave it to React)
+        # self.thToolsLayout.insertWidget(0, tb)
 
         self.btn_prio_senio.triggered.connect(self.handle_btn_prio_senio)
 

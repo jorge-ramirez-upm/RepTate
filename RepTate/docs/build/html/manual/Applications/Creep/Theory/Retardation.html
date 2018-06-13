@@ -90,6 +90,41 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryRetardationModes.TheoryRetardationModesTime">
+<em class="property">class </em><code class="descclassname">TheoryRetardationModes.</code><code class="descname">TheoryRetardationModesTime</code><a class="reference internal" href="../../../../_modules/TheoryRetardationModes.html#TheoryRetardationModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRetardationModes.TheoryRetardationModesTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a discrete Retardation spectrum to time dependent creep data</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Function</strong></dt>
+<dd><div class="first math">
+\[\gamma(t) = \sigma_0 \left( J_0 + \sum_{1}^{n_{modes}} J_i \left[ 1 - \exp\left(\frac{-t}{\tau_i}\right) \right] + \frac{t}{\eta_0} \right)\]</div>
+<dl class="last docutils">
+<dt>where:</dt>
+<dd><ul class="first last simple">
+<li><span class="math">\(\sigma_0\)</span>: constant stress applied during the creep experiment.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last simple">
+<li><span class="math">\(J_0\)</span>: Instantaneous compliance (<code class="docutils literal"><span class="pre">logJini</span></code>, in logarithmic scale).</li>
+<li><span class="math">\(\eta_0\)</span>: Terminal viscosity (<code class="docutils literal"><span class="pre">logeta0</span></code>, in logarithmic scale).</li>
+<li><span class="math">\(n_{modes}\)</span>: number of Retardation modes equally distributed in logarithmic scale between <span class="math">\(t_{min}\)</span> and <span class="math">\(t_{max}\)</span>.</li>
+<li>logtmin = <span class="math">\(\log(t_{min})\)</span>: decimal logarithm of the minimum time range for the modes.</li>
+<li>logtmax = <span class="math">\(\log(t_{max})\)</span>: decimal logarithm of the maximum time.</li>
+<li>logJi = <span class="math">\(\log(J_{i})\)</span>: decimal logarithm of the compliance of Retardation mode <span class="math">\(i\)</span>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>

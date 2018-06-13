@@ -93,6 +93,9 @@
               <layout class="QFormLayout" name="formLayout_4">
                <item row="0" column="1">
                 <widget class="QLineEdit" name="n_polymers">
+                 <property name="toolTip">
+                  <string>Maximum number of polymer</string>
+                 </property>
                  <property name="text">
                   <string>1e4</string>
                  </property>
@@ -100,6 +103,9 @@
                </item>
                <item row="0" column="0">
                 <widget class="QLabel" name="label_6">
+                 <property name="toolTip">
+                  <string>Maximum number of polymer</string>
+                 </property>
                  <property name="text">
                   <string>Num. polymers</string>
                  </property>
@@ -107,6 +113,9 @@
                </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_7">
+                 <property name="toolTip">
+                  <string>Maximum total number of arms</string>
+                 </property>
                  <property name="text">
                   <string>Num. segments</string>
                  </property>
@@ -114,6 +123,9 @@
                </item>
                <item row="1" column="1">
                 <widget class="QLineEdit" name="n_segments">
+                 <property name="toolTip">
+                  <string>Maximum total number of arms</string>
+                 </property>
                  <property name="text">
                   <string>1e5</string>
                  </property>
@@ -137,6 +149,9 @@
                </property>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_2">
+                 <property name="toolTip">
+                  <string>Tube dilation exponent</string>
+                 </property>
                  <property name="text">
                   <string>alpha</string>
                  </property>
@@ -144,6 +159,9 @@
                </item>
                <item row="1" column="1">
                 <widget class="QLineEdit" name="alpha">
+                 <property name="toolTip">
+                  <string>Tube dilation exponent</string>
+                 </property>
                  <property name="text">
                   <string>1</string>
                  </property>
@@ -157,6 +175,9 @@
                    <bold>false</bold>
                   </font>
                  </property>
+                 <property name="toolTip">
+                  <string>Mass of a monomer</string>
+                 </property>
                  <property name="text">
                   <string>M0 (g/mol)</string>
                  </property>
@@ -169,6 +190,9 @@
                    <weight>50</weight>
                    <bold>false</bold>
                   </font>
+                 </property>
+                 <property name="toolTip">
+                  <string>Mass of a monomer</string>
                  </property>
                  <property name="inputMethodHints">
                   <set>Qt::ImhDigitsOnly</set>
@@ -186,6 +210,9 @@
                    <bold>false</bold>
                   </font>
                  </property>
+                 <property name="toolTip">
+                  <string>Number of monomers in an entanglement length</string>
+                 </property>
                  <property name="text">
                   <string>Ne</string>
                  </property>
@@ -199,6 +226,9 @@
                    <bold>false</bold>
                   </font>
                  </property>
+                 <property name="toolTip">
+                  <string>Number of monomers in an entanglement length</string>
+                 </property>
                  <property name="inputMethodHints">
                   <set>Qt::ImhDigitsOnly</set>
                  </property>
@@ -209,6 +239,9 @@
                </item>
                <item row="4" column="0">
                 <widget class="QLabel" name="label_3">
+                 <property name="toolTip">
+                  <string>Mass-density of the polymer (g/cc accepted)</string>
+                 </property>
                  <property name="text">
                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;density (kg/m&lt;span style=&quot; vertical-align:super;&quot;&gt;3&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
@@ -216,6 +249,9 @@
                </item>
                <item row="4" column="1">
                 <widget class="QLineEdit" name="density">
+                 <property name="toolTip">
+                  <string>Mass-density of the polymer (g/cc accepted)</string>
+                 </property>
                  <property name="text">
                   <string>1e3</string>
                  </property>
@@ -223,6 +259,9 @@
                </item>
                <item row="5" column="0">
                 <widget class="QLabel" name="label_5">
+                 <property name="toolTip">
+                  <string>Entanglement time</string>
+                 </property>
                  <property name="text">
                   <string>tau_e (s)</string>
                  </property>
@@ -230,6 +269,9 @@
                </item>
                <item row="5" column="1">
                 <widget class="QLineEdit" name="taue">
+                 <property name="toolTip">
+                  <string>Entanglement time</string>
+                 </property>
                  <property name="text">
                   <string>1e-2</string>
                  </property>
@@ -237,6 +279,9 @@
                </item>
                <item row="6" column="0">
                 <widget class="QLabel" name="label_8">
+                 <property name="toolTip">
+                  <string>Temperature</string>
+                 </property>
                  <property name="text">
                   <string>T (K)</string>
                  </property>
@@ -244,6 +289,9 @@
                </item>
                <item row="6" column="1">
                 <widget class="QLineEdit" name="temperature">
+                 <property name="toolTip">
+                  <string>Temperature</string>
+                 </property>
                  <property name="text">
                   <string>300</string>
                  </property>
@@ -265,6 +313,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pb_help">
+       <property name="toolTip">
+        <string>Show BoB documentation</string>
+       </property>
        <property name="text">
         <string>Help</string>
        </property>
