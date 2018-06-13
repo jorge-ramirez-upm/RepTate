@@ -1777,23 +1777,52 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             new_lim = lim
         return new_lim
 
-    def zoom_wheel(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
+    def _zoom_range(self, begin, end, center, scale_factor, scale):
+        """Compute a 1D range zoomed around center.
+        :param float begin: The begin bound of the range.
+        :param float end: The end bound of the range.
+        :param float center: The center of the zoom (i.e., invariant point)
+        :param float scale_factor: The scale factor to apply.
+        :param str scale: The scale of the axis
+        :return: The zoomed range (min, max)
         """
-        # get the current x and y limits
+        if begin < end:
+            min_, max_ = begin, end
+        else:
+            min_, max_ = end, begin
+
+        if scale == 'linear':
+            old_min, old_max = min_, max_
+        elif scale == 'log':
+            old_min = np.log10(min_ if min_ > 0. else np.nextafter(0, 1))
+            center = np.log10(
+                center if center > 0. else np.nextafter(0, 1))
+            old_max = np.log10(max_) if max_ > 0. else 0.
+        else:
+            logging.warning(
+                'Zoom on wheel not implemented for scale "%s"' % scale)
+            return begin, end
+
+        offset = (center - old_min) / (old_max - old_min)
+        range_ = (old_max - old_min) / scale_factor
+        new_min = center - offset * range_
+        new_max = center + (1. - offset) * range_
+
+        if scale == 'log':
+            try:
+                new_min, new_max = 10. ** float(new_min), 10. ** float(new_max)
+            except OverflowError:  # Limit case
+                new_min, new_max = min_, max_
+            if new_min <= 0. or new_max <= 0.:  # Limit case
+                new_min, new_max = min_, max_
+
+        if begin < end:
+            return new_min, new_max
+        else:
+            return new_max, new_min
+            
+    def zoom_wheel(self, event):
         base_scale = 1.1
-        cur_xlim = self.axarr[0].get_xlim()
-        cur_ylim = self.axarr[0].get_ylim()
-        # set the range
-        xdata = event.xdata  # get event x location
-        ydata = event.ydata  # get event y location
-        if (xdata == None or ydata == None):
-            return
         if event.button == 'up':
             # deal with zoom in
             scale_factor = 1 / base_scale
@@ -1803,18 +1832,35 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             # deal with something that should never happen
             scale_factor = 1
-        # Get distance from the cursor to the edge of the figure frame
-        x_left = xdata - cur_xlim[0]
-        x_right = cur_xlim[1] - xdata
-        y_top = ydata - cur_ylim[0]
-        y_bottom = cur_ylim[1] - ydata
-        # set new limits
-        self.axarr[0].set_xlim(
-            [xdata - x_left * scale_factor, xdata + x_right * scale_factor])
-        self.axarr[0].set_ylim(
-            [ydata - y_top * scale_factor, ydata + y_bottom * scale_factor])
-        self.axarr[0].figure.canvas.draw()  # force re-draw
 
+        # if event.step > 0:
+            # scale_factor = self.scale_factor
+        # else:
+            # scale_factor = 1. / self.scale_factor
+
+        # Go through all axes to enable zoom for multiple axes subplots
+        x_axes, y_axes = self._axes_to_update(event)
+
+        for ax in x_axes:
+            transform = ax.transData.inverted()
+            xdata, ydata = transform.transform_point((event.x, event.y))
+
+            xlim = ax.get_xlim()
+            xlim = self._zoom_range(xlim[0], xlim[1],
+                                    xdata, scale_factor,
+                                    ax.get_xscale())
+            ax.set_xlim(xlim)
+
+        for ax in y_axes:
+            ylim = ax.get_ylim()
+            ylim = self._zoom_range(ylim[0], ylim[1],
+                                    ydata, scale_factor,
+                                    ax.get_yscale())
+            ax.set_ylim(ylim)
+
+        if x_axes or y_axes:
+            self.figure.canvas.draw() 
+        
     def on_press(self, event):
         if event.button == 2: # Pan
             x_axes, y_axes = self._axes_to_update(event)
