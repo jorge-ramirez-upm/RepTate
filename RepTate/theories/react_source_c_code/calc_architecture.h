@@ -34,6 +34,6 @@
 #ifndef CALC_ARCHITECTURE_H
 #define CALC_ARCHITECTURE_H
 
-extern int calc_seniority(int n);
+extern void calc_seniority(int n);
 
 #endif

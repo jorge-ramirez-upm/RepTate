@@ -32,10 +32,11 @@
 
 // --------------------------------------------------------------------------------------------------------
 #include <stdlib.h>
+#include <stdio.h>
 #include "polybits.h"
 #include "calc_architecture.h"
 
-int calc_seniority(int n)
+void calc_seniority(int n)
 {
     int first, m, sen_level, mL1, mL2, mR1, mR2, senL1, senL2, senR1, senR2, maxL, maxR, nassigned, armnum;
     first = br_poly[n].first_end;
@@ -44,9 +45,9 @@ int calc_seniority(int n)
     armnum = br_poly[n].armnum;
     while (true)
     {
-        // loop over all arms and determine if free end (seniority=1)
+        // loop over all arms and determine if free-end (seniority=1)
         // if not, assign 0 (not determined)
-        if ((arm_pool[m].L1 == 0 && arm_pool[m].L2 == 0) || (arm_pool[m].R1 == 0 && arm_pool[m].R2))
+        if ((arm_pool[m].L1 == 0 && arm_pool[m].L2 == 0) || (arm_pool[m].R1 == 0 && arm_pool[m].R2 == 0))
         {
             // it is a free end
             arm_pool[m].senio = 1;
@@ -54,7 +55,7 @@ int calc_seniority(int n)
             if (nassigned == armnum)
             {
                 br_poly[n].max_senio = 1;
-                return 1;
+                return;
             }
         }
         else
@@ -73,27 +74,27 @@ int calc_seniority(int n)
         if (arm_pool[m].senio == 0)
         {
             // seniority not yet determined
-            mL1 = arm_pool[m].L1;
-            mL2 = arm_pool[m].L2;
-            mR1 = arm_pool[m].R1;
-            mR2 = arm_pool[m].R2;
+            mL1 = abs(arm_pool[m].L1);
+            mL2 = abs(arm_pool[m].L2);
+            mR1 = abs(arm_pool[m].R1);
+            mR2 = abs(arm_pool[m].R2);
 
             senL1 = arm_pool[mL1].senio;
             senL2 = arm_pool[mL2].senio;
-            maxL = senL1 > senL2 ? senL1 : senL2;
+            maxL = (senL1 > senL2) ? senL1 : senL2;
 
             senR1 = arm_pool[mR1].senio;
             senR2 = arm_pool[mR2].senio;
-            maxR = senR1 > senR2 ? senR1 : senR2;
+            maxR = (senR1 > senR2) ? senR1 : senR2;
 
-            if ((senL1 != 0 && senL2 != 0 && maxL == sen_level - 1) || (senR1 != 0 && senR2 != 0 && maxR == sen_level - 1))
+            if ((senL1 != 0 && senL2 != 0 && maxL == (sen_level - 1)) || (senR1 != 0 && senR2 != 0 && maxR == (sen_level - 1)))
             {
                 arm_pool[m].senio = sen_level;
                 nassigned++;
                 if (nassigned == armnum)
                 {
-                    br_poly[n].max_senio = 1;
-                    return sen_level;
+                    br_poly[n].max_senio = sen_level;
+                    return;
                 }
             }
         }

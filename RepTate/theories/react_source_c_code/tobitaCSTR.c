@@ -32,6 +32,7 @@
 
 // --------------------------------------------------------------------------------------------------------
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <time.h>
 
@@ -124,10 +125,10 @@ bool tobCSTR(int n, int n1)
         while (m1 != first)
         {
             anum++;
-            arm_pool[m1].armnum = anum;
+            arm_pool[m1].armnum = anum; // number of arms
             m1 = arm_pool[m1].down;
         }
-
+        br_poly[n].armnum = anum + 1;
         first = br_poly[n].first_end;
 
         mass_segs(first, &len1, &nsegs);
@@ -138,6 +139,7 @@ bool tobCSTR(int n, int n1)
 
         // check to see whether to save the polymer
         calc_seniority(n);
+        printf("Max seniority molecule %d with %d arms is %d\n", n,  br_poly[n].armnum, br_poly[n].max_senio);
         bobcount(n, n1);
         return true;
     }
