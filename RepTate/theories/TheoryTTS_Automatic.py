@@ -646,7 +646,7 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
                 fname+="phi%g"%case[2]
             if (case[3]>0):
                 fname+="phiB%g"%case[3]
-            with open(join(folder, fname+'.ttsfactor'), 'w') as fout:
+            with open(join(folder, fname+'.ttsf'), 'w') as fout:
                 Temps0 = [x[0] for x in self.Tdict[case]]
                 Filenames = [x[2] for x in self.Tdict[case]]
                 Files = [x[3] for x in self.Tdict[case]]
@@ -661,7 +661,7 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
                 for i in indTsorted:
                     fname = Filenames[i]
                     sparam = self.shiftParameters[fname]
-                    fout.write('%6.3g %11.3g %11.3g\n'%(Temps0[i], sparam[0], sparam[1]))
+                    fout.write('%6.3g %11.3g %11.3g\n'%(Temps0[i], 10.0**sparam[0], 10.0**sparam[1]))
                     
                 
             
