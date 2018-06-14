@@ -324,6 +324,7 @@ class BaseTheoryTobitaCSTR:
                 else:
                     i = numtomake
         # end make polymers loop
+        rch.print_arch_stats(ct.c_int(ndist))
 
         calc = 0
         # do analysis of polymers made

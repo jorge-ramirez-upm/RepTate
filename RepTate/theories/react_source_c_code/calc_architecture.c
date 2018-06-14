@@ -31,10 +31,56 @@
 // along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 
 // --------------------------------------------------------------------------------------------------------
+// Seniority: To calculate this for a given segment, count the number of
+// strands to the furthest chain end on each side of the segments, then take the smaller of the two values.
+
+// Priority: To calculate this for a given segment, count the number of chain ends
+// attached to each side of the strand, and then take the smaller of the two values.
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "polybits.h"
 #include "calc_architecture.h"
+
+void print_arch_stats(n1)
+{
+    double n = 1.0 * react_dist[n1].npoly;
+    printf("lin=%.3g, star=%.3g, H=%.3g, 7arm=%.3g, comb=%.3g, other=%.3g\n",
+           react_dist[n1].nlin / n, react_dist[n1].nstar / n, react_dist[n1].nH / n, react_dist[n1].n7arm / n, react_dist[n1].ncomb / n, react_dist[n1].nother / n);
+    printf("sumStat=%d, npoly=%d\n", react_dist[n1].nlin + react_dist[n1].nstar + react_dist[n1].nH + react_dist[n1].n7arm + react_dist[n1].ncomb + react_dist[n1].nother, react_dist[n1].npoly);
+}
+
+void save_architect(int n, int n1)
+{
+    int narm;
+    static int counter = 0;
+    narm = br_poly[n].armnum;
+    if (narm == 1)
+    {
+        react_dist[n1].nlin++;
+    }
+    else if (narm == 3)
+    {
+        react_dist[n1].nstar++;
+    }
+    else if (narm == 5)
+    {
+        react_dist[n1].nH++;
+    }
+    else if (narm == 7)
+    {
+        react_dist[n1].n7arm++;
+    }
+    else if (br_poly[n].max_senio == br_poly[n].max_prio)
+    {
+        react_dist[n1].ncomb++;
+    }
+    else
+    {
+        react_dist[n1].nother++;
+    }
+    printf("counter=%d\n", ++counter);
+}
 
 void calc_seniority(int n)
 {
@@ -105,3 +151,199 @@ void calc_seniority(int n)
         }
     }
 }
+
+void calc_priority(int n)
+{
+    int first, m, prio_level, mL1, mL2, mR1, mR2, prL1, prL2, prR1, prR2, maxL, maxR, nassigned, armnum;
+    first = br_poly[n].first_end;
+    m = first;
+    nassigned = 0;
+    armnum = br_poly[n].armnum;
+    while (true)
+    {
+        // loop over all arms and determine if free-end (priority=1)
+        // if not, assign 0 (not determined)
+        if ((arm_pool[m].L1 == 0 && arm_pool[m].L2 == 0) || (arm_pool[m].R1 == 0 && arm_pool[m].R2 == 0))
+        {
+            // it is a free end
+            arm_pool[m].prio = 1;
+            nassigned++;
+            if (nassigned == armnum)
+            {
+                br_poly[n].max_prio = 1;
+                return;
+            }
+        }
+        else
+        {
+            arm_pool[m].prio = 0;
+        }
+        m = arm_pool[m].down;
+        if (m == first)
+            break;
+    }
+
+    m = first;
+    prio_level = 2;
+    while (true)
+    {
+        if (arm_pool[m].prio == 0)
+        {
+            // priority not yet determined
+            mL1 = abs(arm_pool[m].L1);
+            mL2 = abs(arm_pool[m].L2);
+            mR1 = abs(arm_pool[m].R1);
+            mR2 = abs(arm_pool[m].R2);
+
+            prL1 = arm_pool[mL1].prio;
+            prL2 = arm_pool[mL2].prio;
+
+            prR1 = arm_pool[mR1].prio;
+            prR2 = arm_pool[mR2].prio;
+
+            if ((prL1 != 0 && prL2 != 0 && ((prL1 + prL2) == prio_level)) || (prR1 != 0 && prR2 != 0 && ((prR1 + prR2) == prio_level)))
+            {
+                arm_pool[m].prio = prio_level;
+                nassigned++;
+                if (nassigned == armnum)
+                {
+                    br_poly[n].max_prio = prio_level;
+                    return;
+                }
+            }
+        }
+        m = arm_pool[m].down;
+        if (m == first)
+        {
+            prio_level++;
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+
+// void partial_senority(int, int, int, int, int *);
+// void set_seniority(int n, int n1);
+// void set_tmpflag(int n);
+
+// void calc_seniority_bob(int n)
+// {
+//     int n1 = br_poly[n].first_end;
+//     set_seniority(n, n1);
+//     int n2 = arm_pool[n1].down;
+//     while (n2 != n1)
+//     {
+//         set_seniority(n, n2);
+//         n2 = arm_pool[n2].down;
+//     }
+// }
+
+// void set_seniority(int n, int n1)
+// {
+//     if ((arm_pool[n].L1 == 0 && arm_pool[n].L2 == 0) || (arm_pool[n].R1 == 0 && arm_pool[n].R2 == 0))
+//     {
+//         arm_pool[n1].senio = 1;
+//     }
+//     else
+//     {
+//         int nL1 = abs(arm_pool[n1].L1);
+//         int nL2 = abs(arm_pool[n1].L2);
+//         int nR1 = abs(arm_pool[n1].R1);
+//         int nR2 = abs(arm_pool[n1].R2);
+//         int sL;
+//         sL = 0;
+//         partial_seniority(n, n1, nL1, nL2, &sL);
+//         int sR;
+//         sR = 0;
+//         partial_seniority(n, n1, nR1, nR2, &sR);
+//         if (sL <= sR)
+//         {
+//             arm_pool[n1].senio = sL;
+//         }
+//         else
+//         {
+//             arm_pool[n1].senio = sR;
+//         }
+//     }
+// }
+
+// void partial_seniority(int n, int n1, int nL1, int nL2, int *psL)
+// {
+//     int psL1, psL2;
+//     psL1 = 0;
+//     psL2 = 0;
+//     set_tmpflag(n);
+//     arm_pool[n1].tmpflag = false;
+//     arm_pool[nL2].tmpflag = false;
+//     if ((arm_pool[n].L1 == 0 && arm_pool[n].L2 == 0) || (arm_pool[n].R1 == 0 && arm_pool[n].R2 == 0))
+//     {
+//         psL1 = 1;
+//     }
+//     else
+//     {
+//         int nL1a = abs(arm_pool[nL1].L1);
+//         int nL1b = abs(arm_pool[nL1].L2);
+//         int nL1c = abs(arm_pool[nL1].R1);
+//         int nL1d = abs(arm_pool[nL1].R2);
+//         if ((nL1a == 0) || (nL1b == 0) || (nL1c == 0) || (nL1d == 0))
+//         {
+//             printf("inconsistent architechture in partial_seniority.cpp \n");
+//         }
+//         if (arm_pool[nL1a].tmpflag)
+//         {
+//             partial_seniority(n, nL1, nL1a, nL1b, &psL1);
+//         }
+//         else
+//         {
+//             partial_seniority(n, nL1, nL1c, nL1d, &psL1);
+//         }
+//     }
+
+//     set_tmpflag(n);
+//     arm_pool[nL1].tmpflag = false;
+//     arm_pool[n1].tmpflag = false;
+//     if ((arm_pool[n].L1 == 0 && arm_pool[n].L2 == 0) || (arm_pool[n].R1 == 0 && arm_pool[n].R2 == 0))
+//     {
+//         psL2 = 1;
+//     }
+//     else
+//     {
+//         int nL2a = abs(arm_pool[nL2].L1);
+//         int nL2b = abs(arm_pool[nL2].L2);
+//         int nL2c = abs(arm_pool[nL2].R1);
+//         int nL2d = abs(arm_pool[nL2].R2);
+//         if ((nL2a == 0) || (nL2b == 0) || (nL2c == 0) || (nL2d == 0))
+//         {
+//             printf("inconsistent architechture in partial_seniority.cpp \n");
+//         }
+//         if (arm_pool[nL2a].tmpflag)
+//         {
+//             partial_seniority(n, nL2, nL2a, nL2b, &psL2);
+//         }
+//         else
+//         {
+//             partial_seniority(n, nL2, nL2c, nL2d, &psL2);
+//         }
+//     }
+
+//     if (psL1 >= psL2)
+//     {
+//         psL[0] = psL1 + 1;
+//     }
+//     else
+//     {
+//         psL[0] = psL2 + 1;
+//     }
+// }
+// void set_tmpflag(int n)
+// {
+//   int n0 = br_poly[n].first_end;
+//   arm_pool[n0].tmpflag = true;
+//   int nd = arm_pool[n0].down;
+//   while (nd != n0)
+//   {
+//     arm_pool[nd].tmpflag = true;
+//     nd = arm_pool[nd].down;
+//   }
+// }

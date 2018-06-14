@@ -40,7 +40,7 @@ typedef struct
 {
     double arm_len, arm_conv, arm_time, arm_tm, arm_tdb;
     int L1, L2, R1, R2, up, down, armnum, armcat, senio, prio;
-    bool ended, endfin, scission;
+    bool ended, endfin, scission, tmpflag;
 } arm;
 
 typedef struct
@@ -56,6 +56,7 @@ typedef struct
     int *numinbin;                           // array[1..maxbobbins] of integer;
     double monmass, M_e, N_e, boblgmin, boblgmax, m_w, m_n, brav;
     int first_poly, next, nummwdbins, numbobbins, bobbinmax, nsaved, npoly, simnumber;
+    int nlin, nstar, nH, n5arm, n7arm, ncomb, nother;
     bool polysaved;
     char *name;
 } reactresults;

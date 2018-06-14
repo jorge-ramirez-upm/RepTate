@@ -138,9 +138,13 @@ bool tobCSTR(int n, int n1)
         br_poly[n].gfactor = gfact;
 
         // check to see whether to save the polymer
+        // printf("Calc seniority molecule %d with %d arms\n", n,  br_poly[n].armnum);
         calc_seniority(n);
-        printf("Max seniority molecule %d with %d arms is %d\n", n,  br_poly[n].armnum, br_poly[n].max_senio);
+        calc_priority(n);
+        printf("molecule %d with %d arms: senio max=%d, prio max=%d\n", n,  br_poly[n].armnum, br_poly[n].max_senio, br_poly[n].max_prio);
+        save_architect(n, n1);
         bobcount(n, n1);
+
         return true;
     }
     else

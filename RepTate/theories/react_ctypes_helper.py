@@ -166,6 +166,9 @@ increase_polymer_records_in_br_poly.restype = ct.c_bool
 increase_dist_records_in_react_dist = react_lib.increase_dist_records_in_react_dist
 increase_dist_records_in_react_dist.restype = ct.c_bool
 
+print_arch_stats = react_lib.print_arch_stats
+print_arch_stats.restype = None
+
 #initialise lists
 react_dist = None
 

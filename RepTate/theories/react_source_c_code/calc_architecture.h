@@ -35,5 +35,7 @@
 #define CALC_ARCHITECTURE_H
 
 extern void calc_seniority(int n);
-
+void calc_priority(int n);
+// void calc_seniority_bob(int n);
+void save_architect(int n, int n1);
 #endif
