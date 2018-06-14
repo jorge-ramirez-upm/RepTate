@@ -40,7 +40,7 @@ A correct ``.gt`` file looks like:
 
 .. code-block:: none
   
-  ncontri=1;Mw=224;gamma=1;
+  Mw=224;gamma=1;
   t sxy
   0.0E+0      1.28146E+10     
   5.0E-6      1.13402E+10     
