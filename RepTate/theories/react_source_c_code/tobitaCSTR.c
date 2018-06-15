@@ -32,7 +32,6 @@
 
 // --------------------------------------------------------------------------------------------------------
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 #include <time.h>
 
@@ -139,10 +138,11 @@ bool tobCSTR(int n, int n1)
 
         // check to see whether to save the polymer
         // printf("Calc seniority molecule %d with %d arms\n", n,  br_poly[n].armnum);
-        calc_seniority(n);
-        calc_priority(n);
-        printf("molecule %d with %d arms: senio max=%d, prio max=%d\n", n,  br_poly[n].armnum, br_poly[n].max_senio, br_poly[n].max_prio);
-        save_architect(n, n1);
+        if (do_prio_senio){
+            calc_seniority(n);
+            calc_priority(n);
+            save_architect(n, n1);
+        }
         bobcount(n, n1);
 
         return true;

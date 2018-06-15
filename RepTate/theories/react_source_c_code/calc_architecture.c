@@ -42,7 +42,13 @@
 #include "polybits.h"
 #include "calc_architecture.h"
 
-void print_arch_stats(n1)
+bool do_prio_senio = false;
+
+void set_do_prio_senio(bool b){
+    do_prio_senio = b;
+}
+
+void print_arch_stats(int n1)
 {
     double n = 1.0 * react_dist[n1].npoly;
     printf("lin=%.3g, star=%.3g, H=%.3g, 7arm=%.3g, comb=%.3g, other=%.3g\n",
@@ -53,7 +59,6 @@ void print_arch_stats(n1)
 void save_architect(int n, int n1)
 {
     int narm;
-    static int counter = 0;
     narm = br_poly[n].armnum;
     if (narm == 1)
     {
@@ -79,7 +84,6 @@ void save_architect(int n, int n1)
     {
         react_dist[n1].nother++;
     }
-    printf("counter=%d\n", ++counter);
 }
 
 void calc_seniority(int n)

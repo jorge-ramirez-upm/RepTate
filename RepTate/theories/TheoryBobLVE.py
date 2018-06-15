@@ -265,8 +265,9 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         self.btn_prio_senio.setChecked(True)
 
         # BoB LVE do not calculate priority & seniority (leave it to React)
+        # uncomment below for the possiblity to calculate priority & seniority in BoB LVE
+        
         # self.thToolsLayout.insertWidget(0, tb)
-
         self.btn_prio_senio.triggered.connect(self.handle_btn_prio_senio)
 
     def handle_btn_prio_senio(self, checked):

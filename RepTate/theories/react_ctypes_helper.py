@@ -43,7 +43,7 @@ if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = dir_path + os.sep + 'react_lib_%s.so' % (sys.platform)
 else:
-    # 32-bit system    
+    # 32-bit system
     lib_path = dir_path + os.sep + 'react_lib_%s_i686.so' % (sys.platform)
 try:
     react_lib = ct.CDLL(lib_path)
@@ -77,42 +77,51 @@ class arm(ct.Structure):
                 ("arm_tddb", ct.c_double), ("L1", ct.c_int), ("L2", ct.c_int),
                 ("R1", ct.c_int), ("R2", ct.c_int), ("up", ct.c_int),
                 ("down", ct.c_int), ("armnum", ct.c_int), ("armcat", ct.c_int),
-                ("ended", ct.c_int), ("endfin", ct.c_int), ("scission",
-                                                            ct.c_int)]
+                ("ended",
+                 ct.c_int), ("endfin",
+                             ct.c_int), ("scission",
+                                         ct.c_int), ("senio",
+                                                     ct.c_int), ("prio",
+                                                                 ct.c_int)]
 
 
 class polymer(ct.Structure):
-    _fields_ = [("first_end", ct.c_int), ("num_br", ct.c_int),
-                ("bin", ct.c_int), ("num_sat", ct.c_int),
-                ("num_unsat", ct.c_int), ("armnum", ct.c_int), ("nextpoly",
+    _fields_ = [("first_end", ct.c_int), ("num_br", ct.c_int), ("bin",
                                                                 ct.c_int),
-                ("tot_len", ct.c_double), ("gfactor",
-                                           ct.c_double), ("saved", ct.c_bool)]
+                ("num_sat", ct.c_int), ("num_unsat", ct.c_int), ("armnum",
+                                                                 ct.c_int),
+                ("nextpoly",
+                 ct.c_int), ("tot_len", ct.c_double), ("gfactor", ct.c_double),
+                ("saved", ct.c_bool), ("max_senio", ct.c_int), ("max_prio",
+                                                                ct.c_int)]
 
 
 class reactresults(ct.Structure):
-    _fields_ = [("wt", ct.POINTER(ct.c_double)), ("avbr",
-                                                  ct.POINTER(ct.c_double)),
-                ("wmass", ct.POINTER(ct.c_double)), ("avg",
-                                                     ct.POINTER(ct.c_double)),
-                ("lgmid", ct.POINTER(ct.c_double)), ("numinbin",
-                                                     ct.POINTER(ct.c_int)),
-                ("monmass", ct.c_double), ("M_e", ct.c_double), ("N_e",
-                                                                 ct.c_double),
-                ("boblgmin", ct.c_double), ("boblgmax",
-                                            ct.c_double), ("m_w", ct.c_double),
-                ("m_n", ct.c_double), ("brav",
-                                       ct.c_double), ("first_poly",
-                                                      ct.c_int), ("next",
-                                                                  ct.c_int),
-                ("nummwdbins", ct.c_int), ("numbobbins",
-                                           ct.c_int), ("bobbinmax", ct.c_int),
-                ("nsaved",
-                 ct.c_int), ("npoly",
-                             ct.c_int), ("simnumber",
-                                         ct.c_int), ("polysaved",
-                                                     ct.c_bool), ("name",
-                                                                  ct.c_char_p)]
+    _fields_ = [
+        ("wt", ct.POINTER(ct.c_double)), ("avbr", ct.POINTER(
+            ct.c_double)), ("wmass", ct.POINTER(ct.c_double)),
+        ("avg", ct.POINTER(ct.c_double)), ("lgmid", ct.POINTER(
+            ct.c_double)), ("numinbin", ct.POINTER(ct.c_int)), ("monmass",
+                                                                ct.c_double),
+        ("M_e", ct.c_double), ("N_e", ct.c_double), ("boblgmin", ct.c_double),
+        ("boblgmax", ct.c_double), ("m_w", ct.c_double), ("m_n", ct.c_double),
+        ("brav", ct.c_double), ("first_poly", ct.c_int), ("next", ct.c_int),
+        ("nummwdbins", ct.c_int), ("numbobbins",
+                                   ct.c_int), ("bobbinmax",
+                                               ct.c_int), ("nsaved", ct.c_int),
+        ("npoly",
+         ct.c_int), ("simnumber",
+                     ct.c_int), ("polysaved",
+                                 ct.c_bool), ("name", ct.c_char_p), ("nlin",
+                                                                     ct.c_int),
+        ("nstar",
+         ct.c_int), ("nH",
+                     ct.c_int), ("n5arm",
+                                 ct.c_int), ("n7arm",
+                                             ct.c_int), ("ncomb",
+                                                         ct.c_int), ("nother",
+                                                                     ct.c_int)
+    ]
 
 
 #global variable
@@ -166,8 +175,8 @@ increase_polymer_records_in_br_poly.restype = ct.c_bool
 increase_dist_records_in_react_dist = react_lib.increase_dist_records_in_react_dist
 increase_dist_records_in_react_dist.restype = ct.c_bool
 
-print_arch_stats = react_lib.print_arch_stats
-print_arch_stats.restype = None
+set_do_prio_senio = react_lib.set_do_prio_senio
+set_do_prio_senio.restype = None
 
 #initialise lists
 react_dist = None
@@ -298,3 +307,27 @@ mulmetCSTRstart.restype = None
 
 mulmetCSTR = react_lib.mulmetCSTR
 mulmetCSTR.restype = ct.c_bool
+
+def end_print(parent_theory, ndist, do_architecture):
+    parent_theory.Qprint('<hr style="border-top: dotted 2px;" /><b>Simulation statistics:</b>')
+    table='''<table border="1" width="100%">'''
+    table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer made', react_dist[ndist].contents.npoly)
+    table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer saved', react_dist[ndist].contents.nsaved)
+    table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Arm left in memory', pb_global.arms_left)
+    table+= '''<tr><td>%s</td><td>%.3g k</td></tr>'''% ('Mn', react_dist[ndist].contents.m_n / 1000.0)
+    table+= '''<tr><td>%s</td><td>%.3g k</td></tr>'''% ('Mw', react_dist[ndist].contents.m_w / 1000.0)
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('br/1000C', react_dist[ndist].contents.brav)
+    table+= '''</table><br>'''
+    parent_theory.Qprint(table)
+    
+    if(do_architecture):
+        parent_theory.Qprint('<b>Architecture:</b>')
+        table='''<table border="1" width="100%">'''
+        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('lLnear', react_dist[ndist].contents.nlin / react_dist[ndist].contents.npoly * 100)
+        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / react_dist[ndist].contents.npoly * 100)
+        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('H', react_dist[ndist].contents.nH / react_dist[ndist].contents.npoly * 100)
+        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('7-arm', react_dist[ndist].contents.nH / react_dist[ndist].contents.npoly * 100)
+        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Comb', react_dist[ndist].contents.ncomb / react_dist[ndist].contents.npoly * 100)
+        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Other', react_dist[ndist].contents.nother / react_dist[ndist].contents.npoly * 100)
+        table+= '''</table><br>'''
+        parent_theory.Qprint(table)

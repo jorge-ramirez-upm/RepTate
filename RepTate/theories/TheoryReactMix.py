@@ -121,6 +121,7 @@ class BaseTheoryReactMix:
         self.theory_simnumber = [
         ]  # 'react_dist[].simnumber' of theories in mix
         self.calcexists = False
+        self.do_priority_seniority = False
 
         self.signal_mix_dialog.connect(rgt.launch_mix_dialog)
 
@@ -137,6 +138,7 @@ class BaseTheoryReactMix:
         """
         self.calcexists = False
         nbins = int(np.round(self.parameters['nbin'].value))
+        rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
 
         #init theory data table - in case of error and 'return'
         ft = f.data_table
@@ -283,6 +285,7 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)
         self.bob_settings_button.setDisabled(True)
+        self.btn_prio_senio.setDisabled(True)
 
     def theory_buttons_disabled(self, state):
         """
@@ -298,3 +301,7 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
     def handle_edit_bob_settings(self):
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
+
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        # rgt.handle_btn_prio_senio(self, checked)

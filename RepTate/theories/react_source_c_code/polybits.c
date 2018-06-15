@@ -89,6 +89,8 @@ void react_pool_init(void)
         for (i = 1; i <= pb_global_const.maxpol - 1; i++)
         {
             br_poly[i].nextpoly = i + 1;
+            br_poly[i].max_prio = 0;
+            br_poly[i].max_senio = 0;
         }
         br_poly[pb_global_const.maxpol].nextpoly = 0;
         pb_global.first_poly_in_pool = 1;
@@ -228,6 +230,8 @@ void return_poly(int n)
     br_poly[n].nextpoly = pb_global.first_poly_in_pool;
     pb_global.first_poly_in_pool = n;
     pb_global.polys_avail = true;
+    br_poly[n].max_prio = 0;
+    br_poly[n].max_senio = 0;
 }
 
 bool request_dist(int *m_out)
@@ -279,6 +283,14 @@ void return_dist(int n)
         pb_global.first_dist_in_pool = n;
         pb_global.dists_avail = true;
         react_dist[n].polysaved = false;
+        // hold architecture statistics:
+        react_dist[n].nlin = 0;
+        react_dist[n].nstar = 0;
+        react_dist[n].nH = 0;
+        react_dist[n].n5arm = 0;
+        react_dist[n].n7arm = 0;
+        react_dist[n].ncomb = 0;
+        react_dist[n].nother = 0;
     }
 }
 

@@ -134,11 +134,22 @@ def initialise_tool_bar(parent_theory):
         QIcon(':/Icon8/Images/new_icons/icons8-save-BoB.png'),
         'Save Polymer Configuration for BoB')
 
+    # seniority priority
+    parent_theory.btn_prio_senio = tb.addAction(QIcon(':/Icon8/Images/new_icons/priority_seniority.png'), 'Calculate Priority and Seniority (can take some time)')
+    parent_theory.btn_prio_senio.setCheckable(True)
+    parent_theory.btn_prio_senio.setChecked(parent_theory.do_priority_seniority)
+
+
     #signals
     connection_id = parent_theory.bob_settings_button.triggered.connect(
         parent_theory.handle_edit_bob_settings)
     connection_id = parent_theory.save_bob_configuration_button.triggered.connect(
         parent_theory.handle_save_bob_configuration)
+    parent_theory.btn_prio_senio.triggered.connect(parent_theory.handle_btn_prio_senio)
+
+def handle_btn_prio_senio(parent_theory, checked):
+    """Change do_priority_seniority"""
+    parent_theory.do_priority_seniority = checked
 
 def theory_buttons_disabled(parent_theory, state):
     """

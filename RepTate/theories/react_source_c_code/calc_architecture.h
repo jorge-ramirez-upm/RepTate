@@ -33,9 +33,12 @@
 // --------------------------------------------------------------------------------------------------------
 #ifndef CALC_ARCHITECTURE_H
 #define CALC_ARCHITECTURE_H
+#include <stdbool.h>
 
 extern void calc_seniority(int n);
-void calc_priority(int n);
-// void calc_seniority_bob(int n);
-void save_architect(int n, int n1);
+extern void calc_priority(int n);
+extern void save_architect(int n, int n1);
+extern void print_arch_stats(int n1);
+
+extern bool do_prio_senio;
 #endif

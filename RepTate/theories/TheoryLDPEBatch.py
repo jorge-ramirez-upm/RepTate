@@ -124,6 +124,7 @@ class BaseTheoryTobitaBatch():
         self.ndist = 0
         self.has_modes = False  # True if the theory has modes
         self.autocalculate = False
+        self.do_priority_seniority = False
 
         self.parameters['tau'] = Parameter(
             name='tau',
@@ -200,6 +201,8 @@ class BaseTheoryTobitaBatch():
         monmass = self.parameters['mon_mass'].value
         Me = self.parameters['Me'].value
         nbins = int(np.round(self.parameters['nbin'].value))
+        rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
+
 
         c_ndist = ct.c_int()
 
@@ -330,26 +333,28 @@ class BaseTheoryTobitaBatch():
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
 
-            self.Qprint('*************************')
-            # self.Qprint('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
-            self.Qprint(
-                'Made %d polymers' % rch.react_dist[ndist].contents.npoly)
-            self.Qprint('Saved %d polymers in memory' %
-                                   rch.react_dist[ndist].contents.nsaved)
-            self.Qprint(
-                'Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
-            self.Qprint(
-                'Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
-            self.Qprint(
-                'br/1000C = %.3g' % rch.react_dist[ndist].contents.brav)
-            self.Qprint('*************************')
+            rch.end_print(self, ndist, self.do_priority_seniority)
+
+            # self.Qprint('*************************')
+            # # self.Qprint('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
+            # self.Qprint(
+            #     'Made %d polymers' % rch.react_dist[ndist].contents.npoly)
+            # self.Qprint('Saved %d polymers in memory' %
+            #                        rch.react_dist[ndist].contents.nsaved)
+            # self.Qprint(
+            #     'Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
+            # self.Qprint(
+            #     'Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
+            # self.Qprint(
+            #     'br/1000C = %.3g' % rch.react_dist[ndist].contents.brav)
+            # self.Qprint('*************************')
 
             calc = rch.react_dist[ndist].contents.nummwdbins - 1
             rch.react_dist[ndist].contents.polysaved = True
 
         self.simexists = True
-        self.Qprint(
-            '%d arm records left in memory' % rch.pb_global.arms_left)
+        # self.Qprint(
+            # '%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
 
     def destructor(self):
@@ -430,3 +435,6 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
 
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        rgt.handle_btn_prio_senio(self, checked)
