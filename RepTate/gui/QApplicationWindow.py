@@ -1663,29 +1663,59 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
             for ax in x_axes:
                 pixel_to_data = ax.transData.inverted()
-                begin_pt = pixel_to_data.transform_point((event.x, event.y))
-                end_pt = pixel_to_data.transform_point(
+                end_pt = pixel_to_data.transform_point((event.x, event.y))
+                begin_pt = pixel_to_data.transform_point(
                     (self._event.x, self._event.y))
 
                 min_ = min(begin_pt[0], end_pt[0])
                 max_ = max(begin_pt[0], end_pt[0])
-                if not ax.xaxis_inverted():
-                    ax.set_xlim(min_, max_)
+                if (end_pt[0]>begin_pt[0]):
+                    if not ax.xaxis_inverted():
+                        ax.set_xlim(min_, max_)
+                    else:
+                        ax.set_xlim(max_, min_)
                 else:
-                    ax.set_xlim(max_, min_)
+                    min_now, max_now = ax.get_xlim() 
+                    if ax.get_xscale() == 'log':
+                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                        if not ax.xaxis_inverted():
+                            ax.set_xlim(min_now/fac, max_now*fac)
+                        else:
+                            ax.set_xlim(max_now*fac, min_now/fac)
+                    else:
+                        dx = max_ - min_
+                        if not ax.xaxis_inverted():
+                            ax.set_xlim(min_now-dx, max_now+dx)
+                        else:
+                            ax.set_xlim(max_now+dx, min_now-dx)
 
             for ax in y_axes:
                 pixel_to_data = ax.transData.inverted()
-                begin_pt = pixel_to_data.transform_point((event.x, event.y))
-                end_pt = pixel_to_data.transform_point(
+                end_pt = pixel_to_data.transform_point((event.x, event.y))
+                begin_pt = pixel_to_data.transform_point(
                     (self._event.x, self._event.y))
 
                 min_ = min(begin_pt[1], end_pt[1])
                 max_ = max(begin_pt[1], end_pt[1])
-                if not ax.yaxis_inverted():
-                    ax.set_ylim(min_, max_)
+                if (end_pt[1]<begin_pt[1]):
+                    if not ax.yaxis_inverted():
+                        ax.set_ylim(min_, max_)
+                    else:
+                        ax.set_ylim(max_, min_)
                 else:
-                    ax.set_ylim(max_, min_)
+                    min_now, max_now = ax.get_ylim() 
+                    if ax.get_yscale() == 'log':
+                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                        if not ax.yaxis_inverted():
+                            ax.set_ylim(min_now/fac, max_now*fac)
+                        else:
+                            ax.set_ylim(max_now*fac, min_now/fac)
+                    else:
+                        dy = max_ - min_
+                        if not ax.yaxis_inverted():
+                            ax.set_ylim(min_now-dy, max_now+dy)
+                        else:
+                            ax.set_ylim(max_now+dy, min_now-dy)
 
             self._event = None
             self._was_zooming = True
@@ -1731,7 +1761,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self._annotation_done = False
         add_annotation = main_menu.addAction(self.actionAdd_Annotation)
         connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
-        refresh_chart_action = main_menu.addAction("Refresh plot")
+        refresh_chart_action = main_menu.addAction("Reset view(s)")
         refresh_chart_action.triggered.connect(self.refresh_plot)
 
         #launch menu
