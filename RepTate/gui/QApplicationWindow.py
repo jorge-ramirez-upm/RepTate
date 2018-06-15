@@ -1641,7 +1641,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 fill=False, linewidth=1., linestyle=':', color='gray')
             self._event.inaxes.add_patch(self._patch)
 
+            canvas = self._patch.figure.canvas
+            axes = self._patch.axes
+            self._patch.set_animated(True)
+            canvas.draw()
+            self.background = canvas.copy_from_bbox(self._patch.axes.bbox)
+            axes.draw_artist(self._patch)
+            canvas.update()
+
         elif event.name == 'button_release_event':  # end drag
+            self.background = None
             self._patch.remove()
             del self._patch
 
@@ -1680,6 +1689,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
             self._event = None
             self._was_zooming = True
+            self.figure.canvas.draw()
+
 
         elif event.name == 'motion_notify_event':  # drag
             if self._event is None:
@@ -1691,7 +1702,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self._patch.set_width(event.xdata - self._event.xdata)
             self._patch.set_height(event.ydata - self._event.ydata)
 
-        self.figure.canvas.draw()
+            canvas = self._patch.figure.canvas
+            axes = self._patch.axes
+            canvas.restore_region(self.background)
+            axes.draw_artist(self._patch)
+            canvas.update()
+
+
 
     def open_figure_popup_menu(self, event):
         """Open a menu to let the user copy data or chart to clipboard"""
