@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>QApplicationWindow &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.2 20180503',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -53,12 +44,14 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -111,16 +104,17 @@
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">isdir</span>
 <span class="c1">#import logging</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QColor</span><span class="p">,</span> <span class="n">QStandardItem</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QColor</span><span class="p">,</span> <span class="n">QCursor</span><span class="p">,</span> <span class="n">QStandardItem</span>
 <span class="kn">from</span> <span class="nn">PyQt5.uic</span> <span class="k">import</span> <span class="n">loadUiType</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_qt5agg</span> <span class="k">import</span> <span class="n">FigureCanvasQTAgg</span><span class="p">,</span> <span class="n">NavigationToolbar2QT</span>
 <span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtCore</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">Qt</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QColorDialog</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QTreeWidgetItem</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QSplitter</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QTableWidget</span><span class="p">,</span> <span class="n">QTableWidgetItem</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QFrame</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QColorDialog</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QTreeWidgetItem</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QSplitter</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QTableWidget</span><span class="p">,</span> <span class="n">QTableWidgetItem</span>
 <span class="kn">from</span> <span class="nn">QDataSet</span> <span class="k">import</span> <span class="n">QDataSet</span>
 <span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
 <span class="kn">from</span> <span class="nn">DataSetWidgetItem</span> <span class="k">import</span> <span class="n">DataSetWidgetItem</span>
@@ -145,6 +139,77 @@
     
 <span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">Ui_AppWindow</span><span class="p">,</span> <span class="n">QMainWindow</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span><span class="s1">&#39;QApplicationWindow.ui&#39;</span><span class="p">))</span>
+<span class="n">Ui_EditAnnotation</span><span class="p">,</span> <span class="n">QDialog</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span><span class="s1">&#39;annotationedit.ui&#39;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="EditAnnotation"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.EditAnnotation">[docs]</a><span class="k">class</span> <span class="nc">EditAnnotation</span><span class="p">(</span><span class="n">QDialog</span><span class="p">,</span> <span class="n">Ui_EditAnnotation</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">annotation</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EditAnnotation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">QDialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Ui_EditAnnotation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span> <span class="o">=</span> <span class="n">annotation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_text</span><span class="p">())</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.4g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.4g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get_color</span><span class="p">()</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labelFontColor</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">col</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotationSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_rotation</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hacomboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_horizontalalignment</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vacomboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_verticalalignment</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fontweightComboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_fontweight</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fontstyleComboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_fontstyle</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fontsizeannotationSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_fontsize</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">framealphaannotationSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_alpha</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fontfamilyComboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_fontfamily</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pickFontColor</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickFontColor</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pushApply</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_changes</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pushOK</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_changes</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pushDelete</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="EditAnnotation.handle_pickFontColor"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.EditAnnotation.handle_pickFontColor">[docs]</a>    <span class="k">def</span> <span class="nf">handle_pickFontColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showColorDialog</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labelFontColor</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="EditAnnotation.showColorDialog"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.EditAnnotation.showColorDialog">[docs]</a>    <span class="k">def</span> <span class="nf">showColorDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show the color picker and return the picked QtColor or `None`&quot;&quot;&quot;</span>
+        <span class="n">wtitle</span> <span class="o">=</span> <span class="s2">&quot;Select color for the annotation </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">QColorDialog</span><span class="o">.</span><span class="n">getColor</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">wtitle</span><span class="p">,</span> 
+            <span class="n">options</span><span class="o">=</span><span class="n">QColorDialog</span><span class="o">.</span><span class="n">DontUseNativeDialog</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">color</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">color</span></div>
+
+<div class="viewcode-block" id="EditAnnotation.apply_changes"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.EditAnnotation.apply_changes">[docs]</a>    <span class="k">def</span> <span class="nf">apply_changes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_position</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">()),</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_rotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotationSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_horizontalalignment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hacomboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_verticalalignment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacomboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_fontweight</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fontweightComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_fontstyle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fontstyleComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fontsizeannotationSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">framealphaannotationSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">set_family</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fontfamilyComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EditAnnotation.delete"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.EditAnnotation.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">btns</span> <span class="o">=</span> <span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Do you want to delete the the annotation </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Delete annotation&#39;</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="n">btns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pushCancel</span><span class="o">.</span><span class="n">click</span><span class="p">()</span></div></div>
 
 <div class="viewcode-block" id="ViewShiftFactors"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.ViewShiftFactors">[docs]</a><span class="k">class</span> <span class="nc">ViewShiftFactors</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fnames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">factorsx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">factorsy</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -359,9 +424,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionTrack_data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAdd_Annotation</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Legend</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCopyChart</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mplvl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mpl_toolbar</span><span class="p">)</span>
 
@@ -376,9 +438,14 @@
                 
 
         <span class="c1"># EVENT HANDLING</span>
-        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;button_press_event&#39;, self.onclick)</span>
+        <span class="c1"># Matplotlib events</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;resize_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resizeplot</span><span class="p">)</span>
-        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;motion_notify_event&#39;, self.on_plot_hover)   </span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;pick_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onpick</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_release_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onrelease</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;scroll_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom_wheel</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_press</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_motion</span><span class="p">)</span>
+
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShowFigureTools</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewMPLToolbar</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionInspect_Data</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showDataInspector</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionNew_Empty_Dataset</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_createNew_Empty_Dataset</span><span class="p">)</span>
@@ -409,15 +476,18 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCopy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">copy</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionPaste</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">paste</span><span class="p">)</span>
 
+        <span class="c1"># Variables used during matplotlib interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># To store active button during interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># To store x and y axes concerned by interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># To store reference event during interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span> 
 
         <span class="c1"># Annotation stuff</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionTrack_data</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_annotation</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCopyChart</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">copy_chart</span><span class="p">)</span>
+        <span class="c1">#connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graphicnotes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artistnotes</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionAdd_Annotation</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Legend</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_actionShow_Legend</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpl_motion_event</span><span class="p">)</span>
+        <span class="c1">#plt.connect(&#39;motion_notify_event&#39;, self.mpl_motion_event)</span>
 
         <span class="c1">#Setting up the marker-settings dialog</span>
         <span class="c1"># self.marker_dic = {&#39;square&#39;: &#39;s&#39;, &#39;plus (filled)&#39;: &#39;P&#39;, &#39;point&#39;: &#39;.&#39;, &#39;triangle_right&#39;: &#39;&gt;&#39;, &#39;hline&#39;: &#39;_&#39;, &#39;vline&#39;: &#39;|&#39;, &#39;pentagon&#39;: &#39;p&#39;, &#39;tri_left&#39;: &#39;3&#39;, &#39;tri_up&#39;: &#39;2&#39;, &#39;circle&#39;: &#39;o&#39;, &#39;diamond&#39;: &#39;D&#39;, &#39;star&#39;: &#39;*&#39;, &#39;hexagon1&#39;: &#39;h&#39;, &#39;octagon&#39;: &#39;8&#39;, &#39;hexagon2&#39;: &#39;H&#39;, &#39;tri_right&#39;: &#39;4&#39;, &#39;x (filled)&#39;: &#39;X&#39;, &#39;thin_diamond&#39;: &#39;d&#39;, &#39;tri_down&#39;: &#39;1&#39;, &#39;triangle_left&#39;: &#39;&lt;&#39;, &#39;plus&#39;: &#39;+&#39;, &#39;triangle_down&#39;: &#39;v&#39;, &#39;triangle_up&#39;: &#39;^&#39;, &#39;x&#39;: &#39;x&#39;}</span>
@@ -431,6 +501,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">color2</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color_th</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">legend_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="s1">&#39;ncol&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;markerfirst&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;frameon&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;fancybox&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;shadow&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;framealpha&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;edgecolor&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;borderpad&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;labelspacing&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;handletextpad&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;columnspacing&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">(),</span> <span class="s1">&#39;family&#39;</span><span class="p">:</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> <span class="s1">&#39;horizontalalignment&#39;</span><span class="p">:</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;rotation&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>  <span class="s1">&#39;verticalalignment&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;fontweight&#39;</span><span class="p">:</span><span class="s1">&#39;normal&#39;</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">legend_draggable</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">default_legend_labels</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">legend_labels</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -442,6 +513,7 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pickThColor</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickThColor</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pickFaceColor</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickFaceColor</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pickEdgeColor</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickEdgeColor</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pickFontColor</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pickFontColor</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbEmpty</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">populate_cbSymbolType</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFilled</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">populate_cbSymbolType</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pushApply</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_apply_button_pressed</span><span class="p">)</span>
@@ -613,65 +685,26 @@
             <span class="n">ds</span><span class="o">.</span><span class="n">actionNew_Theory</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">cbtheory</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="QApplicationWindow.mpl_motion_event"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.mpl_motion_event">[docs]</a>    <span class="k">def</span> <span class="nf">mpl_motion_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - event {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_annotation</span><span class="o">.</span><span class="n">checked</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="sd">&quot;&quot;&quot;.. todo:: Code to draw annotation. It doesn&#39;t work!&quot;&quot;&quot;</span></div>
-        
-<div class="viewcode-block" id="QApplicationWindow.handle_annotation"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">handle_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Draw and hide the annotation box.</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - checked {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">checked</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-                <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ha</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span>
-                <span class="n">xytext</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">textcoords</span> <span class="o">=</span> <span class="s1">&#39;offset points&#39;</span><span class="p">,</span> <span class="n">va</span> <span class="o">=</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span>
-                <span class="n">bbox</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-                    <span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;roundtooth,pad=0.3&#39;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.20</span><span class="p">),</span>
-                <span class="n">arrowprops</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-                    <span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-|&gt;&quot;</span><span class="p">,</span> <span class="n">connectionstyle</span><span class="o">=</span><span class="s2">&quot;arc3,rad=-0.2&quot;</span><span class="p">)</span>
-                <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
-
 <div class="viewcode-block" id="QApplicationWindow.add_annotation"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.add_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">add_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_done</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">text</span><span class="p">,</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="o">.</span><span class="n">getText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Annotation (LaTeX allowed)&#39;</span><span class="p">,</span> <span class="s1">&#39;Enter the annotation text:&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
-            <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-            <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
-            <span class="n">xpos</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmin</span><span class="o">+</span><span class="n">xmax</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-            <span class="n">ypos</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymin</span><span class="o">+</span><span class="n">ymax</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-            <span class="n">ann</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+            <span class="n">ann</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">ydata</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">ydata</span><span class="p">),</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">graphicnotes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ann</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">artistnotes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DraggableNote</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">DragType</span><span class="o">.</span><span class="n">both</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artistnotes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DraggableNote</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">DragType</span><span class="o">.</span><span class="n">both</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit_annotation</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_done</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="QApplicationWindow.handle_actionShow_Legend"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionShow_Legend">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionShow_Legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;toogle view/hide the legend&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cb_show_legend</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cb_show_legend</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_legend</span><span class="p">()</span></div>
-
+<div class="viewcode-block" id="QApplicationWindow.edit_annotation"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.edit_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">edit_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">EditAnnotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">)</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+            
 <div class="viewcode-block" id="QApplicationWindow.update_legend"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.update_legend">[docs]</a>    <span class="k">def</span> <span class="nf">update_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -803,6 +836,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelEdgeColor</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">legend_opts</span><span class="p">[</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">color</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">()</span>            </div>
             
+<div class="viewcode-block" id="QApplicationWindow.handle_pickFontColor"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_pickFontColor">[docs]</a>    <span class="k">def</span> <span class="nf">handle_pickFontColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call the color picker and save the selected legend face color in </span>
+<span class="sd">        RGB format in the dataset legend info.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showColorDialog</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">color</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelFontColor</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">color</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">()</span>            </div>
             
 <div class="viewcode-block" id="QApplicationWindow.showColorDialog"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.showColorDialog">[docs]</a>    <span class="k">def</span> <span class="nf">showColorDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show the color picker and return the picked QtColor or `None`</span>
@@ -935,6 +976,19 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">legendlabelCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">legendlabelStr</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">legend_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">draggableCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">legend_draggable</span><span class="p">)</span>
+
+
+        <span class="c1"># Annotation stuff        </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rotationSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;rotation&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">hacomboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;horizontalalignment&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">vacomboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;verticalalignment&#39;</span><span class="p">])</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">labelFontColor</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">col</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontweightComboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;fontweight&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontstyleComboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontsizeannotationSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">framealphaannotationSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontfamilyComboBox</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;family&#39;</span><span class="p">])</span> 
         
         <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span> <span class="c1">#this blocks the rest of the app as opposed to .show()</span>
         <span class="k">if</span> <span class="n">success</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1050,6 +1104,16 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">default_legend_labels</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">legend_draggable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">draggableCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+            
+            <span class="c1"># Annotation stuff</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">framealphaannotationSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontfamilyComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;horizontalalignment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">hacomboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;rotation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rotationSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontsizeannotationSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontstyleComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;verticalalignment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">vacomboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotation_opts</span><span class="p">[</span><span class="s1">&#39;fontweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">fontweightComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
 
             <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span> <span class="c1"># update plot and legend</span></div>
 
@@ -1592,15 +1656,6 @@
         <span class="c1"># TODO: Set DPI, FILETYPE, etc</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fileName</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
         
-<div class="viewcode-block" id="QApplicationWindow.on_plot_hover"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.on_plot_hover">[docs]</a>    <span class="k">def</span> <span class="nf">on_plot_hover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - event {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="QApplicationWindow.resizeplot"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.resizeplot">[docs]</a>    <span class="k">def</span> <span class="nf">resizeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -1624,8 +1679,346 @@
         <span class="c1">#resize plot fonts</span>
         <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">()):</span>
-                <span class="n">item</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span></div></div>
+                <span class="n">item</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span></div>
   
+<div class="viewcode-block" id="QApplicationWindow.onpick"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.onpick">[docs]</a>    <span class="k">def</span> <span class="nf">onpick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when clicking on a plot/artist&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">mouseevent</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1">#right click in plot</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span>  <span class="c1">#collect all artists under mouse</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.onrelease"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.onrelease">[docs]</a>    <span class="k">def</span> <span class="nf">onrelease</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when releasing mouse&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1">#if release a right click</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">open_figure_popup_menu</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_zoom_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_press_event&#39;</span><span class="p">:</span>  <span class="c1"># begin drag</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span>
+                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">inaxes</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
+
+            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_animated</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">copy_from_bbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_release_event&#39;</span><span class="p">:</span>  <span class="c1"># end drag</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span>
+                    <span class="nb">abs</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span>  <span class="c1"># No zoom when points are too close</span>
+
+            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span>
+
+            <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">x_axes</span><span class="p">:</span>
+                <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+                <span class="n">end_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">begin_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+                <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_</span><span class="p">,</span> <span class="n">min_</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">min_now</span><span class="p">,</span> <span class="n">max_now</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span> 
+                    <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+                        <span class="n">fac</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">,</span> <span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">,</span> <span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dx</span> <span class="o">=</span> <span class="n">max_</span> <span class="o">-</span> <span class="n">min_</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_now</span><span class="o">-</span><span class="n">dx</span><span class="p">,</span> <span class="n">max_now</span><span class="o">+</span><span class="n">dx</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_now</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span> <span class="n">min_now</span><span class="o">-</span><span class="n">dx</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">y_axes</span><span class="p">:</span>
+                <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+                <span class="n">end_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">begin_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+                <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_</span><span class="p">,</span> <span class="n">min_</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">min_now</span><span class="p">,</span> <span class="n">max_now</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span> 
+                    <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+                        <span class="n">fac</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">,</span> <span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">,</span> <span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dy</span> <span class="o">=</span> <span class="n">max_</span> <span class="o">-</span> <span class="n">min_</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_now</span><span class="o">-</span><span class="n">dy</span><span class="p">,</span> <span class="n">max_now</span><span class="o">+</span><span class="n">dy</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_now</span><span class="o">+</span><span class="n">dy</span><span class="p">,</span> <span class="n">min_now</span><span class="o">-</span><span class="n">dy</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;motion_notify_event&#39;</span><span class="p">:</span>  <span class="c1"># drag</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">inaxes</span><span class="p">:</span>
+                <span class="k">return</span>  <span class="c1"># Ignore event outside plot</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_width</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">xdata</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_height</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">ydata</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">ydata</span><span class="p">)</span>
+
+            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">restore_region</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+
+
+<div class="viewcode-block" id="QApplicationWindow.open_figure_popup_menu"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.open_figure_popup_menu">[docs]</a>    <span class="k">def</span> <span class="nf">open_figure_popup_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open a menu to let the user copy data or chart to clipboard&quot;&quot;&quot;</span>
+        <span class="n">main_menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">()</span>
+
+        <span class="c1">#copy chart action</span>
+        <span class="n">copy_chart_action</span> <span class="o">=</span> <span class="n">main_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s2">&quot;Copy Chart to Clipboard&quot;</span><span class="p">)</span>
+        <span class="n">copy_chart_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">copy_chart</span><span class="p">)</span>
+
+        <span class="c1">#copy data sub-menu</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="p">:</span>  <span class="c1">#do nothing if list of artists is empty</span>
+            <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="s2">&quot;Copy Data To Clipboard&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="p">:</span>
+                <span class="n">action_print_coordinates</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">artist</span><span class="o">.</span><span class="n">aname</span><span class="p">)</span>
+                <span class="n">action_print_coordinates</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                    <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clipboard_coordinates</span><span class="p">(</span><span class="n">artist</span><span class="p">))</span>
+            <span class="n">main_menu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+
+        <span class="n">main_menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">add_annotation</span> <span class="o">=</span> <span class="n">main_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAdd_Annotation</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionAdd_Annotation</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">)</span>
+        <span class="n">refresh_chart_action</span> <span class="o">=</span> <span class="n">main_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s2">&quot;Reset view(s)&quot;</span><span class="p">)</span>
+        <span class="n">refresh_chart_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">refresh_plot</span><span class="p">)</span>
+
+        <span class="c1">#launch menu</span>
+        <span class="k">if</span> <span class="n">main_menu</span><span class="o">.</span><span class="n">exec_</span><span class="p">(</span><span class="n">QCursor</span><span class="o">.</span><span class="n">pos</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_pan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_press_event&#39;</span><span class="p">:</span>  <span class="c1"># begin pan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_release_event&#39;</span><span class="p">:</span>  <span class="c1"># end pan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;motion_notify_event&#39;</span><span class="p">:</span>  <span class="c1"># pan</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">xlim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pan_update_limits</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">ylim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pan_update_limits</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>    
+
+    <span class="k">def</span> <span class="nf">_pan_update_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axis_id</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">last_event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute limits with applied pan.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">axis_id</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">axis_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">()</span>
+
+        <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">last_data</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">last_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">last_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">]</span> <span class="o">-</span> <span class="n">last_data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">]</span>
+            <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">])</span> <span class="o">-</span> \
+                    <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">last_data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">])</span>
+                <span class="n">new_lim</span> <span class="o">=</span> <span class="p">[</span><span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">lim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">delta</span><span class="p">)),</span>
+                           <span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">delta</span><span class="p">))]</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">OverflowError</span><span class="p">):</span>
+                <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span>  <span class="c1"># Keep previous limits</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Pan not implemented for scale &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">scale</span><span class="p">)</span>
+            <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span>
+        <span class="k">return</span> <span class="n">new_lim</span>
+
+    <span class="k">def</span> <span class="nf">_zoom_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a 1D range zoomed around center.</span>
+<span class="sd">        :param float begin: The begin bound of the range.</span>
+<span class="sd">        :param float end: The end bound of the range.</span>
+<span class="sd">        :param float center: The center of the zoom (i.e., invariant point)</span>
+<span class="sd">        :param float scale_factor: The scale factor to apply.</span>
+<span class="sd">        :param str scale: The scale of the axis</span>
+<span class="sd">        :return: The zoomed range (min, max)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+            <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="n">end</span><span class="p">,</span> <span class="n">begin</span>
+
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">old_min</span><span class="p">,</span> <span class="n">old_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="n">old_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span> <span class="k">if</span> <span class="n">min_</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+                <span class="n">center</span> <span class="k">if</span> <span class="n">center</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">old_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="k">if</span> <span class="n">max_</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="mf">0.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s1">&#39;Zoom on wheel not implemented for scale &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">scale</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span>
+
+        <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">center</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">old_max</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span>
+        <span class="n">range_</span> <span class="o">=</span> <span class="p">(</span><span class="n">old_max</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">scale_factor</span>
+        <span class="n">new_min</span> <span class="o">=</span> <span class="n">center</span> <span class="o">-</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">range_</span>
+        <span class="n">new_max</span> <span class="o">=</span> <span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">range_</span>
+
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">**</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_min</span><span class="p">),</span> <span class="mf">10.</span> <span class="o">**</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_max</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OverflowError</span><span class="p">:</span>  <span class="c1"># Limit case</span>
+                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
+            <span class="k">if</span> <span class="n">new_min</span> <span class="o">&lt;=</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="n">new_max</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>  <span class="c1"># Limit case</span>
+                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
+
+        <span class="k">if</span> <span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_max</span><span class="p">,</span> <span class="n">new_min</span>
+            
+<div class="viewcode-block" id="QApplicationWindow.zoom_wheel"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.zoom_wheel">[docs]</a>    <span class="k">def</span> <span class="nf">zoom_wheel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">base_scale</span> <span class="o">=</span> <span class="mf">1.1</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span><span class="p">:</span>
+            <span class="c1"># deal with zoom in</span>
+            <span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">base_scale</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="c1"># deal with zoom out</span>
+            <span class="n">scale_factor</span> <span class="o">=</span> <span class="n">base_scale</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># deal with something that should never happen</span>
+            <span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># if event.step &gt; 0:</span>
+            <span class="c1"># scale_factor = self.scale_factor</span>
+        <span class="c1"># else:</span>
+            <span class="c1"># scale_factor = 1. / self.scale_factor</span>
+
+        <span class="c1"># Go through all axes to enable zoom for multiple axes subplots</span>
+        <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">x_axes</span><span class="p">:</span>
+            <span class="n">transform</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+            <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+            <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+            <span class="n">xlim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_range</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">xdata</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span>
+                                    <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">())</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">y_axes</span><span class="p">:</span>
+            <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="n">ylim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_range</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">ydata</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span>
+                                    <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">())</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span> </div>
+        
+<div class="viewcode-block" id="QApplicationWindow.on_press"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># Pan</span>
+            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="c1"># Zoom</span>
+            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_axes_to_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns two sets of Axes to update according to event.</span>
+
+<span class="sd">        Takes care of multiple axes and shared axes.</span>
+
+<span class="sd">        :param MouseEvent event: Matplotlib event to consider</span>
+<span class="sd">        :return: Axes for which to update xlimits and ylimits</span>
+<span class="sd">        :rtype: 2-tuple of set (xaxes, yaxes)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># Go through all axes to enable zoom for multiple axes subplots</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="c1"># For twin x axes, makes sure the zoom is applied once</span>
+                <span class="n">shared_x_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_shared_x_axes</span><span class="p">()</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">x_axes</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">shared_x_axes</span><span class="p">):</span>
+                    <span class="n">x_axes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+                <span class="c1"># For twin y axes, makes sure the zoom is applied once</span>
+                <span class="n">shared_y_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_shared_y_axes</span><span class="p">()</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">y_axes</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">shared_y_axes</span><span class="p">):</span>
+                    <span class="n">y_axes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
+
+<div class="viewcode-block" id="QApplicationWindow.on_motion"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># pan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># zoom area</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -1648,7 +2041,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

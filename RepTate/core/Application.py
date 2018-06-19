@@ -59,6 +59,7 @@ from ToolGradient import ToolGradient
 from ToolSmooth import ToolSmooth
 from ToolBounds import ToolBounds
 from ToolEvaluate import ToolEvaluate
+from ToolInterpolate import ToolInterpolateExtrapolate
 from ToolMaterialsDatabase import ToolMaterialsDatabase
 
 class Application(CmdBase):
@@ -118,6 +119,7 @@ class Application(CmdBase):
         self.availabletools[ToolFindPeaks.toolname] = ToolFindPeaks
         self.availabletools[ToolGradient.toolname] = ToolGradient
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
+        self.availabletools[ToolInterpolateExtrapolate.toolname] = ToolInterpolateExtrapolate
         self.availabletools[ToolSmooth.toolname] = ToolSmooth
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
         

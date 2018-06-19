@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>DraggableArtists &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.2 20180503',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -53,12 +44,14 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1104,6 +1097,7 @@
 <span class="sd">            - function2 {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DraggableNote</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cidpress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_press</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function2</span><span class="o">=</span><span class="n">function2</span>
 
 <div class="viewcode-block" id="DraggableNote.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1124,6 +1118,25 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_position</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dy</span><span class="p">])</span></div>
 
+<div class="viewcode-block" id="DraggableNote.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - event {[type]} -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">dblclick</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">DraggableNote</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">on_press</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span> <span class="k">return</span>
+        <span class="k">if</span> <span class="n">DraggableArtist</span><span class="o">.</span><span class="n">lock</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span>
+        <span class="n">contains</span><span class="p">,</span> <span class="n">attrd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">contains</span><span class="p">:</span> <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span></div>
+                    
 <div class="viewcode-block" id="DraggableNote.on_release"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
@@ -1138,14 +1151,6 @@
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span> <span class="o">-</span> <span class="n">xpress</span>
         <span class="n">dy</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span> <span class="o">-</span> <span class="n">ypress</span>
-        <span class="c1">#if (self.mode==DragType.none):   </span>
-        <span class="c1">#    self.function(0, 0)</span>
-        <span class="c1">#elif (self.mode==DragType.horizontal):</span>
-        <span class="c1">#    self.function(dx, 0)</span>
-        <span class="c1">#elif (self.mode==DragType.vertical):</span>
-        <span class="c1">#    self.function(0, dy)</span>
-        <span class="c1">#elif (self.mode==DragType.both):</span>
-        <span class="c1">#    self.function(dx, dy)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">DraggableArtist</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_animated</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -1173,7 +1178,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

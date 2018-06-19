@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Debye function &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.2 20180503',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -68,12 +59,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -97,16 +90,16 @@
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first math">
+<dd><div class="first math notranslate">
 \[I(q) = \frac {(b_H-b_D)^2}{V} N \phi(1-\phi) g_D(R_g,q) + \mathrm{Bckgrnd}\]</div>
 <dl class="last docutils">
 <dt>where:</dt>
 <dd><ul class="first simple">
-<li><span class="math">\(N=M_w/M_\mathrm{mono}\)</span> is the degree of polymerization of the chain (<span class="math">\(M_w\)</span> is a parameter of the experimental data)</li>
-<li><span class="math">\(\phi\)</span> is the volume fraction of deuterated chains (read from the file)</li>
-<li><span class="math">\(g_D(R_g,q)\)</span> is the Debye function, given by</li>
+<li><span class="math notranslate">\(N=M_w/M_\mathrm{mono}\)</span> is the degree of polymerization of the chain (<span class="math notranslate">\(M_w\)</span> is a parameter of the experimental data)</li>
+<li><span class="math notranslate">\(\phi\)</span> is the volume fraction of deuterated chains (read from the file)</li>
+<li><span class="math notranslate">\(g_D(R_g,q)\)</span> is the Debye function, given by</li>
 </ul>
-<div class="last math">
+<div class="last math notranslate">
 \[g_D(R_g,q) = \frac{2}{(q^2R_g^2)^2}\left( q^2R_g^2 + exp(-q^2R_g^2) -1 \right)\]</div>
 </dd>
 </dl>
@@ -116,18 +109,18 @@
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last">
-<li><p class="first">Contrast: This sets the magnitude of the scattering and is equal to <span class="math">\((b_H-b_D)^2/V\)</span> where <span class="math">\(b_{H/D}\)</span> is the scattering cross-section of the hydrogenous/deuterated monomer and <span class="math">\(V\)</span> is the monomer volume.</p>
+<li><p class="first">Contrast: This sets the magnitude of the scattering and is equal to <span class="math notranslate">\((b_H-b_D)^2/V\)</span> where <span class="math notranslate">\(b_{H/D}\)</span> is the scattering cross-section of the hydrogenous/deuterated monomer and <span class="math notranslate">\(V\)</span> is the monomer volume.</p>
 </li>
-<li><p class="first"><span class="math">\(C_{gyr}\)</span>: This sets the scale of the radius of gyration of the chain. For a given molecular weight, the radius of gyration is <span class="math">\(R_g^2=C_{gyr}M_w\)</span>. For many polymers, this value is available in the literature, but small adjustments may still be necessary to optimize the agreement with the experimental data.</p>
+<li><p class="first"><span class="math notranslate">\(C_{gyr}\)</span>: This sets the scale of the radius of gyration of the chain. For a given molecular weight, the radius of gyration is <span class="math notranslate">\(R_g^2=C_{gyr}M_w\)</span>. For many polymers, this value is available in the literature, but small adjustments may still be necessary to optimize the agreement with the experimental data.</p>
 </li>
-<li><p class="first"><span class="math">\(M_\mathrm{mono}\)</span>: The molecular weight of a single monomer (should be known from the chain chemistry).</p>
+<li><p class="first"><span class="math notranslate">\(M_\mathrm{mono}\)</span>: The molecular weight of a single monomer (should be known from the chain chemistry).</p>
 </li>
 <li><p class="first">Bckgrnd: This sets the level of the background scattering. It can, in principle, be computed from known incoherent scattering cross sections but, in practice, there are often many other unknown contributions and therefore fitting is necessary.</p>
 </li>
-<li><p class="first"><span class="math">\(\lambda\)</span>: It applies a simple strain measure by shifting the radius of gyration by a constant factor for all <span class="math">\(q\)</span> values, <span class="math">\(R_g\to \lambda R_g\)</span> (the <strong>Stretched</strong> button must be checked). This can be used to compare the microscopic deformation with the effect of a fully affine bulk deformation or to fit to the low <span class="math">\(q\)</span> data to produce an effective radius of gyration under flow. Compression perpendicular to the flow direction can be modelled by setting <span class="math">\(\lambda&lt;1\)</span>.</p>
+<li><p class="first"><span class="math notranslate">\(\lambda\)</span>: It applies a simple strain measure by shifting the radius of gyration by a constant factor for all <span class="math notranslate">\(q\)</span> values, <span class="math notranslate">\(R_g\to \lambda R_g\)</span> (the <strong>Stretched</strong> button must be checked). This can be used to compare the microscopic deformation with the effect of a fully affine bulk deformation or to fit to the low <span class="math notranslate">\(q\)</span> data to produce an effective radius of gyration under flow. Compression perpendicular to the flow direction can be modelled by setting <span class="math notranslate">\(\lambda&lt;1\)</span>.</p>
 </li>
-<li><p class="first"><span class="math">\(\chi\)</span>: Parameter to model the effect of a weak interaction between the hydrogenous and the deuterated monomers on the scattering, modelled within the random phase approximation [3] (the <strong>Non-Ideal Mix</strong> button must be checked). The scattered intensity is calculated according to the function below, in which <span class="math">\(\chi\)</span> is independent of <span class="math">\(M_w\)</span> and <span class="math">\(\phi\)</span> but is expected to change with temperature. Typically, the effect of <span class="math">\(\chi\)</span> is small, but this depends upon the temperature, degree of polymerization and deuterated fraction. For deuterated/hydrogenated polystyrene <span class="math">\(\chi\approx 1.7\cdot 10^{-4}\)</span> at 160 degrees C, and it is expected to be smaller with increasing temperature.</p>
-<div class="math">
+<li><p class="first"><span class="math notranslate">\(\chi\)</span>: Parameter to model the effect of a weak interaction between the hydrogenous and the deuterated monomers on the scattering, modelled within the random phase approximation [3] (the <strong>Non-Ideal Mix</strong> button must be checked). The scattered intensity is calculated according to the function below, in which <span class="math notranslate">\(\chi\)</span> is independent of <span class="math notranslate">\(M_w\)</span> and <span class="math notranslate">\(\phi\)</span> but is expected to change with temperature. Typically, the effect of <span class="math notranslate">\(\chi\)</span> is small, but this depends upon the temperature, degree of polymerization and deuterated fraction. For deuterated/hydrogenated polystyrene <span class="math notranslate">\(\chi\approx 1.7\cdot 10^{-4}\)</span> at 160 degrees C, and it is expected to be smaller with increasing temperature.</p>
+<div class="math notranslate">
 \[I(q) = \frac {(b_H-b_D)^2}{V} \left( \frac{1}{N \phi(1-\phi) g_D(R_g,q)}-2\chi \right)^{-1} + \mathrm{Bckgrnd}     \]</div>
 </li>
 </ul>
@@ -184,7 +177,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

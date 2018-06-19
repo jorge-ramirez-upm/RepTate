@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Tutorial: Interfacing Python and C code &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.2 20180503',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -33,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -96,12 +87,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -171,9 +164,9 @@ The only work we need to do to integrate C code in Python is on Python’s side.
 an array of double and return the square. It is evident that such a simple function
 (that calculates the square of an array) does not justify the use of C, but it is a good place
 to start.</p>
-<p>In a new text file, write the code below and save it as <code class="docutils literal"><span class="pre">basic_function.c</span></code> in the folder
-<code class="docutils literal"><span class="pre">theories/</span></code> for example:</p>
-<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<p>In a new text file, write the code below and save it as <code class="docutils literal notranslate"><span class="pre">basic_function.c</span></code> in the folder
+<code class="docutils literal notranslate"><span class="pre">theories/</span></code> for example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
 
 <span class="kt">void</span> <span class="nf">c_square</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_in</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_out</span><span class="p">)</span>
 <span class="p">{</span> <span class="c1">//return the square of array_in of length n in array_out</span>
@@ -194,7 +187,7 @@ Mac and Linux machines usually have a C compiler installed by default.
 On Windows, we suggest to install <a class="reference external" href="https://anaconda.org/anaconda/mingw">MinGW</a>
 via Anaconda.</p>
 <p>To compile the above C function into a library that can later be used by Python,
-open a terminal and change the working directory to the folder where <code class="docutils literal"><span class="pre">basic_function.c</span></code>
+open a terminal and change the working directory to the folder where <code class="docutils literal notranslate"><span class="pre">basic_function.c</span></code>
 is located. Then compile the library.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -204,31 +197,31 @@ used on Linux or Mac, and vice versa.
 To avoid problem, we name these library differently: we append to the
 library name</p>
 <ul class="last simple">
-<li><code class="docutils literal"><span class="pre">_win32</span></code> for Windows,</li>
-<li><code class="docutils literal"><span class="pre">_darwin</span></code> for Max,</li>
-<li><code class="docutils literal"><span class="pre">_linux</span></code> for Linux.</li>
+<li><code class="docutils literal notranslate"><span class="pre">_win32</span></code> for Windows,</li>
+<li><code class="docutils literal notranslate"><span class="pre">_darwin</span></code> for Max,</li>
+<li><code class="docutils literal notranslate"><span class="pre">_linux</span></code> for Linux.</li>
 </ul>
 </div>
 <p>Compile the C file using either</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ gcc -o basic_function_win32.so -shared -fPIC -O2 basic_function.c <span class="c1"># Windows</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ gcc -o basic_function_win32.so -shared -fPIC -O2 basic_function.c <span class="c1"># Windows</span>
 
 $ gcc -o basic_function_darwin.so -shared -fPIC -O2 basic_function.c <span class="c1"># Mac</span>
 
 $ gcc -o basic_function_linux.so -shared -fPIC -O2 basic_function.c <span class="c1"># Linux</span>
 </pre></div>
 </div>
-<p>This created a new file <code class="docutils literal"><span class="pre">basic_function_***.so</span></code> containing our C function in the RepTate
-folder <code class="docutils literal"><span class="pre">theories/</span></code>.</p>
+<p>This created a new file <code class="docutils literal notranslate"><span class="pre">basic_function_***.so</span></code> containing our C function in the RepTate
+folder <code class="docutils literal notranslate"><span class="pre">theories/</span></code>.</p>
 </div>
 <div class="section" id="use-a-c-library-in-python">
 <h2><a class="toc-backref" href="#id7">Use a C library in Python</a><a class="headerlink" href="#use-a-c-library-in-python" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="read-the-c-library">
 <h3><a class="toc-backref" href="#id8">Read the C library</a><a class="headerlink" href="#read-the-c-library" title="Permalink to this headline">¶</a></h3>
-<p>We use the <code class="docutils literal"><span class="pre">basic_function.so</span></code> library via
+<p>We use the <code class="docutils literal notranslate"><span class="pre">basic_function.so</span></code> library via
 <a class="reference external" href="https://docs.python.org/3.6/library/ctypes.html">Ctypes</a>.
 In a new file, write the following and save it as, for example,
-<code class="docutils literal"><span class="pre">basic_function_helper.py</span></code></p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<code class="docutils literal notranslate"><span class="pre">basic_function_helper.py</span></code></p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -258,46 +251,46 @@ In a new file, write the following and save it as, for example,
 </pre></div>
 </td></tr></table></div>
 <p>Some explainations:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">CDLL</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">CDLL</span>
 </pre></div>
 </div>
 <p>imports the Python Ctypes object we will be needing.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lib_path</span> <span class="o">=</span> <span class="s1">&#39;theories/basic_function_</span><span class="si">%s</span><span class="s1">.so&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lib_path</span> <span class="o">=</span> <span class="s1">&#39;theories/basic_function_</span><span class="si">%s</span><span class="s1">.so&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>defines the path of our library file, and <code class="docutils literal"><span class="pre">sys.platform</span></code> returns either
-<code class="docutils literal"><span class="pre">win32</span></code>, <code class="docutils literal"><span class="pre">darwin</span></code> or <code class="docutils literal"><span class="pre">linux</span></code>. Note that the path is relative to the path of
-<code class="docutils literal"><span class="pre">RepTate.py</span></code> or <code class="docutils literal"><span class="pre">RepTateCL.py</span></code>.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">basic_function_lib</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
+<p>defines the path of our library file, and <code class="docutils literal notranslate"><span class="pre">sys.platform</span></code> returns either
+<code class="docutils literal notranslate"><span class="pre">win32</span></code>, <code class="docutils literal notranslate"><span class="pre">darwin</span></code> or <code class="docutils literal notranslate"><span class="pre">linux</span></code>. Note that the path is relative to the path of
+<code class="docutils literal notranslate"><span class="pre">RepTate.py</span></code> or <code class="docutils literal notranslate"><span class="pre">RepTateCL.py</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">basic_function_lib</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>defines the Python object <code class="docutils literal"><span class="pre">square_lib</span></code> where all the functions and variables
-from our C file <code class="docutils literal"><span class="pre">basic_function.c</span></code> are stored. In particular, the function
-<code class="docutils literal"><span class="pre">c_square</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python_c_square</span> <span class="o">=</span> <span class="n">basic_function_lib</span><span class="o">.</span><span class="n">c_square</span>
+<p>defines the Python object <code class="docutils literal notranslate"><span class="pre">square_lib</span></code> where all the functions and variables
+from our C file <code class="docutils literal notranslate"><span class="pre">basic_function.c</span></code> are stored. In particular, the function
+<code class="docutils literal notranslate"><span class="pre">c_square</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python_c_square</span> <span class="o">=</span> <span class="n">basic_function_lib</span><span class="o">.</span><span class="n">c_square</span>
 </pre></div>
 </div>
-<p>defines the Python equivalent of the C function <code class="docutils literal"><span class="pre">c_square</span></code>. We name it
-<code class="docutils literal"><span class="pre">python_c_square</span></code> for clarity, but using the same name is acceptable.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python_c_square</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+<p>defines the Python equivalent of the C function <code class="docutils literal notranslate"><span class="pre">c_square</span></code>. We name it
+<code class="docutils literal notranslate"><span class="pre">python_c_square</span></code> for clarity, but using the same name is acceptable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python_c_square</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 </div>
 <p>defines what type of variables the C function returns.
-In our case, it is <code class="docutils literal"><span class="pre">void</span></code>, which translates in Python to <code class="docutils literal"><span class="pre">None</span></code>.
+In our case, it is <code class="docutils literal notranslate"><span class="pre">void</span></code>, which translates in Python to <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 See <a class="reference external" href="https://docs.python.org/3.6/library/ctypes.html#fundamental-data-types">fundamental-data-types</a> for
 a list of equivalence.</p>
 </div>
 <div class="section" id="use-library-functions">
 <h3><a class="toc-backref" href="#id9">Use library functions</a><a class="headerlink" href="#use-library-functions" title="Permalink to this headline">¶</a></h3>
-<p>Our C function <code class="docutils literal"><span class="pre">c_square</span></code> accepts three arguments: an <code class="docutils literal"><span class="pre">int</span></code> and two
-<code class="docutils literal"><span class="pre">double</span> <span class="pre">*</span></code>. Hence, our Python function <code class="docutils literal"><span class="pre">python_c_square</span></code> accepts three
-arguments too but they must by of type <code class="docutils literal"><span class="pre">c_int</span></code> and “array of c_double”
-defined by the <code class="docutils literal"><span class="pre">ctypes</span></code> Python library.</p>
-<p>Therefore, to use <code class="docutils literal"><span class="pre">python_c_square</span></code>, we have to convert Python integer into
-<code class="docutils literal"><span class="pre">c_int</span></code> type and Python list into an “array of c_double”.</p>
+<p>Our C function <code class="docutils literal notranslate"><span class="pre">c_square</span></code> accepts three arguments: an <code class="docutils literal notranslate"><span class="pre">int</span></code> and two
+<code class="docutils literal notranslate"><span class="pre">double</span> <span class="pre">*</span></code>. Hence, our Python function <code class="docutils literal notranslate"><span class="pre">python_c_square</span></code> accepts three
+arguments too but they must by of type <code class="docutils literal notranslate"><span class="pre">c_int</span></code> and “array of c_double”
+defined by the <code class="docutils literal notranslate"><span class="pre">ctypes</span></code> Python library.</p>
+<p>Therefore, to use <code class="docutils literal notranslate"><span class="pre">python_c_square</span></code>, we have to convert Python integer into
+<code class="docutils literal notranslate"><span class="pre">c_int</span></code> type and Python list into an “array of c_double”.</p>
 <p>The best way to do so is to write a Python function, in the file
-<code class="docutils literal"><span class="pre">basic_function_helper.py</span></code></p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>16
+<code class="docutils literal notranslate"><span class="pre">basic_function_helper.py</span></code></p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>16
 17
 18
 19
@@ -315,26 +308,26 @@ defined by the <code class="docutils literal"><span class="pre">ctypes</span></c
 </pre></div>
 </td></tr></table></div>
 <p>In details:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">c_arr_in</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)(</span><span class="o">*</span><span class="n">list_in</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c_arr_in</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)(</span><span class="o">*</span><span class="n">list_in</span><span class="p">)</span>
 <span class="n">c_arr_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)()</span>
 </pre></div>
 </div>
-<p>defines two <code class="docutils literal"><span class="pre">ctypes</span></code> arrays of <code class="docutils literal"><span class="pre">double</span></code> of size <code class="docutils literal"><span class="pre">n</span></code>
-that can be used by the C function. The first one is initialised with the values of <code class="docutils literal"><span class="pre">list_in</span></code>.
+<p>defines two <code class="docutils literal notranslate"><span class="pre">ctypes</span></code> arrays of <code class="docutils literal notranslate"><span class="pre">double</span></code> of size <code class="docutils literal notranslate"><span class="pre">n</span></code>
+that can be used by the C function. The first one is initialised with the values of <code class="docutils literal notranslate"><span class="pre">list_in</span></code>.
 It is equivalent to:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="n">c_arr_in</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_double</span><span class="p">(</span><span class="n">list_in</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>This line:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python_c_square</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_arr_in</span><span class="p">,</span> <span class="n">c_arr_out</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python_c_square</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_arr_in</span><span class="p">,</span> <span class="n">c_arr_out</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>calls the C function that does the computation of the square of <code class="docutils literal"><span class="pre">c_arr_in</span></code>
-and put the result in <code class="docutils literal"><span class="pre">c_arr_out</span></code>. Note the conversion <code class="docutils literal"><span class="pre">c_int(n)</span></code> that
-transforms the Python integer into a <code class="docutils literal"><span class="pre">ctypes</span></code> <code class="docutils literal"><span class="pre">int</span></code>.</p>
+<p>calls the C function that does the computation of the square of <code class="docutils literal notranslate"><span class="pre">c_arr_in</span></code>
+and put the result in <code class="docutils literal notranslate"><span class="pre">c_arr_out</span></code>. Note the conversion <code class="docutils literal notranslate"><span class="pre">c_int(n)</span></code> that
+transforms the Python integer into a <code class="docutils literal notranslate"><span class="pre">ctypes</span></code> <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p>
 <p>This line:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">c_arr_out</span><span class="p">[:]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">c_arr_out</span><span class="p">[:]</span>
 </pre></div>
 </div>
 <p>returns a copy of the results as a Python list.</p>
@@ -342,11 +335,11 @@ transforms the Python integer into a <code class="docutils literal"><span class=
 </div>
 <div class="section" id="final-comments">
 <h2><a class="toc-backref" href="#id10">Final comments</a><a class="headerlink" href="#final-comments" title="Permalink to this headline">¶</a></h2>
-<p>Our C function <code class="docutils literal"><span class="pre">c_square</span></code> is now wrapped into a Python function
-<code class="docutils literal"><span class="pre">do_square_using_c</span></code>. To use it in a RepTate module, simply import the
+<p>Our C function <code class="docutils literal notranslate"><span class="pre">c_square</span></code> is now wrapped into a Python function
+<code class="docutils literal notranslate"><span class="pre">do_square_using_c</span></code>. To use it in a RepTate module, simply import the
 function by including in the module header.</p>
 <p>As an example, the following calculates the square of numbers from 0 to 999:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">basic_function_helper</span> <span class="k">import</span> <span class="n">do_square_using_c</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">basic_function_helper</span> <span class="k">import</span> <span class="n">do_square_using_c</span>
 <span class="o">...</span>
 <span class="n">my_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">squared_list</span> <span class="o">=</span> <span class="n">do_square_using_c</span><span class="p">(</span><span class="o">*</span><span class="n">my_list</span><span class="p">)</span>
@@ -366,7 +359,7 @@ the C code call a Python function.
 As a simple example, the C code will request Python to print the advancement of the
 calculations of the “square” function, previously introduced.
 It require more steps than what we have seen before, but it is reasonably simple.</p>
-<p>The C function will call a Python function with a <code class="docutils literal"><span class="pre">double</span></code> argument (the advancement in percent)
+<p>The C function will call a Python function with a <code class="docutils literal notranslate"><span class="pre">double</span></code> argument (the advancement in percent)
 and Python will return the percentage incremented by 20%.</p>
 <div class="section" id="modify-the-c-code">
 <h3><a class="toc-backref" href="#id12">Modify the C code</a><a class="headerlink" href="#modify-the-c-code" title="Permalink to this headline">¶</a></h3>
@@ -380,12 +373,12 @@ and Python will return the percentage incremented by 20%.</p>
 </li>
 <li><dl class="first docutils">
 <dt>A function <em>type</em> that defines how the proxy function “look” like, i.e.</dt>
-<dd>arguments and return types (<code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">double</span></code>, etc.)</dd>
+<dd>arguments and return types (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code>, etc.)</dd>
 </dl>
 </li>
 </ul>
-<p>Somewhere before the <code class="docutils literal"><span class="pre">c_square</span></code> function definition, we write:</p>
-<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="kt">double</span> <span class="nf">give_and_take_double</span><span class="p">(</span><span class="kt">double</span> <span class="n">p</span><span class="p">);</span> <span class="c1">// type definition</span>
+<p>Somewhere before the <code class="docutils literal notranslate"><span class="pre">c_square</span></code> function definition, we write:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="kt">double</span> <span class="nf">give_and_take_double</span><span class="p">(</span><span class="kt">double</span> <span class="n">p</span><span class="p">);</span> <span class="c1">// type definition</span>
 <span class="n">give_and_take_double</span> <span class="o">*</span><span class="n">tell_python</span><span class="p">;</span>             <span class="c1">// pointer to a function of type &quot;give_and_take_double&quot;</span>
 <span class="kt">void</span> <span class="nf">def_python_callback</span><span class="p">(</span><span class="n">give_and_take_double</span> <span class="o">*</span><span class="n">func</span><span class="p">)</span>
 <span class="p">{</span>
@@ -395,13 +388,13 @@ and Python will return the percentage incremented by 20%.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The first line defines a new type: a function that takes a single <code class="docutils literal"><span class="pre">double</span></code> as argument and returns a <code class="docutils literal"><span class="pre">double</span></code>.
-This allows us to define the second line: a pointer to a function of type <code class="docutils literal"><span class="pre">give_and_take_double</span></code>.
-At this point we do not know that the function will be, be we know it accepts a <code class="docutils literal"><span class="pre">double</span></code> as argument, and
-it returns a <code class="docutils literal"><span class="pre">double</span></code>. The last lines is the function that Python will have to call to actually define what <code class="docutils literal"><span class="pre">tell_python</span></code> is,
+<p>The first line defines a new type: a function that takes a single <code class="docutils literal notranslate"><span class="pre">double</span></code> as argument and returns a <code class="docutils literal notranslate"><span class="pre">double</span></code>.
+This allows us to define the second line: a pointer to a function of type <code class="docutils literal notranslate"><span class="pre">give_and_take_double</span></code>.
+At this point we do not know that the function will be, be we know it accepts a <code class="docutils literal notranslate"><span class="pre">double</span></code> as argument, and
+it returns a <code class="docutils literal notranslate"><span class="pre">double</span></code>. The last lines is the function that Python will have to call to actually define what <code class="docutils literal notranslate"><span class="pre">tell_python</span></code> is,
 or rather, define towards what it is pointing to.</p>
-<p>Now we can decorate our <code class="docutils literal"><span class="pre">c_square</span></code> function with the <code class="docutils literal"><span class="pre">tell_python</span></code> function:</p>
-<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">c_square</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_in</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_out</span><span class="p">)</span>
+<p>Now we can decorate our <code class="docutils literal notranslate"><span class="pre">c_square</span></code> function with the <code class="docutils literal notranslate"><span class="pre">tell_python</span></code> function:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">c_square</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_in</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">array_out</span><span class="p">)</span>
 <span class="p">{</span> <span class="c1">//return the square of array_in of length n in array_out</span>
     <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
     <span class="kt">double</span> <span class="n">percent</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
@@ -430,10 +423,10 @@ We need to:</p>
 <ul class="simple">
 <li>Define a “classic” Python function</li>
 <li>Define a C callback function that translates that Python function</li>
-<li>Call the C function <code class="docutils literal"><span class="pre">def_python_callback</span></code>, defined above to setup the callback function</li>
+<li>Call the C function <code class="docutils literal notranslate"><span class="pre">def_python_callback</span></code>, defined above to setup the callback function</li>
 </ul>
 <p>We add to the bottom of the file “basic_function_helper.py”:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Callback stuff</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Callback stuff</span>
 <span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">CFUNCTYPE</span><span class="p">,</span> <span class="n">POINTER</span>
 
 <span class="k">def</span> <span class="nf">get_percent</span><span class="p">(</span><span class="n">percent</span><span class="p">):</span>
@@ -447,25 +440,25 @@ We need to:</p>
 </pre></div>
 </div>
 <p>In these lines:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_percent</span><span class="p">(</span><span class="n">percent</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_percent</span><span class="p">(</span><span class="n">percent</span><span class="p">):</span>
     <span class="o">...</span>
 </pre></div>
 </div>
-<p>we define a “classic” Python function that take a <code class="docutils literal"><span class="pre">float</span></code> as argument, and return a <code class="docutils literal"><span class="pre">float</span></code>.
+<p>we define a “classic” Python function that take a <code class="docutils literal notranslate"><span class="pre">float</span></code> as argument, and return a <code class="docutils literal notranslate"><span class="pre">float</span></code>.
 It prints the information in the theory text box of RepTate via the Qprint method.</p>
 <p>Then, in the line:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CB_FTYPE_DOUBLE_DOUBLE</span> <span class="o">=</span> <span class="n">CFUNCTYPE</span><span class="p">(</span><span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CB_FTYPE_DOUBLE_DOUBLE</span> <span class="o">=</span> <span class="n">CFUNCTYPE</span><span class="p">(</span><span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>the first argument of the ctypes function <code class="docutils literal"><span class="pre">CFUNCTYPE</span></code> defines the return types (here <code class="docutils literal"><span class="pre">double</span></code>) and the other arguments
-are the function arguments (here only one <code class="docutils literal"><span class="pre">double</span></code>). <code class="docutils literal"><span class="pre">CFUNCTYPE</span></code> returns a pointer to a C functions:</p>
-<p>The following line defines a C function of type <code class="docutils literal"><span class="pre">CB_FTYPE_DOUBLE_DOUBLE</span></code>, which is a proxy for the Python
-function <code class="docutils literal"><span class="pre">get_percent</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cb_get_percent</span> <span class="o">=</span> <span class="n">CB_FTYPE_DOUBLE_DOUBLE</span><span class="p">(</span><span class="n">get_percent</span><span class="p">)</span>
+<p>the first argument of the ctypes function <code class="docutils literal notranslate"><span class="pre">CFUNCTYPE</span></code> defines the return types (here <code class="docutils literal notranslate"><span class="pre">double</span></code>) and the other arguments
+are the function arguments (here only one <code class="docutils literal notranslate"><span class="pre">double</span></code>). <code class="docutils literal notranslate"><span class="pre">CFUNCTYPE</span></code> returns a pointer to a C functions:</p>
+<p>The following line defines a C function of type <code class="docutils literal notranslate"><span class="pre">CB_FTYPE_DOUBLE_DOUBLE</span></code>, which is a proxy for the Python
+function <code class="docutils literal notranslate"><span class="pre">get_percent</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cb_get_percent</span> <span class="o">=</span> <span class="n">CB_FTYPE_DOUBLE_DOUBLE</span><span class="p">(</span><span class="n">get_percent</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then we tell our C code which is our callback function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">basic_function_lib</span><span class="o">.</span><span class="n">def_python_callback</span><span class="p">(</span><span class="n">cb_get_percent</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">basic_function_lib</span><span class="o">.</span><span class="n">def_python_callback</span><span class="p">(</span><span class="n">cb_get_percent</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -503,7 +496,7 @@ function <code class="docutils literal"><span class="pre">get_percent</span></co
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>
