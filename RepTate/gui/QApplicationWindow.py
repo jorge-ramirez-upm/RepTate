@@ -75,6 +75,33 @@ from SpreadsheetWidget import SpreadsheetWidget
 PATH = dirname(abspath(__file__))
 Ui_AppWindow, QMainWindow = loadUiType(join(PATH,'QApplicationWindow.ui'))
 Ui_EditAnnotation, QDialog = loadUiType(join(PATH,'annotationedit.ui'))
+Ui_AddDummyFiles, QDialog = loadUiType(join(PATH,'dummyfilesDialog.ui'))
+
+class AddDummyFiles(QDialog, Ui_AddDummyFiles):
+    def __init__(self, parent=None, filetype=None):
+        super(AddDummyFiles, self).__init__(parent)
+        QDialog.__init__(self)
+        Ui_AddDummyFiles.__init__(self)
+        self.setupUi(self)
+        
+        for p in filetype.basic_file_parameters:
+            item = QTreeWidgetItem(self.parameterTreeWidget,[p,"0","1","10"])
+            item.setCheckState(0, 0)
+            item.setIcon(0, QIcon())
+            item.setFlags(item.flags() | Qt.ItemIsEditable)
+            cb = QComboBox(self.parameterTreeWidget)
+            cb.addItems(["Linear", "Log"])
+            self.parameterTreeWidget.setItemWidget(item, 4, cb)
+            
+        for i in range(4):
+            self.parameterTreeWidget.setColumnWidth(i,60)
+
+        connection_id = self.parameterTreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
+            
+    def handle_itemDoubleClicked(self, item, column):
+        if (column>0 and column<4):
+            self.parameterTreeWidget.editItem(item, column)
+            
 
 class EditAnnotation(QDialog, Ui_EditAnnotation):
     def __init__(self, parent=None, annotation=None):
@@ -331,7 +358,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionNew_Empty_Dataset)
-        tb.addAction(self.actionNew_Dataset_From_File)
+
+        #tb.addAction(self.actionNew_Dataset_From_File)
+        tbut = QToolButton()
+        tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut.setDefaultAction(self.actionNew_Dataset_From_File)
+        menu = QMenu()
+        menu.addAction(self.actionAddDummyFiles)
+        tbut.setMenu(menu)
+        tb.addWidget(tbut)
         tb.addAction(self.actionView_All_Sets)
         tb.addAction(self.actionMarkerSettings)
         tb.addAction(self.actionReload_Data)
@@ -385,6 +420,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
+        connection_id = self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
         connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
 
@@ -1485,6 +1521,58 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not paths_to_open:
             return
         self.new_tables_from_files(paths_to_open)
+        
+    def addDummyFiles(self):
+        ds = self.DataSettabWidget.currentWidget()
+        if not ds:
+            return        
+        ftype=self.filetypes[list(self.filetypes.keys())[0]]
+        d = AddDummyFiles(self, ftype)
+        parameterstochange = []
+        parameterrange = []
+        parameterstokeepconstant = []
+        parametervalue = []
+        if d.exec_():         
+            for i in range(d.parameterTreeWidget.topLevelItemCount()):
+                item = d.parameterTreeWidget.topLevelItem(i)
+                if item.checkState(0):
+                    parameterstochange.append(item.text(0))
+                    pmin = float(item.text(1))
+                    pmax = float(item.text(2))
+                    npoints = int(item.text(3))
+                    cb = d.parameterTreeWidget.itemWidget(item, 4)
+                    if cb.currentText() == 'Log':
+                        prange = np.logspace(np.log10(pmin), np.log10(pmax), npoints)
+                    else:
+                        prange = np.linspace(pmin, pmax, npoints)
+                    parameterrange.append(prange)
+                else:
+                    parameterstokeepconstant.append(item.text(0))
+                    parametervalue.append(float(item.text(1)))
+                    
+            nparameterstochange = len(parameterstochange)
+            paramsnames = parameterstochange + parameterstokeepconstant
+            if nparameterstochange==0:
+                cases = [np.array(parametervalue)]
+            elif nparameterstochange==1:
+                cases = []
+                for i in range(len(parameterrange[0])):
+                    case = [parameterrange[0][i]] + parametervalue
+                    cases.append(np.array(case))
+            else:
+                for val in parametervalue:
+                    parameterrange.append(np.array([val]))
+                cases = list(np.array(np.meshgrid(*parameterrange)).T.reshape(-1,len(parameterrange)))
+                                
+            print(paramsnames)
+            print(cases)
+            for c in cases:
+                pass
+                
+            
+        # JR NOW
+
+        
         
     def new_tables_from_files(self, paths_to_open):
         """[summary]
