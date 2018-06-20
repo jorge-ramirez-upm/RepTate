@@ -1566,9 +1566,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                                 
             print(paramsnames)
             print(cases)
+            yval = float(d.yvaluesLineEdit.text())
+            xrange = # form dialog....
             for c in cases:
-                pass
-                
+                fparams = {}
+                for i, pname in enumerate(paramsnames):
+                    fparams[pname] = c[i]
+                newtable = ds.do_new_dummy_file(xrange=, yval=yval, fparams=fparams)
+                # self.addTableToCurrentDataSet(newtable, ext)
+                #[]
+
             
         # JR NOW
 
