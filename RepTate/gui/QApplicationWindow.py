@@ -1459,10 +1459,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         lnew.insert(0, file_name_short)
         newitem = DataSetWidgetItem(ds.DataSettreeWidget, lnew)
         newitem.setCheckState(0, 2)
-        
         self.dataset_actions_disabled(False) #activate buttons
-
-
         
     def handle_createNew_Empty_Dataset(self):
         """Called when button 'new dataset' pushed"""
@@ -1523,9 +1520,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.new_tables_from_files(paths_to_open)
         
     def addDummyFiles(self):
+        """Add dummy files to dataset"""
+        if self.DataSettabWidget.count() == 0:
+                self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
-        if not ds:
-            return        
         ftype = self.filetypes[list(self.filetypes.keys())[0]]
         d = AddDummyFiles(self, ftype)
         parameterstochange = []
