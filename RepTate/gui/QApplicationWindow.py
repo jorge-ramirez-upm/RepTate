@@ -1526,7 +1526,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
             return        
-        ftype=self.filetypes[list(self.filetypes.keys())[0]]
+        ftype = self.filetypes[list(self.filetypes.keys())[0]]
         d = AddDummyFiles(self, ftype)
         parameterstochange = []
         parameterrange = []
@@ -1564,22 +1564,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     parameterrange.append(np.array([val]))
                 cases = list(np.array(np.meshgrid(*parameterrange)).T.reshape(-1,len(parameterrange)))
                                 
-            print(paramsnames)
-            print(cases)
+            # print(paramsnames)
+            # print(cases)
             yval = float(d.yvaluesLineEdit.text())
-            xrange = # form dialog....
+            xmin = float(d.xminLineEdit.text())
+            xmax = float(d.xmaxLineEdit.text())
+            npoints = int(d.npointsLineEdit.text())
+            if d.scaleComboBox.currentText() == 'Log':
+                xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
+            else:
+                xrange = np.linspace(xmin, xmax, npoints)
             for c in cases:
                 fparams = {}
                 for i, pname in enumerate(paramsnames):
                     fparams[pname] = c[i]
-                newtable = ds.do_new_dummy_file(xrange=, yval=yval, fparams=fparams)
-                # self.addTableToCurrentDataSet(newtable, ext)
-                #[]
-
-            
-        # JR NOW
-
-        
+                f, success = ds.do_new_dummy_file(xrange=xrange, yval=yval, fparams=fparams, file_type=ftype)
+                if success:
+                    self.addTableToCurrentDataSet(f, ftype.extension)
         
     def new_tables_from_files(self, paths_to_open):
         """[summary]
