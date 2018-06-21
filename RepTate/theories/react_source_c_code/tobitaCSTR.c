@@ -138,10 +138,9 @@ bool tobCSTR(int n, int n1)
 
         // check to see whether to save the polymer
         // printf("Calc seniority molecule %d with %d arms\n", n,  br_poly[n].armnum);
-        if (do_prio_senio){
-            calc_seniority(n);
-            calc_priority(n);
-            save_architect(n, n1);
+        if (do_prio_senio)
+        {
+            senio_prio(n, n1);
         }
         bobcount(n, n1);
 

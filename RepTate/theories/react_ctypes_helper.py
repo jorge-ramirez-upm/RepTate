@@ -120,7 +120,13 @@ class reactresults(ct.Structure):
                                  ct.c_int), ("n7arm",
                                              ct.c_int), ("ncomb",
                                                          ct.c_int), ("nother",
-                                                                     ct.c_int)
+                                                                     ct.c_int),
+                                                                     ("nsaved_arch",
+                                                                     ct.c_int),
+                                                                    ("arch_minwt",
+                                                                     ct.c_double),
+                                                                    ("arch_maxwt",
+                                                                     ct.c_double)
     ]
 
 
@@ -324,13 +330,15 @@ def end_print(parent_theory, ndist, do_architecture):
     parent_theory.Qprint(table)
     
     if(do_architecture):
-        parent_theory.Qprint('<b>Architecture:</b>')
-        table='''<table border="1" width="100%">'''
-        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Linear', react_dist[ndist].contents.nlin / react_dist[ndist].contents.npoly * 100)
-        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / react_dist[ndist].contents.npoly * 100)
-        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('H', react_dist[ndist].contents.nH / react_dist[ndist].contents.npoly * 100)
-        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('7-arm', react_dist[ndist].contents.nH / react_dist[ndist].contents.npoly * 100)
-        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Comb', react_dist[ndist].contents.ncomb / react_dist[ndist].contents.npoly * 100)
-        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Other', react_dist[ndist].contents.nother / react_dist[ndist].contents.npoly * 100)
-        table+= '''</table><br>'''
-        parent_theory.Qprint(table)
+        norm = react_dist[ndist].contents.nsaved_arch / 100
+        if norm != 0:
+            parent_theory.Qprint('<b>Architecture:</b>')
+            table='''<table border="1" width="100%">'''
+            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Linear', react_dist[ndist].contents.nlin / norm)
+            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / norm)
+            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('H', react_dist[ndist].contents.nH / norm)
+            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('7-arm', react_dist[ndist].contents.nH / norm)
+            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Comb', react_dist[ndist].contents.ncomb / norm)
+            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Other', react_dist[ndist].contents.nother / norm)
+            table+= '''</table><br>'''
+            parent_theory.Qprint(table)

@@ -45,10 +45,12 @@
 bool do_prio_senio = false;
 bool flag_stop_all = false;
 
-void set_do_prio_senio(bool b){
+void set_do_prio_senio(bool b)
+{
     do_prio_senio = b;
 }
-void set_flag_stop_all(bool b){
+void set_flag_stop_all(bool b)
+{
     flag_stop_all = b;
 }
 
@@ -59,36 +61,47 @@ void print_arch_stats(int n1)
            react_dist[n1].nlin / n, react_dist[n1].nstar / n, react_dist[n1].nH / n, react_dist[n1].n7arm / n, react_dist[n1].ncomb / n, react_dist[n1].nother / n);
     printf("sumStat=%d, npoly=%d\n", react_dist[n1].nlin + react_dist[n1].nstar + react_dist[n1].nH + react_dist[n1].n7arm + react_dist[n1].ncomb + react_dist[n1].nother, react_dist[n1].npoly);
 }
-
-void save_architect(int n, int n1)
+void senio_prio(int npoly, int ndistr)
+{
+    calc_seniority(npoly);
+    calc_priority(npoly);
+    double wt = br_poly[npoly].tot_len * react_dist[ndistr].monmass;
+    if ((wt <= react_dist[ndistr].arch_maxwt) && (react_dist[ndistr].arch_minwt <= wt))
+    {
+        save_architect(npoly, ndistr);
+        react_dist[ndistr].nsaved_arch++;
+    }
+}
+void save_architect(int npol, int ndist)
 {
     int narm;
-    narm = br_poly[n].armnum;
+    narm = br_poly[npol].armnum;
     if (narm == 1)
     {
-        react_dist[n1].nlin++;
+        react_dist[ndist].nlin++;
     }
     else if (narm == 3)
     {
-        react_dist[n1].nstar++;
+        react_dist[ndist].nstar++;
     }
     else if (narm == 5)
     {
-        react_dist[n1].nH++;
+        react_dist[ndist].nH++;
     }
     else if (narm == 7)
     {
-        react_dist[n1].n7arm++;
+        react_dist[ndist].n7arm++;
     }
-    else if (br_poly[n].max_senio == br_poly[n].max_prio)
+    else if (br_poly[npol].max_senio == br_poly[npol].max_prio)
     {
-        react_dist[n1].ncomb++;
+        react_dist[ndist].ncomb++;
     }
     else
     {
-        react_dist[n1].nother++;
+        react_dist[ndist].nother++;
     }
 }
+
 
 void calc_seniority(int n)
 {

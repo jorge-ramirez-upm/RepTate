@@ -42,7 +42,7 @@
 #include "calc_architecture.h"
 #include "ran3.h"
 
-tobitabatch_global tb_global = { .tobbatchnumber = 0, .tobitabatcherrorflag = false};
+tobitabatch_global tb_global = {.tobbatchnumber = 0, .tobitabatcherrorflag = false};
 long iy3;
 
 /* local functions */
@@ -55,7 +55,6 @@ static void getconv2(double cur_conv, double *new_conv_out);
 /* local variables */
 static double fin_conv, tau, beta, Cs, Cb;
 static int scount, bcount, rlevel;
-
 
 void tobbatchstart(double pfin_conv, double ptau, double pbeta, double pCs, double pCb, int n)
 {
@@ -123,10 +122,9 @@ bool tobbatch(int n, int n1)
         br_poly[n].tot_len = len1;
         mass_rg2(first, 1.0, &len2, &jtot, &gfact);
         br_poly[n].gfactor = gfact;
-        if (do_prio_senio){
-            calc_seniority(n);
-            calc_priority(n);
-            save_architect(n, n1);
+        if (do_prio_senio)
+        {
+            senio_prio(n, n1);
         }
         // check to see whether to save the polymer
         bobcount(n, n1);

@@ -225,7 +225,7 @@ class BaseTheoryTobitaCSTR:
         nbins = int(np.round(self.parameters['nbin'].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
-        
+
         c_ndist = ct.c_int()
 
         #resize theory datatable
@@ -249,6 +249,9 @@ class BaseTheoryTobitaCSTR:
         ndist = self.ndist
         # rch.react_dist[ndist].contents.name = self.reactname #TODO: set the dist name in the C library
         rch.react_dist[ndist].contents.polysaved = False
+        rch.react_dist[ndist].contents.nsaved_arch = 0
+        rch.react_dist[ndist].contents.arch_minwt = self.xmin
+        rch.react_dist[ndist].contents.arch_maxwt = self.xmax
 
         if self.simexists:
             rch.return_dist_polys(ct.c_int(ndist))
@@ -353,7 +356,6 @@ class BaseTheoryTobitaCSTR:
                 tt.data[i - 1, 1] = rch.react_dist[ndist].contents.wt[i]
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
-            
             rch.end_print(self, ndist, self.do_priority_seniority)
 
             # self.Qprint('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)

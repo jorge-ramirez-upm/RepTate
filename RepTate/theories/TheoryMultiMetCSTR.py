@@ -234,6 +234,9 @@ class BaseTheoryMultiMetCSTR:
         ndist = self.ndist
         # rch.react_dist[ndist].contents.name = self.reactname #TODO: set the dist name in the C library
         rch.react_dist[ndist].contents.polysaved = False
+        rch.react_dist[ndist].contents.nsaved_arch = 0
+        rch.react_dist[ndist].contents.arch_minwt = self.xmin
+        rch.react_dist[ndist].contents.arch_maxwt = self.xmax
 
         if self.simexists:
             rch.return_dist_polys(ct.c_int(ndist))

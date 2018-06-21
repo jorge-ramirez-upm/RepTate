@@ -39,6 +39,7 @@ extern void calc_seniority(int n);
 extern void calc_priority(int n);
 extern void save_architect(int n, int n1);
 extern void print_arch_stats(int n1);
+void senio_prio(int npoly, int ndistr);
 void set_do_prio_senio(bool b);
 void set_flag_stop_all(bool b);
 

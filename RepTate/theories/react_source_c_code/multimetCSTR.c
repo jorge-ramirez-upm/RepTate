@@ -194,10 +194,9 @@ bool mulmetCSTR(int n, int n1)
         br_poly[n].tot_len = len1;
         mass_rg2(first, 1.0, &len2, &jtot, &gfact);
         br_poly[n].gfactor = gfact;
-        if (do_prio_senio){
-            calc_seniority(n);
-            calc_priority(n);
-            save_architect(n, n1);
+        if (do_prio_senio)
+        {
+            senio_prio(n, n1);
         }
         // check to see whether to save the polymer
         bobcount(n, n1);

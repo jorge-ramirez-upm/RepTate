@@ -60,7 +60,8 @@ typedef struct
     int first_poly, next, nummwdbins, numbobbins, bobbinmax, nsaved, npoly, simnumber;
     bool polysaved;
     char *name;
-    int nlin, nstar, nH, n5arm, n7arm, ncomb, nother;
+    int nlin, nstar, nH, n5arm, n7arm, ncomb, nother, nsaved_arch;
+    double arch_minwt, arch_maxwt;
 } reactresults;
 
 typedef struct
