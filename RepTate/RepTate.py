@@ -126,7 +126,7 @@ def start_RepTate(argv):
 
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
-    splash.showMessage("Loading RepTate...\nVersion " + ex.version + ' ' + ex.date)
+    splash.showMessage("Loading RepTate...")
 
     splash.finish(ex)
 

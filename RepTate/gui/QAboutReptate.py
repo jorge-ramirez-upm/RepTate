@@ -57,5 +57,5 @@ class AboutWindow(QDialog, Ui_AboutReptateWindow):
         """
         super(AboutWindow, self).__init__(parent)
         self.setupUi(self)
-        self.label_Version.setText('RepTate v'+version)
+        self.label.setText('RepTate v'+version)
     
