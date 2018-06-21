@@ -150,6 +150,11 @@ class BaseTheoryMultiMetCSTR:
         self.signal_request_arm.connect(rgt.request_more_arm)
         self.signal_mulmet_dialog.connect(rgt.launch_mulmet_dialog)
 
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        rch.set_flag_stop_all(ct.c_bool(True))
+        super().request_stop_computations()
+
     def set_extra_data(self, extra_data):
         """Called when loading a project, set saved parameter values"""
         self.numcat = extra_data['numcat']
@@ -203,7 +208,7 @@ class BaseTheoryMultiMetCSTR:
         Me = self.parameters['Me'].value
         nbins = int(np.round(self.parameters['nbin'].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
-
+        rch.set_flag_stop_all(ct.c_bool(False))
 
         c_ndist = ct.c_int()
 

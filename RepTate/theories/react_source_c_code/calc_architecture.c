@@ -43,9 +43,13 @@
 #include "calc_architecture.h"
 
 bool do_prio_senio = false;
+bool flag_stop_all = false;
 
 void set_do_prio_senio(bool b){
     do_prio_senio = b;
+}
+void set_flag_stop_all(bool b){
+    flag_stop_all = b;
 }
 
 void print_arch_stats(int n1)
@@ -93,7 +97,7 @@ void calc_seniority(int n)
     m = first;
     nassigned = 0;
     armnum = br_poly[n].armnum;
-    while (true)
+    while (!flag_stop_all)
     {
         // loop over all arms and determine if free-end (seniority=1)
         // if not, assign 0 (not determined)
@@ -119,7 +123,7 @@ void calc_seniority(int n)
 
     m = first;
     sen_level = 2;
-    while (true)
+    while (!flag_stop_all)
     {
         if (arm_pool[m].senio == 0)
         {
@@ -163,7 +167,7 @@ void calc_priority(int n)
     m = first;
     nassigned = 0;
     armnum = br_poly[n].armnum;
-    while (true)
+    while (!flag_stop_all)
     {
         // loop over all arms and determine if free-end (priority=1)
         // if not, assign 0 (not determined)
@@ -189,7 +193,7 @@ void calc_priority(int n)
 
     m = first;
     prio_level = 2;
-    while (true)
+    while (!flag_stop_all)
     {
         if (arm_pool[m].prio == 0)
         {

@@ -122,7 +122,6 @@ class BaseTheoryReactMix:
         ]  # 'react_dist[].simnumber' of theories in mix
         self.calcexists = False
         self.do_priority_seniority = False
-
         self.signal_mix_dialog.connect(rgt.launch_mix_dialog)
 
     def Calc(self, f=None):

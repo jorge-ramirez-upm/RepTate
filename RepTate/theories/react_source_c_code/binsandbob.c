@@ -89,16 +89,16 @@ void molbin(int n)
     {
         cplen = br_poly[i].tot_len * react_dist[n].monmass;
         ibin = trunc((log10(cplen) - lgmin) / lgstep) + 1;
-        wttot = wttot + 1.0;
-        m_w = m_w + cplen;
-        m_n = m_n + 1.0 / cplen;
-        brav = brav + br_poly[i].num_br / br_poly[i].tot_len;
+        wttot += 1.0;
+        m_w += cplen;
+        m_n += 1.0 / cplen;
+        brav += br_poly[i].num_br / br_poly[i].tot_len;
         if ((ibin <= react_dist[n].nummwdbins) && (ibin > 0))
         {
-            react_dist[n].wt[ibin] = react_dist[n].wt[ibin] + 1.0;
-            react_dist[n].avbr[ibin] = react_dist[n].avbr[ibin] + br_poly[i].num_br;
-            react_dist[n].avg[ibin] = react_dist[n].avg[ibin] + br_poly[i].gfactor;
-            react_dist[n].wmass[ibin] = react_dist[n].wmass[ibin] + br_poly[i].tot_len;
+            react_dist[n].wt[ibin] += 1.0;
+            react_dist[n].avbr[ibin] += br_poly[i].num_br;
+            react_dist[n].avg[ibin] += br_poly[i].gfactor;
+            react_dist[n].wmass[ibin] += br_poly[i].tot_len;
         }
         i = br_poly[i].nextpoly;
         if (i == 0)

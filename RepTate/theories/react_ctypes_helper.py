@@ -178,6 +178,9 @@ increase_dist_records_in_react_dist.restype = ct.c_bool
 set_do_prio_senio = react_lib.set_do_prio_senio
 set_do_prio_senio.restype = None
 
+set_flag_stop_all = react_lib.set_flag_stop_all
+set_flag_stop_all.restype = None
+
 #initialise lists
 react_dist = None
 
@@ -323,7 +326,7 @@ def end_print(parent_theory, ndist, do_architecture):
     if(do_architecture):
         parent_theory.Qprint('<b>Architecture:</b>')
         table='''<table border="1" width="100%">'''
-        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('lLnear', react_dist[ndist].contents.nlin / react_dist[ndist].contents.npoly * 100)
+        table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Linear', react_dist[ndist].contents.nlin / react_dist[ndist].contents.npoly * 100)
         table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / react_dist[ndist].contents.npoly * 100)
         table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('H', react_dist[ndist].contents.nH / react_dist[ndist].contents.npoly * 100)
         table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('7-arm', react_dist[ndist].contents.nH / react_dist[ndist].contents.npoly * 100)

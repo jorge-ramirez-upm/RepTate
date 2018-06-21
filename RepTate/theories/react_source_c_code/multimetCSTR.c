@@ -187,6 +187,7 @@ bool mulmetCSTR(int n, int n1)
             arm_pool[m1].armnum = anum;
             m1 = arm_pool[m1].down;
         }
+        br_poly[n].armnum = anum + 1;
         first = br_poly[n].first_end;
         mass_segs(first, &len1, &nsegs);
         br_poly[n].num_br = bcount;

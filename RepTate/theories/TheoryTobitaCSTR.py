@@ -174,6 +174,11 @@ class BaseTheoryTobitaCSTR:
         self.signal_request_polymer.connect(rgt.request_more_polymer)
         self.signal_request_arm.connect(rgt.request_more_arm)
 
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        rch.set_flag_stop_all(ct.c_bool(True))
+        super().request_stop_computations()
+
     def get_modes(self):
         """[summary]
         
@@ -219,7 +224,8 @@ class BaseTheoryTobitaCSTR:
         Me = self.parameters['Me'].value
         nbins = int(np.round(self.parameters['nbin'].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
-
+        rch.set_flag_stop_all(ct.c_bool(False))
+        
         c_ndist = ct.c_int()
 
         #resize theory datatable
