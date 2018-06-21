@@ -65,8 +65,8 @@ def request_more_polymer(parent_theory):
     new_max, success_increase_memory = handle_increase_records(
         parent_theory, 'polymer')
     if not success_increase_memory:
-        message = 'Ran out of storage for polymer records. Options to avoid this are:'
-        message += '(1) Reduce number of polymers requested'
+        message = '<b>Ran out of storage for polymer records.</b> Options to avoid this are:<br>'
+        message += '(1) Reduce number of polymers requested</b>'
         message += '(2) Close some other theories'
         parent_theory.Qprint(message)
     else:
@@ -82,10 +82,10 @@ def request_more_arm(parent_theory):
     new_max, success_increase_memory = handle_increase_records(
         parent_theory, 'arm')
     if not success_increase_memory:
-        message = 'Ran out of storage for arm records. Options to avoid this are:\n'
-        message += '(1) Reduce number of polymers requested\n'
-        message += '(2) Adjust BoB parameters so that fewer polymers are saved\n'
-        message += '(3) Close some other theories\n'
+        message = '<b>Ran out of storage for arm records.</b> Options to avoid this are:<br>'
+        message += '(1) Reduce number of polymers requested<br>'
+        message += '(2) Adjust BoB parameters so that fewer polymers are saved<br>'
+        message += '(3) Close some other theories<br>'
         message += '(4) Adjust parameters to avoid gelation'
         parent_theory.Qprint(message)
         # i = numtomake
@@ -108,7 +108,7 @@ def request_more_dist(parent_theory):
         parent_theory.handle_actionCalculate_Theory()
     else:
         parent_theory.Qprint(
-            'Too many theories open for internal storage.\nPlease close a theory or increase records"'
+            '<b>Too many theories open for internal storage.<b> Please close a theory or increase records"'
         )
 
 
@@ -117,9 +117,9 @@ def initialise_tool_bar(parent_theory):
     #disable buttons
     parent_theory.parent_dataset.actionMinimize_Error.setDisabled(True)
     # parent_theory.parent_dataset.actionCalculate_Theory.setDisabled(True)
-    # parent_theory.parent_dataset.actionShow_Limits.setDisabled(True)
-    # parent_theory.parent_dataset.actionVertical_Limits.setDisabled(True)
-    # parent_theory.parent_dataset.actionHorizontal_Limits.setDisabled(True)
+    parent_theory.parent_dataset.actionShow_Limits.setDisabled(True)
+    parent_theory.parent_dataset.actionVertical_Limits.setDisabled(True)
+    parent_theory.parent_dataset.actionHorizontal_Limits.setDisabled(True)
 
     ######toolbar
     tb = QToolBar()
@@ -150,6 +150,7 @@ def initialise_tool_bar(parent_theory):
 def handle_btn_prio_senio(parent_theory, checked):
     """Change do_priority_seniority"""
     parent_theory.do_priority_seniority = checked
+    parent_theory.parent_dataset.toggle_vertical_limits(checked)
 
 def theory_buttons_disabled(parent_theory, state):
     """
@@ -164,9 +165,8 @@ def handle_save_mix_configuration(parent_theory):
     Launch a dialog to select a filename where to save the polymer configurations.
     Then call the C routine 'multipolyconfwrite' that the data into the selected file
     """
-    stars = '*************************'
     if not parent_theory.calcexists:
-        msg = stars + '\nNo calculation performed yet\n' + stars
+        msg = "<font color=green><b>No simulation performed yet. Press \"Calculate\"</b></font>"
         parent_theory.Qprint(msg)
         return
 
@@ -177,7 +177,7 @@ def handle_save_mix_configuration(parent_theory):
             parent_theory.theory_simnumber[i] !=
             rch.react_dist[dist].contents.simnumber)
     if dist_state_check:
-        message = 'Simulations have changed since last calculation.\nRedo calculation first'
+        message = 'Simulations have changed since last calculation. Redo calculation first'
         msgbox = QMessageBox()
         msgbox.setWindowTitle("Error")
         msgbox.setText(message)
@@ -210,8 +210,7 @@ def handle_save_mix_configuration(parent_theory):
         ct.c_char_p(b_out_file), c_weights, c_dists,
         ct.c_int(parent_theory.n_inmix))
 
-    message = stars + '\nSaved %d polymers in %s\n' % (n_out,
-                                                       out_file[0]) + stars
+    message = "<hr>Saved %d polymers in %s" % (n_out, out_file[0])
     parent_theory.Qprint(message)
 
 
@@ -220,7 +219,6 @@ def handle_save_bob_configuration(parent_theory):
     Launch a dialog to select a filename where to save the polymer configurations.
     Then call the C routine 'polyconfwrite' that the data into the selected file
     """
-    stars = '*************************'
     if parent_theory.simexists:
         ndist = parent_theory.ndist
         rch.react_dist[ndist].contents.M_e = parent_theory.parameters[
@@ -240,35 +238,40 @@ def handle_save_bob_configuration(parent_theory):
         # output polymers
         b_out_file = out_file[0].encode('utf-8')
         rch.polyconfwrite(ct.c_int(ndist), ct.c_char_p(b_out_file))
-        message = stars + '\nSaved %d polymers in %s\n' % (
-            rch.react_dist[ndist].contents.nsaved, out_file[0]) + stars
+        message = "<hr>Saved %d polymers in %s" % (
+            rch.react_dist[ndist].contents.nsaved, out_file[0])
     else:
-        message = stars + '\nNo simulation performed yet\n' + stars
+        message = "<font color=green><b>No simulation performed yet. Press \"Calculate\"</b></font>"
     parent_theory.Qprint(message)
 
 
 def handle_edit_bob_settings(parent_theory):
     """Launch a dialog and modify the BoB binning settings if the user press "OK", else nothing happend."""
-    ndist = parent_theory.ndist
-    numbobbins = rch.react_dist[ndist].contents.numbobbins
-    bobmax = np.power(10, rch.react_dist[ndist].contents.boblgmax)
-    bobmin = np.power(10, rch.react_dist[ndist].contents.boblgmin)
-    bobbinmax = rch.react_dist[ndist].contents.bobbinmax
+    if parent_theory.simexists:
+        ndist = parent_theory.ndist
+        numbobbins = rch.react_dist[ndist].contents.numbobbins
+        bobmax = np.power(10, rch.react_dist[ndist].contents.boblgmax)
+        bobmin = np.power(10, rch.react_dist[ndist].contents.boblgmin)
+        bobbinmax = rch.react_dist[ndist].contents.bobbinmax
 
-    d = EditBobSettingsDialog(parent_theory, numbobbins, bobmax, bobmin,
-                              bobbinmax)
-    if d.exec_():
-        try:
-            numbobbins = int(d.e1.text())
-            bobmax = float(d.e2.text())
-            bobmin = float(d.e3.text())
-            bobbinmax = int(d.e4.text())
-        except ValueError:
-            pass
-        rch.react_dist[ndist].contents.numbobbins = ct.c_int(numbobbins)
-        rch.react_dist[ndist].contents.boblgmax = ct.c_double(np.log10(bobmax))
-        rch.react_dist[ndist].contents.boblgmin = ct.c_double(np.log10(bobmin))
-        rch.react_dist[ndist].contents.bobbinmax = ct.c_int(bobbinmax)
+        d = EditBobSettingsDialog(parent_theory, numbobbins, bobmax, bobmin,
+                                bobbinmax)
+        if d.exec_():
+            try:
+                numbobbins = int(d.e1.text())
+                bobmax = float(d.e2.text())
+                bobmin = float(d.e3.text())
+                bobbinmax = int(d.e4.text())
+            except ValueError:
+                pass
+            rch.react_dist[ndist].contents.numbobbins = ct.c_int(numbobbins)
+            rch.react_dist[ndist].contents.boblgmax = ct.c_double(np.log10(bobmax))
+            rch.react_dist[ndist].contents.boblgmin = ct.c_double(np.log10(bobmin))
+            rch.react_dist[ndist].contents.bobbinmax = ct.c_int(bobbinmax)
+    else:
+        message = "<font color=green><b>No simulation performed yet. Press \"Calculate\"</b></font>"
+        parent_theory.Qprint(message)
+
 
 
 def handle_increase_records(parent_theory, name):
@@ -304,7 +307,7 @@ def handle_increase_records(parent_theory, name):
         )  #call C routine to allocate more memory (using 'realloc')
         if not success:
             parent_theory.Qprint(
-                "Allocation of new memory failed\n%d %s records in memory" %
+                "Allocation of new memory failed. %d %s records in memory" %
                 (current_max, name))
         return new_max, success
     else:

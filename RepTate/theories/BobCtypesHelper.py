@@ -89,7 +89,7 @@ class BobCtypesHelper:
         """Function called by BoB from the C++ code. 
         Called when error occured during BoB execution
         """
-        err_msg = '\nERROR encountered in BoB:\n%s\n---------------' % (
+        err_msg = '<b>ERROR encountered in BoB:</b><br>%s<hr>'% (
             char.decode())
         self.parent_theory.Qprint(err_msg)
 

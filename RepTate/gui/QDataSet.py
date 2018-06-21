@@ -375,7 +375,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.theories[self.current_theory].set_xy_limits_visible(
                 False, False)  #hide xrange and yrange
 
-    def toggle_vertical_limits(self, bool):
+    def toggle_vertical_limits(self, checked):
         """Show/Hide the xrange selector for fit
         
         [description]
@@ -383,10 +383,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if self.current_theory:
             th = self.theories[self.current_theory]
             th.do_xrange("")
-            th.is_xrange_visible = self.actionVertical_Limits.isChecked()
+            th.is_xrange_visible = checked
             self.set_limit_icon()
 
-    def toggle_horizontal_limits(self):
+    def toggle_horizontal_limits(self, checked):
         """Show/Hide the yrange selector for fit
         
         [description]
@@ -394,7 +394,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if self.current_theory:
             th = self.theories[self.current_theory]
             th.do_yrange("")
-            th.is_yrange_visible = self.actionHorizontal_Limits.isChecked()
+            th.is_yrange_visible = checked
             self.set_limit_icon()
     
     def end_of_computation(self, th_name):

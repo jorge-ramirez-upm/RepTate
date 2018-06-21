@@ -391,6 +391,9 @@ class BaseTheoryMultiMetCSTR:
     def destructor(self):
         """Return arms to pool"""
         rch.return_dist(ct.c_int(self.ndist))
+    
+    def do_fit(self, line=''):
+        """No fitting allowed in this theory"""
 
     def do_error(self, line):
         pass

@@ -318,13 +318,13 @@ mulmetCSTR = react_lib.mulmetCSTR
 mulmetCSTR.restype = ct.c_bool
 
 def end_print(parent_theory, ndist, do_architecture):
-    parent_theory.Qprint('<hr style="border-top: dotted 2px;" /><b>Simulation statistics:</b>')
+    parent_theory.Qprint('<hr style="border-top: dotted 2px;" /><b>Simulation Results:</b>')
     table='''<table border="1" width="100%">'''
     table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer made', react_dist[ndist].contents.npoly)
     table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer saved', react_dist[ndist].contents.nsaved)
     table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Arm left in memory', pb_global.arms_left)
-    table+= '''<tr><td>%s</td><td>%.3g k</td></tr>'''% ('Mn', react_dist[ndist].contents.m_n / 1000.0)
-    table+= '''<tr><td>%s</td><td>%.3g k</td></tr>'''% ('Mw', react_dist[ndist].contents.m_w / 1000.0)
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mn (kg/mol)', react_dist[ndist].contents.m_n / 1000.0)
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mw (kg/mol)', react_dist[ndist].contents.m_w / 1000.0)
     table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('br/1000C', react_dist[ndist].contents.brav)
     table+= '''</table><br>'''
     parent_theory.Qprint(table)
@@ -332,7 +332,7 @@ def end_print(parent_theory, ndist, do_architecture):
     if(do_architecture):
         norm = react_dist[ndist].contents.nsaved_arch / 100
         if norm != 0:
-            parent_theory.Qprint('<b>Architecture:</b>')
+            parent_theory.Qprint('<b>Architecture of %d Polymers: %.3g &lt; M &lt; %.3g kg/mol:</b>' % (react_dist[ndist].contents.nsaved_arch, parent_theory.xmin/1000, parent_theory.xmax/1000))
             table='''<table border="1" width="100%">'''
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Linear', react_dist[ndist].contents.nlin / norm)
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / norm)

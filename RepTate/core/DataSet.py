@@ -711,7 +711,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         f = File(file_name=filename, file_type=file_type, parent_dataset=self, axarr=self.parent_application.axarr)
         f.file_parameters = fparams
         dt = f.data_table
-        dt.num_columns = dt.MAX_NUM_SERIES
+        dt.num_columns = 4
         dt.num_rows = len(xrange)
         dt.data = np.zeros((dt.num_rows, dt.num_columns))
         dt.data[:,0] = xrange
