@@ -43,6 +43,7 @@ import readline
 
 from CmdBase import CmdBase, CmdMode
 from ApplicationTTS import ApplicationTTS
+from ApplicationTTSFactors import ApplicationTTSFactors
 from ApplicationLVE import ApplicationLVE
 from ApplicationNLVE import ApplicationNLVE
 from ApplicationMWD import ApplicationMWD
@@ -102,21 +103,15 @@ class ApplicationManager(CmdBase):
         self.available_applications = OrderedDict()
         self.available_applications[ApplicationMWD.appname] = ApplicationMWD
         self.available_applications[ApplicationTTS.appname] = ApplicationTTS
+        self.available_applications[ApplicationTTSFactors.appname] = ApplicationTTSFactors
         self.available_applications[ApplicationLVE.appname] = ApplicationLVE
         self.available_applications[ApplicationNLVE.appname] = ApplicationNLVE
         self.available_applications[ApplicationGt.appname] = ApplicationGt
-        self.available_applications[
-            ApplicationCreep.appname] = ApplicationCreep
+        self.available_applications[ApplicationCreep.appname] = ApplicationCreep
         self.available_applications[ApplicationSANS.appname] = ApplicationSANS
-        self.available_applications[
-            ApplicationReact.appname] = ApplicationReact
-        self.available_applications[
-            ApplicationDielectric.appname] = ApplicationDielectric
-        self.available_applications[
-            ApplicationLAOS.appname] = ApplicationLAOS
-        # self.available_applications[ApplicationXY.apname] = ApplicationXY
-        #self.available_applications[ApplicationFRS_I.apname]=ApplicationFRS_I
-
+        self.available_applications[ApplicationReact.appname] = ApplicationReact
+        self.available_applications[ApplicationDielectric.appname] = ApplicationDielectric
+        self.available_applications[ApplicationLAOS.appname] = ApplicationLAOS
 
 
 # APPLICATION STUFF

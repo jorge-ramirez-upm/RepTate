@@ -510,6 +510,18 @@
     <string>Save Shift Factors</string>
    </property>
   </action>
+  <action name="actionAddDummyFiles">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-spiral-bound-booklet.png</normaloff>:/Images/Images/new_icons/icons8-spiral-bound-booklet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Dummy Files</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Set of Empty Files to Current Dataset</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>

@@ -701,6 +701,42 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             completions = [f for f in file_types if f.startswith(text)]
         return completions
 
+    def do_new_dummy_file(self, xrange=[], yval=0, fparams={}, file_type=None):
+        """Create File form xrange and file parameters
+        xrange: list of x points
+        yval: float
+        fparam: dict containing file parameter names and values
+        """
+        filename = "dummy_" + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + ".txt"
+        f = File(file_name=filename, file_type=file_type, parent_dataset=self, axarr=self.parent_application.axarr)
+        f.file_parameters = fparams
+        dt = f.data_table
+        dt.num_columns = dt.MAX_NUM_SERIES
+        dt.num_rows = len(xrange)
+        dt.data = np.zeros((dt.num_rows, dt.num_columns))
+        dt.data[:,0] = xrange
+        for i in range(1, dt.num_columns):
+            dt.data[:, i] = yval
+
+        unique = True
+        for file in self.files:
+            if f.file_name_short == file.file_name_short:  #check if file already exists in current ds
+                unique = False
+        if unique:
+            self.files.append(f)
+            self.current_file = f
+            for th_name in self.theories:
+                #add a theory table
+                self.theories[th_name].tables[
+                    f.file_name_short] = DataTable(
+                        self.parent_application.axarr,
+                        "TH_" + f.file_name_short)
+                self.theories[th_name].function(f)
+            if CmdBase.mode == CmdMode.GUI:
+                return f, True
+        else:
+            return None, False
+
     def do_open(self, line):
         """Open file(s)
         

@@ -75,6 +75,33 @@ from SpreadsheetWidget import SpreadsheetWidget
 PATH = dirname(abspath(__file__))
 Ui_AppWindow, QMainWindow = loadUiType(join(PATH,'QApplicationWindow.ui'))
 Ui_EditAnnotation, QDialog = loadUiType(join(PATH,'annotationedit.ui'))
+Ui_AddDummyFiles, QDialog = loadUiType(join(PATH,'dummyfilesDialog.ui'))
+
+class AddDummyFiles(QDialog, Ui_AddDummyFiles):
+    def __init__(self, parent=None, filetype=None):
+        super(AddDummyFiles, self).__init__(parent)
+        QDialog.__init__(self)
+        Ui_AddDummyFiles.__init__(self)
+        self.setupUi(self)
+        
+        for p in filetype.basic_file_parameters:
+            item = QTreeWidgetItem(self.parameterTreeWidget,[p,"0","1","10"])
+            item.setCheckState(0, 0)
+            item.setIcon(0, QIcon())
+            item.setFlags(item.flags() | Qt.ItemIsEditable)
+            cb = QComboBox(self.parameterTreeWidget)
+            cb.addItems(["Linear", "Log"])
+            self.parameterTreeWidget.setItemWidget(item, 4, cb)
+            
+        for i in range(4):
+            self.parameterTreeWidget.setColumnWidth(i,60)
+
+        connection_id = self.parameterTreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
+            
+    def handle_itemDoubleClicked(self, item, column):
+        if (column>0 and column<4):
+            self.parameterTreeWidget.editItem(item, column)
+            
 
 class EditAnnotation(QDialog, Ui_EditAnnotation):
     def __init__(self, parent=None, annotation=None):
@@ -331,7 +358,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb = QToolBar()
         tb.setIconSize(QtCore.QSize(24,24))
         tb.addAction(self.actionNew_Empty_Dataset)
-        tb.addAction(self.actionNew_Dataset_From_File)
+
+        #tb.addAction(self.actionNew_Dataset_From_File)
+        tbut = QToolButton()
+        tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut.setDefaultAction(self.actionNew_Dataset_From_File)
+        menu = QMenu()
+        menu.addAction(self.actionAddDummyFiles)
+        tbut.setMenu(menu)
+        tb.addWidget(tbut)
         tb.addAction(self.actionView_All_Sets)
         tb.addAction(self.actionMarkerSettings)
         tb.addAction(self.actionReload_Data)
@@ -385,6 +420,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
+        connection_id = self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
         connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
 
@@ -1423,10 +1459,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         lnew.insert(0, file_name_short)
         newitem = DataSetWidgetItem(ds.DataSettreeWidget, lnew)
         newitem.setCheckState(0, 2)
-        
         self.dataset_actions_disabled(False) #activate buttons
-
-
         
     def handle_createNew_Empty_Dataset(self):
         """Called when button 'new dataset' pushed"""
@@ -1485,6 +1518,67 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not paths_to_open:
             return
         self.new_tables_from_files(paths_to_open)
+        
+    def addDummyFiles(self):
+        """Add dummy files to dataset"""
+        if self.DataSettabWidget.count() == 0:
+                self.createNew_Empty_Dataset()
+        ds = self.DataSettabWidget.currentWidget()
+        ftype = self.filetypes[list(self.filetypes.keys())[0]]
+        d = AddDummyFiles(self, ftype)
+        parameterstochange = []
+        parameterrange = []
+        parameterstokeepconstant = []
+        parametervalue = []
+        if d.exec_():         
+            for i in range(d.parameterTreeWidget.topLevelItemCount()):
+                item = d.parameterTreeWidget.topLevelItem(i)
+                if item.checkState(0):
+                    parameterstochange.append(item.text(0))
+                    pmin = float(item.text(1))
+                    pmax = float(item.text(2))
+                    npoints = int(item.text(3))
+                    cb = d.parameterTreeWidget.itemWidget(item, 4)
+                    if cb.currentText() == 'Log':
+                        prange = np.logspace(np.log10(pmin), np.log10(pmax), npoints)
+                    else:
+                        prange = np.linspace(pmin, pmax, npoints)
+                    parameterrange.append(prange)
+                else:
+                    parameterstokeepconstant.append(item.text(0))
+                    parametervalue.append(float(item.text(1)))
+                    
+            nparameterstochange = len(parameterstochange)
+            paramsnames = parameterstochange + parameterstokeepconstant
+            if nparameterstochange==0:
+                cases = [np.array(parametervalue)]
+            elif nparameterstochange==1:
+                cases = []
+                for i in range(len(parameterrange[0])):
+                    case = [parameterrange[0][i]] + parametervalue
+                    cases.append(np.array(case))
+            else:
+                for val in parametervalue:
+                    parameterrange.append(np.array([val]))
+                cases = list(np.array(np.meshgrid(*parameterrange)).T.reshape(-1,len(parameterrange)))
+                                
+            # print(paramsnames)
+            # print(cases)
+            yval = float(d.yvaluesLineEdit.text())
+            xmin = float(d.xminLineEdit.text())
+            xmax = float(d.xmaxLineEdit.text())
+            npoints = int(d.npointsLineEdit.text())
+            if d.scaleComboBox.currentText() == 'Log':
+                xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
+            else:
+                xrange = np.linspace(xmin, xmax, npoints)
+            for c in cases:
+                fparams = {}
+                for i, pname in enumerate(paramsnames):
+                    fparams[pname] = c[i]
+                f, success = ds.do_new_dummy_file(xrange=xrange, yval=yval, fparams=fparams, file_type=ftype)
+                if success:
+                    self.addTableToCurrentDataSet(f, ftype.extension)
         
     def new_tables_from_files(self, paths_to_open):
         """[summary]
@@ -1641,7 +1735,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 fill=False, linewidth=1., linestyle=':', color='gray')
             self._event.inaxes.add_patch(self._patch)
 
+            canvas = self._patch.figure.canvas
+            axes = self._patch.axes
+            self._patch.set_animated(True)
+            canvas.draw()
+            self.background = canvas.copy_from_bbox(self._patch.axes.bbox)
+            axes.draw_artist(self._patch)
+            canvas.update()
+
         elif event.name == 'button_release_event':  # end drag
+            self.background = None
             self._patch.remove()
             del self._patch
 
@@ -1654,32 +1757,64 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
             for ax in x_axes:
                 pixel_to_data = ax.transData.inverted()
-                begin_pt = pixel_to_data.transform_point((event.x, event.y))
-                end_pt = pixel_to_data.transform_point(
+                end_pt = pixel_to_data.transform_point((event.x, event.y))
+                begin_pt = pixel_to_data.transform_point(
                     (self._event.x, self._event.y))
 
                 min_ = min(begin_pt[0], end_pt[0])
                 max_ = max(begin_pt[0], end_pt[0])
-                if not ax.xaxis_inverted():
-                    ax.set_xlim(min_, max_)
+                if (end_pt[0]>begin_pt[0]):
+                    if not ax.xaxis_inverted():
+                        ax.set_xlim(min_, max_)
+                    else:
+                        ax.set_xlim(max_, min_)
                 else:
-                    ax.set_xlim(max_, min_)
+                    min_now, max_now = ax.get_xlim() 
+                    if ax.get_xscale() == 'log':
+                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                        if not ax.xaxis_inverted():
+                            ax.set_xlim(min_now/fac, max_now*fac)
+                        else:
+                            ax.set_xlim(max_now*fac, min_now/fac)
+                    else:
+                        dx = max_ - min_
+                        if not ax.xaxis_inverted():
+                            ax.set_xlim(min_now-dx, max_now+dx)
+                        else:
+                            ax.set_xlim(max_now+dx, min_now-dx)
 
             for ax in y_axes:
                 pixel_to_data = ax.transData.inverted()
-                begin_pt = pixel_to_data.transform_point((event.x, event.y))
-                end_pt = pixel_to_data.transform_point(
+                end_pt = pixel_to_data.transform_point((event.x, event.y))
+                begin_pt = pixel_to_data.transform_point(
                     (self._event.x, self._event.y))
 
                 min_ = min(begin_pt[1], end_pt[1])
                 max_ = max(begin_pt[1], end_pt[1])
-                if not ax.yaxis_inverted():
-                    ax.set_ylim(min_, max_)
+                if (end_pt[1]<begin_pt[1]):
+                    if not ax.yaxis_inverted():
+                        ax.set_ylim(min_, max_)
+                    else:
+                        ax.set_ylim(max_, min_)
                 else:
-                    ax.set_ylim(max_, min_)
+                    min_now, max_now = ax.get_ylim() 
+                    if ax.get_yscale() == 'log':
+                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                        if not ax.yaxis_inverted():
+                            ax.set_ylim(min_now/fac, max_now*fac)
+                        else:
+                            ax.set_ylim(max_now*fac, min_now/fac)
+                    else:
+                        dy = max_ - min_
+                        if not ax.yaxis_inverted():
+                            ax.set_ylim(min_now-dy, max_now+dy)
+                        else:
+                            ax.set_ylim(max_now+dy, min_now-dy)
 
             self._event = None
             self._was_zooming = True
+            self.figure.canvas.draw()
+
 
         elif event.name == 'motion_notify_event':  # drag
             if self._event is None:
@@ -1691,7 +1826,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self._patch.set_width(event.xdata - self._event.xdata)
             self._patch.set_height(event.ydata - self._event.ydata)
 
-        self.figure.canvas.draw()
+            canvas = self._patch.figure.canvas
+            axes = self._patch.axes
+            canvas.restore_region(self.background)
+            axes.draw_artist(self._patch)
+            canvas.update()
+
+
 
     def open_figure_popup_menu(self, event):
         """Open a menu to let the user copy data or chart to clipboard"""
@@ -1714,7 +1855,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self._annotation_done = False
         add_annotation = main_menu.addAction(self.actionAdd_Annotation)
         connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
-        refresh_chart_action = main_menu.addAction("Refresh plot")
+        refresh_chart_action = main_menu.addAction("Reset view(s)")
         refresh_chart_action.triggered.connect(self.refresh_plot)
 
         #launch menu

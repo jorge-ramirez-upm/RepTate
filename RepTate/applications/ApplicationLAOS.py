@@ -132,7 +132,7 @@ class BaseApplicationLAOS:
             name='content of files',
             extension='laos',
             description='file containing laos data',
-            col_names=['gamma(t)', 'sigma(t)'],
+            col_names=['gamma', 'sigma', 'time'],
             basic_file_parameters=['omega', 'gamma'],
             col_units=['-', 'Pa'])
         self.filetypes[

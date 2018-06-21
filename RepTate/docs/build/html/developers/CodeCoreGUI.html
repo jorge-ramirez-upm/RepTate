@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Core classes (Graphical User Interface) &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.2 20180503',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -33,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -86,12 +77,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -114,7 +107,7 @@ ApplicationManager.</p>
 <dl class="class">
 <dt id="QApplicationManager.QApplicationManager">
 <em class="property">class </em><code class="descclassname">QApplicationManager.</code><code class="descname">QApplicationManager</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#ApplicationManager.ApplicationManager" title="ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal"><span class="pre">ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_ReptateMainWindow</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#ApplicationManager.ApplicationManager" title="ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_ReptateMainWindow</span></code></p>
 <p>Main Reptate window and application manager</p>
 <p>[description]</p>
 <dl class="method">
@@ -324,9 +317,36 @@ Maxwell modes</p>
 <p>Module that defines the basic GUI class from which all GUI applications are derived.
 It is the GUI counterpart of Application.</p>
 <dl class="class">
+<dt id="QApplicationWindow.EditAnnotation">
+<em class="property">class </em><code class="descclassname">QApplicationWindow.</code><code class="descname">EditAnnotation</code><span class="sig-paren">(</span><em>parent=None</em>, <em>annotation=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Dialog</span></code></p>
+<dl class="method">
+<dt id="QApplicationWindow.EditAnnotation.apply_changes">
+<code class="descname">apply_changes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.apply_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.apply_changes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.EditAnnotation.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.EditAnnotation.handle_pickFontColor">
+<code class="descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.EditAnnotation.showColorDialog">
+<code class="descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.showColorDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the color picker and return the picked QtColor or <cite>None</cite></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="QApplicationWindow.QApplicationWindow">
 <em class="property">class </em><code class="descclassname">QApplicationWindow.</code><code class="descname">QApplicationWindow</code><span class="sig-paren">(</span><em>name='Application Template'</em>, <em>parent=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -463,6 +483,11 @@ and reset the shift buttons in the data inspector</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.edit_annotation">
+<code class="descname">edit_annotation</code><span class="sig-paren">(</span><em>artist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.edit_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.edit_annotation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.finish_shifts">
 <code class="descname">finish_shifts</code><span class="sig-paren">(</span><em>dx</em>, <em>dy</em>, <em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.finish_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.finish_shifts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -511,12 +536,6 @@ the marker properties: size, shape, color, fill</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.handle_actionShow_Legend">
-<code class="descname">handle_actionShow_Legend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionShow_Legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionShow_Legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>toogle view/hide the legend</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionViewShiftTriggered">
 <code class="descname">handle_actionViewShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionViewShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionViewShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -525,20 +544,6 @@ the marker properties: size, shape, color, fill</p>
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets">
 <code class="descname">handle_actionView_All_Sets</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_Sets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show all datasets simultaneously</p>
-<p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>checked {[type]} – [description]</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.handle_annotation">
-<code class="descname">handle_annotation</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_annotation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draw and hide the annotation box.</p>
 <p>[description]</p>
 <dl class="docutils">
 <dt>Arguments:</dt>
@@ -636,6 +641,13 @@ RGB format in the dataset legend info.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.handle_pickFontColor">
+<code class="descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the color picker and save the selected legend face color in 
+RGB format in the dataset legend info.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_pickThColor">
 <code class="descname">handle_pickThColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickThColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickThColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected theory line color in 
@@ -653,20 +665,6 @@ RGB format used for gradient color type</p>
 <dt id="QApplicationWindow.QApplicationWindow.handle_toolTabMoved">
 <code class="descname">handle_toolTabMoved</code><span class="sig-paren">(</span><em>f</em>, <em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_toolTabMoved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_toolTabMoved" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.mpl_motion_event">
-<code class="descname">mpl_motion_event</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.mpl_motion_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.mpl_motion_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>event {[type]} – [description]</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.new_tables_from_files">
@@ -689,17 +687,25 @@ RGB format used for gradient color type</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.on_plot_hover">
-<code class="descname">on_plot_hover</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_plot_hover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_plot_hover" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>event {[type]} – [description]</li>
-</ul>
-</dd>
-</dl>
+<dt id="QApplicationWindow.QApplicationWindow.on_motion">
+<code class="descname">on_motion</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_motion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.on_press">
+<code class="descname">on_press</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_press" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.onpick">
+<code class="descname">onpick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onpick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when clicking on a plot/artist</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.onrelease">
+<code class="descname">onrelease</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onrelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onrelease" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when releasing mouse</p>
 </dd></dl>
 
 <dl class="method">
@@ -721,6 +727,12 @@ RGB format used for gradient color type</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.open_figure_popup_menu">
+<code class="descname">open_figure_popup_menu</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.open_figure_popup_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.open_figure_popup_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a menu to let the user copy data or chart to clipboard</p>
 </dd></dl>
 
 <dl class="method">
@@ -825,12 +837,17 @@ with filled or empty markers, depending on the user’s choice</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.zoom_wheel">
+<code class="descname">zoom_wheel</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.zoom_wheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.zoom_wheel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="QApplicationWindow.ViewShiftFactors">
 <em class="property">class </em><code class="descclassname">QApplicationWindow.</code><code class="descname">ViewShiftFactors</code><span class="sig-paren">(</span><em>parent=None</em>, <em>fnames=None</em>, <em>factorsx=None</em>, <em>factorsy=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#ViewShiftFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.ViewShiftFactors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 </dd></dl>
 
 </div>
@@ -841,7 +858,7 @@ with filled or empty markers, depending on the user’s choice</p>
 <dl class="class">
 <dt id="QDataSet.EditFileParametersDialog">
 <em class="property">class </em><code class="descclassname">QDataSet.</code><code class="descname">EditFileParametersDialog</code><span class="sig-paren">(</span><em>parent</em>, <em>file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 <p>Create the form that is used to modify the file parameters</p>
 <dl class="method">
 <dt id="QDataSet.EditFileParametersDialog.createFormGroupBox">
@@ -854,13 +871,13 @@ with filled or empty markers, depending on the user’s choice</p>
 <dl class="class">
 <dt id="QDataSet.EditFileParametersDialog_">
 <em class="property">class </em><code class="descclassname">QDataSet.</code><code class="descname">EditFileParametersDialog_</code><span class="sig-paren">(</span><em>parent=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="QDataSet.QDataSet">
 <em class="property">class </em><code class="descclassname">QDataSet.</code><code class="descname">QDataSet</code><span class="sig-paren">(</span><em>name='QDataSet'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#DataSet.DataSet" title="DataSet.DataSet"><code class="xref py py-class docutils literal"><span class="pre">DataSet.DataSet</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_Form</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#DataSet.DataSet" title="DataSet.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet.DataSet</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Form</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1135,7 +1152,7 @@ Two tabs can share the same name</p>
 <dl class="class">
 <dt id="QTheory.CalculationThread">
 <em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">CalculationThread</code><span class="sig-paren">(</span><em>fthread</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#CalculationThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.CalculationThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtCore.QObject</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtCore.QObject</span></code></p>
 <dl class="attribute">
 <dt id="QTheory.CalculationThread.sig_done">
 <code class="descname">sig_done</code><a class="headerlink" href="#QTheory.CalculationThread.sig_done" title="Permalink to this definition">¶</a></dt>
@@ -1151,7 +1168,7 @@ Two tabs can share the same name</p>
 <dl class="class">
 <dt id="QTheory.EditThParametersDialog">
 <em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">EditThParametersDialog</code><span class="sig-paren">(</span><em>parent</em>, <em>p_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#EditThParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.EditThParametersDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 <p>Create the form that is used to modify the theorys parameters</p>
 <dl class="method">
 <dt id="QTheory.EditThParametersDialog.create_param_tab">
@@ -1164,13 +1181,13 @@ Two tabs can share the same name</p>
 <dl class="class">
 <dt id="QTheory.GetModesDialog">
 <em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">GetModesDialog</code><span class="sig-paren">(</span><em>parent=None</em>, <em>th_dict={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#GetModesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.GetModesDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="QTheory.QTheory">
 <em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">QTheory</code><span class="sig-paren">(</span><em>name='QTheory'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Ui_TheoryTab</span></code>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_TheoryTab</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -1204,7 +1221,8 @@ Two tabs can share the same name</p>
 <dl class="method">
 <dt id="QTheory.QTheory.handle_actionCalculate_Theory">
 <code class="descname">handle_actionCalculate_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.handle_actionCalculate_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.handle_actionCalculate_Theory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Used only in non GUI mode</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.handle_actionMinimize_Error">
@@ -1313,7 +1331,7 @@ Or edit all parameters dialog if parameter name is double clicked</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

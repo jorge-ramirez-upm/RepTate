@@ -446,7 +446,7 @@
   <action name="actionTTSFactors">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Icons/Images/new_icons/TTSFactors.png</normaloff>:/Icons/Images/new_icons/TTSFactors.png</iconset>
+     <normaloff>:/Icons/Images/new_icons/TTSF.png</normaloff>:/Icons/Images/new_icons/TTSF.png</iconset>
    </property>
    <property name="text">
     <string>TTS Factors</string>

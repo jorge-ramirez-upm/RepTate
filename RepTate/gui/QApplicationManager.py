@@ -167,7 +167,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         # Generate action buttons from dict of available applications
         self.actionMWD.triggered.connect(lambda: self.handle_new_app('MWD'))
         self.actionTTS.triggered.connect(lambda: self.handle_new_app('TTS'))
-        self.actionTTSFactors.triggered.connect(lambda: self.handle_app_coming_soon('TTS Factors'))
+        self.actionTTSFactors.triggered.connect(lambda: self.handle_new_app('TTSF'))
         self.actionLVE.triggered.connect(lambda: self.handle_new_app('LVE'))
         self.actionNLVE.triggered.connect(lambda: self.handle_new_app('NLVE'))
         self.actionGt.triggered.connect(lambda: self.handle_new_app('Gt'))
