@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>692</width>
-    <height>469</height>
+    <width>757</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,10 +44,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="spacing">
-       <number>0</number>
-      </property>
+     <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -60,36 +57,43 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="QLabel" name="label_Version">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="minimumSize">
+         <size>
+          <width>353</width>
+          <height>447</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>353</width>
+          <height>447</height>
+         </size>
+        </property>
         <property name="font">
          <font>
-          <pointsize>12</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/Images/Images/logo.png);</string>
+        </property>
         <property name="text">
-         <string>TextLabel</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="pixmap">
-         <pixmap resource="About.qrc">:/Images/Images/logo.png</pixmap>
+         <string>fdfdf</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="margin">
+         <number>4</number>
         </property>
        </widget>
       </item>
@@ -98,6 +102,18 @@
    </item>
    <item>
     <widget class="QFrame" name="frame_2">
+     <property name="minimumSize">
+      <size>
+       <width>402</width>
+       <height>449</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>402</width>
+       <height>449</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>

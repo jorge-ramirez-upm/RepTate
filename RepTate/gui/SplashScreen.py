@@ -37,8 +37,9 @@ Module that defines the GUI Splashscreen that is loaded during the startup of Re
 """ 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QColor
-from PyQt5.QtWidgets import QSplashScreen, QApplication
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QSplashScreen, QApplication, QLabel
+from PyQt5.QtGui import QPixmap, QFont
+import Version
 
 class SplashScreen(QSplashScreen):
     """Class to define a splash screen to show loading progress
@@ -54,6 +55,16 @@ class SplashScreen(QSplashScreen):
         QSplashScreen.__init__(
             self,
             QPixmap(":/Images/Images/logo.png"))
+        lblVersion = QLabel(self)
+        lblVersion.setText("RepTate Version "+Version.VERSION+ ' ' + Version.DATE +
+            "\n\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid\n\u00A9 Victor Boudara, University of Leeds, 2018\n")
+        font = self.font()
+        font.setPixelSize(12)
+        font.setWeight(QFont.Bold)
+        self.setFont(font)
+        lblVersion.adjustSize()
+        #lblVersion.setStyleSheet("QLabel { color : white; }")
+        #lblVersion.move(425 - lblVersion.width(), 195)
         QApplication.flush()
 
     def showMessage(self, msg):
@@ -79,3 +90,6 @@ class SplashScreen(QSplashScreen):
         """
         QSplashScreen.clearMessage(self)
         QApplication.processEvents()
+        
+    def mousePressEvent(self, event):
+        self.hide()
