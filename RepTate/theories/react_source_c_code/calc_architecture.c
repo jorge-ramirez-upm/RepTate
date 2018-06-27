@@ -74,7 +74,7 @@ void senio_prio(int npoly, int ndistr)
 }
 void save_architect(int npol, int ndist)
 {
-    int narm;
+    int narm, first, m;
     narm = br_poly[npol].armnum;
     if (narm == 1)
     {
@@ -92,16 +92,25 @@ void save_architect(int npol, int ndist)
     {
         react_dist[ndist].n7arm++;
     }
-    else if (br_poly[npol].max_senio == br_poly[npol].max_prio)
-    {
-        react_dist[ndist].ncomb++;
-    }
     else
     {
-        react_dist[ndist].nother++;
+        first = br_poly[npol].first_end;
+        m = first;
+        while (!flag_stop_all)
+        {
+            if (arm_pool[m].senio != arm_pool[m].prio)
+            {
+                // it is not a comb
+                react_dist[ndist].nother++;
+                return;
+            }
+            m = arm_pool[m].down;
+            if (m == first)
+                break;
+        }
+        react_dist[ndist].ncomb++;
     }
 }
-
 
 void calc_seniority(int n)
 {
