@@ -41,9 +41,13 @@
 #include <stdio.h>
 #include "polybits.h"
 #include "calc_architecture.h"
+#define N_PS 10000
 
 bool do_prio_senio = false;
 bool flag_stop_all = false;
+
+static double prio_v_senio[N_PS];
+static double nprio_v_senio[N_PS];
 
 void set_do_prio_senio(bool b)
 {
@@ -72,9 +76,40 @@ void senio_prio(int npoly, int ndistr)
         react_dist[ndistr].nsaved_arch++;
     }
 }
+
+void init_bin_prio_vs_senio()
+{
+    int i;
+    for (int i = 0; i < N_PS; i++)
+        prio_v_senio[i] = 0;
+}
+
+void bin_prio_vs_senio(int npol, int ndist)
+{
+    int first, m, s, p;
+    double totlen, phi;
+    first = br_poly[npol].first_end;
+    m = first;
+    totlen = br_poly[npol].tot_len;
+
+    while (!flag_stop_all)
+    {
+        p = arm_pool[m].prio;
+        s = arm_pool[m].senio;
+        phi = arm_pool[first].arm_len / totlen;
+        prio_v_senio[s] += phi * p;
+        nprio_v_senio[s] += phi;
+
+        m = arm_pool[m].down;
+        if (m == first)
+            break;
+    }
+}
+
 void save_architect(int npol, int ndist)
 {
     int narm, first, m;
+    int mL1, mL2, mR1, mR2;
     narm = br_poly[npol].armnum;
     if (narm == 1)
     {
@@ -98,11 +133,18 @@ void save_architect(int npol, int ndist)
         m = first;
         while (!flag_stop_all)
         {
-            if (arm_pool[m].senio != arm_pool[m].prio)
+            mL1 = abs(arm_pool[m].L1);
+            mL2 = abs(arm_pool[m].L2);
+            mR1 = abs(arm_pool[m].R1);
+            mR2 = abs(arm_pool[m].R2);
+            if (arm_pool[m].senio > 1)
             {
-                // it is not a comb
-                react_dist[ndist].nother++;
-                return;
+                if (((arm_pool[mL1].senio != 1) && (arm_pool[mL2].senio != 1)) || ((arm_pool[mR1].senio != 1) && (arm_pool[mR2].senio != 1)))
+                {
+                    // it is not a comb
+                    react_dist[ndist].nother++;
+                    return;
+                }
             }
             m = arm_pool[m].down;
             if (m == first)
