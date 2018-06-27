@@ -394,6 +394,18 @@ class BaseTheoryMultiMetCSTR:
     
     def do_fit(self, line=''):
         """No fitting allowed in this theory"""
+        if self.xrange.get_visible():
+            if self.xmin > self.xmax:
+                temp = self.xmin
+                self.xmin = self.xmax
+                self.xmax = temp
+            self.Qprint("<b>xrange</b>=[%0.3g, %0.3g]" % (self.xmin, self.xmax))
+        if self.yrange.get_visible():
+            if self.ymin > self.ymax:
+                temp = self.ymin
+                self.ymin = self.ymax
+                self.ymax = temp
+            self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
     def do_error(self, line):
         pass
