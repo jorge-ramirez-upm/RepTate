@@ -329,6 +329,8 @@ mulmetCSTR.restype = ct.c_bool
 ############
 
 def end_print(parent_theory, ndist, do_architecture):
+    """Print the simulation information at the end of the run. 
+    Print priority and seniority information if needed"""
     parent_theory.Qprint('<hr style="border-top: dotted 2px;" /><b>Simulation Results:</b>')
     table='''<table border="1" width="100%">'''
     table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer made', react_dist[ndist].contents.npoly)
@@ -355,6 +357,8 @@ def end_print(parent_theory, ndist, do_architecture):
             parent_theory.Qprint(table)
 
 def prio_v_senio(parent_theory, f, ndist, do_architecture):
+    """Get the priority vs seniority form C and save it in the
+    theory DataTable"""
     if not do_architecture:
         return
     import matplotlib.pyplot as plt
@@ -365,7 +369,6 @@ def prio_v_senio(parent_theory, f, ndist, do_architecture):
         if val == 0:
             break
         pvs.append(val)
-    print(pvs)
     tt = parent_theory.tables[f.file_name_short]
     nrow = len(tt.data[:, 0])
     if nrow < len(pvs):
@@ -373,3 +376,4 @@ def prio_v_senio(parent_theory, f, ndist, do_architecture):
         tt.num_rows = len(pvs)
     tt.data[:, 4] = np.arange(1, tt.num_rows + 1)
     tt.data[:len(pvs), 5] = pvs[:]
+    tt.data[len(pvs):, 5] = np.nan

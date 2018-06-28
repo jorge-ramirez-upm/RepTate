@@ -382,7 +382,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         if self.current_theory:
             th = self.theories[self.current_theory]
-            th.do_xrange("")
+            th.do_xrange("", checked)
             th.is_xrange_visible = checked
             self.set_limit_icon()
 
@@ -393,7 +393,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         if self.current_theory:
             th = self.theories[self.current_theory]
-            th.do_yrange("")
+            th.do_yrange("", checked)
             th.is_yrange_visible = checked
             self.set_limit_icon()
     

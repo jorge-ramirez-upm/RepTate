@@ -160,7 +160,7 @@ class BaseApplicationReact:
             view_proc=self.view_br_1000C,
             n=1,
             snames=["br/1000C"])
-        self.thviews_prio_v_senio = View(
+        self.views['prio_v_senio'] = View(
             name="prio_v_senio",
             description="Average priority vs seniority",
             x_label="Seniority",
@@ -175,9 +175,11 @@ class BaseApplicationReact:
 
         #set multiviews
         self.multiviews = [
-            self.views["w(M)"], self.views["g(M)"], self.views['br/1000C'], self.thviews_prio_v_senio
+            self.views["w(M)"], self.views["g(M)"], self.views['br/1000C'], self.views['prio_v_senio']
         ]  #default view order in multiplot views
         self.nplots = len(self.multiviews)
+        # default without extra plot
+        self.multiplots.reorg_fig(self.nplots - 1)
 
         # FILES
         # set the type of files that ApplicationReact can open
@@ -202,6 +204,7 @@ class BaseApplicationReact:
 
         #set the current view
         self.set_views()
+        self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
 
     def view_wM(self, dt, file_parameters):
         """Molecular weight distribution :math:`w(M)` vs molecular weight :math:`M` (in logarithmic scale)
@@ -253,10 +256,11 @@ class BaseApplicationReact:
     def thview_prio_v_senio(self, dt, file_parameters):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
+        y[:] = np.nan
         try:
             x[:, 0] = dt.data[:, 4]
             y[:, 0] = dt.data[:, 5]
-        except IndexError:
+        except IndexError: 
             pass
         return x, y, True
 

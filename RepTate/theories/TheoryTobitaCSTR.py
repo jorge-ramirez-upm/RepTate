@@ -367,6 +367,9 @@ class BaseTheoryTobitaCSTR:
         # self.Qprint('%d arm records left in memory' % rch.pb_global.arms_left)
         # rch.print_arch_stats(ct.c_int(ndist))
         return calc
+    
+    def show_theory_extras(self, checked):
+        rgt.show_theory_extras(self, checked)
 
     def destructor(self):
         """Return arms to pool"""
