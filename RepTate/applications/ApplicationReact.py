@@ -95,7 +95,7 @@ class BaseApplicationReact:
         from TheoryCreatePolyconf import TheoryCreatePolyconf
 
         super().__init__(
-            name, parent, nplots=3,
+            name, parent, nplots=4,
             ncols=2)  # will call Application.__init__ with these args
 
         # VIEWS
@@ -160,10 +160,22 @@ class BaseApplicationReact:
             view_proc=self.view_br_1000C,
             n=1,
             snames=["br/1000C"])
+        self.thviews_prio_v_senio = View(
+            name="prio_v_senio",
+            description="Average priority vs seniority",
+            x_label="Seniority",
+            y_label="Average Priority",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=False,
+            view_proc=self.thview_prio_v_senio,
+            n=1,
+            snames=["av_prio"])
 
         #set multiviews
         self.multiviews = [
-            self.views["w(M)"], self.views["g(M)"], self.views['br/1000C']
+            self.views["w(M)"], self.views["g(M)"], self.views['br/1000C'], self.thviews_prio_v_senio
         ]  #default view order in multiplot views
         self.nplots = len(self.multiviews)
 
@@ -237,7 +249,16 @@ class BaseApplicationReact:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 3]
         return x, y, True
-
+    
+    def thview_prio_v_senio(self, dt, file_parameters):
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        try:
+            x[:, 0] = dt.data[:, 4]
+            y[:, 0] = dt.data[:, 5]
+        except IndexError:
+            pass
+        return x, y, True
 
 class CLApplicationReact(BaseApplicationReact, Application):
     """[summary]

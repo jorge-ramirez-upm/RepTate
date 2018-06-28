@@ -225,6 +225,7 @@ class BaseTheoryTobitaCSTR:
         nbins = int(np.round(self.parameters['nbin'].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
+        rch.init_bin_prio_vs_senio()
 
         c_ndist = ct.c_int()
 
@@ -346,7 +347,7 @@ class BaseTheoryTobitaCSTR:
             #resize theory data table
             ft = f.data_table
             tt = self.tables[f.file_name_short]
-            tt.num_columns = ft.num_columns
+            tt.num_columns = ft.num_columns + 2
             tt.num_rows = rch.react_dist[ndist].contents.nummwdbins
             tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
@@ -357,17 +358,7 @@ class BaseTheoryTobitaCSTR:
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
             rch.end_print(self, ndist, self.do_priority_seniority)
-
-            # self.Qprint('End of calculation \"%s\"'%rch.react_dist[ndist].contents.name)
-            # self.Qprint(
-            #     'Polymers made' % rch.react_dist[ndist].contents.npoly)
-            # self.Qprint('Saved %d polymers in memory' %
-            #             rch.react_dist[ndist].contents.nsaved)
-            # self.Qprint('Mn = %.3g' % rch.react_dist[ndist].contents.m_n)
-            # self.Qprint('Mw = %.3g' % rch.react_dist[ndist].contents.m_w)
-            # self.Qprint(
-            #     'br/1000C = %.3g' % rch.react_dist[ndist].contents.brav)
-            # self.Qprint('*************************')
+            rch.prio_v_senio(self, f, ndist, self.do_priority_seniority)
 
             calc = rch.react_dist[ndist].contents.nummwdbins - 1
             rch.react_dist[ndist].contents.polysaved = True

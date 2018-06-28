@@ -187,6 +187,13 @@ set_do_prio_senio.restype = None
 set_flag_stop_all = react_lib.set_flag_stop_all
 set_flag_stop_all.restype = None
 
+init_bin_prio_vs_senio = react_lib.init_bin_prio_vs_senio
+init_bin_prio_vs_senio.restype = None
+
+return_prio_vs_senio = react_lib.return_prio_vs_senio
+return_prio_vs_senio.restype = ct.c_double
+
+
 #initialise lists
 react_dist = None
 
@@ -317,6 +324,10 @@ mulmetCSTRstart.restype = None
 mulmetCSTR = react_lib.mulmetCSTR
 mulmetCSTR.restype = ct.c_bool
 
+#############
+# Other
+############
+
 def end_print(parent_theory, ndist, do_architecture):
     parent_theory.Qprint('<hr style="border-top: dotted 2px;" /><b>Simulation Results:</b>')
     table='''<table border="1" width="100%">'''
@@ -342,3 +353,23 @@ def end_print(parent_theory, ndist, do_architecture):
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Other', react_dist[ndist].contents.nother / norm)
             table+= '''</table><br>'''
             parent_theory.Qprint(table)
+
+def prio_v_senio(parent_theory, f, ndist, do_architecture):
+    if not do_architecture:
+        return
+    import matplotlib.pyplot as plt
+    import numpy as np
+    pvs = []
+    for s in range(1, 1000):
+        val = return_prio_vs_senio(ct.c_int(s))
+        if val == 0:
+            break
+        pvs.append(val)
+    print(pvs)
+    tt = parent_theory.tables[f.file_name_short]
+    nrow = len(tt.data[:, 0])
+    if nrow < len(pvs):
+        tt.data.resize(len(pvs), tt.num_columns)
+        tt.num_rows = len(pvs)
+    tt.data[:, 4] = np.arange(1, tt.num_rows + 1)
+    tt.data[:len(pvs), 5] = pvs[:]

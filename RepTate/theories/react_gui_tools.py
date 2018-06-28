@@ -151,6 +151,12 @@ def handle_btn_prio_senio(parent_theory, checked):
     """Change do_priority_seniority"""
     parent_theory.do_priority_seniority = checked
     parent_theory.parent_dataset.toggle_vertical_limits(checked)
+    app = parent_theory.parent_dataset.parent_application
+    if checked:
+        app.axarr[-1].set_visible(True)
+    else:
+        app.axarr[-1].set_visible(False)
+    app.canvas.draw()
 
 def theory_buttons_disabled(parent_theory, state):
     """

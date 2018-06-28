@@ -48,6 +48,7 @@ bool flag_stop_all = false;
 
 static double prio_v_senio[N_PS];
 static double nprio_v_senio[N_PS];
+void bin_prio_vs_senio(int npol);
 
 void set_do_prio_senio(bool b)
 {
@@ -75,22 +76,26 @@ void senio_prio(int npoly, int ndistr)
         save_architect(npoly, ndistr);
         react_dist[ndistr].nsaved_arch++;
     }
+    bin_prio_vs_senio(npoly);
 }
 
-void init_bin_prio_vs_senio()
+void init_bin_prio_vs_senio(void)
 {
     int i;
     for (int i = 0; i < N_PS; i++)
+    {
         prio_v_senio[i] = 0;
+        nprio_v_senio[i] = 0;
+    }
 }
 
-void bin_prio_vs_senio(int npol, int ndist)
+void bin_prio_vs_senio(int npoly)
 {
     int first, m, s, p;
     double totlen, phi;
-    first = br_poly[npol].first_end;
+    first = br_poly[npoly].first_end;
     m = first;
-    totlen = br_poly[npol].tot_len;
+    totlen = br_poly[npoly].tot_len;
 
     while (!flag_stop_all)
     {
@@ -104,6 +109,14 @@ void bin_prio_vs_senio(int npol, int ndist)
         if (m == first)
             break;
     }
+}
+
+double return_prio_vs_senio(int s)
+{
+    if (nprio_v_senio[s] != 0)
+        return prio_v_senio[s] / nprio_v_senio[s];
+    else
+        return 0;
 }
 
 void save_architect(int npol, int ndist)
