@@ -528,6 +528,31 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 'cur_tab_index': app.TooltabWidget.currentIndex()
             }
             
+            # annotations
+            ann_dict = OrderedDict()
+            for k, ann in enumerate(app.graphicnotes):
+                ann_opts = {}
+                ann_text = ann.get_text()
+                ann_x, ann_y = ann.get_position()
+                ann_opts["color"] = ann.get_color()
+                ann_opts["rotation"] = ann.get_rotation()
+                ann_opts["horizontalalignment"] = ann.get_horizontalalignment()
+                ann_opts["verticalalignment"] = ann.get_verticalalignment()
+                ann_opts["fontweight"] = ann.get_fontweight()
+                ann_opts["style"] = ann.get_fontstyle()
+                ann_opts["fontsize"] = ann.get_fontsize()
+                ann_opts["alpha"] = ann.get_alpha()
+                ann_opts["family"] = ann.get_fontfamily()[0]
+                ann_opts["zorder"] = ann.get_zorder()
+            
+                ann_dict["annotation_%02d" % (k + 1)] = {
+                    "ann_text": ann_text,
+                    "ann_x": ann_x,
+                    "ann_y": ann_y,
+                    "ann_opts": ann_opts
+                    }
+
+            # collect all app info
             app_dic = OrderedDict(
                 [
                     ('app_tabname', self.ApplicationtabWidget.tabText(i)),
@@ -537,7 +562,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     ('current_ds_indx', app.DataSettabWidget.currentIndex()),
                     ('datasets', datasets_dic),
                     ('tools', tools),
-                    ('show_inspector', int(app.DataInspectordockWidget.isVisible()))
+                    ('show_inspector', int(app.DataInspectordockWidget.isVisible())),
+                    ('annotations', ann_dict)
                 ]
             )
 
@@ -681,6 +707,15 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             for pname in tool_param:
                 to.set_param_value(pname, tool_param[pname])
         app.TooltabWidget.setCurrentIndex(tools['cur_tab_index'])
+    
+    def restore_annotations(self, app, annotations):
+        """Restore the annotations"""
+        for ann in annotations.values():
+            ann_text = ann["ann_text"]
+            ann_x = ann["ann_x"]
+            ann_y = ann["ann_y"]
+            ann_opts = ann["ann_opts"]
+            app.add_annotation(text=ann_text, x=ann_x, y=ann_y, annotation_opts=ann_opts)
 
     def open_project(self, project_path):
         """Open file and load project"""
@@ -736,6 +771,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             datasets = app_dic['datasets']
             tools = app_dic['tools']
             show_inspector = bool(app_dic['show_inspector'])
+            annotations = app_dic['annotations']
 
             new_app_tab, ind = self.restore_app(appname, app_tabname)
             if app_indx == current_app_indx:
@@ -757,7 +793,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             self.restore_tools(new_app_tab, tools)
             new_app_tab.DataInspectordockWidget.setVisible(show_inspector)
             
-            #set app views
+            # restore annotations
+            self.restore_annotations(new_app_tab, annotations)
+            
+            # set app views
             new_app_tab.multiviews = [new_app_tab.views[v] for v in current_view_names]
             new_app_tab.viewComboBox.setCurrentText(current_view_names[0])
             new_app_tab.change_view()

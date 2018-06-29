@@ -656,20 +656,28 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.actionNew_Theory.setDisabled(state)
             ds.cbtheory.setDisabled(state)
 
-    def add_annotation(self):
-        if self._annotation_done:
-            return
+    def add_annotation(self, action_trig=False, text=None, x=0, y=0, annotation_opts={}):
         if self.current_viewtab == 0:
             ax = self.axarr[0]
         else:
             ax = self.axarr[self.current_viewtab - 1]
-        text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
-        if ok:
-            ann = ax.annotate(text, xy=(self._event.xdata, self._event.ydata), xytext=(self._event.xdata, self._event.ydata), **self.annotation_opts)
+        if text is None:
+            # annotation from user
+            if self._annotation_done:
+                return
+            text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
+            if ok:
+                ann = ax.annotate(text, xy=(self._event.xdata, self._event.ydata), xytext=(self._event.xdata, self._event.ydata), **self.annotation_opts)
+                self.graphicnotes.append(ann)
+                self.artistnotes.append(DraggableNote(ann, DragType.both, None, self.edit_annotation))
+                self.canvas.draw()
+            self._annotation_done = True
+        else:
+            # annotation from project loading
+            ann = ax.annotate(text, xy=(x, y), **annotation_opts)
             self.graphicnotes.append(ann)
             self.artistnotes.append(DraggableNote(ann, DragType.both, None, self.edit_annotation))
             self.canvas.draw()
-        self._annotation_done = True
 
     def edit_annotation(self, artist):
         d = EditAnnotation(self, artist)
@@ -960,7 +968,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.dialog.ui.fontsizeannotationSpinBox.setValue(self.annotation_opts['fontsize'])
         self.dialog.ui.framealphaannotationSpinBox.setValue(self.annotation_opts['alpha'])
         self.dialog.ui.fontfamilyComboBox.setCurrentText(self.annotation_opts['family']) 
-        
+
+
         success = self.dialog.exec_() #this blocks the rest of the app as opposed to .show()
         if success == 1:
             self.handle_apply_button_pressed()
