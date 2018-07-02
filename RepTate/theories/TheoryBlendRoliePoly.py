@@ -518,6 +518,7 @@ class BaseTheoryBlendRoliePoly:
             self.set_param_value("tauR%02d" % i, taus[i])
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
+        self.update_parameter_table()
         self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def set_modes(self, tau, G):
@@ -536,6 +537,7 @@ class BaseTheoryBlendRoliePoly:
         for i in range(nmodes):
             self.set_param_value("tauD%02d" % i, tau[i])
             self.set_param_value("phi%02d" % i, G[i] / sum_G)
+        self.update_parameter_table()
 
     def fZ(self, z):
         """CLF correction function Likthman-McLeish (2002)"""
@@ -1130,6 +1132,7 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
+        self.update_parameter_table()
         self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def Qhide_theory_extras(self, state):
@@ -1169,7 +1172,7 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 for th in ds.theories.values():
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
-                    if "MWDiscr" in th.name:
+                    if th.thname == 'Discretize MWD':
                         get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name,
                                                th_tab_name)] = th.get_mwd
 
@@ -1184,9 +1187,14 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                 item = d.btngrp.checkedButton().text()
                 m, phi = get_dict[item]()
 
-                self.MWD_m[:] = m[:]
-                self.MWD_phi[:] = phi[:]
+                self.MWD_m = np.copy(m)
+                self.MWD_phi = np.copy(phi)
                 self.set_modes_from_mwd(m, phi)
+        else:
+            # no theory Discretise MWD found
+            QMessageBox.warning(
+                    self, 'Get MW distribution',
+                    'No \"Discretize MWD\" theory found')
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
@@ -1239,8 +1247,8 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
                     self.Qprint("Could not understand line %d, try again" %
                                 (i + 1))
                     return
-            self.MWD_m[:] = m[:]
-            self.MWD_phi[:] = phi[:]
+            self.MWD_m = np.copy(m)
+            self.MWD_phi = np.copy(phi)
             self.set_modes_from_mwd(m, phi)
 
     def plot_modes_graph(self):

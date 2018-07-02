@@ -269,7 +269,9 @@ class BaseTheoryDiscrMWD:
         self.extra_data = extra_data
         nbin = len(self.extra_data['bin_height'])
         try:
-            self.handle_spinboxValueChanged(nbin)
+            self.spinbox.blockSignals(True)
+            self.spinbox.setValue(nbin)
+            self.spinbox.blockSignals(False)
         except:
             # in CL mode
             pass
@@ -334,6 +336,10 @@ class BaseTheoryDiscrMWD:
         Arguments:
             line {[type]} -- [description]
         """
+        pass
+
+    def do_fit(self, line=''):
+        """Fit not allowed in this theory"""
         pass
 
     def calculate_moments(self, f, line=""):
@@ -539,8 +545,8 @@ class BaseTheoryDiscrMWD:
                 alpha=0.5)
 
     def get_mwd(self):
-        m = self.extra_data['saved_th'][:, 0]
-        phi = self.extra_data['saved_th'][:, 1]
+        m = np.copy(self.extra_data['saved_th'][:, 0])
+        phi = np.copy(self.extra_data['saved_th'][:, 1])
         return m, phi
 
 
