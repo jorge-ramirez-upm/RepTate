@@ -125,8 +125,8 @@ class Theory(CmdBase):
         ax = self.ax
 
         # XRANGE for FIT
-        self.xmin = 0.01
-        self.xmax = 1
+        self.xmin = -np.inf
+        self.xmax = np.inf
         self.xrange = ax.axvspan(
             self.xmin, self.xmax, facecolor='yellow', alpha=0.3, visible=False)
         self.xminline = ax.axvline(
@@ -148,8 +148,8 @@ class Theory(CmdBase):
         self.is_xrange_visible = False
 
         # YRANGE for FIT
-        self.ymin = 0.01
-        self.ymax = 1
+        self.ymin = -np.inf
+        self.ymax = np.inf
         self.yrange = ax.axhspan(
             self.ymin, self.ymax, facecolor='pink', alpha=0.3, visible=False)
         self.yminline = ax.axhline(
