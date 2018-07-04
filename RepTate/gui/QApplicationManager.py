@@ -454,11 +454,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     )
                     th.get_extra_data()
                     e_dic = th.extra_data
+                    e_dic_copy = {}
                     # convert numpy arrays into lists
                     for key in e_dic:
                         val = e_dic[key]
                         if type(val) is np.ndarray:
-                            e_dic[key] = val.tolist()
+                            e_dic_copy[key] = val.tolist()
+                        else:
+                            e_dic_copy[key] = val
 
                     th_dic = OrderedDict(
                         [
@@ -467,7 +470,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                             ('th_param', param_dic),
                             ('th_textbox', str(th.thTextBox.toHtml()) + '<br><i>Saved at %s on %s<i><br>' % (time.strftime("%X"), time.strftime("%a %b %d, %Y") )),
                             ('th_tables', th_table_dic),
-                            ('extra_data', e_dic)
+                            ('extra_data', e_dic_copy)
                         ]
                     )
                     theories_dic[th.name] = th_dic
