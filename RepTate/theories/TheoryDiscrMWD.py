@@ -352,8 +352,9 @@ class BaseTheoryDiscrMWD:
         """
         n = f[:, 0].size
         Mw = 0
-        tempMz = 0
         tempMn = 0
+        tempM2 = 0
+        tempM3 = 0
         temp_sum = 0
 
         for i in range(n):
@@ -361,10 +362,12 @@ class BaseTheoryDiscrMWD:
             w = f[i, 1]
             # M = np.power(10, (np.log10(f[i + 1, 0]) + np.log10(f[i, 0])) / 2 )
             Mw += w * M
-            tempMz += w * M * M  # w*M^2
+            tempM3 += w * M**3 # w*M^3
+            tempM2 += w * M * M  # w*M^2
             tempMn += w / M  # w/M
         Mn = 1 / tempMn
-        Mz = tempMz / Mw
+        Mz = tempM2 / Mw
+        Mzp1 = tempM3 / tempM2
         PDI = Mw / Mn
 
         # if line == "input" and CmdBase.mode == CmdMode.GUI:
@@ -386,8 +389,8 @@ class BaseTheoryDiscrMWD:
         else:
             self.Qprint('''<h3>Characteristics of the %s MWD</h3>'''%line, end='')
             table='''<table border="1" width="100%">'''
-            table+='''<tr><th>Mn</th><th>Mw</th><th>Mw/Mn</th><th>Mz/Mw</th></tr>'''
-            table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw)
+            table+='''<tr><th>Mn</th><th>Mw</th><th>Mw/Mn</th><th>Mz/Mw</th><th>Mz+1/Mz</th></tr>'''
+            table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td><td>%7.3g</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw, Mzp1/Mz)
             table+='''</table><br>'''
             self.Qprint(table)
 
@@ -589,7 +592,7 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(3, 50)  # min and max number of modes
+        self.spinbox.setRange(3, 100)  # min and max number of modes
         self.spinbox.setSuffix(" bins")
         self.spinbox.setValue(self.parameters["nbin"].value)  #initial value
         tb.addWidget(self.spinbox)
