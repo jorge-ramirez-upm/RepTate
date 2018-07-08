@@ -116,7 +116,7 @@ void poly_stat(void)
     snprintf(table, sizeof table, "%s%s", table, line);
     sprintf(line, "<tr><td>Number of star molecules</td><td>%d</td></tr>", nstar);
     snprintf(table, sizeof table, "%s%s", table, line);
-    sprintf(line, "<tr><td>mass fraction of star molecules</td><td>%9.4g</td></tr>", mstar / mtot);
+    sprintf(line, "<tr><td>Mass fraction of star molecules</td><td>%9.4g</td></tr>", mstar / mtot);
     snprintf(table, sizeof table, "%s%s", table, line);
     sprintf(line, "<tr><td>Number of comb molecules</td><td>%d</td></tr>", ncomb);
     snprintf(table, sizeof table, "%s%s", table, line);

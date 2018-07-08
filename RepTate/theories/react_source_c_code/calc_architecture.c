@@ -82,7 +82,7 @@ void senio_prio(int npoly, int ndistr)
 void init_bin_prio_vs_senio(void)
 {
     int i;
-    for (int i = 0; i < N_PS; i++)
+    for (i = 0; i < N_PS; i++)
     {
         prio_v_senio[i] = 0;
         nprio_v_senio[i] = 0;
