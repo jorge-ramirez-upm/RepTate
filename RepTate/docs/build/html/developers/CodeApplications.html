@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Applications &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -25,7 +33,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -54,7 +63,7 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Applications</a><ul>
-<li><a class="reference internal" href="#applicationgt">ApplicationGt</a></li>
+<li><a class="reference internal" href="#module-ApplicationGt">ApplicationGt</a></li>
 <li><a class="reference internal" href="#module-ApplicationLVE">ApplicationLVE</a></li>
 <li><a class="reference internal" href="#module-ApplicationMWD">ApplicationMWD</a></li>
 <li><a class="reference internal" href="#module-ApplicationNLVE">ApplicationNLVE</a></li>
@@ -78,14 +87,12 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -100,14 +107,14 @@
 <h1>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<div class="section" id="applicationgt">
-<h2>ApplicationGt<a class="headerlink" href="#applicationgt" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-ApplicationGt"></span><p>Module ApplicationGt</p>
+<div class="section" id="module-ApplicationGt">
+<span id="applicationgt"></span><h2>ApplicationGt<a class="headerlink" href="#module-ApplicationGt" title="Permalink to this headline">¶</a></h2>
+<p>Module ApplicationGt</p>
 <p>Module for the analysis of stress relaxation data from simulations and experiments.</p>
 <dl class="class">
 <dt id="ApplicationGt.ApplicationGt">
 <em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">ApplicationGt</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#ApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.ApplicationGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Application to Analyze Stress Relaxation Data</p>
 <dl class="attribute">
 <dt id="ApplicationGt.ApplicationGt.appname">
@@ -129,7 +136,7 @@
 <dl class="class">
 <dt id="ApplicationGt.BaseApplicationGt">
 <em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">BaseApplicationGt</code><span class="sig-paren">(</span><em>name='Gt'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="attribute">
@@ -151,32 +158,32 @@
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewGt">
 <code class="descname">viewGt</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Relaxation modulus <span class="math notranslate">\(G(t)\)</span> vs time <span class="math notranslate">\(t\)</span> (both in logarithmic scale)</p>
+<dd><p>Relaxation modulus <span class="math">\(G(t)\)</span> vs time <span class="math">\(t\)</span> (both in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewLogGt">
 <code class="descname">viewLogGt</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewLogGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewLogGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the relaxation modulus <span class="math notranslate">\(G(t)\)</span> vs logarithm of time <span class="math notranslate">\(t\)</span></p>
+<dd><p>Logarithm of the relaxation modulus <span class="math">\(G(t)\)</span> vs logarithm of time <span class="math">\(t\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt">
 <code class="descname">viewSchwarzl_Gt</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewSchwarzl_Gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Schwarzl transformation: numerical calculation of the storage modulus <span class="math notranslate">\(G'(\omega)\)</span> and loss modulus 
-<span class="math notranslate">\(G''(\omega)\)</span> from the relaxation modulus <span class="math notranslate">\(G(t)\)</span></p>
+<dd><p>Schwarzl transformation: numerical calculation of the storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus 
+<span class="math">\(G''(\omega)\)</span> from the relaxation modulus <span class="math">\(G(t)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewiRheo">
 <code class="descname">viewiRheo</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewiRheo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewiRheo" title="Permalink to this definition">¶</a></dt>
-<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math notranslate">\(G(t)\)</span> to obtain the storage modulus <span class="math notranslate">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate">\(G''(\omega)\)</span> (no oversamplig).</p>
+<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math">\(G(t)\)</span> to obtain the storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus <span class="math">\(G''(\omega)\)</span> (no oversamplig).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewiRheoOver">
 <code class="descname">viewiRheoOver</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#BaseApplicationGt.viewiRheoOver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewiRheoOver" title="Permalink to this definition">¶</a></dt>
-<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math notranslate">\(G(t)\)</span> to obtain the storage modulus <span class="math notranslate">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate">\(G''(\omega)\)</span> (with user selected oversamplig).</p>
+<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math">\(G(t)\)</span> to obtain the storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus <span class="math">\(G''(\omega)\)</span> (with user selected oversamplig).</p>
 </dd></dl>
 
 </dd></dl>
@@ -184,7 +191,7 @@
 <dl class="class">
 <dt id="ApplicationGt.CLApplicationGt">
 <em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">CLApplicationGt</code><span class="sig-paren">(</span><em>name='Gt'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#CLApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.CLApplicationGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationGt.BaseApplicationGt" title="ApplicationGt.BaseApplicationGt"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationGt.BaseApplicationGt</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationGt.BaseApplicationGt" title="ApplicationGt.BaseApplicationGt"><code class="xref py py-class docutils literal"><span class="pre">ApplicationGt.BaseApplicationGt</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -202,7 +209,7 @@
 <dl class="class">
 <dt id="ApplicationGt.GUIApplicationGt">
 <em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">GUIApplicationGt</code><span class="sig-paren">(</span><em>name='Gt'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationGt.html#GUIApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.GUIApplicationGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationGt.BaseApplicationGt" title="ApplicationGt.BaseApplicationGt"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationGt.BaseApplicationGt</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationGt.BaseApplicationGt" title="ApplicationGt.BaseApplicationGt"><code class="xref py py-class docutils literal"><span class="pre">ApplicationGt.BaseApplicationGt</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -265,7 +272,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationLVE.ApplicationLVE">
 <em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">ApplicationLVE</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#ApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.ApplicationLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Application to Analyze Linear Viscoelastic Data</p>
 <dl class="attribute">
 <dt id="ApplicationLVE.ApplicationLVE.appname">
@@ -287,7 +294,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationLVE.BaseApplicationLVE">
 <em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">BaseApplicationLVE</code><span class="sig-paren">(</span><em>name='LVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <dl class="attribute">
 <dt id="ApplicationLVE.BaseApplicationLVE.appname">
 <code class="descname">appname</code><em class="property"> = 'LVE'</em><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.appname" title="Permalink to this definition">¶</a></dt>
@@ -301,103 +308,103 @@ Called when the spinbox value is changed</p>
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewColeCole">
 <code class="descname">viewColeCole</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewColeCole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewColeCole" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cole-Cole plot: out of phase viscosity <span class="math notranslate">\(\eta''(\omega)=G'(\omega)/\omega\)</span> vs dynamic viscosity <span class="math notranslate">\(\eta'(\omega)=G''(\omega)/\omega\)</span></p>
+<dd><p>Cole-Cole plot: out of phase viscosity <span class="math">\(\eta''(\omega)=G'(\omega)/\omega\)</span> vs dynamic viscosity <span class="math">\(\eta'(\omega)=G''(\omega)/\omega\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewDelta">
 <code class="descname">viewDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewDelta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loss or phase angle <span class="math notranslate">\(\delta(\omega)=\arctan(G''/G')\cdot 180/\pi\)</span> (in degrees, in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Loss or phase angle <span class="math">\(\delta(\omega)=\arctan(G''/G')\cdot 180/\pi\)</span> (in degrees, in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewEtaStar">
 <code class="descname">viewEtaStar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewEtaStar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewEtaStar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Complex viscosity <span class="math notranslate">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Complex viscosity <span class="math">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewG1">
 <code class="descname">viewG1</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewG1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewG1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Storage modulus <span class="math notranslate">\(G'(\omega)\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Storage modulus <span class="math">\(G'(\omega)\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewG1G2">
 <code class="descname">viewG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewG1G2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Storage modulus <span class="math notranslate">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate">\(G''(\omega)\)</span> (in logarithmic scale) vs :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>omega`(in logarithmic scale)</p>
+<dd><p>Storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus <span class="math">\(G''(\omega)\)</span> (in logarithmic scale) vs :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>omega`(in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewG2">
 <code class="descname">viewG2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewG2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewG2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loss modulus <span class="math notranslate">\(G''(\omega)\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Loss modulus <span class="math">\(G''(\omega)\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewJ1J2">
 <code class="descname">viewJ1J2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewJ1J2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewJ1J2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Storage compliance <span class="math notranslate">\(J'(\omega)=G'/(G'^2+G''^2)\)</span> and loss compliance <span class="math notranslate">\(J''(\omega)=G''/(G'^2+G''^2)\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Storage compliance <span class="math">\(J'(\omega)=G'/(G'^2+G''^2)\)</span> and loss compliance <span class="math">\(J''(\omega)=G''/(G'^2+G''^2)\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogEtaStar">
 <code class="descname">viewLogEtaStar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogEtaStar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogEtaStar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the complex viscosity <span class="math notranslate">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the complex viscosity <span class="math">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogG1">
 <code class="descname">viewLogG1</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the storage modulus <span class="math notranslate">\(\log(G'(\omega))\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the storage modulus <span class="math">\(\log(G'(\omega))\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogG1G2">
 <code class="descname">viewLogG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG1G2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the storage modulus <span class="math notranslate">\(\log(G'(\omega))\)</span> and loss modulus <span class="math notranslate">\(\log(G''(\omega))\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the storage modulus <span class="math">\(\log(G'(\omega))\)</span> and loss modulus <span class="math">\(\log(G''(\omega))\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta">
 <code class="descname">viewLogG1G2tandelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG1G2tandelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the storage modulus <span class="math notranslate">\(\log(G'(\omega))\)</span>, loss modulus <span class="math notranslate">\(\log(G''(\omega))\)</span> and tangent of the loss angle <span class="math notranslate">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the storage modulus <span class="math">\(\log(G'(\omega))\)</span>, loss modulus <span class="math">\(\log(G''(\omega))\)</span> and tangent of the loss angle <span class="math">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogG2">
 <code class="descname">viewLogG2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogG2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogG2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the loss modulus <span class="math notranslate">\(\log(G''(\omega))\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the loss modulus <span class="math">\(\log(G''(\omega))\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogGstar">
 <code class="descname">viewLogGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogGstar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the modulus of the complex viscosity <span class="math notranslate">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the modulus of the complex viscosity <span class="math">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogTanDelta">
 <code class="descname">viewLogTanDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogTanDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogTanDelta" title="Permalink to this definition">¶</a></dt>
-<dd><p><span class="math notranslate">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p><span class="math">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar">
 <code class="descname">viewLogtandeltaGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewLogtandeltaGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the tangent of the loss angle <span class="math notranslate">\(\tan(\delta(\omega))=G''/G'\)</span> vs logarithm of the modulus of the complex viscosity <span class="math notranslate">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
+<dd><p>Logarithm of the tangent of the loss angle <span class="math">\(\tan(\delta(\omega))=G''/G'\)</span> vs logarithm of the modulus of the complex viscosity <span class="math">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewTanDelta">
 <code class="descname">viewTanDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewTanDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewTanDelta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tangent of the phase angle <span class="math notranslate">\(\tan(\delta(\omega))=G''/G'\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Tangent of the phase angle <span class="math">\(\tan(\delta(\omega))=G''/G'\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar">
 <code class="descname">viewdeltatanGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#BaseApplicationLVE.viewdeltatanGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loss angle <span class="math notranslate">\(\delta(\omega)=\arctan(G''/G')\)</span> vs logarithm of the modulus of the complex viscosity <span class="math notranslate">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
+<dd><p>Loss angle <span class="math">\(\delta(\omega)=\arctan(G''/G')\)</span> vs logarithm of the modulus of the complex viscosity <span class="math">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
 </dd></dl>
 
 </dd></dl>
@@ -405,7 +412,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationLVE.CLApplicationLVE">
 <em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">CLApplicationLVE</code><span class="sig-paren">(</span><em>name='LVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#CLApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.CLApplicationLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationLVE.BaseApplicationLVE" title="ApplicationLVE.BaseApplicationLVE"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationLVE.BaseApplicationLVE</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationLVE.BaseApplicationLVE" title="ApplicationLVE.BaseApplicationLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationLVE.BaseApplicationLVE</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -413,7 +420,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationLVE.GUIApplicationLVE">
 <em class="property">class </em><code class="descclassname">ApplicationLVE.</code><code class="descname">GUIApplicationLVE</code><span class="sig-paren">(</span><em>name='LVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationLVE.html#GUIApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationLVE.GUIApplicationLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationLVE.BaseApplicationLVE" title="ApplicationLVE.BaseApplicationLVE"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationLVE.BaseApplicationLVE</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationLVE.BaseApplicationLVE" title="ApplicationLVE.BaseApplicationLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationLVE.BaseApplicationLVE</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -426,7 +433,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationMWD.ApplicationMWD">
 <em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">ApplicationMWD</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#ApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.ApplicationMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Application to analyze Molecular Weight Distributions</p>
 <dl class="attribute">
 <dt id="ApplicationMWD.ApplicationMWD.appname">
@@ -448,7 +455,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationMWD.BaseApplicationMWD">
 <em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">BaseApplicationMWD</code><span class="sig-paren">(</span><em>name='MWD'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#BaseApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.BaseApplicationMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="attribute">
@@ -464,13 +471,13 @@ Called when the spinbox value is changed</p>
 <dl class="method">
 <dt id="ApplicationMWD.BaseApplicationMWD.view_WM">
 <code class="descname">view_WM</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#BaseApplicationMWD.view_WM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.BaseApplicationMWD.view_WM" title="Permalink to this definition">¶</a></dt>
-<dd><p><span class="math notranslate">\(W(M)\)</span> vs <span class="math notranslate">\(M\)</span></p>
+<dd><p><span class="math">\(W(M)\)</span> vs <span class="math">\(M\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationMWD.BaseApplicationMWD.view_logWM">
 <code class="descname">view_logWM</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#BaseApplicationMWD.view_logWM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.BaseApplicationMWD.view_logWM" title="Permalink to this definition">¶</a></dt>
-<dd><p><span class="math notranslate">\(\log(W(M))\)</span> vs <span class="math notranslate">\(\log(M)\)</span></p>
+<dd><p><span class="math">\(\log(W(M))\)</span> vs <span class="math">\(\log(M)\)</span></p>
 </dd></dl>
 
 </dd></dl>
@@ -478,7 +485,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationMWD.CLApplicationMWD">
 <em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">CLApplicationMWD</code><span class="sig-paren">(</span><em>name='MWD'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#CLApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.CLApplicationMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationMWD.BaseApplicationMWD" title="ApplicationMWD.BaseApplicationMWD"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationMWD.BaseApplicationMWD</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationMWD.BaseApplicationMWD" title="ApplicationMWD.BaseApplicationMWD"><code class="xref py py-class docutils literal"><span class="pre">ApplicationMWD.BaseApplicationMWD</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -486,7 +493,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationMWD.GUIApplicationMWD">
 <em class="property">class </em><code class="descclassname">ApplicationMWD.</code><code class="descname">GUIApplicationMWD</code><span class="sig-paren">(</span><em>name='MWD'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationMWD.html#GUIApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationMWD.GUIApplicationMWD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationMWD.BaseApplicationMWD" title="ApplicationMWD.BaseApplicationMWD"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationMWD.BaseApplicationMWD</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationMWD.BaseApplicationMWD" title="ApplicationMWD.BaseApplicationMWD"><code class="xref py py-class docutils literal"><span class="pre">ApplicationMWD.BaseApplicationMWD</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -499,7 +506,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationNLVE.ApplicationNLVE">
 <em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">ApplicationNLVE</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#ApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.ApplicationNLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Application to Analyze Start up of Nonlinear flow</p>
 <dl class="attribute">
 <dt id="ApplicationNLVE.ApplicationNLVE.appname">
@@ -521,7 +528,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationNLVE.BaseApplicationNLVE">
 <em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">BaseApplicationNLVE</code><span class="sig-paren">(</span><em>name='NLVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="attribute">
@@ -537,37 +544,37 @@ Called when the spinbox value is changed</p>
 <dl class="method">
 <dt id="ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma">
 <code class="descname">viewLogSigmaGamma</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewLogSigmaGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the transient shear or extensional stress (depending on the experiment) <span class="math notranslate">\(\sigma(t)\)</span> vs logarithm of the strain <span class="math notranslate">\(\gamma\)</span></p>
+<dd><p>Logarithm of the transient shear or extensional stress (depending on the experiment) <span class="math">\(\sigma(t)\)</span> vs logarithm of the strain <span class="math">\(\gamma\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime">
 <code class="descname">viewLogSigmaTime</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewLogSigmaTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the transient shear or extensional stress (depending on the experiment) <span class="math notranslate">\(\sigma(t)\)</span> vs logarithm of time <span class="math notranslate">\(t\)</span></p>
+<dd><p>Logarithm of the transient shear or extensional stress (depending on the experiment) <span class="math">\(\sigma(t)\)</span> vs logarithm of time <span class="math">\(t\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationNLVE.BaseApplicationNLVE.viewLogeta">
 <code class="descname">viewLogeta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewLogeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewLogeta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the transient shear or extensional viscosity (depending on the experiment) <span class="math notranslate">\(\eta(t)\)</span> vs logarithm of time <span class="math notranslate">\(t\)</span></p>
+<dd><p>Logarithm of the transient shear or extensional viscosity (depending on the experiment) <span class="math">\(\eta(t)\)</span> vs logarithm of time <span class="math">\(t\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma">
 <code class="descname">viewSigmaGamma</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewSigmaGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transient shear or extensional stress (depending on the experiment) <span class="math notranslate">\(\sigma(t)\)</span> vs strain <span class="math notranslate">\(\gamma\)</span></p>
+<dd><p>Transient shear or extensional stress (depending on the experiment) <span class="math">\(\sigma(t)\)</span> vs strain <span class="math">\(\gamma\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime">
 <code class="descname">viewSigmaTime</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.viewSigmaTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transient shear or extensional stress (depending on the experiment) <span class="math notranslate">\(\sigma(t)\)</span> vs time <span class="math notranslate">\(t\)</span></p>
+<dd><p>Transient shear or extensional stress (depending on the experiment) <span class="math">\(\sigma(t)\)</span> vs time <span class="math">\(t\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationNLVE.BaseApplicationNLVE.vieweta">
 <code class="descname">vieweta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#BaseApplicationNLVE.vieweta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.BaseApplicationNLVE.vieweta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transient shear or extensional viscosity (depending on the experiment) <span class="math notranslate">\(\eta(t)\)</span> vs time <span class="math notranslate">\(t\)</span> (both axes in logarithmic scale by default)</p>
+<dd><p>Transient shear or extensional viscosity (depending on the experiment) <span class="math">\(\eta(t)\)</span> vs time <span class="math">\(t\)</span> (both axes in logarithmic scale by default)</p>
 </dd></dl>
 
 </dd></dl>
@@ -575,7 +582,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationNLVE.CLApplicationNLVE">
 <em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">CLApplicationNLVE</code><span class="sig-paren">(</span><em>name='NLVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#CLApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.CLApplicationNLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationNLVE.BaseApplicationNLVE" title="ApplicationNLVE.BaseApplicationNLVE"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationNLVE.BaseApplicationNLVE</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationNLVE.BaseApplicationNLVE" title="ApplicationNLVE.BaseApplicationNLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationNLVE.BaseApplicationNLVE</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -583,7 +590,7 @@ Called when the spinbox value is changed</p>
 <dl class="class">
 <dt id="ApplicationNLVE.GUIApplicationNLVE">
 <em class="property">class </em><code class="descclassname">ApplicationNLVE.</code><code class="descname">GUIApplicationNLVE</code><span class="sig-paren">(</span><em>name='NLVE'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationNLVE.html#GUIApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationNLVE.GUIApplicationNLVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationNLVE.BaseApplicationNLVE" title="ApplicationNLVE.BaseApplicationNLVE"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationNLVE.BaseApplicationNLVE</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationNLVE.BaseApplicationNLVE" title="ApplicationNLVE.BaseApplicationNLVE"><code class="xref py py-class docutils literal"><span class="pre">ApplicationNLVE.BaseApplicationNLVE</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -597,7 +604,7 @@ time-temperature superposition principle.</p>
 <dl class="class">
 <dt id="ApplicationTTS.ApplicationTTS">
 <em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">ApplicationTTS</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#ApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.ApplicationTTS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdBase.CmdBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Application to Analyze Linear Viscoelastic Data</p>
 <dl class="attribute">
 <dt id="ApplicationTTS.ApplicationTTS.appname">
@@ -619,7 +626,7 @@ time-temperature superposition principle.</p>
 <dl class="class">
 <dt id="ApplicationTTS.BaseApplicationTTS">
 <em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">BaseApplicationTTS</code><span class="sig-paren">(</span><em>name='TTS'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="attribute">
@@ -635,103 +642,103 @@ time-temperature superposition principle.</p>
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewColeCole">
 <code class="descname">viewColeCole</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewColeCole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewColeCole" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cole-Cole plot: out of phase viscosity <span class="math notranslate">\(\eta''(\omega)=G'(\omega)/\omega\)</span> vs dynamic viscosity <span class="math notranslate">\(\eta'(\omega)=G''(\omega)/\omega\)</span></p>
+<dd><p>Cole-Cole plot: out of phase viscosity <span class="math">\(\eta''(\omega)=G'(\omega)/\omega\)</span> vs dynamic viscosity <span class="math">\(\eta'(\omega)=G''(\omega)/\omega\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewDelta">
 <code class="descname">viewDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewDelta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loss or phase angle <span class="math notranslate">\(\delta(\omega)=\arctan(G''/G')\cdot 180/\pi\)</span> (in degrees, in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Loss or phase angle <span class="math">\(\delta(\omega)=\arctan(G''/G')\cdot 180/\pi\)</span> (in degrees, in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewEtaStar">
 <code class="descname">viewEtaStar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewEtaStar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewEtaStar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Complex viscosity <span class="math notranslate">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Complex viscosity <span class="math">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewG1">
 <code class="descname">viewG1</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewG1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewG1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Storage modulus <span class="math notranslate">\(G'(\omega)\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Storage modulus <span class="math">\(G'(\omega)\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewG1G2">
 <code class="descname">viewG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewG1G2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Storage modulus <span class="math notranslate">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate">\(G''(\omega)\)</span> (in logarithmic scale) vs :math:<a href="#id3"><span class="problematic" id="id4">`</span></a>omega`(in logarithmic scale)</p>
+<dd><p>Storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus <span class="math">\(G''(\omega)\)</span> (in logarithmic scale) vs :math:<a href="#id3"><span class="problematic" id="id4">`</span></a>omega`(in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewG2">
 <code class="descname">viewG2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewG2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewG2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loss modulus <span class="math notranslate">\(G''(\omega)\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Loss modulus <span class="math">\(G''(\omega)\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewJ1J2">
 <code class="descname">viewJ1J2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewJ1J2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewJ1J2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Storage compliance <span class="math notranslate">\(J'(\omega)=G'/(G'^2+G''^2)\)</span> and loss compliance <span class="math notranslate">\(J''(\omega)=G''/(G'^2+G''^2)\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Storage compliance <span class="math">\(J'(\omega)=G'/(G'^2+G''^2)\)</span> and loss compliance <span class="math">\(J''(\omega)=G''/(G'^2+G''^2)\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogEtaStar">
 <code class="descname">viewLogEtaStar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogEtaStar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogEtaStar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the complex viscosity <span class="math notranslate">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the complex viscosity <span class="math">\(\eta^*(\omega) = \sqrt{G'^2 + G''^2}/\omega\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogG1">
 <code class="descname">viewLogG1</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogG1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogG1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the storage modulus <span class="math notranslate">\(\log(G'(\omega))\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the storage modulus <span class="math">\(\log(G'(\omega))\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogG1G2">
 <code class="descname">viewLogG1G2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogG1G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogG1G2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the storage modulus <span class="math notranslate">\(\log(G'(\omega))\)</span> and loss modulus <span class="math notranslate">\(\log(G''(\omega))\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the storage modulus <span class="math">\(\log(G'(\omega))\)</span> and loss modulus <span class="math">\(\log(G''(\omega))\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta">
 <code class="descname">viewLogG1G2tandelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogG1G2tandelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the storage modulus <span class="math notranslate">\(\log(G'(\omega))\)</span>, loss modulus <span class="math notranslate">\(\log(G''(\omega))\)</span> and tangent of the loss angle <span class="math notranslate">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the storage modulus <span class="math">\(\log(G'(\omega))\)</span>, loss modulus <span class="math">\(\log(G''(\omega))\)</span> and tangent of the loss angle <span class="math">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogG2">
 <code class="descname">viewLogG2</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogG2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogG2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the loss modulus <span class="math notranslate">\(\log(G''(\omega))\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the loss modulus <span class="math">\(\log(G''(\omega))\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogGstar">
 <code class="descname">viewLogGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogGstar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the modulus of the complex viscosity <span class="math notranslate">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p>Logarithm of the modulus of the complex viscosity <span class="math">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogTanDelta">
 <code class="descname">viewLogTanDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogTanDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogTanDelta" title="Permalink to this definition">¶</a></dt>
-<dd><p><span class="math notranslate">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math notranslate">\(\log(\omega)\)</span></p>
+<dd><p><span class="math">\(\log(\tan(\delta(\omega)))=\log(G''/G')\)</span> vs <span class="math">\(\log(\omega)\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewLogtandeltaGstar">
 <code class="descname">viewLogtandeltaGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewLogtandeltaGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewLogtandeltaGstar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the tangent of the loss angle <span class="math notranslate">\(\tan(\delta(\omega))=G''/G'\)</span> vs logarithm of the modulus of the complex viscosity <span class="math notranslate">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
+<dd><p>Logarithm of the tangent of the loss angle <span class="math">\(\tan(\delta(\omega))=G''/G'\)</span> vs logarithm of the modulus of the complex viscosity <span class="math">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewTanDelta">
 <code class="descname">viewTanDelta</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewTanDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewTanDelta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tangent of the phase angle <span class="math notranslate">\(\tan(\delta(\omega))=G''/G'\)</span> (in logarithmic scale) vs <span class="math notranslate">\(\omega\)</span> (in logarithmic scale)</p>
+<dd><p>Tangent of the phase angle <span class="math">\(\tan(\delta(\omega))=G''/G'\)</span> (in logarithmic scale) vs <span class="math">\(\omega\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationTTS.BaseApplicationTTS.viewdeltatanGstar">
 <code class="descname">viewdeltatanGstar</code><span class="sig-paren">(</span><em>dt</em>, <em>file_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#BaseApplicationTTS.viewdeltatanGstar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.BaseApplicationTTS.viewdeltatanGstar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loss angle <span class="math notranslate">\(\delta(\omega)=\arctan(G''/G')\)</span> vs logarithm of the modulus of the complex viscosity <span class="math notranslate">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
+<dd><p>Loss angle <span class="math">\(\delta(\omega)=\arctan(G''/G')\)</span> vs logarithm of the modulus of the complex viscosity <span class="math">\(|G*(\omega)|=\sqrt{G'^2+G''^2}\)</span></p>
 </dd></dl>
 
 </dd></dl>
@@ -739,7 +746,7 @@ time-temperature superposition principle.</p>
 <dl class="class">
 <dt id="ApplicationTTS.CLApplicationTTS">
 <em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">CLApplicationTTS</code><span class="sig-paren">(</span><em>name='TTS'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#CLApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.CLApplicationTTS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationTTS.BaseApplicationTTS" title="ApplicationTTS.BaseApplicationTTS"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationTTS.BaseApplicationTTS</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationTTS.BaseApplicationTTS" title="ApplicationTTS.BaseApplicationTTS"><code class="xref py py-class docutils literal"><span class="pre">ApplicationTTS.BaseApplicationTTS</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -747,7 +754,7 @@ time-temperature superposition principle.</p>
 <dl class="class">
 <dt id="ApplicationTTS.GUIApplicationTTS">
 <em class="property">class </em><code class="descclassname">ApplicationTTS.</code><code class="descname">GUIApplicationTTS</code><span class="sig-paren">(</span><em>name='TTS'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationTTS.html#GUIApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationTTS.GUIApplicationTTS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ApplicationTTS.BaseApplicationTTS" title="ApplicationTTS.BaseApplicationTTS"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationTTS.BaseApplicationTTS</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#ApplicationTTS.BaseApplicationTTS" title="ApplicationTTS.BaseApplicationTTS"><code class="xref py py-class docutils literal"><span class="pre">ApplicationTTS.BaseApplicationTTS</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#QApplicationWindow.QApplicationWindow" title="QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal"><span class="pre">QApplicationWindow.QApplicationWindow</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -783,7 +790,7 @@ time-temperature superposition principle.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

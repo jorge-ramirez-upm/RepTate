@@ -7,8 +7,6 @@ Applications
 ApplicationGt
 -------------
 
-.. inheritance-diagram:: ApplicationGt Application
-
 .. automodule:: ApplicationGt
     :members:
     :undoc-members:

@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TheoryBlendRoliePoly &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -23,7 +31,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,14 +53,12 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -583,6 +590,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tauR</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">taus</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">taud</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Got </span><span class="si">%d</span><span class="s2"> modes from MWD&quot;</span> <span class="o">%</span> <span class="n">nmodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=green&gt;&lt;b&gt;Press &quot;Calculate&quot; to update theory&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
@@ -601,6 +609,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">tau</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;phi</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">sum_G</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">fZ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;CLF correction function Likthman-McLeish (2002)&quot;&quot;&quot;</span>
@@ -1195,6 +1204,7 @@
                 <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-infinite.png&#39;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">display_flag</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">=</span> <span class="n">OptType</span><span class="o">.</span><span class="n">const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=green&gt;&lt;b&gt;Press &quot;Calculate&quot; to update theory&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
@@ -1234,7 +1244,7 @@
                 <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                     <span class="n">th_index</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">indexOf</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
                     <span class="n">th_tab_name</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="n">th_index</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="s2">&quot;MWDiscr&quot;</span> <span class="ow">in</span> <span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">th</span><span class="o">.</span><span class="n">thname</span> <span class="o">==</span> <span class="s1">&#39;Discretize MWD&#39;</span><span class="p">:</span>
                         <span class="n">get_dict</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">app_tab_name</span><span class="p">,</span> <span class="n">ds_tab_name</span><span class="p">,</span>
                                                <span class="n">th_tab_name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">get_mwd</span>
 
@@ -1249,9 +1259,14 @@
                 <span class="n">item</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">btngrp</span><span class="o">.</span><span class="n">checkedButton</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
                 <span class="n">m</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">[</span><span class="n">item</span><span class="p">]()</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">MWD_m</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">MWD_phi</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[:]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">MWD_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">MWD_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_modes_from_mwd</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># no theory Discretise MWD found</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Get MW distribution&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;No </span><span class="se">\&quot;</span><span class="s1">Discretize MWD</span><span class="se">\&quot;</span><span class="s1"> theory found&#39;</span><span class="p">)</span>
         <span class="c1"># self.parent_dataset.handle_actionCalculate_Theory()</span>
 
     <span class="k">def</span> <span class="nf">edit_modes_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1304,8 +1319,8 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Could not understand line </span><span class="si">%d</span><span class="s2">, try again&quot;</span> <span class="o">%</span>
                                 <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
                     <span class="k">return</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">MWD_m</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">MWD_phi</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MWD_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MWD_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_modes_from_mwd</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">plot_modes_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1332,7 +1347,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

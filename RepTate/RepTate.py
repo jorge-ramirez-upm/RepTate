@@ -117,7 +117,7 @@ def start_RepTate(argv):
                                     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
     app = QApplication(sys.argv)
     splash = SplashScreen()
-    splash.showMessage("Loading RepTate...\n")
+    # splash.showMessage("Loading RepTate...\n")
     splash.show()
     
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
@@ -126,7 +126,7 @@ def start_RepTate(argv):
 
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
-    splash.showMessage("Loading RepTate...")
+    # splash.showMessage("Loading RepTate...")
 
     splash.finish(ex)
 
