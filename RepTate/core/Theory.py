@@ -728,7 +728,7 @@ class Theory(CmdBase):
         self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax],
                             [1, self.ymin], [0, self.ymin]])
 
-    def do_xrange(self, line):
+    def do_xrange(self, line, visible=None):
         """Set/show xrange for fit and shows limits
         
         With no arguments: switches ON/OFF the horizontal span
@@ -736,6 +736,8 @@ class Theory(CmdBase):
         Arguments:
             - line {[xmin xmax]} -- Sets the limits of the span
         """
+        if visible == None:
+            visible = not self.xrange.get_visible()
         if (line == ""):
             """.. todo:: Set range to current view limits"""
             self.xmin, self.xmax = self.ax.get_xlim()
@@ -743,9 +745,9 @@ class Theory(CmdBase):
             self.xmaxline.set_data([self.xmax, self.xmax], [0, 1])
             self.xrange.set_xy([[self.xmin, 0], [self.xmin, 1], [self.xmax, 1],
                                 [self.xmax, 0], [self.xmin, 0]])
-            self.xrange.set_visible(not self.xrange.get_visible())
-            self.xminline.set_visible(not self.xminline.get_visible())
-            self.xmaxline.set_visible(not self.xmaxline.get_visible())
+            self.xrange.set_visible(visible)
+            self.xminline.set_visible(visible)
+            self.xmaxline.set_visible(visible)
         else:
             items = line.split()
             if len(items) < 2:
@@ -764,7 +766,7 @@ class Theory(CmdBase):
                     self.xmaxline.set_visible(True)
         self.do_plot(line)
 
-    def do_yrange(self, line):
+    def do_yrange(self, line, visible=None):
         """Set/show yrange for fit and shows limits
         
         With no arguments: switches ON/OFF the vertical span
@@ -772,16 +774,18 @@ class Theory(CmdBase):
         Arguments:
             - line {[ymin ymax]} -- Sets the limits of the span
         """
+        if visible == None:
+            visible = not self.yrange.get_visible()
         if (line == ""):
             self.ymin, self.ymax = self.ax.get_ylim()
             self.yminline.set_data([0, 1], [self.ymin, self.ymin])
             self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
             self.yrange.set_xy([[0, self.ymin], [1, self.ymin], [1, self.ymax],
                                 [0, self.ymax], [0, self.ymin]])
-            self.yrange.set_visible(not self.yrange.get_visible())
-            self.yminline.set_visible(not self.yminline.get_visible())
-            self.ymaxline.set_visible(not self.ymaxline.get_visible())
-            print("Ymin=%g Ymax=%g" % (self.ymin, self.ymax))
+            self.yrange.set_visible(visible)
+            self.yminline.set_visible(visible)
+            self.ymaxline.set_visible(visible)
+            # print("Ymin=%g Ymax=%g" % (self.ymin, self.ymax))
         else:
             items = line.split()
             if len(items) < 2:

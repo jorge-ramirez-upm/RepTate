@@ -172,18 +172,7 @@ class MultiView(QWidget):
         for i in range(self.nplots):
             self.axarr.append(self.figure.add_subplot(gs[i]))            
 
-        self.bbox = []
-        x0min = y0min = 1e9
-        x1max = y1max = -1e9
-        for i in range(self.nplots):
-            bboxnow = self.axarr[i].get_position()
-            self.bbox.append(bboxnow)
-            x0min = min(x0min, bboxnow.x0)
-            y0min = min(y0min, bboxnow.y0)
-            x1max = max(x1max, bboxnow.x1)
-            y1max = max(y1max, bboxnow.y1)
-                
-        self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
+        self.set_bbox()
 
         self.canvas = FigureCanvasQTAgg(self.figure)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
@@ -199,7 +188,40 @@ class MultiView(QWidget):
 
             ax_i.xaxis.tick_bottom()
             ax_i.yaxis.tick_left()
-         
+        self.hidden_tab = []
+    
+    def set_bbox(self):
+        self.bbox = []
+        x0min = y0min = 1e9
+        x1max = y1max = -1e9
+        for i in range(self.nplots):
+            bboxnow = self.axarr[i].get_position()
+            self.bbox.append(bboxnow)
+            x0min = min(x0min, bboxnow.x0)
+            y0min = min(y0min, bboxnow.y0)
+            x1max = max(x1max, bboxnow.x1)
+            y1max = max(y1max, bboxnow.y1)
+        self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
+    
+    def reorg_fig(self, nplots):
+        self.plotselecttabWidget.blockSignals(True)
+        self.nplots = nplots
+        gs = self.organizeplots(self.pot, self.nplots, self.ncols)
+        for i in range(nplots):
+            self.axarr[i].set_position(gs[i].get_position(self.figure))
+            self.axarr[i].set_subplotspec(gs[i])
+        for tab in self.hidden_tab:
+            self.plotselecttabWidget.insertTab(tab[0], tab[1], tab[2])
+        self.hidden_tab = []
+
+        for i in range(nplots, len(self.axarr)):
+            self.axarr[i].set_visible(False)
+            self.hidden_tab.append([i + 1, self.plotselecttabWidget.widget(nplots + 1), self.plotselecttabWidget.tabText(nplots + 1)])
+            self.plotselecttabWidget.removeTab(nplots + 1)
+
+        self.set_bbox()
+        self.handle_plottabChanged(self.plotselecttabWidget.currentIndex())
+        self.plotselecttabWidget.blockSignals(False)
 
     def init_plot(self, index):
         if index == 0: #multiplots

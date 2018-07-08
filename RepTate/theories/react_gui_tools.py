@@ -150,7 +150,43 @@ def initialise_tool_bar(parent_theory):
 def handle_btn_prio_senio(parent_theory, checked):
     """Change do_priority_seniority"""
     parent_theory.do_priority_seniority = checked
+    app = parent_theory.parent_dataset.parent_application
+    app.viewComboBox.blockSignals(True)
+    if checked:
+        app.multiviews[-1] = app.views['prio_v_senio']
+        app.viewComboBox.addItems([app.views['prio_v_senio'].name,])
+        app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views['prio_v_senio'].description, Qt.ToolTipRole)
+        app.multiplots.reorg_fig(app.nplots)
+    else:
+        app.multiplots.reorg_fig(app.nplots - 1)
+        app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
+        for i, view in enumerate(app.multiviews):
+            if view.name in 'prio_v_senio':
+                app.multiviews[i] = app.views[app.viewComboBox.itemText(i)]
     parent_theory.parent_dataset.toggle_vertical_limits(checked)
+    app.viewComboBox.blockSignals(False)
+
+def show_theory_extras(parent_theory, show):
+    """Change the number of plots when current theory is changed
+    Show/Hide the extra plot"""
+    app = parent_theory.parent_dataset.parent_application
+    app.viewComboBox.blockSignals(True)
+    hide = not show
+    if show and parent_theory.do_priority_seniority:
+        #show extra figure
+        app.multiviews[-1] = app.views['prio_v_senio']
+        app.viewComboBox.addItems([app.views['prio_v_senio'].name,])
+        app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views['prio_v_senio'].description, Qt.ToolTipRole)
+        app.multiplots.reorg_fig(app.nplots)
+    elif hide and parent_theory.do_priority_seniority:
+        #remove extra figure
+        app.multiplots.reorg_fig(app.nplots - 1)
+        app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
+        for i, view in enumerate(app.multiviews):
+            if view.name in 'prio_v_senio':
+                app.multiviews[i] = app.views[app.viewComboBox.itemText(i)]
+    parent_theory.parent_dataset.toggle_vertical_limits(show)
+    app.viewComboBox.blockSignals(False)
 
 def theory_buttons_disabled(parent_theory, state):
     """

@@ -124,17 +124,28 @@ class Application(CmdBase):
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
         
         # MATPLOTLIB STUFF
+        self.set_multiplot(self.nplots, self.ncols)
+        # self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
+        #                             self.nplots, self.ncols, self)
+        # self.multiplots.plotselecttabWidget.setCurrentIndex(
+        #     self.current_viewtab)
+        # self.figure = self.multiplots.figure
+        # self.axarr = self.multiplots.axarr  #
+        # self.canvas = self.multiplots.canvas
+
+        if (CmdBase.mode == CmdMode.cmdline):
+            # self.figure.show()
+            self.multiplots.show()
+
+    def set_multiplot(self, nplots, ncols):
+        """defines the plot"""
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
-                                    self.nplots, self.ncols, self)
+                                    nplots, ncols, self)
         self.multiplots.plotselecttabWidget.setCurrentIndex(
             self.current_viewtab)
         self.figure = self.multiplots.figure
         self.axarr = self.multiplots.axarr  #
         self.canvas = self.multiplots.canvas
-
-        if (CmdBase.mode == CmdMode.cmdline):
-            # self.figure.show()
-            self.multiplots.show()
 
     def add_common_theories(self):
         for th in self.common_theories.values():
