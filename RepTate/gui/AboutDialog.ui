@@ -81,7 +81,7 @@
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-image: url(:/Images/Images/logo.png);</string>
+         <string notr="true">background-image: url(:/Images/Images/logo_with_uni_logo.png);</string>
         </property>
         <property name="text">
          <string>fdfdf</string>
