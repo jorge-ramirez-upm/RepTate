@@ -78,7 +78,7 @@ class BaseApplicationTemplate:
     #help_file = ''
     appname = ApplicationTemplate.appname
 
-    def __init__(self, name='Template', parent=None, nplots=1, ncols=2):
+    def __init__(self, name='Template', parent=None):
         """
         **Constructor**
         
@@ -90,7 +90,7 @@ class BaseApplicationTemplate:
         # Import theories specific to the Application e.g.:
         # from TheoryTemplate import TheoryA
 
-        super().__init__(name, parent)
+        super().__init__(name, parent, nplot_max=1)
 
         # VIEWS
         # set the views that can be selected in the view combobox
@@ -107,11 +107,15 @@ class BaseApplicationTemplate:
             n=1,
             snames=['y(x)'])
 
-        #set multiviews
-        #default view order in multiplot views, set only one item for single view
-        #if more than one item, modify the 'nplots' in the super().__init__ call
-        self.multiviews = [self.views['y(x)']]
-        self.nplots = len(self.multiviews)
+        # set multiviews
+        # default view order in multiplot views, set nplots=1 for single view
+        # increase self.nplot_max for more plots
+        self.nplots = 1
+        self.multiviews = []
+        for i in range(self.nplot_max):
+            # set views in the same order as declared above
+            self.multiviews.append(list(self.views.values())[i])
+        self.multiplots.reorg_fig(self.nplots)
 
         # FILES
         # set the type of files that ApplicationTemplate can open

@@ -430,6 +430,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
         connection_id = self.actionSave_View.triggered.connect(self.save_view)
+        connection_id = self.sp_nviews.valueChanged.connect(self.sp_nviews_valueChanged)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
         connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
@@ -489,13 +490,17 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
 
-
         self.dataset_actions_disabled(True)
-
+        self.sp_nviews.setMaximum(self.nplot_max)
         # connection_id = self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         #xaxis = self.ax.get_xticklabels()
-        #print (xaxis)  
+        #print (xaxis)
+
+    def sp_nviews_valueChanged(self, new_nplots):
+        """Change the current number of views displayed in the app"""
+        self.nplots = new_nplots
+        self.multiplots.reorg_fig(new_nplots)
 
     def save_view(self):
         dir_start = "data/"

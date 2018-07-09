@@ -204,9 +204,17 @@ class MultiView(QWidget):
         self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
     
     def reorg_fig(self, nplots):
+        self.parent_application.sp_nviews.blockSignals(True)
+        self.parent_application.sp_nviews.setValue(nplots)
+        self.parent_application.sp_nviews.blockSignals(False)
+
         self.plotselecttabWidget.blockSignals(True)
         self.nplots = nplots
         gs = self.organizeplots(self.pot, self.nplots, self.ncols)
+        
+        # hide tabs if only one figure
+        self.plotselecttabWidget.setVisible(nplots > 1)
+
         for i in range(nplots):
             self.axarr[i].set_position(gs[i].get_position(self.figure))
             self.axarr[i].set_subplotspec(gs[i])
@@ -220,6 +228,9 @@ class MultiView(QWidget):
             self.plotselecttabWidget.removeTab(nplots + 1)
 
         self.set_bbox()
+        for ds in self.parent_application.datasets.values():
+            ds.nplots = nplots
+        self.parent_application.update_all_ds_plots()
         self.handle_plottabChanged(self.plotselecttabWidget.currentIndex())
         self.plotselecttabWidget.blockSignals(False)
 

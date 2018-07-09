@@ -90,7 +90,7 @@ class BaseApplicationLAOS:
         # Import theories specific to the Application e.g.:
         # from TheoryLAOS import TheoryA
 
-        super().__init__(name, parent)
+        super().__init__(name, parent, nplot_max=1)
 
         # VIEWS
         # set the views that can be selected in the view combobox
@@ -123,8 +123,12 @@ class BaseApplicationLAOS:
         #set multiviews
         #default view order in multiplot views, set only one item for single view
         #if more than one item, modify the 'nplots' in the super().__init__ call
-        self.multiviews = [self.views['sigma(gamma)']]
-        self.nplots = len(self.multiviews)
+        self.nplots = 1
+        self.multiviews = []
+        for i in range(self.nplot_max):
+            # set views in the same order as declared above
+            self.multiviews.append(list(self.views.values())[i])
+        self.multiplots.reorg_fig(self.nplots)
 
         # FILES
         # set the type of files that ApplicationLAOS can open

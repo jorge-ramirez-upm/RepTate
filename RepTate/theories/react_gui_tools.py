@@ -153,12 +153,14 @@ def handle_btn_prio_senio(parent_theory, checked):
     app = parent_theory.parent_dataset.parent_application
     app.viewComboBox.blockSignals(True)
     if checked:
-        app.multiviews[-1] = app.views['prio_v_senio']
+        app.nplots = min(app.nplot_max, app.nplots + 1)
+        app.multiviews[app.nplots - 1] = app.views['prio_v_senio']
         app.viewComboBox.addItems([app.views['prio_v_senio'].name,])
         app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views['prio_v_senio'].description, Qt.ToolTipRole)
         app.multiplots.reorg_fig(app.nplots)
     else:
-        app.multiplots.reorg_fig(app.nplots - 1)
+        app.nplots = max(1, app.nplots - 1)
+        app.multiplots.reorg_fig(app.nplots)
         app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
         for i, view in enumerate(app.multiviews):
             if view.name in 'prio_v_senio':
@@ -174,13 +176,15 @@ def show_theory_extras(parent_theory, show):
     hide = not show
     if show and parent_theory.do_priority_seniority:
         #show extra figure
-        app.multiviews[-1] = app.views['prio_v_senio']
+        app.nplots = min(app.nplot_max, app.nplots + 1)
+        app.multiviews[app.nplots - 1] = app.views['prio_v_senio']
         app.viewComboBox.addItems([app.views['prio_v_senio'].name,])
         app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views['prio_v_senio'].description, Qt.ToolTipRole)
         app.multiplots.reorg_fig(app.nplots)
     elif hide and parent_theory.do_priority_seniority:
         #remove extra figure
-        app.multiplots.reorg_fig(app.nplots - 1)
+        app.nplots = max(1, app.nplots - 1)
+        app.multiplots.reorg_fig(app.nplots)
         app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
         for i, view in enumerate(app.multiviews):
             if view.name in 'prio_v_senio':

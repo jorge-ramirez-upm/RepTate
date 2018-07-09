@@ -139,10 +139,12 @@ class BaseApplicationSANS:
             snames=["q2*I"])
 
         #set multiviews
-        self.multiviews = [
-            self.views["log(I(q))"]
-        ]  #default view order in multiplot views, set only one item for single view
-        self.nplots = len(self.multiviews)
+        self.nplots = 1
+        self.multiviews = []
+        for i in range(self.nplot_max):
+            # set views in the same order as declared above
+            self.multiviews.append(list(self.views.values())[i])
+        self.multiplots.reorg_fig(self.nplots)
 
         # FILES
         ftype = TXTColumnFile("SANS files", "sans", "SANS files",

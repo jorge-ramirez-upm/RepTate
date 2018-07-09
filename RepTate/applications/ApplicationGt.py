@@ -94,9 +94,7 @@ class BaseApplicationGt:
         from TheoryRouse import TheoryRouseTime
         from TheoryDTDStars import TheoryDTDStarsTime
 
-        super().__init__(
-            name, parent, nplots=2,
-            ncols=2)  # will call Application.__init__ with these args
+        super().__init__(name, parent)
 
         # time range for view conversion to frequency domain
         self.tmin_view = -np.inf
@@ -115,30 +113,6 @@ class BaseApplicationGt:
             view_proc=self.viewLogGt,
             n=1,
             snames=["log(G)"])
-        self.views["G(t)"] = View(
-            name="G(t)",
-            description="Relaxation modulus",
-            x_label="t",
-            y_label="G",
-            x_units="s",
-            y_units="Pa",
-            log_x=True,
-            log_y=True,
-            view_proc=self.viewGt,
-            n=1,
-            snames=["G"])
-        self.views["Schwarzl G',G''"] = View(
-            name="Schwarzl G',G''",
-            description="G', G'' from Schwarzl transformation of G(t)",
-            x_label="$\omega$",
-            y_label="G',G''",
-            x_units="rad/s",
-            y_units="Pa",
-            log_x=True,
-            log_y=True,
-            view_proc=self.viewSchwarzl_Gt,
-            n=2,
-            snames=["G'","G''"])
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
             description="G', G'' from i-Rheo transformation of G(t)",
@@ -164,6 +138,30 @@ class BaseApplicationGt:
             view_proc=self.viewiRheoOver,
             n=2,
             snames=["G'","G''"])
+        self.views["Schwarzl G',G''"] = View(
+            name="Schwarzl G',G''",
+            description="G', G'' from Schwarzl transformation of G(t)",
+            x_label="$\omega$",
+            y_label="G',G''",
+            x_units="rad/s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewSchwarzl_Gt,
+            n=2,
+            snames=["G'","G''"])
+        self.views["G(t)"] = View(
+            name="G(t)",
+            description="Relaxation modulus",
+            x_label="t",
+            y_label="G",
+            x_units="s",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewGt,
+            n=1,
+            snames=["G"])
         self.OVER = 100  # initial oversampling
         self.MIN_OVER = 1  # min oversampling
         self.MAX_OVER = 10000  # max oversampling
@@ -173,6 +171,14 @@ class BaseApplicationGt:
             self.views["log(G(t))"], self.views["i-Rheo G',G''"]
         ]  #default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews)
+
+        #set multiviews
+        self.nplots = 2
+        self.multiviews = []
+        for i in range(self.nplot_max):
+            # set views in the same order as declared above
+            self.multiviews.append(list(self.views.values())[i])
+        self.multiplots.reorg_fig(self.nplots)
 
         # FILES
         ftype = TXTColumnFile("G(t) files", "gt", "Relaxation modulus",

@@ -151,11 +151,14 @@ class BaseApplicationTTSFactors:
             view_proc=self.viewLogaTbT,
             n=2,
             snames=["log(aT)", "log(bT)"])
-            
-            
+
         #set multiviews
-        self.multiviews = [self.views["log(aT)"]] 
-        self.nplots = len(self.multiviews)
+        self.nplots = 1
+        self.multiviews = []
+        for i in range(self.nplot_max):
+            # set views in the same order as declared above
+            self.multiviews.append(list(self.views.values())[i])
+        self.multiplots.reorg_fig(self.nplots)
 
         # FILES
         ftype = TXTColumnFile(

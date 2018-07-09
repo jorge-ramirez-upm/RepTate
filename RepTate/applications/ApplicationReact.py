@@ -94,9 +94,7 @@ class BaseApplicationReact:
         from TheoryReactMix import TheoryReactMix
         from TheoryCreatePolyconf import TheoryCreatePolyconf
 
-        super().__init__(
-            name, parent, nplots=4,
-            ncols=2)  # will call Application.__init__ with these args
+        super().__init__(name, parent)
 
         # VIEWS
         # set the views that can be selected in the view combobox
@@ -174,12 +172,12 @@ class BaseApplicationReact:
             snames=["av_prio"])
 
         #set multiviews
-        self.multiviews = [
-            self.views["w(M)"], self.views["g(M)"], self.views['br/1000C'], self.views['prio_v_senio']
-        ]  #default view order in multiplot views
-        self.nplots = len(self.multiviews)
-        # default without extra plot
-        self.multiplots.reorg_fig(self.nplots - 1)
+        self.nplots = 3
+        self.multiviews = []
+        for i in range(self.nplot_max):
+            # set views in the same order as declared above
+            self.multiviews.append(list(self.views.values())[i])
+        self.multiplots.reorg_fig(self.nplots)
 
         # FILES
         # set the type of files that ApplicationReact can open

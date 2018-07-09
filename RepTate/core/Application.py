@@ -73,8 +73,8 @@ class Application(CmdBase):
     def __init__(self,
                  name="ApplicationTemplate",
                  parent=None,
-                 nplots=1,
-                 ncols=1,
+                 nplot_max=4,
+                 ncols=2,
                  **kwargs):
         """
         **Constructor**
@@ -100,7 +100,8 @@ class Application(CmdBase):
         self.num_datasets = 0
         self.legend_visible = False
         self.multiviews = []  #default view order in multiplot views
-        self.nplots = nplots  #number of plots
+        self.nplot_max = nplot_max  # maximun number of plots
+        self.nplots = nplot_max  # current number of plots
         self.ncols = ncols  #number of columns in the multiplot
         self.current_viewtab = 0
 
