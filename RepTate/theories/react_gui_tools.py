@@ -185,7 +185,6 @@ def show_theory_extras(parent_theory, show):
         for i, view in enumerate(app.multiviews):
             if view.name in 'prio_v_senio':
                 app.multiviews[i] = app.views[app.viewComboBox.itemText(i)]
-    parent_theory.parent_dataset.toggle_vertical_limits(show)
     app.viewComboBox.blockSignals(False)
 
 def theory_buttons_disabled(parent_theory, state):
