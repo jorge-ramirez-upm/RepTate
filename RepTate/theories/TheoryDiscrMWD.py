@@ -108,25 +108,29 @@ class BaseTheoryDiscrMWD:
             1000,
             "Number-average molecular mass",
             ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+            display_flag=False)
         self.parameters["Mw"] = Parameter(
             "Mw",
             1000,
             "Weight-average molecular mass",
             ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+            display_flag=False)
         self.parameters["Mz"] = Parameter(
             "Mz",
             1,
             "z-average molecular mass",
             ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+            display_flag=False)
         self.parameters["PDI"] = Parameter(
             "PDI",
             1,
             "Polydispersity index",
             ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+            display_flag=False)
 
         mmin = self.parent_dataset.minpositivecol(0)
         mmax = self.parent_dataset.maxcol(0)
@@ -163,8 +167,12 @@ class BaseTheoryDiscrMWD:
             ft = f.data_table.data
             m_arr = ft[:, 0]
             w_arr = ft[:, 1]
-            mmin = min(m_arr[np.nonzero(w_arr)])
-            mmax = max(m_arr[np.nonzero(w_arr)])
+            try:
+                mmin = min(m_arr[np.nonzero(w_arr)])
+                mmax = max(m_arr[np.nonzero(w_arr)])
+            except:
+                mmin = m_arr[0]
+                mmax = m_arr[-1]
             self.parameters["logmmin"].value = np.log10(mmin)
             self.parameters["logmmax"].value = np.log10(mmax)
             nbin = self.parameters["nbin"].value
@@ -355,7 +363,6 @@ class BaseTheoryDiscrMWD:
         tempMn = 0
         tempM2 = 0
         tempM3 = 0
-        temp_sum = 0
 
         for i in range(n):
             M = f[i, 0]
@@ -365,10 +372,15 @@ class BaseTheoryDiscrMWD:
             tempM3 += w * M**3 # w*M^3
             tempM2 += w * M * M  # w*M^2
             tempMn += w / M  # w/M
-        Mn = 1 / tempMn
-        Mz = tempM2 / Mw
-        Mzp1 = tempM3 / tempM2
-        PDI = Mw / Mn
+        
+        if tempMn * Mw * tempM2 != 0:
+            Mn = 1 / tempMn
+            Mz = tempM2 / Mw
+            Mzp1 = tempM3 / tempM2
+            PDI = Mw / Mn
+        else:
+            PDI = Mzp1 = Mz = Mw = Mn = np.nan
+            self.Qprint("Could not determine moments")
 
         # if line == "input" and CmdBase.mode == CmdMode.GUI:
         #     file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
@@ -389,8 +401,8 @@ class BaseTheoryDiscrMWD:
         else:
             self.Qprint('''<h3>Characteristics of the %s MWD</h3>'''%line, end='')
             table='''<table border="1" width="100%">'''
-            table+='''<tr><th>Mn</th><th>Mw</th><th>Mw/Mn</th><th>Mz/Mw</th><th>Mz+1/Mz</th></tr>'''
-            table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td><td>%7.3g</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw, Mzp1/Mz)
+            table+='''<tr><th>Mn (kg/mol)</th><th>Mw (kg/mol)</th><th>Mw/Mn</th><th>Mz/Mw</th><th>Mz+1/Mz</th></tr>'''
+            table+='''<tr><td>%.3g</td><td>%.3g</td><td>%.3g</td><td>%.3g</td><td>%.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw, Mzp1/Mz)
             table+='''</table><br>'''
             self.Qprint(table)
 
@@ -422,7 +434,8 @@ class BaseTheoryDiscrMWD:
             temp[i, 0] = np.power(
                 10, (np.log10(ft[i + 1, 0]) + np.log10(ft[i, 0])) / 2)
             temp[i, 1] = mean_w * dlogM
-        temp[:, 1] /= temp_area
+        if temp_area != 0:
+            temp[:, 1] /= temp_area
         self.calculate_moments(temp, "input")
 
         nbin = self.parameters["nbin"].value
