@@ -350,7 +350,7 @@ def end_print(parent_theory, ndist, do_architecture):
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Linear', react_dist[ndist].contents.nlin / norm)
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / norm)
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('H', react_dist[ndist].contents.nH / norm)
-            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('7-arm', react_dist[ndist].contents.nH / norm)
+            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('7-arm', react_dist[ndist].contents.n7arm / norm)
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Comb', react_dist[ndist].contents.ncomb / norm)
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Other', react_dist[ndist].contents.nother / norm)
             table+= '''</table><br>'''

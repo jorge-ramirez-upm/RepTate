@@ -165,10 +165,10 @@ class BaseApplicationReact:
             y_label="Average Priority",
             x_units="-",
             y_units="-",
-            log_x=False,
-            log_y=False,
+            log_x=True,
+            log_y=True,
             view_proc=self.thview_prio_v_senio,
-            n=1,
+            n=3,
             snames=["av_prio"])
 
         #set multiviews
@@ -252,12 +252,20 @@ class BaseApplicationReact:
         return x, y, True
     
     def thview_prio_v_senio(self, dt, file_parameters):
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
+        x = np.zeros((dt.num_rows, 3))
+        y = np.zeros((dt.num_rows, 3))
         y[:] = np.nan
         try:
+            maxp = np.nanmax(dt.data[:, 5])
             x[:, 0] = dt.data[:, 4]
             y[:, 0] = dt.data[:, 5]
+
+            x[:, 1] = dt.data[:, 4]
+            y[:, 1] = dt.data[:, 4]
+            
+            x[:, 2] = dt.data[:, 4]
+            y[:, 2] = np.power(2, dt.data[:, 4] - 1)
+            y[:, 2] = np.where(y[:, 2] <= maxp , y[:, 2], np.nan)   
         except IndexError: 
             pass
         return x, y, True

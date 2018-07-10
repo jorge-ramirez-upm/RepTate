@@ -509,6 +509,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                     th_linestyle = ThLineMode.linestyles.value['dashed']
                                 else:
                                     th_linestyle = ThLineMode.linestyles.value['solid']
+                            elif i == 2: # 3rd theory line with different style
+                                if self.th_linestyle == 'solid':
+                                    th_linestyle = ThLineMode.linestyles.value['dashdotted']
+                                else:
+                                    th_linestyle = ThLineMode.linestyles.value['dotted']
                             else:
                                 th_linestyle = self.th_linestyle
                             tt.series[nx][i].set_linestyle(th_linestyle)
