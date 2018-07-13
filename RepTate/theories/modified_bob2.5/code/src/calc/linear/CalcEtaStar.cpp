@@ -23,54 +23,72 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 double CalcEtaStar(double freq)
 {
   // calculate complex viscosity at a particular frequency
-  // use gtp.dat data to interpolate
-  FILE *fid = fopen("gtp.dat", "r");
-  extern FILE *infofl;
-  double eta = 0.0;
-  if (fid == 0)
+  // use gtp.dat data to interpolate or omega, g_p, g_pp if reptate_flag
+  extern double interp_logscale(int, double, double *, double *);
+  extern bool reptate_flag;
+
+  if (reptate_flag)
   {
-    extern bool reptate_flag;
-    if (reptate_flag){
-      print_to_python((char*)"In CalcEtaStar: Did not find gtp.dat");
-      print_to_python((char*)"Something has gone quite wrong!\n");
-    }
-    else{
-    fprintf(infofl, "In CalcEtaStar: Did not find gtp.dat \n");
-    fprintf(infofl, "Something has gone quite wrong! \n\n");
-    }
-  }
-  else
-  {
-    int ndata = 0;
-    int err = 0;
-    double a1, a2, a3;
-    while (err != -1)
-    {
-      err = fscanf(fid, "%lf %lf %lf", &a1, &a2, &a3);
-      if (err == 3)
-      {
-        ndata++;
-      }
-    }
-    fclose(fid);
+    extern std::vector<double> omega, g_p, g_pp;
     double *ff, *competa;
+    double eta;
+    int ndata, i;
+
+    ndata = omega.size();
     ff = new double[ndata];
     competa = new double[ndata];
-
-    fid = fopen("gtp.dat", "r");
-    for (int i = 0; i < ndata; i++)
+    for (i = 0; i < ndata; i++)
     {
-      err = fscanf(fid, "%lf %lf %lf", &a1, &a2, &a3);
-      ff[i] = a1;
-      competa[i] = sqrt(a2 * a2 + a3 * a3) / a1;
+      ff[i] = omega[i];
+      competa[i] = sqrt(g_p[i] * g_p[i] + g_pp[i] * g_pp[i]) / omega[i];
     }
-    fclose(fid);
-    extern double interp_logscale(int, double, double *, double *);
     eta = interp_logscale(ndata, freq, ff, competa);
     delete[] ff;
     delete[] competa;
+    return eta;
   }
-  return eta;
+  else
+  {
+    FILE *fid = fopen("gtp.dat", "r");
+    extern FILE *infofl;
+    double eta = 0.0;
+    if (fid == 0)
+    {
+      fprintf(infofl, "In CalcEtaStar: Did not find gtp.dat \n");
+      fprintf(infofl, "Something has gone quite wrong! \n\n");
+    }
+    else
+    {
+      int ndata = 0;
+      int err = 0;
+      double a1, a2, a3;
+      while (err != -1)
+      {
+        err = fscanf(fid, "%lf %lf %lf", &a1, &a2, &a3);
+        if (err == 3)
+        {
+          ndata++;
+        }
+      }
+      fclose(fid);
+      double *ff, *competa;
+      ff = new double[ndata];
+      competa = new double[ndata];
+
+      fid = fopen("gtp.dat", "r");
+      for (int i = 0; i < ndata; i++)
+      {
+        err = fscanf(fid, "%lf %lf %lf", &a1, &a2, &a3);
+        ff[i] = a1;
+        competa[i] = sqrt(a2 * a2 + a3 * a3) / a1;
+      }
+      fclose(fid);
+      eta = interp_logscale(ndata, freq, ff, competa);
+      delete[] ff;
+      delete[] competa;
+      return eta;
+    }
+  }
 }
 
 // y(x) over discrete nd points

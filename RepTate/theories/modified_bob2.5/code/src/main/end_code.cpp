@@ -21,6 +21,14 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdlib.h>
 #include "../../include/bob.h"
 
+template<typename T>
+void shrink_to_fit(std::vector<T>& v)
+{
+  // deallocate memory
+  // avoid use of c++11 shrink_to_fit method
+  std::vector<T>(v.begin(), v.end()).swap(v);
+}
+
 void close_files(void)
 {
   extern FILE *infofl;
@@ -64,22 +72,21 @@ void end_code(void)
       br_copy[i].assigned_taus.clear();
       br_copy[i].taus.clear();
 
-      // hopefully deallocate the memory
-      br_copy[i].armindx.shrink_to_fit();
-      br_copy[i].priority.shrink_to_fit();
-      br_copy[i].assigned_trelax.shrink_to_fit();
-      br_copy[i].trelax.shrink_to_fit();
-      br_copy[i].zeta.shrink_to_fit();
-      br_copy[i].relax_end.shrink_to_fit();
-      br_copy[i].assigned_taus.shrink_to_fit();
-      br_copy[i].taus.shrink_to_fit();
+      shrink_to_fit(br_copy[i].armindx);
+      shrink_to_fit(br_copy[i].priority);
+      shrink_to_fit(br_copy[i].assigned_trelax);
+      shrink_to_fit(br_copy[i].trelax);
+      shrink_to_fit(br_copy[i].zeta);
+      shrink_to_fit(br_copy[i].relax_end);
+      shrink_to_fit(br_copy[i].assigned_taus);
+      shrink_to_fit(br_copy[i].taus);
     }
     br_copy.clear();
-    br_copy.shrink_to_fit();
+    shrink_to_fit(br_copy);
 
     extern std::vector<double> t_maxwell;
     t_maxwell.clear();
-    t_maxwell.shrink_to_fit();
+    shrink_to_fit(t_maxwell);
 
     extern int CalcNlin;
     if (CalcNlin == 0)
@@ -90,13 +97,13 @@ void end_code(void)
       {
         nlin_prio_phi_relax[i].clear();
         nlin_prio_phi_held[i].clear();
-        nlin_prio_phi_relax[i].shrink_to_fit();
-        nlin_prio_phi_held[i].shrink_to_fit();
+        shrink_to_fit(nlin_prio_phi_relax[i]);
+        shrink_to_fit(nlin_prio_phi_held[i]);
       }
       nlin_prio_phi_relax.clear();
       nlin_prio_phi_held.clear();
-      nlin_prio_phi_relax.shrink_to_fit();
-      nlin_prio_phi_held.shrink_to_fit();
+      shrink_to_fit(nlin_prio_phi_relax);
+      shrink_to_fit(nlin_prio_phi_held);
     }
 
     extern std::vector<double> omega, g_p, g_pp;
@@ -111,8 +118,7 @@ void end_code(void)
   phi_hist.clear();
   arm_pool.clear();
   branched_poly.clear();
-  // hopefully deallocate the memory
-  phi_hist.shrink_to_fit();
-  arm_pool.shrink_to_fit();
-  branched_poly.shrink_to_fit();
+  shrink_to_fit(phi_hist);
+  shrink_to_fit(arm_pool);
+  shrink_to_fit(branched_poly);
 }
