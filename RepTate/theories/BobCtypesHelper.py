@@ -69,7 +69,7 @@ class BobCtypesHelper:
         try:
             self.bob_lib = CDLL(self.lib_path)
         except:
-            print('OS %s not recognized in BoB CH module' % (sys.platform))
+            print('Could not load shared library \"%s\"' % (self.lib_path))
         # link the C function to Python
         self.link_c_functions()
 
