@@ -57,7 +57,8 @@ class View(object):
                  n=1,
                  snames=[],
                  inverse_view_proc=None,
-                 index=0):
+                 index=0,
+                 with_thline=True):
         """
         **Constructor**
         
@@ -76,6 +77,7 @@ class View(object):
             - inverse_view_proc {func} -- Function that inverses the view: From the n values of the view, returns the data table values (default: {None})
             - n {int} -- Number of series that the view represents (default: {1})
             - snames {list of str} -- Names of the series represented by the view
+            - with_thline {bool} -- if True, plot the theory with lines, else use symbols
         """
         self.name = name
         self.description = description
@@ -89,3 +91,4 @@ class View(object):
         self.inverse_view_proc = inverse_view_proc
         self.n = n
         self.snames = snames
+        self.with_thline = with_thline

@@ -505,20 +505,27 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                         if (i < view.n and file.active and th.active):
                             tt.series[nx][i].set_data(x[:, i], y[:, i])
                             tt.series[nx][i].set_visible(True)
-                            tt.series[nx][i].set_marker('')
-                            if i == 1: # 2nd theory line with different style
-                                if self.th_linestyle == 'solid':
-                                    th_linestyle = ThLineMode.linestyles.value['dashed']
+                            if view.with_thline or i > 0:
+                                tt.series[nx][i].set_marker('')
+                                if i == 1: # 2nd theory line with different style
+                                    if self.th_linestyle == 'solid':
+                                        th_linestyle = ThLineMode.linestyles.value['dashed']
+                                    else:
+                                        th_linestyle = ThLineMode.linestyles.value['solid']
+                                elif i == 2: # 3rd theory line with different style
+                                    if self.th_linestyle == 'solid':
+                                        th_linestyle = ThLineMode.linestyles.value['dashdotted']
+                                    else:
+                                        th_linestyle = ThLineMode.linestyles.value['dotted']
                                 else:
-                                    th_linestyle = ThLineMode.linestyles.value['solid']
-                            elif i == 2: # 3rd theory line with different style
-                                if self.th_linestyle == 'solid':
-                                    th_linestyle = ThLineMode.linestyles.value['dashdotted']
-                                else:
-                                    th_linestyle = ThLineMode.linestyles.value['dotted']
+                                    th_linestyle = ThLineMode.linestyles.value[self.th_linestyle]
+                                tt.series[nx][i].set_linestyle(th_linestyle)
                             else:
-                                th_linestyle = self.th_linestyle
-                            tt.series[nx][i].set_linestyle(th_linestyle)
+                                tt.series[nx][i].set_linestyle('')
+                                tt.series[nx][i].set_marker('.')
+                                tt.series[nx][i].set_markerfacecolor('none')
+                                tt.series[nx][i].set_markersize(size)
+ 
                             tt.series[nx][i].set_linewidth(self.th_line_width)
                             tt.series[nx][i].set_color(th_color)
                             tt.series[nx][i].set_label('')
