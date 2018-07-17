@@ -110,7 +110,18 @@ def request_more_dist(parent_theory):
         parent_theory.Qprint(
             '<b>Too many theories open for internal storage.<b> Please close a theory or increase records"'
         )
+def set_extra_data(parent_theory, extra_data):
+    try:
+        if extra_data['prio_senio_checked'] == 1:
+            handle_btn_prio_senio(parent_theory, True)
+    except Exception as e:
+        print("set_extra_data", e)
 
+def get_extra_data(parent_theory):
+    try:
+        parent_theory.extra_data['prio_senio_checked'] = int(parent_theory.do_priority_seniority)
+    except Exception as e:
+        print("get_extra_data", e)
 
 def initialise_tool_bar(parent_theory):
     """Add icons in theory toolbar"""
@@ -138,7 +149,7 @@ def initialise_tool_bar(parent_theory):
     parent_theory.btn_prio_senio = tb.addAction(QIcon(':/Icon8/Images/new_icons/priority_seniority.png'), 'Calculate Priority and Seniority (can take some time)')
     parent_theory.btn_prio_senio.setCheckable(True)
     parent_theory.btn_prio_senio.setChecked(parent_theory.do_priority_seniority)
-
+    parent_theory.old_views = []
 
     #signals
     connection_id = parent_theory.bob_settings_button.triggered.connect(
@@ -154,17 +165,19 @@ def handle_btn_prio_senio(parent_theory, checked):
     app.viewComboBox.blockSignals(True)
     if checked:
         app.nplots = min(app.nplot_max, app.nplots + 1)
-        app.multiviews[app.nplots - 1] = app.views['prio_v_senio']
-        app.viewComboBox.addItems([app.views['prio_v_senio'].name,])
-        app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views['prio_v_senio'].description, Qt.ToolTipRole)
+        app.multiviews[app.nplots - 1] = app.views[app.extra_view_names[0]]
+        for view_name in app.extra_view_names:
+            app.viewComboBox.addItems([app.views[view_name].name,])
+            app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views[view_name].description, Qt.ToolTipRole)
         app.multiplots.reorg_fig(app.nplots)
     else:
         app.nplots = max(1, app.nplots - 1)
         app.multiplots.reorg_fig(app.nplots)
-        app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
         for i, view in enumerate(app.multiviews):
-            if view.name in 'prio_v_senio':
+            if view.name in app.extra_view_names:
                 app.multiviews[i] = app.views[app.viewComboBox.itemText(i)]
+        for _ in app.extra_view_names:
+            app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
     parent_theory.parent_dataset.toggle_vertical_limits(checked)
     app.viewComboBox.blockSignals(False)
 
@@ -177,18 +190,35 @@ def show_theory_extras(parent_theory, show):
     if show and parent_theory.do_priority_seniority:
         #show extra figure
         app.nplots = min(app.nplot_max, app.nplots + 1)
-        app.multiviews[app.nplots - 1] = app.views['prio_v_senio']
-        app.viewComboBox.addItems([app.views['prio_v_senio'].name,])
-        app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views['prio_v_senio'].description, Qt.ToolTipRole)
+        if parent_theory.old_views:
+            app.multiviews = parent_theory.old_views
+        else:
+            app.multiviews[app.nplots - 1] = app.views[app.extra_view_names[0]]
+        for view_name in app.extra_view_names:
+            app.viewComboBox.addItems([app.views[view_name].name,])
+            app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views[view_name].description, Qt.ToolTipRole)
         app.multiplots.reorg_fig(app.nplots)
     elif hide and parent_theory.do_priority_seniority:
         #remove extra figure
         app.nplots = max(1, app.nplots - 1)
         app.multiplots.reorg_fig(app.nplots)
-        app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
+        parent_theory.old_views = [v for v in app.multiviews]
+        new_multiviews = [v for v in app.multiviews]
+        
+        current_view_name = app.viewComboBox.currentText()
         for i, view in enumerate(app.multiviews):
-            if view.name in 'prio_v_senio':
-                app.multiviews[i] = app.views[app.viewComboBox.itemText(i)]
+            # remove extra view names from viewcombobox
+            if view.name in app.extra_view_names:
+                new_multiviews[i] = app.views[app.viewComboBox.itemText(i)]
+                if view.name == current_view_name:
+                    app.current_view = new_multiviews[i]
+                    app.viewComboBox.setCurrentIndex(i)
+                    new_index = i
+                    current_view_name = ''
+
+        app.multiviews = [v for v in new_multiviews]
+        for _ in app.extra_view_names:
+            app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
     app.viewComboBox.blockSignals(False)
 
 def theory_buttons_disabled(parent_theory, state):

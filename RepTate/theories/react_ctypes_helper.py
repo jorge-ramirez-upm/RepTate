@@ -33,6 +33,7 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
+import numpy as np
 import ctypes as ct
 import sys
 import os
@@ -190,8 +191,29 @@ set_flag_stop_all.restype = None
 init_bin_prio_vs_senio = react_lib.init_bin_prio_vs_senio
 init_bin_prio_vs_senio.restype = None
 
-return_prio_vs_senio = react_lib.return_prio_vs_senio
-return_prio_vs_senio.restype = ct.c_double
+return_avarmlen_v_senio = react_lib.return_avarmlen_v_senio
+return_avarmlen_v_senio.restype = ct.c_double
+
+return_avarmlen_v_prio = react_lib.return_avarmlen_v_prio
+return_avarmlen_v_prio.restype = ct.c_double
+
+return_avprio_v_senio = react_lib.return_avprio_v_senio
+return_avprio_v_senio.restype = ct.c_double
+
+return_avsenio_v_prio = react_lib.return_avsenio_v_prio
+return_avsenio_v_prio.restype = ct.c_double
+
+return_proba_prio = react_lib.return_proba_prio
+return_proba_prio.restype = ct.c_double
+
+return_max_prio = react_lib.return_max_prio
+return_max_prio.restype = ct.c_int
+
+return_proba_senio = react_lib.return_proba_senio
+return_proba_senio.restype = ct.c_double
+
+return_max_senio = react_lib.return_max_senio
+return_max_senio.restype = ct.c_int
 
 
 #initialise lists
@@ -345,7 +367,7 @@ def end_print(parent_theory, ndist, do_architecture):
     if(do_architecture):
         norm = react_dist[ndist].contents.nsaved_arch / 100
         if norm != 0:
-            parent_theory.Qprint('<b>Architecture of %d Polymers: %.3g &lt; M &lt; %.3g kg/mol:</b>' % (react_dist[ndist].contents.nsaved_arch, parent_theory.xmin/1000, parent_theory.xmax/1000))
+            parent_theory.Qprint('<b>Architecture of %d Polymers: %.3g &lt; M &lt; %.3g g/mol:</b>' % (react_dist[ndist].contents.nsaved_arch, parent_theory.xmin, parent_theory.xmax))
             table='''<table border="1" width="100%">'''
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Linear', react_dist[ndist].contents.nlin / norm)
             table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / norm)
@@ -356,24 +378,44 @@ def end_print(parent_theory, ndist, do_architecture):
             table+= '''</table><br>'''
             parent_theory.Qprint(table)
 
-def prio_v_senio(parent_theory, f, ndist, do_architecture):
+def prio_and_senio(parent_theory, f, ndist, do_architecture):
     """Get the priority vs seniority form C and save it in the
     theory DataTable"""
     if not do_architecture:
         return
-    import matplotlib.pyplot as plt
-    import numpy as np
-    pvs = []
-    for s in range(1, 1000):
-        val = return_prio_vs_senio(ct.c_int(s))
-        if val == 0:
-            break
-        pvs.append(val)
     tt = parent_theory.tables[f.file_name_short]
-    nrow = len(tt.data[:, 0])
-    if nrow < len(pvs):
-        tt.data.resize(len(pvs), tt.num_columns)
-        tt.num_rows = len(pvs)
-    tt.data[:, 4] = np.arange(1, tt.num_rows + 1)
-    tt.data[:len(pvs), 5] = pvs[:]
-    tt.data[len(pvs):, 5] = np.nan
+    max_prio = return_max_prio()
+    max_senio = return_max_senio()
+    
+    avarmlen_v_senio = [return_avarmlen_v_senio(ct.c_int(s), ct.c_int(ndist)) for s in range(1, max_senio + 1)]
+    avarmlen_v_prio = [return_avarmlen_v_prio(ct.c_int(p), ct.c_int(ndist)) for p in range(1, max_prio + 1)]
+
+    avprio_v_senio = [return_avprio_v_senio(ct.c_int(s)) for s in range(1, max_senio + 1)]    
+    avsenio_v_prio = [return_avsenio_v_prio(ct.c_int(p)) for p in range(1, max_prio + 1)]
+    
+    proba_senio = [return_proba_senio(ct.c_int(s)) for s in range(1, max_senio + 1)]
+    proba_prio = [return_proba_prio(ct.c_int(p)) for p in range(1, max_prio + 1)]
+    
+    tt.extra_tables['avarmlen_v_senio'] = np.zeros((max_senio, 2))
+    tt.extra_tables['avarmlen_v_senio'][:, 0] = np.arange(1, max_senio + 1)
+    tt.extra_tables['avarmlen_v_senio'][:, 1] =  avarmlen_v_senio[:]
+    
+    tt.extra_tables['avarmlen_v_prio'] = np.zeros((max_prio, 2))
+    tt.extra_tables['avarmlen_v_prio'][:, 0] = np.arange(1, max_prio + 1)
+    tt.extra_tables['avarmlen_v_prio'][:, 1] =  avarmlen_v_prio[:]
+    
+    tt.extra_tables['avprio_v_senio'] = np.zeros((max_senio, 2))
+    tt.extra_tables['avprio_v_senio'][:, 0] = np.arange(1, max_senio + 1)
+    tt.extra_tables['avprio_v_senio'][:, 1] =  avprio_v_senio[:]
+    
+    tt.extra_tables['avsenio_v_prio'] = np.zeros((max_prio, 2))
+    tt.extra_tables['avsenio_v_prio'][:, 0] = np.arange(1, max_prio + 1)
+    tt.extra_tables['avsenio_v_prio'][:, 1] =  avsenio_v_prio[:]
+
+    tt.extra_tables['proba_senio'] = np.zeros((max_senio, 2))
+    tt.extra_tables['proba_senio'][:, 0] = np.arange(1, max_senio + 1)
+    tt.extra_tables['proba_senio'][:, 1] = proba_senio[:]
+
+    tt.extra_tables['proba_prio'] = np.zeros((max_prio, 2))
+    tt.extra_tables['proba_prio'][:, 0] = np.arange(1, max_prio + 1)
+    tt.extra_tables['proba_prio'][:, 1] = proba_prio[:]

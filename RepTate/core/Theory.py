@@ -1014,6 +1014,9 @@ class Theory(CmdBase):
         else:
             super(Theory, self).default(line)
 
+    def show_theory_extras(self, show):
+        pass
+
     def do_hide(self, line=''):
         """Hide the theory artists and associated tools
         
@@ -1025,11 +1028,7 @@ class Theory(CmdBase):
             for i in range(table.MAX_NUM_SERIES):
                 for nx in range(self.parent_dataset.nplots):
                     table.series[nx][i].set_visible(False)
-        try:
-            self.show_theory_extras(False)
-        except:  # current theory has no extras
-            # print("current theory has no extras to hide")
-            pass
+        self.show_theory_extras(False)
 
     def set_th_table_visible(self, fname, state):
         """Show/Hide all theory lines related to the file "fname" """
@@ -1054,11 +1053,7 @@ class Theory(CmdBase):
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.parent_dataset.nplots):
                         tt.series[nx][i].set_visible(True)
-        try:
-            self.show_theory_extras(True)
-        except:  # current theory has no extras
-            # print("current theory has no extras to show")
-            pass
+        self.show_theory_extras(True)
         self.parent_dataset.do_plot("")
 
     def Qprint(self, msg, end='<br>'):

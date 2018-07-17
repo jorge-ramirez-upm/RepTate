@@ -60,6 +60,7 @@ class DataTable(object):
         self.column_units=[]
         self.data=np.zeros((self.num_rows, self.num_columns))
         self.series=[]
+        self.extra_tables = {}
         
         for nx in range(len(axarr)): #create series for each plot
             series_nx = []

@@ -1384,7 +1384,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.DataSettabWidget.removeTab(index)
         self.update_legend()
 
-    def change_view(self):
+    def change_view(self, x_vis=False, y_vis=False):
         """Change plot view
         
         [description]
@@ -1393,9 +1393,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = self.DataSettabWidget.currentWidget()
         if ds:
             if ds.current_theory:
-                ds.theories[ds.current_theory].is_xrange_visible = False
-                ds.theories[ds.current_theory].is_yrange_visible = False
-                ds.theories[ds.current_theory].set_xy_limits_visible(False, False)
+                ds.theories[ds.current_theory].is_xrange_visible = x_vis
+                ds.theories[ds.current_theory].is_yrange_visible = y_vis
+                ds.theories[ds.current_theory].set_xy_limits_visible(x_vis, y_vis)
                 
         self.view_switch(selected_view_name) #view_switch of Application
         self.set_view_tools(selected_view_name)
@@ -1538,7 +1538,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if self.DataSettabWidget.count() == 0:
                 self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
-        ftype = self.filetypes[list(self.filetypes.keys())[0]]
+        ftype = self.filetypes[list(self.filetypes)[0]]
         d = AddDummyFiles(self, ftype)
         parameterstochange = []
         parameterrange = []

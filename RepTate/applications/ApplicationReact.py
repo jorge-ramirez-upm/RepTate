@@ -158,19 +158,165 @@ class BaseApplicationReact:
             view_proc=self.view_br_1000C,
             n=1,
             snames=["br/1000C"])
-        self.views['prio_v_senio'] = View(
-            name="prio_v_senio",
-            description="Average priority vs seniority",
+        #### extra views for P&S:
+        self.views['<senio(prio)> log-log'] = View(
+            name="<senio(prio)> log-log",
+            description="Average seniority vs priority log-log scale",
+            x_label="Priority",
+            y_label="Average Seniority",
+            x_units="-",
+            y_units="-",
+            log_x=True,
+            log_y=True,
+            view_proc=self.thview_avsenio_v_prio,
+            n=3,
+            snames=["av_senio"])
+        self.views['<senio(prio)> lin-log'] = View(
+            name="<senio(prio)> lin-log",
+            description="Average seniority vs priority lin-log scale",
+            x_label="Priority",
+            y_label="Average Seniority",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=True,
+            view_proc=self.thview_avsenio_v_prio,
+            n=3,
+            snames=["av_senio"])
+        #####
+        self.views['<prio(senio)> log-log'] = View(
+            name="<prio(senio)> log-log",
+            description="Average priority vs seniority log-log scale",
             x_label="Seniority",
             y_label="Average Priority",
             x_units="-",
             y_units="-",
             log_x=True,
             log_y=True,
-            view_proc=self.thview_prio_v_senio,
+            view_proc=self.thview_avprio_v_senio,
             n=3,
             snames=["av_prio"])
-
+        self.views['<prio(senio)> lin-log'] = View(
+            name="<prio(senio)> lin-log",
+            description="Average priority vs seniority lin-log scale",
+            x_label="Seniority",
+            y_label="Average Priority",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=True,
+            view_proc=self.thview_avprio_v_senio,
+            n=3,
+            snames=["av_prio"])
+        #####
+        self.views['p(senio) log-log'] = View(
+            name="p(senio) log-log",
+            description="seniority prob. dist. log-log",
+            x_label="Seniority",
+            y_label="Probability",
+            x_units="-",
+            y_units="-",
+            log_x=True,
+            log_y=True,
+            view_proc=self.thview_proba_senio,
+            n=1,
+            snames=["proba_senio"])
+        self.views['p(senio) lin-log'] = View(
+            name="p(senio) lin-log",
+            description="seniority prob. dist. lin-log scale",
+            x_label="Seniority",
+            y_label="Probability",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=True,
+            view_proc=self.thview_proba_senio,
+            n=1,
+            snames=["proba_senio"])
+        #####
+        self.views['p(prio) log-log'] = View(
+            name="p(prio) log-log",
+            description="Priority prob. dist. log-log scale",
+            x_label="Priority",
+            y_label="Probability",
+            x_units="-",
+            y_units="-",
+            log_x=True,
+            log_y=True,
+            view_proc=self.thview_proba_prio,
+            n=1,
+            snames=["proba_prio"])
+        self.views['p(prio) lin-log'] = View(
+            name="p(prio) lin-log",
+            description="Priority prob. dist. lin-log scale",
+            x_label="Priority",
+            y_label="Probability",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=True,
+            view_proc=self.thview_proba_prio,
+            n=1,
+            snames=["proba_prio"])
+        ####
+        self.views['<Marm(senio)> log-log'] = View(
+            name="<Marm(senio)> log-log",
+            description="Average arm mass between branch pt. vs seniority log-log scale",
+            x_label="Seniority",
+            y_label="Average arm mass",
+            x_units="-",
+            y_units="g/mol",
+            log_x=True,
+            log_y=True,
+            view_proc=self.thview_avarmlen_v_senio,
+            n=1,
+            snames=["av_arm_M"])
+        self.views['<Marm(senio)> lin-lin'] = View(
+            name="<Marm(senio)> lin-lin",
+            description="Average arm mass between branch pt. vs seniority lin-lin scale",
+            x_label="Seniority",
+            y_label="Average arm mass",
+            x_units="-",
+            y_units="g/mol",
+            log_x=False,
+            log_y=False,
+            view_proc=self.thview_avarmlen_v_senio,
+            n=1,
+            snames=["av_arm_M"])
+        ####
+        self.views['<Marm(prio)> log-log'] = View(
+            name="<Marm(prio)> log-log",
+            description="Average arm mass between branch pt. vs priority log-log scale",
+            x_label="Priority",
+            y_label="Average arm mass",
+            x_units="-",
+            y_units="g/mol",
+            log_x=True,
+            log_y=True,
+            view_proc=self.thview_avarmlen_v_prio,
+            n=1,
+            snames=["av_arm_M"])
+        self.views['<Marm(prio)> lin-lin'] = View(
+            name="<Marm(prio)> lin-lin",
+            description="Average arm mass between branch pt. vs priority lin-lin scale",
+            x_label="Priority",
+            y_label="Average arm mass",
+            x_units="-",
+            y_units="g/mol",
+            log_x=False,
+            log_y=False,
+            view_proc=self.thview_avarmlen_v_prio,
+            n=1,
+            snames=["av_arm_M"])
+        
+        self.extra_view_names = [
+            '<senio(prio)> log-log', '<senio(prio)> lin-log',
+            '<prio(senio)> log-log', '<prio(senio)> lin-log', 
+            'p(senio) log-log', 'p(senio) lin-log',
+            'p(prio) log-log', 'p(prio) lin-log',
+            '<Marm(senio)> log-log', '<Marm(senio)> lin-lin',
+            '<Marm(prio)> log-log', '<Marm(prio)> lin-lin'
+            ]
         #set multiviews
         self.nplots = 3
         self.multiviews = []
@@ -202,7 +348,20 @@ class BaseApplicationReact:
 
         #set the current view
         self.set_views()
-        self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
+        for _ in self.extra_view_names:
+            self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
+
+    def change_view(self):
+        """Redefinition to handle the x-range selection when P&S is selected"""
+        do_priority_seniority = False
+        try:
+            ds = self.DataSettabWidget.currentWidget()
+            th = ds.TheorytabWidget.currentWidget()
+            do_priority_seniority = th.do_priority_seniority
+        except Exception as e:
+            pass
+        super().change_view(x_vis=do_priority_seniority)
+
 
     def view_wM(self, dt, file_parameters):
         """Molecular weight distribution :math:`w(M)` vs molecular weight :math:`M` (in logarithmic scale)
@@ -251,23 +410,131 @@ class BaseApplicationReact:
         y[:, 0] = dt.data[:, 3]
         return x, y, True
     
-    def thview_prio_v_senio(self, dt, file_parameters):
-        x = np.zeros((dt.num_rows, 3))
-        y = np.zeros((dt.num_rows, 3))
-        y[:] = np.nan
+    def thview_avprio_v_senio(self, dt, file_parameters):
         try:
-            maxp = np.nanmax(dt.data[:, 5])
-            x[:, 0] = dt.data[:, 4]
-            y[:, 0] = dt.data[:, 5]
+            data = dt.extra_tables['avprio_v_senio']
+        except:
+            x = np.zeros((1, 3))
+            y = np.zeros((1, 3))
+            y[:] = np.nan
+            return x, y, True
+        
+        nrows = len(data[:, 0])
+        x = np.zeros((nrows, 3))
+        y = np.zeros((nrows, 3))
 
-            x[:, 1] = dt.data[:, 4]
-            y[:, 1] = dt.data[:, 4]
-            
-            x[:, 2] = dt.data[:, 4]
-            y[:, 2] = np.power(2, dt.data[:, 4] - 1)
-            y[:, 2] = np.where(y[:, 2] <= maxp , y[:, 2], np.nan)   
-        except IndexError: 
-            pass
+        maxp = np.nanmax(data[:, 1])
+        x[:, 0] = data[:, 0]
+        y[:, 0] = data[:, 1]
+        # comb limit
+        x[:, 1] = data[:, 0]
+        y[:, 1] = data[:, 0]
+        # Cayley tree limit
+        x[:, 2] = data[:, 0]
+        y[:, 2] = np.power(2, data[:, 0] - 1)
+        # avoid large numbers
+        y[:, 2] = np.where(y[:, 2] <= maxp , y[:, 2], np.nan)   
+
+        return x, y, True
+    
+    def thview_avsenio_v_prio(self, dt, file_parameters):
+        try:
+            data = dt.extra_tables['avsenio_v_prio']
+        except:
+            x = np.zeros((1, 3))
+            y = np.zeros((1, 3))
+            y[:] = np.nan
+            return x, y, True
+        
+        nrows = len(data[:, 0])
+        x = np.zeros((nrows, 3))
+        y = np.zeros((nrows, 3))
+
+        maxs = np.nanmax(data[:, 1])
+        x[:, 0] = data[:, 0]
+        y[:, 0] = data[:, 1]
+        # comb limit
+        x[:, 1] = data[:, 0]
+        y[:, 1] = data[:, 0]
+        # Cayley tree limit
+        x[:, 2] = data[:, 0]
+        y[:, 2] = np.log(data[:, 0]) / np.log(2) + 1
+        # y[:, 2] = np.power(2, data[:, 0] - 1)
+        # avoid large numbers
+        y[:, 2] = np.where(y[:, 2] <= maxs , y[:, 2], np.nan)   
+
+        return x, y, True
+
+    def thview_proba_prio(self, dt, file_parameters):
+        try:
+            data = dt.extra_tables['proba_prio']
+            is_extra = True
+        except:
+            is_extra = False
+        if is_extra:
+            nrows = len(data[:, 0])
+            x = np.zeros((nrows, 1))
+            y = np.zeros((nrows, 1))
+            x[:, 0] = data[:, 0]
+            y[:, 0] = data[:, 1]
+        else:
+            x = np.zeros((1, 1))
+            y = np.zeros((1, 1))
+            y[:] = np.nan
+        return x, y, True
+
+    def thview_proba_senio(self, dt, file_parameters):
+        try:
+            data = dt.extra_tables['proba_senio']
+            is_extra = True
+        except:
+            is_extra = False
+        if is_extra:
+            nrows = len(data[:, 0])
+            x = np.zeros((nrows, 1))
+            y = np.zeros((nrows, 1))
+            x[:, 0] = data[:, 0]
+            y[:, 0] = data[:, 1]
+        else:
+            x = np.zeros((1, 1))
+            y = np.zeros((1, 1))
+            y[:] = np.nan
+        return x, y, True
+
+    def thview_avarmlen_v_prio(self, dt, file_parameters):
+        try:
+            data = dt.extra_tables['avarmlen_v_prio']
+            is_extra = True
+        except:
+            is_extra = False
+        if is_extra:
+            nrows = len(data[:, 0])
+            x = np.zeros((nrows, 1))
+            y = np.zeros((nrows, 1))
+            x[:, 0] = data[:, 0]
+            y[:, 0] = data[:, 1]
+        else:
+            x = np.zeros((1, 1))
+            y = np.zeros((1, 1))
+            y[:] = np.nan
+        return x, y, True
+
+    def thview_avarmlen_v_senio(self, dt, file_parameters):
+        try:
+            data = dt.extra_tables['avarmlen_v_senio']
+            is_extra = True
+        except:
+            is_extra = False
+        if is_extra:
+            nrows = len(data[:, 0])
+            x = np.zeros((nrows, 1))
+            y = np.zeros((nrows, 1))
+            x[:, 0] = data[:, 0]
+            y[:, 0] = data[:, 1]
+        else:
+            x = np.zeros((1, 1))
+            y = np.zeros((1, 1))
+            y[:] = np.nan
         return x, y, True
 
 class CLApplicationReact(BaseApplicationReact, Application):

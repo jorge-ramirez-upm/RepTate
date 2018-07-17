@@ -79,6 +79,8 @@ void react_pool_init(void)
         {
             arm_pool[i].L1 = i - 1;
             arm_pool[i].R1 = i + 1;
+            arm_pool[i].prio = 0;
+            arm_pool[i].senio = 0;
         }
         arm_pool[1].L1 = 0;
         arm_pool[pb_global_const.maxarm].R1 = 0;
@@ -120,6 +122,8 @@ void pool_reinit(void)
     {
         arm_pool[i].L1 = i - 1;
         arm_pool[i].R1 = i + 1;
+        arm_pool[i].prio = 0;
+        arm_pool[i].senio = 0;
     }
     arm_pool[1].L1 = 0;
     arm_pool[pb_global_const.maxarm].R1 = 0;
@@ -133,11 +137,6 @@ bool request_arm(int *m_out)
     m = (*m_out) = pb_global.first_in_pool;
     if (arm_pool[m].R1 == 0)
     {
-        ///  need to decide what to do if you run out of arms!
-        ///
-        //   if (MessageDlg('Ran out of arms, exit?',
-        //      mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
-        //    exit;
         pb_global.arms_avail = false;
         return false;
     }
@@ -183,11 +182,6 @@ bool request_poly(int *m_out)
     m = *m_out = pb_global.first_poly_in_pool;
     if (br_poly[m].nextpoly == 0)
     {
-        ///  need to decide what to do if you run out of polymers!
-        ///
-        //   if (MessageDlg('Ran out of polymers, exit?',
-        //      mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
-        //    exit;
         pb_global.polys_avail = false;
         return false;
     }
@@ -240,11 +234,6 @@ bool request_dist(int *m_out)
     m = *m_out = pb_global.first_dist_in_pool;
     if (react_dist[m].next == 0)
     {
-        ///  need to decide what to do if you run out of distributions!
-        ///
-        //   if (MessageDlg('Ran out of distributions, exit?',
-        //      mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
-        //    exit;
         pb_global.dists_avail = false;
         *m_out = 0;
         return false;

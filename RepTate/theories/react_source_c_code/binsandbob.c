@@ -36,6 +36,7 @@
 #include <math.h>
 #include "polybits.h"
 #include "binsandbob.h"
+#include "calc_architecture.h"
 
 binsandbob_global bab_global = {.multi_m_w = 0, .multi_m_n = 0, .multi_brav = 0, .multi_nummwdbins = 0};
 
@@ -314,8 +315,8 @@ void polyconfwrite(int n, char *fname)
                 first = br_poly[i].first_end;
                 armwt = 0.5 * arm_pool[first].arm_len / br_poly[i].tot_len / npoly * enrich;
                 armz = 0.5 * arm_pool[first].arm_len / N_e;
-                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e %7d\n", -1, -1, 1, -1, armz, armwt, arm_pool[first].senio);
-                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e %7d\n", 0, -1, -1, -1, armz, armwt, arm_pool[arm_pool[first].down].senio);
+                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", -1, -1, 1, -1, armz, armwt);
+                fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", 0, -1, -1, -1, armz, armwt);
             }
             else
             { // it's a branched polymer
@@ -379,10 +380,9 @@ void polyconfwrite(int n, char *fname)
                         mc = abs(arm_pool[m1].R2);
                         tR2 = arm_pool[mc].armnum;
                     }
-                    fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e %7d %7d\n", tL1, tL2, tR1, tR2, armz, armwt, arm_pool[m1].senio, arm_pool[m1].prio);
+                    fprintf(fp, "%7d %7d %7d %7d %20.13e %20.13e\n", tL1, tL2, tR1, tR2, armz, armwt);
 
                     m1 = arm_pool[m1].down;
-
                     if (m1 == first)
                     { //end output loop over arms
                         break;
@@ -584,10 +584,12 @@ double return_binsandbob_multi_wt(int i)
     return multi_wt[i];
 }
 
-void set_react_dist_monmass(int i, double monmass){
+void set_react_dist_monmass(int i, double monmass)
+{
     react_dist[i].monmass = monmass;
 }
 
-void set_react_dist_M_e(int i, double M_e){
+void set_react_dist_M_e(int i, double M_e)
+{
     react_dist[i].M_e = M_e;
 }

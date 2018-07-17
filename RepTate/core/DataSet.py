@@ -448,12 +448,14 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                         dt.series[nx][i].set_data(x[:, i], y[:, i])
                         dt.series[nx][i].set_visible(True)
                         dt.series[nx][i].set_marker(marker)
-                        if i == 1: # filled and empty symbols
+                        if i == 0:
+                            face = color if filled else 'none'
+                        elif i == 1: # filled and empty symbols
                             if face == 'none':
                                 face = color
                             elif face == color:
                                 face = 'none'
-                        if i>1:
+                        else:
                             face = color
                             fillstyles=["left", "right", "bottom", "top"]
                             fs = fillstyles[i-2]
@@ -712,7 +714,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         yval: float
         fparam: dict containing file parameter names and values
         """
-        filename = "dummy_" + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + ".txt"
+        filename = "dummy_" + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + "." + file_type.extension
         f = File(file_name=filename, file_type=file_type, parent_dataset=self, axarr=self.parent_application.axarr)
         f.file_parameters = fparams
         dt = f.data_table

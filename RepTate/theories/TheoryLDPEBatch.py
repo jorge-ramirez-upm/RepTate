@@ -343,7 +343,7 @@ class BaseTheoryTobitaBatch():
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
 
             rch.end_print(self, ndist, self.do_priority_seniority)
-            rch.prio_v_senio(self, f, ndist, self.do_priority_seniority)
+            rch.prio_and_senio(self, f, ndist, self.do_priority_seniority)
 
             calc = rch.react_dist[ndist].contents.nummwdbins - 1
             rch.react_dist[ndist].contents.polysaved = True
@@ -452,3 +452,11 @@ class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
     def handle_btn_prio_senio(self, checked):
         """Change do_priority_seniority"""
         rgt.handle_btn_prio_senio(self, checked)
+
+    def set_extra_data(self, extra_data):
+        """set extra data"""
+        rgt.set_extra_data(self, extra_data)
+
+    def get_extra_data(self):
+        """set extra data"""
+        rgt.get_extra_data(self)

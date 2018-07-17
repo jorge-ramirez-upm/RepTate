@@ -43,11 +43,28 @@
 #include "calc_architecture.h"
 #define N_PS 10000
 
+static double sphi_avsenio_v_prio[N_PS];
+static double sphi_avprio_v_senio[N_PS];
+
+static double avsenio_v_prio[N_PS];
+static double avprio_v_senio[N_PS];
+
+static double avarmlen_v_senio[N_PS];
+static double avarmlen_v_prio[N_PS];
+
+static double proba_prio[N_PS];
+static double proba_senio[N_PS];
+
+static int n_armlen_v_senio[N_PS];
+static int n_armlen_v_prio[N_PS];
+
+static int n_polymer;
+static int max_prio;
+static int max_senio;
+
 bool do_prio_senio = false;
 bool flag_stop_all = false;
 
-static double prio_v_senio[N_PS];
-static double nprio_v_senio[N_PS];
 void bin_prio_vs_senio(int npol);
 
 void set_do_prio_senio(bool b)
@@ -68,15 +85,23 @@ void print_arch_stats(int n1)
 }
 void senio_prio(int npoly, int ndistr)
 {
-    calc_seniority(npoly);
-    calc_priority(npoly);
     double wt = br_poly[npoly].tot_len * react_dist[ndistr].monmass;
     if ((wt <= react_dist[ndistr].arch_maxwt) && (react_dist[ndistr].arch_minwt <= wt))
     {
+        calc_seniority(npoly);
+        calc_priority(npoly);
+        if (br_poly[npoly].max_prio > max_prio)
+        {
+            max_prio = br_poly[npoly].max_prio;
+        }
+        if (br_poly[npoly].max_senio > max_senio)
+        {
+            max_senio = br_poly[npoly].max_senio;
+        }
         save_architect(npoly, ndistr);
         react_dist[ndistr].nsaved_arch++;
+        bin_prio_vs_senio(npoly);
     }
-    bin_prio_vs_senio(npoly);
 }
 
 void init_bin_prio_vs_senio(void)
@@ -84,9 +109,24 @@ void init_bin_prio_vs_senio(void)
     int i;
     for (i = 0; i < N_PS; i++)
     {
-        prio_v_senio[i] = 0;
-        nprio_v_senio[i] = 0;
+        sphi_avprio_v_senio[i] = 0;
+        sphi_avsenio_v_prio[i] = 0;
+        
+        avprio_v_senio[i] = 0;
+        avsenio_v_prio[i] = 0;
+
+        avarmlen_v_senio[i] = 0;
+        avarmlen_v_prio[i] = 0;
+        
+        n_armlen_v_senio[i] = 0;
+        n_armlen_v_prio[i] = 0;
+
+        proba_senio[i] = 0;
+        proba_prio[i] = 0;
     }
+    n_polymer = 0;
+    max_prio = 0;
+    max_senio = 0;
 }
 
 void bin_prio_vs_senio(int npoly)
@@ -101,22 +141,92 @@ void bin_prio_vs_senio(int npoly)
     {
         p = arm_pool[m].prio;
         s = arm_pool[m].senio;
-        phi = arm_pool[first].arm_len / totlen;
-        prio_v_senio[s] += phi * p;
-        nprio_v_senio[s] += phi;
+        phi = arm_pool[m].arm_len / totlen;
+        // average prio vs senio
+        avprio_v_senio[s] += phi * p;
+        sphi_avprio_v_senio[s] += phi;
+
+        // average senio vs prio
+        avsenio_v_prio[p] += phi * s;
+        sphi_avsenio_v_prio[p] += phi;
+
+        // average arm length vs senio
+        avarmlen_v_senio[s] += arm_pool[m].arm_len;
+        n_armlen_v_senio[s]++;
+        // average arm length vs prio
+        avarmlen_v_prio[p] += arm_pool[m].arm_len * phi;
+        n_armlen_v_prio[p]++;
+
+        // probability of prio p
+        proba_prio[p] += phi;
+
+        // probability of senio s
+        proba_senio[s] += phi;
 
         m = arm_pool[m].down;
         if (m == first)
+        {
+            n_polymer++;
             break;
+        }
     }
 }
 
-double return_prio_vs_senio(int s)
+double return_avarmlen_v_senio(int s, int dist)
 {
-    if (nprio_v_senio[s] != 0)
-        return prio_v_senio[s] / nprio_v_senio[s];
+    if (n_armlen_v_senio[s] != 0)
+        return avarmlen_v_senio[s] / n_armlen_v_senio[s] * react_dist[dist].monmass;
     else
         return 0;
+}
+
+double return_avarmlen_v_prio(int p, int dist)
+{
+    if (n_armlen_v_prio[p] != 0)
+        return avarmlen_v_prio[p] / n_armlen_v_prio[p] * react_dist[dist].monmass;
+    else
+        return 0;
+}
+
+double return_avprio_v_senio(int s)
+{
+    if (sphi_avprio_v_senio[s] != 0)
+        return avprio_v_senio[s] / sphi_avprio_v_senio[s];
+    else
+        return 0;
+}
+
+double return_avsenio_v_prio(int p)
+{
+    if (sphi_avsenio_v_prio[p] != 0)
+        return avsenio_v_prio[p] / sphi_avsenio_v_prio[p];
+    else
+        return 0;
+}
+
+double return_proba_prio(int p)
+{
+    if (n_polymer != 0)
+        return proba_prio[p] / n_polymer;
+    else
+        return 0;
+}
+double return_proba_senio(int s)
+{
+    if (n_polymer != 0)
+        return proba_senio[s] / n_polymer;
+    else
+        return 0;
+}
+
+int return_max_prio(void)
+{
+    return max_prio;
+}
+
+int return_max_senio(void)
+{
+    return max_senio;
 }
 
 void save_architect(int npol, int ndist)
