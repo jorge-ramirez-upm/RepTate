@@ -170,7 +170,8 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_avsenio_v_prio,
             n=3,
-            snames=["av_senio"])
+            snames=["av_senio"],
+            with_thline=False)
         self.views['<senio(prio)> lin-log'] = View(
             name="<senio(prio)> lin-log",
             description="Average seniority vs priority lin-log scale",
@@ -182,7 +183,21 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_avsenio_v_prio,
             n=3,
-            snames=["av_senio"])
+            snames=["av_senio"],
+            with_thline=False)
+        self.views['<senio(prio)> lin-lin'] = View(
+            name="<senio(prio)> lin-lin",
+            description="Average seniority vs priority lin-lin scale",
+            x_label="Priority",
+            y_label="Average Seniority",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=False,
+            view_proc=self.thview_avsenio_v_prio,
+            n=3,
+            snames=["av_senio"],
+            with_thline=False)
         #####
         self.views['<prio(senio)> log-log'] = View(
             name="<prio(senio)> log-log",
@@ -195,7 +210,8 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_avprio_v_senio,
             n=3,
-            snames=["av_prio"])
+            snames=["av_prio"],
+            with_thline=False)
         self.views['<prio(senio)> lin-log'] = View(
             name="<prio(senio)> lin-log",
             description="Average priority vs seniority lin-log scale",
@@ -207,7 +223,21 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_avprio_v_senio,
             n=3,
-            snames=["av_prio"])
+            snames=["av_prio"],
+            with_thline=False)
+        self.views['<prio(senio)> lin-lin'] = View(
+            name="<prio(senio)> lin-lin",
+            description="Average priority vs seniority lin-lin scale",
+            x_label="Seniority",
+            y_label="Average Priority",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=False,
+            view_proc=self.thview_avprio_v_senio,
+            n=3,
+            snames=["av_prio"],
+            with_thline=False)
         #####
         self.views['p(senio) log-log'] = View(
             name="p(senio) log-log",
@@ -220,7 +250,8 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_proba_senio,
             n=1,
-            snames=["proba_senio"])
+            snames=["proba_senio"],
+            with_thline=False)
         self.views['p(senio) lin-log'] = View(
             name="p(senio) lin-log",
             description="seniority prob. dist. lin-log scale",
@@ -232,7 +263,8 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_proba_senio,
             n=1,
-            snames=["proba_senio"])
+            snames=["proba_senio"],
+            with_thline=False)
         #####
         self.views['p(prio) log-log'] = View(
             name="p(prio) log-log",
@@ -245,7 +277,8 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_proba_prio,
             n=1,
-            snames=["proba_prio"])
+            snames=["proba_prio"],
+            with_thline=False)
         self.views['p(prio) lin-log'] = View(
             name="p(prio) lin-log",
             description="Priority prob. dist. lin-log scale",
@@ -257,11 +290,12 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_proba_prio,
             n=1,
-            snames=["proba_prio"])
+            snames=["proba_prio"],
+            with_thline=False)
         ####
-        self.views['<Marm(senio)> log-log'] = View(
-            name="<Marm(senio)> log-log",
-            description="Average arm mass between branch pt. vs seniority log-log scale",
+        self.views['<mass br(senio)> log-log'] = View(
+            name="<mass br(senio)> log-log",
+            description="Average mol. mass b/w branch pt vs seniority log-log scale",
             x_label="Seniority",
             y_label="Average arm mass",
             x_units="-",
@@ -270,10 +304,11 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_avarmlen_v_senio,
             n=1,
-            snames=["av_arm_M"])
-        self.views['<Marm(senio)> lin-lin'] = View(
-            name="<Marm(senio)> lin-lin",
-            description="Average arm mass between branch pt. vs seniority lin-lin scale",
+            snames=["av_arm_M"],
+            with_thline=False)
+        self.views['<mass br(senio)> lin-lin'] = View(
+            name="<mass br(senio)> lin-lin",
+            description="Average mol. mass b/w branch pt vs seniority lin-lin scale",
             x_label="Seniority",
             y_label="Average arm mass",
             x_units="-",
@@ -282,11 +317,12 @@ class BaseApplicationReact:
             log_y=False,
             view_proc=self.thview_avarmlen_v_senio,
             n=1,
-            snames=["av_arm_M"])
+            snames=["av_arm_M"],
+            with_thline=False)
         ####
-        self.views['<Marm(prio)> log-log'] = View(
-            name="<Marm(prio)> log-log",
-            description="Average arm mass between branch pt. vs priority log-log scale",
+        self.views['<mass br(prio)> log-log'] = View(
+            name="<mass br(prio)> log-log",
+            description="Average mol. mass b/w branch pt vs priority log-log scale",
             x_label="Priority",
             y_label="Average arm mass",
             x_units="-",
@@ -295,10 +331,11 @@ class BaseApplicationReact:
             log_y=True,
             view_proc=self.thview_avarmlen_v_prio,
             n=1,
-            snames=["av_arm_M"])
-        self.views['<Marm(prio)> lin-lin'] = View(
-            name="<Marm(prio)> lin-lin",
-            description="Average arm mass between branch pt. vs priority lin-lin scale",
+            snames=["av_arm_M"],
+            with_thline=False)
+        self.views['<mass br(prio)> lin-lin'] = View(
+            name="<mass br(prio)> lin-lin",
+            description="Average mol. mass b/w branch pt vs priority lin-lin scale",
             x_label="Priority",
             y_label="Average arm mass",
             x_units="-",
@@ -307,15 +344,16 @@ class BaseApplicationReact:
             log_y=False,
             view_proc=self.thview_avarmlen_v_prio,
             n=1,
-            snames=["av_arm_M"])
+            snames=["av_arm_M"],
+            with_thline=False)
         
         self.extra_view_names = [
-            '<senio(prio)> log-log', '<senio(prio)> lin-log',
-            '<prio(senio)> log-log', '<prio(senio)> lin-log', 
+            '<senio(prio)> log-log', '<senio(prio)> lin-log', '<senio(prio)> lin-lin',
+            '<prio(senio)> log-log', '<prio(senio)> lin-log', '<prio(senio)> lin-lin', 
             'p(senio) log-log', 'p(senio) lin-log',
             'p(prio) log-log', 'p(prio) lin-log',
-            '<Marm(senio)> log-log', '<Marm(senio)> lin-lin',
-            '<Marm(prio)> log-log', '<Marm(prio)> lin-lin'
+            '<mass br(senio)> log-log', '<mass br(senio)> lin-lin',
+            '<mass br(prio)> log-log', '<mass br(prio)> lin-lin'
             ]
         #set multiviews
         self.nplots = 3
@@ -459,9 +497,8 @@ class BaseApplicationReact:
         # Cayley tree limit
         x[:, 2] = data[:, 0]
         y[:, 2] = np.log(data[:, 0]) / np.log(2) + 1
-        # y[:, 2] = np.power(2, data[:, 0] - 1)
         # avoid large numbers
-        y[:, 2] = np.where(y[:, 2] <= maxs , y[:, 2], np.nan)   
+        y[:, 1] = np.where(y[:, 1] <= maxs , y[:, 1], np.nan)   
 
         return x, y, True
 
