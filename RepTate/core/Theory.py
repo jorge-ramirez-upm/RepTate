@@ -108,7 +108,7 @@ class Theory(CmdBase):
         )  # keep the dictionary key in order for the parameter table
         self.tables = {}
         self.function = None
-        self.active = True  #defines if the theorie is plotted
+        self.active = True  #defines if the theory is plotted
         self.calculate_is_busy = False
         self.axarr[0].autoscale(False)
         self.autocalculate = True
@@ -187,6 +187,9 @@ class Theory(CmdBase):
             self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
         # flag for requesting end of computations
         self.stop_theory_flag = False
+
+    def destructor(self):
+        pass
 
     def precmd(self, line):
         """Calculations before the theory is calculated
@@ -1022,13 +1025,13 @@ class Theory(CmdBase):
         
         [description]
         """
-        self.active = False
         self.set_xy_limits_visible(False, False)  # hide xrange and yrange
         for table in self.tables.values():
             for i in range(table.MAX_NUM_SERIES):
                 for nx in range(self.parent_dataset.nplots):
                     table.series[nx][i].set_visible(False)
         self.show_theory_extras(False)
+        self.active = False
 
     def set_th_table_visible(self, fname, state):
         """Show/Hide all theory lines related to the file "fname" """

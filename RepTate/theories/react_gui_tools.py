@@ -198,7 +198,7 @@ def show_theory_extras(parent_theory, show):
             app.viewComboBox.addItems([app.views[view_name].name,])
             app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views[view_name].description, Qt.ToolTipRole)
         app.multiplots.reorg_fig(app.nplots)
-    elif hide and parent_theory.do_priority_seniority:
+    elif hide and parent_theory.do_priority_seniority and parent_theory.active:
         #remove extra figure
         app.nplots = max(1, app.nplots - 1)
         app.multiplots.reorg_fig(app.nplots)

@@ -960,11 +960,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             - name {[type]} -- [description]
         """
         if name in self.theories.keys():
-            try:
-                self.theories[name].destructor()
-            except:
-                print("No destructor programmed for %s" %
-                      self.theories[name].name)
+            self.theories[name].destructor()
             for tt in self.theories[
                     name].tables.values():  # remove matplotlib artist from ax
                 for i in range(tt.MAX_NUM_SERIES):
@@ -1079,6 +1075,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         """
         if line in self.theories.keys():
             th = self.theories[line]
+            self.current_theory = line
             th.cmdloop()
         else:
             print("Theory \"%s\" not found" % line)
