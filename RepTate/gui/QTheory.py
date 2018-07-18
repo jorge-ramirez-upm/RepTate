@@ -203,7 +203,6 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         """
         super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
         self.setupUi(self)
-        self.extra_data = {} # Dictionary saved during "Save Project"
 
         #build the therory widget
         self.thParamTable.setIndentation(0)

@@ -1140,7 +1140,7 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         
         [description]
         """
-        self.linearenvelope.setChecked(state)
+        # self.linearenvelope.setChecked(state)
         self.parent_dataset.actionMinimize_Error.setDisabled(state)
         self.parent_dataset.actionShow_Limits.setDisabled(state)
         self.parent_dataset.actionVertical_Limits.setDisabled(state)

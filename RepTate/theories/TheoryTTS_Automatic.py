@@ -246,16 +246,19 @@ class BaseTheoryTTSShiftAutomatic:
                     MwUnique[self.Mw[i]][1] += npt
 
         if (line == ""):
-            table='''<table border="1" width="100%">'''
-            table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
+            # table='''<table border="1" width="100%">'''
+            # table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
+            table = [['%-12s' % 'Mw', '%-12s' % 'Mw2', '%-12s' % 'phi', '%-12s' % 'phi2', '%-12s' % 'Error', '%-12s' % '# Pts.' ],]
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1] > 0):
-                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%8.3g</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], MwUnique[o][0] / MwUnique[o][1], MwUnique[o][1])
+                    # table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%8.3g</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], MwUnique[o][0] / MwUnique[o][1], MwUnique[o][1])
+                    table.append(['%-12.4g' % o[0], '%-12.4g' % o[1], '%-12.4g' % o[2], '%-12.4g' % o[3], '%-12.3g' % (MwUnique[o][0] / MwUnique[o][1]), '%-12d' % MwUnique[o][1] ])
                 else:
-                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
-            table+='''</table><br>'''
+                    # table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
+                    table.append(['%-12.4g' % o[0], '%-12.4g' % o[1], '%-12.4g' % o[2], '%-12.4g' % o[3], '%-12.3g' % '-', '%-12d' % MwUnique[o][1] ])
+            # table+='''</table><br>'''
             self.Qprint(table)
         if (npoints > 0):
             total_error /= npoints
@@ -367,8 +370,9 @@ class BaseTheoryTTSShiftAutomatic:
                 order=['f1'], axis=0)
             self.shiftParameters[fname] = (0.0, 0.0)
 
-            table='''<table border="1" width="100%">'''
-            table+='''<tr><th>T</th><th>log(Hshift)</th><th>log(Vshift)</th></tr>'''
+            # table='''<table border="1" width="100%">'''
+            # table+='''<tr><th>T</th><th>log(Hshift)</th><th>log(Vshift)</th></tr>'''
+            table = [['%-12s' % 'T','%-12s' % 'log(Hshift)','%-12s' % 'log(Vshift)'], ]
             #self.Qprint('%6s %11s %11s' % ('T', 'log(Hshift)', 'log(Vshift)'))
             indices = np.delete(indices, 0, None)
 
@@ -435,10 +439,11 @@ class BaseTheoryTTSShiftAutomatic:
             for i in indTsorted:
                 fname = Filenames[i]
                 sparam = self.shiftParameters[fname]
-                table+='''<tr><td>%6.3g</td><td>%11.3g</td><td>%11.3g</td></tr>'''%(Temps0[i], sparam[0], sparam[1])
+                # table+='''<tr><td>%6.3g</td><td>%11.3g</td><td>%11.3g</td></tr>'''%(Temps0[i], sparam[0], sparam[1])
+                table.append(['%-12.3g' % Temps0[i],'%-12.3g' % sparam[0],'%-12.3g' % sparam[1]])
                 #self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], sparam[0], sparam[1]))
 
-            table+='''</table><br>'''
+            # table+='''</table><br>'''
             self.Qprint(table)        
 
         self.fitting = False

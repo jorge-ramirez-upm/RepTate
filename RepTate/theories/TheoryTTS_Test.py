@@ -293,16 +293,19 @@ class BaseTheoryWLFShiftTest:
                     MwUnique[Mw[i]][1] += npt
 
         if (line == ""):
-            table='''<table border="1" width="100%">'''
-            table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
+            # table='''<table border="1" width="100%">'''
+            # table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
+            table = [['%-12s' % 'Mw', '%-12s' % 'Mw2', '%-12s' % 'phi', '%-12s' % 'phi2', '%-12s' % 'Error', '%-12s' % '# Pts.' ],]
             p = list(MwUnique.keys())
             p.sort()
             for o in p:
                 if (MwUnique[o][1] > 0):
-                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%8.3g</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], MwUnique[o][0] / MwUnique[o][1], MwUnique[o][1])
+                    # table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%8.3g</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], MwUnique[o][0] / MwUnique[o][1], MwUnique[o][1])
+                    table.append(['%-12.4g' % o[0], '%-12.4g' % o[1], '%-12.4g' % o[2], '%-12.4g' % o[3], '%-12.3g' % (MwUnique[o][0] / MwUnique[o][1]), '%-12d' % MwUnique[o][1] ])
                 else:
-                    table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
-            table+='''</table><br>'''
+                    # table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
+                    table.append(['%-12.4g' % o[0], '%-12.4g' % o[1], '%-12.4g' % o[2], '%-12.4g' % o[3], '%-12.3g' % '-', '%-12d' % MwUnique[o][1] ])
+            # table+='''</table><br>'''
             self.Qprint(table)
 
         if (npoints > 0):
@@ -381,17 +384,20 @@ class BaseTheoryWLFShiftTest:
         self.Qprint('<b>%g</b> function evaluations' % (res['nfev']))
 
         ind = 0
-        table='''<table border="1" width="100%">'''
-        table+='''<tr><th>Parameter</th><th>Value</th></tr>'''
+        # table='''<table border="1" width="100%">'''
+        # table+='''<tr><th>Parameter</th><th>Value</th></tr>'''
+        table = [['%-18s' % 'Parameter', '%-18s' % 'Value'], ]
+
         for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 ind += 1
-                table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
+                # table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
+                table.append(['%-18s' % par.name, '%-18.4g' % par.value])
             else:
                 #table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
                 pass
-        table+='''</table><br>'''
+        # table+='''</table><br>'''
         self.Qprint(table)        
         self.is_fitting = False
         self.do_calculate(line, timing=False)

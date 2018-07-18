@@ -184,10 +184,12 @@ class BaseTheoryLogNormal:
             Mn = M0 * np.exp(sigma**2 / 2)
             Mw = M0 * np.exp(3 * sigma**2 / 2)
             Mz = M0 * np.exp(5 * sigma**2 / 2)
-            table='''<table border="1" width="100%">'''
-            table+='''<tr><th>Mn</th><th>Mw</th><th>Mz</th><th>D</th></tr>'''
-            table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, Mz/1000 , Mw/Mn)
-            table+='''</table><br>'''
+            # table='''<table border="1" width="100%">'''
+            # table+='''<tr><th>Mn</th><th>Mw</th><th>Mz</th><th>D</th></tr>'''
+            # table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, Mz/1000 , Mw/Mn)
+            # table+='''</table><br>'''
+            table = [['%-12s' % 'Mn (kg/mol)', '%-12s' % 'Mw (kg/mol)', '%-9s' % 'Mw/Mn', '%-9s' % 'Mz/Mw'],]
+            table.append(['%-12.3g' % (Mn / 1000), '%-12.3g' % (Mw / 1000), '%-9.3g' % (Mw / Mn), '%-9.3g' % (Mz / Mw)])
             self.Qprint(table)
 
 

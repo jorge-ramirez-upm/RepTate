@@ -112,13 +112,15 @@ class BaseToolInterpolateExtrapolate:
         xunique, indunique = np.unique(x, return_index=True)
         yunique=y[indunique]
         try:
-            table='''<table border="1" width="100%">'''
-            table+='''<tr><th>x</th><th>y</th></tr>'''        
+            # table='''<table border="1" width="100%">'''
+            # table+='''<tr><th>x</th><th>y</th></tr>'''
+            table = [['%-10s' % 'x', '%-10s' % 'y'], ]
             ff = interp1d(xunique, yunique, bounds_error=False, kind='cubic', fill_value='extrapolate', assume_sorted=True)
             func = lambda t: ff(t)
             yval = func(xval)
-            table+='''<tr><td>%.4e</td><td>%.4e</td></tr>'''%(xval,yval)            
-            table+='''</table><br>'''            
+            # table+='''<tr><td>%.4e</td><td>%.4e</td></tr>'''%(xval,yval)
+            table.append(['%-10.4e' % xval, '%-10.4e' % yval])
+            # table+='''</table><br>'''            
             self.Qprint(table)
         except Exception as e:
             self.Qprint("in ToolInterpolateExtrapolate.calculate(): %s"%traceback.format_exc())

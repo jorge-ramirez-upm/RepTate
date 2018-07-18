@@ -54,6 +54,24 @@ from collections import OrderedDict
 from math import log
 from ToolMaterialsDatabase import check_chemistry, get_all_parameters
 
+from html.parser import HTMLParser
+class MLStripper(HTMLParser):
+    """Remove HTML tags from string"""
+    def __init__(self):
+        self.reset()
+        self.strict = False
+        self.convert_charrefs= True
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+    
+    def get_data(self):
+        return ''.join(self.fed)
+        
+
+
+
 class EndComputationRequested(Exception):
     """Exception class to end computations"""
     pass
@@ -112,6 +130,8 @@ class Theory(CmdBase):
         self.calculate_is_busy = False
         self.axarr[0].autoscale(False)
         self.autocalculate = True
+        self.extra_data = {} # Dictionary saved during "Save Project"
+
 
         # THEORY OPTIONS
         self.npoints = 100
@@ -275,9 +295,9 @@ class Theory(CmdBase):
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools       
-        table='''<table border="1" width="100%">'''
-        table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
-
+        # table='''<table border="1" width="100%">'''
+        # table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
+        tab_data = [['%-18s' % 'File', '%-18s' % 'Error (RSS)', '%-18s' % '# Pts'],]
         for f in self.theory_files():
             if self.stop_theory_flag:
                 break
@@ -302,9 +322,11 @@ class Theory(CmdBase):
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt
-            table+= '''<tr><td>%14s</td><td>%10.4g</td><td>%5d</td></tr>'''% (f.file_name_short, f_error, npt)
-        table+='''</table><br>'''
-        self.Qprint(table)
+            # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
+            tab_data.append(['%-18s'% f.file_name_short, '%-18.4g' % f_error, '%-18d' %npt])
+        # table+='''</table><br>'''
+        # self.Qprint(table)
+        self.Qprint(tab_data)
 
         #count number of fitting parameters
         free_p = 0
@@ -480,10 +502,12 @@ class Theory(CmdBase):
         residuals = y - self.func_fit(x, *pars)
         fres1 = sum(residuals**2)
 
-        table='''<table border="1" width="100%">'''
-        table+='''<tr><th>Initial Error</th><th>Final Error</th></tr>'''
-        table+='''<tr><td>%g</td><td>%g</td></tr>'''%(fres0, fres1)
-        table+='''</table><br>'''
+        # table='''<table border="1" width="100%">'''
+        # table+='''<tr><th>Initial Error</th><th>Final Error</th></tr>'''
+        # table+='''<tr><td>%g</td><td>%g</td></tr>'''%(fres0, fres1)
+        # table+='''</table><br>'''
+        table = [['%-18s' % 'Initial Error', '%-18s' % 'Final Error'],]
+        table.append(['%-18g' % fres0, '%-18g' % fres1])
         self.Qprint(table)
 
         self.Qprint('<b>%g</b> function evaluations' % (self.nfev))
@@ -502,17 +526,21 @@ class Theory(CmdBase):
             par_error.append(sigma * tval)
 
         ind = 0
-        table='''<table border="1" width="100%">'''
-        table+='''<tr><th>Parameter</th><th>Value ± Error</th></tr>'''
+        # table='''<table border="1" width="100%">'''
+        # table+='''<tr><th>Parameter</th><th>Value ± Error</th></tr>'''
+        table = [['%-18s' % 'Parameter', '%-18s' % 'Value ± Error'], ]
         for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 par.error = par_error[ind]
                 ind += 1
-                table+='''<tr><td>%s</td><td>%10.4g ± %-9.4g</td></tr>'''%(par.name, par.value, par.error)
+                # table+='''<tr><td>%s</td><td>%10.4g ± %-9.4g</td></tr>'''%(par.name, par.value, par.error)
+                val_err = '%.4g ± %.4g' % (par.value, par.error)
+                table.append(['%-18s' % par.name, '%-18s' % val_err])
             else:
-                table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
-        table+='''</table><br>'''
+                # table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
+                table.append(['%-18s' % par.name, '%-18.4g' % par.value])
+        # table+='''</table><br>'''
         self.Qprint(table)        
         self.is_fitting = False
         self.do_calculate(line, timing=False)
@@ -1067,12 +1095,49 @@ class Theory(CmdBase):
         Arguments:
             - msg {[type]} -- [description]
         """
+
         if CmdBase.mode == CmdMode.GUI:
+            if isinstance(msg, list):
+                msg = self.table_as_html(msg)
             self.print_signal.emit(msg + end)
         else:
             if end == '<br>':
                 end = '\n'
+            if isinstance(msg, list):
+                msg = self.table_as_ascii(msg)
+            else:
+                msg = msg.replace('<br>', '\n')
+                msg = self.strip_tags(msg)
             print(msg, end=end)
+    
+    def table_as_html(self, tab):
+        header = tab[0]
+        rows = tab[1:]
+        nrows = len(rows)
+        table = '''<table border="1" width="100%">'''
+        # header
+        table += '<tr>'
+        table += ''.join(['<th>%s</th>' % h for h in header])
+        table += '</tr>'
+        #data
+        for row in rows:
+            table += '<tr>'
+            table += ''.join(['<td>%s</td>' % d for d in row])
+            table += '</tr>'
+        table+='''</table><br>'''
+        return table
+
+    def table_as_ascii(self, tab):
+        text = ''
+        for row in tab:
+            text += ' '.join(row)
+            text += '\n'
+        return text
+
+    def strip_tags(self, html_text):
+        s = MLStripper()
+        s.feed(html_text)
+        return s.get_data()
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""

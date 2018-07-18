@@ -1404,9 +1404,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if ds:
             ds.highlight_series()
 
-    def set_view_tools(self, view_name):
-        pass
-
     def dragEnterEvent(self, e):
         """[summary]
         

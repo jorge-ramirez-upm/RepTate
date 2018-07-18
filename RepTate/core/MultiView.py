@@ -40,6 +40,7 @@ import enum
 import math
 import numpy as np
 import itertools
+from CmdBase import CmdBase, CmdMode
 #from UI_Multimatplotlib import Ui_Form
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QTabWidget, QWidget, QSizePolicy
 from PyQt5.QtCore import QSize, QMetaObject, Qt
@@ -204,9 +205,11 @@ class MultiView(QWidget):
         self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
     
     def reorg_fig(self, nplots):
-        self.parent_application.sp_nviews.blockSignals(True)
-        self.parent_application.sp_nviews.setValue(nplots)
-        self.parent_application.sp_nviews.blockSignals(False)
+        """Reorganise the views to show nplots"""
+        if CmdBase.mode == CmdMode.GUI:
+            self.parent_application.sp_nviews.blockSignals(True)
+            self.parent_application.sp_nviews.setValue(nplots)
+            self.parent_application.sp_nviews.blockSignals(False)
 
         self.plotselecttabWidget.blockSignals(True)
         self.nplots = nplots
@@ -255,10 +258,11 @@ class MultiView(QWidget):
         self.parent_application.current_viewtab = index
         if index == 0: #multiplots
             view_name = self.parent_application.multiviews[0].name
-            ind = self.parent_application.viewComboBox.findText(view_name, Qt.MatchExactly)
-            self.parent_application.viewComboBox.blockSignals(True)
-            self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
-            self.parent_application.viewComboBox.blockSignals(False)
+            if CmdBase.mode == CmdMode.GUI:
+                ind = self.parent_application.viewComboBox.findText(view_name, Qt.MatchExactly)
+                self.parent_application.viewComboBox.blockSignals(True)
+                self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
+                self.parent_application.viewComboBox.blockSignals(False)
             for i in range(self.nplots):
                 self.axarr[i].set_position(self.bbox[i])
                 self.axarr[i].set_visible(True)
@@ -266,10 +270,11 @@ class MultiView(QWidget):
         else: #single plot max-size
             tab_to_maxi = index - 1 # in 0 1 2
             view_name = self.parent_application.multiviews[tab_to_maxi].name
-            ind = self.parent_application.viewComboBox.findText(view_name)
-            self.parent_application.viewComboBox.blockSignals(True)
-            self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
-            self.parent_application.viewComboBox.blockSignals(False)
+            if CmdBase.mode == CmdMode.GUI:
+                ind = self.parent_application.viewComboBox.findText(view_name)
+                self.parent_application.viewComboBox.blockSignals(True)
+                self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
+                self.parent_application.viewComboBox.blockSignals(False)
             for i in range(self.nplots):
                 if i == tab_to_maxi: #hide other plots
                     self.axarr[i].set_visible(True)

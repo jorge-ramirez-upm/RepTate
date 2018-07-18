@@ -148,6 +148,10 @@ class Application(CmdBase):
         self.axarr = self.multiplots.axarr  #
         self.canvas = self.multiplots.canvas
 
+    def set_view_tools(self, view_name):
+        """Redefined in Child application. Called when view is changed"""
+        pass
+
     def add_common_theories(self):
         for th in self.common_theories.values():
             self.theories[th.thname] = th

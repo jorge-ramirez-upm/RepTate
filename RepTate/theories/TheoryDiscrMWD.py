@@ -399,11 +399,13 @@ class BaseTheoryDiscrMWD:
         if line == "":
             return Mn / 1000, Mw / 1000, PDI, Mz / Mw
         else:
-            self.Qprint('''<h3>Characteristics of the %s MWD</h3>'''%line, end='')
-            table='''<table border="1" width="100%">'''
-            table+='''<tr><th>Mn (kg/mol)</th><th>Mw (kg/mol)</th><th>Mw/Mn</th><th>Mz/Mw</th><th>Mz+1/Mz</th></tr>'''
-            table+='''<tr><td>%.3g</td><td>%.3g</td><td>%.3g</td><td>%.3g</td><td>%.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw, Mzp1/Mz)
-            table+='''</table><br>'''
+            self.Qprint('''<h3>Characteristics of the %s MWD<br></h3>''' % line, end='')
+            # table='''<table border="1" width="100%">'''
+            # table+='''<tr><th>Mn (kg/mol)</th><th>Mw (kg/mol)</th><th>Mw/Mn</th><th>Mz/Mw</th><th>Mz+1/Mz</th></tr>'''
+            # table+='''<tr><td>%.3g</td><td>%.3g</td><td>%.3g</td><td>%.3g</td><td>%.3g</td></tr>'''%(Mn / 1000, Mw / 1000, PDI, Mz / Mw, Mzp1/Mz)
+            # table+='''</table><br>'''
+            table = [['%-12s' % 'Mn (kg/mol)', '%-12s' % 'Mw (kg/mol)', '%-9s' % 'Mw/Mn', '%-9s' % 'Mz/Mw', '%-9s' % 'Mz+1/Mz'],]
+            table.append(['%-12.3g' % (Mn / 1000), '%-12.3g' % (Mw / 1000), '%-9.3g' % PDI, '%-9.3g' % (Mz / Mw), '%-9.3g' % (Mzp1 / Mz)])
             self.Qprint(table)
 
     def discretise_mwd(self, f=None):
