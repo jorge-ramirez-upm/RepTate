@@ -153,8 +153,9 @@ void bin_prio_vs_senio(int npoly)
         // average arm length vs senio
         avarmlen_v_senio[s] += arm_pool[m].arm_len;
         n_armlen_v_senio[s]++;
+
         // average arm length vs prio
-        avarmlen_v_prio[p] += arm_pool[m].arm_len * phi;
+        avarmlen_v_prio[p] += arm_pool[m].arm_len;
         n_armlen_v_prio[p]++;
 
         // probability of prio p
