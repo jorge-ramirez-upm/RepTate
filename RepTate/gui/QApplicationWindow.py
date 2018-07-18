@@ -1868,10 +1868,30 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
         refresh_chart_action = main_menu.addAction("Reset view(s)")
         refresh_chart_action.triggered.connect(self.refresh_plot)
+        # change view
+        for i, ax in enumerate(self.axarr):
+            if event.inaxes == ax:
+                n_ax_view_to_change = i
+        menu2 = QMenu("Select View")
+        pick_view = {}
+        for i in range(self.viewComboBox.count()):
+            view_name = self.viewComboBox.itemText(i)
+            pick_view = menu2.addAction(view_name)
+            pick_view.triggered.connect(lambda _, view_name=view_name: self.change_ax_view(n_ax_view_to_change, view_name))
+        main_menu.addMenu(menu2)
 
         #launch menu
         if main_menu.exec_(QCursor.pos()):
             self.artists_clicked.clear()
+
+    def change_ax_view(self, n_ax, view_name):
+        """Change the view corresponding to axis n_ax"""
+        if n_ax == 0:
+            ind = self.viewComboBox.findText(view_name)
+            self.viewComboBox.setCurrentIndex(ind)
+        else:
+            self.multiviews[n_ax] = self.views[view_name]
+            self.refresh_plot()
 
     def _pan(self, event):
         if event.name == 'button_press_event':  # begin pan
