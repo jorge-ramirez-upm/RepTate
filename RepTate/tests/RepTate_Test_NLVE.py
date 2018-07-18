@@ -94,7 +94,7 @@ def start_RepTate(argv):
         dow_dir + "My_dow150-160-0003 shear.shear",
     ])
     # Open a theory
-    ex.applications["NLVE1"].datasets["Set1"].new_theory("RoliePoly")
+    ex.applications["NLVE1"].datasets["Set1"].new_theory("Rolie-Poly")
     # Minimize the theory
     ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
@@ -113,14 +113,14 @@ def start_RepTate(argv):
         dow_dir + "My_dow150-160-0003.uext",
     ])
     # Open a theory
-    ex.applications["NLVE2"].datasets["Set1"].new_theory("RoliePoly")
+    ex.applications["NLVE2"].datasets["Set1"].new_theory("Rolie-Poly")
     #select uniaxial extension
     ex.applications["NLVE2"].datasets["Set1"].theories[
-        "RoliePoly01"].select_extensional_flow()
+        "Rolie-Poly01"].select_extensional_flow()
     # Minimize the theory
     ex.applications["NLVE2"].datasets["Set1"].handle_actionMinimize_Error()
     # Open a theory
-    ex.applications["NLVE2"].datasets["Set1"].new_theory("PomPom")
+    ex.applications["NLVE2"].datasets["Set1"].new_theory("Pom-Pom")
 
 
     ####################
@@ -131,7 +131,7 @@ def start_RepTate(argv):
     ex.applications["LVE3"].new_tables_from_files([
         dow_dir + "DOWLDPEL150R_160C.tts",
     ])
-    ex.applications["LVE3"].datasets["Set1"].new_theory("MaxwellModesFrequency")
+    ex.applications["LVE3"].datasets["Set1"].new_theory("Maxwell Modes")
     ex.applications["LVE3"].datasets["Set1"].handle_actionMinimize_Error()
 
     sys.exit(app.exec_())

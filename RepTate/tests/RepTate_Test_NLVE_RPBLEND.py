@@ -34,9 +34,10 @@
 
 Main program that launches the GUI.
 
-""" 
+"""
 import os
 import sys
+import getopt
 sys.path.append('core')
 sys.path.append('gui')
 sys.path.append('console')
@@ -59,84 +60,87 @@ def start_RepTate(argv):
     :param list argv: Command line parameters passed to Reptate
     """
     GUI = True
-    QApplication.setStyle("Fusion") #comment that line for a native look
+    QApplication.setStyle("Fusion")  #comment that line for a native look
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
-    
+
     app = QApplication(sys.argv)
-    
+
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     # CmdBase.calcmode = CalcMode.singlethread
-    
+
     ex = QApplicationManager()
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
     ex.show()
-    
+
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.handle_new_app('LVE')
-    
-    #####################
-    # TEST Likhtman-McLeish
-    # Open a Dataset
-    pi_dir = "data%sPI_LINEAR%s"%((os.sep,)*2)
-    ex.applications["LVE1"].new_tables_from_files([
-                                                   pi_dir + "PI_13.5k_T-35.tts",
-                                                   pi_dir + "PI_23.4k_T-35.tts",
-                                                   pi_dir + "PI_33.6k_T-35.tts",
-                                                   pi_dir + "PI_94.9k_T-35.tts",
-                                                   pi_dir + "PI_225.9k_T-35.tts",
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   pi_dir + "PI_634.5k_T-35.tts",
-                                                   pi_dir + "PI_1131k_T-35.tts",
-                                                   ])
-    # Open a theory
-    ex.applications["LVE1"].datasets["Set1"].new_theory("Likhtman-McLeish")
-    # Minimize the theory
-    ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
-
-    # Open a theory
-    ex.applications["LVE1"].datasets["Set1"].new_theory("Rouse")
-    # Minimize the theory
-    ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
-
+    ex.handle_new_app('NLVE')
 
     #####################
-    # TEST Carreau-Yasuda
+    # TEST Rolie-Poly
     # Open a Dataset
-    ex.handle_new_app('LVE')
-    ex.applications["LVE2"].new_tables_from_files([
-                                                   pi_dir + "PI_483.1k_T-35.tts",
-                                                   ])
-    # Switch the view
-    ex.applications["LVE2"].view_switch("logetastar")
+
+    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s" % ((
+        os.sep, ) * 4)
+    ex.applications["NLVE1"].new_tables_from_files([
+        dow_dir + "My_dow150-160-1 shear.shear",
+        dow_dir + "My_dow150-160-01 shear.shear",
+        dow_dir + "My_dow150-160-001 shear.shear",
+        dow_dir + "My_dow150-160-3 shear.shear",
+        dow_dir + "My_dow150-160-03 shear.shear",
+        dow_dir + "My_dow150-160-003 shear.shear",
+        dow_dir + "My_dow150-160-0003 shear.shear",
+    ])
     # Open a theory
-    ex.applications["LVE2"].datasets["Set1"].new_theory("Carreau-Yasuda")
+    ex.applications["NLVE1"].datasets["Set1"].new_theory("Rolie-Poly Blends")
     # Minimize the theory
-    ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
-    
-    # Open a theory
-    ex.applications["LVE2"].datasets["Set1"].new_theory("Maxwell Modes")
-    # Minimize the theory
-    ex.applications["LVE2"].datasets["Set1"].handle_actionMinimize_Error()
-    
+    # ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
+
+    ########################################################
+    # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
+    # Open a particular application
+    ex.handle_new_app('NLVE')
 
     #####################
-    # TEST DTD
+    # TEST Rolie-Poly
     # Open a Dataset
-    ex.handle_new_app('LVE')
-    pi_dir = "data%sPI_STAR%s"%((os.sep,)*2)
-    ex.applications["LVE3"].new_tables_from_files([
-                                                   pi_dir + "S6Z8.1T40.tts",
-                                                   pi_dir + "S6Z12T40.tts",
-                                                   pi_dir + "S6Z16T40.tts",
-                                                   ])
 
-    ex.applications["LVE3"].datasets["Set1"].new_theory("DTD Stars")
-    ex.applications["LVE3"].datasets["Set1"].handle_actionMinimize_Error()
+    dow_dir = os.path.join('data', 'NLVE_Extension', '')
+    ex.applications["NLVE2"].new_tables_from_files([
+        dow_dir + "Minegishi_spiked_PS_0_572.uext",
+        dow_dir + "Minegishi_spiked_PS_0_013.uext",
+        dow_dir + "Minegishi_spiked_PS_0_047.uext",
+        dow_dir + "Minegishi_spiked_PS_0_097.uext"
+    ])
+    # Open a theory
+    ex.applications["NLVE2"].datasets["Set1"].new_theory("Rolie-Poly Blends")
+    # Minimize the theory
+    # ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
+
+    ####################
+    #open MWD import Mead gpc
+    ex.handle_new_app('MWD')
+    dir = os.path.join('data', 'MWD', '')
+    ex.applications["MWD3"].new_tables_from_files([
+        dir + "Munstedt_PSIV.gpc",
+    ])
+    ex.applications["MWD3"].datasets["Set1"].new_theory("Discretize MWD")
+
+    # ####################
+    # #open linear rheology data to import the Maxwell modes
+    # ex.handle_new_app('NLVE')
+    # dow_dir = "data%sDOW%sLinear_Rheology_TTS%s" % ((
+    #     os.sep, ) * 3)
+    # ex.applications["LVE3"].new_tables_from_files([
+    #     dow_dir + "DOWLDPEL150R_160C.tts",
+    # ])
+    # ex.applications["LVE3"].datasets["Set1"].new_theory("MaxwellModesFrequency")
+    # ex.applications["LVE3"].datasets["Set1"].handle_actionMinimize_Error()
 
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     start_RepTate(sys.argv[1:])

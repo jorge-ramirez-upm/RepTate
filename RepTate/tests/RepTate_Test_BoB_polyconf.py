@@ -83,7 +83,7 @@ def start_RepTate(argv):
         "data%sReact%sout1.reac" % ((os.sep, ) * 2),
     ])
     # Open a theory
-    ex.applications["React1"].datasets["Set1"].new_theory("CreatePolyconfTheory")
+    ex.applications["React1"].datasets["Set1"].new_theory("Create Polyconf")
 
     ex.show()
 

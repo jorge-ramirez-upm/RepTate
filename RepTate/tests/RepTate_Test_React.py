@@ -82,23 +82,23 @@ def start_RepTate(argv):
         "data%sReact%sout1.reac" % ((os.sep, ) * 2),
     ])
     # Open a theory
-    ex.applications["React1"].datasets["Set1"].new_theory("TobitaCSTRTheory")
+    ex.applications["React1"].datasets["Set1"].new_theory("Tobita CSTR")
     # Calculate the theory
     # ex.applications["React1"].datasets["Set1"].handle_actionCalculate_Theory()
 
     # Open a theory
     sleep(1)
-    ex.applications["React1"].datasets["Set1"].new_theory("TobitaBatchTheory")
+    ex.applications["React1"].datasets["Set1"].new_theory("Tobita Batch")
     # Calculate the theory
     # ex.applications["React1"].datasets["Set1"].handle_actionCalculate_Theory()
 
     # Open a theory
     sleep(1)
-    ex.applications["React1"].datasets["Set1"].new_theory("ReactMixTheory")
+    ex.applications["React1"].datasets["Set1"].new_theory("React Mix")
 
     # Open a theory
     sleep(1)
-    ex.applications["React1"].datasets["Set1"].new_theory("MultiMetCSTRTheory")
+    ex.applications["React1"].datasets["Set1"].new_theory("Multi-Met CSTR")
 
     ex.show()
 

@@ -94,8 +94,16 @@ def start_RepTate(argv):
                                                    ])
 
     # Open a theory
-    ex.applications["TTS1"].datasets["Set1"].new_theory("TTSShiftAutomatic")
+    ex.applications["TTS1"].datasets["Set1"].new_theory("Automatic TTS Shift")
     
+    # Minimize the theory
+    ex.applications["TTS1"].datasets["Set1"].handle_actionMinimize_Error()
+    # Open a theory
+    ex.applications["TTS1"].datasets["Set1"].new_theory("WLF Shift Test")
+    # Minimize the theory
+    ex.applications["TTS1"].datasets["Set1"].handle_actionMinimize_Error()
+    # Open a theory
+    ex.applications["TTS1"].datasets["Set1"].new_theory("WLF Shift")
     # Minimize the theory
     ex.applications["TTS1"].datasets["Set1"].handle_actionMinimize_Error()
                                                    

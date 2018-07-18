@@ -79,22 +79,24 @@ def start_RepTate(argv):
     ex.handle_new_app('MWD')
     
     #####################
-    # TEST MaxwellModesTime
     # Open a Dataset
     gt_dir = "data%sMWD%s"%((os.sep,)*2)
     ex.applications["MWD1"].new_tables_from_files([
                                                    gt_dir + "Munstedt_PSIII.gpc",
                                                    ])
     # Open a theory
-    ex.applications["MWD1"].datasets["Set1"].new_theory("MWDiscr")
+    ex.applications["MWD1"].datasets["Set1"].new_theory("Discretize MWD")
+    ex.applications["MWD1"].datasets["Set1"].new_theory("LogNormal")
+    ex.applications["MWD1"].datasets["Set1"].new_theory("GEX")
 
     ex.handle_new_app('MWD')
     ex.applications["MWD2"].new_tables_from_files([
                                                    gt_dir + "Munstedt_PSIV.gpc",
                                                    ])
     # Open a theory
-    ex.applications["MWD2"].datasets["Set1"].new_theory("MWDiscr")
-
+    ex.applications["MWD2"].datasets["Set1"].new_theory("Discretize MWD")
+    ex.applications["MWD2"].datasets["Set1"].new_theory("LogNormal")
+    ex.applications["MWD2"].datasets["Set1"].new_theory("GEX")
 
     sys.exit(app.exec_())
 

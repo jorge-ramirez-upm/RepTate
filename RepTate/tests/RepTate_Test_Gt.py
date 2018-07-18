@@ -86,11 +86,11 @@ def start_RepTate(argv):
                                                    gt_dir + "C0224_NVT_450K_1atm.gt",
                                                    ])
     # Open a theory
-    ex.applications["Gt1"].datasets["Set1"].new_theory("MaxwellModesTime")
+    ex.applications["Gt1"].datasets["Set1"].new_theory("Maxwell Modes")
     # Minimize the theory
     ex.applications["Gt1"].datasets["Set1"].handle_actionMinimize_Error()
 
-    ex.applications["Gt1"].datasets["Set1"].new_theory("RouseTime")
+    ex.applications["Gt1"].datasets["Set1"].new_theory("Rouse")
     # # Minimize the theory
     ex.applications["Gt1"].datasets["Set1"].handle_actionMinimize_Error()
 
