@@ -36,7 +36,7 @@ Module that defines the Likhtman-McLeish theory for melts of linear monodisperse
 polymers.
 
 """
-from os.path import sep
+import os
 import numpy as np
 from scipy import interp
 from CmdBase import CmdBase, CmdMode
@@ -144,7 +144,8 @@ class BaseTheoryLikhtmanMcLeish2002NEW:
             opt_type=OptType.const,
             display_flag=False)
             
-        f = np.load("theories" + sep + "linlin.npz")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        f = np.load(os.path.join(dir_path, "linlin.npz"))
         self.Zarray = f['Z']
         self.cnuarray = f['cnu']
         self.data = f['data']

@@ -11,8 +11,11 @@
 Reads the linlin data from the compact *.npz file
 
 """ 
+import os
 import numpy as np
-f=np.load("../theories/linlin.npz")
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+f=np.load(os.path.join(dir_path, "..", "theories", "linlin.npz"))
 Z=f['Z']
 cnu=f['cnu']
 data=f['data']

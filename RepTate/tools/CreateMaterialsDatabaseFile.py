@@ -12,6 +12,7 @@ Module that creates the basic Materials database data.
 
 """ 
 import numpy as np
+import os
 from polymer_data import polymer
 
 polymerdict={}        
@@ -23,8 +24,8 @@ polymerdict['hPBd'] = polymer(name='hPBd',long='Hydrogenated Polybutadiene', aut
 
 polymeruserdict={}        
 
-
-np.save('materials_database.npy', polymerdict) 
-np.save('user_database.npy', polymeruserdict) 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+np.save(os.path.join(dir_path, 'materials_database.npy'), polymerdict) 
+np.save(os.path.join(dir_path,'user_database.npy'), polymeruserdict) 
 
 
