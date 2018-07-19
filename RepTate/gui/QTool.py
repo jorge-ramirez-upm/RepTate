@@ -43,8 +43,9 @@ from Tool import Tool
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QToolBar
 from PyQt5.QtCore import Qt, QObject, QThread, QSize, pyqtSignal, pyqtSlot, QEvent
-from PyQt5.QtGui import QDoubleValidator, QIcon
+from PyQt5.QtGui import QDoubleValidator, QIcon, QCursor
 from Parameter import OptType, ParameterType, ShiftType
+from math import ceil, floor
 import ast
 PATH = dirname(abspath(__file__))
 Ui_ToolTab, QWidget = loadUiType(join(PATH, 'Tooltab.ui'))
@@ -86,6 +87,8 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         self.toolParamTable.setEditTriggers(self.toolParamTable.NoEditTriggers)
 
         self.toolTextBox.setReadOnly(True)
+        self.toolTextBox.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.toolTextBox.customContextMenuRequested.connect(self.toolTextBox_context_menu)
 
         connection_id = self.actionActive.triggered.connect(self.handle_actionActivepressed)
         connection_id = self.actionApplyToTheory.triggered.connect(self.handle_actionApplyToTheorypressed)
@@ -93,7 +96,26 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         connection_id = self.toolParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         connection_id = self.toolParamTable.itemChanged.connect(self.handle_parameterItemChanged)
         self.toolParamTable.setEditTriggers(QTreeWidget.EditKeyPressed)
-        
+
+    def toolTextBox_context_menu(self):
+        """Custom contextual menu for the theory textbox"""
+        menu = self.toolTextBox.createStandardContextMenu()
+        menu.addSeparator()
+        menu.addAction("Increase Font Size", lambda: self.change_toolTextBox_fontsize(1.25))
+        menu.addAction("Deacrease Font Size", lambda: self.change_toolTextBox_fontsize(0.8))
+        menu.addAction("Clear Text", self.toolTextBox.clear)
+        menu.exec_(QCursor.pos())
+    
+    def change_toolTextBox_fontsize(self, factor):
+        """Change the toolTextBox font size by a factor `factor` """
+        font = self.toolTextBox.currentFont()
+        if factor < 1:
+            font_size = ceil(font.pointSize() * factor)
+        else:
+            font_size = floor(font.pointSize() * factor)
+        font.setPointSize(font_size)
+        self.toolTextBox.document().setDefaultFont(font)
+
     def editItem(self, item, column):
         print(column)
         
