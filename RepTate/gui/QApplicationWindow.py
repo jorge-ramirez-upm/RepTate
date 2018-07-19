@@ -272,7 +272,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionResetShiftFactors)
         vblayout.addWidget(tb)
         # Shift factors stuff
-        self.shiftTable = QTableWidget(DataTable.MAX_NUM_SERIES,2, self)
+        self.shiftTable = SpreadsheetWidget(self) # has a 'copy' method
+        self.shiftTable.setColumnCount(2)
+        self.shiftTable.setRowCount(DataTable.MAX_NUM_SERIES)
+        # disable Paste
+        self.shiftTable.paste = lambda: None
+        
         self.shiftTable.setHorizontalHeaderLabels(["Xshift", "Yshift"])
         self.shiftTable.horizontalHeader().setStyleSheet("color: blue; font: bold;")
         self.shiftTable.verticalHeader().setStyleSheet("color: blue; font: bold;")
