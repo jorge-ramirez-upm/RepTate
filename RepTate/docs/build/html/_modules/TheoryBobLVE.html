@@ -1,0 +1,477 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TheoryBobLVE &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for TheoryBobLVE</h1><div class="highlight"><pre>
+<span></span><span class="c1"># RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jorge Ramirez, jorge.ramirez@upm.es</span>
+<span class="c1">#     Victor Boudara, victor.boudara@gmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Useful links:</span>
+<span class="c1">#     http://blogs.upm.es/compsoftmatter/software/reptate/</span>
+<span class="c1">#     https://github.com/jorge-ramirez-upm/RepTate</span>
+<span class="c1">#     http://reptate.readthedocs.io</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of RepTate.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># RepTate is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with RepTate.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;Module TheoryBobLVE</span>
+
+<span class="sd">BobLVE file calculates the LVE of a given polymer configuration</span>
+<span class="sd">by Chinmay Das et al.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
+<span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
+<span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
+<span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">bob_LVE</span>  <span class="c1"># dialog</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">from</span> <span class="nn">BobCtypesHelper</span> <span class="k">import</span> <span class="n">BobCtypesHelper</span><span class="p">,</span> <span class="n">BobError</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QToolBar</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QTextEdit</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIntValidator</span><span class="p">,</span> <span class="n">QDoubleValidator</span><span class="p">,</span> <span class="n">QDesktopServices</span><span class="p">,</span> <span class="n">QIcon</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">pyqtSignal</span><span class="p">,</span> <span class="n">QSize</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="k">import</span> <span class="n">copy2</span>
+
+
+<div class="viewcode-block" id="TheoryBobLVE"><a class="viewcode-back" href="../manual/Applications/LVE/Theory/theory.html#TheoryBobLVE.TheoryBobLVE">[docs]</a><span class="k">class</span> <span class="nc">TheoryBobLVE</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Analyse the relaxation of polymers read from a polymer configuration file</span>
+<span class="sd">    using BoB v2.5 (Chinmay Das and Daniel Read).</span>
+<span class="sd">    These files can be generated from the React application in RepTate.</span>
+
+<span class="sd">    The original documentation of BoB can be found here: `&lt;https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="s1">&#39;BOB&#39;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Branch-On-Branch rheology&#39;</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="s1">&#39;Das C., Inkson N.J., Read D.J., Kelmanson M.A. and McLeish T.C.B., J. Rheol. 2006, 50, 207-234&#39;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;http://dx.doi.org/10.1122/1.2167487&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GUITheoryBobLVE</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span>
+            <span class="n">axarr</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLTheoryBobLVE</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">BaseTheoryBobLVE</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#help_file = &#39;&#39;</span>
+    <span class="n">single_file</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># False if the theory can be applied to multiple files simultaneously</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryBobLVE</span><span class="o">.</span><span class="n">thname</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryBobLVE</span><span class="o">.</span><span class="n">citations</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">TheoryBobLVE</span><span class="o">.</span><span class="n">doi</span> 
+
+    <span class="n">signal_param_dialog</span> <span class="o">=</span> <span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ThBobLVE&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;ThBobLVE&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span>  <span class="c1"># main theory function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_modes</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># True if the theory has modes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_param_dialog</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">launch_param_dialog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">polyconf_file_out</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># full path of target polyconf file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bch</span> <span class="o">=</span> <span class="n">BobCtypesHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freqint</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="c1"># BoB theory points spaced by log10(freqint)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_priority_seniority</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">request_stop_computations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when user wants to terminate the current computation&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;font color=red&gt;&lt;b&gt;Stop current calculation requested&lt;/b&gt;&lt;/font&gt;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bch</span><span class="o">.</span><span class="n">set_flag_stop_bob</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_bool</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create polymer configuration file and calculate distribution characteristics</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - f {[type]} -- [description] (default: {None})</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - [type] -- [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_rows</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freqmin</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">mincol</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freqmax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">maxcol</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#show form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success_dialog</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_param_dialog</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_dialog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># wait for the end of QDialog</span>
+            <span class="c1"># TODO: find a better way to wait for the dialog thread to finish</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_dialog</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;Operation cancelled&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">QApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bch</span><span class="o">.</span><span class="n">link_c_callback</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bch</span><span class="o">.</span><span class="n">set_do_priority_seniority</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">do_priority_seniority</span><span class="p">))</span>
+        <span class="c1"># Run BoB C++ code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time_cal</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">omega</span><span class="p">,</span> <span class="n">gp</span><span class="p">,</span> <span class="n">gpp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bch</span><span class="o">.</span><span class="n">return_bob_lve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">BobError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;Operation cancelled&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1">#copy results to RepTate data file</span>
+        <span class="k">if</span> <span class="n">omega</span><span class="p">:</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">omega</span><span class="p">[:]</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">gp</span><span class="p">[:]</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">gpp</span><span class="p">[:]</span>
+
+    <span class="k">def</span> <span class="nf">do_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Fitting not allowed in this theory&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">CLTheoryBobLVE</span><span class="p">(</span><span class="n">BaseTheoryBobLVE</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+
+    <span class="c1"># This class usually stays empty</span>
+
+
+<span class="k">class</span> <span class="nc">GUITheoryBobLVE</span><span class="p">(</span><span class="n">BaseTheoryBobLVE</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+<span class="sd">    </span>
+<span class="sd">    [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**</span>
+<span class="sd">        </span>
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
+<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
+<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">axarr</span><span class="p">)</span>
+        <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;theories&#39;</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">)</span>
+        <span class="c1">#create temp folder if does not exist</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_dialog</span><span class="p">()</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_prio_senio</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/priority_seniority.png&#39;</span><span class="p">),</span> <span class="s1">&#39;Calculate Priority and Seniority (can take some time)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_prio_senio</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_prio_senio</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># BoB LVE do not calculate priority &amp; seniority (leave it to React)</span>
+        <span class="c1"># uncomment below for the possiblity to calculate priority &amp; seniority in BoB LVE</span>
+        
+        <span class="c1"># self.thToolsLayout.insertWidget(0, tb)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_prio_senio</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_btn_prio_senio</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle_btn_prio_senio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change do_priority_seniority&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_priority_seniority</span> <span class="o">=</span> <span class="n">checked</span>
+
+    <span class="k">def</span> <span class="nf">get_file_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open a dialog to choose a file containing the polymer configuration for BoB&quot;&quot;&quot;</span>
+        <span class="c1"># file browser window</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">Options</span><span class="p">()</span>
+        <span class="n">dir_start</span> <span class="o">=</span> <span class="s2">&quot;data/React/&quot;</span>
+        <span class="n">dilogue_name</span> <span class="o">=</span> <span class="s2">&quot;Select a Polymer Configuration File&quot;</span>
+        <span class="n">ext_filter</span> <span class="o">=</span> <span class="s2">&quot;Data Files (*.dat)&quot;</span>
+        <span class="n">selected_file</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">dilogue_name</span><span class="p">,</span> <span class="n">dir_start</span><span class="p">,</span> <span class="n">ext_filter</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_file</span> <span class="o">=</span> <span class="n">selected_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">selected_file</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">selected_file</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">num_file_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of lines in the file `fname`&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span> 
+            <span class="k">return</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">setup_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load the form dialog from bob_LVE.py&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span> <span class="o">=</span> <span class="n">QDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">bob_LVE</span><span class="o">.</span><span class="n">Ui_Dialog</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">pb_pick_file</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_file_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">selected_file</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;color : blue ;&quot;</span><span class="p">)</span>
+        <span class="c1"># connect button OK</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">pb_ok</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_pb_ok</span><span class="p">)</span>
+        <span class="c1"># connect button Cancel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">pb_cancel</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">reject</span><span class="p">)</span>
+        <span class="c1"># connect button Help</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">pb_help</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_help_button</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle_pb_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Define the OK button role. If something is wrong, keep the dialog open&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Select Input Polyconf&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;Please select a file for BoB to read the polymer configuration&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>    
+            <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">handle_help_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;When Help button of dialog box is clicked, show BoB manual (pdf)&quot;&quot;&quot;</span>
+        <span class="n">bob_manual_pdf</span> <span class="o">=</span> <span class="s1">&#39;docs</span><span class="si">%s</span><span class="s1">source</span><span class="si">%s</span><span class="s1">manual</span><span class="si">%s</span><span class="s1">Applications</span><span class="si">%s</span><span class="s1">React</span><span class="si">%s</span><span class="s1">bob2.3.pdf&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromLocalFile</span><span class="p">(</span><span class="n">bob_manual_pdf</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">create_bob_input_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nlines</span><span class="p">,</span> <span class="n">inpf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a file containing the input BoB parameters from the form dialog&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inpf</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+            <span class="c1">#1 memory</span>
+            <span class="n">npol</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nlines</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">n_polymers</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">nseg</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nlines</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">n_segments</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+
+            <span class="n">tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">npol</span><span class="p">,</span> <span class="n">nseg</span><span class="p">))</span>
+            <span class="c1">#2 alpha</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%f</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">alpha</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="c1">#3 dummy &quot;1&quot;</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;1</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># 4 M0, Ne, density</span>
+            <span class="n">M0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">m0</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">Ne</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">ne</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">density</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">density</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%f</span><span class="s1"> </span><span class="si">%f</span><span class="s1"> </span><span class="si">%f</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">M0</span><span class="p">,</span> <span class="n">Ne</span><span class="p">,</span> <span class="n">density</span><span class="p">))</span>
+            <span class="c1">#5 tau_e, T</span>
+            <span class="n">taue</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">taue</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">temperature</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%f</span><span class="s1"> </span><span class="si">%f</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">taue</span><span class="p">,</span> <span class="n">temperature</span><span class="p">))</span>
+            <span class="c1">#6 write &quot;0&quot; so BoB reads a polyconf file</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;0</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">launch_param_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show a dialog to get the filename of the polymer configuration.</span>
+<span class="sd">        This function is called via a pyqtSignal for multithread compatibility&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">exec_</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">success_dialog</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">return</span>
+        <span class="n">conffile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_file</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_ascii</span><span class="p">(</span><span class="n">conffile</span><span class="p">):</span>
+            <span class="n">ok_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;theories&#39;</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;target_polyconf.dat&#39;</span><span class="p">)</span>
+            <span class="n">copy2</span><span class="p">(</span><span class="n">conffile</span><span class="p">,</span> <span class="n">ok_path</span><span class="p">)</span>
+            <span class="n">conffile</span> <span class="o">=</span> <span class="n">ok_path</span>
+        <span class="k">if</span> <span class="n">conffile</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">nlines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_file_lines</span><span class="p">(</span><span class="n">conffile</span><span class="p">)</span>
+        <span class="n">inpf</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;theories&#39;</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;temp_inpf.dat&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_bob_input_file</span><span class="p">(</span><span class="n">nlines</span><span class="p">,</span> <span class="n">inpf</span><span class="p">)</span>
+
+        <span class="c1"># BoB main arguments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;./bob&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">inpf</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="n">conffile</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success_dialog</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">is_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if `s` contains non ASCII characters&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">UnicodeEncodeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>
