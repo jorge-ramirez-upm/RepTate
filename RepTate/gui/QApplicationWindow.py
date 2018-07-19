@@ -1723,8 +1723,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
   
     def onpick(self, event):
         """Called when clicking on a plot/artist"""
+        import matplotlib
         if event.mouseevent.button == 3:  #right click in plot
-            self.artists_clicked.append(event.artist)  #collect all artists under mouse
+            if not isinstance(event.artist, matplotlib.legend.Legend):
+                self.artists_clicked.append(event.artist)  #collect all artists under mouse
 
     def onrelease(self, event):
         """Called when releasing mouse"""

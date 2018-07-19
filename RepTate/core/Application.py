@@ -169,7 +169,10 @@ class Application(CmdBase):
 
     def clipboard_coordinates(self, artist):
         """Copy data to clipboard in tab-separated format"""
-        x, y = artist.get_data()
+        try:
+            x, y = artist.get_data()
+        except:
+            return
         line_strings = []
         for i in range(len(x)):
             line_strings.append(str(x[i]) + "\t" + str(y[i]))
