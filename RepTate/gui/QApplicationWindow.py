@@ -1174,6 +1174,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             file.yshift = [0]*DataTable.MAX_NUM_SERIES
             file.isshifted = [False]*DataTable.MAX_NUM_SERIES
             ds.do_plot()
+        for i in range(DataTable.MAX_NUM_SERIES):
+            for j in range(2):
+                item = self.shiftTable.item(i, j)
+                item.setText("0")
     
     def handle_actionShiftTriggered(self):
         """Allow the current 'selected_file' to be dragged
