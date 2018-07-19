@@ -129,7 +129,8 @@
                  <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">snames</span><span class="o">=</span><span class="p">[],</span>
                  <span class="n">inverse_view_proc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+                 <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">with_thline</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
 <span class="sd">        </span>
@@ -148,6 +149,7 @@
 <span class="sd">            - inverse_view_proc {func} -- Function that inverses the view: From the n values of the view, returns the data table values (default: {None})</span>
 <span class="sd">            - n {int} -- Number of series that the view represents (default: {1})</span>
 <span class="sd">            - snames {list of str} -- Names of the series represented by the view</span>
+<span class="sd">            - with_thline {bool} -- if True, plot the theory with lines, else use symbols</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
@@ -160,7 +162,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">view_proc</span> <span class="o">=</span> <span class="n">view_proc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inverse_view_proc</span> <span class="o">=</span> <span class="n">inverse_view_proc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">snames</span> <span class="o">=</span> <span class="n">snames</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snames</span> <span class="o">=</span> <span class="n">snames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_thline</span> <span class="o">=</span> <span class="n">with_thline</span></div>
 </pre></div>
 
           </div>

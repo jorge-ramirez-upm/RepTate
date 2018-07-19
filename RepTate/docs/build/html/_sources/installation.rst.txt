@@ -80,7 +80,7 @@ like ``Python 2.x.x``, then try::
     python3 --version
 
 If it prints something like ``Python 3.x.x``, you will need to add the "3" 
-at the end of ``python`` every time you see it in the "Anaconda prompt".
+at the end of ``python`` every time you see it used in this tutorial.
 
 
 Install extra packages 
@@ -149,8 +149,8 @@ command line interface to ``RepTate/RepTate/``. Type::
     cd RepTate
     python RepTate.py
 
-Wait a little, and RepTate should appear on your screen! Note that you may need to use 
-``python3 RepTate.py`` depending on your system
+Wait a little and RepTate should appear on your screen. Note that you may need to use 
+``python3 RepTate.py`` depending on your system.
 
 Take a moment to read the `User Manual <http://reptate.readthedocs.io/en/latest/manual/manual.html>`_.
 

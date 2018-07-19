@@ -260,10 +260,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">MAX_OVER</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># max oversampling</span>
 
         <span class="c1">#set multiviews</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log(gamma(t))&quot;</span><span class="p">]</span>
-        <span class="p">]</span>  <span class="c1">#default view order in multiplot views, set only one item for single view</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplot_max</span><span class="p">):</span>
+            <span class="c1"># set views in the same order as declared above</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">i</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">reorg_fig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">)</span>
 
         <span class="c1"># FILES</span>
         <span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span><span class="s2">&quot;Creep files&quot;</span><span class="p">,</span> <span class="s2">&quot;creep&quot;</span><span class="p">,</span> <span class="s2">&quot;Creep files&quot;</span><span class="p">,</span>

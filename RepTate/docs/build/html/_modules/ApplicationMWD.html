@@ -115,7 +115,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="ApplicationMWD"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationMWD.ApplicationMWD">[docs]</a><span class="k">class</span> <span class="nc">ApplicationMWD</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ApplicationMWD"><a class="viewcode-back" href="../manual/Applications/MWD/general.html#ApplicationMWD.ApplicationMWD">[docs]</a><span class="k">class</span> <span class="nc">ApplicationMWD</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application to analyze Molecular Weight Distributions</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -161,7 +161,7 @@
         <span class="kn">from</span> <span class="nn">TheoryGEX</span> <span class="k">import</span> <span class="n">TheoryGEX</span>
         <span class="kn">from</span> <span class="nn">TheoryLogNormal</span> <span class="k">import</span> <span class="n">TheoryLogNormal</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">nplot_max</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
         <span class="c1"># VIEWS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log-lin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
@@ -202,10 +202,12 @@
             <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">])</span>
 
         <span class="c1">#set multiviews</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s2">&quot;log-lin&quot;</span><span class="p">]</span>
-        <span class="p">]</span>  <span class="c1">#default view order in multiplot views, set only one item for single view</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplot_max</span><span class="p">):</span>
+            <span class="c1"># set views in the same order as declared above</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">i</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">reorg_fig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">)</span>
 
         <span class="c1"># FILES</span>
         <span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span>
@@ -227,7 +229,7 @@
         <span class="c1">#set the current view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseApplicationMWD.view_WM"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationMWD.BaseApplicationMWD.view_WM">[docs]</a>    <span class="k">def</span> <span class="nf">view_WM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationMWD.view_WM"><a class="viewcode-back" href="../manual/Applications/MWD/general.html#ApplicationMWD.BaseApplicationMWD.view_WM">[docs]</a>    <span class="k">def</span> <span class="nf">view_WM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:math:`W(M)` vs :math:`M`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -236,7 +238,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationMWD.view_logWM"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationMWD.BaseApplicationMWD.view_logWM">[docs]</a>    <span class="k">def</span> <span class="nf">view_logWM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationMWD.view_logWM"><a class="viewcode-back" href="../manual/Applications/MWD/general.html#ApplicationMWD.BaseApplicationMWD.view_logWM">[docs]</a>    <span class="k">def</span> <span class="nf">view_logWM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:math:`\\log(W(M))` vs :math:`\\log(M)` </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>

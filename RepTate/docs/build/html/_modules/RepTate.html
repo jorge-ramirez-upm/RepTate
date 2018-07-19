@@ -189,7 +189,7 @@
                                     <span class="c1">#for a list of available styles: &quot;from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())&quot;</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
     <span class="n">splash</span> <span class="o">=</span> <span class="n">SplashScreen</span><span class="p">()</span>
-    <span class="n">splash</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="s2">&quot;Loading RepTate...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># splash.showMessage(&quot;Loading RepTate...\n&quot;)</span>
     <span class="n">splash</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     
     <span class="c1"># FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)</span>
@@ -198,7 +198,7 @@
 
     <span class="n">ex</span> <span class="o">=</span> <span class="n">QApplicationManager</span><span class="p">()</span>
     <span class="n">ex</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QTabBar::tab { color:black; height: 22px; }&quot;</span><span class="p">)</span>
-    <span class="n">splash</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="s2">&quot;Loading RepTate...&quot;</span><span class="p">)</span>
+    <span class="c1"># splash.showMessage(&quot;Loading RepTate...&quot;)</span>
 
     <span class="n">splash</span><span class="o">.</span><span class="n">finish</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
 

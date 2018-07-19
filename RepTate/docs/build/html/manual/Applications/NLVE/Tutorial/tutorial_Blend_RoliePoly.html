@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Tutorial Blend of Rolie-Poly &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -25,7 +33,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -68,14 +77,12 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -93,9 +100,9 @@
 <li><p class="first">Start RepTate and create a new NLVE Application <a class="reference internal" href="../../../../_images/NLVE.png"><img alt="logo" class="align-bottom" src="../../../../_images/NLVE.png" style="width: 20pt; height: 20pt;" /></a>:</p>
 <a class="reference internal image-reference" href="../../../../_images/new_NLVE.png"><img alt="New application" class="align-center" src="../../../../_images/new_NLVE.png" style="width: 400pt;" /></a>
 </li>
-<li><p class="first">Drag and drop shear (<code class="docutils literal notranslate"><span class="pre">.shear</span></code>) or uniaxial extension (<code class="docutils literal notranslate"><span class="pre">.uext</span></code>) data files,
-e.g. all the <code class="docutils literal notranslate"><span class="pre">Minegishi_spiked_PS_***.uext</span></code> files from the folder
-<code class="docutils literal notranslate"><span class="pre">data/NLVE_Extension/</span></code>. These are the uniaxial extension data for the
+<li><p class="first">Drag and drop shear (<code class="docutils literal"><span class="pre">.shear</span></code>) or uniaxial extension (<code class="docutils literal"><span class="pre">.uext</span></code>) data files,
+e.g. all the <code class="docutils literal"><span class="pre">Minegishi_spiked_PS_***.uext</span></code> files from the folder
+<code class="docutils literal"><span class="pre">data/NLVE_Extension/</span></code>. These are the uniaxial extension data for the
 PS686 spiked with 1.5% long chains from <a class="reference internal" href="#rpbtut-minegishi2001" id="id1">[1]</a></p>
 <p>The first column of the file should contain the time and the second
 column the stress (shear, or tensile, stress growth function).</p>
@@ -103,20 +110,20 @@ column the stress (shear, or tensile, stress growth function).</p>
 </li>
 <li><p class="first">Select the “BlendRoliePoly” theory <a class="reference internal" href="../../../../_images/select_BlendRoliePoly.png"><img alt="th_select" class="align-bottom" src="../../../../_images/select_BlendRoliePoly.png" style="height: 15pt;" /></a> and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
 <a class="reference internal image-reference" href="../../../../_images/new_RP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_RP_th.png" style="width: 400pt;" /></a>
-<p>At this point, you need to setup the relaxation times, <span class="math notranslate">\(\tau_i\)</span>, and
-weights, <span class="math notranslate">\(g_i\)</span>, for each mode <span class="math notranslate">\(i\)</span>.
+<p>At this point, you need to setup the relaxation times, <span class="math">\(\tau_i\)</span>, and
+weights, <span class="math">\(g_i\)</span>, for each mode <span class="math">\(i\)</span>.
 You can:</p>
 <ul>
 <li><p class="first">Input them manually by clicking:</p>
 <a class="reference internal image-reference" href="../../../../_images/edit_modes.png"><img alt="Edit modes" class="align-center" src="../../../../_images/edit_modes.png" style="width: 100pt;" /></a>
 <p>then select the number of modes, enter the values and click “OK”.</p>
 </li>
-<li><p class="first">Obtain an estimate of the linear rheology (i.e. the set of <span class="math notranslate">\(\tau_{\mathrm{d},i}\)</span>)
+<li><p class="first">Obtain an estimate of the linear rheology (i.e. the set of <span class="math">\(\tau_{\mathrm{d},i}\)</span>)
 from a the molecular weight distribution (MWD). In this case, for each molecular mass mode,
-a reptation time is assigned. For a molecular mass mode <span class="math notranslate">\(M_i\)</span>, the corresponding
-relaxation time is estimated as <span class="math notranslate">\(\tau_{\mathrm{d},i} = 3 Z_i^3 f_{\mu,i} \tau_\mathrm{e}\)</span>
-where <span class="math notranslate">\(Z_i = M_i/M_\mathrm{e}\)</span>, <span class="math notranslate">\(M_\mathrm{e}\)</span> the entanglement molecualar mass,
-<span class="math notranslate">\(\tau_\mathrm{e}\)</span> the entanglement relaxation time, and <span class="math notranslate">\(f_{\mu,i}\)</span> the contour
+a reptation time is assigned. For a molecular mass mode <span class="math">\(M_i\)</span>, the corresponding
+relaxation time is estimated as <span class="math">\(\tau_{\mathrm{d},i} = 3 Z_i^3 f_{\mu,i} \tau_\mathrm{e}\)</span>
+where <span class="math">\(Z_i = M_i/M_\mathrm{e}\)</span>, <span class="math">\(M_\mathrm{e}\)</span> the entanglement molecualar mass,
+<span class="math">\(\tau_\mathrm{e}\)</span> the entanglement relaxation time, and <span class="math">\(f_{\mu,i}\)</span> the contour
 length fluctuation (CLF) correction.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -128,7 +135,7 @@ for the longer chains. Here, we consider repation along the thin tube, and CLF
 commensurate with the diluted tube (which speeds up the terminal relaxation because
 CLF shortens the distance required to reptate).</p>
 </div>
-<p>The stretch relaxation times are calculated as <span class="math notranslate">\(\tau_{\mathrm{s},i} = Z_i^2 \tau_\mathrm{e}\)</span>.</p>
+<p>The stretch relaxation times are calculated as <span class="math">\(\tau_{\mathrm{s},i} = Z_i^2 \tau_\mathrm{e}\)</span>.</p>
 <p>It is possible to import the MWD form an open MWD application, or by copy-pasting
 MWD data into a table.
 <strong>In this tutorial we will use the latter method.</strong></p>
@@ -142,8 +149,8 @@ MWD data into a table.
 </div></blockquote>
 </li>
 <li><p class="first">Select the number of molecular mass modes and provide the entanglement molecualar weight
-and entanglement relaxation time, respectively <span class="math notranslate">\(16\,625\)</span> g/mol and <span class="math notranslate">\(3.4 \times 10^{−3}\)</span> s
-at 160 <span class="math notranslate">\(^\circ\mathrm{C}\)</span>.
+and entanglement relaxation time, respectively <span class="math">\(16\,625\)</span> g/mol and <span class="math">\(3.4 \times 10^{−3}\)</span> s
+at 160 <span class="math">\(^\circ\mathrm{C}\)</span>.
 We use the 21 modes MWD provided in <a class="reference internal" href="#rpbtut-mishler2013" id="id2">[2]</a> and paste it in the table:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -151,8 +158,8 @@ We use the 21 modes MWD provided in <a class="reference internal" href="#rpbtut-
 <col width="52%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><span class="math notranslate">\(M\)</span></th>
-<th class="head"><span class="math notranslate">\(\phi\)</span></th>
+<tr class="row-odd"><th class="head"><span class="math">\(M\)</span></th>
+<th class="head"><span class="math">\(\phi\)</span></th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -227,18 +234,18 @@ We use the 21 modes MWD provided in <a class="reference internal" href="#rpbtut-
 <li><p class="first">Click “OK” to close the dialog. This launches the calculations of the relaxation times.
 You can look at the result by clicking <a class="reference internal" href="../../../../_images/check_relaxation_results.png"><img alt="relax_time" class="align-bottom" src="../../../../_images/check_relaxation_results.png" style="height: 50pt;" /></a>.</p>
 </li>
-<li><p class="first">Adjust the parameter <code class="docutils literal notranslate"><span class="pre">GN0</span></code>. We set it to <span class="math notranslate">\(2\times 10^5\)</span> Pa. Then, press “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a>
+<li><p class="first">Adjust the parameter <code class="docutils literal"><span class="pre">GN0</span></code>. We set it to <span class="math">\(2\times 10^5\)</span> Pa. Then, press “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a>
 to get the nonlinear rheology predictions.</p>
 <a class="reference internal image-reference" href="../../../../_images/RPB_pre_result.png"><img alt="Without fene, G" class="align-center" src="../../../../_images/RPB_pre_result.png" style="width: 400pt;" /></a>
 </li>
 <li><p class="first">The calculations can be done using “infinitely stretching chains” <a class="reference internal" href="../../../../_images/icons8-infinite.png"><img alt="no_fene" class="align-bottom" src="../../../../_images/icons8-infinite.png" style="height: 15pt;" /></a>
 or with finite extensibility <a class="reference internal" href="../../../../_images/icons8-facebook-f.png"><img alt="fene" class="align-bottom" src="../../../../_images/icons8-facebook-f.png" style="height: 15pt;" /></a>. In the latter case, the maximum extensibility
-parameter <code class="docutils literal notranslate"><span class="pre">lmax</span></code> is present in the parameter table.
+parameter <code class="docutils literal"><span class="pre">lmax</span></code> is present in the parameter table.
 You can change its value and click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory
 predictions.</p>
 </li>
-<li><p class="first">Finally, it is possible to correct the modulus (given as the parameter <code class="docutils literal notranslate"><span class="pre">GN0</span></code>) by clicking
-<a class="reference internal" href="../../../../_images/icons8-circled-g-filled.png"><img alt="g-correction" class="align-bottom" src="../../../../_images/icons8-circled-g-filled.png" style="height: 15pt;" /></a>. The stress of each species <span class="math notranslate">\(i\)</span> is corrected by a factor <span class="math notranslate">\(f_{\mu,i}^{1/2}\)</span>
+<li><p class="first">Finally, it is possible to correct the modulus (given as the parameter <code class="docutils literal"><span class="pre">GN0</span></code>) by clicking
+<a class="reference internal" href="../../../../_images/icons8-circled-g-filled.png"><img alt="g-correction" class="align-bottom" src="../../../../_images/icons8-circled-g-filled.png" style="height: 15pt;" /></a>. The stress of each species <span class="math">\(i\)</span> is corrected by a factor <span class="math">\(f_{\mu,i}^{1/2}\)</span>
 (see Chapter 6 of <a class="reference internal" href="#rpbtut-dealy2018" id="id3">[3]</a>).
 Note that this option is only available if the relxations times were given via MWD.
 Click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory predictions:</p>
@@ -300,7 +307,7 @@ Click “calculate” <a class="reference internal" href="../../../../_images/ic
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

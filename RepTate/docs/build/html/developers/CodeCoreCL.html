@@ -120,7 +120,7 @@
 <p>Module that defines the basic class from which all applications are derived.</p>
 <dl class="class">
 <dt id="Application.Application">
-<em class="property">class </em><code class="descclassname">Application.</code><code class="descname">Application</code><span class="sig-paren">(</span><em>name='ApplicationTemplate'</em>, <em>parent=None</em>, <em>nplots=1</em>, <em>ncols=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Application.html#Application"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Application.Application" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Application.</code><code class="descname">Application</code><span class="sig-paren">(</span><em>name='ApplicationTemplate'</em>, <em>parent=None</em>, <em>nplot_max=4</em>, <em>ncols=2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Application.html#Application"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Application.Application" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
 <p>Main abstract class that represents an application</p>
 <dl class="method">
@@ -506,6 +506,18 @@
 <code class="descname">set_legend_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Application.html#Application.set_legend_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Application.Application.set_legend_properties" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Application.Application.set_multiplot">
+<code class="descname">set_multiplot</code><span class="sig-paren">(</span><em>nplots</em>, <em>ncols</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Application.html#Application.set_multiplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Application.Application.set_multiplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>defines the plot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Application.Application.set_view_tools">
+<code class="descname">set_view_tools</code><span class="sig-paren">(</span><em>view_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Application.html#Application.set_view_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Application.Application.set_view_tools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redefined in Child application. Called when view is changed</p>
 </dd></dl>
 
 <dl class="method">
@@ -2776,6 +2788,23 @@ sort Mw [,reverse]</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="Theory.MLStripper">
+<em class="property">class </em><code class="descclassname">Theory.</code><code class="descname">MLStripper</code><a class="reference internal" href="../_modules/Theory.html#MLStripper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.MLStripper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">html.parser.HTMLParser</span></code></p>
+<p>Remove HTML tags from string</p>
+<dl class="method">
+<dt id="Theory.MLStripper.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#MLStripper.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.MLStripper.get_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.MLStripper.handle_data">
+<code class="descname">handle_data</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#MLStripper.handle_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.MLStripper.handle_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="Theory.Theory">
 <em class="property">class </em><code class="descclassname">Theory.</code><code class="descname">Theory</code><span class="sig-paren">(</span><em>name='Theory'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#CmdBase.CmdBase" title="CmdBase.CmdBase"><code class="xref py py-class docutils literal"><span class="pre">CmdBase.CmdBase</span></code></a></p>
@@ -2932,6 +2961,11 @@ Else, we execute the line as Python code.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Theory.Theory.destructor">
+<code class="descname">destructor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.destructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.destructor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Theory.Theory.do_calculate">
 <code class="descname">do_calculate</code><span class="sig-paren">(</span><em>line</em>, <em>timing=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.do_calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.do_calculate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the theory</p>
@@ -3069,7 +3103,7 @@ With no arguments, show the current values</p>
 
 <dl class="method">
 <dt id="Theory.Theory.do_xrange">
-<code class="descname">do_xrange</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.do_xrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.do_xrange" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_xrange</code><span class="sig-paren">(</span><em>line</em>, <em>visible=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.do_xrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.do_xrange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set/show xrange for fit and shows limits</p>
 <p>With no arguments: switches ON/OFF the horizontal span</p>
 <dl class="docutils">
@@ -3083,7 +3117,7 @@ With no arguments, show the current values</p>
 
 <dl class="method">
 <dt id="Theory.Theory.do_yrange">
-<code class="descname">do_yrange</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.do_yrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.do_yrange" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_yrange</code><span class="sig-paren">(</span><em>line</em>, <em>visible=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.do_yrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.do_yrange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set/show yrange for fit and shows limits</p>
 <p>With no arguments: switches ON/OFF the vertical span</p>
 <dl class="docutils">
@@ -3254,6 +3288,26 @@ before execution (for example, variable substitution) do it here.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Theory.Theory.show_theory_extras">
+<code class="descname">show_theory_extras</code><span class="sig-paren">(</span><em>show</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.show_theory_extras"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.show_theory_extras" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.strip_tags">
+<code class="descname">strip_tags</code><span class="sig-paren">(</span><em>html_text</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.strip_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.strip_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.table_as_ascii">
+<code class="descname">table_as_ascii</code><span class="sig-paren">(</span><em>tab</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.table_as_ascii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.table_as_ascii" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.table_as_html">
+<code class="descname">table_as_html</code><span class="sig-paren">(</span><em>tab</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.table_as_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.table_as_html" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Theory.Theory.theory_files">
 <code class="descname">theory_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.theory_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.theory_files" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3285,7 +3339,7 @@ before execution (for example, variable substitution) do it here.</p>
 the data graphically.</p>
 <dl class="class">
 <dt id="View.View">
-<em class="property">class </em><code class="descclassname">View.</code><code class="descname">View</code><span class="sig-paren">(</span><em>name=''</em>, <em>description=''</em>, <em>x_label=''</em>, <em>y_label=''</em>, <em>x_units=''</em>, <em>y_units=''</em>, <em>log_x=False</em>, <em>log_y=False</em>, <em>view_proc=None</em>, <em>n=1</em>, <em>snames=[]</em>, <em>inverse_view_proc=None</em>, <em>index=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/View.html#View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#View.View" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">View.</code><code class="descname">View</code><span class="sig-paren">(</span><em>name=''</em>, <em>description=''</em>, <em>x_label=''</em>, <em>y_label=''</em>, <em>x_units=''</em>, <em>y_units=''</em>, <em>log_x=False</em>, <em>log_y=False</em>, <em>view_proc=None</em>, <em>n=1</em>, <em>snames=[]</em>, <em>inverse_view_proc=None</em>, <em>index=0</em>, <em>with_thline=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/View.html#View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#View.View" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Abstract class to describe a view</p>
 <p>[description]</p>

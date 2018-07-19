@@ -400,8 +400,14 @@ It is the GUI counterpart of Application.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.change_ax_view">
+<code class="descname">change_ax_view</code><span class="sig-paren">(</span><em>n_ax</em>, <em>view_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.change_ax_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.change_ax_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the view corresponding to axis n_ax</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.change_view">
-<code class="descname">change_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.change_view" title="Permalink to this definition">¶</a></dt>
+<code class="descname">change_view</code><span class="sig-paren">(</span><em>x_vis=False</em>, <em>y_vis=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.change_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change plot view</p>
 <p>[description]</p>
 </dd></dl>
@@ -807,11 +813,6 @@ with filled or empty markers, depending on the user’s choice</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.set_view_tools">
-<code class="descname">set_view_tools</code><span class="sig-paren">(</span><em>view_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.set_view_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.set_view_tools" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.showColorDialog">
 <code class="descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.showColorDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the color picker and return the picked QtColor or <cite>None</cite></p>
@@ -837,6 +838,12 @@ with filled or empty markers, depending on the user’s choice</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged">
+<code class="descname">sp_nviews_valueChanged</code><span class="sig-paren">(</span><em>new_nplots</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.sp_nviews_valueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the current number of views displayed in the app</p>
 </dd></dl>
 
 <dl class="method">
@@ -1228,6 +1235,12 @@ Two tabs can share the same name</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QTheory.QTheory.change_thtextbox_fontsize">
+<code class="descname">change_thtextbox_fontsize</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.change_thtextbox_fontsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.change_thtextbox_fontsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the thTextBox font size by a factor <cite>factor</cite></p>
+</dd></dl>
+
+<dl class="method">
 <dt id="QTheory.QTheory.copy_parameters">
 <code class="descname">copy_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.copy_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.copy_parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1318,6 +1331,12 @@ Or edit all parameters dialog if parameter name is double clicked</p>
 <dt id="QTheory.QTheory.theory_buttons_disabled">
 <code class="descname">theory_buttons_disabled</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.theory_buttons_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.theory_buttons_disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable theory button inside the theory</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QTheory.QTheory.thtextbox_context_menu">
+<code class="descname">thtextbox_context_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.thtextbox_context_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.thtextbox_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom contextual menu for the theory textbox</p>
 </dd></dl>
 
 <dl class="method">

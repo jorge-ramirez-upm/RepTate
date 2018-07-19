@@ -180,25 +180,29 @@
             <span class="mi">1000</span><span class="p">,</span>
             <span class="s2">&quot;Number-average molecular mass&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
-            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;Mw&quot;</span><span class="p">,</span>
             <span class="mi">1000</span><span class="p">,</span>
             <span class="s2">&quot;Weight-average molecular mass&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
-            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Mz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;Mz&quot;</span><span class="p">,</span>
             <span class="mi">1</span><span class="p">,</span>
             <span class="s2">&quot;z-average molecular mass&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
-            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;PDI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;PDI&quot;</span><span class="p">,</span>
             <span class="mi">1</span><span class="p">,</span>
             <span class="s2">&quot;Polydispersity index&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
-            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="n">mmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">minpositivecol</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">mmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">maxcol</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -235,8 +239,12 @@
             <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span>
             <span class="n">m_arr</span> <span class="o">=</span> <span class="n">ft</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
             <span class="n">w_arr</span> <span class="o">=</span> <span class="n">ft</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">mmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">w_arr</span><span class="p">)])</span>
-            <span class="n">mmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">w_arr</span><span class="p">)])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">mmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">w_arr</span><span class="p">)])</span>
+                <span class="n">mmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">w_arr</span><span class="p">)])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">mmin</span> <span class="o">=</span> <span class="n">m_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">mmax</span> <span class="o">=</span> <span class="n">m_arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logmmin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mmin</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logmmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mmax</span><span class="p">)</span>
             <span class="n">nbin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nbin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -427,7 +435,6 @@
         <span class="n">tempMn</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">tempM2</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">tempM3</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">temp_sum</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="n">M</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
@@ -437,10 +444,15 @@
             <span class="n">tempM3</span> <span class="o">+=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">M</span><span class="o">**</span><span class="mi">3</span> <span class="c1"># w*M^3</span>
             <span class="n">tempM2</span> <span class="o">+=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">M</span> <span class="o">*</span> <span class="n">M</span>  <span class="c1"># w*M^2</span>
             <span class="n">tempMn</span> <span class="o">+=</span> <span class="n">w</span> <span class="o">/</span> <span class="n">M</span>  <span class="c1"># w/M</span>
-        <span class="n">Mn</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">tempMn</span>
-        <span class="n">Mz</span> <span class="o">=</span> <span class="n">tempM2</span> <span class="o">/</span> <span class="n">Mw</span>
-        <span class="n">Mzp1</span> <span class="o">=</span> <span class="n">tempM3</span> <span class="o">/</span> <span class="n">tempM2</span>
-        <span class="n">PDI</span> <span class="o">=</span> <span class="n">Mw</span> <span class="o">/</span> <span class="n">Mn</span>
+        
+        <span class="k">if</span> <span class="n">tempMn</span> <span class="o">*</span> <span class="n">Mw</span> <span class="o">*</span> <span class="n">tempM2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Mn</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">tempMn</span>
+            <span class="n">Mz</span> <span class="o">=</span> <span class="n">tempM2</span> <span class="o">/</span> <span class="n">Mw</span>
+            <span class="n">Mzp1</span> <span class="o">=</span> <span class="n">tempM3</span> <span class="o">/</span> <span class="n">tempM2</span>
+            <span class="n">PDI</span> <span class="o">=</span> <span class="n">Mw</span> <span class="o">/</span> <span class="n">Mn</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">PDI</span> <span class="o">=</span> <span class="n">Mzp1</span> <span class="o">=</span> <span class="n">Mz</span> <span class="o">=</span> <span class="n">Mw</span> <span class="o">=</span> <span class="n">Mn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Could not determine moments&quot;</span><span class="p">)</span>
 
         <span class="c1"># if line == &quot;input&quot; and CmdBase.mode == CmdMode.GUI:</span>
         <span class="c1">#     file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)</span>
@@ -459,11 +471,13 @@
         <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">Mw</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">PDI</span><span class="p">,</span> <span class="n">Mz</span> <span class="o">/</span> <span class="n">Mw</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;h3&gt;Characteristics of the </span><span class="si">%s</span><span class="s1"> MWD&lt;/h3&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">table</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
-            <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;Mn&lt;/th&gt;&lt;th&gt;Mw&lt;/th&gt;&lt;th&gt;Mw/Mn&lt;/th&gt;&lt;th&gt;Mz/Mw&lt;/th&gt;&lt;th&gt;Mz+1/Mz&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
-            <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;</span><span class="si">%6.3g</span><span class="s1">k&lt;/td&gt;&lt;td&gt;</span><span class="si">%6.3g</span><span class="s1">k&lt;/td&gt;&lt;td&gt;</span><span class="si">%7.3g</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%7.3g</span><span class="s1">&lt;/td&gt;&lt;td&gt;</span><span class="si">%7.3g</span><span class="s1">&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">Mw</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">PDI</span><span class="p">,</span> <span class="n">Mz</span> <span class="o">/</span> <span class="n">Mw</span><span class="p">,</span> <span class="n">Mzp1</span><span class="o">/</span><span class="n">Mz</span><span class="p">)</span>
-            <span class="n">table</span><span class="o">+=</span><span class="s1">&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;h3&gt;Characteristics of the </span><span class="si">%s</span><span class="s1"> MWD&lt;br&gt;&lt;/h3&gt;&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="c1"># table=&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
+            <span class="c1"># table+=&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;Mn (kg/mol)&lt;/th&gt;&lt;th&gt;Mw (kg/mol)&lt;/th&gt;&lt;th&gt;Mw/Mn&lt;/th&gt;&lt;th&gt;Mz/Mw&lt;/th&gt;&lt;th&gt;Mz+1/Mz&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
+            <span class="c1"># table+=&#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;%.3g&lt;/td&gt;&lt;td&gt;%.3g&lt;/td&gt;&lt;td&gt;%.3g&lt;/td&gt;&lt;td&gt;%.3g&lt;/td&gt;&lt;td&gt;%.3g&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;%(Mn / 1000, Mw / 1000, PDI, Mz / Mw, Mzp1/Mz)</span>
+            <span class="c1"># table+=&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Mn (kg/mol)&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Mw (kg/mol)&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-9s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Mw/Mn&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-9s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Mz/Mw&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-9s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Mz+1/Mz&#39;</span><span class="p">],]</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%-12.3g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Mn</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">%-12.3g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Mw</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">%-9.3g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">PDI</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-9.3g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Mz</span> <span class="o">/</span> <span class="n">Mw</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">%-9.3g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Mzp1</span> <span class="o">/</span> <span class="n">Mz</span><span class="p">)])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseTheoryDiscrMWD.discretise_mwd"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryDiscrMWD.BaseTheoryDiscrMWD.discretise_mwd">[docs]</a>    <span class="k">def</span> <span class="nf">discretise_mwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -494,7 +508,8 @@
             <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span>
                 <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ft</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ft</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_w</span> <span class="o">*</span> <span class="n">dlogM</span>
-        <span class="n">temp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="n">temp_area</span>
+        <span class="k">if</span> <span class="n">temp_area</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">temp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="n">temp_area</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calculate_moments</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">)</span>
 
         <span class="n">nbin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nbin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>

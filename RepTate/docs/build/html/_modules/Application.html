@@ -145,8 +145,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ApplicationTemplate&quot;</span><span class="p">,</span>
                  <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">nplots</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">nplot_max</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                 <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
@@ -172,7 +172,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_datasets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">legend_visible</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#default view order in multiplot views</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="n">nplots</span>  <span class="c1">#number of plots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplot_max</span> <span class="o">=</span> <span class="n">nplot_max</span>  <span class="c1"># maximun number of plots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="n">nplot_max</span>  <span class="c1"># current number of plots</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span> <span class="o">=</span> <span class="n">ncols</span>  <span class="c1">#number of columns in the multiplot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -196,17 +197,32 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="p">[</span><span class="n">ToolMaterialsDatabase</span><span class="o">.</span><span class="n">toolname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ToolMaterialsDatabase</span>
         
         <span class="c1"># MATPLOTLIB STUFF</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span> <span class="o">=</span> <span class="n">MultiView</span><span class="p">(</span><span class="n">PlotOrganizationType</span><span class="o">.</span><span class="n">OptimalRow</span><span class="p">,</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">plotselecttabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">figure</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">axarr</span>  <span class="c1">#</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">canvas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_multiplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">)</span>
+        <span class="c1"># self.multiplots = MultiView(PlotOrganizationType.OptimalRow,</span>
+        <span class="c1">#                             self.nplots, self.ncols, self)</span>
+        <span class="c1"># self.multiplots.plotselecttabWidget.setCurrentIndex(</span>
+        <span class="c1">#     self.current_viewtab)</span>
+        <span class="c1"># self.figure = self.multiplots.figure</span>
+        <span class="c1"># self.axarr = self.multiplots.axarr  #</span>
+        <span class="c1"># self.canvas = self.multiplots.canvas</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">cmdline</span><span class="p">):</span>
             <span class="c1"># self.figure.show()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Application.set_multiplot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_multiplot">[docs]</a>    <span class="k">def</span> <span class="nf">set_multiplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nplots</span><span class="p">,</span> <span class="n">ncols</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;defines the plot&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span> <span class="o">=</span> <span class="n">MultiView</span><span class="p">(</span><span class="n">PlotOrganizationType</span><span class="o">.</span><span class="n">OptimalRow</span><span class="p">,</span>
+                                    <span class="n">nplots</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">plotselecttabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">figure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">axarr</span>  <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">canvas</span></div>
+
+<div class="viewcode-block" id="Application.set_view_tools"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_view_tools">[docs]</a>    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Redefined in Child application. Called when view is changed&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Application.add_common_theories"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.add_common_theories">[docs]</a>    <span class="k">def</span> <span class="nf">add_common_theories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>

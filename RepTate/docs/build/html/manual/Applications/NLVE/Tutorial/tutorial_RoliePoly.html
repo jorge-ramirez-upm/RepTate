@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Tutorial Rolie-Poly &#8212; RepTate 0.9.2 20180503 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.9.2 20180503',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -25,7 +33,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -68,14 +77,12 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -93,17 +100,17 @@
 <li><p class="first">Start RepTate and create a new NLVE Application <a class="reference internal" href="../../../../_images/NLVE.png"><img alt="logo" class="align-bottom" src="../../../../_images/NLVE.png" style="width: 20pt; height: 20pt;" /></a>:</p>
 <a class="reference internal image-reference" href="../../../../_images/new_NLVE.png"><img alt="New application" class="align-center" src="../../../../_images/new_NLVE.png" style="width: 400pt;" /></a>
 </li>
-<li><p class="first">Drag and drop shear (<code class="docutils literal notranslate"><span class="pre">.shear</span></code>) or uniaxial extension (<code class="docutils literal notranslate"><span class="pre">.uext</span></code>) data files,
-e.g. all the <code class="docutils literal notranslate"><span class="pre">.uext</span></code> files from the folder
-<code class="docutils literal notranslate"><span class="pre">data/DOW/Non-Linear_Rheology/Start-up_extension/</span></code>.</p>
+<li><p class="first">Drag and drop shear (<code class="docutils literal"><span class="pre">.shear</span></code>) or uniaxial extension (<code class="docutils literal"><span class="pre">.uext</span></code>) data files,
+e.g. all the <code class="docutils literal"><span class="pre">.uext</span></code> files from the folder
+<code class="docutils literal"><span class="pre">data/DOW/Non-Linear_Rheology/Start-up_extension/</span></code>.</p>
 <p>The first column of the file should contain the time and the second
 column the stress (shear, or tensile, stress growth function).</p>
 <a class="reference internal image-reference" href="../../../../_images/load_uext_data.png"><img alt="Load data" class="align-center" src="../../../../_images/load_uext_data.png" style="width: 400pt;" /></a>
 </li>
 <li><p class="first">Select the “RoliePoly” theory <a class="reference internal" href="../../../../_images/RP_theory.png"><img alt="th_select" class="align-bottom" src="../../../../_images/RP_theory.png" style="height: 15pt;" /></a> and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
 <a class="reference internal image-reference" href="../../../../_images/new_RP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_RP_th.png" style="width: 400pt;" /></a>
-<p>At this point, you need to setup the relaxation times, <span class="math notranslate">\(\tau_i\)</span>, and
-weights, <span class="math notranslate">\(g_i\)</span>, for each mode <span class="math notranslate">\(i\)</span>.
+<p>At this point, you need to setup the relaxation times, <span class="math">\(\tau_i\)</span>, and
+weights, <span class="math">\(g_i\)</span>, for each mode <span class="math">\(i\)</span>.
 You can:</p>
 <blockquote>
 <div><ul>
@@ -140,12 +147,12 @@ prediction:</p>
 <div><a class="reference internal image-reference" href="../../../../_images/with_LVE.png"><img alt="Show LVE" class="align-center" src="../../../../_images/with_LVE.png" style="width: 400pt;" /></a>
 </div></blockquote>
 </li>
-<li><p class="first">The number of stretching modes is given by <a class="reference internal" href="../../../../_images/nstretch.png"><img alt="nstretch" class="align-bottom" src="../../../../_images/nstretch.png" style="height: 15pt;" /></a>. <span class="math notranslate">\(N_\text{stretch}=0\)</span>
+<li><p class="first">The number of stretching modes is given by <a class="reference internal" href="../../../../_images/nstretch.png"><img alt="nstretch" class="align-bottom" src="../../../../_images/nstretch.png" style="height: 15pt;" /></a>. <span class="math">\(N_\text{stretch}=0\)</span>
 means that the non-stretching version of the Rolie-Poly model will be used for all
 modes. See <a class="reference internal" href="../Theory/theory.html#roliepoly-equation-label"><span class="std std-ref">Rolie-Poly equation</span></a> for more details.
 So far, the calculations were done using “infinitely stretching chains” <a class="reference internal" href="../../../../_images/icons8-infinite.png"><img alt="no_fene" class="align-bottom" src="../../../../_images/icons8-infinite.png" style="height: 15pt;" /></a>.
 Click that button to use finite extensibility <a class="reference internal" href="../../../../_images/icons8-facebook-f.png"><img alt="fene" class="align-bottom" src="../../../../_images/icons8-facebook-f.png" style="height: 15pt;" /></a>. The maximum extensibility
-parameter <code class="docutils literal notranslate"><span class="pre">lmax</span></code> is now present in the parameter table.
+parameter <code class="docutils literal"><span class="pre">lmax</span></code> is now present in the parameter table.
 You can change its value and click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory
 predictions:</p>
 <blockquote>
@@ -185,7 +192,7 @@ predictions:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

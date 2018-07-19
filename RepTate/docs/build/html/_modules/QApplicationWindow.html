@@ -502,6 +502,7 @@
         
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_view</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionSave_View</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_view</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sp_nviews</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sp_nviews_valueChanged</span><span class="p">)</span>
 
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">tabCloseRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close_data_tab_handler</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">tabBarDoubleClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_doubleClickTab</span><span class="p">)</span>
@@ -561,13 +562,17 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rbFilled</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">populate_cbSymbolType</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">pushApply</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_apply_button_pressed</span><span class="p">)</span>
 
-
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset_actions_disabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_nviews</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplot_max</span><span class="p">)</span>
         <span class="c1"># connection_id = self.checkBoxColor.toggled.connect(self)</span>
         <span class="c1"># TEST GET CLICKABLE OBJECTS ON THE X AXIS</span>
         <span class="c1">#xaxis = self.ax.get_xticklabels()</span>
-        <span class="c1">#print (xaxis)  </span>
+        <span class="c1">#print (xaxis)</span>
+
+<div class="viewcode-block" id="QApplicationWindow.sp_nviews_valueChanged"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">sp_nviews_valueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_nplots</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the current number of views displayed in the app&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="n">new_nplots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">reorg_fig</span><span class="p">(</span><span class="n">new_nplots</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QApplicationWindow.save_view"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.save_view">[docs]</a>    <span class="k">def</span> <span class="nf">save_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dir_start</span> <span class="o">=</span> <span class="s2">&quot;data/&quot;</span>
@@ -1451,7 +1456,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_legend</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="QApplicationWindow.change_view"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.change_view">[docs]</a>    <span class="k">def</span> <span class="nf">change_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QApplicationWindow.change_view"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.change_view">[docs]</a>    <span class="k">def</span> <span class="nf">change_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_vis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">y_vis</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change plot view</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -1460,9 +1465,9 @@
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">:</span>
-                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">is_xrange_visible</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">is_yrange_visible</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">set_xy_limits_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">is_xrange_visible</span> <span class="o">=</span> <span class="n">x_vis</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">is_yrange_visible</span> <span class="o">=</span> <span class="n">y_vis</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">set_xy_limits_visible</span><span class="p">(</span><span class="n">x_vis</span><span class="p">,</span> <span class="n">y_vis</span><span class="p">)</span>
                 
         <span class="bp">self</span><span class="o">.</span><span class="n">view_switch</span><span class="p">(</span><span class="n">selected_view_name</span><span class="p">)</span> <span class="c1">#view_switch of Application</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_view_tools</span><span class="p">(</span><span class="n">selected_view_name</span><span class="p">)</span>
@@ -1470,9 +1475,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_curve_drag</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">ds</span><span class="p">:</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">highlight_series</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="QApplicationWindow.set_view_tools"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.set_view_tools">[docs]</a>    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
-        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="QApplicationWindow.dragEnterEvent"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.dragEnterEvent">[docs]</a>    <span class="k">def</span> <span class="nf">dragEnterEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -1605,7 +1607,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">createNew_Empty_Dataset</span><span class="p">()</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
-        <span class="n">ftype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">ftype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">AddDummyFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ftype</span><span class="p">)</span>
         <span class="n">parameterstochange</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">parameterrange</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1938,10 +1940,30 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionAdd_Annotation</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">)</span>
         <span class="n">refresh_chart_action</span> <span class="o">=</span> <span class="n">main_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s2">&quot;Reset view(s)&quot;</span><span class="p">)</span>
         <span class="n">refresh_chart_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">refresh_plot</span><span class="p">)</span>
+        <span class="c1"># change view</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span> <span class="o">==</span> <span class="n">ax</span><span class="p">:</span>
+                <span class="n">n_ax_view_to_change</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">menu2</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="s2">&quot;Select View&quot;</span><span class="p">)</span>
+        <span class="n">pick_view</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">()):</span>
+            <span class="n">view_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">itemText</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">pick_view</span> <span class="o">=</span> <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">view_name</span><span class="p">)</span>
+            <span class="n">pick_view</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">,</span> <span class="n">view_name</span><span class="o">=</span><span class="n">view_name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">change_ax_view</span><span class="p">(</span><span class="n">n_ax_view_to_change</span><span class="p">,</span> <span class="n">view_name</span><span class="p">))</span>
+        <span class="n">main_menu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="n">menu2</span><span class="p">)</span>
 
         <span class="c1">#launch menu</span>
         <span class="k">if</span> <span class="n">main_menu</span><span class="o">.</span><span class="n">exec_</span><span class="p">(</span><span class="n">QCursor</span><span class="o">.</span><span class="n">pos</span><span class="p">()):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationWindow.change_ax_view"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.change_ax_view">[docs]</a>    <span class="k">def</span> <span class="nf">change_ax_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_ax</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the view corresponding to axis n_ax&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n_ax</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">view_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">[</span><span class="n">n_ax</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="n">view_name</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_plot</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_pan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_press_event&#39;</span><span class="p">:</span>  <span class="c1"># begin pan</span>
