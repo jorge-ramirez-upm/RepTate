@@ -304,7 +304,7 @@ class BaseTheoryWLFShiftTest:
                     table.append(['%-12.4g' % o[0], '%-12.4g' % o[1], '%-12.4g' % o[2], '%-12.4g' % o[3], '%-12.3g' % (MwUnique[o][0] / MwUnique[o][1]), '%-12d' % MwUnique[o][1] ])
                 else:
                     # table+='''<tr><td>%4g</td><td>%4g</td><td>%4g</td><td>%4g</td><td>%s</td><td>(%5d)</td></tr>'''%(o[0], o[1], o[2], o[3], "-", MwUnique[o][1])
-                    table.append(['%-12.4g' % o[0], '%-12.4g' % o[1], '%-12.4g' % o[2], '%-12.4g' % o[3], '%-12.3g' % '-', '%-12d' % MwUnique[o][1] ])
+                    table.append(['%-12.4g' % o[0], '%-12.4g' % o[1], '%-12.4g' % o[2], '%-12.4g' % o[3], '%-12s' % '-', '%-12d' % MwUnique[o][1] ])
             # table+='''</table><br>'''
             self.Qprint(table)
 
