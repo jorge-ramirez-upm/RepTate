@@ -41,10 +41,11 @@ from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
 from Theory import Theory
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog, QApplication
+from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog, QApplication, QTextBrowser, QSplitter, QMenu
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QDoubleValidator
+from PyQt5.QtGui import QDoubleValidator, QCursor
 from Parameter import OptType, ParameterType, ShiftType
+from math import ceil, floor
 import Version
 import time
 import ast
@@ -218,6 +219,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
         self.thTextBox.setReadOnly(True)
         self.thTextBox.setOpenExternalLinks(True)
+        self.thTextBox.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.thTextBox.customContextMenuRequested.connect(self.thtextbox_context_menu)
 
         self.thread_calc_busy = False
         self.thread_fit_busy = False
@@ -226,6 +229,25 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             self.onTreeWidgetItemDoubleClicked)
         connection_id = self.thParamTable.itemChanged.connect(
             self.handle_parameterItemChanged)
+
+    def thtextbox_context_menu(self):
+        """Custom contextual menu for the theory textbox"""
+        menu = self.thTextBox.createStandardContextMenu()
+        menu.addSeparator()
+        menu.addAction("Increase Font Size", lambda: self.change_thtextbox_fontsize(1.25))
+        menu.addAction("Deacrease Font Size", lambda: self.change_thtextbox_fontsize(0.8))
+        menu.addAction("Clear Text", self.thTextBox.clear)
+        menu.exec_(QCursor.pos())
+    
+    def change_thtextbox_fontsize(self, factor):
+        """Change the thTextBox font size by a factor `factor` """
+        font = self.thTextBox.currentFont()
+        if factor < 1:
+            font_size = ceil(font.pointSize() * factor)
+        else:
+            font_size = floor(font.pointSize() * factor)
+        font.setPointSize(font_size)
+        self.thTextBox.document().setDefaultFont(font)
 
     def set_extra_data(self, extra_data):
         """set the extra data dict at loading, redefined in Child class if needed"""
