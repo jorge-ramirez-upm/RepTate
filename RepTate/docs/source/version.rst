@@ -2,6 +2,30 @@
 Version History
 ===============
 
+Release 0.9.3 - 20180719
+========================
+- New App: to handle and fit TTS shift factors
+- New Tools for manipulating how data is represented (draggable to set the order of application)
+- New Tools: Integral, Find Peaks, Gradient, Smooth data, set bounds to data, Evaluate Expression, Interpolate/Extrapolate
+- New Materials Database (implemented as a Tool); theory parameters are read from the database if the chemistry is available
+- New View: i-Rheo for J(t), with oversampling
+- Handling of citations
+- Bayesian information criterion printed in theory output
+- Save to Flowsolve button in RP and BlendRP theories
+- Save Maxwell modes in all theories
+- Copy/Paste parameters between theories
+- Legend settings and autoupdate legend
+- Better bug handling (send email to developers)
+- Save all views data to a text file
+- Shifting of files; handling and saving shift parameters
+- Nicer HTML output in Theory and Tools
+- Allow calculations and fits to be stopped
+- Developer docs: Callback functions
+- Zoom (right button and wheel; zoom in and zoom out) and Pan (middle button)
+- Dummyfiles to check theory predictions without experimental data
+- New NLVE test data
+- Allow many plots in the same application
+
 Release 0.9.2 - 20180503
 ========================
 - Save theory predictions to a file
