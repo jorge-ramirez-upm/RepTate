@@ -175,7 +175,7 @@ class BaseTheoryCreatePolyconf:
         self.polyconf_file_out = None  # full path of target polyconf file
         self.autocalculate = False
         self.bch = BobCtypesHelper(self)
-        self.do_priority_seniority = True
+        self.do_priority_seniority = False
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
