@@ -262,7 +262,7 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         tb.setIconSize(QSize(24, 24))
         self.btn_prio_senio = tb.addAction(QIcon(':/Icon8/Images/new_icons/priority_seniority.png'), 'Calculate Priority and Seniority (can take some time)')
         self.btn_prio_senio.setCheckable(True)
-        self.btn_prio_senio.setChecked(True)
+        self.btn_prio_senio.setChecked(self.do_priority_seniority)
 
         # BoB LVE do not calculate priority & seniority (leave it to React)
         # uncomment below for the possiblity to calculate priority & seniority in BoB LVE

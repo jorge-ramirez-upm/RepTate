@@ -125,7 +125,7 @@ class BaseTheoryReactMix:
         self.signal_mix_dialog.connect(rgt.launch_mix_dialog)
 
     def Calc(self, f=None):
-        """ReactMix function that returns the square of y
+        """ReactMix function
         
         [description]
         
