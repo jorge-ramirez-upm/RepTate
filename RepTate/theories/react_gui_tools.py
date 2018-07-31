@@ -163,19 +163,22 @@ def handle_btn_prio_senio(parent_theory, checked):
     parent_theory.do_priority_seniority = checked
     app = parent_theory.parent_dataset.parent_application
     app.viewComboBox.blockSignals(True)
-    if checked:
+    if checked and (app.viewComboBox.count() < len(app.views)):
         app.nplots = min(app.nplot_max, app.nplots + 1)
         app.multiviews[app.nplots - 1] = app.views[app.extra_view_names[0]]
         for view_name in app.extra_view_names:
             app.viewComboBox.addItems([app.views[view_name].name,])
             app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views[view_name].description, Qt.ToolTipRole)
         app.multiplots.reorg_fig(app.nplots)
-    else:
-        app.nplots = max(1, app.nplots - 1)
-        app.multiplots.reorg_fig(app.nplots)
+    elif (not checked) and (app.viewComboBox.count() == len(app.views)):
+        ps_view = False
         for i, view in enumerate(app.multiviews):
             if view.name in app.extra_view_names:
                 app.multiviews[i] = app.views[app.viewComboBox.itemText(i)]
+                ps_view = True
+        if ps_view:
+            app.nplots = max(1, app.nplots - 1)
+            app.multiplots.reorg_fig(app.nplots)
         for _ in app.extra_view_names:
             app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
     parent_theory.parent_dataset.toggle_vertical_limits(checked)
@@ -194,9 +197,10 @@ def show_theory_extras(parent_theory, show):
             app.multiviews = parent_theory.old_views
         else:
             app.multiviews[app.nplots - 1] = app.views[app.extra_view_names[0]]
-        for view_name in app.extra_view_names:
-            app.viewComboBox.addItems([app.views[view_name].name,])
-            app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views[view_name].description, Qt.ToolTipRole)
+        if app.viewComboBox.count() < len(app.views):
+            for view_name in app.extra_view_names:
+                app.viewComboBox.addItems([app.views[view_name].name,])
+                app.viewComboBox.setItemData(app.viewComboBox.count() - 1, app.views[view_name].description, Qt.ToolTipRole)
         app.multiplots.reorg_fig(app.nplots)
     elif hide and parent_theory.do_priority_seniority and parent_theory.active:
         #remove extra figure
@@ -213,12 +217,12 @@ def show_theory_extras(parent_theory, show):
                 if view.name == current_view_name:
                     app.current_view = new_multiviews[i]
                     app.viewComboBox.setCurrentIndex(i)
-                    new_index = i
                     current_view_name = ''
 
         app.multiviews = [v for v in new_multiviews]
-        for _ in app.extra_view_names:
-            app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
+        if app.viewComboBox.count() == len(app.views):
+            for _ in range(len(app.extra_view_names)):
+                app.viewComboBox.removeItem(app.viewComboBox.count() - 1)
     app.viewComboBox.blockSignals(False)
 
 def theory_buttons_disabled(parent_theory, state):

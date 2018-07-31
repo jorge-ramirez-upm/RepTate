@@ -1340,13 +1340,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if ds:
             disable_buttons = True if not ds.files else False
             self.dataset_actions_disabled(disable_buttons) # disable/activate buttons buttons
-            ds.Qshow_all() #show all data of current dataset, except previously unticked files
             ntab = self.DataSettabWidget.count()
             for i in range(ntab): 
                 if i!=index:
                     ds_to_hide = self.DataSettabWidget.widget(i) #hide files of all datasets except current one
                     ds_to_hide.do_hide_all()
                     ds_to_hide.set_no_limits(ds_to_hide.current_theory) 
+            ds.Qshow_all() #show all data of current dataset, except previously unticked files
             ds.highlight_series()
             ds.populate_inspector()
         else: # handle case where no dataset is left

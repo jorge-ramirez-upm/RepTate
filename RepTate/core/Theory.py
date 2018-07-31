@@ -1053,13 +1053,14 @@ class Theory(CmdBase):
         
         [description]
         """
-        self.set_xy_limits_visible(False, False)  # hide xrange and yrange
-        for table in self.tables.values():
-            for i in range(table.MAX_NUM_SERIES):
-                for nx in range(self.parent_dataset.nplots):
-                    table.series[nx][i].set_visible(False)
-        self.show_theory_extras(False)
-        self.active = False
+        if self.active:
+            self.set_xy_limits_visible(False, False)  # hide xrange and yrange
+            for table in self.tables.values():
+                for i in range(table.MAX_NUM_SERIES):
+                    for nx in range(self.parent_dataset.nplots):
+                        table.series[nx][i].set_visible(False)
+            self.show_theory_extras(False)
+            self.active = False
 
     def set_th_table_visible(self, fname, state):
         """Show/Hide all theory lines related to the file "fname" """
