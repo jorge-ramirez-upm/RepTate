@@ -106,7 +106,9 @@ class reactresults(ct.Structure):
                                                                 ct.c_double),
         ("M_e", ct.c_double), ("N_e", ct.c_double), ("boblgmin", ct.c_double),
         ("boblgmax", ct.c_double), ("m_w", ct.c_double), ("m_n", ct.c_double),
-        ("brav", ct.c_double), ("first_poly", ct.c_int), ("next", ct.c_int),
+        ("brav", ct.c_double), 
+        ("m_z", ct.c_double), ("m_zp1", ct.c_double), ("m_zp2", ct.c_double), 
+        ("first_poly", ct.c_int), ("next", ct.c_int),
         ("nummwdbins", ct.c_int), ("numbobbins",
                                    ct.c_int), ("bobbinmax",
                                                ct.c_int), ("nsaved", ct.c_int),
@@ -358,9 +360,12 @@ def end_print(parent_theory, ndist, do_architecture):
     table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer made', react_dist[ndist].contents.npoly)
     table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer saved', react_dist[ndist].contents.nsaved)
     table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Arm left in memory', pb_global.arms_left)
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mn (kg/mol)', react_dist[ndist].contents.m_n / 1000.0)
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mw (kg/mol)', react_dist[ndist].contents.m_w / 1000.0)
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('br/1000C', react_dist[ndist].contents.brav)
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mn (g/mol)', react_dist[ndist].contents.m_n )
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mw (g/mol)', react_dist[ndist].contents.m_w )
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mz (g/mol)', react_dist[ndist].contents.m_z )
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mz+1 (g/mol)', react_dist[ndist].contents.m_zp1)
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mz+2 (g/mol)', react_dist[ndist].contents.m_zp2)
+    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Br/1000C', react_dist[ndist].contents.brav)
     table+= '''</table><br>'''
     parent_theory.Qprint(table)
     
