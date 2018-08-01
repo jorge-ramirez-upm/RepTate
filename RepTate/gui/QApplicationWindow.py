@@ -673,6 +673,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ax = self.axarr[self.current_viewtab - 1]
         if text is None:
             # annotation from user
+            if self._event is None:
+                return
             if self._annotation_done:
                 return
             text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
@@ -1767,9 +1769,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         elif event.name == 'button_release_event':  # end drag
             self.background = None
-            self._patch.remove()
-            del self._patch
-
+            try:
+                self._patch.remove()
+                del self._patch
+            except AttributeError:
+                # self._patch do not exist
+                pass
+            if self._event == None:
+                self._was_zooming = False
+                return
             if (abs(event.x - self._event.x) < 3 or
                     abs(event.y - self._event.y) < 3):
                 self._was_zooming = False
@@ -1861,7 +1869,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         main_menu = QMenu()
 
         #copy chart action
-        copy_chart_action = main_menu.addAction("Copy Chart to Clipboard")
+        copy_chart_action = main_menu.addAction("Copy Chart To Clipboard")
         copy_chart_action.triggered.connect(self.copy_chart)
 
         #copy data sub-menu
@@ -1874,22 +1882,28 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             main_menu.addMenu(menu)
 
         main_menu.addSeparator()
-        self._annotation_done = False
-        add_annotation = main_menu.addAction(self.actionAdd_Annotation)
-        connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
+        if self._event is not None:
+            self._annotation_done = False
+            add_annotation = main_menu.addAction(self.actionAdd_Annotation)
+            connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
         refresh_chart_action = main_menu.addAction("Reset view(s)")
         refresh_chart_action.triggered.connect(self.refresh_plot)
         # change view
+        n_ax_view_to_change = None
         for i, ax in enumerate(self.axarr):
             if event.inaxes == ax:
                 n_ax_view_to_change = i
-        menu2 = QMenu("Select View")
-        pick_view = {}
-        for i in range(self.viewComboBox.count()):
-            view_name = self.viewComboBox.itemText(i)
-            pick_view = menu2.addAction(view_name)
-            pick_view.triggered.connect(lambda _, view_name=view_name: self.change_ax_view(n_ax_view_to_change, view_name))
-        main_menu.addMenu(menu2)
+        if n_ax_view_to_change is not None:
+            tab_ind = self.multiplots.plotselecttabWidget.currentIndex()
+            if tab_ind != 0:
+                n_ax_view_to_change = tab_ind - 1
+            
+            menu2 = QMenu("Select View")
+            for i in range(self.viewComboBox.count()):
+                view_name = self.viewComboBox.itemText(i)
+                pick_view = menu2.addAction(view_name)
+                pick_view.triggered.connect(lambda _, view_name=view_name: self.change_ax_view(n_ax_view_to_change, view_name))
+            main_menu.addMenu(menu2)
 
         #launch menu
         if main_menu.exec_(QCursor.pos()):
@@ -1897,7 +1911,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def change_ax_view(self, n_ax, view_name):
         """Change the view corresponding to axis n_ax"""
-        if n_ax == 0:
+        tab_ind = self.multiplots.plotselecttabWidget.currentIndex()
+        if (n_ax == 0) or (n_ax == tab_ind - 1):
+            # change combobox selection
             ind = self.viewComboBox.findText(view_name)
             self.viewComboBox.setCurrentIndex(ind)
         else:
