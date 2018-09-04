@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>MWD: Theories &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <title>MWD: Theories &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.9.2 20180503',
+        VERSION:     '0.9.3 20180719',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../general.html" title="MWD: General description"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../MWD.html" accesskey="U"> MWD: Molecular Weight Distribution</a> &#187;</li> 
@@ -128,32 +128,23 @@
 </div>
 <div class="section" id="mwd-discretization">
 <h2><a class="toc-backref" href="#id2">MWD Discretization</a><a class="headerlink" href="#mwd-discretization" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../../../../_images/create_MWDiscr_theory.png"><img alt="../../../../_images/create_MWDiscr_theory.png" class="align-center" src="../../../../_images/create_MWDiscr_theory.png" style="width: 80%;" /></a>
 <ul>
-<li><p class="first">The number average, weight average and polydispersity index, <span class="math">\(M_n\)</span> , <span class="math">\(M_w\)</span> and <span class="math">\(\text{PDI}\)</span>, respectively, of the original data are calculated and
-reported into the file parameters panel: <a class="reference internal" href="../../../../_images/file_parameters.png"><img alt="fileparam" class="align-bottom" src="../../../../_images/file_parameters.png" style="height: 20pt;" /></a> where</p>
-<div class="math">
-\[\begin{split}M_n &amp;= \dfrac{1}{\sum_i w_i/M_i} \\
-M_w &amp;= \sum_i w_i M_i \\
-\text{PDI} &amp;= \dfrac{M_w}{M_n}\end{split}\]</div>
-<p>The theory parameters panel shows these values for the discretized distribution: <a class="reference internal" href="../../../../_images/th_parameters.png"><img alt="thparam" class="align-bottom" src="../../../../_images/th_parameters.png" style="width: 45pt;" /></a>.</p>
-</li>
-<li><p class="first">The area, <span class="math">\(\phi_i\)</span>, of each greay bin corresponds to the area under the data curve delimited by the bin edges.
-The height, <span class="math">\(h_i\)</span> of the bin is the area divided by the bin width (on a <span class="math">\(\log_{10}\)</span> scale).</p>
+<li><p class="first">The area, <span class="math">\(\phi_i\)</span>, of each grey bin corresponds to the area under the data curve delimited by the bin edges.
+The height, <span class="math">\(h_i\)</span>, of the bin is the area divided by the bin width (on a <span class="math">\(\log_{10}\)</span> scale).</p>
 <p>You can change the number of bins and move the bin edges by dragging the yellow markers.</p>
 </li>
 <li><p class="first">In the bottom of the plot, the grey tick marks indicate the bin molecular weight
 taken as the weight-average molecular mass value across the bin width</p>
-<blockquote>
-<div><div class="math">
+<div class="math">
 \[M_{w,i} = \frac{\sum w_j M_j}{\sum w_j}.\]</div>
-</div></blockquote>
 </li>
 </ul>
 <ol class="arabic">
 <li><p class="first">To save the discretized molecular weight, click the <a class="reference internal" href="../../../../_images/icons8-save_TH.png"><img alt="th_save" class="align-bottom" src="../../../../_images/icons8-save_TH.png" style="width: 20pt; height: 20pt;" /></a> button.</p>
-<p>The output file contains a header with the moments  <span class="math">\(M_n\)</span>, <span class="math">\(M_w\)</span> and the <cite>PDI</cite>, and two columns.
+<p>The output file contains a header with the moments  <span class="math">\(M_n\)</span>, <span class="math">\(M_w\)</span> and the PDI, and two columns.
 The first column is the molecular weight <span class="math">\(M_{w,i}\)</span> as indicated by the grey tick marks,
-the second column is the value of the area of the covered by the bin, <span class="math">\(\phi_i\)</span>.</p>
+the second column is <span class="math">\(\phi_i\)</span>, the value of the area of the covered by the bin.</p>
 <p>The sum of the areas should equal 1:</p>
 <div class="math">
 \[\sum \phi_i = 1.\]</div>
@@ -246,7 +237,7 @@ the second column is the value of the area of the covered by the bin, <span clas
         <li class="right" >
           <a href="../general.html" title="MWD: General description"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../MWD.html" > MWD: Molecular Weight Distribution</a> &#187;</li> 

@@ -102,6 +102,8 @@ class BaseTheoryDiscrMWD:
         self.view_bins = True
         self.bins = None
         self.current_file = None
+        self.NBIN_MIN = 1
+        self.NBIN_MAX = 100
 
         self.parameters["Mn"] = Parameter(
             "Mn",
@@ -155,6 +157,8 @@ class BaseTheoryDiscrMWD:
             value=nbin,
             description="Number of molecular weight bins",
             type=ParameterType.integer,
+            min_value=self.NBIN_MIN,
+            max_value=self.NBIN_MAX,
             opt_type=OptType.const,
             display_flag=False)
 
@@ -607,7 +611,7 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(3, 100)  # min and max number of modes
+        self.spinbox.setRange(self.NBIN_MIN, self.NBIN_MAX)  # min and max number of modes
         self.spinbox.setSuffix(" bins")
         self.spinbox.setValue(self.parameters["nbin"].value)  #initial value
         tb.addWidget(self.spinbox)

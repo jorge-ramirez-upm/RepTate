@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>MWD Tutorial: Command Line &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <title>MWD Tutorial: Command Line &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.9.2 20180503',
+        VERSION:     '0.9.3 20180719',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="tutorialGUIMWD.html" title="MWD Tutorial: Graphical User Interface"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../MWD.html" accesskey="U"> MWD: Molecular Weight Distribution</a> &#187;</li> 
@@ -112,9 +112,22 @@
 </ul>
 <p class="last">(the difference is the use of backslash <code class="docutils literal"><span class="pre">\</span></code> instead of slash <code class="docutils literal"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Tutorial coming soon…</p>
+<p>Start RepTate and open a new MWD application:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">MWD</span>
+</pre></div>
+</div>
+<p>Open a data file containing a GPC data and display the data:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">open</span> <span class="n">data</span><span class="o">/</span><span class="n">PS_Linear_Polydisperse</span><span class="o">/</span><span class="n">ps1_header</span><span class="o">.</span><span class="n">gpc</span>
+<span class="n">plot</span>
+</pre></div>
+</div>
+<p>Open a new “Discretize MWD” theory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">theory_new</span> <span class="n">Discretize</span> <span class="n">MWD</span>
+</pre></div>
+</div>
+<p>Change the number of bins to 15:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nbin</span><span class="o">=</span><span class="mi">15</span>
+</pre></div>
 </div>
 </div>
 
@@ -139,7 +152,7 @@
         <li class="right" >
           <a href="tutorialGUIMWD.html" title="MWD Tutorial: Graphical User Interface"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../MWD.html" > MWD: Molecular Weight Distribution</a> &#187;</li> 
