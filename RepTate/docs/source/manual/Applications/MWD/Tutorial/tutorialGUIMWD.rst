@@ -20,14 +20,6 @@ MWD Tutorial: Graphical User Interface
 .. |MWDiscr| image:: images/MWDiscr.png
     :height: 15pt
     :align: bottom
-	
-.. |fileparam| image:: images/file_parameters.png
-    :height: 20pt
-    :align: bottom
-
-.. |thparam| image:: images/th_parameters.png
-    :width: 45pt
-    :align: bottom
 
 
 **Discretization of a GPC molecular weight distribution**
