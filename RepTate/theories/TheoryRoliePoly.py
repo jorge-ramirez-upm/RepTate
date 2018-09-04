@@ -283,7 +283,7 @@ class BaseTheoryRoliePoly:
         """
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
-        self.extra_graphic_visible(show)
+        # self.extra_graphic_visible(self.linearenvelope.isChecked())
 
     def extra_graphic_visible(self, state):
         """[summary]
@@ -546,7 +546,8 @@ class BaseTheoryRoliePoly:
         """
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
-            self.spinbox.setMaximum(int(value))
+            if CmdBase.mode == CmdMode.GUI:
+                self.spinbox.setMaximum(int(value))
         message, success = super(BaseTheoryRoliePoly, self).set_param_value(
             name, value)
         if not success:
@@ -780,6 +781,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
                 QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
+        self.update_parameter_table()
         self.parent_dataset.handle_actionCalculate_Theory()
 
     def handle_spinboxValueChanged(self, value):
@@ -788,12 +790,15 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
 
-    def Qhide_theory_extras(self, state):
+    def Qhide_theory_extras(self, show):
         """Uncheck the LVE button. Called when curent theory is changed
         
         [description]
         """
-        self.linearenvelope.setChecked(state)
+        if show:
+            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        else:
+            self.LVEenvelopeseries.set_visible(False)
 
     def show_linear_envelope(self, state):
         self.extra_graphic_visible(state)

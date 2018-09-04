@@ -44,5 +44,5 @@ Graphical User Interface
 - i-Rheo Fourier transform to get G' and G'' from G(t)
 - Zoom with wheel
 - Calculate integral, find peaks (BETA, only in CL version)
-- Save predictions of theory to a Reptate compatible file
+- Save predictions of theory to a RepTate compatible file
 

@@ -12,8 +12,8 @@ Tutorial Blend of Rolie-Poly
     :height: 20pt
     :align: bottom
 
-.. |import_modes| image:: /gui_icons/icons8-broadcasting.png
-    :width: 20pt
+.. |import_modes| image:: images/import_modes.png
+    :width: 25pt
     :height: 20pt
     :align: bottom
 
@@ -49,11 +49,11 @@ Tutorial Blend of Rolie-Poly
     :align: bottom
 	
 .. |MWD_from_data| image:: images/select_MWD_from_data.png
-    :height: 15pt
+    :height: 60pt
     :align: bottom
 	
-.. |relax_time| image:: images/check_relaxation_results.png
-    :height: 50pt
+.. |relax_time| image:: images/edit_modesBRP.png
+    :height: 60pt
     :align: bottom
 
 	
@@ -81,7 +81,7 @@ Tutorial Blend of Rolie-Poly
 
 #.  Select the "BlendRoliePoly" theory |th_select| and press |einstein| to create it.
 
-    .. image:: images/new_RP_th.png
+    .. image:: images/new_BRP_th.png
         :width: 400pt
         :align: center
         :alt: New theory
@@ -90,9 +90,9 @@ Tutorial Blend of Rolie-Poly
     weights, :math:`g_i`, for each mode :math:`i`.
     You can:
 
-    - Input them manually by clicking:
+    - Input them manually by clicking "Edit Modes":
       
-      .. image:: images/edit_modes.png
+      .. image:: images/edit_modesBRP.png
           :width: 100pt
           :align: center
           :alt: Edit modes
@@ -123,7 +123,7 @@ Tutorial Blend of Rolie-Poly
       **In this tutorial we will use the latter method.**
 
 #.  To import the MWD form by copy-pasting MWD data, click right arrow of |import_modes| and select 
-    |MWD_from_data|:
+    "Get Modes (MWD data)"|MWD_from_data|:
 	
 	.. image:: images/input_MWD_data.png
 		:width: 250pt
@@ -169,7 +169,7 @@ Tutorial Blend of Rolie-Poly
       :alt: Show LVE
 
 #.  Click "OK" to close the dialog. This launches the calculations of the relaxation times.
-    You can look at the result by clicking |relax_time|. 
+    You can look at the result by clicking "Edit Modes" |relax_time|. 
 
 #.  Adjust the parameter ``GN0``. We set it to :math:`2\times 10^5` Pa. Then, press "calculate" |calculate| 
     to get the nonlinear rheology predictions.
@@ -198,6 +198,9 @@ Tutorial Blend of Rolie-Poly
 
 .. note::
     The minimisation procedure is inactive in this theory.
+
+..todo::
+    Cite related publication
 
 .. bibliography:: ../bibliography.bib
     :style: unsrt

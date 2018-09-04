@@ -1,6 +1,6 @@
-==================================
+========================
 LVE: General Description
-==================================
+========================
 
 .. contents:: Contents
     :local:
@@ -13,7 +13,9 @@ Purpose
 -------
 
 .. autoclass:: ApplicationLVE.ApplicationLVE()	
-	
+
+.. _LVE_Data_Description:
+
 ----------
 Data Files
 ----------
@@ -50,7 +52,7 @@ Other columns will be ignored. A correct ``.tts`` file looks like:
 Views
 -----
 
-log(G',G''(w))
+log(G',G"(w))
 -------------------------------------------
 .. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2()
    
@@ -59,7 +61,7 @@ log(G',G''(w))
     :align: center
 
 
-G',G''(w)
+G',G"(w)
 --------------------------------
 .. automethod:: ApplicationLVE.BaseApplicationLVE.viewG1G2()
 
@@ -131,7 +133,7 @@ delta(G*)
     :width: 45%
     :align: center
 
-J',J''(w)
+J',J"(w)
 ----------------------------
 .. automethod:: ApplicationLVE.BaseApplicationLVE.viewJ1J2()
 
@@ -164,7 +166,7 @@ G'
     :width: 45%
     :align: center
 
-log(G'')
+log(G")
 -------------------------------------------
 .. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG2()
 
@@ -173,7 +175,7 @@ log(G'')
     :align: center
 
 
-G''
+G"
 --------------------------------
 .. automethod:: ApplicationLVE.BaseApplicationLVE.viewG2()
 
@@ -181,7 +183,7 @@ G''
     :width: 45%
     :align: center
 
-log(G',G''(w),tan(delta))
+log(G',G"(w),tan(delta))
 --------------------------------
 .. automethod:: ApplicationLVE.BaseApplicationLVE.viewLogG1G2tandelta()
 

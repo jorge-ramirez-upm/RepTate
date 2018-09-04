@@ -11,35 +11,37 @@ LVE Tutorial: Command Line
 .. hint::
 	.. include:: /manual/Applications/All_Tutorials/tutorialCL_instructions.rst
 
+.. highlight:: none
+
 -----------------------
 Likhtman-McLeish theory
 -----------------------
 
 Prediction of LVE data of linear polymer melts
 
-#. Start Reptate and create LVE Application::
+#. Start RepTate and create LVE Application::
 
     > RepTate.py
-    Reptate Version 0.5 command processor
+    RepTate Version 0.9.3 - 20180719 command processor
     help [command] for instructions
     TAB for completions
-    reptate> new LVE
-    reptate/LVE1/DataSet01>
+    RepTate> new LVE
+    RepTate/LVE1/DataSet01>
 
-#. Add files to the dataset (master curve tts files)::
+#. Add files to the dataset (master curve tts files, see :ref:`LVE_Data_Description`)::
 
-    open data/PI_LINEAR/PI_13.5k_T-35.tts
-    open data/PI_LINEAR/PI_23.4k_T-35.tts
-    open data/PI_LINEAR/PI_33.6k_T-35.tts
-    open data/PI_LINEAR/PI_94.9k_T-35.tts
-    open data/PI_LINEAR/PI_225.9k_T-35.tts
-    open data/PI_LINEAR/PI_483.1k_T-35.tts
-    open data/PI_LINEAR/PI_634.5k_T-35.tts
-    open data/PI_LINEAR/PI_1131k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_13.5k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_23.4k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_33.6k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_94.9k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_225.9k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_483.1k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_634.5k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_1131k_T-35.tts
     
 #. Plot the files using the default LVE Application view::
 
-    plot
+    RepTate/LVE1/DataSet01> plot
 .. image:: images/PI_LVE_plot.png
     :width: 70%
     :align: center
@@ -47,15 +49,15 @@ Prediction of LVE data of linear polymer melts
 
 #. View the legend. By default, the legend shows the most important file parameters, according to the corresponding file type::
 
-    legend
+    RepTate/LVE1/DataSet01> legend
 .. image:: images/PI_LVE_legend.png
     :width: 70%
     :align: center
     :alt: PI_LVE_legend
 
-#. Create new theory (calculation is done with default parameter values). Type::
+#. Create new theory (calculation is done with default parameter values)::
     
-    theory_new Likhtman-McLeish
+    RepTate/LVE1/DataSet01> theory_new Likhtman-McLeish
 
    The output is::
 
@@ -77,9 +79,9 @@ Prediction of LVE data of linear polymer melts
 
     CITE: Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343
 
-#. Fit the theory to the data files. Type::
+#. Fit the theory to the data files::
 
-    fit
+    RepTate/LVE1/DataSet01/Likhtman-McLeish01> fit
 
    The output is::
 
@@ -116,18 +118,17 @@ Prediction of LVE data of linear polymer melts
     :align: center
     :alt: PI_LVE_fit
 
-#. Save theory predictions. Files with extension ``_TH.tts`` are saved in the same folder as the experimental data.
-   Type::
+#. Save theory predictions. Files with extension ``_TH.tts`` are saved in the same folder as the experimental data.::
     
-    save
+    RepTate/LVE1/DataSet01/Likhtman-McLeish01> save
 
    The output is::
 
     Saving prediction of Likhtman-McLeish theory
 
-#. Exit Reptate (the y answer is needed). Type::
+#. Exit RepTate (the y answer is needed)::
     
-    quit
+    RepTate/LVE1/DataSet01/Likhtman-McLeish01> quit
 
 ------------------------
 Fit Maxwell modes to LVE
@@ -135,19 +136,19 @@ Fit Maxwell modes to LVE
 
 #. Create LVE Application::
 
-    new LVE
+    RepTate> new LVE
 
 #. Add files to the dataset (master curve tts files)::
     
-    open data/PI_LINEAR/PI_483.1k_T-35.tts
+    RepTate/LVE1/DataSet01> open data/PI_LINEAR/PI_483.1k_T-35.tts
 
 #. Plot the files using the default LVE Application view::
 
-    plot
+    RepTate/LVE1/DataSet01> plot
     
 #. Create new theory::
 
-    theory_new Maxwell Modes
+    RepTate/LVE1/DataSet01> theory_new Maxwell Modes
 
    The output is::
 
@@ -166,15 +167,15 @@ Fit Maxwell modes to LVE
     
 #. If needed, change the xrange for the fitting (with respect to the current view)::
 
-    xrange -8 -3
+    RepTate/LVE1/DataSet01/Maxwell Modes01> xrange -8 -3
     
 #. Change the number of Maxwell modes::
 
-    nmodes=5
+    RepTate/LVE1/DataSet01/Maxwell Modes01> nmodes=5
     
 #. Fit the theory to the data files, type::
 
-    fit
+    RepTate/LVE1/DataSet01/Maxwell Modes01> fit
 
    The output is::
 
@@ -209,8 +210,8 @@ Fit Maxwell modes to LVE
     
 #. Save theory predictions::
 
-    save
+    RepTate/LVE1/DataSet01/Maxwell Modes01> save
     
-#. Exit Reptate (the y answer is needed)::
+#. Exit RepTate (the y answer is needed)::
 
-    quit
+    RepTate/LVE1/DataSet01/Maxwell Modes01> quit

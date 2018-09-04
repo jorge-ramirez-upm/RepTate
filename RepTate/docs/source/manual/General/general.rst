@@ -9,7 +9,7 @@ RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory & Experi
 
 The software is designed in a modular way, so it is easy to extend to analyze new types of data and fit with new theories. 
 
-The main Reptate window is called the *Application Manager* and is a multiple document interface (MDI). All the applications can be opened from the Application Manager and will reside inside it. At the top of the Application Manager there is a toolbar that allows to open different applications, load and save projects, read the help and exit RepTate.
+The main RepTate window is called the *Application Manager* and is a multiple document interface (MDI). All the applications can be opened from the Application Manager and will reside inside it. At the top of the Application Manager there is a toolbar that allows to open different applications, load and save projects, read the help and exit RepTate.
 
 Applications have three separate areas:
 

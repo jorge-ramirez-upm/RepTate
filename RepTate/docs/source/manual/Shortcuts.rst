@@ -1,5 +1,5 @@
 ==========================
-Reptate Keyboard Shortcuts
+RepTate Keyboard Shortcuts
 ==========================
 
 .. contents:: Contents
@@ -25,7 +25,7 @@ Ctrl+7          New SANS Application
 Ctrl+8          New React Application
 Ctrl+9          New Dielectric Application
 Ctrl+0          New S(q,t) Application
-Ctrl+Q          Quit Reptate
+Ctrl+Q          Quit RepTate
 ==============  ==============================
 
 -----------

@@ -31,9 +31,7 @@ MWD Tutorial: Graphical User Interface
         :align: center
         :alt: New MWD application
 
-#.  Drag and drop a file with a ``.gpc`` extension, e.g. ``ps2.gpc`` in the ``data/PS_Linear_Polydisperse/`` folder.
-
-    The first column of the file should contain the molecular mass :math:`M`, and the second column the weight associated, :math:`\dfrac{\text d w(\log M)}{\text d \log M}`.
+#.  Drag and drop a file with a ``.gpc`` extension (see :ref:`MWD_Data_Description`), e.g. ``ps2.gpc`` in the ``data/PS_Linear_Polydisperse/`` folder.
    
     .. image:: images/open_gpc_file.png
         :width: 75%

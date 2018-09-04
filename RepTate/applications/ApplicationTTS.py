@@ -377,7 +377,7 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewLogGstar(self, dt, file_parameters):
-        """Logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)` 
+        """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)` 
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -387,7 +387,7 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewLogtandeltaGstar(self, dt, file_parameters):
-        """Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G'^2+G''^2}`
+        """Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -397,7 +397,7 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewdeltatanGstar(self, dt, file_parameters):
-        """Loss angle :math:`\\delta(\\omega)=\\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G'^2+G''^2}`
+        """Loss angle :math:`\\delta(\\omega)=\\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

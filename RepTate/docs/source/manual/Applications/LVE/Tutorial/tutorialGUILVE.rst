@@ -58,7 +58,7 @@ Likhtman-McLeish theory
 
 #.  Drag and drop a file(s) with a ``.tts`` extension, e.g. the set of ``PI_**k_T-35.tts`` files in the ``data/PI_LINEAR/`` 
     folder, with molecular weight from "13.5k" to "1131k".
-    See :ref:`LVE: General Description` for a description of the data file organization.
+    See :ref:`LVE_Data_Description` for a description of the data file organization.
    
     .. image:: images/open_files.png
         :width: 75%
@@ -90,7 +90,7 @@ or by BOB software (Chinmay Das and Daniel Read) outside RepTate (`<https://sour
         :align: center
         :alt: New application
 
-#.  Drag and drop a file with a ``.tts`` extension OR add a dummy file if you do not 
+#.  Drag and drop a file with a ``.tts`` extension (see :ref:`LVE_Data_Description`) OR add a dummy file if you do not 
     have data corresponding to the "polyconf" file by clicking |dummy|, which brings the following dialog.
 
     .. image:: images/dummy_dialog.png
