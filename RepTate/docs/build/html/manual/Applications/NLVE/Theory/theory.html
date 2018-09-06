@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>NLVE: Theories &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <title>NLVE: Theories &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.2 20180503',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -33,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +41,7 @@
         <li class="right" >
           <a href="../general.html" title="NLVE: General description"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../NLVE.html" accesskey="U"> NLVE: Start-up of Flow</a> &#187;</li> 
@@ -104,12 +95,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -159,46 +152,46 @@
 <p>The Rolie-Poly (<strong>RO</strong>use <strong>LI</strong>near <strong>E</strong>ntangled <strong>POLY</strong>mers) <a class="reference internal" href="#nlve-likhtman2003" id="id1">[3]</a> constitutive
 equation is a single mode formulation of the full microscopic model <a class="reference internal" href="#nlve-graham2003" id="id2">[4]</a>
 for linear entangled polymer chains with chain stretch and convective constraint release.</p>
-<p>The evolution equations for the conformation tensor, <span class="math">\(\boldsymbol{A}\)</span>, solved by RepTate for every stretching mode is:</p>
-<div class="math">
+<p>The evolution equations for the conformation tensor, <span class="math notranslate">\(\boldsymbol{A}\)</span>, solved by RepTate for every stretching mode is:</p>
+<div class="math notranslate">
 \[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
 }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
 (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2(1 - \lambda^{-1})}{\tau_\mathrm{R}} \left(  \boldsymbol{A}+ \beta \lambda^{2\delta}(\boldsymbol{A
 }- \boldsymbol{I}) \right),\]</div>
-<p>where the stretch ratio, <span class="math">\(\lambda\)</span>, is</p>
-<div class="math">
+<p>where the stretch ratio, <span class="math notranslate">\(\lambda\)</span>, is</p>
+<div class="math notranslate">
 \[\lambda = \left( \frac 1 3 \text{tr}\, \boldsymbol{A} \right)^{1/2}\]</div>
 <p>and, for non-stretching modes, the equation for each mode is:</p>
-<div class="math">
+<div class="math notranslate">
 \[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
 }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
 (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2}{3} \mathrm{tr}
 (\boldsymbol{\kappa}\cdot\boldsymbol{A}) \big(\boldsymbol{A}+
 \beta(\boldsymbol{A}- \boldsymbol{I}) \big).\]</div>
-<p>Given <span class="math">\(n\)</span> modes <span class="math">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
-<div class="math">
+<p>Given <span class="math notranslate">\(n\)</span> modes <span class="math notranslate">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
+<div class="math notranslate">
 \[\boldsymbol{\sigma}(t) = \sum_{i=1}^n G_i\, \boldsymbol{A}_i\]</div>
 </div>
 <div class="section" id="finite-extensibility">
 <h3><a class="toc-backref" href="#id12">Finite extensibility</a><a class="headerlink" href="#finite-extensibility" title="Permalink to this headline">¶</a></h3>
 <p>A non-Gaussian version of the Rolie–Poly constitutive equation, which accounts
 for finite extensibility of polymer chains, can be written in the following form</p>
-<div class="math">
+<div class="math notranslate">
 \[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
 }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
 (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2(1 - \lambda^{-1})}{\tau_\mathrm{R}}
 \text{fene}(\lambda) \left( \boldsymbol{A}+ \beta \lambda^{2\delta}(\boldsymbol{A
 }- \boldsymbol{I}) \right),\]</div>
-<p>The nonlinear spring coefficient, <span class="math">\(\text{fene}(\lambda)\)</span>, is
+<p>The nonlinear spring coefficient, <span class="math notranslate">\(\text{fene}(\lambda)\)</span>, is
 approximated by the normalized Padé inverse Langevin function <a class="reference internal" href="#nlve-cohen1991" id="id3">[5]</a></p>
-<div class="math">
+<div class="math notranslate">
 \[\text{fene}(\lambda) = \dfrac{3 - \lambda^2/\lambda_\text{max}^2}{1 - \lambda^2/\lambda_\text{max}^2}
 \dfrac{1 - 1/\lambda_\text{max}^2}{3 - 1/\lambda_\text{max}^2},\]</div>
-<p>where <span class="math">\(\lambda_\text{max}\)</span> is the fixed maximum stretch ratio.</p>
-<p>Given <span class="math">\(n\)</span> modes <span class="math">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
-<div class="math">
+<p>where <span class="math notranslate">\(\lambda_\text{max}\)</span> is the fixed maximum stretch ratio.</p>
+<p>Given <span class="math notranslate">\(n\)</span> modes <span class="math notranslate">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
+<div class="math notranslate">
 \[\boldsymbol{\sigma}(t) = \sum_{i=1}^n G_i\,  \text{fene}(\lambda_i)\, \boldsymbol{A}_i\]</div>
-<p>with <span class="math">\(\lambda_i = \left( \frac 1 3 \text{tr}\,\boldsymbol{A}_i \right)^{1/2}\)</span>.</p>
+<p>with <span class="math notranslate">\(\lambda_i = \left( \frac 1 3 \text{tr}\,\boldsymbol{A}_i \right)^{1/2}\)</span>.</p>
 </div>
 </div>
 <div class="section" id="multi-mode-upper-convected-maxwell-model">
@@ -209,7 +202,7 @@ approximated by the normalized Padé inverse Langevin function <a class="refere
 <dt id="TheoryUCM.TheoryUCM">
 <em class="property">class </em><code class="descclassname">TheoryUCM.</code><code class="descname">TheoryUCM</code><a class="reference internal" href="../../../../_modules/TheoryUCM.html#TheoryUCM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryUCM.TheoryUCM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multi-mode Upper Convected Maxwell model (see Chapter 1 of <a class="reference internal" href="#nlve-larson1988" id="id4">[1]</a>):</p>
-<div class="math">
+<div class="math notranslate">
 \[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol A_i\\
 \dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
 + \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
@@ -219,16 +212,16 @@ approximated by the normalized Padé inverse Langevin function <a class="refere
 <dt><strong>Functions</strong></dt>
 <dd><ul class="first">
 <li><p class="first">Analytical solution in shear</p>
-<div class="math">
+<div class="math notranslate">
 \[\eta^+(t) = \sum_{i=1}^n G_i \tau_i (1 - \exp(-t/\tau_i))\]</div>
 </li>
 <li><p class="first">Analytical solution in uniaxial extension</p>
-<div class="math">
+<div class="math notranslate">
 \[\eta^+_\mathrm E (t) = \dfrac 1 {\dot\varepsilon}
 \sum_{i=1}^n G_i (A_{xx, i}(t) - A_{yy, i}(t))\]</div>
 <p>with</p>
 <blockquote>
-<div><div class="math">
+<div><div class="math notranslate">
 \[\begin{split}A_{xx, i}(t) &amp;= \dfrac{ 1 - 2 \dot\varepsilon\tau_i 
 \exp(-(1 - 2 \dot\varepsilon\tau_i) t / \tau_i) } {1 - 2 \dot\varepsilon\tau_i }\\
 A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i 
@@ -237,10 +230,10 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 </li>
 </ul>
 <dl class="last docutils">
-<dt>where for each mode <span class="math">\(i\)</span>:</dt>
+<dt>where for each mode <span class="math notranslate">\(i\)</span>:</dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(G_i\)</span>: weight of mode <span class="math">\(i\)</span></li>
-<li><span class="math">\(\tau_i\)</span>: relaxation time of mode <span class="math">\(i\)</span></li>
+<li><span class="math notranslate">\(G_i\)</span>: weight of mode <span class="math notranslate">\(i\)</span></li>
+<li><span class="math notranslate">\(\tau_i\)</span>: relaxation time of mode <span class="math notranslate">\(i\)</span></li>
 </ul>
 </dd>
 </dl>
@@ -267,18 +260,18 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <em class="property">class </em><code class="descclassname">TheoryGiesekus.</code><code class="descname">TheoryGiesekus</code><a class="reference internal" href="../../../../_modules/TheoryGiesekus.html#TheoryGiesekus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryGiesekus.TheoryGiesekus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multi-mode Giesekus Model (see Chapter 6 of <a class="reference internal" href="#nlve-larson1988" id="id6">[1]</a>):</p>
 <blockquote>
-<div><div class="math">
+<div><div class="math notranslate">
 \[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol  {A_i},\\
 \dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
 + \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
 - \dfrac {1} {\tau_i}  (\boldsymbol A_i - \boldsymbol I)
 -  \dfrac {\alpha_i} {\tau_i} (\boldsymbol A_i - \boldsymbol I)^2,\end{split}\]</div>
 <dl class="docutils">
-<dt>where for each mode <span class="math">\(i\)</span>:</dt>
+<dt>where for each mode <span class="math notranslate">\(i\)</span>:</dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(G_i\)</span>: weight of mode <span class="math">\(i\)</span></li>
-<li><span class="math">\(\tau_i\)</span>: relaxation time of mode <span class="math">\(i\)</span></li>
-<li><span class="math">\(\alpha_i\)</span>: constant of proportionality mode <span class="math">\(i\)</span></li>
+<li><span class="math notranslate">\(G_i\)</span>: weight of mode <span class="math notranslate">\(i\)</span></li>
+<li><span class="math notranslate">\(\tau_i\)</span>: relaxation time of mode <span class="math notranslate">\(i\)</span></li>
+<li><span class="math notranslate">\(\alpha_i\)</span>: constant of proportionality mode <span class="math notranslate">\(i\)</span></li>
 </ul>
 </dd>
 </dl>
@@ -287,7 +280,7 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last">
-<li><code class="docutils literal"><span class="pre">alpha_i</span></code> <span class="math">\(\equiv \alpha_i\)</span></li>
+<li><code class="docutils literal notranslate"><span class="pre">alpha_i</span></code> <span class="math notranslate">\(\equiv \alpha_i\)</span></li>
 </ul>
 </dd>
 </dl>
@@ -306,7 +299,7 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <em class="property">class </em><code class="descclassname">TheoryPomPom.</code><code class="descname">TheoryPomPom</code><a class="reference internal" href="../../../../_modules/TheoryPomPom.html#TheoryPomPom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryPomPom.TheoryPomPom" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multi-mode PomPom Model based on <a class="reference internal" href="#nlve-blackwell2000" id="id8">[2]</a>:</p>
 <blockquote>
-<div><div class="math">
+<div><div class="math notranslate">
 \[\begin{split}\boldsymbol \sigma &amp;= 3 \sum_{i=1}^n G_i  \lambda_i^2(t) \boldsymbol S_i (t),\\
 \boldsymbol S_i &amp;= \dfrac{\boldsymbol A_i } {\mathrm{Tr} \boldsymbol A_i}\\
 \dfrac {\mathrm D \boldsymbol A_i} {\mathrm D t} &amp;= \boldsymbol \kappa \cdot \boldsymbol A_i
@@ -317,13 +310,13 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 - \dfrac {1} {\tau_{\mathrm s, i}}  (\lambda_i - 1)
 \exp\left( \nu^* (\lambda_i - 1) \right),\end{split}\]</div>
 <dl class="docutils">
-<dt>where, for each mode <span class="math">\(i\)</span>:</dt>
+<dt>where, for each mode <span class="math notranslate">\(i\)</span>:</dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(G_i\)</span>: weight of mode <span class="math">\(i\)</span></li>
-<li><span class="math">\(\tau_{\mathrm b, i}\)</span>: backbone orientation relaxation time of mode <span class="math">\(i\)</span></li>
-<li><span class="math">\(\tau_{\mathrm s, i}\)</span>: backbone stretch relaxation time of mode <span class="math">\(i\)</span></li>
-<li><span class="math">\(\nu_i^* = \dfrac{2}{q_i - 1}\)</span></li>
-<li><span class="math">\(q_i\)</span>: the number of dangling arms of each mode</li>
+<li><span class="math notranslate">\(G_i\)</span>: weight of mode <span class="math notranslate">\(i\)</span></li>
+<li><span class="math notranslate">\(\tau_{\mathrm b, i}\)</span>: backbone orientation relaxation time of mode <span class="math notranslate">\(i\)</span></li>
+<li><span class="math notranslate">\(\tau_{\mathrm s, i}\)</span>: backbone stretch relaxation time of mode <span class="math notranslate">\(i\)</span></li>
+<li><span class="math notranslate">\(\nu_i^* = \dfrac{2}{q_i - 1}\)</span></li>
+<li><span class="math notranslate">\(q_i\)</span>: the number of dangling arms of each mode</li>
 </ul>
 </dd>
 </dl>
@@ -332,8 +325,8 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first simple">
-<li><code class="docutils literal"><span class="pre">q_i</span></code> <span class="math">\(\equiv q_i\)</span>: the number of dangling arms of each mode</li>
-<li><code class="docutils literal"><span class="pre">ratio_i</span></code> <span class="math">\(\equiv \dfrac{\tau_{\mathrm b, i}}{\tau_{\mathrm s, i}}\)</span>:</li>
+<li><code class="docutils literal notranslate"><span class="pre">q_i</span></code> <span class="math notranslate">\(\equiv q_i\)</span>: the number of dangling arms of each mode</li>
+<li><code class="docutils literal notranslate"><span class="pre">ratio_i</span></code> <span class="math notranslate">\(\equiv \dfrac{\tau_{\mathrm b, i}}{\tau_{\mathrm s, i}}\)</span>:</li>
 </ul>
 <p class="last">the ratio of orientation to stretch relaxation times of each mode</p>
 </dd>
@@ -357,11 +350,11 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first math">
+<dd><div class="first math notranslate">
 \[\boldsymbol \sigma = G_N^0 \sum_i \text{fene}(\lambda_i) \phi_i \boldsymbol A_i\]</div>
 <dl class="last docutils">
 <dt>where</dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[\begin{split}\boldsymbol A_i &amp;= \sum_j \phi_j \boldsymbol A_{ij}\\
 \lambda_i &amp;= \left( \dfrac{\text{Tr}  \boldsymbol A_i}{3}  \right)^{1/2}\\
 \stackrel{\nabla}{\boldsymbol  A_{ij}} &amp;=
@@ -378,12 +371,12 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">GN0</span></code> <span class="math">\(\equiv G_N^0\)</span>: Plateau modulus</li>
-<li><code class="docutils literal"><span class="pre">beta</span></code> <span class="math">\(\equiv\beta_\text{CCR}\)</span>: Rolie-Poly CCR parameter</li>
-<li><code class="docutils literal"><span class="pre">delta</span></code> <span class="math">\(\equiv\delta\)</span>: Rolie-Poly CCR exponent</li>
-<li><code class="docutils literal"><span class="pre">phi_i</span></code> <span class="math">\(\equiv\phi_i\)</span>: Volume fraction of species <span class="math">\(i\)</span></li>
-<li><code class="docutils literal"><span class="pre">tauD_i</span></code> <span class="math">\(\equiv\tau_{\mathrm d,i}\)</span>: Maxwell relaxation times for the stress of species <span class="math">\(i\)</span> (includes both reptation and constraint release mechamisms)</li>
-<li><code class="docutils literal"><span class="pre">tauR_i</span></code> <span class="math">\(\equiv\tau_{\mathrm s,i}\)</span>: Stretch relaxation time of species <span class="math">\(i\)</span></li>
+<li><code class="docutils literal notranslate"><span class="pre">GN0</span></code> <span class="math notranslate">\(\equiv G_N^0\)</span>: Plateau modulus</li>
+<li><code class="docutils literal notranslate"><span class="pre">beta</span></code> <span class="math notranslate">\(\equiv\beta_\text{CCR}\)</span>: Rolie-Poly CCR parameter</li>
+<li><code class="docutils literal notranslate"><span class="pre">delta</span></code> <span class="math notranslate">\(\equiv\delta\)</span>: Rolie-Poly CCR exponent</li>
+<li><code class="docutils literal notranslate"><span class="pre">phi_i</span></code> <span class="math notranslate">\(\equiv\phi_i\)</span>: Volume fraction of species <span class="math notranslate">\(i\)</span></li>
+<li><code class="docutils literal notranslate"><span class="pre">tauD_i</span></code> <span class="math notranslate">\(\equiv\tau_{\mathrm d,i}\)</span>: Maxwell relaxation times for the stress of species <span class="math notranslate">\(i\)</span> (includes both reptation and constraint release mechamisms)</li>
+<li><code class="docutils literal notranslate"><span class="pre">tauR_i</span></code> <span class="math notranslate">\(\equiv\tau_{\mathrm s,i}\)</span>: Stretch relaxation time of species <span class="math notranslate">\(i\)</span></li>
 </ul>
 </dd>
 </dl>
@@ -448,7 +441,7 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
         <li class="right" >
           <a href="../general.html" title="NLVE: General description"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li> 
@@ -456,7 +449,7 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

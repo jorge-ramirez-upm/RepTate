@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Carreau-Yasuda equation &#8212; RepTate 0.9.2 20180503 documentation</title>
+    <title>Carreau-Yasuda equation &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.2 20180503',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +33,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -68,12 +59,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -97,7 +90,7 @@
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[\eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^{(n-1)/a}\]</div>
 </dd>
 </dl>
@@ -105,11 +98,11 @@
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(\eta_0\)</span>: Viscosity at zero shear rate.</li>
-<li><span class="math">\(\eta_\infty\)</span>: Viscosity at infinite shear rate.</li>
-<li><span class="math">\(\lambda\)</span>: Relaxation time.</li>
-<li><span class="math">\(n\)</span>: Power law index.</li>
-<li><span class="math">\(a\)</span>: Dimensionless parameter (2 in most cases)</li>
+<li><span class="math notranslate">\(\eta_0\)</span>: Viscosity at zero shear rate.</li>
+<li><span class="math notranslate">\(\eta_\infty\)</span>: Viscosity at infinite shear rate.</li>
+<li><span class="math notranslate">\(\lambda\)</span>: Relaxation time.</li>
+<li><span class="math notranslate">\(n\)</span>: Power law index.</li>
+<li><span class="math notranslate">\(a\)</span>: Dimensionless parameter (2 in most cases)</li>
 </ul>
 </dd>
 </dl>
@@ -121,13 +114,13 @@
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>Fit of the complex viscosity to the phenomenological Carreau-Yasuda equation. The equation used in the fit is:</p>
-<div class="math">
+<div class="math notranslate">
 \[\eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^{(n-1)/a}\]</div>
-<p>In the equation, <span class="math">\(a\)</span> is a dimensionless parameter that describes the transition from the zero-shear rate region
-to the power law region. It frequently takes the value 2. In some experimental data, it is safe to assume that <span class="math">\(\eta_\infty\)</span> is equal to zero.</p>
+<p>In the equation, <span class="math notranslate">\(a\)</span> is a dimensionless parameter that describes the transition from the zero-shear rate region
+to the power law region. It frequently takes the value 2. In some experimental data, it is safe to assume that <span class="math notranslate">\(\eta_\infty\)</span> is equal to zero.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">The fit only makes sense when applied using the <code class="docutils literal"><span class="pre">logstar</span></code> view (logarithm of the complex viscosity). The logarithm
+<p class="last">The fit only makes sense when applied using the <code class="docutils literal notranslate"><span class="pre">logstar</span></code> view (logarithm of the complex viscosity). The logarithm
 is needed, due to the wide range of viscosity values.</p>
 </div>
 <div class="admonition warning">
@@ -154,12 +147,12 @@ the theory will be applied to the first one in the list of active files.</p>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.2 20180503 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>
