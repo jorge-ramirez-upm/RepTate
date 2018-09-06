@@ -66,8 +66,8 @@ class ApplicationManager(CmdBase):
 
     version = Version.VERSION
     date = Version.DATE
-    prompt = 'reptate> '
-    intro = 'Reptate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
+    prompt = 'RepTate> '
+    intro = 'RepTate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
         version, date)
 
     def __init__(self, parent=None):

@@ -48,7 +48,7 @@ static void init_binsandbob_arrays(void);
 void molbin(int n)
 {
     int i, ibin;
-    double wttot, m_w, m_n, brav, lgstep, lgmin, lgmax, cplen;
+    double wttot, m_w, m_2, m_3, m_4, m_n, brav, lgstep, lgmin, lgmax, cplen;
 
     react_dist[n].nummwdbins = fmin(react_dist[n].nummwdbins, pb_global_const.maxmwdbins);
     // first find largest and smallest polymer
@@ -81,6 +81,9 @@ void molbin(int n)
     }
     wttot = 0.0;
     m_w = 0.0;
+    m_2 = 0.0;
+    m_3 = 0.0;
+    m_4 = 0.0;
     m_n = 0.0;
     brav = 0.0;
 
@@ -92,6 +95,9 @@ void molbin(int n)
         ibin = trunc((log10(cplen) - lgmin) / lgstep) + 1;
         wttot += 1.0;
         m_w += cplen;
+        m_2 += cplen * cplen;
+        m_3 += cplen * cplen * cplen;
+        m_4 += cplen * cplen * cplen * cplen;
         m_n += 1.0 / cplen;
         brav += br_poly[i].num_br / br_poly[i].tot_len;
         if ((ibin <= react_dist[n].nummwdbins) && (ibin > 0))
@@ -117,6 +123,9 @@ void molbin(int n)
     }
     react_dist[n].m_w = m_w / wttot;
     react_dist[n].m_n = wttot / m_n;
+    react_dist[n].m_z =  m_2 / m_w;
+    react_dist[n].m_zp1 = m_3 / m_2;
+    react_dist[n].m_zp2 = m_4 / m_3;
     react_dist[n].brav = brav / wttot * 500.0;
 }
 

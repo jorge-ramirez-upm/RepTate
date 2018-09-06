@@ -20,14 +20,6 @@ MWD Tutorial: Graphical User Interface
 .. |MWDiscr| image:: images/MWDiscr.png
     :height: 15pt
     :align: bottom
-	
-.. |fileparam| image:: images/file_parameters.png
-    :height: 20pt
-    :align: bottom
-
-.. |thparam| image:: images/th_parameters.png
-    :width: 45pt
-    :align: bottom
 
 
 **Discretization of a GPC molecular weight distribution**
@@ -35,38 +27,38 @@ MWD Tutorial: Graphical User Interface
 #.  Start RepTate and create a new MWD Application |logo|:
     
     .. image:: images/open_MWD_app.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: New MWD application
 
-#.  Drag and drop a file with a ``.gpc`` extension, e.g. ``ps2.gpc`` in the ``data/PS_Linear_Polydisperse/`` folder.
-
-    The first column of the file should contain the molecular mass :math:`M`, and the second column the relative molecular weight :math:`w(\log(M))`.
+#.  Drag and drop a file with a ``.gpc`` extension (see :ref:`MWD_Data_Description`), e.g. ``ps2.gpc`` in the ``data/PS_Linear_Polydisperse/`` folder.
    
     .. image:: images/open_gpc_file.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: Load data
 
 #.  Select the "Molecular Weight Discretization" theory |MWDiscr| and press |einstein| to create it.
     
     .. image:: images/create_MWDiscr_theory.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: New MWD theory
     
-    The number average, weight average and polydispersity index, :math:`M_n` , :math:`M_w` and :math:`\text{PDI}`, respectively, of the original data are calculated and
-    reported into the file parameters panel: |fileparam|.
-    
-    The theory parameters panel shows these values for the discretized distribution: |thparam|.
-
     The area of each bin corresponds to the area under the data curve delimited by the bin edges.
+    The number- and weight-average molecular weight, together with the higher order moments 
+    of the distribution, are calculated and reported in the theory text-box for both the input data and the discretized MW:
+    
+    .. image:: images/MWD_characteristics.png
+        :width: 40%
+        :align: center
+        :alt: New MWD theory
 
 #.  Adjust the number of molecular weight bins by changing the value in the theory panel.
     By default they are equally spaced on a logarithmic scale:
 
     .. image:: images/change_bin_number.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: Adjust bin number
 
@@ -79,9 +71,14 @@ MWD Tutorial: Graphical User Interface
     The yellow markers indicate the bin edges, they can be dragged around:
 
     .. image:: images/move_bin_edge.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: Move bin edge
+
+    .. hint::
+       To increase density of bins in an region, say the high M, we can set the number of bins to 1,
+       then move the bin edges to the region of interest and increase the number of bins. This will increase the number of bins between the
+       :math:`M_\mathrm{min}` and :math:`M_\mathrm{max}`.
 
 #.  To save the discretized molecular weight, click the |th_save| button.
 

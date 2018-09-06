@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Multi-mode Upper Convected Maxwell Model &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.9.3 20180719',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -23,7 +31,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -58,14 +67,12 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -84,7 +91,7 @@
 <dt id="TheoryUCM.TheoryUCM">
 <em class="property">class </em><code class="descclassname">TheoryUCM.</code><code class="descname">TheoryUCM</code><a class="reference internal" href="../../../../_modules/TheoryUCM.html#TheoryUCM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryUCM.TheoryUCM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multi-mode Upper Convected Maxwell model (see Chapter 1 of <a class="reference internal" href="theory.html#nlve-larson1988" id="id1">[1]</a>):</p>
-<div class="math notranslate">
+<div class="math">
 \[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol A_i\\
 \dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
 + \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
@@ -94,16 +101,16 @@
 <dt><strong>Functions</strong></dt>
 <dd><ul class="first">
 <li><p class="first">Analytical solution in shear</p>
-<div class="math notranslate">
+<div class="math">
 \[\eta^+(t) = \sum_{i=1}^n G_i \tau_i (1 - \exp(-t/\tau_i))\]</div>
 </li>
 <li><p class="first">Analytical solution in uniaxial extension</p>
-<div class="math notranslate">
+<div class="math">
 \[\eta^+_\mathrm E (t) = \dfrac 1 {\dot\varepsilon}
 \sum_{i=1}^n G_i (A_{xx, i}(t) - A_{yy, i}(t))\]</div>
 <p>with</p>
 <blockquote>
-<div><div class="math notranslate">
+<div><div class="math">
 \[\begin{split}A_{xx, i}(t) &amp;= \dfrac{ 1 - 2 \dot\varepsilon\tau_i 
 \exp(-(1 - 2 \dot\varepsilon\tau_i) t / \tau_i) } {1 - 2 \dot\varepsilon\tau_i }\\
 A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i 
@@ -112,10 +119,10 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 </li>
 </ul>
 <dl class="last docutils">
-<dt>where for each mode <span class="math notranslate">\(i\)</span>:</dt>
+<dt>where for each mode <span class="math">\(i\)</span>:</dt>
 <dd><ul class="first last simple">
-<li><span class="math notranslate">\(G_i\)</span>: weight of mode <span class="math notranslate">\(i\)</span></li>
-<li><span class="math notranslate">\(\tau_i\)</span>: relaxation time of mode <span class="math notranslate">\(i\)</span></li>
+<li><span class="math">\(G_i\)</span>: weight of mode <span class="math">\(i\)</span></li>
+<li><span class="math">\(\tau_i\)</span>: relaxation time of mode <span class="math">\(i\)</span></li>
 </ul>
 </dd>
 </dl>
@@ -154,7 +161,7 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

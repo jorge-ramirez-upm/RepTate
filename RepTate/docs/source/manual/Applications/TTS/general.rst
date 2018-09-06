@@ -13,7 +13,9 @@ Purpose
 -------
 
 .. autoclass:: ApplicationTTS.ApplicationTTS()	
-	
+
+.. _TTS_Data_Description:
+
 ----------
 Data Files
 ----------
@@ -53,7 +55,7 @@ Other columns will be ingnored. A correct ``.osc`` file looks like:
 Views
 -----
 
-log(G',G''(w))
+log(G',G"(w))
 -------------------------------------------
 .. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1G2()
    
@@ -62,7 +64,7 @@ log(G',G''(w))
     :align: center
 
 
-G',G''(w)
+G',G"(w)
 --------------------------------
 .. automethod:: ApplicationTTS.BaseApplicationTTS.viewG1G2()
 
@@ -134,7 +136,7 @@ delta(G*)
     :width: 45%
     :align: center
 
-J',J''(w)
+J',J"(w)
 ----------------------------
 .. automethod:: ApplicationTTS.BaseApplicationTTS.viewJ1J2()
 
@@ -167,7 +169,7 @@ G'
     :width: 45%
     :align: center
 
-log(G'')
+log(G")
 -------------------------------------------
 .. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG2()
 
@@ -176,7 +178,7 @@ log(G'')
     :align: center
 
 
-G''
+G"
 --------------------------------
 .. automethod:: ApplicationTTS.BaseApplicationTTS.viewG2()
 
@@ -184,7 +186,7 @@ G''
     :width: 45%
     :align: center
 
-log(G',G''(w),tan(delta))
+log(G',G"(w),tan(delta))
 --------------------------------
 .. automethod:: ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta()
 

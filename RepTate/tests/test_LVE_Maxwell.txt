@@ -1,0 +1,16 @@
+new LVE
+open data/DOW/Linear_Rheology_TTS/DOWLDPEL150R_160C.tts
+plot
+theory_new Maxwell Modes
+nmodes=8
+fit
+up
+up
+new NLVE
+open data/DOW/Non-Linear_Rheology/Start-up_Shear/My_dow150-160-*
+theory_new Rolie-Poly
+copy_modes
+0
+calculate
+save
+quit

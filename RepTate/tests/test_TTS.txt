@@ -1,0 +1,8 @@
+new TTS
+open data/PI_LINEAR/osc/PI*osc
+plot
+theory_new WLF Shift
+T0=-35
+fit
+save
+quit

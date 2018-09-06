@@ -334,7 +334,7 @@ class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
         tb.setIconSize(QSize(24, 24))
         self.btn_prio_senio = tb.addAction(QIcon(':/Icon8/Images/new_icons/priority_seniority.png'), 'Calculate Priority and Seniority (can take some time)')
         self.btn_prio_senio.setCheckable(True)
-        self.btn_prio_senio.setChecked(True)
+        self.btn_prio_senio.setChecked(self.do_priority_seniority)
         self.thToolsLayout.insertWidget(0, tb)
 
         self.btn_prio_senio.triggered.connect(self.handle_btn_prio_senio)

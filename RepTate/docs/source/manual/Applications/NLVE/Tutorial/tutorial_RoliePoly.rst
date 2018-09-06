@@ -67,7 +67,7 @@ Tutorial Rolie-Poly
 #.  Start RepTate and create a new NLVE Application |logo|:
     
     .. image:: images/new_NLVE.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: New application
 		
@@ -79,14 +79,14 @@ Tutorial Rolie-Poly
     column the stress (shear, or tensile, stress growth function).
 
     .. image:: images/load_uext_data.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: Load data
 
 #.  Select the "RoliePoly" theory |th_select| and press |einstein| to create it.
 
     .. image:: images/new_RP_th.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: New theory
 
@@ -102,7 +102,7 @@ Tutorial Rolie-Poly
               :alt: Edit modes
 	  
           then select the number of modes, enter the values and click "OK", then 
-          minimize |fit|.
+          "Minimize Error" |fit|.
         
         - Alternatively, it is possible to copy the values from a file or spreadsheet
           from and external program and paste the values into the "Edit Modes" table.
@@ -113,19 +113,22 @@ Tutorial Rolie-Poly
           **In this tutorial we will import Maxwell modes from a LVE application.**
 
 #.  Create a new LVE Application |logoLVE| and open the linear viscoelastic data 
-    file corresponding to the **same sample** at the **same temperature**. 
-    Then create a new Maxwell theory |maxwell| and minimize |fit|:
+    file corresponding to the **same sample** at the **same temperature**. We use the 
+    file ``data/DOW/Linear_Rheology_TTS/DOWLDPEL150R_160C.tts``.
+    Then, we create a new Maxwell theory |maxwell| and "Minimize Error" |fit|:
 	
     .. image:: images/LVE_for_NLVE.png
-        :width: 400pt
+        :width: 75%
         :align: center
         :alt: LVE for NLVE
 
-#.  Return to the NLVE application and now click |import_modes| and select from which 
-    theory you want to import the modes |get_modes| and click "OK" and minimize |fit|:
+#.  Return to the NLVE application and now click |import_modes|. 
+    We want to import the 6 Maxwell modes of the "LVE2" app. Select from which 
+    theory you want to import the modes |get_modes| and click "OK". Then click "Minimize Error" |fit|
+    to find the best values for the ``tauR`` parameters:
 	
 	.. image:: images/RP_predictions.png
-		:width: 400pt
+		:width: 75%
 		:align: center
 		:alt: Theory prediction
  
@@ -133,7 +136,7 @@ Tutorial Rolie-Poly
     prediction:
 	
 	.. image:: images/with_LVE.png
-		:width: 400pt
+		:width: 75%
 		:align: center
 		:alt: Show LVE
 
@@ -147,6 +150,6 @@ Tutorial Rolie-Poly
     predictions:
 	
 	.. image:: images/with_fene.png
-		:width: 400pt
+		:width: 75%
 		:align: center
 		:alt: With fene

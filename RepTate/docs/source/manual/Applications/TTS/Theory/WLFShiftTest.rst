@@ -41,7 +41,7 @@ where :math:`B_1` and :math:`B_2` are material parameters.
         B_1 & = C_1C_2 \\
         B_2 & = C_2 - T_r
         \end{eqnarray}
-    * Everytime Reptate calculates or fits the theory to a set of experimental data, it will output the values of the standard WLF parameters :math:`C_1` and :math:`C_2` at the temperature :math:`T_r` in the theory window.
+    * Everytime RepTate calculates or fits the theory to a set of experimental data, it will output the values of the standard WLF parameters :math:`C_1` and :math:`C_2` at the temperature :math:`T_r` in the theory window.
     
 In the **vertical shift**, the modulus is modified according to the expression:
 

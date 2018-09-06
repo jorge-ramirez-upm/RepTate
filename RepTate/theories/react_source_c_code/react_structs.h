@@ -56,7 +56,7 @@ typedef struct
 {
     double *wt, *avbr, *wmass, *avg, *lgmid; //array[1..maxmwdbins] of ;
     int *numinbin;                           // array[1..maxbobbins] of integer;
-    double monmass, M_e, N_e, boblgmin, boblgmax, m_w, m_n, brav;
+    double monmass, M_e, N_e, boblgmin, boblgmax, m_w, m_n, brav, m_z, m_zp1, m_zp2;
     int first_poly, next, nummwdbins, numbobbins, bobbinmax, nsaved, npoly, simnumber;
     bool polysaved;
     char *name;

@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>React: General description &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.9.3 20180719',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -25,7 +33,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -57,7 +66,7 @@
 <li><a class="reference internal" href="#">React: General description</a><ul>
 <li><a class="reference internal" href="#purpose">Purpose</a></li>
 <li><a class="reference internal" href="#data-files">Data Files</a><ul>
-<li><a class="reference internal" href="#reac-extension"><code class="docutils literal notranslate"><span class="pre">.reac</span></code> extension</a></li>
+<li><a class="reference internal" href="#reac-extension"><code class="docutils literal"><span class="pre">.reac</span></code> extension</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#views">Views</a><ul>
@@ -87,14 +96,12 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -112,7 +119,7 @@
 <ul class="simple">
 <li><a class="reference internal" href="#purpose" id="id1">Purpose</a></li>
 <li><a class="reference internal" href="#data-files" id="id2">Data Files</a><ul>
-<li><a class="reference internal" href="#reac-extension" id="id3"><code class="docutils literal notranslate"><span class="pre">.reac</span></code> extension</a></li>
+<li><a class="reference internal" href="#reac-extension" id="id3"><code class="docutils literal"><span class="pre">.reac</span></code> extension</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#views" id="id4">Views</a><ul>
@@ -139,25 +146,25 @@
 <div class="section" id="data-files">
 <h2><a class="toc-backref" href="#id2">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal notranslate"><span class="pre">;</span></code>).
+<li>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal"><span class="pre">;</span></code>).
 It may contain any number of parameters which will be read and saved as file-parameter in RepTate.</li>
 <li>Then the data columns should appear, separated by <strong>spaces</strong> or <strong>tabs</strong>.</li>
 </ul>
 <div class="section" id="reac-extension">
-<h3><a class="toc-backref" href="#id3"><code class="docutils literal notranslate"><span class="pre">.reac</span></code> extension</a><a class="headerlink" href="#reac-extension" title="Permalink to this headline">¶</a></h3>
-<p>Text files with <code class="docutils literal notranslate"><span class="pre">.reac</span></code> extension should be organised as follows:</p>
+<h3><a class="toc-backref" href="#id3"><code class="docutils literal"><span class="pre">.reac</span></code> extension</a><a class="headerlink" href="#reac-extension" title="Permalink to this headline">¶</a></h3>
+<p>Text files with <code class="docutils literal"><span class="pre">.reac</span></code> extension should be organised as follows:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">.reac</span></code> files are not expected to provide any specific parameter values.</li>
+<li><code class="docutils literal"><span class="pre">.reac</span></code> files are not expected to provide any specific parameter values.</li>
 <li>4 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:<ol class="arabic">
-<li>molar mass, <span class="math notranslate">\(M\)</span>,</li>
-<li>weight associated, <span class="math notranslate">\(\dfrac{\text d w(\log M)}{\text d \log M}\)</span>,</li>
-<li>the <cite>g</cite>-factor, <span class="math notranslate">\(g(M)=\dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></li>
+<li>molar mass, <span class="math">\(M\)</span>,</li>
+<li>weight associated, <span class="math">\(\dfrac{\text d w(\log M)}{\text d \log M}\)</span>,</li>
+<li>the <cite>g</cite>-factor, <span class="math">\(g(M)=\dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></li>
 <li>number of branching points per 1000 carbon.</li>
 </ol>
 </li>
 </ul>
-<p>A correct <code class="docutils literal notranslate"><span class="pre">.reac</span></code> file looks like:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.1148E+03 0.5000E-03 0.1000E+01 0.0000E+00
+<p>A correct <code class="docutils literal"><span class="pre">.reac</span></code> file looks like:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>0.1148E+03 0.5000E-03 0.1000E+01 0.0000E+00
 0.1514E+03 0.1500E-02 0.1000E+01 0.0000E+00
 0.1995E+03 0.1667E-02 0.1000E+01 0.0000E+00
 0.2630E+03 0.1750E-02 0.1000E+01 0.0000E+00
@@ -175,49 +182,49 @@ It may contain any number of parameters which will be read and saved as file-par
 <dl class="method">
 <dt id="ApplicationReact.BaseApplicationReact.view_wM">
 <code class="descclassname">BaseApplicationReact.</code><code class="descname">view_wM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_wM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_wM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Molecular weight distribution <span class="math notranslate">\(w(M)\)</span> vs molecular weight <span class="math notranslate">\(M\)</span> (in logarithmic scale)</p>
+<dd><p>Molecular weight distribution <span class="math">\(w(M)\)</span> vs molecular weight <span class="math">\(M\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <a class="reference internal image-reference" href="../../../_images/React_wM.png"><img alt="../../../_images/React_wM.png" class="align-center" src="../../../_images/React_wM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="log-w-m">
 <h3><a class="toc-backref" href="#id6">log(w(M))</a><a class="headerlink" href="#log-w-m" title="Permalink to this headline">¶</a></h3>
-<p><span class="math notranslate">\(\log_{10}(w(M))\)</span> (log-linear)</p>
+<p><span class="math">\(\log_{10}(w(M))\)</span> (log-linear)</p>
 <dl class="method">
 <dt id="ApplicationReact.BaseApplicationReact.view_logwM">
 <code class="descclassname">BaseApplicationReact.</code><code class="descname">view_logwM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_logwM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_logwM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the molecular weight distribution <span class="math notranslate">\(\log(w(M))\)</span> vs molecular weight <span class="math notranslate">\(M\)</span> (in logarithmic scale)</p>
+<dd><p>Logarithm of the molecular weight distribution <span class="math">\(\log(w(M))\)</span> vs molecular weight <span class="math">\(M\)</span> (in logarithmic scale)</p>
 </dd></dl>
 
 <a class="reference internal image-reference" href="../../../_images/React_logwM.png"><img alt="../../../_images/React_logwM.png" class="align-center" src="../../../_images/React_logwM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="g-m">
 <h3><a class="toc-backref" href="#id7">g(M)</a><a class="headerlink" href="#g-m" title="Permalink to this headline">¶</a></h3>
-<p><span class="math notranslate">\(g(M)\)</span> (log-linear)</p>
+<p><span class="math">\(g(M)\)</span> (log-linear)</p>
 <dl class="method">
 <dt id="ApplicationReact.BaseApplicationReact.view_gM">
 <code class="descclassname">BaseApplicationReact.</code><code class="descname">view_gM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_gM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_gM" title="Permalink to this definition">¶</a></dt>
-<dd><p><span class="math notranslate">\(g\)</span>-factor as a function of the molecular weight.
-The <span class="math notranslate">\(g\)</span>-factor is defined as <span class="math notranslate">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+<dd><p><span class="math">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math">\(g\)</span>-factor is defined as <span class="math">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
 </dd></dl>
 
 <a class="reference internal image-reference" href="../../../_images/React_gM.png"><img alt="../../../_images/React_gM.png" class="align-center" src="../../../_images/React_gM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="log-g-m">
 <h3><a class="toc-backref" href="#id8">log(g(M))</a><a class="headerlink" href="#log-g-m" title="Permalink to this headline">¶</a></h3>
-<p><span class="math notranslate">\(\log_{10}(g(M))\)</span> (log-linear)</p>
+<p><span class="math">\(\log_{10}(g(M))\)</span> (log-linear)</p>
 <dl class="method">
 <dt id="ApplicationReact.BaseApplicationReact.view_loggM">
 <code class="descclassname">BaseApplicationReact.</code><code class="descname">view_loggM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_loggM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_loggM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the <span class="math notranslate">\(g\)</span>-factor as a function of the molecular weight.
-The <span class="math notranslate">\(g\)</span>-factor is defined as <span class="math notranslate">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+<dd><p>Logarithm of the <span class="math">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math">\(g\)</span>-factor is defined as <span class="math">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
 </dd></dl>
 
 <a class="reference internal image-reference" href="../../../_images/React_LoggM.png"><img alt="../../../_images/React_LoggM.png" class="align-center" src="../../../_images/React_LoggM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="br-1000c">
 <h3><a class="toc-backref" href="#id9">br/1000C</a><a class="headerlink" href="#br-1000c" title="Permalink to this headline">¶</a></h3>
-<p><span class="math notranslate">\(\text{br/1000C}\)</span> (log-linear)</p>
+<p><span class="math">\(\text{br/1000C}\)</span> (log-linear)</p>
 <dl class="method">
 <dt id="ApplicationReact.BaseApplicationReact.view_br_1000C">
 <code class="descclassname">BaseApplicationReact.</code><code class="descname">view_br_1000C</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationReact.html#BaseApplicationReact.view_br_1000C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationReact.BaseApplicationReact.view_br_1000C" title="Permalink to this definition">¶</a></dt>
@@ -258,7 +265,7 @@ The <span class="math notranslate">\(g\)</span>-factor is defined as <span class
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>
