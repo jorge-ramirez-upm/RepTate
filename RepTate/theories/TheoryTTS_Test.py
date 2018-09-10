@@ -478,7 +478,7 @@ class BaseTheoryWLFShiftTest:
                     data = np.reshape(data, (-1, ttable.num_columns))
                     fparam.update(Filei.file_parameters)
             data = data[data[:, 0].argsort()]
-            fparam["T"] = self.parameters["T0"].value
+            fparam["T"] = self.parameters["Tr"].value
 
             if line == "":
                 ofilename = os.path.dirname(
