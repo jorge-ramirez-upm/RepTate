@@ -12,7 +12,7 @@ More info:
 
 - Documentation at ReadTheDocs_.
 
-.. _ReadTheDocs: http://reptate.readthedocs.io/en/latest/index.html
+.. _ReadTheDocs: http://reptate.readthedocs.io/
 
 - Download a binary installation package from Jorge Ramirez's blog at UPM_.
 
