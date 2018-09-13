@@ -93,6 +93,7 @@ class BaseApplicationReact:
         from TheoryMultiMetCSTR import TheoryMultiMetCSTR
         from TheoryReactMix import TheoryReactMix
         from TheoryCreatePolyconf import TheoryCreatePolyconf
+        from TheoryDieneCSTR import TheoryDieneCSTR
 
         super().__init__(name, parent)
 
@@ -382,6 +383,7 @@ class BaseApplicationReact:
         self.theories[TheoryMultiMetCSTR.thname] = TheoryMultiMetCSTR
         self.theories[TheoryReactMix.thname] = TheoryReactMix
         self.theories[TheoryCreatePolyconf.thname] = TheoryCreatePolyconf
+        self.theories[TheoryDieneCSTR.thname] = TheoryDieneCSTR
         self.add_common_theories()
 
         #set the current view

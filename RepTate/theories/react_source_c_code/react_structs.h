@@ -114,4 +114,10 @@ typedef struct
     bool tobitaCSTRerrorflag;
 } tobitaCSTR_global;
 
+typedef struct
+{
+    int dieneCSTRnumber;
+    bool dieneCSTRerrorflag;
+} dieneCSTR_global;
+
 #endif

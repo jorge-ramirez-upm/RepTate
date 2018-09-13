@@ -327,6 +327,26 @@ tobCSTRstart.restype = None
 tobCSTR = react_lib.tobCSTR
 tobCSTR.restype = ct.c_bool
 
+###############
+# dieneCSTR.c
+###############
+
+
+#struct
+class dieneCSTR_global(ct.Structure):
+    _fields_ = [("dieneCSTRnumber", ct.c_int), ("dieneCSTRerrorflag",
+                                              ct.c_bool)]
+
+#global variable
+dCSTR_global = dieneCSTR_global.in_dll(react_lib, "dCSTR_global")
+
+#function
+dieneCSTRstart = react_lib.dieneCSTRstart
+dieneCSTRstart.restype = None
+
+dieneCSTR = react_lib.dieneCSTR
+dieneCSTR.restype = ct.c_bool
+
 ################
 # MultiMetCSTR.c
 ################
