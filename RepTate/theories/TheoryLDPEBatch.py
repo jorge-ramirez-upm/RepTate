@@ -255,7 +255,7 @@ class BaseTheoryTobitaBatch():
         i = 0
         while i < numtomake:
             if self.stop_theory_flag:
-                self.Qprint('Polymer creation stopped by user')
+                self.Qprint('<big><font color=red><b>Polymer creation stopped by user</b></font></big>')
                 break
             # get a polymer
             success = rch.request_poly(ct.byref(c_m))
@@ -284,7 +284,7 @@ class BaseTheoryTobitaBatch():
                     # check for error
                     if rch.tb_global.tobitabatcherrorflag:
                         self.Qprint(
-                            'Polymers too large: gelation occurs for these parameters'
+                            '<big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>'
                         )
                         i = numtomake
                 else:  # error message if we ran out of arms

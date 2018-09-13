@@ -350,7 +350,7 @@ void calc_seniority(int n)
 
 void calc_priority(int n)
 {
-    int first, m, prio_level, mL1, mL2, mR1, mR2, prL1, prL2, prR1, prR2, maxL, maxR, nassigned, armnum;
+    int first, m, prio_level, mL1, mL2, mR1, mR2, prL1, prL2, prR1, prR2, nassigned, armnum;
     first = br_poly[n].first_end;
     m = first;
     nassigned = 0;
