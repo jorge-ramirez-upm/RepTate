@@ -87,11 +87,6 @@ class BaseTheoryDieneCSTR:
     thname = TheoryDieneCSTR.thname
     citations = TheoryDieneCSTR.citations
     doi = TheoryDieneCSTR.doi
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 87471c7d10f748a2be9256d7f45c792d67fef316
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)
