@@ -87,7 +87,11 @@ class BaseTheoryDieneCSTR:
     thname = TheoryDieneCSTR.thname
     citations = TheoryDieneCSTR.citations
     doi = TheoryDieneCSTR.doi
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 87471c7d10f748a2be9256d7f45c792d67fef316
     signal_request_dist = pyqtSignal(object)
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)
@@ -386,14 +390,12 @@ class BaseTheoryDieneCSTR:
         # self.Qprint('%d arm records left in memory' % rch.pb_global.arms_left)
         # rch.print_arch_stats(ct.c_int(ndist))
         return calc
-
     def show_theory_extras(self, checked):
         rgt.show_theory_extras(self, checked)
 
     def destructor(self):
         """Return arms to pool"""
         rch.return_dist(ct.c_int(self.ndist))
-
     def do_fit(self, line=''):
         """No fitting allowed in this theory"""
         if self.xrange.get_visible():
@@ -465,7 +467,6 @@ class GUITheoryDieneCSTR(BaseTheoryDieneCSTR, QTheory):
     def handle_btn_prio_senio(self, checked):
         """Change do_priority_seniority"""
         rgt.handle_btn_prio_senio(self, checked)
-
     def set_extra_data(self, extra_data):
         """set extra data"""
         rgt.set_extra_data(self, extra_data)
