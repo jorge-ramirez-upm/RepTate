@@ -303,7 +303,7 @@ class BaseTheoryBlendRoliePoly:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#rolie-poly-blend-equations'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-poly-blend-equations'
     single_file = False
     thname = TheoryBlendRoliePoly.thname
     citations = TheoryBlendRoliePoly.citations

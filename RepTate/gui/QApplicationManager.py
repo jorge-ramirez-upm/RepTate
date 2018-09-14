@@ -63,7 +63,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/index.html'
+    help_file = 'http://reptate.readthedocs.io/index.html'
     #reptatelogger = logging.getLogger('ReptateLogger')
     #reptatelogger.setLevel(logging.DEBUG)
 
@@ -225,7 +225,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             help_file = self.ApplicationtabWidget.currentWidget().help_file
         except AttributeError as e:
             print('in "handle_show_help":', e)
-            help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/applications.html'
+            help_file = 'http://reptate.readthedocs.io/manual/Applications/applications.html'
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
     def handle_show_th_help(self):
@@ -237,7 +237,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             help_file = th.help_file
         except Exception as e:
             print('in "handle_show_help":', e)
-            help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/All_Theories.html'
+            help_file = 'http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html'
         QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
 
     def handle_actionShow_offline_help(self):

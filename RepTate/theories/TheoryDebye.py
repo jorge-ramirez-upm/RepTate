@@ -101,7 +101,7 @@ class BaseTheoryDebye:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/SANS/Theory/theory.html#debye-function'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/SANS/Theory/theory.html#debye-function'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDebye.thname
     citations = TheoryDebye.citations

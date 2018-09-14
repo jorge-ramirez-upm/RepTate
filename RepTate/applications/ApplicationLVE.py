@@ -72,7 +72,7 @@ class ApplicationLVE(CmdBase):
 class BaseApplicationLVE:
     """
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/LVE.html'
     appname = ApplicationLVE.appname
 
     def __init__(self, name="LVE", parent=None):

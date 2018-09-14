@@ -71,7 +71,7 @@ class BaseToolGradient:
     
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/en/latest/manual/Tools/Gradient.html'
+    #help_file = 'http://reptate.readthedocs.io/manual/Tools/Gradient.html'
     toolname = ToolGradient.toolname
     citations = ToolGradient.citations
 

@@ -159,7 +159,7 @@ class BaseToolMaterialsDatabase:
     
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/en/latest/manual/Tools/MaterialsDatabase.html'
+    #help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
     toolname = ToolMaterialsDatabase.toolname
     citations = ToolMaterialsDatabase.citations
 

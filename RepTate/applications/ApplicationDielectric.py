@@ -74,7 +74,7 @@ class BaseApplicationDielectric:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Dielectric/Dielectric.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html'
     appname = ApplicationDielectric.appname
 
     def __init__(self, name="Dielectric", parent=None):

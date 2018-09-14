@@ -81,7 +81,7 @@ class BaseTheoryDiscrMWD:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/theory.html#mwd-discretization'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization'
     single_file = True
     thname = TheoryDiscrMWD.thname
     citations = TheoryDiscrMWD.citations

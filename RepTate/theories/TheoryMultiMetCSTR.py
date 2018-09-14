@@ -84,7 +84,7 @@ class BaseTheoryMultiMetCSTR:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/MetalloceneCSTR.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryMultiMetCSTR.thname
     citations = TheoryMultiMetCSTR.citations

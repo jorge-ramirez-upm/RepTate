@@ -82,7 +82,7 @@ class BaseTheoryLogNormal:
        - ``logW0`` :math:`\\equiv\\log_{10}(M_0)`
        - ``sigma`` :math:`\\equiv\\sigma`
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryLogNormal.thname
     citations = TheoryLogNormal.citations

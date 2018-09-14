@@ -152,7 +152,7 @@ command line interface to ``RepTate/RepTate/``. Type::
 Wait a little and RepTate should appear on your screen. Note that you may need to use 
 ``python3 RepTate.py`` depending on your system.
 
-Take a moment to read the `User Manual <http://reptate.readthedocs.io/en/latest/manual/manual.html>`_.
+Take a moment to read the `User Manual <http://reptate.readthedocs.io/manual/manual.html>`_.
 
 Update RepTate
 ~~~~~~~~~~~~~~

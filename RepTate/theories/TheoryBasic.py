@@ -70,7 +70,7 @@ class TheoryPolynomial(CmdBase):
 
 
 class BaseTheoryPolynomial:
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#polynomial'
+    help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial'
     single_file = True
     thname = TheoryPolynomial.thname
 
@@ -262,7 +262,7 @@ class BaseTheoryPowerLaw:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#power-law'
+    help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
     single_file = True
     thname = TheoryPowerLaw.thname
 
@@ -384,7 +384,7 @@ class BaseTheoryExponential:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#exponential'
+    help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
     single_file = True
     thname = TheoryExponential.thname
 
@@ -509,7 +509,7 @@ class BaseTheoryTwoExponentials:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/All_Theories/basic_theories.html#double-exponential'
+    help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
     single_file = True
     thname = TheoryTwoExponentials.thname
 

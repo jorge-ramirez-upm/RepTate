@@ -87,7 +87,7 @@ class BaseTheoryTTSShiftAutomatic:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift'
     single_file = False
     thname = TheoryTTSShiftAutomatic.thname
     citations = TheoryTTSShiftAutomatic.citations

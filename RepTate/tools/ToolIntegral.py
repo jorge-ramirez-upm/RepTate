@@ -73,7 +73,7 @@ class BaseToolIntegral:
     
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/en/latest/manual/Tools/Integral.html'
+    #help_file = 'http://reptate.readthedocs.io/manual/Tools/Integral.html'
     toolname = ToolIntegral.toolname
     citations = ToolIntegral.citations
 

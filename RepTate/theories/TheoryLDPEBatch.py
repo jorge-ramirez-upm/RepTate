@@ -95,7 +95,7 @@ class BaseTheoryTobitaBatch():
     [description]
     """
     # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/React/Theory/tobitaLDPE.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaLDPE.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryTobitaBatch.thname
     citations = TheoryTobitaBatch.citations

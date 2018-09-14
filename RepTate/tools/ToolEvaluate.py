@@ -71,7 +71,7 @@ class BaseToolEvaluate:
     
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/en/latest/manual/Tools/template.html'
+    #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolEvaluate.toolname
     citations = ToolEvaluate.citations
 

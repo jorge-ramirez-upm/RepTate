@@ -74,7 +74,7 @@ class BaseApplicationMWD:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/MWD/MWD.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/MWD.html'
     appname = ApplicationMWD.appname
 
     def __init__(self, name="MWD", parent=None):

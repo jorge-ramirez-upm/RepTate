@@ -95,7 +95,7 @@ class BaseTheoryKWWModesFrequency:
     """[summary] 
         
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/Dielectric/Theory/theory.html#kolhrauch-williams-watts-kww-modes'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#kolhrauch-williams-watts-kww-modes'
     single_file = True
     thname = TheoryKWWModesFrequency.thname
     citations = TheoryKWWModesFrequency.citations

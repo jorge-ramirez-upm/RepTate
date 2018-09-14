@@ -74,7 +74,7 @@ class BaseApplicationTTSFactors:
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/en/latest/manual/Applications/TTSFactors/TTSFactors.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html'
     appname = ApplicationTTSFactors.appname
 
     def __init__(self, name="TTSF", parent=None):
