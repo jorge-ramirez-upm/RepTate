@@ -1,5 +1,5 @@
 ===================================
-Navigate the source Code of Reptate
+Navigate the source Code of RepTate
 ===================================
 
 .. toctree::

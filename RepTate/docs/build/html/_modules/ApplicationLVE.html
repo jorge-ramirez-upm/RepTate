@@ -144,7 +144,7 @@
 <div class="viewcode-block" id="BaseApplicationLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationLVE.BaseApplicationLVE">[docs]</a><span class="k">class</span> <span class="nc">BaseApplicationLVE</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/LVE/LVE.html&#39;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/manual/Applications/LVE/LVE.html&#39;</span>
     <span class="n">appname</span> <span class="o">=</span> <span class="n">ApplicationLVE</span><span class="o">.</span><span class="n">appname</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LVE&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -461,7 +461,7 @@
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="BaseApplicationLVE.viewLogGstar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}` vs :math:`\\log(\\omega)` </span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}` vs :math:`\\log(\\omega)` </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -471,7 +471,7 @@
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="BaseApplicationLVE.viewLogtandeltaGstar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewLogtandeltaGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogtandeltaGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G&#39;&#39;/G&#39;` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
+        <span class="sd">&quot;&quot;&quot;Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G&#39;&#39;/G&#39;` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -481,7 +481,7 @@
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="BaseApplicationLVE.viewdeltatanGstar"><a class="viewcode-back" href="../manual/Applications/LVE/general.html#ApplicationLVE.BaseApplicationLVE.viewdeltatanGstar">[docs]</a>    <span class="k">def</span> <span class="nf">viewdeltatanGstar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Loss angle :math:`\\delta(\\omega)=\\arctan(G&#39;&#39;/G&#39;)` vs logarithm of the modulus of the complex viscosity :math:`|G*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
+        <span class="sd">&quot;&quot;&quot;Loss angle :math:`\\delta(\\omega)=\\arctan(G&#39;&#39;/G&#39;)` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G&#39;^2+G&#39;&#39;^2}`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>

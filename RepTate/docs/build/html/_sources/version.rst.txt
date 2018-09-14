@@ -29,7 +29,7 @@ Release 0.9.3 - 20180719
 Release 0.9.2 - 20180503
 ========================
 - Save theory predictions to a file
-- Save/Load Reptate project
+- Save/Load RepTate project
 - New App: Dielectric spectroscopy
 - New Dielectric Theories: Debye and Havriliak-Negami relaxation modes
 - New Dielectric Theories: Kolhrauch-Williams-Watts (KWW) modes (BETA VERSION)
@@ -39,7 +39,7 @@ Release 0.9.2 - 20180503
 - Zoom plot with mouse wheel (does not work if multiview > 1)
 - Added all LVE views to TTS.
 - LVE app can open osc files.
-- Added missing views from old Reptate
+- Added missing views from old RepTate
 - i-Rheo is the default view for panel 2 (Gt)
 - Calculate integrals and find peaks of data (Experimental, only in CL version)
 - "get modes" for Blend RP theory

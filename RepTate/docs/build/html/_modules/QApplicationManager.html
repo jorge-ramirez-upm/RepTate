@@ -135,7 +135,7 @@
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/index.html&#39;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/index.html&#39;</span>
     <span class="c1">#reptatelogger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
     <span class="c1">#reptatelogger.setLevel(logging.DEBUG)</span>
 
@@ -297,7 +297,7 @@
             <span class="n">help_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span><span class="o">.</span><span class="n">help_file</span>
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;in &quot;handle_show_help&quot;:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-            <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/applications.html&#39;</span>
+            <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/manual/Applications/applications.html&#39;</span>
         <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromUserInput</span><span class="p">((</span><span class="n">help_file</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="QApplicationManager.handle_show_th_help"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_show_th_help">[docs]</a>    <span class="k">def</span> <span class="nf">handle_show_th_help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -309,7 +309,7 @@
             <span class="n">help_file</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">help_file</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;in &quot;handle_show_help&quot;:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-            <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/All_Theories/All_Theories.html&#39;</span>
+            <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html&#39;</span>
         <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromUserInput</span><span class="p">((</span><span class="n">help_file</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="QApplicationManager.handle_actionShow_offline_help"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_actionShow_offline_help">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionShow_offline_help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

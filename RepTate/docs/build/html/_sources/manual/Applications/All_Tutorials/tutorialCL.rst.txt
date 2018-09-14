@@ -2,7 +2,7 @@
 RepTate Command Line Tutorial
 ===============================
 
-Examples of use of Reptate using the Command Line interpreter and batch.
+Examples of use of RepTate using the Command Line interpreter and batch.
 
 .. include:: tutorialCL_instructions.rst
 

@@ -98,17 +98,17 @@
 <p><strong>Non-Linear flow prediction</strong></p>
 <ol class="arabic">
 <li><p class="first">Start RepTate and create a new NLVE Application <a class="reference internal" href="../../../../_images/NLVE.png"><img alt="logo" class="align-bottom" src="../../../../_images/NLVE.png" style="width: 20pt; height: 20pt;" /></a>:</p>
-<a class="reference internal image-reference" href="../../../../_images/new_NLVE.png"><img alt="New application" class="align-center" src="../../../../_images/new_NLVE.png" style="width: 400pt;" /></a>
+<a class="reference internal image-reference" href="../../../../_images/new_NLVE.png"><img alt="New application" class="align-center" src="../../../../_images/new_NLVE.png" style="width: 75%;" /></a>
 </li>
 <li><p class="first">Drag and drop shear (<code class="docutils literal"><span class="pre">.shear</span></code>) or uniaxial extension (<code class="docutils literal"><span class="pre">.uext</span></code>) data files,
 e.g. all the <code class="docutils literal"><span class="pre">.uext</span></code> files from the folder
 <code class="docutils literal"><span class="pre">data/DOW/Non-Linear_Rheology/Start-up_extension/</span></code>.</p>
 <p>The first column of the file should contain the time and the second
 column the stress (shear, or tensile, stress growth function).</p>
-<a class="reference internal image-reference" href="../../../../_images/load_uext_data.png"><img alt="Load data" class="align-center" src="../../../../_images/load_uext_data.png" style="width: 400pt;" /></a>
+<a class="reference internal image-reference" href="../../../../_images/load_uext_data.png"><img alt="Load data" class="align-center" src="../../../../_images/load_uext_data.png" style="width: 75%;" /></a>
 </li>
 <li><p class="first">Select the “RoliePoly” theory <a class="reference internal" href="../../../../_images/RP_theory.png"><img alt="th_select" class="align-bottom" src="../../../../_images/RP_theory.png" style="height: 15pt;" /></a> and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
-<a class="reference internal image-reference" href="../../../../_images/new_RP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_RP_th.png" style="width: 400pt;" /></a>
+<a class="reference internal image-reference" href="../../../../_images/new_RP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_RP_th.png" style="width: 75%;" /></a>
 <p>At this point, you need to setup the relaxation times, <span class="math">\(\tau_i\)</span>, and
 weights, <span class="math">\(g_i\)</span>, for each mode <span class="math">\(i\)</span>.
 You can:</p>
@@ -117,7 +117,7 @@ You can:</p>
 <li><p class="first">Input them manually by clicking:</p>
 <a class="reference internal image-reference" href="../../../../_images/edit_modes.png"><img alt="Edit modes" class="align-center" src="../../../../_images/edit_modes.png" style="width: 100pt;" /></a>
 <p>then select the number of modes, enter the values and click “OK”, then
-minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
+“Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
 </li>
 <li><p class="first">Alternatively, it is possible to copy the values from a file or spreadsheet
 from and external program and paste the values into the “Edit Modes” table.
@@ -131,20 +131,23 @@ G(t)).
 </div></blockquote>
 </li>
 <li><p class="first">Create a new LVE Application <a class="reference internal" href="../../../../_images/LVE.png"><img alt="logoLVE" class="align-bottom" src="../../../../_images/LVE.png" style="width: 20pt; height: 20pt;" /></a> and open the linear viscoelastic data
-file corresponding to the <strong>same sample</strong> at the <strong>same temperature</strong>.
-Then create a new Maxwell theory <a class="reference internal" href="../../../../_images/select_Maxwell.png"><img alt="maxwell" class="align-bottom" src="../../../../_images/select_Maxwell.png" style="height: 15pt;" /></a> and minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>:</p>
-<a class="reference internal image-reference" href="../../../../_images/LVE_for_NLVE.png"><img alt="LVE for NLVE" class="align-center" src="../../../../_images/LVE_for_NLVE.png" style="width: 400pt;" /></a>
+file corresponding to the <strong>same sample</strong> at the <strong>same temperature</strong>. We use the
+file <code class="docutils literal"><span class="pre">data/DOW/Linear_Rheology_TTS/DOWLDPEL150R_160C.tts</span></code>.
+Then, we create a new Maxwell theory <a class="reference internal" href="../../../../_images/select_Maxwell.png"><img alt="maxwell" class="align-bottom" src="../../../../_images/select_Maxwell.png" style="height: 15pt;" /></a> and “Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<a class="reference internal image-reference" href="../../../../_images/LVE_for_NLVE.png"><img alt="LVE for NLVE" class="align-center" src="../../../../_images/LVE_for_NLVE.png" style="width: 75%;" /></a>
 </li>
-<li><p class="first">Return to the NLVE application and now click <a class="reference internal" href="../../../../_images/icons8-broadcasting.png"><img alt="import_modes" class="align-bottom" src="../../../../_images/icons8-broadcasting.png" style="width: 20pt; height: 20pt;" /></a> and select from which
-theory you want to import the modes <a class="reference internal" href="../../../../_images/get_modes.png"><img alt="get_modes" class="align-bottom" src="../../../../_images/get_modes.png" style="height: 45pt;" /></a> and click “OK” and minimize <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<li><p class="first">Return to the NLVE application and now click <a class="reference internal" href="../../../../_images/icons8-broadcasting.png"><img alt="import_modes" class="align-bottom" src="../../../../_images/icons8-broadcasting.png" style="width: 20pt; height: 20pt;" /></a>.
+We want to import the 6 Maxwell modes of the “LVE2” app. Select from which
+theory you want to import the modes <a class="reference internal" href="../../../../_images/get_modes.png"><img alt="get_modes" class="align-bottom" src="../../../../_images/get_modes.png" style="height: 45pt;" /></a> and click “OK”. Then click “Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>
+to find the best values for the <code class="docutils literal"><span class="pre">tauR</span></code> parameters:</p>
 <blockquote>
-<div><a class="reference internal image-reference" href="../../../../_images/RP_predictions.png"><img alt="Theory prediction" class="align-center" src="../../../../_images/RP_predictions.png" style="width: 400pt;" /></a>
+<div><a class="reference internal image-reference" href="../../../../_images/RP_predictions.png"><img alt="Theory prediction" class="align-center" src="../../../../_images/RP_predictions.png" style="width: 75%;" /></a>
 </div></blockquote>
 </li>
 <li><p class="first">Click the <a class="reference internal" href="../../../../_images/icons8-visible.png"><img alt="eye" class="align-bottom" src="../../../../_images/icons8-visible.png" style="width: 20pt; height: 20pt;" /></a> button to show (or hide) the linear viscoelastic envelope
 prediction:</p>
 <blockquote>
-<div><a class="reference internal image-reference" href="../../../../_images/with_LVE.png"><img alt="Show LVE" class="align-center" src="../../../../_images/with_LVE.png" style="width: 400pt;" /></a>
+<div><a class="reference internal image-reference" href="../../../../_images/with_LVE.png"><img alt="Show LVE" class="align-center" src="../../../../_images/with_LVE.png" style="width: 75%;" /></a>
 </div></blockquote>
 </li>
 <li><p class="first">The number of stretching modes is given by <a class="reference internal" href="../../../../_images/nstretch.png"><img alt="nstretch" class="align-bottom" src="../../../../_images/nstretch.png" style="height: 15pt;" /></a>. <span class="math">\(N_\text{stretch}=0\)</span>
@@ -156,7 +159,7 @@ parameter <code class="docutils literal"><span class="pre">lmax</span></code> is
 You can change its value and click “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a> to update the theory
 predictions:</p>
 <blockquote>
-<div><a class="reference internal image-reference" href="../../../../_images/with_fene.png"><img alt="With fene" class="align-center" src="../../../../_images/with_fene.png" style="width: 400pt;" /></a>
+<div><a class="reference internal image-reference" href="../../../../_images/with_fene.png"><img alt="With fene" class="align-center" src="../../../../_images/with_fene.png" style="width: 75%;" /></a>
 </div></blockquote>
 </li>
 </ol>

@@ -224,7 +224,7 @@
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/en/latest/manual/Applications/NLVE/Theory/theory.html#rolie-poly-equation&#39;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-poly-equation&#39;</span>
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryRoliePoly</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryRoliePoly</span><span class="o">.</span><span class="n">citations</span>
@@ -354,8 +354,8 @@
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qhide_theory_extras</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">extra_graphic_visible</span><span class="p">(</span><span class="n">show</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qhide_theory_extras</span><span class="p">(</span><span class="n">show</span><span class="p">)</span></div>
+        <span class="c1"># self.extra_graphic_visible(self.linearenvelope.isChecked())</span>
 
 <div class="viewcode-block" id="BaseTheoryRoliePoly.extra_graphic_visible"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.extra_graphic_visible">[docs]</a>    <span class="k">def</span> <span class="nf">extra_graphic_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -618,7 +618,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nmodes&quot;</span><span class="p">):</span>
             <span class="n">oldn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="n">message</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseTheoryRoliePoly</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span>
             <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
@@ -852,6 +853,7 @@
                 <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-infinite.png&#39;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">display_flag</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">=</span> <span class="n">OptType</span><span class="o">.</span><span class="n">const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="GUITheoryRoliePoly.handle_spinboxValueChanged"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -860,12 +862,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.Qhide_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.Qhide_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Uncheck the LVE button. Called when curent theory is changed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GUITheoryRoliePoly.show_linear_envelope"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.show_linear_envelope">[docs]</a>    <span class="k">def</span> <span class="nf">show_linear_envelope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_graphic_visible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>

@@ -1,6 +1,6 @@
-===========================
+==========================
 Creep: General description
-===========================
+==========================
 
 .. contents:: Contents
     :local:
@@ -21,7 +21,7 @@ Data Files
 .. include:: ../datafile_doc.rst
 
 ``.creep`` extension
--------------------
+--------------------
 
 Text files with ``.creep`` extension should be organised as follows:
 

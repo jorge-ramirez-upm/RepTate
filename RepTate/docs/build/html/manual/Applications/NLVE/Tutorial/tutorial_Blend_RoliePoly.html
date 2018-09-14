@@ -109,13 +109,13 @@ column the stress (shear, or tensile, stress growth function).</p>
 <a class="reference internal image-reference" href="../../../../_images/load_uext_data_Minegishi.png"><img alt="Load data" class="align-center" src="../../../../_images/load_uext_data_Minegishi.png" style="width: 400pt;" /></a>
 </li>
 <li><p class="first">Select the “BlendRoliePoly” theory <a class="reference internal" href="../../../../_images/select_BlendRoliePoly.png"><img alt="th_select" class="align-bottom" src="../../../../_images/select_BlendRoliePoly.png" style="height: 15pt;" /></a> and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
-<a class="reference internal image-reference" href="../../../../_images/new_RP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_RP_th.png" style="width: 400pt;" /></a>
+<a class="reference internal image-reference" href="../../../../_images/new_BRP_th.png"><img alt="New theory" class="align-center" src="../../../../_images/new_BRP_th.png" style="width: 400pt;" /></a>
 <p>At this point, you need to setup the relaxation times, <span class="math">\(\tau_i\)</span>, and
 weights, <span class="math">\(g_i\)</span>, for each mode <span class="math">\(i\)</span>.
 You can:</p>
 <ul>
-<li><p class="first">Input them manually by clicking:</p>
-<a class="reference internal image-reference" href="../../../../_images/edit_modes.png"><img alt="Edit modes" class="align-center" src="../../../../_images/edit_modes.png" style="width: 100pt;" /></a>
+<li><p class="first">Input them manually by clicking “Edit Modes”:</p>
+<a class="reference internal image-reference" href="../../../../_images/edit_modesBRP.png"><img alt="Edit modes" class="align-center" src="../../../../_images/edit_modesBRP.png" style="width: 100pt;" /></a>
 <p>then select the number of modes, enter the values and click “OK”.</p>
 </li>
 <li><p class="first">Obtain an estimate of the linear rheology (i.e. the set of <span class="math">\(\tau_{\mathrm{d},i}\)</span>)
@@ -142,8 +142,8 @@ MWD data into a table.
 </li>
 </ul>
 </li>
-<li><p class="first">To import the MWD form by copy-pasting MWD data, click right arrow of <a class="reference internal" href="../../../../_images/icons8-broadcasting.png"><img alt="import_modes" class="align-bottom" src="../../../../_images/icons8-broadcasting.png" style="width: 20pt; height: 20pt;" /></a> and select
-<a class="reference internal" href="../../../../_images/select_MWD_from_data.png"><img alt="MWD_from_data" class="align-bottom" src="../../../../_images/select_MWD_from_data.png" style="height: 15pt;" /></a>:</p>
+<li><p class="first">To import the MWD form by copy-pasting MWD data, click right arrow of <a class="reference internal" href="../../../../_images/import_modes.png"><img alt="import_modes" class="align-bottom" src="../../../../_images/import_modes.png" style="width: 25pt; height: 20pt;" /></a> and select
+“Get Modes (MWD data)”<a class="reference internal" href="../../../../_images/select_MWD_from_data.png"><img alt="MWD_from_data" class="align-bottom" src="../../../../_images/select_MWD_from_data.png" style="height: 60pt;" /></a>:</p>
 <blockquote>
 <div><a class="reference internal image-reference" href="../../../../_images/input_MWD_data.png"><img alt="input MWD data" class="align-center" src="../../../../_images/input_MWD_data.png" style="width: 250pt;" /></a>
 </div></blockquote>
@@ -232,7 +232,7 @@ We use the 21 modes MWD provided in <a class="reference internal" href="#rpbtut-
 <a class="reference internal image-reference" href="../../../../_images/MWD_table_input.png"><img alt="Show LVE" class="align-center" src="../../../../_images/MWD_table_input.png" style="width: 250pt;" /></a>
 </li>
 <li><p class="first">Click “OK” to close the dialog. This launches the calculations of the relaxation times.
-You can look at the result by clicking <a class="reference internal" href="../../../../_images/check_relaxation_results.png"><img alt="relax_time" class="align-bottom" src="../../../../_images/check_relaxation_results.png" style="height: 50pt;" /></a>.</p>
+You can look at the result by clicking “Edit Modes” <a class="reference internal" href="../../../../_images/edit_modesBRP.png"><img alt="relax_time" class="align-bottom" src="../../../../_images/edit_modesBRP.png" style="height: 60pt;" /></a>.</p>
 </li>
 <li><p class="first">Adjust the parameter <code class="docutils literal"><span class="pre">GN0</span></code>. We set it to <span class="math">\(2\times 10^5\)</span> Pa. Then, press “calculate” <a class="reference internal" href="../../../../_images/icons8-abacus.png"><img alt="calculate" class="align-bottom" src="../../../../_images/icons8-abacus.png" style="width: 20pt; height: 20pt;" /></a>
 to get the nonlinear rheology predictions.</p>
@@ -256,6 +256,10 @@ Click “calculate” <a class="reference internal" href="../../../../_images/ic
 <p class="first admonition-title">Note</p>
 <p class="last">The minimisation procedure is inactive in this theory.</p>
 </div>
+<dl class="docutils">
+<dt>..todo::</dt>
+<dd>Cite related publication</dd>
+</dl>
 <p id="bibtex-bibliography-manual/Applications/NLVE/Tutorial/tutorial_Blend_RoliePoly-0"><table class="docutils citation" frame="void" id="rpbtut-minegishi2001" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">

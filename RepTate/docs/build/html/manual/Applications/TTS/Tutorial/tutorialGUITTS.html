@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tutorial TTS Application &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <title>TTS Tutorial: Graphical User Interface &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="LVE: Linear ViscoElasticity" href="../../LVE/LVE.html" />
-    <link rel="prev" title="Tutorial TTS Application Command Line" href="tutorialCLTTS.html" />
+    <link rel="prev" title="TTS Tutorial: Command Line" href="tutorialCLTTS.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -48,7 +48,7 @@
           <a href="../../LVE/LVE.html" title="LVE: Linear ViscoElasticity"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tutorialCLTTS.html" title="Tutorial TTS Application Command Line"
+          <a href="tutorialCLTTS.html" title="TTS Tutorial: Command Line"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
@@ -63,7 +63,7 @@
             </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="tutorialCLTTS.html"
-                        title="previous chapter">Tutorial TTS Application Command Line</a></p>
+                        title="previous chapter">TTS Tutorial: Command Line</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../../LVE/LVE.html"
                         title="next chapter"> LVE: Linear ViscoElasticity</a></p>
@@ -92,13 +92,37 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="tutorial-tts-application">
-<h1>Tutorial TTS Application<a class="headerlink" href="#tutorial-tts-application" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="tts-tutorial-graphical-user-interface">
+<h1>TTS Tutorial: Graphical User Interface<a class="headerlink" href="#tts-tutorial-graphical-user-interface" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<ol class="arabic">
+<li><p class="first">Start RepTate and create a new LVE Application <a class="reference internal" href="../../../../_images/TTS.png"><img alt="logo" class="align-bottom" src="../../../../_images/TTS.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_app.png"><img alt="New application" class="align-center" src="../../../../_images/TTS_app.png" style="width: 75%;" /></a>
+</li>
+<li><p class="first">Drag and drop files with <code class="docutils literal"><span class="pre">.osc</span></code> extension, e.g. the set of <code class="docutils literal"><span class="pre">PI_*.osc</span></code> files in the <code class="docutils literal"><span class="pre">data/PI_LINEAR/osc/</span></code>
+folder. See <a class="reference internal" href="../general.html#tts-data-description"><span class="std std-ref">Data Files</span></a> for a description of the data file organization.</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_data.png"><img alt="Load data" class="align-center" src="../../../../_images/TTS_data.png" style="width: 75%;" /></a>
+</li>
+<li><p class="first">Select a theory, e.g. “WLF Shift” <a class="reference internal" href="../../../../_images/TTS_theoryWLF.png"><img alt="theory" class="align-bottom" src="../../../../_images/TTS_theoryWLF.png" style="height: 20pt;" /></a>, and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it (calculation is done with default parameter values).
+Press “Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_shift.png"><img alt="New theory" class="align-center" src="../../../../_images/TTS_shift.png" style="width: 75%;" /></a>
+</li>
+<li><p class="first">Change a parameter, e.g. set the reference temperature to <span class="math">\(T_0=-40^\circ\)</span>C, and press “Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_T-40.png"><img alt="New theory" class="align-center" src="../../../../_images/TTS_T-40.png" style="width: 75%;" /></a>
+</li>
+<li><p class="first">To save the theory line(s), click the <a class="reference internal" href="../../../../_images/icons8-save_TH.png"><img alt="th_save" class="align-bottom" src="../../../../_images/icons8-save_TH.png" style="width: 20pt; height: 20pt;" /></a> button.
+A dialog will ask for a folder where the theory files will be saved.</p>
+</li>
+</ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Tutorial coming soon…</p>
+<p class="last">When the “Vertical Shift” button <a class="reference internal" href="../../../../_images/icons8-vertical-shift.png"><img alt="arrow_up" class="align-bottom" src="../../../../_images/icons8-vertical-shift.png" style="height: 20pt;" /></a> is checked,
+vertical shift of the data is allowed.</p>
+</div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">When the “Shift to Isofrictional State” button <a class="reference internal" href="../../../../_images/icons8-iso.png"><img alt="iso" class="align-bottom" src="../../../../_images/icons8-iso.png" style="height: 20pt;" /></a> is checked …</p>
 </div>
 </div>
 
@@ -121,7 +145,7 @@
           <a href="../../LVE/LVE.html" title="LVE: Linear ViscoElasticity"
              >next</a> |</li>
         <li class="right" >
-          <a href="tutorialCLTTS.html" title="Tutorial TTS Application Command Line"
+          <a href="tutorialCLTTS.html" title="TTS Tutorial: Command Line"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>

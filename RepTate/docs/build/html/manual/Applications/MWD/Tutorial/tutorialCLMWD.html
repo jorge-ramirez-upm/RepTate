@@ -113,22 +113,57 @@
 <p class="last">(the difference is the use of backslash <code class="docutils literal"><span class="pre">\</span></code> instead of slash <code class="docutils literal"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
 </div>
 <p>Start RepTate and open a new MWD application:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">MWD</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>RepTate&gt; new MWD
 </pre></div>
 </div>
-<p>Open a data file containing a GPC data and display the data:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">open</span> <span class="n">data</span><span class="o">/</span><span class="n">PS_Linear_Polydisperse</span><span class="o">/</span><span class="n">ps1_header</span><span class="o">.</span><span class="n">gpc</span>
-<span class="n">plot</span>
+<p>Open a data file containing a GPC data (see <a class="reference internal" href="../general.html#mwd-data-description"><span class="std std-ref">Data Files</span></a>) and display the data:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>RepTate/MWD1/DataSet01&gt; open data/PS_Linear_Polydisperse/ps2.gpc
+RepTate/MWD1/DataSet01&gt; plot
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../../../../_images/MWD_just_data.png"><img alt="MWD" class="align-center" src="../../../../_images/MWD_just_data.png" style="width: 70%;" /></a>
 <p>Open a new “Discretize MWD” theory:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">theory_new</span> <span class="n">Discretize</span> <span class="n">MWD</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>RepTate/MWD1/DataSet01&gt; theory_new Discretize MWD
 </pre></div>
 </div>
-<p>Change the number of bins to 15:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nbin</span><span class="o">=</span><span class="mi">15</span>
+<p>The output is:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Characteristics of the input MWD
+Mn (kg/mol)  Mw (kg/mol)  Mw/Mn     Mz/Mw     Mz+1/Mz
+101          274          2.72      1.83      1.5
+
+Characteristics of the discretized MWD
+Mn (kg/mol)  Mw (kg/mol)  Mw/Mn     Mz/Mw     Mz+1/Mz
+106          274          2.59      1.75      1.45
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../../../../_images/MWD_initial.png"><img alt="MWD" class="align-center" src="../../../../_images/MWD_initial.png" style="width: 70%;" /></a>
+<p>Change the number of bins to 20:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>RepTate/MWD1/DataSet01/Discretize MWD01&gt; nbin=20
+</pre></div>
+</div>
+<p>The output is:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Characteristics of the input MWD
+Mn (kg/mol)  Mw (kg/mol)  Mw/Mn     Mz/Mw     Mz+1/Mz
+101          274          2.72      1.83      1.5
+
+Characteristics of the discretized MWD
+Mn (kg/mol)  Mw (kg/mol)  Mw/Mn     Mz/Mw     Mz+1/Mz
+102          274          2.68      1.8       1.48
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../../../_images/MWD_more_bins.png"><img alt="MWD" class="align-center" src="../../../../_images/MWD_more_bins.png" style="width: 70%;" /></a>
+<ol class="arabic">
+<li><p class="first">Save discretized molecular weight:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>RepTate/MWD1/DataSet01/Discretize MWD01&gt; save
+</pre></div>
+</div>
+</li>
+<li><p class="first">Exit RepTate (the y answer is needed):</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>RepTate/TTS1/DataSet01/WLF Shift01&gt; quit
+</pre></div>
+</div>
+</li>
+</ol>
 </div>
 
 
