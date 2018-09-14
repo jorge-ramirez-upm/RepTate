@@ -18,14 +18,11 @@ The main idea of RepTate is to create a platform which makes comparing theory an
 
 New collaborations are always welcome - for example you are welcome to contact us if you would like to implement a new theory or module. Contributions leading to improved help, documentation or tutorials are especially welcome.
 
-RepTate works under Windows, Linux and Mac OS, and is distributed as open source. 
-You can download an installation package from 
+RepTate works under Windows, Linux and Mac OS, and RepTate is free and distributed as open source under the `GPLv3+ <https://www.gnu.org/licenses/gpl-3.0.html>`_ licence (RepTate's source code repository is located here: https://github.com/jorge-ramirez-upm/RepTate).
 
-http://blogs.upm.es/compsoftmatter/software/reptate/
+For installation instructions and downloads, follow this link:
 
-or you can download the Python source code from
-
-https://github.com/jorge-ramirez-upm/RepTate
+https://reptate.readthedocs.io/installation.html
 
 If you want to know more about the features of RepTate, or want to learn how to use the software, check the documentation. Additionally, you can check the news page to see the latest features and a history of changes in RepTate.
 
