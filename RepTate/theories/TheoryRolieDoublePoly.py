@@ -30,9 +30,9 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
-"""Module TheoryBlendRoliePoly
+"""Module TheoryRolieDoublePoly
 
-Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
+Module for the Rolie-Double-Poly theory for the non-linear flow of entangled polymers.
 
 """
 import numpy as np
@@ -249,8 +249,8 @@ class EditModesDialog(QDialog):
             self.table.setItem(i, 2, QTableWidgetItem("1"))
 
 
-class TheoryBlendRoliePoly(CmdBase):
-    """Blend of Rolie-Poly equations for the nonlinear predictions of polydisperse melts
+class TheoryRolieDoublePoly(CmdBase):
+    """Rolie-Double-Poly equations for the nonlinear predictions of polydisperse melts of entangled linear polymers
 
     * **Function**
         .. math::
@@ -275,8 +275,8 @@ class TheoryBlendRoliePoly(CmdBase):
        - ``tauD_i`` :math:`\\equiv\\tau_{\\mathrm d,i}`: Maxwell relaxation times for the stress of species :math:`i` (includes both reptation and constraint release mechamisms)
        - ``tauR_i`` :math:`\\equiv\\tau_{\\mathrm s,i}`: Stretch relaxation time of species :math:`i`
     """
-    thname = "Rolie-Poly Blends"
-    description = "Rolie-Poly const. eq. for blends"
+    thname = "Rolie-Double-Poly"
+    description = "Rolie-Double-Poly const. eq. for polydisperse melts of entangled linear polymers"
     citations = ""
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
@@ -292,21 +292,21 @@ class TheoryBlendRoliePoly(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        return GUITheoryBlendRoliePoly(
+        return GUITheoryRolieDoublePoly(
             name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryBlendRoliePoly(
+            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryRolieDoublePoly(
                 name, parent_dataset, ax)
 
 
-class BaseTheoryBlendRoliePoly:
+class BaseTheoryRolieDoublePoly:
     """[summary]
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-poly-blend-equations'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations'
     single_file = False
-    thname = TheoryBlendRoliePoly.thname
-    citations = TheoryBlendRoliePoly.citations
+    thname = TheoryRolieDoublePoly.thname
+    citations = TheoryRolieDoublePoly.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """
@@ -318,7 +318,7 @@ class BaseTheoryBlendRoliePoly:
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
-        self.function = self.BlendRoliePoly
+        self.function = self.RolieDoublePoly
         self.has_modes = True
         self.parameters["beta"] = Parameter(
             name="beta",
@@ -469,13 +469,14 @@ class BaseTheoryBlendRoliePoly:
         """
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
-        self.extra_graphic_visible(show)
+        # self.extra_graphic_visible(show)
 
     def extra_graphic_visible(self, state):
         """[summary]
         
         [description]
         """
+        self.view_LVEenvelope = state
         self.LVEenvelopeseries.set_visible(state)
         self.parent_dataset.parent_application.update_plot()
 
@@ -741,7 +742,7 @@ class BaseTheoryBlendRoliePoly:
         l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
         return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
 
-    def BlendRoliePoly(self, f=None):
+    def RolieDoublePoly(self, f=None):
         """[summary]
         
         [description]
@@ -886,7 +887,7 @@ class BaseTheoryBlendRoliePoly:
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
             # self.spinbox.setMaximum(int(value))
-        message, success = super(BaseTheoryBlendRoliePoly,
+        message, success = super(BaseTheoryRolieDoublePoly,
                                  self).set_param_value(name, value)
         if not success:
             return message, success
@@ -931,7 +932,7 @@ class BaseTheoryBlendRoliePoly:
         self.Qprint("<font color=red><b>Minimisation procedure disabled in this theory</b></font>")
 
 
-class CLTheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, Theory):
+class CLTheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, Theory):
     """[summary]
     
     [description]
@@ -949,7 +950,7 @@ class CLTheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, Theory):
         super().__init__(name, parent_dataset, ax)
 
 
-class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
+class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
     """[summary]
     
     [description]
@@ -998,9 +999,9 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         self.edit_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
             "Edit Modes")
-        self.plot_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
-            "Plot Modes")
+        # self.plot_modes_action = menu.addAction(
+        #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+        #     "Plot Modes")
         self.save_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
             "Save Modes")
@@ -1008,11 +1009,11 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
         # #Show LVE button
-        # self.linearenvelope = tb.addAction(
-        #     QIcon(':/Icon8/Images/new_icons/icons8-visible.png'),
-        #     'Show Linear Envelope')
-        # self.linearenvelope.setCheckable(True)
-        # self.linearenvelope.setChecked(False)
+        self.linearenvelope = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/lve-icon.png'),
+            'Show Linear Envelope')
+        self.linearenvelope.setCheckable(True)
+        self.linearenvelope.setChecked(False)
         #Finite extensibility button
         self.with_fene_button = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'),
@@ -1042,10 +1043,10 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             self.edit_mwd_modes)
         connection_id = self.edit_modes_action.triggered.connect(
             self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(
-            self.plot_modes_graph)
-        # connection_id = self.linearenvelope.triggered.connect(
-        #     self.show_linear_envelope)
+        # connection_id = self.plot_modes_action.triggered.connect(
+        #     self.plot_modes_graph)
+        connection_id = self.linearenvelope.triggered.connect(
+            self.show_linear_envelope)
         connection_id = self.save_modes_action.triggered.connect(
             self.save_modes)
         connection_id = self.with_fene_button.triggered.connect(
@@ -1135,16 +1136,19 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
         self.update_parameter_table()
         self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
-    def Qhide_theory_extras(self, state):
+    def Qhide_theory_extras(self, show):
         """Uncheck the LVE button. Called when curent theory is changed
         
         [description]
         """
-        # self.linearenvelope.setChecked(state)
-        self.parent_dataset.actionMinimize_Error.setDisabled(state)
-        self.parent_dataset.actionShow_Limits.setDisabled(state)
-        self.parent_dataset.actionVertical_Limits.setDisabled(state)
-        self.parent_dataset.actionHorizontal_Limits.setDisabled(state)
+        if show:
+            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        else:
+            self.LVEenvelopeseries.set_visible(False)
+        self.parent_dataset.actionMinimize_Error.setDisabled(show)
+        self.parent_dataset.actionShow_Limits.setDisabled(show)
+        self.parent_dataset.actionVertical_Limits.setDisabled(show)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
 
     def show_linear_envelope(self, state):
         self.extra_graphic_visible(state)
@@ -1251,5 +1255,37 @@ class GUITheoryBlendRoliePoly(BaseTheoryBlendRoliePoly, QTheory):
             self.MWD_phi = np.copy(phi)
             self.set_modes_from_mwd(m, phi)
 
-    def plot_modes_graph(self):
-        pass
+    # def plot_modes_graph(self):
+    #     pass
+
+    def plot_theory_stuff(self):
+        """[summary]
+        
+        [description]
+        """
+        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp.num_columns = 2
+        data_table_tmp.num_rows = 100
+        data_table_tmp.data = np.zeros((100, 2))
+
+        times = np.logspace(-2, 3, 100)
+        data_table_tmp.data[:, 0] = times
+        nmodes = self.parameters["nmodes"].value
+        data_table_tmp.data[:, 1] = 0
+        fparamaux = {}
+        fparamaux["gdot"] = 1e-8
+        tauD, G = self.get_modes()
+        for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
+            data_table_tmp.data[:, 1] += G[i] * fparamaux["gdot"] * tauD[i] * (
+                1 - np.exp(-times / tauD[i])) 
+        if self.flow_mode == FlowMode.uext:
+            data_table_tmp.data[:, 1] *= 3.0
+        view = self.parent_dataset.parent_application.current_view
+        try:
+            x, y, success = view.view_proc(data_table_tmp, fparamaux)
+        except TypeError as e:
+            print(e)
+            return
+        self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])

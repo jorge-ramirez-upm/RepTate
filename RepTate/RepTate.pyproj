@@ -100,7 +100,7 @@
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="theories\TheoryBlendRoliePoly.py" />
+    <Compile Include="theories\TheoryRolieDoublePoly.py" />
     <Compile Include="theories\TheoryBobLVE.py" />
     <Compile Include="theories\TheoryCarreauYasuda.py" />
     <Compile Include="theories\TheoryCreatePolyconf.py" />

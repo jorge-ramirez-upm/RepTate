@@ -1,5 +1,5 @@
 ============================
-Tutorial Blend of Rolie-Poly
+Tutorial Rolie-Double-Poly
 ============================
 
 .. |logo| image:: /app_logo/NLVE.png
@@ -44,7 +44,7 @@ Tutorial Blend of Rolie-Poly
     :height: 15pt
     :align: bottom
 
-.. |th_select| image:: images/select_BlendRoliePoly.png
+.. |th_select| image:: images/select_RolieDoublePoly.png
     :height: 15pt
     :align: bottom
 	
@@ -79,7 +79,7 @@ Tutorial Blend of Rolie-Poly
         :align: center
         :alt: Load data
 
-#.  Select the "BlendRoliePoly" theory |th_select| and press |einstein| to create it.
+#.  Select the "RolieDoublePoly" theory |th_select| and press |einstein| to create it.
 
     .. image:: images/new_BRP_th.png
         :width: 400pt
@@ -198,9 +198,6 @@ Tutorial Blend of Rolie-Poly
 
 .. note::
     The minimisation procedure is inactive in this theory.
-
-..todo::
-    Cite related publication
 
 .. bibliography:: ../bibliography.bib
     :style: unsrt

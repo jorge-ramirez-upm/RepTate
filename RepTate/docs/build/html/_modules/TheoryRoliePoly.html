@@ -724,9 +724,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">edit_modes_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
             <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-edit-file.png&#39;</span><span class="p">),</span>
             <span class="s2">&quot;Edit Modes&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">plot_modes_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
-            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-scatter-plot.png&#39;</span><span class="p">),</span>
-            <span class="s2">&quot;Plot Modes&quot;</span><span class="p">)</span>
+        <span class="c1"># self.plot_modes_action = menu.addAction(</span>
+        <span class="c1">#     QIcon(&#39;:/Icon8/Images/new_icons/icons8-scatter-plot.png&#39;),</span>
+        <span class="c1">#     &quot;Plot Modes&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_modes_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
             <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-save-Maxwell.png&#39;</span><span class="p">),</span>
             <span class="s2">&quot;Save Modes&quot;</span><span class="p">)</span>
@@ -735,7 +735,7 @@
         <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tbutmodes</span><span class="p">)</span>
         <span class="c1">#Show LVE button</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
-            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-visible.png&#39;</span><span class="p">),</span>
+            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/lve-icon.png&#39;</span><span class="p">),</span>
             <span class="s1">&#39;Show Linear Envelope&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -769,8 +769,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">get_modes_reptate</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">edit_modes_window</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">plot_modes_graph</span><span class="p">)</span>
+        <span class="c1"># connection_id = self.plot_modes_action.triggered.connect(</span>
+        <span class="c1">#     self.plot_modes_graph)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_modes</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linearenvelope</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
@@ -893,14 +893,14 @@
         <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">fparamaux</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">fparamaux</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span>
+        <span class="n">fparamaux</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-8</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">tauD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">tauD</span> <span class="o">*</span> <span class="p">(</span>
-                <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">times</span> <span class="o">/</span> <span class="n">tauD</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e-6</span>
+            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">fparamaux</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">tauD</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">times</span> <span class="o">/</span> <span class="n">tauD</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">==</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">uext</span><span class="p">:</span>
             <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">3.0</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
@@ -943,10 +943,10 @@
                     <span class="s1">&#39;Some parameter(s) could not be updated.</span><span class="se">\n</span><span class="s1">Please try again.&#39;</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.plot_modes_graph"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.plot_modes_graph">[docs]</a>    <span class="k">def</span> <span class="nf">plot_modes_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div></div>
+    <span class="c1"># def plot_modes_graph(self):</span>
+    <span class="c1">#     pass</span>
 </pre></div>
 
           </div>

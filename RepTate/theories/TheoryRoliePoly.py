@@ -652,9 +652,9 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         self.edit_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
             "Edit Modes")
-        self.plot_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
-            "Plot Modes")
+        # self.plot_modes_action = menu.addAction(
+        #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+        #     "Plot Modes")
         self.save_modes_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
             "Save Modes")
@@ -663,7 +663,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         tb.addWidget(self.tbutmodes)
         #Show LVE button
         self.linearenvelope = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'),
+            QIcon(':/Icon8/Images/new_icons/lve-icon.png'),
             'Show Linear Envelope')
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
@@ -697,8 +697,8 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             self.get_modes_reptate)
         connection_id = self.edit_modes_action.triggered.connect(
             self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(
-            self.plot_modes_graph)
+        # connection_id = self.plot_modes_action.triggered.connect(
+        #     self.plot_modes_graph)
         connection_id = self.save_modes_action.triggered.connect(
             self.save_modes)
         connection_id = self.linearenvelope.triggered.connect(
@@ -821,14 +821,14 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.data[:, 1] = 0
         fparamaux = {}
-        fparamaux["gdot"] = 1e-6
+        fparamaux["gdot"] = 1e-8
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
             G = self.parameters["G%02d" % i].value
             tauD = self.parameters["tauD%02d" % i].value
-            data_table_tmp.data[:, 1] += G * tauD * (
-                1 - np.exp(-times / tauD)) * 1e-6
+            data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauD * (
+                1 - np.exp(-times / tauD))
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
         view = self.parent_dataset.parent_application.current_view
@@ -873,5 +873,5 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             else:
                 self.handle_actionCalculate_Theory()
 
-    def plot_modes_graph(self):
-        pass
+    # def plot_modes_graph(self):
+    #     pass
