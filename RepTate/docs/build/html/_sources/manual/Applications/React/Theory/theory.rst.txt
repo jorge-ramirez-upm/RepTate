@@ -10,3 +10,4 @@ React Theories
   mixture
   MetalloceneCSTR
   BoB_polyconf
+  dieneCSTR
