@@ -82,7 +82,7 @@ class BaseTheoryDieneCSTR:
     
     [description]
     """
-    help_file = ''
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/dieneCSTR.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDieneCSTR.thname
     citations = TheoryDieneCSTR.citations
