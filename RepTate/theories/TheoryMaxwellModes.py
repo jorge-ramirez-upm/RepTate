@@ -147,13 +147,6 @@ class BaseTheoryMaxwellModesFrequency:
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
                 opt_type=OptType.opt)
-            self.parameters["logw%02d" % i] = Parameter(
-                "logw%02d" % i,
-                np.log10(w[i]),
-                "Log of Mode %d frequency" % i,
-                ParameterType.real,
-                opt_type=OptType.const,
-                display_flag=False)
 
         # GRAPHIC MODES
         self.graphicmodes = []
@@ -171,11 +164,11 @@ class BaseTheoryMaxwellModesFrequency:
             for i in range(nmodesold):
                 Gold[i] = self.parameters["logG%02d" % i].value
                 del self.parameters["logG%02d" % i]
-                del self.parameters["logw%02d" % i]
 
             nmodesnew = int(value)
             message, success = super().set_param_value("nmodes", nmodesnew)
             wnew = np.logspace(wminold, wmaxold, nmodesnew)
+
             Gnew = np.interp(wnew, wold, Gold)
 
             for i in range(nmodesnew):
@@ -185,13 +178,6 @@ class BaseTheoryMaxwellModesFrequency:
                     "Log of Mode %d amplitude" % i,
                     ParameterType.real,
                     opt_type=OptType.opt)
-                self.parameters["logw%02d" % i] = Parameter(
-                    "logw%02d" % i,
-                    np.log10(wnew[i]),
-                    "Log of Mode %d frequency" % i,
-                    ParameterType.real,
-                    opt_type=OptType.const,
-                    display_flag=False)
             if CmdBase.mode == CmdMode.GUI:
                 self.spinbox.blockSignals(True)
                 self.spinbox.setValue(nmodesnew)
@@ -217,9 +203,6 @@ class BaseTheoryMaxwellModesFrequency:
         else:
             self.set_param_value("logwmin", dx[0])
             self.set_param_value("logwmax", dx[nmodes - 1])
-        wnew = np.logspace(self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes)
-        for i in range(nmodes):
-            self.set_param_value("logw%02d" % i,  np.log10(wnew[i]))
 
         if self.parent_dataset.parent_application.current_view.log_y:
             for i in range(nmodes):
@@ -304,11 +287,12 @@ class BaseTheoryMaxwellModesFrequency:
             - [type] -- [description]
         """
         nmodes = self.parameters["nmodes"].value
+        freq = np.logspace(self.parameters["logwmin"].value,
+                           self.parameters["logwmax"].value, nmodes)
+        tau = 1.0 / freq
         G = np.zeros(nmodes)
-        tau = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
-            tau[i] = 1.0 / np.power(10, self.parameters["logw%02d" % i].value)
         return tau, G
 
     def set_modes(self, tau, G):
@@ -320,13 +304,7 @@ class BaseTheoryMaxwellModesFrequency:
             - tau {[type]} -- [description]
             - G {[type]} -- [description]
         """
-        nmodes = len(tau)
-        self.set_param_value("nmodes", nmodes)
-        self.set_param_value("logwmin", np.log10(1.0 / tau[0]))
-        self.set_param_value("logwmax", np.log10(1.0 / tau[-1]))
-        for i in range(nmodes):
-            self.set_param_value("logG%02d" % i, np.log10(G[i]))
-            self.set_param_value("logw%02d" % i, np.log10(1.0 / tau[i]))
+        print("set_modes not allowed in this theory (%s)" % self.name)
 
     def MaxwellModesFrequency(self, f=None):
         """[summary]
@@ -344,12 +322,14 @@ class BaseTheoryMaxwellModesFrequency:
         tt.data[:, 0] = ft.data[:, 0]
 
         nmodes = self.parameters["nmodes"].value
+        freq = np.logspace(self.parameters["logwmin"].value,
+                           self.parameters["logwmax"].value, nmodes)
+        tau = 1.0 / freq
 
         for i in range(nmodes):
             if self.stop_theory_flag:
-                print("STOP in MMF")
                 break
-            wT = tt.data[:, 0] / np.power(10, self.parameters["logw%02d" % i].value)
+            wT = tt.data[:, 0] * tau[i]
             wTsq = wT**2
             G = np.power(10, self.parameters["logG%02d" % i].value)
             tt.data[:, 1] += G * wTsq / (1 + wTsq)
@@ -367,12 +347,12 @@ class BaseTheoryMaxwellModesFrequency:
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 3))
-
+        freq = np.logspace(self.parameters["logwmin"].value,
+                           self.parameters["logwmax"].value, nmodes)
+        data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            data_table_tmp.data[i, 0] =  np.power(
-                10, self.parameters["logw%02d" % i].value)
             data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
                 10, self.parameters["logG%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
@@ -430,9 +410,6 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
         tb.addWidget(self.spinbox)
-        self.get_modes_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes")
         self.modesaction = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
         self.save_modes_action = tb.addAction(
@@ -448,11 +425,6 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
             self.modesaction_change)
         connection_id = self.save_modes_action.triggered.connect(
             self.save_modes)
-        connection_id = self.get_modes_action.triggered.connect(
-            self.get_modes_reptate)
-
-    def get_modes_reptate(self):
-        self.Qcopy_modes()
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed
