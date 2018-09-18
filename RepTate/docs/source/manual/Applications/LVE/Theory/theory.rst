@@ -14,3 +14,4 @@ LVE Theories
 .. include:: Rouse_frequency.rst
 .. include:: DTD_stars.rst
 .. include:: BoB_LVE.rst
+.. include:: RDP_LVE.rst
