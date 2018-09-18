@@ -178,6 +178,10 @@ class GetModesDialog(QDialog):
             rb = QRadioButton(item, self)
             layout.addWidget(rb)
             self.btngrp.addButton(rb)
+        
+        #select first button by default
+        rb = self.btngrp.buttons()[0]
+        rb.setChecked(True)
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
@@ -506,19 +510,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 tau = tau[tauinds]
                 G0 = G0[tauinds]
                 self.set_modes(tau, G0)
+                self.update_parameter_table()
+                self.parent_dataset.handle_actionCalculate_Theory()
+        else:
+            QMessageBox.information(self, 'Import Modes', 'Found no opened theory to import modes from')
 
-            #item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)
-            #print(item)
-
-            #d = QDialog(self, )
-            #layout = QVBoxLayout(d)
-            #d.setLayout(layout)
-            #for item in G.keys():
-            #    rb = QRadioButton(item, d)
-            #    layout.addWidget(rb)
-            #d.setWindowTitle("Select provider of Maxwell modes:")
-            #d.setWindowModality(Qt.ApplicationModal)
-            #d.exec_()
             
     def save_modes(self):
         """Save Maxwell modes to a text file"""

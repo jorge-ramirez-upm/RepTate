@@ -636,7 +636,6 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
 
     def get_modes_reptate(self):
         self.Qcopy_modes()
-        self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
         times, G = self.get_modes()

@@ -94,7 +94,7 @@ def start_RepTate(argv):
         dow_dir + "My_dow150-160-0003 shear.shear",
     ])
     # Open a theory
-    ex.applications["NLVE1"].datasets["Set1"].new_theory("Rolie-Poly Blends")
+    ex.applications["NLVE1"].datasets["Set1"].new_theory("Rolie-Double-Poly")
     # Minimize the theory
     # ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
@@ -115,7 +115,7 @@ def start_RepTate(argv):
         dow_dir + "Minegishi_spiked_PS_0_097.uext"
     ])
     # Open a theory
-    ex.applications["NLVE2"].datasets["Set1"].new_theory("Rolie-Poly Blends")
+    ex.applications["NLVE2"].datasets["Set1"].new_theory("Rolie-Double-Poly")
     # Minimize the theory
     # ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
