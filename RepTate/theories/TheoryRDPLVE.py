@@ -46,18 +46,21 @@ from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
 from PyQt5.QtCore import Qt
 from TheoryRolieDoublePoly import Dilution, GcorrMode, GetMwdRepate, EditMWDDialog, EditModesDialog
 from math import sqrt
+from collections import OrderedDict
+
+
 class TheoryRDPLVE(CmdBase):
     """Rolie-Double-Poly equation for the linear predictions of polydispere entangled linear polymers
 
     * **Function**
         .. math::
             \\begin{eqnarray}
-            G'(\\omega) & = & \\sum_{i,j=1}^{n_{modes}} G *\\phi_i \\ phi_j \\frac{(\\omega\\tau)^2}{1+(\\omega\\tau)^2} \\\\
-            G''(\\omega) & = & \\sum_{1}^{n_{modes}} G \\phi_i \\ phi_j \\frac{\\omega\\tau}{1+(\\omega\\tau)^2}
+            G'(\\omega) & = & \\sum_{i=1}^{n_{modes}}\\sum_{j=1}^{n_{modes}} G \\phi_i \\phi_j \\frac{(\\omega\\tau)^2}{1+(\\omega\\tau)^2} \\\\
+            G''(\\omega) & = & \\sum_{i=1}^{n_{modes}}\\sum_{j=1}^{n_{modes}} G \\phi_i \\phi_j \\frac{\\omega\\tau}{1+(\\omega\\tau)^2}
             \\end{eqnarray}
         
-        where, :math:`\\tau = (\\tau_{\\text D,i}^{-1} + tau_{\\text D, j}^{-1})^{-1}`, and,
-        if the "modulus correction" button is clicked, :math:`G=G_N^0 * g(Z_\\text{eff})`, with :math:`g` the Likthman-McLeish CLF correction function
+        where, :math:`\\tau = (\\tau_{\\text D,i}^{-1} + \\tau_{\\text D, j}^{-1})^{-1}`, and,
+        if the "modulus correction" button is clicked, :math:`G=G_N^0 * g(Z_\\text{eff})`, with :math:`g` the Likthman-McLeish CLF correction function,
         otherwise :math:`G=G_N^0`
 
     * **Parameters**
@@ -173,6 +176,7 @@ class BaseTheoryRDPLVE:
         self.MWD_m = [100, 1000]
         self.MWD_phi =  [0.5, 0.5]
         self.Zeff = []
+        self.MAX_MODES = 200
 
     def set_extra_data(self, extra_data):
         """Set extra data when loading project"""
@@ -313,7 +317,6 @@ class BaseTheoryRDPLVE:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = ft.data[:, 1] * ft.data[:, 1]
 
         nmodes = self.parameters['nmodes'].value
         taud = []
@@ -332,7 +335,6 @@ class BaseTheoryRDPLVE:
                 tau = 1. / (1. / taud[i] + 1. / taud[j])
                 wT = tt.data[:, 0] * tau
                 wTsq = wT**2
-                expT_tau = np.exp(-tt.data[:, 0] / tau)
                 tt.data[:, 1] += G * phi[i] * phi[j] * wTsq / (1 + wTsq)
                 tt.data[:, 2] += G * phi[i] * phi[j] * wT / (1 + wTsq)
 

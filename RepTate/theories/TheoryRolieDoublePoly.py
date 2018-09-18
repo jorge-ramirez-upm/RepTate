@@ -359,7 +359,7 @@ class EditModesDialog(QDialog):
 
         self.table = SpreadsheetWidget()  #allows copy/paste
         self.table.setRowCount(nmodes)
-        self.table.setColumnCount(3)
+        self.table.setColumnCount(self.nparam)
         self.table.setHorizontalHeaderLabels(pnames)
         for i in range(nmodes):
             for j in range (self.nparam):
