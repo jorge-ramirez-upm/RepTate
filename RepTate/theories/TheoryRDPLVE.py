@@ -60,7 +60,7 @@ class TheoryRDPLVE(CmdBase):
             \\end{eqnarray}
         
         where, :math:`\\tau = (\\tau_{\\text D,i}^{-1} + \\tau_{\\text D, j}^{-1})^{-1}`, and,
-        if the "modulus correction" button is clicked, :math:`G=G_N^0 * g(Z_\\text{eff})`, with :math:`g` the Likthman-McLeish CLF correction function,
+        if the "modulus correction" button is clicked, :math:`G=G_N^0 \\times g(Z_\\text{eff})`, with :math:`g` the Likthman-McLeish CLF correction function,
         otherwise :math:`G=G_N^0`
 
     * **Parameters**
