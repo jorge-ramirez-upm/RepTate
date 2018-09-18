@@ -33,8 +33,6 @@
 // --------------------------------------------------------------------------------------------------------
 #include <stdlib.h>
 #include <math.h>
-#include <time.h>
-
 #include "tobitaCSTR.h"
 #include "binsandbob.h"
 #include "polybits.h"
@@ -44,8 +42,6 @@
 #include "ran3.h"
 
 tobitaCSTR_global tCSTR_global = {.tobCSTRnumber = 1, .tobitaCSTRerrorflag = false};
-
-long iy3;
 
 /* local functions */
 static void tobita_grow(int dir, int m, double cur_conv, bool sc_tag);
@@ -62,7 +58,7 @@ void tobCSTRstart(double ttau, double tbeta, double tsigma, double tlambda, int 
 {
 
     bobinit(n);
-    iy3 = time(NULL); //initialize seed
+
     // passed variables
     tau = ttau;
     beta = tbeta;
@@ -137,7 +133,6 @@ bool tobCSTR(int n, int n1)
         br_poly[n].gfactor = gfact;
 
         // check to see whether to save the polymer
-        // printf("Calc seniority molecule %d with %d arms\n", n,  br_poly[n].armnum);
         if (do_prio_senio)
         {
             senio_prio(n, n1);

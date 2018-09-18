@@ -57,4 +57,7 @@ extern void return_dist_polys(int);
 extern void armupdown(int, int);
 extern reactresults *return_react_dist(int i);
 
+// random number generator seed
+extern long iy3;
+
 #endif

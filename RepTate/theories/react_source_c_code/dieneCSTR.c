@@ -45,8 +45,6 @@
 
 dieneCSTR_global dCSTR_global = {.dieneCSTRnumber = 1, .dieneCSTRerrorflag = false};
 
-long iy3;
-
 /* local functions */
 static void diene_grow(int dir, int m, double cur_conv);
 static void calclength(double *r_out);
@@ -65,7 +63,7 @@ void dieneCSTRstart(double _tau, double _kpM, double _kDLCB, double _kpD, double
     double s, P, lb1, lb2;
 
     bobinit(n);
-    iy3 = time(NULL); //initialize seed
+
     // passed variables //
     tau = _tau;
     kpM = _kpM;

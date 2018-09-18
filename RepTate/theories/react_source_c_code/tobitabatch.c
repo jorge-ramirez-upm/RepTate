@@ -32,7 +32,6 @@
 
 // --------------------------------------------------------------------------------------------------------
 #include <stdlib.h>
-#include <time.h>
 #include <math.h>
 #include "polybits.h"
 #include "polycleanup.h"
@@ -43,7 +42,6 @@
 #include "ran3.h"
 
 tobitabatch_global tb_global = {.tobbatchnumber = 0, .tobitabatcherrorflag = false};
-long iy3;
 
 /* local functions */
 static void tobita_grow(int dir, int m, double cur_conv, bool sc_tag);
@@ -59,7 +57,7 @@ static int scount, bcount, rlevel;
 void tobbatchstart(double pfin_conv, double ptau, double pbeta, double pCs, double pCb, int n)
 {
     bobinit(n);
-    iy3 = time(NULL); //initialize seed
+
     // passed variables
     fin_conv = pfin_conv;
     tau = ptau;

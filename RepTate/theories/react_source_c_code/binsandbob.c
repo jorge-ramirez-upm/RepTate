@@ -37,11 +37,13 @@
 #include "polybits.h"
 #include "binsandbob.h"
 #include "calc_architecture.h"
+#include <time.h>
 
 binsandbob_global bab_global = {.multi_m_w = 0, .multi_m_n = 0, .multi_brav = 0, .multi_nummwdbins = 0};
 
 static double *multi_wt, *multi_avbr, *multi_wmass, *multi_avg, *multi_lgmid;
 static void init_binsandbob_arrays(void);
+long iy3;
 
 // call this procedure to calculate current averages
 //  and MWD for polymers made in distribution n
@@ -241,6 +243,7 @@ void init_binsandbob_arrays()
         multi_wmass = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
         multi_avg = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
         multi_lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
+        iy3 = time(NULL);
         is_initialized = true;
     }
 }

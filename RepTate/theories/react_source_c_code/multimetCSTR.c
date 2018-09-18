@@ -33,7 +33,6 @@
 // --------------------------------------------------------------------------------------------------------
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <math.h>
 #include "polybits.h"
 #include "binsandbob.h"
@@ -43,7 +42,6 @@
 #include "ran3.h"
 
 mulmetCSTR_global MMCSTR_global = {.mulmetCSTRnumber = 1, .mulmetCSTRerrorflag = false};
-long iy3;
 
 /* local functions */
 static void mulmet_grow(int dir, int m, int cur_cat);
@@ -86,7 +84,6 @@ void mulmetCSTRstart(double *kp, double *kdb, double *ks, double *kplcb, double 
         pD2[i] = (double *)malloc(sizeof(double) * (n + 1));
     }
     bobinit(ndist);
-    iy3 = time(NULL); //initialize seed
 
     // from reactor to simulation variables
     s = 1.0 / tau;
