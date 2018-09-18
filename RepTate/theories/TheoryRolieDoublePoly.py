@@ -119,6 +119,9 @@ class GetMwdRepate(QDialog):
             rb = QRadioButton(item, self)
             layout.addWidget(rb)
             self.btngrp.addButton(rb)
+        # default button selection
+        rb = self.btngrp.buttons()[0]
+        rb.setChecked(True)
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
