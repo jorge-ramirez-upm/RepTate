@@ -1278,7 +1278,11 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            data_table_tmp.data[:, 1] += G[i] * fparamaux["gdot"] * tauD[i] * (
+            if self.with_gcorr == GcorrMode.with_gcorr:
+                g = G[i] * sqrt(self.fZ(self.Zeff[i]))
+            else:
+                g = G[i]
+            data_table_tmp.data[:, 1] += g * fparamaux["gdot"] * tauD[i] * (
                 1 - np.exp(-times / tauD[i])) 
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
