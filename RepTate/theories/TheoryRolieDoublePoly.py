@@ -414,7 +414,7 @@ class TheoryRolieDoublePoly(CmdBase):
         with :math:`\\beta_\\text{th}` the thermal constrain release parameter, set to 1. If the "modulus correction" button
         is pressed, :math:`g(z) = 1- \\dfrac{c_1}{z^{1/2}} + \\dfrac{c_2}{z} + \\dfrac{c_3}{z^{3/2}}` is the Likhtman-McLeish
         CLF correction function to the modulus (:math:`c_1=1.69`, :math:`c_2=2`, :math:`c_3=-1.24`), :math:`g(z) = 1` otherwise;
-         :math:`Z_{\\text{eff},i}=Z_i\\phi_{\\text{dil},i}` is the
+        :math:`Z_{\\text{eff},i}=Z_i\\phi_{\\text{dil},i}` is the
         effective entanglement number of the molecular weight component :math:`i`, and :math:`\\phi_{\\text{dil},i}` the
         dilution factor (:math:`\\phi_{\\text{dil},i}\\leq \\phi_i`).
 
