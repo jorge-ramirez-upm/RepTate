@@ -204,7 +204,14 @@ class BaseTheoryRDPLVE:
         Returns:
             - [type] -- [description]
         """
-        pass
+        nmodes = self.parameters["nmodes"].value
+        tau = np.zeros(nmodes)
+        G = np.zeros(nmodes)
+        GN0 = self.parameters["GN0"].value
+        for i in range(nmodes):
+            tau[i] = self.parameters["tauD%02d" % i].value
+            G[i] = GN0 * self.parameters["phi%02d" % i].value
+        return tau, G
 
     def set_modes(self):
         """[summary]
@@ -330,7 +337,8 @@ class BaseTheoryRDPLVE:
                 break
             G = self.parameters['GN0'].value
             if self.with_gcorr == GcorrMode.with_gcorr:
-                G = G * sqrt(self.fZ(self.Zeff[i]))
+                # G = G * sqrt(self.fZ(self.Zeff[i]))
+                G = G * self.gZ(self.Zeff[i])
             for j in range(nmodes):
                 tau = 1. / (1. / taud[i] + 1. / taud[j])
                 wT = tt.data[:, 0] * tau
@@ -415,6 +423,8 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
             self.edit_modes_window)
         connection_id = self.with_gcorr_button.triggered.connect(
             self.handle_with_gcorr_button)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
 
     def handle_with_gcorr_button(self, checked):
         if checked:
@@ -427,7 +437,7 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
                 return
         else:
             self.with_gcorr = GcorrMode.none
-        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
+        self.parent_dataset.handle_actionCalculate_Theory()
 
     def Qhide_theory_extras(self, show):
         """Called when curent theory is changed
