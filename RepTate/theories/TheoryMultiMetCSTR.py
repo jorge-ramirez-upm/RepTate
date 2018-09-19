@@ -161,6 +161,7 @@ class BaseTheoryMultiMetCSTR:
         self.time_const = extra_data['time_const']
         self.monomer_conc = extra_data['monomer_conc']
         self.pvalues = extra_data['pvalues']
+        rgt.set_extra_data(self, extra_data)
     
     def get_extra_data(self):
         """Called when saving project. Save parameters in extra_data dict"""
@@ -168,6 +169,7 @@ class BaseTheoryMultiMetCSTR:
         self.extra_data['time_const'] = self.time_const
         self.extra_data['monomer_conc'] = self.monomer_conc
         self.extra_data['pvalues'] = self.pvalues
+        rgt.get_extra_data(self)
 
     def init_param_values(self):
         """Initialise parameters with default values"""
@@ -477,11 +479,3 @@ class GUITheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, QTheory):
     def handle_btn_prio_senio(self, checked):
         """Change do_priority_seniority"""
         rgt.handle_btn_prio_senio(self, checked)
-
-    def set_extra_data(self, extra_data):
-        """set extra data"""
-        rgt.set_extra_data(self, extra_data)
-
-    def get_extra_data(self):
-        """set extra data"""
-        rgt.get_extra_data(self)
