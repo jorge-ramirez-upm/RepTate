@@ -372,7 +372,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         menu.addAction(self.actionAddDummyFiles)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
-        tb.addAction(self.actionView_All_Sets)
+        # view all sets / theories
+        tbut2 = QToolButton()
+        tbut2.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut2.setDefaultAction(self.actionView_All_Sets)
+        menu2 = QMenu()
+        menu2.addAction(self.actionView_All_SetTheories)
+        tbut2.setMenu(menu2)
+        tb.addWidget(tbut2)
+        #
         tb.addAction(self.actionMarkerSettings)
         tb.addAction(self.actionReload_Data)
         tb.addAction(self.actionInspect_Data)
@@ -441,6 +449,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
         connection_id = self.DataSettabWidget.currentChanged.connect(self.handle_currentChanged)
         connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
+        connection_id = self.actionView_All_SetTheories.triggered.connect(self.handle_actionView_All_SetTheories)
         connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
         connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
         connection_id = self.actionViewShiftFactors.triggered.connect(self.handle_actionViewShiftTriggered)
@@ -1307,6 +1316,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds.files.clear()
         ds.theories.clear()
         return file_paths_cleaned, th_cleaned, True
+
+    def handle_actionView_All_SetTheories(self, checked):
+        ds = self.DataSettabWidget.currentWidget()
+        if ds:
+            for th in ds.theories.values():
+                th.do_show()
 
     def handle_actionView_All_Sets(self, checked):
         """Show all datasets simultaneously
