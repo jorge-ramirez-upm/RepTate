@@ -456,7 +456,7 @@ class BaseTheoryRolieDoublePoly:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations'
-    single_file = False
+    single_file = True
     thname = TheoryRolieDoublePoly.thname
     citations = TheoryRolieDoublePoly.citations
 
