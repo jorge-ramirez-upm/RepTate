@@ -372,9 +372,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                     message, success = self.set_param_value(cols[0], cols[1])                          
         self.update_parameter_table()
         if self.autocalculate:
-            self.self.parent_dataset.handle_actionCalculate_Theory()
-
-            
+            self.parent_dataset.handle_actionCalculate_Theory()
+     
     def update_parameter_table(self):
         """Update the theory parameter table
         

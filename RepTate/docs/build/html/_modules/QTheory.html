@@ -250,6 +250,10 @@
             <span class="n">rb</span> <span class="o">=</span> <span class="n">QRadioButton</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
             <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">rb</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">btngrp</span><span class="o">.</span><span class="n">addButton</span><span class="p">(</span><span class="n">rb</span><span class="p">)</span>
+        
+        <span class="c1">#select first button by default</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btngrp</span><span class="o">.</span><span class="n">buttons</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">rb</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># OK and Cancel buttons</span>
         <span class="n">buttons</span> <span class="o">=</span> <span class="n">QDialogButtonBox</span><span class="p">(</span>
@@ -577,20 +581,12 @@
                 <span class="n">tauinds</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
                 <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="n">tauinds</span><span class="p">]</span>
                 <span class="n">G0</span> <span class="o">=</span> <span class="n">G0</span><span class="p">[</span><span class="n">tauinds</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">set_modes</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">G0</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_modes</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">G0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Import Modes&#39;</span><span class="p">,</span> <span class="s1">&#39;Found no opened theory to import modes from&#39;</span><span class="p">)</span></div>
 
-            <span class="c1">#item, success = GetModesDialog.getMaxwellModesProvider(parent=self, th_dict=G)</span>
-            <span class="c1">#print(item)</span>
-
-            <span class="c1">#d = QDialog(self, )</span>
-            <span class="c1">#layout = QVBoxLayout(d)</span>
-            <span class="c1">#d.setLayout(layout)</span>
-            <span class="c1">#for item in G.keys():</span>
-            <span class="c1">#    rb = QRadioButton(item, d)</span>
-            <span class="c1">#    layout.addWidget(rb)</span>
-            <span class="c1">#d.setWindowTitle(&quot;Select provider of Maxwell modes:&quot;)</span>
-            <span class="c1">#d.setWindowModality(Qt.ApplicationModal)</span>
-            <span class="c1">#d.exec_()</span>
             
 <div class="viewcode-block" id="QTheory.save_modes"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QTheory.QTheory.save_modes">[docs]</a>    <span class="k">def</span> <span class="nf">save_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save Maxwell modes to a text file&quot;&quot;&quot;</span>

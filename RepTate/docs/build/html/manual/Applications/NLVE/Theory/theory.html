@@ -358,20 +358,29 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
 <dd><div class="first math">
-\[\boldsymbol \sigma = G_N^0 \sum_i \text{fene}(\lambda_i) \phi_i \boldsymbol A_i\]</div>
-<dl class="last docutils">
+\[\boldsymbol \sigma = G_N^0 \sum_i g(Z_{\text{eff},i}) \text{fene}(\lambda_i) \phi_i \boldsymbol A_i\]</div>
+<dl class="docutils">
 <dt>where</dt>
 <dd><div class="first last math">
 \[\begin{split}\boldsymbol A_i &amp;= \sum_j \phi_j \boldsymbol A_{ij}\\
 \lambda_i &amp;= \left( \dfrac{\text{Tr}  \boldsymbol A_i}{3}  \right)^{1/2}\\
 \stackrel{\nabla}{\boldsymbol  A_{ij}} &amp;=
--\dfrac{1}{2\tau_{\mathrm d,i}} (\boldsymbol A_{ij} - \boldsymbol I)
+-\dfrac{1}{\tau_{\mathrm d,i}} (\boldsymbol A_{ij} - \boldsymbol I)
 -\dfrac{2}{\tau_{\mathrm s,i}} \dfrac{\lambda_i - 1}{\lambda_i} \boldsymbol A_{ij}
--\left( \dfrac{\beta_\text{th}}{2\tau_{\mathrm d,j}} 
+-\left( \dfrac{\beta_\text{th}}{\tau_{\mathrm d,j}} 
 + \beta_\text{CCR}\dfrac{2}{\tau_{\mathrm s,j}} \dfrac{\lambda_j - 1}{\lambda_j}\lambda_i^{2\delta} \right)
-(\boldsymbol A_{ij} - \boldsymbol I)\end{split}\]</div>
+(\boldsymbol A_{ij} - \boldsymbol I)\\
+\text{fene}(\lambda) &amp;= \dfrac{1-1/\lambda_\text{max}^2}{1-\lambda^2/\lambda_\text{max}^2}\end{split}\]</div>
 </dd>
 </dl>
+<p>with <span class="math">\(\beta_\text{th}\)</span> the thermal constrain release parameter, set to 1. If the “modulus correction” button
+is pressed, <span class="math">\(g(z) = 1- \dfrac{c_1}{z^{1/2}} + \dfrac{c_2}{z} + \dfrac{c_3}{z^{3/2}}\)</span> is the Likhtman-McLeish
+CLF correction function to the modulus (<span class="math">\(c_1=1.69\)</span>, <span class="math">\(c_2=2\)</span>, <span class="math">\(c_3=-1.24\)</span>), <span class="math">\(g(z) = 1\)</span> otherwise;</p>
+<blockquote>
+<div><p><span class="math">\(Z_{\text{eff},i}=Z_i\phi_{\text{dil},i}\)</span> is the</p>
+</div></blockquote>
+<p class="last">effective entanglement number of the molecular weight component <span class="math">\(i\)</span>, and <span class="math">\(\phi_{\text{dil},i}\)</span> the
+dilution factor (<span class="math">\(\phi_{\text{dil},i}\leq \phi_i\)</span>).</p>
 </dd>
 </dl>
 </li>
@@ -382,8 +391,9 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <li><code class="docutils literal"><span class="pre">beta</span></code> <span class="math">\(\equiv\beta_\text{CCR}\)</span>: Rolie-Poly CCR parameter</li>
 <li><code class="docutils literal"><span class="pre">delta</span></code> <span class="math">\(\equiv\delta\)</span>: Rolie-Poly CCR exponent</li>
 <li><code class="docutils literal"><span class="pre">phi_i</span></code> <span class="math">\(\equiv\phi_i\)</span>: Volume fraction of species <span class="math">\(i\)</span></li>
-<li><code class="docutils literal"><span class="pre">tauD_i</span></code> <span class="math">\(\equiv\tau_{\mathrm d,i}\)</span>: Maxwell relaxation times for the stress of species <span class="math">\(i\)</span> (includes both reptation and constraint release mechamisms)</li>
+<li><code class="docutils literal"><span class="pre">tauD_i</span></code> <span class="math">\(\equiv\tau_{\mathrm d,i}\)</span>: Reptation time of species <span class="math">\(i\)</span> (including CLF)</li>
 <li><code class="docutils literal"><span class="pre">tauR_i</span></code> <span class="math">\(\equiv\tau_{\mathrm s,i}\)</span>: Stretch relaxation time of species <span class="math">\(i\)</span></li>
+<li><code class="docutils literal"><span class="pre">lmax</span></code> <span class="math">\(\equiv\lambda_\text{max}\)</span>: Maximum stretch ratio (active only when the “fene button” is pressed)</li>
 </ul>
 </dd>
 </dl>

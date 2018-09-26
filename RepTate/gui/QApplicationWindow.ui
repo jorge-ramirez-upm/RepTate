@@ -18,16 +18,7 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -45,16 +36,7 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
       </layout>
@@ -86,16 +68,7 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
     </layout>
@@ -122,16 +95,7 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
@@ -185,7 +149,7 @@
        </item>
        <item>
         <widget class="QComboBox" name="viewComboBox">
-         <property name="currentText">
+         <property name="currentText" stdset="0">
           <string/>
          </property>
         </widget>
@@ -539,6 +503,18 @@
    </property>
    <property name="toolTip">
     <string>Add Set of Empty Files to Current Dataset</string>
+   </property>
+  </action>
+  <action name="actionView_All_SetTheories">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-binoculars.png</normaloff>:/Images/Images/new_icons/icons8-binoculars.png</iconset>
+   </property>
+   <property name="text">
+    <string>View All Theories (Same DataSet)</string>
+   </property>
+   <property name="toolTip">
+    <string>View all theories simultaneously (same Set)</string>
    </property>
   </action>
  </widget>

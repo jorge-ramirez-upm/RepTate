@@ -90,6 +90,7 @@ class BaseApplicationLVE:
         from TheoryRouse import TheoryRouseFrequency
         from TheoryDTDStars import TheoryDTDStarsFreq
         from TheoryBobLVE import TheoryBobLVE
+        from TheoryRDPLVE import TheoryRDPLVE
         super().__init__(name, parent)
 
         # VIEWS
@@ -313,6 +314,7 @@ class BaseApplicationLVE:
         self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
         self.theories[TheoryDTDStarsFreq.thname]=TheoryDTDStarsFreq
         self.theories[TheoryBobLVE.thname]=TheoryBobLVE
+        self.theories[TheoryRDPLVE.thname] = TheoryRDPLVE
         self.add_common_theories()
 
         #set the current view

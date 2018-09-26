@@ -251,10 +251,17 @@ class Theory(CmdBase):
 
         self.calculate_is_busy = True
         self.start_time_cal = time.time()
-        for f in self.theory_files():
-            if self.stop_theory_flag:
-                break
-            self.function(f)
+        th_files = self.theory_files()
+        for f in self.parent_dataset.files:
+            if f in th_files:
+                if self.stop_theory_flag:
+                    break
+                self.function(f)
+            else:
+                tt = self.tables[f.file_name_short]
+                tt.data = np.empty((tt.num_rows, tt.num_columns))
+                tt.data[:] = np.nan
+
         if not self.is_fitting:
             self.do_plot(line)
             self.do_error(line)

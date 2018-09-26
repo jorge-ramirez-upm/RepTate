@@ -43,7 +43,7 @@ def compute_derivs_shear(sigma, p, t, with_fene):
     deriv_arr = (c_double * (c * n * n))(*np.zeros(c * n * n))
     sigma_arr = (c_double * (c * n * n))(*sigma[:])
     phi_arr = (c_double * n)(*phi[:])
-    taud_arr = (c_double * n)(*taud[:])
+    taud_arr = (c_double * n)(*np.array(taud)/2.0) # hard coded factor 2 in C routine
     taus_arr = (c_double * n)(*taus[:])
 
     derivs_rp_blend_shear(deriv_arr, sigma_arr, phi_arr, taus_arr, taud_arr,
@@ -71,7 +71,7 @@ def compute_derivs_uext(sigma, p, t, with_fene):
     deriv_arr = (c_double * (c * n * n))(*np.zeros(c * n * n))
     sigma_arr = (c_double * (c * n * n))(*sigma[:])
     phi_arr = (c_double * n)(*phi[:])
-    taud_arr = (c_double * n)(*taud[:])
+    taud_arr = (c_double * n)(*np.array(taud)/2.0) # hard coded factor 2 in C routine
     taus_arr = (c_double * n)(*taus[:])
 
     derivs_rp_blend_uext(deriv_arr, sigma_arr, phi_arr, taus_arr, taud_arr,

@@ -55,7 +55,151 @@ import Version
 
 import rp_blend_ctypes_helper as rpch
 from Theory import EndComputationRequested
+from collections import OrderedDict
 
+
+class Dilution():
+    def __init__(self, m, phi, taue, Me, parent_theory):
+        super().__init__()
+        self.parent_theory = parent_theory
+        self.res = self.relax_times_from_mwd(m, phi, taue, Me)
+
+    def find_down_indx(self, tauseff, taud):
+        """Find index i such that taud[i] < tauseff < taud[i+1]
+        or returns -1 if tauseff < taud[0]
+        or returns n-1 if tauseff > taud[n-1] (should not happen)
+        """
+        n = len(taud)
+        down = n - 1
+        while tauseff < taud[down]:
+            if down == 0:
+                down = -1
+                break
+            down -= 1
+        return down
+
+    def find_dilution(self, phi, taud, taus, interp=True):
+        """Find the dilution factor phi_dil for a chain with bare stretch relax time `taus`"""
+        n = len(phi)
+        temp = -1
+        phi_dil = 1
+        tauseff = taus / phi_dil
+        #m[0] < m[1] <  ... < m[n]
+        while True:
+            down = self.find_down_indx(tauseff, taud)
+            if down == -1:
+                #case tauseff < taud[0]
+                phi_dil = 1
+                break
+            elif down == n - 1:
+                #(just in case) tauseff > taud[n-1]
+                phi_dil = phi[n - 1]
+                break
+            else:
+                #change tauseff and check if 'down' is still the same
+                if (temp == down):
+                    break
+                temp = down
+                phi_dil = 1.0
+                for k in range(down):
+                    phi_dil -= phi[k]
+                if interp:
+                    # x=0 if tauseff close to td[down], x=1 if tauseff close to td[down+1]
+                    x = (tauseff - taud[down]) / (taud[down + 1] - taud[down])
+                    # linear interpolation of phi_dil
+                    phi_dil = phi_dil - x * phi[down]
+                else:
+                    phi_dil -= phi[down]
+            tauseff = taus / phi_dil
+        return phi_dil
+
+    def sort_list(self, m, phi):
+        """Ensure m[0] <= m[1] <=  ... <= m[n]"""
+        if all(m[i] <= m[i + 1] for i in range(len(m) - 1)):
+            #list aready sorted
+            return m, phi
+        args = np.argsort(m)
+        m = list(np.array(m)[args])
+        phi = list(np.array(phi)[args])
+        return m, phi
+
+    def relax_times_from_mwd(self, m, phi, taue, Me):
+        """Guess relaxation times of linear rheology (taud) from molecular weight distribution.
+        (i) Count short chains (M < 2*Me) as solvent
+        (ii) The effective dilution at a given timescale t is equal to the sum of
+        the volume fractions of all chains with relaxation time greater than t
+        (iii) CLF makes use of the most diluted tube available at the CLF timescale
+        """
+        #m[0] < m[1] <  ... < m[n]
+        m, phi = self.sort_list(m, phi)
+
+        taus = []
+        taus_short = []
+        taud = []
+        phi_short = []
+        m_short = []
+        phi_u = 0
+        nshort = 0
+
+        n = len(m)
+        for i in range(n):
+            z = m[i] / Me
+            ts = z * z * taue
+            if m[i] < 2. * Me:
+                #short chains not entangled: use upper-convected Maxwell model
+                nshort += 1
+                phi_u += phi[i]
+                taus_short.append(ts)
+                phi_short.append(phi[i])
+                m_short.append(m[i])
+            else:
+                taus.append(ts)
+
+        #remove the short chains from the list of M and phi
+        m = m[nshort:]
+        phi = phi[nshort:]
+
+        n = len(m)  # new size
+        if n == 0:
+            self.parent_theory.Qprint("All chains as solvent")
+            return [False]
+        if n == 1:
+            return [True, phi, taus, [3 * z * ts,]]
+
+        Zeff = [0] * n
+        #renormalize the fraction of entangled chains
+        Me /= (1 - phi_u)
+        taue /= ((1 - phi_u) * (1 - phi_u))
+        for i in range(n):
+            phi[i] /= (1 - phi_u)
+            z = m[i] / Me
+            taud.append(3. * z * z * z * taue)
+
+        vphi = []
+        interp = (n>2) # true if more than two species
+        for i in range(n):
+            #find dilution for the entangled chains
+            if i == 0:
+                phi_dil = 1
+            else:
+                phi_dil = self.find_dilution(phi, taud, taus[i], interp=interp)
+            vphi.append(phi_dil)
+
+        for i in range(n):
+            z = m[i] / Me
+            if z * vphi[i] < 1 and z > 1:
+                # case where long chains are effectively untentangled
+                # CR-Rouse approximated as last taud having z*vphi > 1
+                taud_sticky_rep = taud[i - 1]
+                for j in range(i, n):
+                    taud[j] = taud_sticky_rep
+                    Zeff[j] = 1.0
+                break
+            taud[i] = taud[i] * self.parent_theory.fZ(z * vphi[i])
+            Zeff[i] = z * vphi[i]
+        self.parent_theory.Zeff = np.array(Zeff)
+
+        return [True, phi, taus, taud]
 
 
 class FlowMode(Enum):
@@ -196,17 +340,14 @@ class EditMWDDialog(QDialog):
 
 
 class EditModesDialog(QDialog):
-    def __init__(self,
-                 parent=None,
-                 phi=None,
-                 taud=None,
-                 taur=None,
-                 MAX_MODES=0):
+    def __init__(self, parent=None, param_dic={}, MAX_MODES=0):
         super().__init__(parent)
 
         self.setWindowTitle("Edit volume fractions and relaxation times")
         layout = QVBoxLayout(self)
-        nmodes = len(phi)
+        self.nparam = len(param_dic)
+        pnames = list(param_dic.keys())
+        nmodes = len(param_dic[pnames[0]])
 
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
@@ -216,13 +357,13 @@ class EditModesDialog(QDialog):
 
         self.table = SpreadsheetWidget()  #allows copy/paste
         self.table.setRowCount(nmodes)
-        self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(["phi", "tauD", "tauR"])
+        self.table.setColumnCount(self.nparam)
+        self.table.setHorizontalHeaderLabels(pnames)
         for i in range(nmodes):
-            self.table.setItem(i, 0, QTableWidgetItem("%g" % phi[i]))
-            self.table.setItem(i, 1, QTableWidgetItem("%g" % taud[i]))
-            self.table.setItem(i, 2, QTableWidgetItem("%g" % taur[i]))
-
+            for j in range(self.nparam):
+                self.table.setItem(i, j,
+                                   QTableWidgetItem(
+                                       "%g" % param_dic[pnames[j]][i]))
         layout.addWidget(self.table)
 
         # OK and Cancel buttons
@@ -247,9 +388,8 @@ class EditModesDialog(QDialog):
         nrow_old = self.table.rowCount()
         self.table.setRowCount(value)
         for i in range(nrow_old, value):  #create extra rows with defaut values
-            self.table.setItem(i, 0, QTableWidgetItem("0"))
-            self.table.setItem(i, 1, QTableWidgetItem("100"))
-            self.table.setItem(i, 2, QTableWidgetItem("1"))
+            for j in range(self.nparam):
+                self.table.setItem(i, j, QTableWidgetItem("0"))
 
 
 class TheoryRolieDoublePoly(CmdBase):
@@ -257,26 +397,35 @@ class TheoryRolieDoublePoly(CmdBase):
 
     * **Function**
         .. math::
-            \\boldsymbol \\sigma = G_N^0 \\sum_i \\text{fene}(\\lambda_i) \\phi_i \\boldsymbol A_i
+            \\boldsymbol \\sigma = G_N^0 \\sum_i g(Z_{\\text{eff},i}) \\text{fene}(\\lambda_i) \\phi_i \\boldsymbol A_i
 
         where
             .. math::
                 \\boldsymbol A_i &= \\sum_j \\phi_j \\boldsymbol A_{ij}\\\\
                 \\lambda_i &= \\left( \\dfrac{\\text{Tr}  \\boldsymbol A_i}{3}  \\right)^{1/2}\\\\
                 \\stackrel{\\nabla}{\\boldsymbol  A_{ij}} &=
-                -\\dfrac{1}{2\\tau_{\\mathrm d,i}} (\\boldsymbol A_{ij} - \\boldsymbol I)
+                -\\dfrac{1}{\\tau_{\\mathrm d,i}} (\\boldsymbol A_{ij} - \\boldsymbol I)
                 -\\dfrac{2}{\\tau_{\\mathrm s,i}} \\dfrac{\\lambda_i - 1}{\\lambda_i} \\boldsymbol A_{ij}
-                -\\left( \\dfrac{\\beta_\\text{th}}{2\\tau_{\\mathrm d,j}} 
+                -\\left( \\dfrac{\\beta_\\text{th}}{\\tau_{\\mathrm d,j}} 
                 + \\beta_\\text{CCR}\\dfrac{2}{\\tau_{\\mathrm s,j}} \\dfrac{\\lambda_j - 1}{\\lambda_j}\\lambda_i^{2\\delta} \\right)
-                (\\boldsymbol A_{ij} - \\boldsymbol I)
+                (\\boldsymbol A_{ij} - \\boldsymbol I)\\\\
+                \\text{fene}(\\lambda) &= \\dfrac{1-1/\\lambda_\\text{max}^2}{1-\\lambda^2/\\lambda_\\text{max}^2}
+        
+        with :math:`\\beta_\\text{th}` the thermal constrain release parameter, set to 1. If the "modulus correction" button
+        is pressed, :math:`g(z) = 1- \\dfrac{c_1}{z^{1/2}} + \\dfrac{c_2}{z} + \\dfrac{c_3}{z^{3/2}}` is the Likhtman-McLeish
+        CLF correction function to the modulus (:math:`c_1=1.69`, :math:`c_2=2`, :math:`c_3=-1.24`), :math:`g(z) = 1` otherwise;
+        :math:`Z_{\\text{eff},i}=Z_i\\phi_{\\text{dil},i}` is the
+        effective entanglement number of the molecular weight component :math:`i`, and :math:`\\phi_{\\text{dil},i}` the
+        dilution factor (:math:`\\phi_{\\text{dil},i}\\leq \\phi_i`).
 
     * **Parameters**
        - ``GN0`` :math:`\\equiv G_N^0`: Plateau modulus
        - ``beta`` :math:`\\equiv\\beta_\\text{CCR}`: Rolie-Poly CCR parameter
        - ``delta`` :math:`\\equiv\\delta`: Rolie-Poly CCR exponent
        - ``phi_i`` :math:`\\equiv\\phi_i`: Volume fraction of species :math:`i`
-       - ``tauD_i`` :math:`\\equiv\\tau_{\\mathrm d,i}`: Maxwell relaxation times for the stress of species :math:`i` (includes both reptation and constraint release mechamisms)
+       - ``tauD_i`` :math:`\\equiv\\tau_{\\mathrm d,i}`: Reptation time of species :math:`i` (including CLF)
        - ``tauR_i`` :math:`\\equiv\\tau_{\\mathrm s,i}`: Stretch relaxation time of species :math:`i`
+       - ``lmax`` :math:`\\equiv\\lambda_\\text{max}`: Maximum stretch ratio (active only when the "fene button" is pressed)
     """
     thname = "Rolie-Double-Poly"
     description = "Rolie-Double-Poly const. eq. for polydisperse melts of entangled linear polymers"
@@ -307,7 +456,7 @@ class BaseTheoryRolieDoublePoly:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations'
-    single_file = False
+    single_file = True
     thname = TheoryRolieDoublePoly.thname
     citations = TheoryRolieDoublePoly.citations
 
@@ -420,7 +569,7 @@ class BaseTheoryRolieDoublePoly:
         self.with_gcorr = GcorrMode.none
         self.Zeff = []
         self.MWD_m = [100, 1000]
-        self.MWD_phi =  [0.5, 0.5]
+        self.MWD_phi = [0.5, 0.5]
         self.init_flow_mode()
 
     def set_extra_data(self, extra_data):
@@ -428,10 +577,10 @@ class BaseTheoryRolieDoublePoly:
         self.MWD_m = extra_data['MWD_m']
         self.MWD_phi = extra_data['MWD_phi']
         self.Zeff = extra_data['Zeff']
-        
+
         # FENE button
         self.handle_with_fene_button(extra_data['with_fene'])
-        
+
         # G button
         if extra_data['with_gcorr']:
             self.with_gcorr == GcorrMode.with_gcorr
@@ -510,7 +659,7 @@ class BaseTheoryRolieDoublePoly:
         """
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
-        res = self.relax_times_from_mwd(m, phi, taue, Me)
+        res = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
             self.Qprint("Could not set modes from MDW")
             return
@@ -523,7 +672,9 @@ class BaseTheoryRolieDoublePoly:
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
         self.update_parameter_table()
-        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
 
     def set_modes(self, tau, G):
         """[summary]
@@ -550,143 +701,6 @@ class BaseTheoryRolieDoublePoly:
     def gZ(self, z):
         """CLF correction function for modulus Likthman-McLeish (2002)"""
         return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
-
-    def find_down_indx(self, tauseff, taud):
-        """Find index i such that taud[i] < tauseff < taud[i+1]
-        or returns -1 if tauseff < taud[0]
-        or returns n-1 if tauseff > taud[n-1] (should not happen)
-        """
-        n = len(taud)
-        down = n - 1
-        while tauseff < taud[down]:
-            if down == 0:
-                down = -1
-                break
-            down -= 1
-        return down
-
-    def find_dilution(self, phi, taud, taus):
-        """Find the dilution factor phi_dil for a chain with bare stretch relax time `taus`"""
-        n = len(phi)
-        temp = -1
-        phi_dil = 1
-        tauseff = taus / phi_dil
-        #m[0] < m[1] <  ... < m[n]
-        while True:
-            down = self.find_down_indx(tauseff, taud)
-            if down == -1:
-                #case tauseff < taud[0]
-                phi_dil = 1
-                break
-            elif down == n - 1:
-                #(just in case) tauseff > taud[n-1]
-                phi_dil = phi[n - 1]
-                break
-            else:
-                #change tauseff and check if 'down' is still the same
-                if (temp == down):
-                    break
-                temp = down
-                phi_dil = 1.0
-                for k in range(down):
-                    phi_dil -= phi[k]
-                # x=0 if tauseff close to td[down], x=1 if tauseff close to td[down+1]
-                x = (tauseff - taud[down]) / (taud[down + 1] - taud[down])
-                # linear interpolation of phi_dil
-                phi_dil = phi_dil - x * phi[down]
-            tauseff = taus / phi_dil
-        return phi_dil
-
-    def sort_list(self, m, phi):
-        """Ensure m[0] <= m[1] <=  ... <= m[n]"""
-        if all(m[i] <= m[i + 1] for i in range(len(m) - 1)):
-            #list aready sorted
-            return
-        args = np.argsort(m)
-        m = list(np.array(m)[args])
-        phi = list(np.array(phi)[args])
-
-    def relax_times_from_mwd(self, m, phi, taue, Me):
-        """Guess relaxation times of linear rheology (taud) from molecular weight distribution.
-        (i) Count short chains (M < 2*Me) as solvent
-        (ii) The effective dilution at a given timescale t is equal to the sum of
-        the volume fractions of all chains with relaxation time greater than t
-        (iii) CLF makes use of the most diluted tube available at the CLF timescale
-        """
-        #m[0] < m[1] <  ... < m[n]
-        self.sort_list(m, phi)
-
-        taus = []
-        taus_short = []
-        taud = []
-        phi_short = []
-        m_short = []
-        phi_u = 0
-        nshort = 0
-
-        n = len(m)
-        for i in range(n):
-            z = m[i] / Me
-            ts = z * z * taue
-            if m[i] < 2. * Me:
-                #short chains not entangled: use upper-convected Maxwell model
-                nshort += 1
-                phi_u += phi[i]
-                taus_short.append(ts)
-                phi_short.append(phi[i])
-                m_short.append(m[i])
-            else:
-                taus.append(ts)
-
-        #remove the short chains from the list of M and phi
-        m = m[nshort:]
-        phi = phi[nshort:]
-
-        n = len(m)  # new size
-        if n == 0:
-            self.Qprint("All chains as solvent")
-            return [False]
-        if n == 1:
-            return [True, phi, taus, [3 * z * ts * 0.5]]
-
-        Zeff = [0] * n
-        #renormalize the fraction of entangled chains
-        Me /= (1 - phi_u)
-        taue /= ((1 - phi_u) * (1 - phi_u))
-        for i in range(n):
-            phi[i] /= (1 - phi_u)
-            z = m[i] / Me
-            taud.append(3. * z * z * z * taue)
-
-        vphi = []
-        for i in range(n):
-            #find dillution for the entangled chains
-            if i == 0:
-                phi_dil = 1
-            else:
-                phi_dil = self.find_dilution(phi, taud, taus[i])
-            vphi.append(phi_dil)
-
-        for i in range(n):
-            z = m[i] / Me
-            if z * vphi[i] < 1 and z > 1:
-                # case where long chains are effectively untentangled
-                # CR-Rouse approximated as last taud having z*vphi > 1
-                taud_sticky_rep = taud[i - 1]
-                for j in range(i, n):
-                    taud[j] = taud_sticky_rep
-                    Zeff[j] = 1.0
-                break
-            taud[i] = taud[i] * self.fZ(z * vphi[i])
-            Zeff[i] = z * vphi[i]
-        self.Zeff = np.array(Zeff)
-
-
-        for i in range(n):
-            #factor 0.5 cf. G(t)~mu^2 (Likthman2002)
-            taud[i] = 0.5 * taud[i]
-
-        return [True, phi, taus, taud]
 
     def sigmadot_shear(self, sigma, t, p):
         """Rolie-Poly differential equation under *shear* flow
@@ -836,7 +850,7 @@ class BaseTheoryRolieDoublePoly:
                 if self.with_fene == FeneMode.with_fene:
                     sig_i *= self.calculate_fene(lsq[:, i], lmax)
                 if self.with_gcorr == GcorrMode.with_gcorr:
-                    sig_i *= sqrt(self.fZ(self.Zeff[i]))
+                    sig_i *= self.gZ(self.Zeff[i])
                 tt.data[:, 1] += phi_arr[i] * sig_i
             tt.data[:, 1] *= self.parameters["GN0"].value
 
@@ -932,7 +946,9 @@ class BaseTheoryRolieDoublePoly:
 
     def do_fit(self, line):
         """Minimisation procedure disabled in this theory"""
-        self.Qprint("<font color=red><b>Minimisation procedure disabled in this theory</b></font>")
+        self.Qprint(
+            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
+        )
 
 
 class CLTheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, Theory):
@@ -978,8 +994,7 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
         self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
-            "Shear Flow")
+            QIcon(':/Icon8/Images/new_icons/icon-shear.png'), "Shear Flow")
         self.extensional_flow_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
             "Extensional Flow")
@@ -1064,14 +1079,17 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
 
         #Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(self,
-            "Save Parameters to FowSolve", "data/", "FlowSolve (*.fsrep)")
+                                               "Save Parameters to FowSolve",
+                                               "data/", "FlowSolve (*.fsrep)")
         if fpath == '':
             return
-        
+
         with open(fpath, 'w') as f:
             header = '#flowGen input\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION, Version.DATE)
-            header += '# At %s on %s\n' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
+            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
+                                                             Version.DATE)
+            header += '# At %s on %s\n' % (time.strftime("%X"),
+                                           time.strftime("%a %b %d, %Y"))
             f.write(header)
 
             f.write('\n#param global\n')
@@ -1079,7 +1097,7 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
             # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
 
             f.write('\n#param constitutive\n')
-            
+
             n = self.parameters['nmodes'].value
 
             td = np.zeros(n)
@@ -1103,10 +1121,11 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
             f.write('modulus %f\n' % self.parameters["GN0"].value)
             f.write('beta %f\n' % self.parameters["beta"].value)
             f.write('delta %f\n' % self.parameters["delta"].value)
-            
+
             f.write('\n#end')
-        
-        QMessageBox.information(self, 'Success', 'Wrote FlowSolve parameters in \"%s\"' % fpath)
+
+        QMessageBox.information(self, 'Success',
+                                'Wrote FlowSolve parameters in \"%s\"' % fpath)
 
     def handle_with_gcorr_button(self, checked):
         if checked:
@@ -1114,12 +1133,16 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
                 # if Zeff contains something
                 self.with_gcorr = GcorrMode.with_gcorr
             else:
-                self.Qprint('<font color=orange><b>Modulus correction needs Z from MWD</b></font>')
+                self.Qprint(
+                    '<font color=orange><b>Modulus correction needs Z from MWD</b></font>'
+                )
                 self.with_gcorr_button.setChecked(False)
                 return
         else:
             self.with_gcorr = GcorrMode.none
-        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
 
     def handle_with_fene_button(self, checked):
         if checked:
@@ -1137,7 +1160,9 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
         self.update_parameter_table()
-        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
 
     def Qhide_theory_extras(self, show):
         """Uncheck the LVE button. Called when curent theory is changed
@@ -1154,6 +1179,7 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
         self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
 
     def show_linear_envelope(self, state):
+        self.plot_theory_stuff()
         self.extra_graphic_visible(state)
         # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         # self.plot_theory_stuff()
@@ -1199,9 +1225,8 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
                 self.set_modes_from_mwd(m, phi)
         else:
             # no theory Discretise MWD found
-            QMessageBox.warning(
-                    self, 'Get MW distribution',
-                    'No \"Discretize MWD\" theory found')
+            QMessageBox.warning(self, 'Get MW distribution',
+                                'No \"Discretize MWD\" theory found')
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
@@ -1213,7 +1238,11 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
             phi[i] = self.parameters["phi%02d" % i].value
             taud[i] = self.parameters["tauD%02d" % i].value
             taur[i] = self.parameters["tauR%02d" % i].value
-        d = EditModesDialog(self, phi, taud, taur, self.MAX_MODES)
+        param_dic = OrderedDict()
+        param_dic["phi"] = phi
+        param_dic["tauD"] = taud
+        param_dic["tauR"] = taur
+        d = EditModesDialog(self, param_dic, self.MAX_MODES)
         if d.exec_():
             nmodes = d.table.rowCount()
             self.set_param_value("nmodes", nmodes)
@@ -1266,27 +1295,37 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
         
         [description]
         """
+        logtmin = np.log10(self.parent_dataset.minpositivecol(0))
+        logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
+        ntimes = int((logtmax - logtmin) * 20)
         data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
-        data_table_tmp.num_rows = 100
-        data_table_tmp.data = np.zeros((100, 2))
+        data_table_tmp.num_rows = ntimes
+        data_table_tmp.data = np.zeros((ntimes, 2))
 
-        times = np.logspace(-2, 3, 100)
+        times = np.logspace(logtmin, logtmax, ntimes)
         data_table_tmp.data[:, 0] = times
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.data[:, 1] = 0
-        fparamaux = {}
-        fparamaux["gdot"] = 1e-8
-        tauD, G = self.get_modes()
+        fparamaux = {"gdot": 1e-8}
+
+        phi = []
+        taud = []
+        for i in range(nmodes):
+            phi.append(self.parameters["phi%02d" % i].value)
+            taud.append(self.parameters["tauD%02d" % i].value)
+
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
+            G = self.parameters['GN0'].value
             if self.with_gcorr == GcorrMode.with_gcorr:
-                g = G[i] * sqrt(self.fZ(self.Zeff[i]))
-            else:
-                g = G[i]
-            data_table_tmp.data[:, 1] += g * fparamaux["gdot"] * tauD[i] * (
-                1 - np.exp(-times / tauD[i])) 
+                G = G * self.gZ(self.Zeff[i])
+            for j in range(nmodes):
+                # TODO: use symetry to reduce number of loops
+                tau = 1. / (1. / taud[i] + 1. / taud[j])
+                data_table_tmp.data[:, 1] += G * phi[i] * phi[j] * fparamaux[
+                    "gdot"] * tau * (1 - np.exp(-times / tau))
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
         view = self.parent_dataset.parent_application.current_view
@@ -1296,3 +1335,8 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
             print(e)
             return
         self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
+        # remove tmp artist form ax
+        for i in range(data_table_tmp.MAX_NUM_SERIES):
+            for nx in range(len(self.axarr)):
+                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+

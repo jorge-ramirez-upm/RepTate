@@ -92,7 +92,7 @@ class BaseTheoryBobLVE:
     
     [description]
     """
-    #help_file = ''
+    help_file = 'https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-lve'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobLVE.thname
     citations = TheoryBobLVE.citations
