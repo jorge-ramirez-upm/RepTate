@@ -45,7 +45,7 @@ from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
+from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog, QMessageBox
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 
@@ -442,7 +442,6 @@ class BaseTheoryWLFShift:
         Arguments:
             - line {[type]} -- [description]
         """
-        print('Saving prediction of ' + self.thname + ' theory')
         nfiles = len(self.parent_dataset.files)
         Mw = []
         for i in range(nfiles):
@@ -464,6 +463,7 @@ class BaseTheoryWLFShift:
         MwUnique = list(set(Mw))
         MwUnique.sort()
 
+        counter = 0
         for m in MwUnique:
             data = np.zeros(0)
             fparam = {}
@@ -471,8 +471,9 @@ class BaseTheoryWLFShift:
                 if (Mw[i] == m):
                     Filei = self.parent_dataset.files[i]
                     ttable = self.tables[Filei.file_name_short]
-                    data = np.append(data, ttable.data)
-                    data = np.reshape(data, (-1, ttable.num_columns))
+                    T_array = np.full((ttable.num_rows, 1), Filei.file_parameters["T"])
+                    data = np.append(data, np.append(ttable.data, T_array, axis=1))
+                    data = np.reshape(data, (-1, ttable.num_columns + 1))
                     fparam.update(Filei.file_parameters)
             data = data[data[:, 0].argsort()]
             fparam["T"] = self.parameters["T0"].value
@@ -487,7 +488,6 @@ class BaseTheoryWLFShift:
                 ofilename = line + os.sep + fparam["chem"] + '_Mw' + str(
                     m[0]) + 'k' + '_Mw2' + str(m[1]) + '_phi' + str(
                         m[2]) + '_phiB' + str(m[3]) + str(fparam["T"]) + '.tts'
-            print('File: ' + ofilename)
             fout = open(ofilename, 'w')
             for i in sorted(fparam):
                 fout.write(i + "=" + str(fparam[i]) + ";")
@@ -502,13 +502,19 @@ class BaseTheoryWLFShift:
             k = Filei.file_type.col_names
             for i in k:
                 fout.write(i + '\t')
-            fout.write('\n')
+            fout.write('T \t\n')
             for i in range(data.shape[0]):
                 for j in range(data.shape[1]):
                     fout.write(str(data[i, j]) + '\t')
                 fout.write('\n')
             fout.close()
-
+            counter += 1
+        # print information
+        msg = 'Saved %d TTS file(s) in "%s"' % (counter, line)
+        if CmdBase.mode == CmdMode.GUI:
+            QMessageBox.information(self, 'Save TTS', msg)
+        else:
+            print(msg)
     def destructor(self):
         pass
 

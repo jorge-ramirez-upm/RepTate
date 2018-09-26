@@ -277,7 +277,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if th:
             self.theories[th].paste_parameters()
             
-            
     def handle_action_save_theory_data(self):
         """Save theory data of current theory"""
         th = self.current_theory
@@ -287,9 +286,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             dilogue_name = "Select Folder"
             folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
             if os.path.isdir(folder):
-                print('saving')
                 self.theories[th].do_save(folder)
-
 
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)
