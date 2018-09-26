@@ -128,8 +128,8 @@ def initialise_tool_bar(parent_theory):
     #disable buttons
     parent_theory.parent_dataset.actionMinimize_Error.setDisabled(True)
     # parent_theory.parent_dataset.actionCalculate_Theory.setDisabled(True)
-    parent_theory.parent_dataset.actionShow_Limits.setDisabled(True)
-    parent_theory.parent_dataset.actionVertical_Limits.setDisabled(True)
+    # parent_theory.parent_dataset.actionShow_Limits.setDisabled(True)
+    # parent_theory.parent_dataset.actionVertical_Limits.setDisabled(True)
     parent_theory.parent_dataset.actionHorizontal_Limits.setDisabled(True)
 
     ######toolbar
