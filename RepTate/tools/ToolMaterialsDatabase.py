@@ -125,6 +125,16 @@ def get_single_parameter(chem, param, fparam, dbindex):
         bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
         Ge /= bT;
         return Ge, True
+    elif param=='rho0':
+        try:
+            T = float(fparam["T"])
+        except:  # T was not found in the file parameters
+            return 0, False
+        rho0 = materials_db[dbindex][chem].data['rho0']
+        logalpha = materials_db[dbindex][chem].data['logalpha']
+        alpha = np.power(10.0, logalpha)
+        rho = rho0/(1.0+alpha*T)
+        return rho, True
     else:
         value = materials_db[dbindex][chem].data[param]
         return value, True

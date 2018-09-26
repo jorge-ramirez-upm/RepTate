@@ -87,7 +87,6 @@ class BaseApplicationTTS:
             - parent {[type]} -- [description] (default: {None})
         """
         from TheoryTTS import TheoryWLFShift
-        from TheoryTTS_Test import TheoryWLFShiftTest
         from TheoryTTS_Automatic import TheoryTTSShiftAutomatic
         super().__init__(name, parent)
 
@@ -302,7 +301,6 @@ class BaseApplicationTTS:
         # THEORIES
         self.theories[TheoryTTSShiftAutomatic.thname] = TheoryTTSShiftAutomatic
         self.theories[TheoryWLFShift.thname] = TheoryWLFShift
-        self.theories[TheoryWLFShiftTest.thname] = TheoryWLFShiftTest
         self.add_common_theories()
 
         #set the current view

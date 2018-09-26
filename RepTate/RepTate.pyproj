@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
+    <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>--single</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
@@ -100,6 +100,7 @@
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="theories\TheoryRDPLVE.py" />
     <Compile Include="theories\TheoryRolieDoublePoly.py" />
     <Compile Include="theories\TheoryBobLVE.py" />
     <Compile Include="theories\TheoryCarreauYasuda.py" />
@@ -114,7 +115,6 @@
     <Compile Include="theories\TheoryKWWModes.py" />
     <Compile Include="theories\TheoryLDPEBatch.py" />
     <Compile Include="theories\TheoryLikhtmanMcLeish2002.py" />
-    <Compile Include="theories\TheoryLikhtmanMcLeish2002NEW.py" />
     <Compile Include="theories\TheoryLogNormal.py" />
     <Compile Include="theories\TheoryMaxwellModes.py">
       <SubType>Code</SubType>
@@ -126,15 +126,12 @@
     <Compile Include="theories\TheoryRoliePoly.py" />
     <Compile Include="theories\TheoryRouse.py" />
     <Compile Include="theories\TheoryTobitaCSTR.py" />
-    <Compile Include="theories\TheoryTTS.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="gui\QAboutReptate.py" />
     <Compile Include="gui\QApplicationManager.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="theories\TheoryTTS_Automatic.py" />
-    <Compile Include="theories\TheoryTTS_Test.py" />
+    <Compile Include="theories\TheoryTTS.py" />
     <Compile Include="theories\TheoryUCM.py" />
     <Compile Include="tools\ToolBounds.py" />
     <Compile Include="tools\ToolEvaluate.py" />
@@ -154,7 +151,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
+    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />
