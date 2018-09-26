@@ -64,6 +64,7 @@ void react_pool_init(void)
                 react_dist[i].avg = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
                 react_dist[i].lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
                 react_dist[i].numinbin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
+                react_dist[i].numin_armwt_bin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
                 // hold architecture statistics:
                 react_dist[i].nlin = 0;
                 react_dist[i].nstar = 0;

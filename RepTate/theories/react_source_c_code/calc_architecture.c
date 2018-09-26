@@ -39,9 +39,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "polybits.h"
 #include "calc_architecture.h"
 #define N_PS 10000
+
+static void bin_prio_vs_senio(int npol);
 
 static double sphi_avsenio_v_prio[N_PS];
 static double sphi_avprio_v_senio[N_PS];
@@ -58,14 +61,17 @@ static double proba_senio[N_PS];
 static int n_armlen_v_senio[N_PS];
 static int n_armlen_v_prio[N_PS];
 
+static double lgmin;
+static double lgmax;
+static double lgstep;
+
 static int n_polymer;
 static int max_prio;
 static int max_senio;
 
+int num_armwt_bin;
 bool do_prio_senio = false;
 bool flag_stop_all = false;
-
-void bin_prio_vs_senio(int npol);
 
 void set_do_prio_senio(bool b)
 {
@@ -104,20 +110,45 @@ void senio_prio(int npoly, int ndistr)
     }
 }
 
-void init_bin_prio_vs_senio(void)
+void bin_arm_length(int npoly, int ndistr)
+{
+    double wt = br_poly[npoly].tot_len * react_dist[ndistr].monmass;
+    if ((wt <= react_dist[ndistr].arch_maxwt) && (react_dist[ndistr].arch_minwt <= wt))
+    {
+        double warm;
+        int ibin, first, m;
+
+        first = br_poly[npoly].first_end;
+        m = first;
+        while (!flag_stop_all)
+        {
+            warm = arm_pool[m].arm_len * react_dist[ndistr].monmass;
+            ibin = trunc((log10(warm) - lgmin) / lgstep) + 1;
+            ibin = fmin(fmax(1, ibin), num_armwt_bin);
+            react_dist[ndistr].numin_armwt_bin[ibin] += 1;
+            m = arm_pool[m].down;
+            if (m == first)
+            {
+                break;
+            }
+        }
+    }
+}
+
+void init_bin_prio_vs_senio(int ndistr)
 {
     int i;
     for (i = 0; i < N_PS; i++)
     {
         sphi_avprio_v_senio[i] = 0;
         sphi_avsenio_v_prio[i] = 0;
-        
+
         avprio_v_senio[i] = 0;
         avsenio_v_prio[i] = 0;
 
         avarmlen_v_senio[i] = 0;
         avarmlen_v_prio[i] = 0;
-        
+
         n_armlen_v_senio[i] = 0;
         n_armlen_v_prio[i] = 0;
 
@@ -127,6 +158,16 @@ void init_bin_prio_vs_senio(void)
     n_polymer = 0;
     max_prio = 0;
     max_senio = 0;
+
+    lgmax = log10(react_dist[ndistr].arch_maxwt * 1.01);
+    lgmin = log10(react_dist[ndistr].monmass / 1.01);
+    num_armwt_bin = (lgmax - lgmin) * 10;
+    lgstep = (lgmax - lgmin) / (1.0 * num_armwt_bin);
+    for (i = 0; i < num_armwt_bin + 1; i++)
+    {
+        react_dist[ndistr].numin_armwt_bin[i] = 0;
+    }
+    react_dist[ndistr].num_armwt_bin = num_armwt_bin;
 }
 
 void bin_prio_vs_senio(int npoly)

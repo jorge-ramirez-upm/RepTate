@@ -99,37 +99,38 @@ class polymer(ct.Structure):
 
 class reactresults(ct.Structure):
     _fields_ = [
-        ("wt", ct.POINTER(ct.c_double)), ("avbr", ct.POINTER(
-            ct.c_double)), ("wmass", ct.POINTER(ct.c_double)),
-        ("avg", ct.POINTER(ct.c_double)), ("lgmid", ct.POINTER(
-            ct.c_double)), ("numinbin", ct.POINTER(ct.c_int)), ("monmass",
+        ("wt", ct.POINTER(ct.c_double)), ("avbr", ct.POINTER(ct.c_double)),
+        ("wmass", ct.POINTER(ct.c_double)), ("avg", ct.POINTER(
+            ct.c_double)), ("lgmid", ct.POINTER(
+                ct.c_double)), ("numinbin",
+                                ct.POINTER(ct.c_int)), ("numin_armwt_bin",
+                                                        ct.POINTER(ct.c_int)),
+        ("num_armwt_bin", ct.c_int), ("monmass", ct.c_double), ("M_e",
                                                                 ct.c_double),
-        ("M_e", ct.c_double), ("N_e", ct.c_double), ("boblgmin", ct.c_double),
-        ("boblgmax", ct.c_double), ("m_w", ct.c_double), ("m_n", ct.c_double),
-        ("brav", ct.c_double), 
-        ("m_z", ct.c_double), ("m_zp1", ct.c_double), ("m_zp2", ct.c_double), 
-        ("first_poly", ct.c_int), ("next", ct.c_int),
-        ("nummwdbins", ct.c_int), ("numbobbins",
-                                   ct.c_int), ("bobbinmax",
-                                               ct.c_int), ("nsaved", ct.c_int),
+        ("N_e", ct.c_double), ("boblgmin", ct.c_double), ("boblgmax",
+                                                          ct.c_double),
+        ("m_w", ct.c_double), ("m_n", ct.c_double), ("brav", ct.c_double),
+        ("m_z", ct.c_double), ("m_zp1", ct.c_double), ("m_zp2", ct.c_double),
+        ("first_poly",
+         ct.c_int), ("next",
+                     ct.c_int), ("nummwdbins",
+                                 ct.c_int), ("numbobbins",
+                                             ct.c_int), ("bobbinmax",
+                                                         ct.c_int), ("nsaved",
+                                                                     ct.c_int),
         ("npoly",
          ct.c_int), ("simnumber",
                      ct.c_int), ("polysaved",
                                  ct.c_bool), ("name", ct.c_char_p), ("nlin",
                                                                      ct.c_int),
-        ("nstar",
-         ct.c_int), ("nH",
-                     ct.c_int), ("n5arm",
-                                 ct.c_int), ("n7arm",
-                                             ct.c_int), ("ncomb",
-                                                         ct.c_int), ("nother",
+        ("nstar", ct.c_int), ("nH", ct.c_int), ("n5arm", ct.c_int), ("n7arm",
                                                                      ct.c_int),
-                                                                     ("nsaved_arch",
-                                                                     ct.c_int),
-                                                                    ("arch_minwt",
-                                                                     ct.c_double),
-                                                                    ("arch_maxwt",
-                                                                     ct.c_double)
+        ("ncomb",
+         ct.c_int), ("nother",
+                     ct.c_int), ("nsaved_arch",
+                                 ct.c_int), ("arch_minwt",
+                                             ct.c_double), ("arch_maxwt",
+                                                            ct.c_double)
     ]
 
 
@@ -192,6 +193,7 @@ set_flag_stop_all.restype = None
 
 init_bin_prio_vs_senio = react_lib.init_bin_prio_vs_senio
 init_bin_prio_vs_senio.restype = None
+init_bin_prio_vs_senio.argtypes = [ct.c_int]
 
 return_avarmlen_v_senio = react_lib.return_avarmlen_v_senio
 return_avarmlen_v_senio.restype = ct.c_double
@@ -216,7 +218,6 @@ return_proba_senio.restype = ct.c_double
 
 return_max_senio = react_lib.return_max_senio
 return_max_senio.restype = ct.c_int
-
 
 #initialise lists
 react_dist = None
@@ -335,7 +336,8 @@ tobCSTR.restype = ct.c_bool
 #struct
 class dieneCSTR_global(ct.Structure):
     _fields_ = [("dieneCSTRnumber", ct.c_int), ("dieneCSTRerrorflag",
-                                              ct.c_bool)]
+                                                ct.c_bool)]
+
 
 #global variable
 dCSTR_global = dieneCSTR_global.in_dll(react_lib, "dCSTR_global")
@@ -372,70 +374,119 @@ mulmetCSTR.restype = ct.c_bool
 # Other
 ############
 
+
 def end_print(parent_theory, ndist, do_architecture):
     """Print the simulation information at the end of the run. 
     Print priority and seniority information if needed"""
-    parent_theory.Qprint('<hr style="border-top: dotted 2px;" /><b>Simulation Results:</b>')
-    table='''<table border="1" width="100%">'''
-    table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer made', react_dist[ndist].contents.npoly)
-    table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Polymer saved', react_dist[ndist].contents.nsaved)
-    table+= '''<tr><td>%s</td><td>%d</td></tr>'''% ('Arm left in memory', pb_global.arms_left)
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mn (g/mol)', react_dist[ndist].contents.m_n )
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mw (g/mol)', react_dist[ndist].contents.m_w )
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mz (g/mol)', react_dist[ndist].contents.m_z )
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mz+1 (g/mol)', react_dist[ndist].contents.m_zp1)
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Mz+2 (g/mol)', react_dist[ndist].contents.m_zp2)
-    table+= '''<tr><td>%s</td><td>%.3g</td></tr>'''% ('Br/1000C', react_dist[ndist].contents.brav)
-    table+= '''</table><br>'''
+    parent_theory.Qprint(
+        '<hr style="border-top: dotted 2px;" /><b>Simulation Results:</b>')
+    table = '''<table border="1" width="100%">'''
+    table += '''<tr><td>%s</td><td>%d</td></tr>''' % (
+        'Polymer made', react_dist[ndist].contents.npoly)
+    table += '''<tr><td>%s</td><td>%d</td></tr>''' % (
+        'Polymer saved', react_dist[ndist].contents.nsaved)
+    table += '''<tr><td>%s</td><td>%d</td></tr>''' % ('Arm left in memory',
+                                                      pb_global.arms_left)
+    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
+        'Mn (g/mol)', react_dist[ndist].contents.m_n)
+    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
+        'Mw (g/mol)', react_dist[ndist].contents.m_w)
+    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
+        'Mz (g/mol)', react_dist[ndist].contents.m_z)
+    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
+        'Mz+1 (g/mol)', react_dist[ndist].contents.m_zp1)
+    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
+        'Mz+2 (g/mol)', react_dist[ndist].contents.m_zp2)
+    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
+        'Br/1000C', react_dist[ndist].contents.brav)
+    table += '''</table><br>'''
     parent_theory.Qprint(table)
-    
-    if(do_architecture):
+
+    if (do_architecture):
         norm = react_dist[ndist].contents.nsaved_arch / 100
         if norm != 0:
-            parent_theory.Qprint('<b>Architecture of %d Polymers: %.3g &lt; M &lt; %.3g g/mol:</b>' % (react_dist[ndist].contents.nsaved_arch, parent_theory.xmin, parent_theory.xmax))
-            table='''<table border="1" width="100%">'''
-            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Linear', react_dist[ndist].contents.nlin / norm)
-            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Star', react_dist[ndist].contents.nstar / norm)
-            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('H', react_dist[ndist].contents.nH / norm)
-            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('7-arm', react_dist[ndist].contents.n7arm / norm)
-            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Comb', react_dist[ndist].contents.ncomb / norm)
-            table+= '''<tr><td>%s</td><td>%.3g%%</td></tr>'''% ('Other', react_dist[ndist].contents.nother / norm)
-            table+= '''</table><br>'''
+            parent_theory.Qprint(
+                '<b>Architecture of %d Polymers: %.3g &lt; M &lt; %.3g g/mol:</b>'
+                % (react_dist[ndist].contents.nsaved_arch, parent_theory.xmin,
+                   parent_theory.xmax))
+            table = '''<table border="1" width="100%">'''
+            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
+                'Linear', react_dist[ndist].contents.nlin / norm)
+            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
+                'Star', react_dist[ndist].contents.nstar / norm)
+            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
+                'H', react_dist[ndist].contents.nH / norm)
+            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
+                '7-arm', react_dist[ndist].contents.n7arm / norm)
+            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
+                'Comb', react_dist[ndist].contents.ncomb / norm)
+            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
+                'Other', react_dist[ndist].contents.nother / norm)
+            table += '''</table><br>'''
             parent_theory.Qprint(table)
 
+
 def prio_and_senio(parent_theory, f, ndist, do_architecture):
-    """Get the priority vs seniority form C and save it in the
+    """Get the arm length prob. distr. and priority vs seniority form C and save it in the
     theory DataTable"""
+    tt = parent_theory.tables[f.file_name_short]
+    # arm length
+    lgmax = np.log10(react_dist[ndist].contents.arch_maxwt * 1.01)
+    lgmin = np.log10(react_dist[ndist].contents.monmass / 1.01)
+    num_armwt_bin = react_dist[ndist].contents.num_armwt_bin
+    lgstep = (lgmax - lgmin)/(1.0 * num_armwt_bin)
+    tt.extra_tables['proba_arm_wt'] = np.zeros((num_armwt_bin + 1, 2))
+    tt.extra_tables['proba_arm_wt'][:, 0] = np.power(10, [lgmin + ibin * lgstep - 0.5 * lgstep for ibin in range(num_armwt_bin + 1)])
+    tt.extra_tables['proba_arm_wt'][:, 1] = [react_dist[ndist].contents.numin_armwt_bin[ibin] for ibin in range(num_armwt_bin + 1)]
+    try:
+        tt.extra_tables['proba_arm_wt'][:, 1] /= tt.extra_tables['proba_arm_wt'][:, 1].sum()
+    except ZeroDivisionError:
+        pass
+
     if not do_architecture:
         return
-    tt = parent_theory.tables[f.file_name_short]
+    # P&S
     max_prio = return_max_prio()
     max_senio = return_max_senio()
-    
-    avarmlen_v_senio = [return_avarmlen_v_senio(ct.c_int(s), ct.c_int(ndist)) for s in range(1, max_senio + 1)]
-    avarmlen_v_prio = [return_avarmlen_v_prio(ct.c_int(p), ct.c_int(ndist)) for p in range(1, max_prio + 1)]
 
-    avprio_v_senio = [return_avprio_v_senio(ct.c_int(s)) for s in range(1, max_senio + 1)]    
-    avsenio_v_prio = [return_avsenio_v_prio(ct.c_int(p)) for p in range(1, max_prio + 1)]
-    
-    proba_senio = [return_proba_senio(ct.c_int(s)) for s in range(1, max_senio + 1)]
-    proba_prio = [return_proba_prio(ct.c_int(p)) for p in range(1, max_prio + 1)]
-    
+    avarmlen_v_senio = [
+        return_avarmlen_v_senio(ct.c_int(s), ct.c_int(ndist))
+        for s in range(1, max_senio + 1)
+    ]
+    avarmlen_v_prio = [
+        return_avarmlen_v_prio(ct.c_int(p), ct.c_int(ndist))
+        for p in range(1, max_prio + 1)
+    ]
+
+    avprio_v_senio = [
+        return_avprio_v_senio(ct.c_int(s)) for s in range(1, max_senio + 1)
+    ]
+    avsenio_v_prio = [
+        return_avsenio_v_prio(ct.c_int(p)) for p in range(1, max_prio + 1)
+    ]
+
+    proba_senio = [
+        return_proba_senio(ct.c_int(s)) for s in range(1, max_senio + 1)
+    ]
+    proba_prio = [
+        return_proba_prio(ct.c_int(p)) for p in range(1, max_prio + 1)
+    ]
+
     tt.extra_tables['avarmlen_v_senio'] = np.zeros((max_senio, 2))
     tt.extra_tables['avarmlen_v_senio'][:, 0] = np.arange(1, max_senio + 1)
-    tt.extra_tables['avarmlen_v_senio'][:, 1] =  avarmlen_v_senio[:]
-    
+    tt.extra_tables['avarmlen_v_senio'][:, 1] = avarmlen_v_senio[:]
+
     tt.extra_tables['avarmlen_v_prio'] = np.zeros((max_prio, 2))
     tt.extra_tables['avarmlen_v_prio'][:, 0] = np.arange(1, max_prio + 1)
-    tt.extra_tables['avarmlen_v_prio'][:, 1] =  avarmlen_v_prio[:]
-    
+    tt.extra_tables['avarmlen_v_prio'][:, 1] = avarmlen_v_prio[:]
+
     tt.extra_tables['avprio_v_senio'] = np.zeros((max_senio, 2))
     tt.extra_tables['avprio_v_senio'][:, 0] = np.arange(1, max_senio + 1)
-    tt.extra_tables['avprio_v_senio'][:, 1] =  avprio_v_senio[:]
-    
+    tt.extra_tables['avprio_v_senio'][:, 1] = avprio_v_senio[:]
+
     tt.extra_tables['avsenio_v_prio'] = np.zeros((max_prio, 2))
     tt.extra_tables['avsenio_v_prio'][:, 0] = np.arange(1, max_prio + 1)
-    tt.extra_tables['avsenio_v_prio'][:, 1] =  avsenio_v_prio[:]
+    tt.extra_tables['avsenio_v_prio'][:, 1] = avsenio_v_prio[:]
 
     tt.extra_tables['proba_senio'] = np.zeros((max_senio, 2))
     tt.extra_tables['proba_senio'][:, 0] = np.arange(1, max_senio + 1)

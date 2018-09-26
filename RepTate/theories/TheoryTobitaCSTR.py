@@ -173,6 +173,7 @@ class BaseTheoryTobitaCSTR:
         self.signal_request_dist.connect(rgt.request_more_dist)
         self.signal_request_polymer.connect(rgt.request_more_polymer)
         self.signal_request_arm.connect(rgt.request_more_arm)
+        self.do_xrange('', visible=self.xrange.get_visible())
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -225,7 +226,6 @@ class BaseTheoryTobitaCSTR:
         nbins = int(np.round(self.parameters['nbin'].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
-        rch.init_bin_prio_vs_senio()
 
         c_ndist = ct.c_int()
 
@@ -249,10 +249,14 @@ class BaseTheoryTobitaCSTR:
                 self.dist_exists = True
         ndist = self.ndist
         # rch.react_dist[ndist].contents.name = self.reactname #TODO: set the dist name in the C library
+        rch.react_dist[ndist].contents.M_e = Me
+        rch.react_dist[ndist].contents.monmass = monmass
+        rch.react_dist[ndist].contents.nummwdbins = nbins
         rch.react_dist[ndist].contents.polysaved = False
         rch.react_dist[ndist].contents.nsaved_arch = 0
         rch.react_dist[ndist].contents.arch_minwt = self.xmin
         rch.react_dist[ndist].contents.arch_maxwt = self.xmax
+        rch.init_bin_prio_vs_senio(ndist)
 
         if self.simexists:
             rch.return_dist_polys(ct.c_int(ndist))
@@ -263,9 +267,6 @@ class BaseTheoryTobitaCSTR:
             ct.c_double(lambda_), ct.c_int(ndist))
         rch.react_dist[ndist].contents.npoly = 0
 
-        rch.react_dist[ndist].contents.M_e = Me
-        rch.react_dist[ndist].contents.monmass = monmass
-        rch.react_dist[ndist].contents.nummwdbins = nbins
         c_m = ct.c_int()
 
         # make numtomake polymers

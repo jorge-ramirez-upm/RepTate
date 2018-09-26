@@ -159,6 +159,19 @@ class BaseApplicationReact:
             view_proc=self.view_loggM,
             n=1,
             snames=["log(g)"])
+        self.views['p(mass br) log-lin'] = View(
+            name="p(mass br) log-lin",
+            description="Prob. dist. of mass segement b/w branch pt log-lin scale",
+            x_label="M segment",
+            y_label="p(M segment)",
+            x_units="g/mol",
+            y_units="-",
+            log_x=True,
+            log_y=False,
+            view_proc=self.thview_proba_mass_br,
+            n=1,
+            snames=["p(M segment)"],
+            with_thline=False)
         #### extra views for P&S:
         self.views['<senio(prio)> log-log'] = View(
             name="<senio(prio)> log-log",
@@ -561,6 +574,24 @@ class BaseApplicationReact:
     def thview_avarmlen_v_senio(self, dt, file_parameters):
         try:
             data = dt.extra_tables['avarmlen_v_senio']
+            is_extra = True
+        except:
+            is_extra = False
+        if is_extra:
+            nrows = len(data[:, 0])
+            x = np.zeros((nrows, 1))
+            y = np.zeros((nrows, 1))
+            x[:, 0] = data[:, 0]
+            y[:, 0] = data[:, 1]
+        else:
+            x = np.zeros((1, 1))
+            y = np.zeros((1, 1))
+            y[:] = np.nan
+        return x, y, True
+
+    def thview_proba_mass_br(self, dt, file_parameters):
+        try:
+            data = dt.extra_tables['proba_arm_wt']
             is_extra = True
         except:
             is_extra = False

@@ -195,6 +195,7 @@ bool mulmetCSTR(int n, int n1)
         {
             senio_prio(n, n1);
         }
+        bin_arm_length(n, n1);
         // check to see whether to save the polymer
         bobcount(n, n1);
         return true;

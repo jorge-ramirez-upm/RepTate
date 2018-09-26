@@ -132,11 +132,12 @@ bool tobCSTR(int n, int n1)
         mass_rg2(first, 1.0, &len2, &jtot, &gfact);
         br_poly[n].gfactor = gfact;
 
-        // check to see whether to save the polymer
         if (do_prio_senio)
         {
             senio_prio(n, n1);
         }
+        bin_arm_length(n, n1);
+        // check to see whether to save the polymer
         bobcount(n, n1);
 
         return true;
