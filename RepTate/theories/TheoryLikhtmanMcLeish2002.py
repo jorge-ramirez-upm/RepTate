@@ -43,7 +43,9 @@ from CmdBase import CmdBase, CmdMode
 from Theory import Theory
 from QTheory import QTheory
 from Parameter import Parameter, ParameterType, OptType
-
+from PyQt5.QtWidgets import QToolBar, QAction, QStyle, QLabel, QLineEdit
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSize
 
 class TheoryLikhtmanMcLeish2002(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
@@ -96,8 +98,8 @@ class BaseTheoryLikhtmanMcLeish2002:
         super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002
 
-        self.parameters["taue"] = Parameter(
-            "taue",
+        self.parameters["tau_e"] = Parameter(
+            "tau_e",
             2e-6,
             "Rouse time of one Entanglement",
             ParameterType.real,
@@ -120,32 +122,47 @@ class BaseTheoryLikhtmanMcLeish2002:
             opt_type=OptType.opt,
             min_value=0.0,
             max_value=np.inf)
-        self.parameters["cnu"] = Parameter(
-            name="cnu",
+        self.parameters["c_nu"] = Parameter(
+            name="c_nu",
             value=0.1,
             description="Constraint Release parameter",
             type=ParameterType.discrete_real,
             opt_type=OptType.const,
             discrete_values=[0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10])
-        
+        self.parameters["linkMeGe"] = Parameter(
+            name="linkMeGe",
+            value=False,
+            description="Link values of Ge & Me through rho and T",
+            type=ParameterType.boolean,
+            opt_type=OptType.const,
+            display_flag=False)
+        self.parameters["rho0"] = Parameter(
+            name="rho0",
+            value=1.0,
+            description="Density of the polymer melt (kg/m3)",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            display_flag=False)
+            
         dir_path = os.path.dirname(os.path.realpath(__file__))
         f = np.load(os.path.join(dir_path, "linlin.npz"))
         self.Zarray = f['Z']
         self.cnuarray = f['cnu']
         self.data = f['data']
 
-        # Estimate initial values of the theory
-        w = self.parent_dataset.files[0].data_table.data[:, 0]
-        Gp = self.parent_dataset.files[0].data_table.data[:, 1]
-        Gpp = self.parent_dataset.files[0].data_table.data[:, 2]
+        if not self.get_material_parameters():
+            # Estimate initial values of the theory
+            w = self.parent_dataset.files[0].data_table.data[:, 0]
+            Gp = self.parent_dataset.files[0].data_table.data[:, 1]
+            Gpp = self.parent_dataset.files[0].data_table.data[:, 2]
 
-        Gpp_Gp = Gpp / Gp
-        ind = len(Gpp_Gp) - np.argmax(np.flipud(Gpp_Gp) < 0.8)
-        if (ind < len(w)):
-            taue = 1.0 / w[ind]
-            Ge = Gp[ind]
-            self.set_param_value("taue", taue)
-            self.set_param_value("Ge", Ge)
+            Gpp_Gp = Gpp / Gp
+            ind = len(Gpp_Gp) - np.argmax(np.flipud(Gpp_Gp) < 0.8)
+            if (ind < len(w)):
+                taue = 1.0 / w[ind]
+                Ge = Gp[ind]
+                self.set_param_value("tau_e", taue)
+                self.set_param_value("Ge", Ge)
 
     def LikhtmanMcLeish2002(self, f=None):
         """[summary]
@@ -162,11 +179,16 @@ class BaseTheoryLikhtmanMcLeish2002:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        taue = self.parameters["taue"].value
+        taue = self.parameters["tau_e"].value
         Ge = self.parameters["Ge"].value
         Me = self.parameters["Me"].value
-        cnu = self.parameters["cnu"].value
+        cnu = self.parameters["c_nu"].value
+        rho0 = self.parameters["rho0"].value
+        linkMeGe = self.parameters["linkMeGe"].value
         Mw = float(f.file_parameters["Mw"])
+        T = float(f.file_parameters["T"]) + 273.15
+        if (linkMeGe):
+            Ge = 1000.0*rho0*T*8.314/Me*5/4
 
         indcnu = (np.where(self.cnuarray == cnu))[0][0]
         indcnu1 = 1 + indcnu * 2
@@ -241,3 +263,54 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.linkMeGeaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/linkGeMe.png'), 'Link Me-Ge')
+        self.linkMeGeaction.setCheckable(True)
+        self.linkMeGeaction.setChecked(False)
+        lbl = QLabel("<P><b>rho</b> (g/cm<sup>3</sup>)</P></br>", self)
+        tb.addWidget(lbl)
+        self.txtrho = QLineEdit("%.4g"%self.parameters["rho0"].value)
+        self.txtrho.setReadOnly(True)
+        tb.addWidget(self.txtrho)
+        self.calculateStuff = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'Calculate Tube Theory stuff')
+        self.thToolsLayout.insertWidget(0, tb)
+        
+        connection_id = self.linkMeGeaction.triggered.connect(self.linkMeGeaction_change)
+        connection_id = self.calculateStuff.triggered.connect(self.calculate_tube_theory)
+
+    def linkMeGeaction_change(self):
+        self.set_param_value('linkMeGe', self.linkMeGeaction.isChecked())
+        if self.linkMeGeaction.isChecked():
+            self.txtrho.setReadOnly(False)
+            p = self.parameters['Ge']
+            p.opt_type=OptType.const
+        else:
+            self.txtrho.setReadOnly(True)
+            p = self.parameters['Ge']
+            p.opt_type=OptType.opt
+        self.update_parameter_table()
+
+    def calculate_tube_theory(self):
+        self.Qprint('<h3>Tube theory results</h3>')
+        CC1 = 1.69
+        CC2 = 4.17
+        CC3 = -1.55
+        taue = self.parameters["tau_e"].value
+        Me = self.parameters["Me"].value
+        # table='''<table border="1" width="100%">'''
+        # table+='''<tr><th>File</th><th>Z</th><th>&tau;<sub>R</sub></th><th>&tau;<sub>D</sub></th></tr>'''
+        table = [['%-18s' % 'File', '%-12s' % 'Z', '%-12s' % '&tau;<sub>R</sub>', '%-12s' % '&tau;<sub>D</sub>'], ]
+        for f in self.parent_dataset.files:
+            Mw = float(f.file_parameters["Mw"])
+            Z = Mw / Me
+            tR = taue * Z*Z
+            tD = 3 * taue * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5) 
+            # table+= '''<tr><td>%.10s</td><td>%6.1f</td><td>%8.4g</td><td>%8.4g</td></tr>'''% (f.file_name_short, Z, tR, tD)
+            table.append(['%-18s' % f.file_name_short, '%-12.1g' % Z, '%-12.4g' % tR, '%-12.4g' % tD])
+        # table+='''</table><br>'''
+        self.Qprint(table)
+            

@@ -89,12 +89,6 @@ class BaseApplicationDielectric:
         from TheoryHavriliakNegamiModes import TheoryHavriliakNegamiModesFrequency
         from TheoryKWWModes import TheoryKWWModesFrequency
         
-        #from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
-        #from TheoryTTS import TheoryWLFShift
-        #from TheoryCarreauYasuda import TheoryCarreauYasuda
-        #from TheoryRouse import TheoryRouseFrequency
-        #from TheoryDTDStars import TheoryDTDStarsFreq
-        #from TheoryBobDielectric import TheoryBobDielectric
         super().__init__(name, parent)
 
         # VIEWS
@@ -233,13 +227,6 @@ class BaseApplicationDielectric:
         self.theories[TheoryDebyeModesFrequency.thname] = TheoryDebyeModesFrequency
         self.theories[TheoryHavriliakNegamiModesFrequency.thname] = TheoryHavriliakNegamiModesFrequency
         self.theories[TheoryKWWModesFrequency.thname] = TheoryKWWModesFrequency
-        #self.theories[
-        #    TheoryLikhtmanMcLeish2002.thname] = TheoryLikhtmanMcLeish2002
-        #self.theories[TheoryCarreauYasuda.thname] = TheoryCarreauYasuda
-        #self.theories[TheoryWLFShift.thname]=TheoryWLFShift
-        #self.theories[TheoryRouseFrequency.thname]=TheoryRouseFrequency
-        #self.theories[TheoryDTDStarsFreq.thname]=TheoryDTDStarsFreq
-        #self.theories[TheoryBobDielectric.thname]=TheoryBobDielectric
         self.add_common_theories()
 
         #set the current view

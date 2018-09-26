@@ -12,7 +12,7 @@
     <Name>RepTate</Name>
     <RootNamespace>RepTate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|VisualStudio|MiniConda</InterpreterId>
+    <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>--single</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
@@ -114,7 +114,6 @@
     <Compile Include="theories\TheoryKWWModes.py" />
     <Compile Include="theories\TheoryLDPEBatch.py" />
     <Compile Include="theories\TheoryLikhtmanMcLeish2002.py" />
-    <Compile Include="theories\TheoryLikhtmanMcLeish2002NEW.py" />
     <Compile Include="theories\TheoryLogNormal.py" />
     <Compile Include="theories\TheoryMaxwellModes.py">
       <SubType>Code</SubType>
@@ -154,7 +153,7 @@
     <Folder Include="tests\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|VisualStudio|MiniConda" />
+    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".pylintrc" />

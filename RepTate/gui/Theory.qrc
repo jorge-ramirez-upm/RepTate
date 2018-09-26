@@ -40,5 +40,6 @@
         <file>Images/new_icons/icons8-save.png</file>
         <file>Images/new_icons/priority_seniority.png</file>
         <file>Images/new_icons/lve-icon.png</file>
+        <file>Images/new_icons/linkGeMe.png</file>
     </qresource>
 </RCC>

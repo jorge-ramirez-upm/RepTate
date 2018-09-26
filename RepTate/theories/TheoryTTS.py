@@ -49,7 +49,6 @@ from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 
-
 class TheoryWLFShift(CmdBase):
     """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
     
