@@ -452,6 +452,19 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     th_table_dic = OrderedDict( 
                         [ (f.file_name_short, th.tables[f.file_name_short].data.tolist()) for f in ds.files]
                     )
+                    # save extra_tables
+                    th_extra_table_dic = OrderedDict()
+                    for f in ds.files:
+                        dic_copy = {}
+                        # loop over extra table and convert np.array to list
+                        for et_key in th.tables[f.file_name_short].extra_tables:
+                            val = th.tables[f.file_name_short].extra_tables[et_key]
+                            if type(val) is np.ndarray:
+                                dic_copy[et_key] = val.tolist()
+                            else:
+                                dic_copy[et_key] = val
+                        th_extra_table_dic[f.file_name_short] = dic_copy
+
                     th.get_extra_data()
                     e_dic = th.extra_data
                     e_dic_copy = {}
@@ -470,6 +483,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                             ('th_param', param_dic),
                             ('th_textbox', str(th.thTextBox.toHtml()) + '<br><i>Saved at %s on %s<i><br>' % (time.strftime("%X"), time.strftime("%a %b %d, %Y") )),
                             ('th_tables', th_table_dic),
+                            ('th_extra_table_dic', th_extra_table_dic),
                             ('extra_data', e_dic_copy)
                         ]
                     )
@@ -656,6 +670,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             th_textbox = th_dic['th_textbox']
             th_tables = th_dic['th_tables']
             extra_data = th_dic['extra_data']
+            try:
+                extra_table_dic = th_dic['th_extra_table_dic']
+            except KeyError:
+                # backward compatibility
+                extra_table_dic = {}
 
             for key in extra_data:
                 val = extra_data[key]
@@ -670,7 +689,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             for fname in th_tables:
                 tt = new_th.tables[fname]
                 tt.data = np.asarray(th_tables[fname])
-                tt.num_rows, tt.num_columns = tt.data.shape
+                try:
+                    tt.num_rows, tt.num_columns = tt.data.shape
+                except ValueError:
+                    tt.num_rows, tt.num_columns = (0, 0)
+            for fname in extra_table_dic:
+                tt_dic = new_th.tables[fname].extra_tables
+                for key in extra_table_dic[fname]:
+                    tt_dic[key] = np.asarray(extra_table_dic[fname][key])
             new_th.set_extra_data(extra_data)
             new_th.update_parameter_table()
             new_th.thTextBox.insertHtml(th_textbox)
