@@ -67,15 +67,6 @@ void react_pool_init(void)
                 react_dist[i].numin_armwt_bin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
                 react_dist[i].numin_num_br_bin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
                 react_dist[i].max_num_br = pb_global_const.maxbobbins;
-                // hold architecture statistics:
-                react_dist[i].nlin = 0;
-                react_dist[i].nstar = 0;
-                react_dist[i].nH = 0;
-                react_dist[i].n5arm = 0;
-                react_dist[i].n7arm = 0;
-                react_dist[i].ncomb = 0;
-                react_dist[i].nother = 0;
-
             }
             is_initialized = true;
         }
@@ -276,14 +267,6 @@ void return_dist(int n)
         pb_global.first_dist_in_pool = n;
         pb_global.dists_avail = true;
         react_dist[n].polysaved = false;
-        // hold architecture statistics:
-        react_dist[n].nlin = 0;
-        react_dist[n].nstar = 0;
-        react_dist[n].nH = 0;
-        react_dist[n].n5arm = 0;
-        react_dist[n].n7arm = 0;
-        react_dist[n].ncomb = 0;
-        react_dist[n].nother = 0;
     }
 }
 
@@ -301,14 +284,6 @@ void return_dist_polys(int n)
     react_dist[n].first_poly = 0;
     react_dist[n].polysaved = false;
     react_dist[n].simnumber++;
-    // reset stats
-    react_dist[n].nlin = 0;
-    react_dist[n].nstar = 0;
-    react_dist[n].nH = 0;
-    react_dist[n].n5arm = 0;
-    react_dist[n].n7arm = 0;
-    react_dist[n].ncomb = 0;
-    react_dist[n].nother = 0;
 }
 
 void armupdown(int m, int m1)

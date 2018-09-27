@@ -123,9 +123,15 @@ class reactresults(ct.Structure):
         ("npoly",
          ct.c_int), ("simnumber",
                      ct.c_int), ("polysaved",
-                                 ct.c_bool), ("name", ct.c_char_p), ("nlin",
-                                                                     ct.c_int),
-        ("nstar", ct.c_int), ("nH", ct.c_int), ("n5arm", ct.c_int), ("n7arm",
+                                 ct.c_bool), ("name", ct.c_char_p), 
+        ("wlin", ct.c_double),
+        ("wstar", ct.c_double), ("wH", ct.c_double), ("w7arm",
+                                                                     ct.c_double),
+        ("wcomb",
+         ct.c_double), ("wother",
+                     ct.c_double),
+                                 ("nlin", ct.c_int),
+        ("nstar", ct.c_int), ("nH", ct.c_int), ("n7arm",
                                                                      ct.c_int),
         ("ncomb",
          ct.c_int), ("nother",
@@ -405,6 +411,27 @@ def end_print(parent_theory, ndist, do_architecture):
     parent_theory.Qprint(table)
 
     if (do_architecture):
+        nlin = react_dist[ndist].contents.nlin
+        nstar = react_dist[ndist].contents.nstar
+        nH = react_dist[ndist].contents.nH
+        n7arm = react_dist[ndist].contents.n7arm
+        ncomb = react_dist[ndist].contents.ncomb
+        nother = react_dist[ndist].contents.nother
+        #
+        wlin = react_dist[ndist].contents.wlin
+        wstar = react_dist[ndist].contents.wstar
+        wH = react_dist[ndist].contents.wH
+        w7arm = react_dist[ndist].contents.w7arm
+        wcomb = react_dist[ndist].contents.wcomb
+        wother = react_dist[ndist].contents.wother
+        
+        name_list = ["Linear", "Star", "H", "7-arm", "Comb", "Other"]
+        nlist = [nlin, nstar, nH, n7arm, ncomb, nother]
+        wlist = [wlin, wstar, wH, w7arm, wcomb, wother]
+        for i, n in enumerate(nlist):
+            if n != 0:
+                wlist[i] = wlist[i] / n
+
         norm = react_dist[ndist].contents.nsaved_arch / 100
         if norm != 0:
             parent_theory.Qprint(
@@ -412,21 +439,12 @@ def end_print(parent_theory, ndist, do_architecture):
                 % (react_dist[ndist].contents.nsaved_arch, parent_theory.xmin,
                    parent_theory.xmax))
             table = '''<table border="1" width="100%">'''
-            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
-                'Linear', react_dist[ndist].contents.nlin / norm)
-            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
-                'Star', react_dist[ndist].contents.nstar / norm)
-            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
-                'H', react_dist[ndist].contents.nH / norm)
-            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
-                '7-arm', react_dist[ndist].contents.n7arm / norm)
-            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
-                'Comb', react_dist[ndist].contents.ncomb / norm)
-            table += '''<tr><td>%s</td><td>%.3g%%</td></tr>''' % (
-                'Other', react_dist[ndist].contents.nother / norm)
+            table += '''<tr><th>Type</th><th>Prop.</th><th>&lt;Mw&gt; (g/mol)</th></tr>'''
+            for i in range(len(nlist)):
+                table += '''<tr><td>%s</td><td>%.3g%%</td><td>%.3g</td></tr>''' % (
+                    name_list[i], nlist[i] / norm, wlist[i])
             table += '''</table><br>'''
             parent_theory.Qprint(table)
-
 
 def prio_and_senio(parent_theory, f, ndist, do_architecture):
     """Get the arm length prob. distr. and priority vs seniority form C and save it in the

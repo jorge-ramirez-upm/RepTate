@@ -172,6 +172,20 @@ void init_bin_prio_vs_senio(int ndistr)
     max_prio = 0;
     max_senio = 0;
 
+    // initialise architecture statistics:
+    react_dist[ndistr].wlin = 0;
+    react_dist[ndistr].wstar = 0;
+    react_dist[ndistr].wH = 0;
+    react_dist[ndistr].w7arm = 0;
+    react_dist[ndistr].wcomb = 0;
+    react_dist[ndistr].wother = 0;
+    react_dist[ndistr].nlin = 0;
+    react_dist[ndistr].nstar = 0;
+    react_dist[ndistr].nH = 0;
+    react_dist[ndistr].n7arm = 0;
+    react_dist[ndistr].ncomb = 0;
+    react_dist[ndistr].nother = 0;
+
     // initialise arm length statistics
     lgmax = log10(react_dist[ndistr].arch_maxwt * 1.01);
     lgmin = log10(react_dist[ndistr].monmass / 1.01);
@@ -296,22 +310,29 @@ void save_architect(int npol, int ndist)
 {
     int narm, first, m;
     int mL1, mL2, mR1, mR2;
+    double wt;
+    
+    wt = br_poly[npol].tot_len * react_dist[ndist].monmass;
     narm = br_poly[npol].armnum;
     if (narm == 1)
     {
         react_dist[ndist].nlin++;
+        react_dist[ndist].wlin += wt;
     }
     else if (narm == 3)
     {
         react_dist[ndist].nstar++;
+        react_dist[ndist].wstar += wt;
     }
     else if (narm == 5)
     {
         react_dist[ndist].nH++;
+        react_dist[ndist].wH += wt;
     }
     else if (narm == 7)
     {
         react_dist[ndist].n7arm++;
+        react_dist[ndist].w7arm += wt;
     }
     else
     {
@@ -329,6 +350,7 @@ void save_architect(int npol, int ndist)
                 {
                     // it is not a comb
                     react_dist[ndist].nother++;
+                    react_dist[ndist].wother += wt;
                     return;
                 }
             }
@@ -337,6 +359,7 @@ void save_architect(int npol, int ndist)
                 break;
         }
         react_dist[ndist].ncomb++;
+        react_dist[ndist].wcomb += wt;
     }
 }
 
