@@ -105,7 +105,9 @@ class reactresults(ct.Structure):
                 ct.c_double)), ("numinbin",
                                 ct.POINTER(ct.c_int)), ("numin_armwt_bin",
                                                         ct.POINTER(ct.c_int)),
-        ("num_armwt_bin", ct.c_int), ("monmass", ct.c_double), ("M_e",
+                                                        ("numin_num_br_bin",
+                                                        ct.POINTER(ct.c_int)),
+        ("num_armwt_bin", ct.c_int), ("max_num_br", ct.c_int), ("monmass", ct.c_double), ("M_e",
                                                                 ct.c_double),
         ("N_e", ct.c_double), ("boblgmin", ct.c_double), ("boblgmax",
                                                           ct.c_double),
@@ -435,11 +437,21 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
     lgmin = np.log10(react_dist[ndist].contents.monmass / 1.01)
     num_armwt_bin = react_dist[ndist].contents.num_armwt_bin
     lgstep = (lgmax - lgmin)/(1.0 * num_armwt_bin)
-    tt.extra_tables['proba_arm_wt'] = np.zeros((num_armwt_bin + 1, 2))
-    tt.extra_tables['proba_arm_wt'][:, 0] = np.power(10, [lgmin + ibin * lgstep - 0.5 * lgstep for ibin in range(num_armwt_bin + 1)])
-    tt.extra_tables['proba_arm_wt'][:, 1] = [react_dist[ndist].contents.numin_armwt_bin[ibin] for ibin in range(num_armwt_bin + 1)]
+    tt.extra_tables['proba_arm_wt'] = np.zeros((num_armwt_bin, 2))
+    tt.extra_tables['proba_arm_wt'][:, 0] = np.power(10, [lgmin + ibin * lgstep - 0.5 * lgstep for ibin in range(1, num_armwt_bin + 1)])
+    tt.extra_tables['proba_arm_wt'][:, 1] = [react_dist[ndist].contents.numin_armwt_bin[ibin] for ibin in range(1, num_armwt_bin + 1)]
     try:
         tt.extra_tables['proba_arm_wt'][:, 1] /= tt.extra_tables['proba_arm_wt'][:, 1].sum()
+    except ZeroDivisionError:
+        pass
+
+    # number of branch points branch point
+    max_num_br = react_dist[ndist].contents.max_num_br
+    tt.extra_tables['proba_br_pt'] = np.zeros((max_num_br + 1, 2))
+    tt.extra_tables['proba_br_pt'][:, 0] = np.arange(max_num_br + 1)
+    tt.extra_tables['proba_br_pt'][:, 1] = [react_dist[ndist].contents.numin_num_br_bin[i] for i in range(max_num_br + 1)]
+    try:
+        tt.extra_tables['proba_br_pt'][:, 1] /= tt.extra_tables['proba_br_pt'][:, 1].sum()
     except ZeroDivisionError:
         pass
 

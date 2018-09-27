@@ -65,6 +65,8 @@ void react_pool_init(void)
                 react_dist[i].lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
                 react_dist[i].numinbin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
                 react_dist[i].numin_armwt_bin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
+                react_dist[i].numin_num_br_bin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
+                react_dist[i].max_num_br = pb_global_const.maxbobbins;
                 // hold architecture statistics:
                 react_dist[i].nlin = 0;
                 react_dist[i].nstar = 0;
@@ -73,6 +75,7 @@ void react_pool_init(void)
                 react_dist[i].n7arm = 0;
                 react_dist[i].ncomb = 0;
                 react_dist[i].nother = 0;
+
             }
             is_initialized = true;
         }

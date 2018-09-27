@@ -55,7 +55,8 @@ static void getconv_past_reac(double cur_conv, double *new_conv);
 
 /* local variables */
 static double tau, kpM, kDLCB, kpD, kd, kt, D0, C0;
-static double lc, lb, conv_future, conv_past, p_free_diene, ldiene = 0;
+static double lc, lb, conv_future, conv_past, p_free_diene;
+static double  ldiene = 1; // diene length is fixed to 1 monomer
 static int bcount, rlevel;
 
 void dieneCSTRstart(double _tau, double _kpM, double _kDLCB, double _kpD, double _kd, double _kt, double _D0, double _C0, int n)

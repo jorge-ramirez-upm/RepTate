@@ -172,6 +172,32 @@ class BaseApplicationReact:
             n=1,
             snames=["p(M segment)"],
             with_thline=False)
+        self.views['p(br/molecule) log-lin'] = View(
+            name="p(br/molecule) log-lin",
+            description="Prob. dist. of num. branch pt per molecule log-lin scale",
+            x_label="Num. br/molecule",
+            y_label="p(br/molecule)",
+            x_units="-",
+            y_units="-",
+            log_x=True,
+            log_y=False,
+            view_proc=self.thview_proba_num_br,
+            n=1,
+            snames=["p(M segment)"],
+            with_thline=False)
+        self.views['p(br/molecule) lin-lin'] = View(
+            name="p(br/molecule) lin-lin",
+            description="Prob. dist. of num. branch pt per molecule lin-lin scale",
+            x_label="Num. br/molecule",
+            y_label="p(br/molecule)",
+            x_units="-",
+            y_units="-",
+            log_x=False,
+            log_y=False,
+            view_proc=self.thview_proba_num_br,
+            n=1,
+            snames=["p(M segment)"],
+            with_thline=False)
         #### extra views for P&S:
         self.views['<senio(prio)> log-log'] = View(
             name="<senio(prio)> log-log",
@@ -592,6 +618,24 @@ class BaseApplicationReact:
     def thview_proba_mass_br(self, dt, file_parameters):
         try:
             data = dt.extra_tables['proba_arm_wt']
+            is_extra = True
+        except:
+            is_extra = False
+        if is_extra:
+            nrows = len(data[:, 0])
+            x = np.zeros((nrows, 1))
+            y = np.zeros((nrows, 1))
+            x[:, 0] = data[:, 0]
+            y[:, 0] = data[:, 1]
+        else:
+            x = np.zeros((1, 1))
+            y = np.zeros((1, 1))
+            y[:] = np.nan
+        return x, y, True
+
+    def thview_proba_num_br(self, dt, file_parameters):
+        try:
+            data = dt.extra_tables['proba_br_pt']
             is_extra = True
         except:
             is_extra = False

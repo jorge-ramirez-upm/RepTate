@@ -45,6 +45,7 @@
 #define N_PS 10000
 
 static void bin_prio_vs_senio(int npol);
+static void bin_br_pts(int npoly, int ndistr);
 
 static double sphi_avsenio_v_prio[N_PS];
 static double sphi_avprio_v_senio[N_PS];
@@ -118,6 +119,7 @@ void bin_arm_length(int npoly, int ndistr)
         double warm;
         int ibin, first, m;
 
+        bin_br_pts(npoly, ndistr); // bin number of branch points
         first = br_poly[npoly].first_end;
         m = first;
         while (!flag_stop_all)
@@ -132,6 +134,17 @@ void bin_arm_length(int npoly, int ndistr)
                 break;
             }
         }
+    }
+}
+
+void bin_br_pts(int npoly, int ndistr)
+{
+    int num_br;
+    num_br = br_poly[npoly].num_br;
+    react_dist[ndistr].numin_num_br_bin[num_br] += 1;
+    if (num_br > react_dist[ndistr].max_num_br)
+    {
+        react_dist[ndistr].max_num_br = num_br;
     }
 }
 
@@ -159,6 +172,7 @@ void init_bin_prio_vs_senio(int ndistr)
     max_prio = 0;
     max_senio = 0;
 
+    // initialise arm length statistics
     lgmax = log10(react_dist[ndistr].arch_maxwt * 1.01);
     lgmin = log10(react_dist[ndistr].monmass / 1.01);
     num_armwt_bin = (lgmax - lgmin) * 10;
@@ -168,6 +182,13 @@ void init_bin_prio_vs_senio(int ndistr)
         react_dist[ndistr].numin_armwt_bin[i] = 0;
     }
     react_dist[ndistr].num_armwt_bin = num_armwt_bin;
+
+    // initialise branch point statistics
+    for (i = 0; i <= react_dist[ndistr].max_num_br; i++)
+    {
+        react_dist[ndistr].numin_num_br_bin[i] = 0;
+    }
+    react_dist[ndistr].max_num_br = 0;
 }
 
 void bin_prio_vs_senio(int npoly)

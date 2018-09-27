@@ -845,7 +845,7 @@ class EditBobSettingsDialog(QDialog):
         val_int = QIntValidator()
         val_int.setBottom(0)  #set smalled int allowed in the form
         val_int.setTop(rch.pb_global_const.maxbobbins
-                       )  #set smalled int allowed in the form
+                       )  #set largest int allowed in the form
 
         self.e1 = QLineEdit()
         self.e1.setValidator(val_int)
