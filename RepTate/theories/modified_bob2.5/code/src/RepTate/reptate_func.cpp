@@ -41,7 +41,8 @@
 #include "reptate_func.h"
 
 // flag stop bob calculation
-void set_flag_stop_bob(bool b){
+void set_flag_stop_bob(bool b)
+{
     extern bool flag_stop_bob;
     flag_stop_bob = b;
 }
@@ -54,7 +55,26 @@ pyget_double *get_freqmin;
 pyget_double *get_freqmax;
 pyget_double *get_freqint;
 
-void set_do_priority_seniority(bool b){
+void set_NLVE_param(double flowtime, int calcnlin, int flowpriority, int nlinprep)
+{
+    extern double FlowTime;
+    extern double SnipTime;
+    extern int CalcNlin;
+    extern int FlowPriority;
+    extern int NlinPrep;
+    extern int Snipping;
+
+    FlowTime = flowtime;
+    SnipTime = FlowTime;
+
+    CalcNlin = calcnlin;
+    FlowPriority = flowpriority;
+    NlinPrep = nlinprep;
+    Snipping = NlinPrep;
+}
+
+void set_do_priority_seniority(bool b)
+{
     do_priority_seniority = b;
 }
 

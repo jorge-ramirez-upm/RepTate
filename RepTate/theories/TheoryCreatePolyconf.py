@@ -115,10 +115,10 @@ class TheoryCreatePolyconf(CmdBase):
 
     The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
     """
-    thname = 'Create Polyconf'
-    description = 'Create Polyconf'
-    citations = ''
-    doi = ''
+    thname = 'BOB Architecture'
+    description = 'Create and Save Polymer Configuration with BOB'
+    citations = 'Das C., Inkson N.J., Read D.J., Kelmanson M.A. and McLeish T.C.B., J. Rheol. 2006, 50, 207-234'
+    doi = "http://dx.doi.org/10.1122/1.2167487"
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

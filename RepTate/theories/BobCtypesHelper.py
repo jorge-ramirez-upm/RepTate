@@ -111,6 +111,12 @@ class BobCtypesHelper:
         self.get_bob_lve = self.bob_lib.get_bob_lve
         self.get_bob_lve.restype = c_bool
 
+        self.run_bob_nlve = self.bob_lib.run_bob_nlve
+        self.run_bob_nlve.restype = c_bool
+
+        self.get_bob_nlve_results = self.bob_lib.get_bob_nlve_results
+        self.get_bob_nlve_results.restype = c_bool
+
         # ask BoB to stop calculations
         self.set_flag_stop_bob = self.bob_lib.set_flag_stop_bob
         self.set_flag_stop_bob.restype = None
@@ -194,6 +200,30 @@ class BobCtypesHelper:
 
             if self.get_bob_lve(omega, g_p, g_pp):
                 return [omega[:], g_p[:], g_pp[:]]
+
+        # BoB encountered error
+        raise BobError
+
+    def return_bob_nlve(self, arg_list, flowrate, tmin, tmax, is_shear):
+        """Run BoB NLVE and copy results to arrays"""
+        # prepare the arguments for bob_main function
+        n_arg = len(arg_list)
+        argv = (c_char_p * n_arg)()
+        for i in range(n_arg):
+            argv[i] = arg_list[i].encode('utf-8')
+
+        # run bob and get size of results
+        # call C function, return False if error in BoB
+        out_size = c_int()
+        if self.run_bob_nlve(c_int(n_arg), argv, c_double(flowrate), c_double(tmin), c_double(tmax), c_bool(is_shear), byref(out_size)):
+            print("outsize=%d" % out_size.value)
+            #allocate Python memory for results and copy bob results
+            time_arr = (c_double * out_size.value)()
+            stress_arr = (c_double * out_size.value)()
+            N1_arr = (c_double * out_size.value)()
+
+            if self.get_bob_nlve_results(time_arr, stress_arr, N1_arr, c_bool(is_shear)):
+                return [time_arr[:], stress_arr[:]]
 
         # BoB encountered error
         raise BobError

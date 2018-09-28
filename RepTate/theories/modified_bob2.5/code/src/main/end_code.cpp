@@ -110,6 +110,12 @@ void end_code(void)
     omega.clear();
     g_p.clear();
     g_pp.clear();
+
+    extern std::vector<double> time_arr, stress_arr, N1_arr;
+    time_arr.clear();
+    stress_arr.clear();
+    N1_arr.clear();
+
   }
   extern std::vector<arm> arm_pool;
   extern std::vector<polymer> branched_poly;

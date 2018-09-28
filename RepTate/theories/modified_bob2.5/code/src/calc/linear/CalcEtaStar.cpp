@@ -33,7 +33,6 @@ double CalcEtaStar(double freq)
     double *ff, *competa;
     double eta;
     int ndata, i;
-
     ndata = omega.size();
     ff = new double[ndata];
     competa = new double[ndata];

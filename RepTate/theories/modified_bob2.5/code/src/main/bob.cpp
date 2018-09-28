@@ -33,6 +33,110 @@ bool reptate_flag = true; // if false, "end_code()" is called at the end of bob_
 int nnp_size;
 bool flag_stop_bob;
 bool do_priority_seniority = true; // defines if priority and seniority are calculated
+double NLVE_rate;
+double NLVE_tmin;
+double NLVE_tmax;
+int NLVE_flowmode;
+
+bool get_bob_nlve_results(double *time_out, double *stress_out, double *N1_out, bool is_shear)
+{
+  try
+  {
+    int n;
+    n = time_arr.size();
+    if (is_shear)
+    {
+      for (int i = 0; i < n; i++)
+      {
+        time_out[i] = time_arr[i];
+        stress_out[i] = stress_arr[i];
+        N1_out[i] = N1_arr[i];
+      }
+    }
+    else
+    { // uext
+      for (int i = 0; i < n; i++)
+      {
+        time_out[i] = time_arr[i];
+        stress_out[i] = stress_arr[i];
+      }
+    }
+    // close_files();
+    end_code();
+    return true;
+  }
+  catch (const std::exception &)
+  {
+    // clear memory
+    end_code();
+    return false;
+  }
+}
+
+bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double tmax_in, bool is_shear, int *out_size)
+{
+  if (flowrate == 0)
+  {
+    return false;
+  }
+  try
+  {
+    set_flag_stop_bob(false);
+    double flowtime;
+    extern double FreqMin, FreqMax, FreqInterval;
+    flowtime = 1.0 / flowrate;
+    NLVE_rate = flowrate;
+    NLVE_tmin = tmin_in;
+    NLVE_tmax = tmax_in;
+    if (is_shear)
+    {
+      NLVE_flowmode = 0;
+    }
+    else
+    {
+      NLVE_flowmode = 1;
+    }
+
+    ////////////// first pass/////////////////
+    // creates "maxwell.dat" and "savedprio.dat"
+    infofl = fopen("info.txt", "w");
+    rcread();
+    // CalcNlin=no, FlowPriority=no, NlinPrep=yes
+    set_NLVE_param(flowtime, -1, -1, 0);
+    do_priority_seniority = true;
+    // get frequency parameters from Python
+    // FreqMin = get_freqmin();
+    // FreqMax = get_freqmax();
+    // FreqInterval = get_freqint();
+    OutMode = 3;
+
+    bob_main(argc, argv);
+    // clear memory
+    end_code();
+
+    ////////////// second pass/////////////////
+    // creates stress results
+    infofl = fopen("info.txt", "w");
+    rcread();
+    // CalcNlin=yes, FlowPriority=yes, NlinPrep=no
+    set_NLVE_param(flowtime, 0, 0, -1);
+    // get frequency parameters from Python
+    // FreqMin = get_freqmin();
+    // FreqMax = get_freqmax();
+    // FreqInterval = get_freqint();
+    OutMode = 3;
+
+    bob_main(argc, argv);
+    *out_size = time_arr.size();
+    return true;
+  }
+  catch (const std::exception &)
+  {
+    // clear memory
+    end_code();
+    return false;
+  }
+}
 
 bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn_out, double *mw_out, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out)
 {
@@ -44,13 +148,13 @@ bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int n
     bob_main(argc, argv);
     return_gpcls(nbin, ncomp, ni, nf, lgmid_out, wtbin_out, brbin_out, gbin_out);
     get_mn_mw(mn_out, mw_out);
-    // close_files();
+    // clear memory
     end_code();
     return true;
   }
   catch (const std::exception &)
   {
-    // close_files();
+    // clear memory
     end_code();
     return false;
   }
@@ -66,13 +170,13 @@ bool get_bob_lve(double *omega_out, double *gp_out, double *gpp_out)
       gp_out[i] = g_p[i];
       gpp_out[i] = g_pp[i];
     }
-    // close_files();
+    // clear memory
     end_code();
     return true;
   }
   catch (const std::exception &)
   {
-    // close_files();
+    // clear memory
     end_code();
     return false;
   }
@@ -98,6 +202,7 @@ bool run_bob_lve(int argc, char **argv, int *n)
   }
   catch (const std::exception &)
   {
+    end_code();
     return false;
   }
 }
@@ -289,6 +394,7 @@ int bob_main(int argc, char *argv[])
       print_to_python((char *)"  0% done");
       while (num_alive > 0)
       {
+
         if ((phi_ST + 0.05) <= progres)
         {
           sprintf(info_progres, "%3g%% done\n", (1 - progres) * 100);
@@ -319,6 +425,7 @@ int bob_main(int argc, char *argv[])
           }
         }
 #endif
+        ////////////////////HERE////////////////
         num_alive = time_step(1);
         ndata++;
 
@@ -332,8 +439,6 @@ int bob_main(int argc, char *argv[])
 
         if (cur_time > 1e30)
         {
-          printf("in if (cur_time > 1e30) \n");
-
           warnmsgs(101);
           for (int i = 0; i < num_poly; i++)
           {

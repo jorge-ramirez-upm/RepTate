@@ -20,14 +20,15 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdlib.h>
 #include "../../RepTate/reptate_func.h"
 
+std::vector<double> time_arr, stress_arr, N1_arr;
+
 void pompom(void)
 {
   extern double CalcEtaStar(double);
   double eta_lin;
   extern FILE *infofl;
-
   FILE *NLoutfl = NULL;
-  FILE *NLinpfl = fopen("nlin.inp", "r");
+  FILE *NLinpfl = NULL;
   extern int OutMode;
   char fname[80];
   char extn[80];
@@ -36,164 +37,210 @@ void pompom(void)
   double xp[kkmax], yp[kkmax], stress[kkmax], N1[kkmax];
   int kmax = 101;
 
-  if (NLinpfl == NULL)
+  if (reptate_flag)
   {
-    nrate = 10;
+    nrate = 1;
   }
   else
   {
-    fscanf(NLinpfl, "%d", &nrate);
-  }
-  if (OutMode == 1)
-  {
-    NLoutfl = fopen("nonlin.agr", "w");
-    extern void graceheadernlin(FILE *);
-    graceheadernlin(NLoutfl);
-  }
-
-  for (int irt = 0; irt < nrate; irt++)
-  {
+    FILE *NLoutfl = NULL;
+    FILE *NLinpfl = fopen("nlin.inp", "r");
     if (NLinpfl == NULL)
     {
-      tmin = 1.0e-3;
-      tmax = 1.0e4;
-      if ((irt == 0) || (irt == 5))
-      {
-        rate = 0.01;
-      }
-      else
-      {
-        rate = rate * 5.0;
-      }
-      shearcode = irt / 5;
-      tmax = 10.0 / rate;
+      nrate = 10;
     }
     else
     {
-      fscanf(NLinpfl, "%d %lf %lf %lf", &shearcode, &rate, &tmin, &tmax);
+      fscanf(NLinpfl, "%d", &nrate);
+    }
+    if (OutMode == 1)
+    {
+      NLoutfl = fopen("nonlin.agr", "w");
+      extern void graceheadernlin(FILE *);
+      graceheadernlin(NLoutfl);
+    }
+  }
+  for (int irt = 0; irt < nrate; irt++)
+  {
+    if (reptate_flag)
+    {
+      shearcode = NLVE_flowmode;
+      rate = NLVE_rate;
+      tmin = NLVE_tmin;
+      tmax = NLVE_tmax;
+    }
+    else
+    {
+      if (NLinpfl == NULL)
+      {
+        tmin = 1.0e-3;
+        tmax = 1.0e4;
+        if ((irt == 0) || (irt == 5))
+        {
+          rate = 0.01;
+        }
+        else
+        {
+          rate = rate * 5.0;
+        }
+        shearcode = irt / 5;
+        tmax = 10.0 / rate;
+      }
+      else
+      {
+        fscanf(NLinpfl, "%d %lf %lf %lf", &shearcode, &rate, &tmin, &tmax);
+      }
     }
     calc_pompom(shearcode, kmax, rate, tmin, tmax, xp, yp, stress, N1);
     eta_lin = CalcEtaStar(rate);
     if (shearcode == 0)
     {
       extern bool reptate_flag;
-      if (reptate_flag){
+      if (reptate_flag)
+      {
         char line[256];
-        sprintf(line,"<b>Shear thinning at %9.4g s<sup>-1</sup>: %9.4g</b><br>", rate, (stress[kmax - 2] / rate) / (eta_lin));
+        sprintf(line, "<b>Shear thinning at %9.4g s<sup>-1</sup>: %9.4g</b><br>", rate, (stress[kmax - 2] / rate) / (eta_lin));
         print_to_python(line);
-      }
 
-      fprintf(infofl, "shear thinning at %e /s : %e \n", rate, (stress[kmax - 2] / rate) / (eta_lin));
-      strcpy(fname, "shear");
-      inttochar(irt, extn);
-      strcat(fname, extn);
-      switch (OutMode)
-      {
-      case 2:
-        strcpy(extn, ".shear");
-        break;
-      default:
-        strcpy(extn, ".dat");
-        break;
-      }
-      strcat(fname, extn);
-      if (OutMode != 1)
-      {
-        NLoutfl = fopen(fname, "w");
-      }
-      if (OutMode == 2)
-      {
-        fprintf(NLoutfl, "gdot=%10.4e;\n", rate);
+        // put shear results to vectors
+        time_arr.resize(kmax - 1);
+        stress_arr.resize(kmax - 1);
+        N1_arr.resize(kmax - 1);
         for (int ik = 0; ik < kmax - 1; ik++)
         {
-          fprintf(NLoutfl, "%e %e %e %e %e\n", xp[ik], stress[ik], N1[ik], rate, 1.0);
+          time_arr[ik] = xp[ik];
+          stress_arr[ik] = stress[ik];
+          N1_arr[ik] = stress[ik];
         }
       }
       else
       {
-        if (OutMode == 1)
+        fprintf(infofl, "shear thinning at %e /s : %e \n", rate, (stress[kmax - 2] / rate) / (eta_lin));
+        strcpy(fname, "shear");
+        inttochar(irt, extn);
+        strcat(fname, extn);
+        switch (OutMode)
         {
+        case 2:
+          strcpy(extn, ".shear");
+          break;
+        default:
+          strcpy(extn, ".dat");
+          break;
+        }
+        strcat(fname, extn);
+        if (OutMode != 1)
+        {
+          NLoutfl = fopen(fname, "w");
+        }
+        if (OutMode == 2)
+        {
+          fprintf(NLoutfl, "gdot=%10.4e;\n", rate);
           for (int ik = 0; ik < kmax - 1; ik++)
           {
-            fprintf(NLoutfl, "%e %e\n", xp[ik], stress[ik] / rate);
-          }
-          if (OutMode == 1)
-          {
-            fprintf(NLoutfl, "& \n");
+            fprintf(NLoutfl, "%e %e %e %e %e\n", xp[ik], stress[ik], N1[ik], rate, 1.0);
           }
         }
         else
         {
-          for (int ik = 0; ik < kmax - 1; ik++)
+          if (OutMode == 1)
           {
-            fprintf(NLoutfl, "%e %e %e %e\n", xp[ik], stress[ik], N1[ik], rate);
+            for (int ik = 0; ik < kmax - 1; ik++)
+            {
+              fprintf(NLoutfl, "%e %e\n", xp[ik], stress[ik] / rate);
+            }
+            if (OutMode == 1)
+            {
+              fprintf(NLoutfl, "& \n");
+            }
+          }
+          else
+          {
+            for (int ik = 0; ik < kmax - 1; ik++)
+            {
+              fprintf(NLoutfl, "%e %e %e %e\n", xp[ik], stress[ik], N1[ik], rate);
+            }
           }
         }
-      }
-      if (OutMode != 1)
-      {
-        fclose(NLoutfl);
+        if (OutMode != 1)
+        {
+          fclose(NLoutfl);
+        }
       }
     }
 
     else
     {
-      if (reptate_flag){
+      if (reptate_flag)
+      {
         char line[256];
-        sprintf(line,"<b>Extension hardening at %9.4g s<sup>-1</sup>: %9.4g</b><br>", rate, (stress[kmax - 2] / rate) / (3.0 * eta_lin));
+        sprintf(line, "<b>Extension hardening at %9.4g s<sup>-1</sup>: %9.4g</b><br>", rate, (stress[kmax - 2] / rate) / (3.0 * eta_lin));
         print_to_python(line);
-      }
-      fprintf(infofl, "Extension hardening at %e /s : %e \n", rate, (stress[kmax - 2] / rate) / (3.0 * eta_lin));
-      strcpy(fname, "extn");
-      inttochar(irt, extn);
-      strcat(fname, extn);
-      if (OutMode == 2)
-      {
-        strcpy(extn, ".uext");
-      }
-      else
-      {
-        strcpy(extn, ".dat");
-      }
-      strcat(fname, extn);
-      if (OutMode != 1)
-      {
-        NLoutfl = fopen(fname, "w");
-      }
-      if (OutMode == 2)
-      {
-        fprintf(NLoutfl, "gdot=%10.4e;\n", rate);
+
+        // put uext results to vectors
+        time_arr.resize(kmax - 1);
+        stress_arr.resize(kmax - 1);
+        N1_arr.resize(kmax - 1);
         for (int ik = 0; ik < kmax - 1; ik++)
         {
-          fprintf(NLoutfl, "%e %e %e %e \n", xp[ik], stress[ik], rate, 1.0);
+          time_arr[ik] = xp[ik];
+          stress_arr[ik] = stress[ik];
         }
-        // fprintf(NLoutfl,"%e %e %e %e \n",xp[ik],stress[ik]/rate,rate, 1.0);}
       }
       else
       {
-        if (OutMode == 1)
+        fprintf(infofl, "Extension hardening at %e /s : %e \n", rate, (stress[kmax - 2] / rate) / (3.0 * eta_lin));
+        strcpy(fname, "extn");
+        inttochar(irt, extn);
+        strcat(fname, extn);
+        if (OutMode == 2)
         {
-          for (int ik = 0; ik < kmax - 1; ik++)
-          {
-            fprintf(NLoutfl, "%e %e\n", xp[ik], stress[ik] / rate);
-          }
+          strcpy(extn, ".uext");
         }
         else
         {
+          strcpy(extn, ".dat");
+        }
+        strcat(fname, extn);
+        if (OutMode != 1)
+        {
+          NLoutfl = fopen(fname, "w");
+        }
+        if (OutMode == 2)
+        {
+          fprintf(NLoutfl, "gdot=%10.4e;\n", rate);
           for (int ik = 0; ik < kmax - 1; ik++)
           {
-            fprintf(NLoutfl, "%e %e %e \n", xp[ik], stress[ik], rate);
+            fprintf(NLoutfl, "%e %e %e %e \n", xp[ik], stress[ik], rate, 1.0);
+          }
+          // fprintf(NLoutfl,"%e %e %e %e \n",xp[ik],stress[ik]/rate,rate, 1.0);}
+        }
+        else
+        {
+          if (OutMode == 1)
+          {
+            for (int ik = 0; ik < kmax - 1; ik++)
+            {
+              fprintf(NLoutfl, "%e %e\n", xp[ik], stress[ik] / rate);
+            }
+          }
+          else
+          {
+            for (int ik = 0; ik < kmax - 1; ik++)
+            {
+              fprintf(NLoutfl, "%e %e %e \n", xp[ik], stress[ik], rate);
+            }
+          }
+
+          if (OutMode == 1)
+          {
+            fprintf(NLoutfl, "& \n");
           }
         }
-
-        if (OutMode == 1)
+        if (OutMode != 1)
         {
-          fprintf(NLoutfl, "& \n");
+          fclose(NLoutfl);
         }
-      }
-      if (OutMode != 1)
-      {
-        fclose(NLoutfl);
       }
     }
   }

@@ -45,6 +45,9 @@ extern pyget_double *get_freqmax;
 extern pyget_double *get_freqint;
 
 // functions used by Python
+extern "C" void set_NLVE_param(double flowtime, int calcnlin, int flowpriority, int nlinprep);
+extern "C" bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double tmax_in, bool is_shear, int *out_size);
+extern "C" bool get_bob_nlve_results(double *time_out, double *stress_out, double *N1_out, bool is_shear);
 extern "C" void set_do_priority_seniority(bool b);
 extern "C" void def_pyprint_func(pyprint_func F);
 extern "C" void def_pyprint_err_func(pyprint_func F);
@@ -63,8 +66,14 @@ void return_gpchist(int ncomp, int n_cur_comp, double *mass_ar, double *gfac_ar,
                     double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
 
 extern std::vector<double> omega, g_p, g_pp;
+extern std::vector<double> time_arr, stress_arr, N1_arr;
 extern int n_lve_out;
 extern bool reptate_flag;
 extern bool do_priority_seniority;
+// NLVE
+extern double NLVE_rate;
+extern double NLVE_tmin;
+extern double NLVE_tmax;
+extern int NLVE_flowmode;
 
 #endif
