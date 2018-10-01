@@ -449,15 +449,19 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """Change the "calculate" button to "stop" button"""
         if ans:
             self.actionCalculate_Theory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
+            self.actionCalculate_Theory.setToolTip("Stop current calculations")
         else:
             self.actionCalculate_Theory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-abacus.png"))
+            self.actionCalculate_Theory.setToolTip("Calculate Theory (ALT + C)")
 
     def icon_fit_is_stop(self, ans):
         """Change the "fit" button to "stop" button"""
         if ans:
             self.actionMinimize_Error.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
+            self.actionCalculate_Theory.setToolTip("Stop current calculations")
         else:
             self.actionMinimize_Error.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-minimum-value.png"))
+            self.actionCalculate_Theory.setToolTip("Minimize error (ALT + M)")
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed

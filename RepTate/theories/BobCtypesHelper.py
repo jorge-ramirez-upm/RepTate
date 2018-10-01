@@ -216,7 +216,6 @@ class BobCtypesHelper:
         # call C function, return False if error in BoB
         out_size = c_int()
         if self.run_bob_nlve(c_int(n_arg), argv, c_double(flowrate), c_double(tmin), c_double(tmax), c_bool(is_shear), byref(out_size)):
-            print("outsize=%d" % out_size.value)
             #allocate Python memory for results and copy bob results
             time_arr = (c_double * out_size.value)()
             stress_arr = (c_double * out_size.value)()

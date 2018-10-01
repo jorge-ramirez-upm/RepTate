@@ -33,6 +33,7 @@ bool reptate_flag = true; // if false, "end_code()" is called at the end of bob_
 int nnp_size;
 bool flag_stop_bob;
 bool do_priority_seniority = true; // defines if priority and seniority are calculated
+bool flag_no_info_printed = false; // NLVE second pass don't print info again
 double NLVE_rate;
 double NLVE_tmin;
 double NLVE_tmax;
@@ -103,16 +104,17 @@ bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double
     rcread();
     // CalcNlin=no, FlowPriority=no, NlinPrep=yes
     set_NLVE_param(flowtime, -1, -1, 0);
-    do_priority_seniority = true;
+    do_priority_seniority = false;
+    OutMode = 3;
     // get frequency parameters from Python
     // FreqMin = get_freqmin();
     // FreqMax = get_freqmax();
     // FreqInterval = get_freqint();
-    OutMode = 3;
-
     bob_main(argc, argv);
+
     // clear memory
     end_code();
+    ///////////////////////////////////////////
 
     ////////////// second pass/////////////////
     // creates stress results
@@ -120,19 +122,25 @@ bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double
     rcread();
     // CalcNlin=yes, FlowPriority=yes, NlinPrep=no
     set_NLVE_param(flowtime, 0, 0, -1);
+    OutMode = 3;
+    do_priority_seniority = true;
+    flag_no_info_printed = true; // don't print info again
     // get frequency parameters from Python
     // FreqMin = get_freqmin();
     // FreqMax = get_freqmax();
     // FreqInterval = get_freqint();
-    OutMode = 3;
-
     bob_main(argc, argv);
+
+    ///////////////////////////////////////////
+
     *out_size = time_arr.size();
+    flag_no_info_printed = false;
     return true;
   }
   catch (const std::exception &)
   {
     // clear memory
+    flag_no_info_printed = false;
     end_code();
     return false;
   }
@@ -230,7 +238,10 @@ int bob_main(int argc, char *argv[])
   if (cont_exec == 0)
   {
     user_interface();
-    poly_stat();
+    if (!flag_no_info_printed)
+    {
+      poly_stat();
+    }
     if (GenPolyOnly != 0)
     {
       if ((Snipping != 0) && (CalcNlin != 0))
@@ -244,7 +255,7 @@ int bob_main(int argc, char *argv[])
       {
         if (reptate_flag)
         {
-          print_to_python((char *)"<br>Following relaxation to calculate linear rheology and saving segment relaxation times for nonlinear flow...");
+          print_to_python((char *)"<br>Following relaxation to calculate <b>linear</b> rheology and saving segment relaxation times for nonlinear flow...");
         }
         else
         {
@@ -255,7 +266,7 @@ int bob_main(int argc, char *argv[])
       if (CalcNlin == 0)
       {
         if (reptate_flag)
-          print_to_python((char *)"<br>Following relaxation to calculate nonlinear flow predictions...");
+          print_to_python((char *)"<br>Following relaxation to calculate <b>nonlinear</b> flow predictions...");
         else
           fprintf(infofl, "Following relaxation to calculate nonlinear flow predictions\n");
       }

@@ -41,9 +41,12 @@ void lin_rheology(int ndata)
   extern bool reptate_flag;
   if (reptate_flag)
   {
-    char line[256];
-    sprintf(line, "<b>|complex-viscosity|(1.0e-6) = %9.4g</b><br>", CalcEtaStar(1.0e-6));
-    print_to_python(line);
+    if (!flag_no_info_printed)
+    {
+      char line[256];
+      sprintf(line, "<b>|complex-viscosity|(1.0e-6) = %9.4g</b><br>", CalcEtaStar(1.0e-6));
+      print_to_python(line);
+    }
   }
   else
     fprintf(infofl, "|complex-viscosity|(1.0e-6) = %e \n", CalcEtaStar(1.0e-6));

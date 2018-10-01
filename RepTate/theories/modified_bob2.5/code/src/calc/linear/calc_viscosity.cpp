@@ -87,15 +87,19 @@ void calc_viscosity(int ndata, double *tp, double *phip, double *phip_ST)
   if (num_try > 19)
   {
     if (reptate_flag)
-    print_to_python((char *)"<b>Warning:</b><br>Viscosity estimate may not be reliable<br>");
+      print_to_python((char *)"<b>Warning:</b><br>Viscosity estimate may not be reliable<br>");
     else
-    fprintf(infofl, "Warning: viscosity estimate may not be reliable \n");
+      fprintf(infofl, "Warning: viscosity estimate may not be reliable \n");
   }
-    if (reptate_flag){
-    char line[256];
-    sprintf(line, "<b>Zero-shear viscosity = %9.4g</b><br>", (sxx * sy - sxy * sx) / (5.0 * sxx - sx * sx));
-    print_to_python(line);
+  if (reptate_flag)
+  {
+    if (!flag_no_info_printed)
+    {
+      char line[256];
+      sprintf(line, "<b>Zero-shear viscosity = %9.4g</b><br>", (sxx * sy - sxy * sx) / (5.0 * sxx - sx * sx));
+      print_to_python(line);
     }
-    else
-  fprintf(infofl, "zero-shear viscosity = %le \n", (sxx * sy - sxy * sx) / (5.0 * sxx - sx * sx));
+  }
+  else
+    fprintf(infofl, "zero-shear viscosity = %le \n", (sxx * sy - sxy * sx) / (5.0 * sxx - sx * sx));
 }

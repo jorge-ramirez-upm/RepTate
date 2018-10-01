@@ -67,9 +67,9 @@ class FlowMode(Enum):
 
 
 class TheoryBobNLVE(CmdBase):
-    """Analyse the relaxation of polymers read from a polymer configuration file
+    """Predict the nonlinear rheology of "branch-on-branch" polymers, read from a polymer configuration file,
     using BoB v2.5 (Chinmay Das and Daniel Read).
-    These files can be generated from the React application in RepTate.
+    Polymer configuration files can be generated from the React application in RepTate.
 
     The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
     """
@@ -102,8 +102,8 @@ class BaseTheoryBobNLVE:
     
     [description]
     """
-    # help_file = 'https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-nlve'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    help_file = 'https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve'
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobNLVE.thname
     citations = TheoryBobNLVE.citations
     doi = TheoryBobNLVE.doi 
@@ -129,6 +129,8 @@ class BaseTheoryBobNLVE:
         self.freqint = 1.1 # BoB theory points spaced by log10(freqint)
         self.do_priority_seniority = False
         self.init_flow_mode()
+        self.success_dialog = False
+        self.argv = None
     
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -205,14 +207,14 @@ class BaseTheoryBobNLVE:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         self.freqmax = 1.0 / f.data_table.mincol(0)
         self.freqmin = 1.0 / f.data_table.maxcol(0)
-        #show form
-        self.success_dialog = None
-        self.argv = None
-
-        self.signal_param_dialog.emit(self)
-        while self.success_dialog is None:  # wait for the end of QDialog
-            # TODO: find a better way to wait for the dialog thread to finish
-            time.sleep(0.5)
+        
+        #show form if not filled yet
+        if not self.success_dialog:
+            self.signal_param_dialog.emit(self)
+            self.success_dialog = None
+            while self.success_dialog is None:  # wait for the end of QDialog
+                # TODO: find a better way to wait for the dialog thread to finish
+                time.sleep(0.5)
         if not self.success_dialog:
             self.Qprint('Operation cancelled')
             return
@@ -226,7 +228,7 @@ class BaseTheoryBobNLVE:
         tmin = ft.data[0, 0]
         tmax = ft.data[-1, 0]
         is_shear = self.flow_mode == FlowMode.shear
-        self.Qprint("<h3>rate %.3g</h3>" % flowrate)
+        self.Qprint("<hr><h3>rate %.3g s<sup>-1</sup></h3>" % flowrate)
         try:
             time_arr, stress_arr = self.bch.return_bob_nlve(self.argv, flowrate, tmin, tmax, is_shear)
         except BobError:
@@ -306,8 +308,20 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
             self.tbutflow.setDefaultAction(self.extensional_flow_action)
         self.tbutflow.setMenu(menu)
         tb.addWidget(self.tbutflow)
+
+        #BOB settings buttons
+        self.bob_settings_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-BoB-settings.png'),
+            "Edit BoB's input polyconf. file and material parameters")
+
         self.thToolsLayout.insertWidget(0, tb)
 
+        connection_id = self.shear_flow_action.triggered.connect(
+            self.select_shear_flow)
+        connection_id = self.extensional_flow_action.triggered.connect(
+            self.select_extensional_flow)
+        connection_id = self.bob_settings_button.triggered.connect(
+            self.launch_param_dialog)
 
     def select_shear_flow(self):
         self.flow_mode = FlowMode.shear

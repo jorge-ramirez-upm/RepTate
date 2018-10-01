@@ -40,11 +40,13 @@ void user_interface(void)
   extern void get_material(void); // chemistry : M_e, \tau_e ...
   get_material();
 
-  // extern bool reptate_flag;
   if (reptate_flag)
   {
-    extern void print_io_to_reptate(void); // dump input to output
-    print_io_to_reptate();
+    if (!flag_no_info_printed)
+    {
+      extern void print_io_to_reptate(void); // dump input to output
+      print_io_to_reptate();
+    }
   }
   else
   {

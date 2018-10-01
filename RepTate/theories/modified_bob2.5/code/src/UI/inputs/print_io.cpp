@@ -73,8 +73,9 @@ void print_io_to_reptate(void)
 {
   char table[1024];
   char line[256];
-  strcpy(table, "<br><hr><br>");
-  snprintf(table, sizeof table, "%s%s", table, "<table border=\"1\" width=\"100%\">");
+  // strcpy(table, "<br><hr><br>");
+  // snprintf(table, sizeof table, "%s%s", table, "<table border=\"1\" width=\"100%\">");
+  strcpy(table, "<table border=\"1\" width=\"100%\">");
   snprintf(table, sizeof table, "%s%s", table, "<tr><th>Input Parameter</th><th>Value</th></tr>");
   extern double Alpha, RetLim, PSquare, mass_mono, N_e, G_0_unit, temp;
   extern double unit_time, rho_poly, ReptAmount;

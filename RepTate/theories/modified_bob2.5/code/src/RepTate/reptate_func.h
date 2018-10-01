@@ -70,6 +70,7 @@ extern std::vector<double> time_arr, stress_arr, N1_arr;
 extern int n_lve_out;
 extern bool reptate_flag;
 extern bool do_priority_seniority;
+extern bool flag_no_info_printed;
 // NLVE
 extern double NLVE_rate;
 extern double NLVE_tmin;
