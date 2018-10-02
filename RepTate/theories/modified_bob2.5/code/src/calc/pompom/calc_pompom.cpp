@@ -31,18 +31,39 @@ void calc_pompom(int shearcode, int kmax, double gdot, double tmin, double tmax,
   double gm, g0, tauB, tauS, stretchrate, axx, ayy, axy;
   int q, num_maxwell, num_modes;
 
+  // changes from bob v2.6
+  double stretchrateSV;
+  double tauB1;
+  int ferr;
+  //
+
   FILE *maxfl = fopen("maxwell.dat", "r");
   FILE *nlinfl = fopen("nlin_modes.dat", "r");
 
   fscanf(maxfl, "%d", &num_maxwell);
   for (int im = 0; im < num_maxwell; im++)
   {
-
     fscanf(maxfl, "%lf %lf", &tauB, &gm);
-    fscanf(nlinfl, "%lf %d", &tauB, &num_modes);
+    ferr = 2;
+    ferr = fscanf(nlinfl, "%lf %d", &tauB1, &num_modes);
+    if (ferr != 2)
+    {
+      num_modes = 1;
+    } // missing data, fudge sensibly
+
     for (int jm = 0; jm < num_modes; jm++)
     {
-      fscanf(nlinfl, "%d %lf %lf", &q, &g0, &stretchrate);
+      if (ferr == 2)
+      {
+        fscanf(nlinfl, "%d %lf %lf", &q, &g0, &stretchrate);
+        stretchrateSV = stretchrate;
+      }
+      else
+      {
+        q = 1;
+        g0 = 1.0;
+        stretchrate = stretchrateSV;
+      }
       g0 = g0 * gm;
       tauS = tauB / stretchrate;
 
