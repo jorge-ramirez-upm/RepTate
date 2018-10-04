@@ -123,6 +123,8 @@ class BaseTheoryReactMix:
         self.calcexists = False
         self.do_priority_seniority = False
         self.signal_mix_dialog.connect(rgt.launch_mix_dialog)
+        self.ratios = [] # list of ratios in dialog
+        self.include = [] # list of (0 or 1) include in dialog
 
     def Calc(self, f=None):
         """ReactMix function
@@ -245,6 +247,17 @@ class BaseTheoryReactMix:
         """
         pass
 
+    def set_extra_data(self, extra_data):
+        """Called when loading a project, set saved parameter values"""
+        self.ratios = extra_data['ratios']
+        self.include = extra_data['include']
+        rgt.set_extra_data(self, extra_data)
+    
+    def get_extra_data(self):
+        """Called when saving project. Save parameters in extra_data dict"""
+        self.extra_data['ratios'] = self.ratios
+        self.extra_data['include'] = self.include
+        rgt.get_extra_data(self)
 
 class CLTheoryReactMix(BaseTheoryReactMix, Theory):
     """[summary]

@@ -427,10 +427,14 @@ class ParameterReactMix(QDialog):
     def compute_weights(self):
         """Update the 'weight' column based on the 'ratio' values"""
         sum_ratio = 0
+        self.parent_theory.ratios = [] 
+        self.parent_theory.include = [] 
         for i in range(len(self.opened_react_theories)):
             # IF 'is included?' is checked and Ratio > 0
             is_checked = self.lines[i][3].isChecked()
             ratio = float(self.lines[i][4].text())
+            self.parent_theory.ratios.append(ratio)
+            self.parent_theory.include.append(int(is_checked))
             if is_checked and ratio > 0:
                 sum_ratio += ratio
 
@@ -457,7 +461,7 @@ class ParameterReactMix(QDialog):
         dvalidator = QDoubleValidator()  #prevent letters etc.
         dvalidator.setBottom(0)  #minimum allowed value
         self.lines = []
-        for th in self.opened_react_theories:
+        for i, th in enumerate(self.opened_react_theories):
             line = []
             ndist = th.ndist
             ds = th.parent_dataset
@@ -484,11 +488,17 @@ class ParameterReactMix(QDialog):
                 QLabel('%.4g' %
                        rch.react_dist[ndist].contents.nsaved))  #no. saved
             checkbox = QCheckBox()
-            checkbox.setChecked(True)
+            try:
+                checkbox.setChecked(bool(self.parent_theory.include[i]))
+            except IndexError:
+                checkbox.setChecked(True)
             line.append(checkbox)  #is included? - checked by default
             qledit = QLineEdit()
             qledit.setValidator(dvalidator)
-            qledit.setText('1')
+            try:
+                qledit.setText('%s' % self.parent_theory.ratios[i])
+            except IndexError:
+                qledit.setText('1')
             line.append(qledit)  #ratio
             line.append(QLabel('-'))  #weight
             self.lines.append(line)
