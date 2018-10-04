@@ -50,7 +50,8 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
 
 from collections import OrderedDict
-from Theory import MLStripper
+
+import Theory
 
 
 class Tool(CmdBase):
@@ -425,7 +426,7 @@ class Tool(CmdBase):
         return text
 
     def strip_tags(self, html_text):
-        s = MLStripper()
+        s = Theory.MLStripper()
         s.feed(html_text)
         return s.get_data()
 
