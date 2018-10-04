@@ -50,6 +50,7 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
 
 from collections import OrderedDict
+from Theory import MLStripper
 
 
 class Tool(CmdBase):
@@ -386,11 +387,48 @@ class Tool(CmdBase):
             - msg {[type]} -- [description]
         """
         if CmdBase.mode == CmdMode.GUI:
+            if isinstance(msg, list):
+                msg = self.table_as_html(msg)
             self.print_signal.emit(msg + end)
         else:
             if end == '<br>':
                 end = '\n'
+            if isinstance(msg, list):
+                msg = self.table_as_ascii(msg)
+            else:
+                msg = msg.replace('<br>', '\n')
+                msg = self.strip_tags(msg)
             print(msg, end=end)
+    
+    def table_as_html(self, tab):
+        header = tab[0]
+        rows = tab[1:]
+        nrows = len(rows)
+        table = '''<table border="1" width="100%">'''
+        # header
+        table += '<tr>'
+        table += ''.join(['<th>%s</th>' % h for h in header])
+        table += '</tr>'
+        #data
+        for row in rows:
+            table += '<tr>'
+            table += ''.join(['<td>%s</td>' % d for d in row])
+            table += '</tr>'
+        table+='''</table><br>'''
+        return table
+
+    def table_as_ascii(self, tab):
+        text = ''
+        for row in tab:
+            text += ' '.join(row)
+            text += '\n'
+        return text
+
+    def strip_tags(self, html_text):
+        s = MLStripper()
+        s.feed(html_text)
+        return s.get_data()
+
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""
