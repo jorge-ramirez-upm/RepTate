@@ -295,7 +295,7 @@ class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
 
     def handle_save_bob_configuration(self):
         """Save polymer configuraions to a file"""
-        rgt.handle_save_bob_configuration(self)
+        rgt.handle_save_mix_configuration(self)
 
     def handle_edit_bob_settings(self):
         """Open the BoB binnig settings dialog"""
