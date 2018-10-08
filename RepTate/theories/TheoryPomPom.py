@@ -614,10 +614,10 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
             ratio = 'ratio'
             qarms = 'qarms'
             for i, arg in enumerate(args):
-                modulus += ' %f' % self.parameters["G%02d" % arg].value
-                taub += ' %f' % self.parameters["tauB%02d" % arg].value
-                ratio += ' %f' % self.parameters["ratio%02d" % arg].value
-                qarms += ' %f' % self.parameters["q%02d" % arg].value
+                modulus += ' %.6g' % self.parameters["G%02d" % arg].value
+                taub += ' %.6g' % self.parameters["tauB%02d" % arg].value
+                ratio += ' %.6g' % self.parameters["ratio%02d" % arg].value
+                qarms += ' %.6g' % self.parameters["q%02d" % arg].value
             f.write('%s\n%s\n%s\n%s\n' % (modulus, taub, ratio, qarms))
             
             f.write('nustar 2\n')

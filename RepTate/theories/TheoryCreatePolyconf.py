@@ -426,7 +426,7 @@ FunH
         #3 "1" for BoB 'compatibility'
         tb.append("1")
         #4 M0, Ne, (density not used)
-        tb.append("%f %f 0" % (float(self.d.m0.text()),
+        tb.append("%.6g %.6g 0" % (float(self.d.m0.text()),
                                float(self.d.ne.text())))
         #5 tau_e, T (not used)
         tb.append("0 0")
@@ -445,7 +445,7 @@ FunH
                 w = float(pol_dict["Ratio"].text()) / tot_ratio
             except:
                 w = "ERROR"
-            tb.append("%f" % w)
+            tb.append("%.6g" % w)
             #9.. num. polymer and type
             # float -> int conversion needed for e.g. "1e6"
             npol = int(float(pol_dict["Num. of polymers"].text()))

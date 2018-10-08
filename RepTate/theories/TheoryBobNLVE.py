@@ -391,18 +391,18 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
 
             tmp.write('%d %d\n' % (npol, nseg))
             #2 alpha
-            tmp.write('%f\n' % float(self.d.alpha.text()))
+            tmp.write('%.6g\n' % float(self.d.alpha.text()))
             #3 dummy "1"
             tmp.write('1\n')
             # 4 M0, Ne, density
             M0 = float(self.d.m0.text())
             Ne = float(self.d.ne.text())
             density = float(self.d.density.text())
-            tmp.write('%f %f %f\n' % (M0, Ne, density))
+            tmp.write('%.6g %.6g %.6g\n' % (M0, Ne, density))
             #5 tau_e, T
             taue = float(self.d.taue.text())
             temperature = float(self.d.temperature.text())
-            tmp.write('%f %f\n' % (taue, temperature))
+            tmp.write('%.6g %.6g\n' % (taue, temperature))
             #6 write "0" so BoB reads a polyconf file
             tmp.write('0\n')
 

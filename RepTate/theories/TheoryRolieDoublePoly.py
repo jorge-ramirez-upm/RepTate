@@ -1111,16 +1111,16 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
             tauR = 'tauR'
             lmax = 'lambdaMax'
             for i, arg in enumerate(args):
-                fraction += ' %f' % self.parameters["phi%02d" % arg].value
-                taud += ' %f' % self.parameters["tauD%02d" % arg].value
-                tauR += ' %f' % self.parameters["tauR%02d" % arg].value
-                lmax += ' %f' % self.parameters["lmax"].value
+                fraction += ' %.6g' % self.parameters["phi%02d" % arg].value
+                taud += ' %.6g' % self.parameters["tauD%02d" % arg].value
+                tauR += ' %.6g' % self.parameters["tauR%02d" % arg].value
+                lmax += ' %.6g' % self.parameters["lmax"].value
             f.write('%s\n%s\n%s\n' % (taud, tauR, fraction))
             if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write('%s\n' % lmax)
-            f.write('modulus %f\n' % self.parameters["GN0"].value)
-            f.write('beta %f\n' % self.parameters["beta"].value)
-            f.write('delta %f\n' % self.parameters["delta"].value)
+            f.write('modulus %.6g\n' % self.parameters["GN0"].value)
+            f.write('beta %.6gn' % self.parameters["beta"].value)
+            f.write('delta %.6g\n' % self.parameters["delta"].value)
 
             f.write('\n#end')
 

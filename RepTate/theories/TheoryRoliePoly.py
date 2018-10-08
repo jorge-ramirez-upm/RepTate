@@ -748,16 +748,16 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
             tauR = 'tauR'
             lmax = 'lambdaMax'
             for i, arg in enumerate(args):
-                modulus += ' %f' % self.parameters["G%02d" % arg].value
-                taud += ' %f' % self.parameters["tauD%02d" % arg].value
+                modulus += ' %.6g' % self.parameters["G%02d" % arg].value
+                taud += ' %.6g' % self.parameters["tauD%02d" % arg].value
                 if n - i <= nR:
-                    tauR += ' %f' % self.parameters["tauR%02d" % arg].value
-                    lmax += ' %f' % self.parameters["lmax"].value
+                    tauR += ' %.6g' % self.parameters["tauR%02d" % arg].value
+                    lmax += ' %.6g' % self.parameters["lmax"].value
             f.write('%s\n%s\n%s\n' % (modulus, taud, tauR))
             if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write('%s\n' % lmax)
-            f.write('beta %f\n' % self.parameters["beta"].value)
-            f.write('delta %f\n' % self.parameters["delta"].value)
+            f.write('beta %.6g\n' % self.parameters["beta"].value)
+            f.write('delta %.6g\n' % self.parameters["delta"].value)
             f.write('firstStretch %d\n' %
                     (1 + n - nR))  # +1 as flowsolve uses 1-n index not 0-n-1
 
