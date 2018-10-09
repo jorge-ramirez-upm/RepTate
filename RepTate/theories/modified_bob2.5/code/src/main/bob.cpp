@@ -106,10 +106,6 @@ bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double
     set_NLVE_param(flowtime, -1, -1, 0);
     do_priority_seniority = false;
     OutMode = 3;
-    // get frequency parameters from Python
-    // FreqMin = get_freqmin();
-    // FreqMax = get_freqmax();
-    // FreqInterval = get_freqint();
     bob_main(argc, argv);
 
     // clear memory
@@ -125,10 +121,6 @@ bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double
     OutMode = 3;
     do_priority_seniority = true;
     flag_no_info_printed = true; // don't print info again
-    // get frequency parameters from Python
-    // FreqMin = get_freqmin();
-    // FreqMax = get_freqmax();
-    // FreqInterval = get_freqint();
     bob_main(argc, argv);
 
     ///////////////////////////////////////////

@@ -34,6 +34,7 @@ void close_files(void)
   extern FILE *infofl;
   extern FILE *errfl;
   extern FILE *debugfl;
+  extern FILE *inpfl;
   if (infofl != NULL)
   {
     fclose(infofl);
@@ -49,6 +50,10 @@ void close_files(void)
   if (debugfl != NULL)
   {
     fclose(debugfl);
+  }
+  if (inpfl != NULL)
+  {
+    fclose(inpfl);
   }
 }
 

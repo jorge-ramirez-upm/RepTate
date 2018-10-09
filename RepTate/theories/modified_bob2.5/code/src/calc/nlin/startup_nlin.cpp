@@ -31,8 +31,8 @@ void startup_nlin(void)
   nlin_prio_phi_held.resize(max_prio_var);
   for (int i = 0; i < max_prio_var; i++)
   {
-    nlin_prio_phi_relax[i].resize(max_prio_var);
-    nlin_prio_phi_held[i].resize(max_prio_var);
+    nlin_prio_phi_relax[i].resize(NumNlinStretch);
+    nlin_prio_phi_held[i].resize(NumNlinStretch);
   }
   // nlin_prio_phi_relax=assign_ar_2d_double(max_prio_var, NumNlinStretch);
   // nlin_prio_phi_held=assign_ar_2d_double(max_prio_var, NumNlinStretch);

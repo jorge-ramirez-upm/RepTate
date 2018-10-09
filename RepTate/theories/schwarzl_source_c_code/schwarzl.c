@@ -194,4 +194,6 @@ void schwarzl_gt(int n_data, double *value_G_of_t, double *time_G_of_t, double *
         out_wpp[i] = 1. / times[ref_time_index];
         out_Gpp[i] = G2p;
     }
+    free(times);
+    free(gvalues);
 }

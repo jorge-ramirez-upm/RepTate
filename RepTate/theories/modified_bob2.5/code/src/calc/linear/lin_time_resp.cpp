@@ -31,6 +31,9 @@ void lin_time_resp(int ndata, double *tp, double *phip, double *phip_ST)
   case 2:
     resfl = fopen("goft.gt", "w");
     break;
+  case 3:
+    // do not create a gt file
+    return;
   default:
     resfl = fopen("gt.dat", "w");
     break;
@@ -74,5 +77,8 @@ void lin_time_resp(int ndata, double *tp, double *phip, double *phip_ST)
   {
     fprintf(resfl, "& \n");
   }
-  fclose(resfl);
+  if (resfl != NULL)
+  {
+    fclose(resfl);
+  }
 }

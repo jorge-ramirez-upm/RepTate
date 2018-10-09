@@ -142,6 +142,19 @@ void mulmetCSTRstart(double *kp, double *kdb, double *ks, double *kplcb, double 
             cpD2[i][j] = cpD2[i - 1][j] + pD2[i][j];
         }
     }
+    free(pM); 
+    free(hsp);
+    free(pconc); 
+    free(kpM);
+    for (i = 0; i <= numcats; i++)
+    {
+        free(pU[i]);
+        free(pD1[i]);
+        free(pD2[i]);
+    }
+    free(pU);
+    free(pD1);
+    free(pD2);
     MMCSTR_global.mulmetCSTRerrorflag = false;
 }
 
