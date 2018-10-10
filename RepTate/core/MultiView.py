@@ -96,9 +96,9 @@ class MultiView(QWidget):
         self.pot = pot
         self.nplots = nplots
         self.ncols = ncols
-        self.setupUi(self)
+        self.setupUi()
         
-    def setupUi(self, matplotlibWidget):
+    def setupUi(self):
         # Remove seaborn dependency
         dark_gray = ".15" 
         light_gray = ".8"
@@ -132,12 +132,12 @@ class MultiView(QWidget):
             }
         mpl.rcParams.update(style_dict)            
 
-        matplotlibWidget.setObjectName("matplotlibWidget")
-        self.horizontalLayout = QHBoxLayout(matplotlibWidget)
+        self.setObjectName("self")
+        self.horizontalLayout = QHBoxLayout(self)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.plotselecttabWidget = QTabWidget(matplotlibWidget)
+        self.plotselecttabWidget = QTabWidget(self)
         self.plotselecttabWidget.setMaximumSize(QSize(22, 1000))
         self.plotselecttabWidget.setTabPosition(QTabWidget.West)
         self.plotselecttabWidget.setTabShape(QTabWidget.Triangular)
@@ -190,7 +190,7 @@ class MultiView(QWidget):
             ax_i.xaxis.tick_bottom()
             ax_i.yaxis.tick_left()
         self.hidden_tab = []
-    
+
     def set_bbox(self):
         self.bbox = []
         x0min = y0min = 1e9
@@ -212,9 +212,10 @@ class MultiView(QWidget):
             self.parent_application.sp_nviews.blockSignals(False)
 
         self.plotselecttabWidget.blockSignals(True)
+        nplot_old = self.nplots
         self.nplots = nplots
         gs = self.organizeplots(self.pot, self.nplots, self.ncols)
-        
+
         # hide tabs if only one figure
         self.plotselecttabWidget.setVisible(nplots > 1)
 
@@ -222,26 +223,45 @@ class MultiView(QWidget):
             self.axarr[i].set_position(gs[i].get_position(self.figure))
             self.axarr[i].set_subplotspec(gs[i])
         for tab in self.hidden_tab:
-            self.plotselecttabWidget.insertTab(tab[0], tab[1], tab[2])
+            tab_id = tab[0]
+            widget = tab[1]
+            tab_text = tab[2]
+            self.plotselecttabWidget.insertTab(tab_id, widget, tab_text)
         self.hidden_tab = []
 
         for i in range(nplots, len(self.axarr)):
             self.axarr[i].set_visible(False)
-            self.hidden_tab.append([i + 1, self.plotselecttabWidget.widget(nplots + 1), self.plotselecttabWidget.tabText(nplots + 1)])
+            tab_id = i + 1
+            widget = self.plotselecttabWidget.widget(nplots + 1)
+            tab_text = self.plotselecttabWidget.tabText(nplots + 1)
+            self.hidden_tab.append([tab_id, widget, tab_text])
             self.plotselecttabWidget.removeTab(nplots + 1)
 
         self.set_bbox()
+        for i in range(self.nplots):
+            self.axarr[i].set_position(self.bbox[i])
+        # add new axes to plt
+        for i in range(nplot_old, self.nplots):
+            try:
+                plt.subplot(self.axarr[i])
+            except:
+                pass
+        # remove axes from plt
+        for i in range(self.nplots, nplot_old):
+            try:
+                plt.delaxes(self.axarr[i])
+            except:
+                pass
         for ds in self.parent_application.datasets.values():
             ds.nplots = nplots
         self.parent_application.update_all_ds_plots()
-        self.handle_plottabChanged(self.plotselecttabWidget.currentIndex())
+        self.handle_plottabChanged(0) # switch to all plot tab
         self.plotselecttabWidget.blockSignals(False)
-
+    
     def init_plot(self, index):
         if index == 0: #multiplots
             for i in range(self.nplots):
                 self.axarr[i].set_position(self.bbox[i])
-                self.axarr[i].set_visible(True)
         else: #single plot max-size
             tab_to_maxi = index - 1
             for i in range(self.nplots):
@@ -266,6 +286,10 @@ class MultiView(QWidget):
             for i in range(self.nplots):
                 self.axarr[i].set_position(self.bbox[i])
                 self.axarr[i].set_visible(True)
+                try:
+                    plt.subplot(self.axarr[i])
+                except:
+                    pass
 
         else: #single plot max-size
             tab_to_maxi = index - 1 # in 0 1 2
@@ -279,8 +303,16 @@ class MultiView(QWidget):
                 if i == tab_to_maxi: #hide other plots
                     self.axarr[i].set_visible(True)
                     self.axarr[i].set_position(self.bboxmax)
+                    try:
+                        plt.subplot(self.axarr[i])
+                    except:
+                        pass
                 else:
                     self.axarr[i].set_visible(False)
+                    try:
+                        plt.delaxes(self.axarr[i])
+                    except:
+                        pass
         self.canvas.draw()
         self.parent_application.set_view_tools(view_name)
 
