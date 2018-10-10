@@ -389,17 +389,17 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 if p.opt_type == OptType.const:
                     item = QTreeWidgetItem(
                         self.thParamTable,
-                        [p.name, "%0.4g" % p.value, "N/A"])
+                        [p.name, "%0.3g" % p.value, "N/A"])
                     item.setCheckState(0, Qt.PartiallyChecked)
                     item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
                 else:
                     try:
-                        err = "%0.4g" % p.error
+                        err = "%0.3g" % p.error
                     except:
                         err = "-"
                     item = QTreeWidgetItem(
                         self.thParamTable,
-                        [p.name, "%0.4g" % p.value, err])
+                        [p.name, "%0.3g" % p.value, err])
                     if p.opt_type == OptType.opt:
                         item.setCheckState(0, Qt.Checked)
                     elif p.opt_type == OptType.nopt:
