@@ -188,7 +188,7 @@ class BaseTheoryLikhtmanMcLeish2002:
         Mw = float(f.file_parameters["Mw"])
         T = float(f.file_parameters["T"]) + 273.15
         if (linkMeGe):
-            Ge = 1000.0*rho0*T*8.314/Me*5/4
+            Ge = 1000.0*rho0*T*8.314/Me # *5/4 (Pity... With this factor it works much better)
 
         indcnu = (np.where(self.cnuarray == cnu))[0][0]
         indcnu1 = 1 + indcnu * 2

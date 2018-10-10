@@ -63,6 +63,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="core\FileType.py" />
+    <Compile Include="core\MultiView.py" />
     <Compile Include="core\Parameter.py">
       <SubType>Code</SubType>
     </Compile>
