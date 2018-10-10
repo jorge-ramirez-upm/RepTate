@@ -536,6 +536,9 @@ double kww_mid( const double w, const double beta,
     double q;
     const double Smin=2e-20; // to assess worst truncation error
 
+    int nalloc_ak_bk = 0;
+    int ii;
+
     // dynamic initialization upon first call
     if ( firstCall ) {
         for ( j=0; j<num_range; ++ j ) {
@@ -598,13 +601,27 @@ double kww_mid( const double w, const double beta,
     for ( iter=0; iter<max_iter_int; ++iter ) {
         // static initialisation of NN, ak, bk for given 'iter'
         if ( iter>iterDone[kind][j] ) {
-            if ( N>1e6 )
+            if ( N>1e6 ){
+                for (ii=0; ii < nalloc_ak_bk; ii++){
+                    free(ak[kind][j][ii]);
+                    free(bk[kind][j][ii]);
+                }
                 return -3; // integral limits overflow
+            }
             NN[j][iter] = N;
             if ( !( ak[kind][j][iter]=malloc((sizeof(long double))*(2*N+1)) ) ||
                  !( bk[kind][j][iter]=malloc((sizeof(long double))*(2*N+1)) )) {
                 fprintf( stderr, "kww: Workspace allocation failed\n" );
+                for (ii=0; ii < nalloc_ak_bk; ii++){
+                    if ( ii>iterDone[kind][j] ) {
+                        free(ak[kind][j][ii]);
+                        free(bk[kind][j][ii]);
+                    }
+                }
                 exit( ENOMEM );
+            }
+            else{
+                nalloc_ak_bk++;
             }
             h = logl( logl( 42*N/kww_delta/Smin ) / p ) / N; // 42=(pi+1)*10
             isig=1-2*(NN[j][iter]&1);
@@ -620,15 +637,29 @@ double kww_mid( const double w, const double beta,
                 chi  = 2*p*sinhl(u) + 2*q*u;
                 dchi = 2*p*coshl(u) + 2*q;
                 if ( u==0 ) {
-                    if ( k!=0 )
+                    if ( k!=0 ){
+                        for (ii=0; ii < nalloc_ak_bk; ii++){
+                            if ( ii>iterDone[kind][j] ) {
+                                free(ak[kind][j][ii]);
+                                free(bk[kind][j][ii]);
+                            }
+                        }
                         return -4; // integration variable underflow
+                    }
                     // special treatment to bridge singularity at u=0
                     ahk = PI/h/dchi;
                     dhk = 0.5;
                     chk = sin( ahk );
                 } else {
-                    if ( -chi>DBL_MAX_EXP/2 )
+                    if ( -chi>DBL_MAX_EXP/2 ){
+                        for (ii=0; ii < nalloc_ak_bk; ii++){
+                            if ( ii>iterDone[kind][j] ) {
+                                free(ak[kind][j][ii]);
+                                free(bk[kind][j][ii]);
+                            }
+                        }
                         return -5; // integral transformation overflow
+                    }
                     e = expl( -chi );
                     ahk = PI/h * u/(1-e);
                     dhk = 1/(1-e) - u*e*dchi/SQR(1-e);
@@ -673,15 +704,47 @@ double kww_mid( const double w, const double beta,
             kww_hexprint_double( "S_old", S_last );
         }
         // termination criteria
-        if      ( kww_debug & 4 )
+        if      ( kww_debug & 4 ){
+            for (ii=0; ii < nalloc_ak_bk; ii++){
+                free(ak[kind][j][ii]);
+                free(bk[kind][j][ii]);
+            }
             return -1; // we want to inspect just one sum
-        else if ( S < 0 && !diffmode )
+        }
+        else if ( S < 0 && !diffmode ){
+            for (ii=0; ii < nalloc_ak_bk; ii++){
+                if ( ii>iterDone[kind][j] ) {
+                    free(ak[kind][j][ii]);
+                    free(bk[kind][j][ii]);
+                }
+            }
             return -6; // cancelling terms lead to negative S
-        else if ( kww_eps*T > kww_delta*fabs(S) )
+        }
+        else if ( kww_eps*T > kww_delta*fabs(S) ){
+            for (ii=0; ii < nalloc_ak_bk; ii++){
+                if ( ii>iterDone[kind][j] ) {
+                    free(ak[kind][j][ii]);
+                    free(bk[kind][j][ii]);
+                }
+            }
             return -2; // cancellation
-        else if ( iter && fabs(S-S_last) + kww_eps*T < kww_delta*fabs(S) )
+        }
+        else if ( iter && fabs(S-S_last) + kww_eps*T < kww_delta*fabs(S) ){
+            for (ii=0; ii < nalloc_ak_bk; ii++){
+                if ( ii>iterDone[kind][j] ) {
+                    free(ak[kind][j][ii]);
+                    free(bk[kind][j][ii]);
+                }
+            }
             return S * PI / w; // success (for factor pi/w see my eq. 48)
+        }
         N *= 2; // retry with more points
+    }
+    for (ii=0; ii < nalloc_ak_bk; ii++){
+        if ( ii>iterDone[kind][j] ) {
+            free(ak[kind][j][ii]);
+            free(bk[kind][j][ii]);
+        }
     }
     return -9; // not converged
 }
