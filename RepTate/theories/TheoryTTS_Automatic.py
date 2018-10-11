@@ -511,14 +511,19 @@ class BaseTheoryTTSShiftAutomatic:
             data = data[data[:, 0].argsort()]
             fparam["T"] = self.parameters["T"].value
 
+            try:
+                chem_name = '%s_' % fparam["chem"]
+            except KeyError:
+                chem_name = ''
+
             if line == "":
                 ofilename = os.path.dirname(
                     self.parent_dataset.files[0].file_full_path
-                ) + os.sep + fparam["chem"] + '_Mw' + str(
+                ) + os.sep + chem_name+ 'Mw' + str(
                     m[0]) + 'k' + '_Mw2' + str(m[1]) + '_phi' + str(
                         m[2]) + '_phiB' + str(m[3]) + str(fparam["T"]) + '.tts'
             else:
-                ofilename = line + os.sep + fparam["chem"] + '_Mw' + str(
+                ofilename = line + os.sep + chem_name + 'Mw' + str(
                     m[0]) + 'k' + '_Mw2' + str(m[1]) + '_phi' + str(
                         m[2]) + '_phiB' + str(m[3]) + str(fparam["T"]) + '.tts'
             fout = open(ofilename, 'w')
