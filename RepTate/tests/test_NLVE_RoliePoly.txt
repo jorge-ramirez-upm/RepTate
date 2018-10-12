@@ -1,9 +1,16 @@
 new LVE
-open data/PI_LINEAR/PI_483.1k_T-35.tts
+open data/DOW/Linear_Rheology_TTS/DOWLDPEL150R_160C.tts
 plot
 theory_new Maxwell Modes
-xrange -8 -3
-nmodes=5
+nmodes=8
 fit
-#save
-exit()
+up
+up
+new NLVE
+open data/DOW/Non-Linear_Rheology/Start-up_Shear/My_dow150-160-*shear.shear
+theory_new Rolie-Poly
+copy_modes
+0
+calculate
+save
+quit

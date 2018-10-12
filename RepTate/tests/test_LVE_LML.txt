@@ -10,5 +10,5 @@ open data/PI_LINEAR/PI_1131k_T-35.tts
 plot
 theory_new Likhtman-McLeish
 fit
-#save
+save
 exit()
