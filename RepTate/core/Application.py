@@ -61,6 +61,7 @@ from ToolBounds import ToolBounds
 from ToolEvaluate import ToolEvaluate
 from ToolInterpolate import ToolInterpolateExtrapolate
 from ToolMaterialsDatabase import ToolMaterialsDatabase
+from mpldatacursor import datacursor
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -137,6 +138,21 @@ class Application(CmdBase):
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
             self.multiplots.show()
+        self.datacursor_ = None
+
+    def update_datacursor_artists(self):
+        """Update the datacursor. Called at the end of ds.do_plot()"""
+        try: 
+            self.datacursor_.hide().disable()
+        except AttributeError:
+            pass
+        del self.datacursor_
+        axs = [self.axarr[i] for i in range(self.nplots)]
+        self.datacursor_ = datacursor(axes=axs, formatter="x={x:.3g}\ny={y:.3g}".format, hide_button=1) # enable draggable=True?
+        # change arrow color to red (default='black')
+        self.datacursor_.default_annotation_kwargs['arrowprops']['edgecolor'] = 'red'
+        # less transparency (default=0.5)
+        self.datacursor_.default_annotation_kwargs['bbox']['alpha'] = 0.7
 
     def set_multiplot(self, nplots, ncols):
         """defines the plot"""
