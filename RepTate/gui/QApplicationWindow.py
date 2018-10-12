@@ -1628,6 +1628,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if (self.DataSettabWidget.count()==0):
                 self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
+        ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
         success, newtables, ext = ds.do_open(paths_to_open)
         if success==True:
             self.check_no_param_missing(newtables, ext)
@@ -1635,11 +1636,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 self.addTableToCurrentDataSet(dt, ext)
             ds.do_plot()
             self.update_Qplot()
-            # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
             ds.set_table_icons(ds.table_icon_list)
-            # ds.DataSettreeWidget.blockSignals(False)
         else:
             QMessageBox.about(self, "Open", success)
+        ds.DataSettreeWidget.blockSignals(False)
     
     def check_no_param_missing(self, newtables, ext):
         """[summary]
