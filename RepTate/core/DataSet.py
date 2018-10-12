@@ -802,8 +802,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                             df.file_name_short] = DataTable(
                                 self.parent_application.axarr,
                                 "TH_" + df.file_name_short)
-                        if self.theories[th_name].autocalculate:
-                            self.theories[th_name].function(df)
             if CmdBase.mode == CmdMode.GUI:
                 return (True, newtables, f_ext[0])
         else:
