@@ -42,7 +42,7 @@ from Theory import Theory
 from QTheory import QTheory
 import numpy as np
 from PyQt5.QtCore import Qt, QSize, QFile
-from PyQt5.QtWidgets import QToolBar, QSpinBox, QFileDialog
+from PyQt5.QtWidgets import QToolBar, QSpinBox, QFileDialog, QMessageBox
 from PyQt5.QtGui import QIcon
 from DraggableArtists import DragType, DraggableBinSeries
 
@@ -669,9 +669,9 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         self.set_bar_plot(True)  #leave the bar plot on
         self.parent_dataset.parent_application.update_plot()
         
-    def do_save(self, dir):
+    def do_save(self, dir, extra_txt=''):
         nbin = self.parameters['nbin'].value
-        file_out = os.path.join(dir, self.extra_data['current_fname'] + '_TH_%dbins' % nbin + '.txt')
+        file_out = os.path.join(dir, '%s_TH_%dbins%s.txt' % (self.extra_data['current_fname'], nbin, extra_txt))
         fout = open(file_out, 'w')
         # output polymers
         Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.extra_data['saved_th'], "")
@@ -682,7 +682,10 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
         for i in range(nbin_out):
             fout.write("%-10.3e %12.6e\n" % (self.extra_data['saved_th'][i, 0],
                                              self.extra_data['saved_th'][i, 1]))
-        message = '*************************\n'
-        message += "Saved %d bins to \"%s\"" % (nbin_out, file_out)
 
-        self.Qprint(message)
+        # print information
+        msg = "Saved %d bins to \"%s\"" % (nbin_out, file_out)
+        if CmdBase.mode == CmdMode.GUI:
+            QMessageBox.information(self, 'Saved discretized MWD', msg)
+        else:
+            print(msg)

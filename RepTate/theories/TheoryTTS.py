@@ -437,7 +437,7 @@ class BaseTheoryWLFShift:
             completions = [f for f in file_names if f.startswith(text)]
         return completions
 
-    def do_save(self, line):
+    def do_save(self, line, extra_txt=''):
         """Save the results from WLFShift theory predictions to a TTS file
         
         [description]
@@ -495,7 +495,7 @@ class BaseTheoryWLFShift:
             else:
                 ofilename = line + os.sep + chem_name + 'Mw' + str(
                     m[0]) + 'k' + '_Mw2' + str(m[1]) + '_phi' + str(
-                        m[2]) + '_phiB' + str(m[3]) + str(fparam["T"]) + '.tts'
+                        m[2]) + '_phiB' + str(m[3]) + str(fparam["T"]) + extra_txt + '.tts'
             fout = open(ofilename, 'w')
             for i in sorted(fparam):
                 fout.write(i + "=" + str(fparam[i]) + ";")

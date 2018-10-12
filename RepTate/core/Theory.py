@@ -49,6 +49,7 @@ from Parameter import Parameter, ParameterType, OptType
 from DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QMessageBox
 
 from collections import OrderedDict
 from math import log
@@ -656,7 +657,7 @@ class Theory(CmdBase):
 
 # SAVE THEORY STUFF
 
-    def do_save(self, line):
+    def do_save(self, line='', extra_txt=''):
         """Save the results from all theory predictions to file
         
         [description]
@@ -665,6 +666,7 @@ class Theory(CmdBase):
             - line {[type]} -- [description]
         """
         self.Qprint('Saving prediction(s) of ' + self.name + ' theory')
+        counter = 0
         for f in self.parent_dataset.files:
             fparam = f.file_parameters
             ttable = self.tables[f.file_name_short]
@@ -673,7 +675,7 @@ class Theory(CmdBase):
                     f.file_full_path)[0] + '_TH' + os.path.splitext(
                         f.file_full_path)[1]
             else:
-                ofilename = os.path.join(line, f.file_name_short + '_TH' + os.path.splitext(
+                ofilename = os.path.join(line, f.file_name_short + '_TH' + extra_txt + os.path.splitext(
                         f.file_full_path)[1])
             # print("ofilename", ofilename)
             # print('File: ' + f.file_name_short)
@@ -701,6 +703,14 @@ class Theory(CmdBase):
                     fout.write(str(ttable.data[i, j]) + '\t')
                 fout.write('\n')
             fout.close()
+            counter += 1
+        
+        # print information
+        msg = 'Saved %d theory file(s) in "%s"' % (counter, line)
+        if CmdBase.mode == CmdMode.GUI:
+            QMessageBox.information(self, 'Saved Theory', msg)
+        else:
+            print(msg)
 
 # SPAN STUFF
 

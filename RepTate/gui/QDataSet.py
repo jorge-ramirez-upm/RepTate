@@ -286,7 +286,18 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             dilogue_name = "Select Folder"
             folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
             if os.path.isdir(folder):
-                self.theories[th].do_save(folder)
+                dialog = QInputDialog(self)
+                dialog.setWindowTitle('Add label to filename(s)?')
+                dialog.setLabelText('Add the following text to each saved theory filename(s):')
+                dialog.setTextValue('')
+                dialog.setCancelButtonText('None')
+                if dialog.exec():
+                    txt = dialog.textValue()
+                    if txt != '':
+                        txt = '_' + txt
+                else:
+                    txt = ''
+                self.theories[th].do_save(folder, txt)
 
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)
