@@ -315,6 +315,7 @@ class MultiView(QWidget):
                         pass
         self.canvas.draw()
         self.parent_application.set_view_tools(view_name)
+        self.parent_application.update_datacursor_artists()
 
     def organizeHorizontal(self, nplots):
         gs = gridspec.GridSpec(1, self.nplots,left=self.LEFT,right=self.RIGHT,

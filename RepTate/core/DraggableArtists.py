@@ -564,9 +564,18 @@ class DraggableModesSeries(DraggableArtist):
         # canvas.blit(axes.bbox)
         self.background = None
         # self.artist.figure.canvas.draw()
-        self.data = self.artist.get_data()
-        xdata = self.data[0]
-        ydata = self.data[1]
+        tmp_data = self.artist.get_data()
+        xdata = tmp_data[0]
+        ydata = tmp_data[1]
+        # for compatibility with mpldatacursor
+        # prevent the modes from disappearing 
+        try:
+            float(xdata[0])
+            self.data = tmp_data
+        except TypeError:
+            # don't change the modes
+            xdata = self.data[0]
+            ydata = self.data[1]
         self.function(xdata, ydata)
 
 
