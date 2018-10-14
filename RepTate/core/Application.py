@@ -141,7 +141,8 @@ class Application(CmdBase):
         self.datacursor_ = None
 
     def update_datacursor_artists(self):
-        """Update the datacursor. Called at the end of ds.do_plot()"""
+        """Update the datacursor instance 
+        Called at the end of ds.do_plot() and when plot-tab is changed"""
         try: 
             self.datacursor_.remove()
         except AttributeError:
@@ -172,9 +173,11 @@ class Application(CmdBase):
                                     if th:
                                         artists.append(th.tables[f.file_name_short].series[self.current_viewtab - 1][j])
                 self.datacursor_ = cursor(pickables=artists) 
+                self.datacursor_.bindings["deselect"] = 1
         else:
             axs = [self.axarr[i] for i in range(self.nplots)]
             self.datacursor_ = cursor(pickables=axs) 
+            self.datacursor_.bindings["deselect"] = 1
         @self.datacursor_.connect("add")
         def _(sel):
             x, y = sel.target
