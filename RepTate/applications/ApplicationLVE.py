@@ -93,7 +93,6 @@ class BaseApplicationLVE:
         from TheoryBobLVE import TheoryBobLVE
         from TheoryRDPLVE import TheoryRDPLVE
         super().__init__(name, parent)
-        self.log_g_scaling = 0 # scalling in vGP plots
 
         # VIEWS
         self.views["log(G',G''(w))"] = View(
@@ -407,10 +406,6 @@ class BaseApplicationLVE:
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(
             np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
-        try:
-            x[:, 0] -= self.log_g_scaling
-        except:
-            pass
         y[:, 0] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
@@ -421,10 +416,6 @@ class BaseApplicationLVE:
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(
             np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
-        try:
-            x[:, 0] -= self.log_g_scaling
-        except:
-            pass
         y[:, 0] = np.arctan2(dt.data[:, 2], dt.data[:, 1]) * 180 / np.pi
         return x, y, True
 
@@ -532,58 +523,3 @@ class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
             - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent)
-        self.add_rescale_G_widget()
-        self.set_gscaling_widget_visible(False)
-        
-    def add_rescale_G_widget(self):
-        """Add widgets below the view combobox to select the 
-        G value to reascale the x axis (used in vGP plots)"""
-        hlayout = QHBoxLayout()
-        
-        hlayout.addStretch()
-        # scale G
-        self.scale_value = QLineEdit("") 
-        self.scale_value.setToolTip("Rescale G<sup>*</sup>")
-        self.scale_value.textChanged.connect(self.change_scale_value)
-        self.scale_value.setValidator(QDoubleValidator())
-        self.scale_value.setMaximumWidth(65)
-        self.scale_value.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        self.scale_value_label = QLabel("<b>log(G)</b>")
-        self.scale_value_label.setToolTip("Rescale G<sup>*</sup>")
-        hlayout.addWidget(self.scale_value_label)
-        hlayout.addWidget(self.scale_value)
-        #push button to refresh view
-        self.pb = QPushButton("GO")
-        self.pb.setMaximumWidth(25)
-        self.pb.clicked.connect(self.update_all_ds_plots)
-        hlayout.addWidget(self.pb)
-        self.hlayout_view = hlayout
-        self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
-
-    def change_scale_value(self, text):
-        """Update the value of t_min"""
-        if text == "":
-            self.log_g_scaling = 0
-        else:
-            try:
-                self.log_g_scaling = float(text)
-            except:
-                self.log_g_scaling = 0
-
-    def set_view_tools(self, view_name):
-        """Show/Hide extra view widgets depending on the current view"""
-        if view_name in ["log(tan(delta),G*)", "delta(G*)"]:
-            self.set_gscaling_widget_visible(True)
-        else:
-            try:
-                self.set_gscaling_widget_visible(False)
-            except AttributeError:
-                pass
-    
-    def set_gscaling_widget_visible(self, state):
-        """Show/Hide the extra widgets for xrange selection"""
-        self.pb.setVisible(state)
-        self.scale_value.setVisible(state)
-        self.scale_value_label.setVisible(state)
-
-        
