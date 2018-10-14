@@ -61,7 +61,7 @@ from ToolBounds import ToolBounds
 from ToolEvaluate import ToolEvaluate
 from ToolInterpolate import ToolInterpolateExtrapolate
 from ToolMaterialsDatabase import ToolMaterialsDatabase
-from mpldatacursor import datacursor
+from mplcursors import cursor
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -171,14 +171,16 @@ class Application(CmdBase):
                                     artists.append(dt.series[self.current_viewtab - 1][j])
                                     if th:
                                         artists.append(th.data_table.series[self.current_viewtab - 1][j])
-                self.datacursor_ = datacursor(artists=artists, formatter="x={x:.3g}\ny={y:.3g}".format, hide_button=1) # enable draggable=True?
+                self.datacursor_ = cursor(pickables=artists, hover=True) 
         else:
             axs = [self.axarr[i] for i in range(self.nplots)]
-            self.datacursor_ = datacursor(axes=axs, formatter="x={x:.3g}\ny={y:.3g}".format, hide_button=1) # enable draggable=True?
-        # change arrow color to red (default='black')
-        self.datacursor_.default_annotation_kwargs['arrowprops']['edgecolor'] = 'red'
-        # less transparency (default=0.5)
-        self.datacursor_.default_annotation_kwargs['bbox']['alpha'] = 0.7
+            self.datacursor_ = cursor(pickables=axs, hover=True) 
+        @self.datacursor_.connect("add")
+        def _(sel):
+            x, y = sel.target
+            sel.annotation.set(text="%.3g, %.3g"%(x,y))
+            sel.annotation.get_bbox_patch().set(alpha=0.7)
+            sel.annotation.arrow_patch.set(ec="red", alpha=0.5)
 
     def set_multiplot(self, nplots, ncols):
         """defines the plot"""
