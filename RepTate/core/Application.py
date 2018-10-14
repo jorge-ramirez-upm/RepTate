@@ -178,7 +178,7 @@ class Application(CmdBase):
         @self.datacursor_.connect("add")
         def _(sel):
             x, y = sel.target
-            sel.annotation.set(text="%.3g, %.3g"%(x,y))
+            sel.annotation.set(text="%.3g, %.3g"%(x,y), size=15)
             sel.annotation.get_bbox_patch().set(alpha=0.7)
             sel.annotation.arrow_patch.set(ec="red", alpha=0.5)
 
