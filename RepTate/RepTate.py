@@ -41,6 +41,7 @@ import glob
 import argparse
 import traceback
 from logging import *
+import numpy as np
 basicConfig(level=WARNING)
  
 # os.chdir(os.path.dirname(sys.argv[0])) # set cwd as *this* dir
@@ -135,10 +136,13 @@ def start_RepTate(argv):
     for k in dictfiles.keys():
         if k == 'rept':
             ex.open_project(dictfiles[k][0])
-        elif (k in d.keys()):
-            ex.handle_new_app(d[k])
-            appname="%s%d"%(d[k],ex.application_counter)
-            ex.applications[appname].new_tables_from_files(dictfiles[k])
+        elif np.any([k in key for key in d.keys()]): # works with spaces in extensions
+            for key in d.keys():
+                if k in key:
+                    ex.handle_new_app(d[key])
+                    appname="%s%d"%(d[key],ex.application_counter)
+                    ex.applications[appname].new_tables_from_files(dictfiles[k])
+                    break
         else:
             print("File type %s cannot be opened"%k)
 
