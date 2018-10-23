@@ -49,7 +49,7 @@ class ApplicationNLVE(CmdBase):
     """
     appname = "NLVE"
     description = "Non-Linear Flow"
-    extension = "shear"
+    extension = "shear uext"
 
     def __new__(cls, name="NLVE", parent=None):
         """[summary]
@@ -91,6 +91,7 @@ class BaseApplicationNLVE:
         from TheoryPomPom import TheoryPomPom
         from TheoryRolieDoublePoly import TheoryRolieDoublePoly
         from TheoryBobNLVE import TheoryBobNLVE
+        from TheoryPETS import TheoryPETS
 
         super().__init__(name, parent)
 
@@ -193,6 +194,7 @@ class BaseApplicationNLVE:
         self.theories[TheoryPomPom.thname] = TheoryPomPom
         self.theories[TheoryRolieDoublePoly.thname] = TheoryRolieDoublePoly
         self.theories[TheoryBobNLVE.thname] = TheoryBobNLVE
+        self.theories[TheoryPETS.thname] = TheoryPETS
         self.add_common_theories()
         
         #set the current view
