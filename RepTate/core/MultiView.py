@@ -313,6 +313,7 @@ class MultiView(QWidget):
                         plt.delaxes(self.axarr[i])
                     except:
                         pass
+        self.parent_application.update_datacursor_artists()
         self.canvas.draw()
         self.parent_application.set_view_tools(view_name)
 

@@ -61,6 +61,7 @@ from ToolBounds import ToolBounds
 from ToolEvaluate import ToolEvaluate
 from ToolInterpolate import ToolInterpolateExtrapolate
 from ToolMaterialsDatabase import ToolMaterialsDatabase
+from mplcursors import cursor
 
 class Application(CmdBase):
     """Main abstract class that represents an application
@@ -137,6 +138,52 @@ class Application(CmdBase):
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
             self.multiplots.show()
+        self.datacursor_ = None
+
+    def update_datacursor_artists(self):
+        """Update the datacursor instance 
+        Called at the end of ds.do_plot() and when plot-tab is changed"""
+        try: 
+            self.datacursor_.remove()
+        except AttributeError:
+            pass
+        del self.datacursor_
+
+        if CmdBase.mode == CmdMode.GUI:
+            ds_list = [self.DataSettabWidget.currentWidget(),]
+            if self.actionView_All_Sets.isChecked():
+                ds_list = self.datasets.values()
+            artists = []
+            for ds in ds_list:
+                if ds:
+                    th = ds.TheorytabWidget.currentWidget()
+                    for f in ds.files:
+                        if f.active:
+                            dt = f.data_table
+                            for j in range(dt.MAX_NUM_SERIES):
+                                if self.current_viewtab == 0:
+                                    # all artists
+                                    for i in range(self.nplots):
+                                        artists.append(dt.series[i][j])
+                                        if th:
+                                            artists.append(th.tables[f.file_name_short].series[i][j])
+                                else:
+                                    # only artists of current tab
+                                    artists.append(dt.series[self.current_viewtab - 1][j])
+                                    if th:
+                                        artists.append(th.tables[f.file_name_short].series[self.current_viewtab - 1][j])
+                self.datacursor_ = cursor(pickables=artists) 
+                self.datacursor_.bindings["deselect"] = 1
+        else:
+            axs = [self.axarr[i] for i in range(self.nplots)]
+            self.datacursor_ = cursor(pickables=axs) 
+            self.datacursor_.bindings["deselect"] = 1
+        @self.datacursor_.connect("add")
+        def _(sel):
+            x, y = sel.target
+            sel.annotation.set(text="%.3g; %.3g"%(x,y), size=15)
+            sel.annotation.get_bbox_patch().set(alpha=0.7)
+            sel.annotation.arrow_patch.set(ec="red", alpha=0.5)
 
     def set_multiplot(self, nplots, ncols):
         """defines the plot"""
