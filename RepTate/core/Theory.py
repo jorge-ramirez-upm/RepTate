@@ -1134,9 +1134,10 @@ class Theory(CmdBase):
         nrows = len(rows)
         table = '''<table border="1" width="100%">'''
         # header
-        table += '<tr>'
-        table += ''.join(['<th>%s</th>' % h for h in header])
-        table += '</tr>'
+        if not np.all([h == '' for h in header]):
+            table += '<tr>'
+            table += ''.join(['<th>%s</th>' % h for h in header])
+            table += '</tr>'
         #data
         for row in rows:
             table += '<tr>'
