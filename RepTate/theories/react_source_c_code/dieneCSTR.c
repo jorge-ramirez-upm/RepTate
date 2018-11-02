@@ -178,7 +178,7 @@ void diene_grow(int dir, int m, double cur_conv)
     double seg_len, new_conv;
 
     rlevel++; //recursion level
-    if ((rlevel > 1000) || dCSTR_global.dieneCSTRerrorflag)
+    if ((rlevel > pb_global_const.MAX_RLEVEL) || dCSTR_global.dieneCSTRerrorflag)
     {
         dCSTR_global.dieneCSTRerrorflag = true;
         rlevel = 100000;

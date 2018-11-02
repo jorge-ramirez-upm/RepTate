@@ -225,7 +225,7 @@ void mulmet_grow(int dir, int m, int cur_cat)
     double seg_len, rnd;
 
     rlevel++; //recursion level
-    if ((rlevel > 5000) || MMCSTR_global.mulmetCSTRerrorflag)
+    if ((rlevel > pb_global_const.MAX_RLEVEL) || MMCSTR_global.mulmetCSTRerrorflag)
     {
         MMCSTR_global.mulmetCSTRerrorflag = true;
         rlevel = 100000;

@@ -142,7 +142,7 @@ void tobita_grow(int dir, int m, double cur_conv, bool sc_tag)
     double sigma, lambda, pref, Psigma, Plambda, Pbeta;
 
     rlevel++; //recursion level
-    if ((rlevel > 5000) || tb_global.tobitabatcherrorflag)
+    if ((rlevel > pb_global_const.MAX_RLEVEL) || tb_global.tobitabatcherrorflag)
     {
         ///  need to decide what to do if you make molecules too big
         tb_global.tobitabatcherrorflag = true;

@@ -155,7 +155,7 @@ void tobita_grow(int dir, int m, double cur_conv, bool sc_tag)
     double seg_len, new_conv, rnd;
 
     rlevel++; //recursion level
-    if ((rlevel > 5000) || tCSTR_global.tobitaCSTRerrorflag)
+    if ((rlevel > pb_global_const.MAX_RLEVEL) || tCSTR_global.tobitaCSTRerrorflag)
     {
         ///
         ///  need to decide what to do if you make molecules too big

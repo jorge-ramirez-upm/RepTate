@@ -76,6 +76,7 @@ typedef struct
     int maxarm; //  maxarm=10000000;
     int maxpol;
     int maxreact;
+    int MAX_RLEVEL;
 } polybits_global_const; //these are not really constants, can be changed at runtime
 
 typedef struct
