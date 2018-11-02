@@ -60,7 +60,7 @@ except:
 class polybits_global_const(ct.Structure):
     _fields_ = [("maxbobbins", ct.c_int), ("maxmwdbins", ct.c_int),
                 ("maxarm", ct.c_int), ("maxpol", ct.c_int), ("maxreact",
-                                                             ct.c_int)]
+                                                             ct.c_int), ("MAX_RLEVEL", ct.c_int)]
 
 
 class polybits_global(ct.Structure):
@@ -387,7 +387,7 @@ def end_print(parent_theory, ndist, do_architecture):
     """Print the simulation information at the end of the run. 
     Print priority and seniority information if needed"""
     parent_theory.Qprint(
-        '<hr style="border-top: dotted 2px;" /><b>Simulation Results:</b>')
+        '<b>Simulation Results:</b>')
     table = '''<table border="1" width="100%">'''
     table += '''<tr><td>%s</td><td>%d</td></tr>''' % (
         'Polymer made', react_dist[ndist].contents.npoly)

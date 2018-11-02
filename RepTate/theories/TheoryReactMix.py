@@ -196,27 +196,29 @@ class BaseTheoryReactMix:
 
         totpoly = 0
         totsaved = 0
-        self.Qprint('*************************')
-        self.Qprint('End of mixture calculation')
+        self.Qprint('<b>Mixture calculation results:</b>')
         # for i in range (1, rch.pb_global_const.maxreact):
         #     if mixtureform.inmix[i]:
-
+        table = []
+        table.append(['Distribution', '#Polymer', '#Saved'])
         for i, dist in enumerate(self.dists):
             totpoly = totpoly + rch.react_dist[dist].contents.npoly
             totsaved = totsaved + rch.react_dist[dist].contents.nsaved
-            self.Qprint('Used distribution %s' % self.theory_names[i])
-            self.Qprint(
-                'Containing %d polymers' % rch.react_dist[dist].contents.npoly)
-            self.Qprint('Including %d saved polymers' %
-                        rch.react_dist[dist].contents.nsaved)
-
-        self.Qprint('Total polymers: %d' % totpoly)
-        self.Qprint('Total saved polymers: %d' % totsaved)
-        self.Qprint('Mn = %.3g' % rch.bab_global.multi_m_n)
-        self.Qprint('Mw = %.3g' % rch.bab_global.multi_m_w)
-        self.Qprint('br/1000C = %.3g' % rch.bab_global.multi_brav)
-        self.Qprint('*************************')
-
+            table.append([str(self.theory_names[i]), str(rch.react_dist[dist].contents.npoly), str(rch.react_dist[dist].contents.nsaved)])
+            # self.Qprint('Used distribution %s' % self.theory_names[i])
+            # self.Qprint(
+            #     'Containing %d polymers' % rch.react_dist[dist].contents.npoly)
+            # self.Qprint('Including %d saved polymers' %
+            #             rch.react_dist[dist].contents.nsaved)
+        self.Qprint(table)
+        table = []
+        table.append(['', '']) # no header
+        table.append(['Total polymers', '%d' % totpoly])
+        table.append(['Total saved polymers', '%d' % totsaved])
+        table.append(['Mn', '%.3g' % rch.bab_global.multi_m_n])
+        table.append(['Mw', '%.3g' % rch.bab_global.multi_m_w])
+        table.append(['br/1000C', '%.3g' % rch.bab_global.multi_brav])
+        self.Qprint(table)
         self.calcexists = True
         return rch.bab_global.multi_nummwdbins - 1
 

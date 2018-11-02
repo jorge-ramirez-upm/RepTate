@@ -283,9 +283,12 @@ class BaseTheoryMultiMetCSTR:
 
         # make numtomake polymers
         i = 0
+        rate_print = np.trunc(numtomake / 20)
+        self.Qprint('Making polymers:')
+        self.Qprint('0% ', end='')
         while i < numtomake:
             if self.stop_theory_flag:
-                self.Qprint('<big><font color=red><b>Polymer creation stopped by user</b></font></big>')
+                self.Qprint('<br><big><font color=red><b>Polymer creation stopped by user</b></font></big>')
                 break
             # get a polymer
             success = rch.request_poly(ct.byref(c_m))
@@ -313,7 +316,7 @@ class BaseTheoryMultiMetCSTR:
                     # check for error
                     if rch.MMCSTR_global.mulmetCSTRerrorflag:
                         self.Qprint(
-                            '<big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>'
+                            '<br><big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>'
                         )
                         i = numtomake
                 else:  # error message if we ran out of arms
@@ -330,12 +333,10 @@ class BaseTheoryMultiMetCSTR:
                         rch.MMCSTR_global.mulmetCSTRerrorflag = True
 
                 # update on number made
-                if rch.react_dist[ndist].contents.npoly % np.trunc(
-                        numtomake / 20) == 0:
-                    self.Qprint('Made %d polymers' %
-                                rch.react_dist[ndist].contents.npoly)
-                    QApplication.processEvents(
-                    )  # needed to use Qprint if in single-thread
+                if i % rate_print == 0:
+                    self.Qprint('-', end='')
+                    # needed to use Qprint if in single-thread
+                    QApplication.processEvents()  
 
             else:  # polymer wasn't available
                 self.success_increase_memory = None
@@ -349,6 +350,8 @@ class BaseTheoryMultiMetCSTR:
                 else:
                     i = numtomake
         # end make polymers loop
+        if not rch.MMCSTR_global.mulmetCSTRerrorflag:
+            self.Qprint('&nbsp;100%')
 
         calc = 0
         # do analysis of polymers made
