@@ -455,9 +455,21 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
     lgmin = np.log10(react_dist[ndist].contents.monmass / 1.01)
     num_armwt_bin = react_dist[ndist].contents.num_armwt_bin
     lgstep = (lgmax - lgmin)/(1.0 * num_armwt_bin)
-    tt.extra_tables['proba_arm_wt'] = np.zeros((num_armwt_bin, 2))
-    tt.extra_tables['proba_arm_wt'][:, 0] = np.power(10, [lgmin + ibin * lgstep - 0.5 * lgstep for ibin in range(1, num_armwt_bin + 1)])
-    tt.extra_tables['proba_arm_wt'][:, 1] = [react_dist[ndist].contents.numin_armwt_bin[ibin] for ibin in range(1, num_armwt_bin + 1)]
+    tmp_x = np.power(10, [lgmin + ibin * lgstep - 0.5 * lgstep for ibin in range(1, num_armwt_bin + 1)])
+    tmp_y = [react_dist[ndist].contents.numin_armwt_bin[ibin] for ibin in range(1, num_armwt_bin + 1)]
+    # trim right zeros
+    tmp_y = np.trim_zeros(tmp_y, 'b')
+    new_len = len(tmp_y)
+    tmp_x = tmp_x[:new_len]
+    # trim left zeros
+    tmp_y = np.trim_zeros(tmp_y, 'f')
+    new_len = len(tmp_y)
+    tmp_x = tmp_x[-new_len:]
+
+    tt.extra_tables['proba_arm_wt'] = np.zeros((new_len, 2))
+    tt.extra_tables['proba_arm_wt'][:, 0] = tmp_x
+    tt.extra_tables['proba_arm_wt'][:, 1] = tmp_y
+    # normalize
     try:
         tt.extra_tables['proba_arm_wt'][:, 1] /= tt.extra_tables['proba_arm_wt'][:, 1].sum()
     except ZeroDivisionError:
