@@ -661,13 +661,15 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         """
         # if column == 0: #do not sort file name
         #     return
-        sort_param = self.DataSettreeWidget.headerItem().text(column)
-        rev = True if order == Qt.AscendingOrder else False
-        if rev:
-            sort_param = sort_param + ",reverse"
-        self.do_sort(sort_param)
-        self.do_plot()
-        self.set_table_icons(self.table_icon_list)
+        if self.DataSettreeWidget.topLevelItemCount() > 0:
+            # sort iff there are some files in the dataset
+            sort_param = self.DataSettreeWidget.headerItem().text(column)
+            rev = True if order == Qt.AscendingOrder else False
+            if rev:
+                sort_param = sort_param + ",reverse"
+            self.do_sort(sort_param)
+            self.do_plot()
+            self.set_table_icons(self.table_icon_list)
 
     def Qshow_all(self):
         """Show all the files in this dataset, except those previously hiden

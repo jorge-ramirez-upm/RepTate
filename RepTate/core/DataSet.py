@@ -557,13 +557,14 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         else:
             print("Wrong number of arguments")
 
-        if fp in self.current_file.file_parameters:
-            self.files.sort(
-                key=lambda x: float(x.file_parameters[fp]), reverse=rev)
-        elif fp == "File":
-            self.files.sort(key=lambda x: x.file_name_short, reverse=rev)
-        else:
-            print("Parameter %s not found in files" % line)
+        if self.current_file:
+            if fp in self.current_file.file_parameters:
+                self.files.sort(
+                    key=lambda x: float(x.file_parameters[fp]), reverse=rev)
+            elif fp == "File":
+                self.files.sort(key=lambda x: x.file_name_short, reverse=rev)
+            else:
+                print("Parameter %s not found in files" % line)
 
     def complete_sort(self, text, line, begidx, endidx):
         """Complete with the list of file parameters of the current file in the current dataset
