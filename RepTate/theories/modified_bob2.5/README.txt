@@ -12,8 +12,11 @@ Copy that file to RepTate's "theories/" folder and change its name according to 
 MacOs
 cp bob2p5_lib.so ../../../../bob2p5_lib_darwin.so
 
-Windows 
+Windows 64-bit
 cp bob2p5_lib.so ../../../../bob2p5_lib_win32.so
+
+Windows 32-bit 
+cp bob2p5_lib.so ../../../../bob2p5_lib_win32_i686.so
 
 Linux
 cp bob2p5_lib.so ../../../../bob2p5_lib_linux.so
