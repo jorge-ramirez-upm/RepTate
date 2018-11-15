@@ -37,7 +37,7 @@
 #include "react_structs.h"
 #include "polybits.h"
 
-polybits_global_const pb_global_const = {.maxbobbins = 5000, .maxmwdbins = 1000, .maxarm = 1000000, .maxpol = 1000000, .maxreact = 11, .MAX_RLEVEL = 1000};
+polybits_global_const pb_global_const = {.maxbobbins = 5000, .maxmwdbins = 1000, .maxarm = 1000000, .maxpol = 1000000, .maxreact = 11, .MAX_RLEVEL = 1000, .MAX_NBR=1e6};
 polybits_global pb_global = {.first_in_pool = 0, .first_poly_in_pool = 0, .first_dist_in_pool = 0, .mmax = 0, .num_react = 0, .arms_left = 0, .react_pool_initialised = false, .react_pool_declared = false, .arms_avail = true, .polys_avail = true, .dists_avail = true};
 
 arm *arm_pool;
@@ -65,8 +65,7 @@ void react_pool_init(void)
                 react_dist[i].lgmid = (double *)malloc(sizeof(double) * (pb_global_const.maxmwdbins + 1));
                 react_dist[i].numinbin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
                 react_dist[i].numin_armwt_bin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
-                react_dist[i].numin_num_br_bin = (int *)malloc(sizeof(int) * (pb_global_const.maxbobbins + 1));
-                react_dist[i].max_num_br = pb_global_const.maxbobbins;
+                react_dist[i].numin_num_br_bin = (int *)malloc(sizeof(int) * (pb_global_const.MAX_NBR + 1));
             }
             is_initialized = true;
         }

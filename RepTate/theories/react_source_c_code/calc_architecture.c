@@ -141,10 +141,13 @@ void bin_br_pts(int npoly, int ndistr)
 {
     int num_br;
     num_br = br_poly[npoly].num_br;
-    react_dist[ndistr].numin_num_br_bin[num_br] += 1;
     if (num_br > react_dist[ndistr].max_num_br)
     {
         react_dist[ndistr].max_num_br = num_br;
+    }
+    if (num_br < (pb_global_const.MAX_NBR + 1))
+    {
+        react_dist[ndistr].numin_num_br_bin[num_br] += 1;
     }
 }
 
@@ -198,7 +201,7 @@ void init_bin_prio_vs_senio(int ndistr)
     react_dist[ndistr].num_armwt_bin = num_armwt_bin;
 
     // initialise branch point statistics
-    for (i = 0; i <= react_dist[ndistr].max_num_br; i++)
+    for (i = 0; i < pb_global_const.MAX_NBR + 1; i++)
     {
         react_dist[ndistr].numin_num_br_bin[i] = 0;
     }
@@ -311,7 +314,7 @@ void save_architect(int npol, int ndist)
     int narm, first, m;
     int mL1, mL2, mR1, mR2;
     double wt;
-    
+
     wt = br_poly[npol].tot_len * react_dist[ndist].monmass;
     narm = br_poly[npol].armnum;
     if (narm == 1)

@@ -60,7 +60,7 @@ except:
 class polybits_global_const(ct.Structure):
     _fields_ = [("maxbobbins", ct.c_int), ("maxmwdbins", ct.c_int),
                 ("maxarm", ct.c_int), ("maxpol", ct.c_int), ("maxreact",
-                                                             ct.c_int), ("MAX_RLEVEL", ct.c_int)]
+                                                             ct.c_int), ("MAX_RLEVEL", ct.c_int), ("MAX_NBR", ct.c_int)]
 
 
 class polybits_global(ct.Structure):
@@ -388,26 +388,19 @@ def end_print(parent_theory, ndist, do_architecture):
     Print priority and seniority information if needed"""
     parent_theory.Qprint(
         '<b>Simulation Results:</b>')
-    table = '''<table border="1" width="100%">'''
-    table += '''<tr><td>%s</td><td>%d</td></tr>''' % (
-        'Polymer made', react_dist[ndist].contents.npoly)
-    table += '''<tr><td>%s</td><td>%d</td></tr>''' % (
-        'Polymer saved', react_dist[ndist].contents.nsaved)
-    table += '''<tr><td>%s</td><td>%d</td></tr>''' % ('Arm left in memory',
-                                                      pb_global.arms_left)
-    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
-        'Mn (g/mol)', react_dist[ndist].contents.m_n)
-    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
-        'Mw (g/mol)', react_dist[ndist].contents.m_w)
-    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
-        'Mz (g/mol)', react_dist[ndist].contents.m_z)
-    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
-        'Mz+1 (g/mol)', react_dist[ndist].contents.m_zp1)
-    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
-        'Mz+2 (g/mol)', react_dist[ndist].contents.m_zp2)
-    table += '''<tr><td>%s</td><td>%.3g</td></tr>''' % (
-        'Br/1000C', react_dist[ndist].contents.brav)
-    table += '''</table><br>'''
+
+    table = []
+    table.append(['', '']) # no header
+    table.append(['Polymer made', '%d' % react_dist[ndist].contents.npoly])
+    table.append(['Polymer saved', '%d' % react_dist[ndist].contents.nsaved])
+    table.append(['Arm left in memory', '%d' % pb_global.arms_left])
+    table.append(['Mn (g/mol)', '%.3g' % react_dist[ndist].contents.m_n])
+    table.append(['Mw (g/mol)', '%.3g' % react_dist[ndist].contents.m_w])
+    table.append(['Mz (g/mol)', '%.3g' % react_dist[ndist].contents.m_z])
+    table.append(['Mz+1 (g/mol)', '%.3g' % react_dist[ndist].contents.m_zp1])
+    table.append(['Mz+2 (g/mol)', '%.3g' % react_dist[ndist].contents.m_zp2])
+    table.append(['Br/1000C', '%.3g' % react_dist[ndist].contents.brav])
+    table.append(['Max br', '%d' % react_dist[ndist].contents.max_num_br])
     parent_theory.Qprint(table)
 
     if (do_architecture):
@@ -477,6 +470,9 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
 
     # number of branch points branch point
     max_num_br = react_dist[ndist].contents.max_num_br
+    
+    # if max_num_br < 100:
+    rmax = min(max_num_br + 1, pb_global_const.MAX_NBR)
     tt.extra_tables['proba_br_pt'] = np.zeros((max_num_br + 1, 2))
     tt.extra_tables['proba_br_pt'][:, 0] = np.arange(max_num_br + 1)
     tt.extra_tables['proba_br_pt'][:, 1] = [react_dist[ndist].contents.numin_num_br_bin[i] for i in range(max_num_br + 1)]
@@ -484,6 +480,14 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
         tt.extra_tables['proba_br_pt'][:, 1] /= tt.extra_tables['proba_br_pt'][:, 1].sum()
     except ZeroDivisionError:
         pass
+    # else:
+    #     # bin the data
+    #     tmp_x = list(np.arange(max_num_br + 1))
+    #     tmp_y = [react_dist[ndist].contents.numin_num_br_bin[i] for i in range(max_num_br + 1)]
+    #     hist, bin_edge = np.histogram(tmp_x, bins=20, weights=tmp_y, density=True)
+    #     tt.extra_tables['proba_br_pt'] = np.zeros((len(hist), 2))
+    #     tt.extra_tables['proba_br_pt'][:, 0] = np.diff(bin_edge) / 2 + bin_edge[:-1]
+    #     tt.extra_tables['proba_br_pt'][:, 1] = hist
 
     if not do_architecture:
         return

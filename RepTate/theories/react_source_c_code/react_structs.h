@@ -77,6 +77,7 @@ typedef struct
     int maxpol;
     int maxreact;
     int MAX_RLEVEL;
+    int MAX_NBR; // max number of branch pt per molecule
 } polybits_global_const; //these are not really constants, can be changed at runtime
 
 typedef struct

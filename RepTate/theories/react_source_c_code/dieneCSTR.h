@@ -37,7 +37,7 @@
 #include <stdbool.h>
 #include "react_structs.h"
 
-void dieneCSTRstart(double _tau, double _kpM, double _kDLCB, double _kpD, double _kd, double _kt, double _D0, double _C0, int n);
+void dieneCSTRstart(double _tau, double _kpM, double _kDLCB, double _kpLCB, double _kpD, double _keq, double _ks, double _D0, double _C0, double _ldiene, double t_collection, int n);
 bool dieneCSTR(int n, int n1);     // returns false it we ran out of arm-storage
 
 extern dieneCSTR_global dCSTR_global;

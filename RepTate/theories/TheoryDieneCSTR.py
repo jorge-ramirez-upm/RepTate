@@ -55,8 +55,8 @@ class TheoryDieneCSTR(CmdBase):
     """
     thname = 'Diene CSTR'
     description = 'The Diene CSTR reaction theory'
-    citations = 'Das C., Read D. J., Soulages J. M., and Shirodkar P. P., Macromolecules, 47, 5860-5868 (2014)'
-    doi = "https://doi.org/10.1021/ma5011205"
+    citations = 'Das C., Read D. J., Soulages J. M., and Shirodkar P. P., Macromol. Theory Simul., 26, 1700006 (2017)'
+    doi = "https://doi.org/10.1002/mats.201700006"
 
     def __new__(cls, name='', parent_dataset=None, ax=None):
         """[summary]
@@ -110,64 +110,89 @@ class BaseTheoryDieneCSTR:
         self.has_modes = False  # True if the theory has modes
         self.autocalculate = False
         self.do_priority_seniority = False
+        self.M_diene = 138
 
+        self.parameters['col_time'] = Parameter(
+            name='col_time',
+            value=1e3,
+            min_value=0,
+            description='Collection time',
+            type=ParameterType.real,
+            opt_type=OptType.const)
         self.parameters['tau'] = Parameter(
             name='tau',
-            value=100,
+            value=200,
             description='Reactor time constant',
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['kpM'] = Parameter(
-            name='kpM',
-            value=100,
-            description='Polymerisation rate times Monomer conc.',
-            type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['kDLCB'] = Parameter(
-            name='kDLCB',
-            value=45,
-            description='Rate of long-chain branching by addition of a pendant diene',
-            type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['kpD'] = Parameter(
-            name='kpD',
-            value=180,
-            description='Rate of free-diene incorporation',
-            type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['kd'] = Parameter(
-            name='kd',
-            value=1e-4,
-            description='Rate of catalyst deactivation during termination',
-            type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['kt'] = Parameter(
-            name='kt',
-            value=0.085,
-            description='Rate of termination',
-            type=ParameterType.real,
+            min_value=0,
             opt_type=OptType.const)
         self.parameters['D0'] = Parameter(
             name='D0',
-            value=1e-3,
+            value=1e-4,
+            min_value=0,
             description='Rate of diene feed to the reactor',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters['C0'] = Parameter(
             name='C0',
-            value=1e-2,
+            value=2e-3,
+            min_value=0,
             description='Rate of catalyst feed to the reactor',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['kpM'] = Parameter(
+            name='kpM',
+            value=150,
+            min_value=0,
+            description='Polymerisation rate times Monomer conc.',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['k='] = Parameter(
+            name='k=',
+            value=0.2,
+            min_value=0,
+            description='Rate of termination leaving double bond behind',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['ks'] = Parameter(
+            name='ks',
+            value=0.005,
+            min_value=0,
+            description='Rate of termination leaving saturated chain behind',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['kpD'] = Parameter(
+            name='kpD',
+            value=30,
+            min_value=0,
+            description='Rate of free-diene incorporation',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['kDLCB'] = Parameter(
+            name='kDLCB',
+            value=0.2,
+            min_value=0,
+            description='Rate of long-chain branching by addition of a pendant diene',
+            type=ParameterType.real,
+            opt_type=OptType.const)
+        self.parameters['kpLCB'] = Parameter(
+            name='kpLCB',
+            value=1,
+            min_value=0,
+            description='Rate of long-chain branching by macromer incorporation',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters['num_to_make'] = Parameter(
             name='num_to_make',
             value=1000,
+            min_value=0,
             description='Number of molecules made in the simulation',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters['mon_mass'] = Parameter(
             name='mon_mass',
             value=28,
+            min_value=0,
             description=
             'Mass, in a.m.u., of a monomer (usually set to 28 for PE)',
             type=ParameterType.real,
@@ -175,12 +200,14 @@ class BaseTheoryDieneCSTR:
         self.parameters['Me'] = Parameter(
             name='Me',
             value=1000,
+            min_value=0,
             description='Entanglement molecular weight',
             type=ParameterType.real,
             opt_type=OptType.const)
         self.parameters['nbin'] = Parameter(
             name='nbin',
             value=100,
+            min_value=1,
             description='Number of molecular weight bins',
             type=ParameterType.real,
             opt_type=OptType.const)
@@ -231,12 +258,14 @@ class BaseTheoryDieneCSTR:
         """
 
         # get parameters
+        col_time = self.parameters['col_time'].value
         tau = self.parameters['tau'].value
         kpM = self.parameters['kpM'].value
         kDLCB = self.parameters['kDLCB'].value
+        kpLCB = self.parameters['kpLCB'].value
         kpD = self.parameters['kpD'].value
-        kd = self.parameters['kd'].value
-        kt = self.parameters['kt'].value
+        keq = self.parameters['k='].value
+        ks = self.parameters['ks'].value
         D0 = self.parameters['D0'].value
         C0 = self.parameters['C0'].value
         numtomake = np.round(self.parameters['num_to_make'].value)
@@ -281,16 +310,15 @@ class BaseTheoryDieneCSTR:
             rch.return_dist_polys(ct.c_int(ndist))
 
         # initialise diene batch
-        rch.dieneCSTRstart(
-            ct.c_double(tau), ct.c_double(kpM), ct.c_double(kDLCB),
-            ct.c_double(kpD), ct.c_double(kd), ct.c_double(kt),
-            ct.c_double(D0), ct.c_double(C0), ct.c_int(ndist))
+        ldiene = self.M_diene / monmass
+        rch.dieneCSTRstart(ct.c_double(tau), ct.c_double(kpM), ct.c_double(kDLCB), ct.c_double(kpLCB), ct.c_double(kpD), ct.c_double(keq), ct.c_double(ks), ct.c_double(D0), ct.c_double(C0), ct.c_double(ldiene), ct.c_double(col_time), ct.c_int(ndist))
         rch.react_dist[ndist].contents.npoly = 0
 
         c_m = ct.c_int()
 
         # make numtomake polymers
         i = 0
+        n_gel = 0
         rate_print = np.trunc(numtomake / 20)
         self.Qprint('Making polymers:')
         self.Qprint('0% ', end='')
@@ -322,10 +350,12 @@ class BaseTheoryDieneCSTR:
                     i += 1
                     # check for error
                     if rch.dCSTR_global.dieneCSTRerrorflag:
-                        self.Qprint(
-                            '<br><big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>'
-                        )
-                        i = numtomake
+                        n_gel += 1
+                        rch.dCSTR_global.dieneCSTRerrorflag = False
+                        # self.Qprint(
+                        #     '<br><big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>'
+                        # )
+                        # i = numtomake
                 else:  # error message if we ran out of arms
                     self.success_increase_memory = None
                     self.signal_request_arm.emit(self)
@@ -361,8 +391,7 @@ class BaseTheoryDieneCSTR:
 
         calc = 0
         # do analysis of polymers made
-        if (rch.react_dist[ndist].contents.npoly >=
-                100) and (not rch.dCSTR_global.dieneCSTRerrorflag):
+        if (rch.react_dist[ndist].contents.npoly):
             rch.molbin(ndist)
             ft = f.data_table
 
@@ -384,11 +413,11 @@ class BaseTheoryDieneCSTR:
 
             calc = rch.react_dist[ndist].contents.nummwdbins - 1
             rch.react_dist[ndist].contents.polysaved = True
-
         self.simexists = True
-        # self.Qprint('%d arm records left in memory' % rch.pb_global.arms_left)
-        # rch.print_arch_stats(ct.c_int(ndist))
+        if n_gel != 0:
+            self.Qprint('<br><big><font color=red><b>Gelation might occurs for these parameters.<br>%.3g%% of the molecules exceeded the maximum recursion level</b></font></big>' % (n_gel/numtomake*100.0))    
         return calc
+    
     def show_theory_extras(self, checked):
         rgt.show_theory_extras(self, checked)
 
