@@ -304,6 +304,7 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
         self.d.selected_file.setStyleSheet("color : blue ;")
         # connect button OK
         self.d.pb_ok.clicked.connect(self.handle_pb_ok)
+        self.d.pb_ok.setDefault(True)
         # connect button Cancel
         self.d.pb_cancel.clicked.connect(self.dialog.reject)
         # connect button Help
