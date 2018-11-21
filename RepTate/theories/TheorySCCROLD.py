@@ -30,9 +30,9 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
-"""Module TheorySCCR
+"""Module TheorySCCROLD
 
-Module for the SCCR theory for the non-linear flow of entangled polymers.
+Module for the SCCROLD theory for the non-linear flow of entangled polymers.
 
 """
 import numpy as np
@@ -64,13 +64,13 @@ class FlowMode(Enum):
     shear = 0
     uext = 1
 
-class TheorySCCR(CmdBase):
-    """SCCR
+class TheorySCCROLD(CmdBase):
+    """SCCROLD
     
     [description]
     """
-    thname = "SCCR"
-    description = "SCCR theory for linear entangled polymers"
+    thname = "SCCROLD"
+    description = "SCCROLD theory for linear entangled polymers"
     citations = "Graham, R.S., Likhtman, A.E., McLeish, T.C.B. & Milner, S.T., J. Rheo., 2003, 47, 1171-1200"
     doi = "http://dx.doi.org/10.1122/1.1595099"
 
@@ -87,22 +87,22 @@ class TheorySCCR(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        return GUITheorySCCR(
+        return GUITheorySCCROLD(
             name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheorySCCR(
+            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheorySCCROLD(
                 name, parent_dataset, ax)
 
 
-class BaseTheorySCCR:
+class BaseTheorySCCROLD:
     """[summary]
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#SCCROLD'
     single_file = False
-    thname = TheorySCCR.thname
-    citations = TheorySCCR.citations
-    doi = TheorySCCR.doi
+    thname = TheorySCCROLD.thname
+    citations = TheorySCCROLD.citations
+    doi = TheorySCCROLD.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """
@@ -114,7 +114,7 @@ class BaseTheorySCCR:
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
-        self.function = self.SCCR
+        self.function = self.SCCROLD
         self.has_modes = False
 
         self.parameters["tau_e"] = Parameter(
@@ -151,7 +151,7 @@ class BaseTheorySCCR:
         self.parameters["N"] = Parameter(
             name="N",
             value=1,
-            description="npoints=N*Z Precision of SCCR (odd number)",
+            description="npoints=N*Z Precision of SCCROLD (odd number)",
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False)
@@ -177,7 +177,7 @@ class BaseTheorySCCR:
             else:
                 self.flow_mode = FlowMode.uext
         except Exception as e:
-            print("in SCCR init:", e)
+            print("in SCCROLD init:", e)
             self.flow_mode = FlowMode.shear  #default mode: shear
 
     def destructor(self):
@@ -463,7 +463,7 @@ class BaseTheorySCCR:
         return dy
 
 
-    def SCCR(self, f=None):
+    def SCCROLD(self, f=None):
         """[summary]
         
         [description]
@@ -519,7 +519,7 @@ class BaseTheorySCCR:
         dt0 = (self.Z/self.N)**2.5
         
         ## SOLUTION WITH SCIPY.ODEINT   
-        self.Qprint("<b>SCCR</b> - File: %s"%f.file_name_short)
+        self.Qprint("<b>SCCROLD</b> - File: %s"%f.file_name_short)
         try:
             sig = odeint(self.pde_shear, self.yeq, t, args=(p, ), full_output = 1, h0=dt0, rtol=self.relerr)
         except EndComputationRequested:
@@ -544,7 +544,7 @@ class BaseTheorySCCR:
 
             tt.data[i,1]=(stressTube*4.0/5.0+stressRouse)*Ge
 
-class CLTheorySCCR(BaseTheorySCCR, Theory):
+class CLTheorySCCROLD(BaseTheorySCCROLD, Theory):
     """[summary]
     
     [description]
@@ -562,7 +562,7 @@ class CLTheorySCCR(BaseTheorySCCR, Theory):
         super().__init__(name, parent_dataset, ax)
 
 
-class GUITheorySCCR(BaseTheorySCCR, QTheory):
+class GUITheorySCCROLD(BaseTheorySCCROLD, QTheory):
     """[summary]
     
     [description]
@@ -602,7 +602,7 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
         self.spinbox.setRange(1, 5)  # min and max number of modes
         self.spinbox.setPrefix("N=")
         self.spinbox.setSuffix("*Z")
-        self.spinbox.setToolTip("Precision of SCCR Calculation")
+        self.spinbox.setToolTip("Precision of SCCROLD Calculation")
         self.spinbox.setValue(self.parameters["N"].value)
         self.spinbox.setSingleStep(2)
         tb.addWidget(self.spinbox)
