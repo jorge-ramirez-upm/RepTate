@@ -1486,11 +1486,18 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         lnew = []
         for param in self.filetypes[ext].basic_file_parameters[:]:
             try:
-                lnew.append(str(dt.file_parameters[param]))
+                s_param = dt.file_parameters[param]
             except KeyError as e:
                 header = "Missing Parameter"
                 message = "Parameter %s not found in file '%s'."%(e, dt.file_name_short)
                 QMessageBox.warning(self, header, message)
+            else:
+                # parameter exists
+                try:
+                    s_param = "%.3g" % float(s_param)
+                except ValueError:
+                    s_param = str(dt.file_parameters[param])
+                lnew.append(s_param)
                 
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
