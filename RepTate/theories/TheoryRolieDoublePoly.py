@@ -456,7 +456,7 @@ class BaseTheoryRolieDoublePoly:
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations'
-    single_file = True
+    single_file = False
     thname = TheoryRolieDoublePoly.thname
     citations = TheoryRolieDoublePoly.citations
 
@@ -472,6 +472,7 @@ class BaseTheoryRolieDoublePoly:
         super().__init__(name, parent_dataset, axarr)
         self.function = self.RolieDoublePoly
         self.has_modes = True
+        self.autocalculate = False
         self.parameters["beta"] = Parameter(
             name="beta",
             value=1,
