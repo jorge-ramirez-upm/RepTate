@@ -53,6 +53,8 @@ from SpreadsheetWidget import SpreadsheetWidget
 import Version
 import time
 from Theory import EndComputationRequested
+import sccr_ctypes_helper as sch
+from ctypes import c_int, c_double
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -167,7 +169,6 @@ class BaseTheorySCCR:
         self.get_material_parameters()
         self.autocalculate = False
 
-
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
         try:
@@ -198,44 +199,6 @@ class BaseTheorySCCR:
         """[summary]
         
         [description]
-        """
-        pass
-
-    def sigmadot_shear_nostretch(self, sigma, t, p):
-        """Rolie-Poly differential equation under shear flow, without stretching
-        
-        [description]
-        
-        Arguments:
-            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
-            - t {float} -- time
-            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
-        """
-        if self.stop_theory_flag:
-            raise EndComputationRequested
-        sxx, syy, sxy = sigma
-        _, tauD, _, beta, _, gammadot = p
-
-        # Create the vector with the time derivative of sigma
-        return [
-            2.0 * gammadot * sxy -
-            (sxx - 1.0) / tauD - 2.0 / 3.0 * gammadot * sxy * (sxx + beta *
-                                                               (sxx - 1)),
-            -(syy - 1.0) / tauD - 2.0 / 3.0 * gammadot * sxy * (syy + beta *
-                                                                (syy - 1)),
-            gammadot * syy - sxy / tauD - 2.0 / 3.0 * gammadot * sxy *
-            (sxy + beta * sxy)
-        ]
-
-    def sigmadot_uext_nostretch(self, sigma, t, p):
-        """Rolie-Poly differential equation under elongation flow, wihtout stretching
-        
-        [description]
-        
-        Arguments:
-            - sigma {array} -- vector of state variables, sigma = [sxx, syy]
-            - t {float} -- time
-            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, epsilon_dot]
         """
         pass
 
@@ -281,65 +244,6 @@ class BaseTheorySCCR:
             beta_rcr = fZ*gcnu
         return beta_rcr
 
-    def d1(self, s):
-        """ 
-        1D diffusion coefficient (reptation + CLF)
-        With cut-off for maximum D=a^2/6/tau_e
-        """
-        ad = 1.15
-        w=0
-        waux=1.0/np.pi/np.pi/3.0*(np.pi*np.pi/2.0-1.0/self.Z)
-        s*=self.Z/self.N
-        if (s==0):
-            w = waux
-        elif (s<ad*np.sqrt(self.Z)):
-            w=1.0/np.pi/np.pi/3.0*(ad*ad/s/s-1.0/self.Z);
-        if (w>waux):
-            w = waux
-        return w
-
-    def d(self, i, j):
-        """
-        1D diffusion coefficient (reptation + CLF)
-        """
-        sm=min(i, j, self.N-i, self.N-j)
-        return 1.0/3.0/np.pi/np.pi/self.Z+self.d1(sm);
-
-    def ind(self, k, i, j):
-        """
-        Convert k,i,j (3D array) indices to ind (1D array), considering the symmetry of the problem
-         \  1 /  (j=i diagonal)
-          \  /
-         2 \/ 4
-           /\
-          /  \
-         /  3 \ (j=self.N-i diagonal)
-        """
-        if (j>=i and j>=(self.N-i)): # 1st Quadrant
-            ind0 = k*self.SIZE
-            if (i<=self.N/2):
-                return ind0 + i*(i+3)//2+j-self.N
-            else:
-                if (self.N % 2 == 0):
-                    return ind0 - i*i//2+(2*self.N+1)*i//2 + j - self.N*(2+self.N)//4
-                else:
-                    return ind0 - i*i//2+(2*self.N+1)*i//2 + j - ((self.N+1)//2)**2
-        elif (j>=i and j<(self.N-i)): # 2nd Quadrant
-            # Reflection of point on J=self.N-I line
-            auxi=self.N-j
-            auxj=self.N-i
-            return self.ind(k, auxi, auxj)
-        elif (j<i and j<(self.N-i)): # 3rd Quadrant
-            # INVERSION OF THE POINT WITH RESPECT TO THE POINT (self.N/2, self.N/2)
-            auxi=self.N-i
-            auxj=self.N-j
-            return self.ind(k, auxi, auxj)
-        elif (j<i and j>=(self.N-i)): # 4th Quadrant
-            # Reflection of point on K=I line
-            auxi=j
-            auxj=i
-            return self.ind(k, auxi, auxj)
-
     def set_yeq(self):
         aux = self.N/self.Z/2.0
         ind=0
@@ -351,117 +255,17 @@ class BaseTheorySCCR:
                         self.yeq[ind]=1.0/3.0
                     ind+=1
 
-    def get_im(self, i,j):
-        im=i;
-        imin=i;
-        if(j<imin):
-            im=j
-            imin=j
-        if(self.N-i<imin):
-            im=i
-            imin=self.N-i
-        if(self.N-j<imin):
-            im=j
-        return im
-
-
-    def pde_shear(self, y, t, p):
-        """    [description]
-        """    
-        if (t>self.prevt):
-            self.dt=t-self.prevt
-            self.prevt=t
-            if(np.log10(t)-np.log10(self.prevtlog)>1):
-                self.Qprint("t=%g"%(t*self.taue))
-                self.prevtlog=t
-        gdot = p[0]
-        Rs = 2.0
-
-        # Instantaneous number of entanglements (normalized arc length of primitive path)
-        # And norm of f
-        normf = [y[self.ind(0,j,j)] + 2*y[self.ind(2,j,j)] for j in range(self.N+1)]
-        zstar=(1+sum(np.sqrt(normf[i]) for i in range(1,self.N)))*self.Z/self.N;
-
-        dy = np.zeros(3*self.SIZE)
+    def pde_shear(self, y, t):
         if self.stop_theory_flag:
-            return dy
-
-        for k in range(3):
-            for i in range(1, self.N):
-                mm = max(self.N-i,i)
-                for j in range(mm, self.N):
-
-                    im=self.get_im(i,j)
-
-                    fkij = self.ind(k,i,j)
-                    fkip1jp1 = self.ind(k,i+1,j+1)
-                    fkim1jm1 = self.ind(k,i-1,j-1)
-                    fkip1j = self.ind(k,i+1,j)
-                    fkim1j = self.ind(k,i-1,j)
-                    fkijp1 = self.ind(k,i,j+1)
-                    fkijm1 = self.ind(k,i,j-1)
-
-                    dy[fkij]+=1.0/2.0/np.pi/np.pi*self.N/self.Z*self.N/self.Z*Rs* \
-					        ((y[fkip1j]-y[fkim1j])/2.0*  # Retr (s)
-					        (np.log(normf[i+1])-np.log(normf[i-1]))/2.0 
-                            +y[fkij]*(np.log(normf[i+1])+np.log(normf[i-1])-2.0*np.log(normf[i])))
-
-                    dy[fkij]+=1.0/2.0/np.pi/np.pi*self.N/self.Z*self.N/self.Z*Rs* \
-					        ((y[fkijp1]-y[fkijm1])/2.0*   # Retr (s')
-					        (np.log(normf[j+1])-np.log(normf[j-1]))/2.0
-					        +y[fkij]*(np.log(normf[j+1])+np.log(normf[j-1])-2.0*np.log(normf[j])))
-            
-                    # Chain rule applied to Rept+CLF term
-                    dy[fkij]+=self.N/self.Z*self.N/self.Z/np.sqrt(normf[im])*(
-					        (self.d(i+1,j+1)-self.d(i-1,j-1))/2.0*(y[fkip1jp1]-y[fkim1jm1])/2.0/np.sqrt(normf[im])	# CLF
-					        +self.d(i,j)*(y[fkip1jp1]-y[fkim1jm1])/2.0*
-					        (1.0/np.sqrt(normf[im+1])-1.0/np.sqrt(normf[im-1]))/2.0
-					        +self.d(i,j)/np.sqrt(normf[im])*(y[fkip1jp1]+y[fkim1jm1]-2.0*y[fkij])
-					        )
-    
-        # Get partially updated y to calculate retraction rate
-        yn = y + dy*self.dt
-        normfn = [yn[self.ind(0,j,j)] + 2*yn[self.ind(2,j,j)] for j in range(self.N+1)]
-        lam=0
-        if (self.dt>0):
-            for i in range (1,self.N):
-                lam-=(normfn[i]-normf[i])/self.N/2.0/self.dt/np.sqrt(normf[i])
-    
-        for k in range(3):
-            for i in range(1, self.N):
-                mm = max(self.N-i,i)
-                for j in range(mm, self.N):
-
-                    fkij = self.ind(k,i,j)
-                    fkip1jp1 = self.ind(k,i+1,j+1)
-                    fkim1jm1 = self.ind(k,i-1,j-1)
-                    fkip1j = self.ind(k,i+1,j)
-                    fkim1j = self.ind(k,i-1,j)
-                    fkijp1 = self.ind(k,i,j+1)
-                    fkijm1 = self.ind(k,i,j-1)
-
-                    dy[fkij]+=self.N/self.Z*self.N/self.Z*1.5*(lam+1.0/3.0/self.beta_rcr/self.Z/self.Z/self.Z)*self.cnu*(self.Z/zstar) \
-                        *((y[fkip1j]+y[fkim1j]-2.0*y[fkij]-self.yeq[fkip1j]-self.yeq[fkim1j]+2.0*self.yeq[fkij])  # CCR
-                        /np.sqrt(normf[i])
-                        +(y[fkip1j]-y[fkim1j]-self.yeq[fkip1j]+self.yeq[fkim1j])/2.0
-                        *(1.0/np.sqrt(normf[i+1])-1.0/np.sqrt(normf[i-1]))/2.0
-                
-                        +(y[fkijp1]+y[fkijm1]-2.0*y[fkij]-self.yeq[fkijp1]-self.yeq[fkijm1]+2.0*self.yeq[fkij]) # CCR
-                        /np.sqrt(normf[j])
-                        +(y[fkijp1]-y[fkijm1]-self.yeq[fkijp1]+self.yeq[fkijm1])/2.0
-                        *(1.0/np.sqrt(normf[j+1])-1.0/np.sqrt(normf[j-1]))/2.0)
-                        
-        for i in range(1, self.N):
-            mm = max(self.N-i,i)
-            for j in range(mm, self.N):
-                f0ij = self.ind(0,i,j)
-                f1ij = self.ind(1,i,j)
-                f2ij = self.ind(2,i,j)
-                # Shear Flow
-                dy[f0ij]+=2*gdot*y[f1ij]
-                dy[f1ij]+=gdot*y[f2ij]
-        return dy
-
+            raise EndComputationRequested
+        if t >= self.tmax * self.count:
+            self.Qprint("--", end='')
+            self.count += 0.2
+        n = len(y)
+        y_arr = (c_double * n)(*y[:])
+        dy_arr = (c_double * n)(*np.zeros(n))
+        sch.sccr_dy(y_arr, dy_arr, c_double(t))
+        return dy_arr[:]
 
     def SCCR(self, f=None):
         """[summary]
@@ -495,6 +299,7 @@ class BaseTheorySCCR:
             self.Z = 1
         if self.parameters["recommendedN"].value:
             self.N = self.Get_Recommended_N(self.cnu, self.Z)
+            self.Qprint("recommend N=%d" % self.N)
         else:
             self.N=self.Z*self.parameters["N"].value
 
@@ -503,6 +308,7 @@ class BaseTheorySCCR:
             self.SIZE = ((self.N+1)*(self.N+3)+1)//4
         else:
             self.SIZE = (self.N+1)*(self.N+3)//4
+        
         self.yeq = np.zeros(3*self.SIZE) # Integer division (NEED TO STORE 3 COMPONENTS f(0)=fxx f(1)=fxy f(2)=fyy)
         self.beta_rcr=self.Set_beta_rcr(self.Z,self.cnu)
         self.prevt=0
@@ -511,27 +317,34 @@ class BaseTheorySCCR:
         self.NMAXROUSE=50 # To calculate fast Rouse modes inside the tube
         self.relerr = 1.0e-3
 
+        # send value of N, Z, and SIZE to C code
+        sch.set_static_int(c_int(self.N), c_int(self.Z), c_int(self.SIZE))
+        # initialise gdot, prevt, dt, beta_rcr, and cnu in C code
+        sch.set_static_double(c_double(gdot), c_double(self.prevt), c_double(self.dt), c_double(self.beta_rcr), c_double(self.cnu))
+
         # Initialize the equilibrium function yeq    
         t = ft.data[:, 0]/self.taue
         #t = np.concatenate([[0], t])
         self.set_yeq()
-        p = [gdot]
+        sch.set_yeq_static(self.yeq)
+        # p = [] # parameters are static in the C code
         dt0 = (self.Z/self.N)**2.5
         
         ## SOLUTION WITH SCIPY.ODEINT   
         self.Qprint("<b>SCCR</b> - File: %s"%f.file_name_short)
+        self.tmax = t[-1]
+        self.count = 0.2
+        self.Qprint('Rate %.3g<br>  0%% ' % gdot, end='')
         try:
-            sig = odeint(self.pde_shear, self.yeq, t, args=(p, ), full_output = 1, h0=dt0, rtol=self.relerr)
+            sig = odeint(self.pde_shear, self.yeq, t, args=( ), full_output = 1, h0=dt0, rtol=self.relerr)
         except EndComputationRequested:
-            pass
-        self.Qprint("<b>Done</b>")
-        self.Qprint("")
+            return
+        else:
+            self.Qprint('&nbsp;100%')
 
         Sint=np.linspace(0,self.Z,self.N+1)
         Fint=np.zeros(self.N+1)
-        #Gxy=np.zeros(len(t)-1)
-        Gxy=np.zeros(len(t))
-        #for i in range(1, len(t)):
+
         for i in range(len(t)):
             # Stress from tube theory
             Fint = [sig[0][i][self.ind(1,j,j)] for j in range(self.N+1)]
@@ -608,7 +421,7 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
         tb.addWidget(self.spinbox)
 
         self.recommendedN = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'),
+            QIcon(':/Icon8/Images/new_icons/icons8-light-on-N.png'),
             'Recommended N value')
         self.recommendedN.setCheckable(True)        
 

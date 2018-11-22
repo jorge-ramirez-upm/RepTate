@@ -19,24 +19,19 @@ try:
 except:
     print('OS %s not recognized in SCCR CH' % (sys.platform))
 
+set_static_int = sccr_lib.set_static_int
+set_static_int.restype = None
+
+set_static_double = sccr_lib.set_static_double
+set_static_double.restype = None
+
+set_yeq_static_in_C = sccr_lib.set_yeq_static_in_C
+set_yeq_static_in_C.restype = None
+
 sccr_dy = sccr_lib.sccr_dy
-sccr_dy.restype = c_bool
+sccr_dy.restype = None
 
-def calculate_sccr_dy(params, EPS):
-    """Calculate dynamic tube dilution in frequency domain"""
-    G0, a, tau_e, z, w = params
-    n = len(w)
-
-    w_arr = (c_double * n)()
-    gp_arr = (c_double * n)()
-    gpp_arr = (c_double * n)()
-    w_arr[:] = w[:]
-    gp_arr[:] = np.zeros(n)[:]
-    gpp_arr[:] = np.zeros(n)[:]
-
-    success = sccr_dy(
-        c_double(G0), c_double(a), c_double(tau_e), c_double(z), c_int(n),
-        w_arr, gp_arr, gpp_arr, c_double(EPS))
-
-    # convert ctypes array to numpy
-    return (np.asarray(gp_arr[:]), np.asarray(gpp_arr[:]), success)
+def set_yeq_static(yeq):
+    n = len(yeq)
+    arr = (c_double * n)(*yeq[:])
+    set_yeq_static_in_C(arr, c_int(n))
