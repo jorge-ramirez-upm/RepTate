@@ -55,6 +55,7 @@ import time
 from Theory import EndComputationRequested
 import sccr_ctypes_helper as sch
 from ctypes import c_int, c_double
+from math import exp
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -294,8 +295,8 @@ class BaseTheorySCCR:
         if self.stop_theory_flag:
             raise EndComputationRequested
         if t >= self.tmax * self.count:
-            self.Qprint("--", end='')
-            self.count += 0.2
+            self.Qprint("-", end='')
+            self.count += 0.1
         n = len(y)
         y_arr = (c_double * n)(*y[:])
         dy_arr = (c_double * n)(*np.zeros(n))
@@ -359,7 +360,7 @@ class BaseTheorySCCR:
 
         # Initialize the equilibrium function yeq    
         t = ft.data[:, 0]/self.taue
-        #t = np.concatenate([[0], t])
+        # t = np.concatenate([[0], t])
         self.set_yeq()
         sch.set_yeq_static(self.yeq)
         # p = [] # parameters are static in the C code
@@ -368,7 +369,7 @@ class BaseTheorySCCR:
         ## SOLUTION WITH SCIPY.ODEINT   
         self.Qprint("<b>SCCR</b> - File: %s"%f.file_name_short)
         self.tmax = t[-1]
-        self.count = 0.2
+        self.count = 0.1
         self.Qprint('Rate %.3g<br>  0%% ' % gdot, end='')
         try:
             sig = odeint(self.pde_shear, self.yeq, t, args=( ), full_output = 1, h0=dt0, rtol=self.relerr)
@@ -376,10 +377,9 @@ class BaseTheorySCCR:
             return
         else:
             self.Qprint('&nbsp;100%')
-
         Sint=np.linspace(0,self.Z,self.N+1)
         Fint=np.zeros(self.N+1)
-
+        tmp = self.Z * self.Z / 2.0
         for i in range(len(t)):
             # Stress from tube theory
             Fint = [sig[0][i][self.ind(1,j,j)] for j in range(self.N+1)]
@@ -388,9 +388,11 @@ class BaseTheorySCCR:
             # Fast modes inside the tube
             stressRouse=0
             for j in range(self.Z,self.NMAXROUSE*self.Z+1):
-                stressRouse+=self.Z*self.Z/2.0/j/j*(1-np.exp(-2.0*j*j*t[i]/self.Z/self.Z))/self.Z*gdot
+                jsq = j * j
+                # stressRouse+=self.Z*self.Z/2.0/j/j*(1-np.exp(-2.0*j*j*t[i]/self.Z/self.Z))/self.Z*gdot
+                stressRouse += (1 - exp(-jsq * t[i] / tmp)) / jsq 
 
-            tt.data[i,1]=(stressTube*4.0/5.0+stressRouse)*Ge
+            tt.data[i,1] = (stressTube*4.0/5.0+stressRouse * tmp/self.Z*gdot)*Ge
 
 class CLTheorySCCR(BaseTheorySCCR, Theory):
     """[summary]
