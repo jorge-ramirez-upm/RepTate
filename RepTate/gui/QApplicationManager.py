@@ -202,6 +202,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
         #self.add_save_load_buttons()
         self.REPTATE_PROJ_JSON = 'reptate_project.json' # json filename inside zip
+        self.load_path = None
 
         # CONSOLE WINDOW (need to integrate it with cmd commands)
         #self.text_edit = Console(self)
@@ -397,18 +398,28 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
     def launch_open_dialog(self):
         """Get filename of RepTate project to open"""
-        fpath, _ = QFileDialog.getOpenFileName(self,
-            "Open RepTate Project", "data/", "RepTate Project (*.rept)")
+        if self.load_path:
+            fpath, _ = QFileDialog.getOpenFileName(self,
+                "Open RepTate Project", self.load_path, "RepTate Project (*.rept)")
+        else:
+            fpath, _ = QFileDialog.getOpenFileName(self,
+                "Open RepTate Project", "data/", "RepTate Project (*.rept)")
         if fpath == '':
             return
+        self.load_path = fpath
         self.open_project(fpath)
 
     def launch_save_dialog(self):
         """Get filename of RepTate project to save"""
-        fpath, _ = QFileDialog.getSaveFileName(self,
-            "Save RepTate Project", "data/", "RepTate Project (*.rept)")
+        if self.load_path:
+            fpath, _ = QFileDialog.getSaveFileName(self,
+                "Save RepTate Project", self.load_path, "RepTate Project (*.rept)")
+        else:
+            fpath, _ = QFileDialog.getSaveFileName(self,
+                "Save RepTate Project", "data/", "RepTate Project (*.rept)")
         if fpath == '':
             return False
+        self.load_path = fpath
         self.save_reptate(fpath)
         return True
 
