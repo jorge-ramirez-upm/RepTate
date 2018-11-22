@@ -244,6 +244,41 @@ class BaseTheorySCCR:
             beta_rcr = fZ*gcnu
         return beta_rcr
 
+    def ind(self, k, i, j):
+        """
+        Convert k,i,j (3D array) indices to ind (1D array), considering the symmetry of the problem
+         \  1 /  (j=i diagonal)
+          \  /
+         2 \/ 4
+           /\
+          /  \
+         /  3 \ (j=self.N-i diagonal)
+        """
+        if (j>=i and j>=(self.N-i)): # 1st Quadrant
+            ind0 = k*self.SIZE
+            if (i<=self.N/2):
+                return ind0 + i*(i+3)//2+j-self.N
+            else:
+                if (self.N % 2 == 0):
+                    return ind0 - i*i//2+(2*self.N+1)*i//2 + j - self.N*(2+self.N)//4
+                else:
+                    return ind0 - i*i//2+(2*self.N+1)*i//2 + j - ((self.N+1)//2)**2
+        elif (j>=i and j<(self.N-i)): # 2nd Quadrant
+            # Reflection of point on J=self.N-I line
+            auxi=self.N-j
+            auxj=self.N-i
+            return self.ind(k, auxi, auxj)
+        elif (j<i and j<(self.N-i)): # 3rd Quadrant
+            # INVERSION OF THE POINT WITH RESPECT TO THE POINT (self.N/2, self.N/2)
+            auxi=self.N-i
+            auxj=self.N-j
+            return self.ind(k, auxi, auxj)
+        elif (j<i and j>=(self.N-i)): # 4th Quadrant
+            # Reflection of point on K=I line
+            auxi=j
+            auxj=i
+            return self.ind(k, auxi, auxj)
+
     def set_yeq(self):
         aux = self.N/self.Z/2.0
         ind=0
