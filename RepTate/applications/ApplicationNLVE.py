@@ -170,6 +170,18 @@ class BaseApplicationNLVE:
             view_proc=self.viewSigmaTime,
             n=1,
             snames=["sigma"])
+        self.views["Flow Curve"] = View(
+            name="Flow Curve",
+            description="Steady state stress vs flow rate",
+            x_label="Flow rate",
+            y_label="$\sigma$(t$_{\infty}$)",
+            x_units="s$^{-1}$",
+            y_units="Pa",
+            log_x=True,
+            log_y=True,
+            view_proc=self.view_flowcurve,
+            n=1,
+            snames=["sigma"])
 
         #set multiviews
         self.nplots = 1
@@ -272,6 +284,20 @@ class BaseApplicationNLVE:
             flow_rate = float(file_parameters["edot"])
         x[:, 0] = dt.data[:, 0] * flow_rate  #compute strain
         y[:, 0] = dt.data[:, 1]
+        return x, y, True
+        
+    def view_flowcurve(self, dt, file_parameters):
+        """ :math:`\\sigma(t_{\\to\\infty})` vs flow rate
+        """
+
+        try:
+            flow_rate = float(file_parameters["gdot"])
+        except KeyError:
+            flow_rate = float(file_parameters["edot"])
+        x = np.zeros((1, 1))
+        y = np.zeros((1, 1))
+        x[0, 0] = flow_rate
+        y[0, 0] = dt.data[-1,1]
         return x, y, True
 
 
