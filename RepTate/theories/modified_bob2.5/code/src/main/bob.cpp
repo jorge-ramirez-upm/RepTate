@@ -296,10 +296,19 @@ int bob_main(int argc, char *argv[])
 
         if (FlowPriority == 0)
         {
+          int max_flow_prio = 0, tmp_max_fprio;
           for (int i = 0; i < num_poly; i++)
           {
-            extern void calc_flow_priority(int);
-            calc_flow_priority(i);
+            extern int calc_flow_priority(int);
+            tmp_max_fprio = calc_flow_priority(i);
+            if (tmp_max_fprio > max_flow_prio)
+              max_flow_prio = tmp_max_fprio;
+          }
+          if (reptate_flag)
+          {
+            char line[128];
+            sprintf(line, "<b>Max. flow priority=%d</b>", max_flow_prio);
+            print_to_python(line);
           }
         }
         fprio = fopen("savedprio.dat", "w"); // re-writing the savedprio.dat file after altitude

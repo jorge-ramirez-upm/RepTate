@@ -93,7 +93,7 @@ void topoan(void)
   {
     char line[128];
     sprintf(line, "<b>Maximum priority=%d<b><br><b>Maximum seniority=%d</b><br>", max_prio_var, max_senio_var);
-    print_to_python(line);
+    // print_to_python(line); // do not print 
   }
   else
     fprintf(infofl, "maximum priority = %d \n maximum seniority = %d \n", max_prio_var, max_senio_var);

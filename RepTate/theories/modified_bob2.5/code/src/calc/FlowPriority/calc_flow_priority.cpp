@@ -19,7 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include "../../../include/bob.h"
 #include <stdlib.h>
 #include <stdio.h>
-void calc_flow_priority(int n)
+int calc_flow_priority(int n)
 {
 
   extern std::vector<arm> arm_pool;
@@ -37,11 +37,15 @@ void calc_flow_priority(int n)
   n1 = branched_poly[n].first_end;
   arm_pool[n1].priority -= 1;
   n2 = arm_pool[n1].down;
+  int max_fprio = 0;
   while (n2 != n1)
   {
     arm_pool[n2].priority -= 1;
+    if (arm_pool[n2].priority > max_fprio)
+      max_fprio = arm_pool[n2].priority;
     n2 = arm_pool[n2].down;
   }
+  return max_fprio;
 }
 
 void set_flow_prio(int n1)
