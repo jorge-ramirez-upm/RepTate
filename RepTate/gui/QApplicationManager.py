@@ -406,7 +406,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Open RepTate Project", "data/", "RepTate Project (*.rept)")
         if fpath == '':
             return
-        self.load_path = fpath
         self.open_project(fpath)
 
     def launch_save_dialog(self):
@@ -419,12 +418,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Save RepTate Project", "data/", "RepTate Project (*.rept)")
         if fpath == '':
             return False
-        self.load_path = fpath
         self.save_reptate(fpath)
         return True
 
     def save_reptate(self, fpath):
         """Save RepTate project to 'fpath'"""
+        self.load_path = fpath
         apps_dic = OrderedDict()
         napps = self.ApplicationtabWidget.count()
         nth_saved = 0
@@ -762,6 +761,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         import json, zipfile, tempfile
         if not os.path.isfile(project_path):
             return
+        self.load_path = project_path
         try:
             with tempfile.TemporaryDirectory() as tmpdirname:
                 with zipfile.ZipFile(project_path) as z:
