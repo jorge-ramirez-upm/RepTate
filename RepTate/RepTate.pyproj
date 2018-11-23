@@ -14,7 +14,7 @@
     <IsWindowsApplication>False</IsWindowsApplication>
     <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>--single</CommandLineArguments>
+    <CommandLineArguments>-s</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -97,6 +97,7 @@
     <Compile Include="theories\react_gui_tools.py" />
     <Compile Include="theories\rouse_ctypes_helper.py" />
     <Compile Include="theories\rp_blend_ctypes_helper.py" />
+    <Compile Include="theories\sccr_ctypes_helper.py" />
     <Compile Include="theories\schwarzl_ctypes_helper.py" />
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
@@ -126,6 +127,8 @@
     <Compile Include="theories\TheoryRetardationModes.py" />
     <Compile Include="theories\TheoryRoliePoly.py" />
     <Compile Include="theories\TheoryRouse.py" />
+    <Compile Include="theories\TheorySCCR.py" />
+    <Compile Include="theories\TheorySCCROLD.py" />
     <Compile Include="theories\TheoryTobitaCSTR.py" />
     <Compile Include="gui\QAboutReptate.py" />
     <Compile Include="gui\QApplicationManager.py">
