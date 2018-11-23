@@ -189,6 +189,12 @@ class BaseTheorySCCR:
         """
         pass
 
+    def do_fit(self, line):
+        """Minimisation procedure disabled in this theory"""
+        self.Qprint(
+            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
+        )
+
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed
         
@@ -460,7 +466,7 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
         self.recommendedN = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-light-on-N.png'),
             'Recommended N value')
-        self.recommendedN.setCheckable(True)        
+        self.recommendedN.setCheckable(True)  
 
         self.thToolsLayout.insertWidget(0, tb)
 
@@ -488,6 +494,8 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
     def handle_spinboxValueChanged(self, value):
         self.set_param_value("N", value)
 
-
-
-
+    def set_extra_data(self, extra_data):
+        """Set extra data when loading project"""
+        self.spinbox.setValue(self.parameters["N"].value)
+        self.recommendedN.setChecked(self.parameters["recommendedN"].value)
+        self.handle_recommendedN(self.parameters["recommendedN"].value)
