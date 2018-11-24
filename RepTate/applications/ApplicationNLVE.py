@@ -181,7 +181,9 @@ class BaseApplicationNLVE:
             log_y=True,
             view_proc=self.view_flowcurve,
             n=1,
-            snames=["sigma"])
+            snames=["sigma"],
+            with_thline=False,
+            filled=True)
 
         #set multiviews
         self.nplots = 1

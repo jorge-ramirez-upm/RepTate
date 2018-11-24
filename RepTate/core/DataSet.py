@@ -523,7 +523,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                             else:
                                 tt.series[nx][i].set_linestyle('')
                                 tt.series[nx][i].set_marker('.')
-                                tt.series[nx][i].set_markerfacecolor('none')
+                                if view.filled:
+                                    tt.series[nx][i].set_markerfacecolor(th_color)
+                                else: 
+                                    tt.series[nx][i].set_markerfacecolor('none')
                                 tt.series[nx][i].set_markersize(size)
  
                             tt.series[nx][i].set_linewidth(self.th_line_width)

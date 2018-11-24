@@ -58,7 +58,8 @@ class View(object):
                  snames=[],
                  inverse_view_proc=None,
                  index=0,
-                 with_thline=True):
+                 with_thline=True,
+                 filled=False):
         """
         **Constructor**
         
@@ -78,6 +79,7 @@ class View(object):
             - n {int} -- Number of series that the view represents (default: {1})
             - snames {list of str} -- Names of the series represented by the view
             - with_thline {bool} -- if True, plot the theory with lines, else use symbols
+            - filled {bool} -- if True, use filled symbols (when with_thline=False)
         """
         self.name = name
         self.description = description
@@ -92,3 +94,4 @@ class View(object):
         self.n = n
         self.snames = snames
         self.with_thline = with_thline
+        self.filled = filled
