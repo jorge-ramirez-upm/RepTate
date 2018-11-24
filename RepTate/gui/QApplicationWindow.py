@@ -441,7 +441,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.TooltabWidget.tabCloseRequested.connect(self.handle_toolTabCloseRequested)
         connection_id = self.qtabbar.tabMoved.connect(self.handle_toolTabMoved)
         
-        connection_id = self.viewComboBox.currentIndexChanged.connect(self.change_view)
+        connection_id = self.viewComboBox.currentIndexChanged.connect(self.handle_change_view)
         connection_id = self.actionSave_View.triggered.connect(self.save_view)
         connection_id = self.sp_nviews.valueChanged.connect(self.sp_nviews_valueChanged)
 
@@ -1410,6 +1410,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.DataSettabWidget.removeTab(index)
         self.update_legend()
 
+    def handle_change_view(self):
+        self.change_view()
+
     def change_view(self, x_vis=False, y_vis=False):
         """Change plot view
         
@@ -1759,7 +1762,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         import matplotlib
         if event.mouseevent.button == 3:  #right click in plot
             if not isinstance(event.artist, matplotlib.legend.Legend):
-                self.artists_clicked.append(event.artist)  #collect all artists under mouse
+                if event.artist.get_visible():
+                    self.artists_clicked.append(event.artist)  #collect all artists under mouse
 
     def onrelease(self, event):
         """Called when releasing mouse"""
