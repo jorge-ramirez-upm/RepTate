@@ -42,7 +42,7 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QFileDialog, QInputDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
@@ -56,6 +56,7 @@ from Theory import EndComputationRequested
 import sccr_ctypes_helper as sch
 from ctypes import c_int, c_double
 from math import exp
+from PyQt5.QtCore import pyqtSignal
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -107,6 +108,8 @@ class BaseTheorySCCR:
     citations = TheorySCCR.citations
     doi = TheorySCCR.doi
 
+    signal_get_MW = pyqtSignal(object)
+
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """
         **Constructor**
@@ -119,6 +122,7 @@ class BaseTheorySCCR:
         super().__init__(name, parent_dataset, axarr)
         self.function = self.SCCR
         self.has_modes = False
+        self.signal_get_MW.connect(self.launch_get_MW_dialog)
 
         self.parameters["tau_e"] = Parameter(
             "tau_e",
@@ -169,6 +173,15 @@ class BaseTheorySCCR:
         self.init_flow_mode()
         self.get_material_parameters()
         self.autocalculate = False
+
+    def launch_get_MW_dialog(self):
+        title = 'Missing "Mw" value'
+        msg = 'Set "Mw" value for file \"%s\"' % self.fname_missing_mw
+        def_val = 1e3
+        min_val = 0
+        val, success = QInputDialog.getDouble(self, title, msg, def_val, min_val)
+        self.success_MW = success
+        self.new_MW_val = val
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -334,8 +347,17 @@ class BaseTheorySCCR:
         try:
             Mw = float(f.file_parameters["Mw"])
         except KeyError:
-            self.Qprint('<big><font color=red><b>Mw value is missing in file \"%s\"</b></font></big>' % f.file_name_short)
-            return
+            self.success_MW = None
+            self.fname_missing_mw = f.file_name_short
+            self.signal_get_MW.emit(self)
+            while self.success_MW is None:
+                time.sleep(0.5)
+            if self.success_MW:
+                f.file_parameters["Mw"] = self.new_MW_val
+                Mw = self.new_MW_val
+            else:
+                self.Qprint('<big><font color=red><b>Mw value is missing in file \"%s\"</b></font></big>' % f.file_name_short)
+                return
         gdot = float(f.file_parameters["gdot"])
         gdot=gdot*self.taue
 
