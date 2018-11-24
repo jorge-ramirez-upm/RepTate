@@ -41,11 +41,11 @@
 static double *yeq;
 static double gdot, prevt, dt, beta_rcr, cnu;
 static const double Rs = 2.0;
-static int Z, N, SIZE;
+static int Z, N, SIZE, shear_flow;
 static int yeq_allocated = 0;
 
 // functions exposed to Python
-void set_static_int(int N_, int Z_, int SIZE_);
+void set_static_int(int N_, int Z_, int SIZE_, int shear_flow_);
 void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_);
 void set_yeq_static_in_C(double *yeq_in, int n);
 void sccr_dy(double *y, double *dy, double t);
@@ -56,10 +56,11 @@ static double d1(double s);
 static double d(int i, int j);
 
 
-void set_static_int(int N_, int Z_, int SIZE_){
+void set_static_int(int N_, int Z_, int SIZE_, int shear_flow_){
     N = N_;
     Z = Z_;
     SIZE = SIZE_;
+    shear_flow = shear_flow_;
 }
 
 void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_){
@@ -277,18 +278,38 @@ void sccr_dy(double *y, double *dy, double t)
             }
         }
     }
-                    
-    for (i=1;i<N;++i) {
-        mm = MAX(N-i,i);
-        for (j=mm;j<N;++j) {
-            f0ij = ind(0,i,j);
-            f1ij = ind(1,i,j);
-            f2ij = ind(2,i,j);
-            // Shear Flow
-            dy[f0ij]+=2*gdot*y[f1ij];
-            dy[f1ij]+=gdot*y[f2ij];
+
+    if (shear_flow == 1)
+    { // Shear Flow
+        for (i = 1; i < N; ++i) 
+        {
+            mm = MAX(N - i, i);
+            for (j = mm; j < N; ++j)
+            {
+                f0ij = ind(0, i, j);
+                f1ij = ind(1, i, j);
+                f2ij = ind(2, i, j);
+                dy[f0ij] += 2 * gdot * y[f1ij];
+                dy[f1ij] += gdot * y[f2ij];
+            }
         }
     }
+    else
+    { // Uniaxial extension Flow
+        for (i = 1; i < N; ++i)
+        {
+            mm = MAX(N - i, i);
+            for (j = mm; j < N; ++j) 
+            {
+                f0ij = ind(0, i, j);
+                f1ij = ind(1, i, j);
+                f2ij = ind(2, i, j);
+                dy[f0ij] += 2*gdot * y[f0ij];
+                dy[f2ij] -= gdot * y[f2ij];
+            }
+        }
+    }
+
     free(normf);
     free(normfn);
     free(yn);

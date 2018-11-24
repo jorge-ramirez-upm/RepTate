@@ -331,7 +331,11 @@ class BaseTheorySCCR:
         Ge = self.parameters["Ge"].value
         Me = self.parameters["Me"].value
         self.cnu = self.parameters["c_nu"].value
-        Mw = float(f.file_parameters["Mw"])
+        try:
+            Mw = float(f.file_parameters["Mw"])
+        except KeyError:
+            self.Qprint('<big><font color=red><b>Mw value is missing in file \"%s\"</b></font></big>' % f.file_name_short)
+            return
         gdot = float(f.file_parameters["gdot"])
         gdot=gdot*self.taue
 
@@ -360,7 +364,8 @@ class BaseTheorySCCR:
         self.relerr = 1.0e-3
 
         # send value of N, Z, and SIZE to C code
-        sch.set_static_int(c_int(self.N), c_int(self.Z), c_int(self.SIZE))
+        is_shear = c_int(self.flow_mode == FlowMode.shear)
+        sch.set_static_int(c_int(self.N), c_int(self.Z), c_int(self.SIZE), is_shear)
         # initialise gdot, prevt, dt, beta_rcr, and cnu in C code
         sch.set_static_double(c_double(gdot), c_double(self.prevt), c_double(self.dt), c_double(self.beta_rcr), c_double(self.cnu))
 
@@ -386,19 +391,26 @@ class BaseTheorySCCR:
         Sint=np.linspace(0,self.Z,self.N+1)
         Fint=np.zeros(self.N+1)
         tmp = self.Z * self.Z / 2.0
-        for i in range(len(t)):
-            # Stress from tube theory
-            Fint = [sig[0][i][self.ind(1,j,j)] for j in range(self.N+1)]
-            stressTube = np.trapz(Fint,Sint)*3.0/self.Z #*3.0/self.N
-
-            # Fast modes inside the tube
-            stressRouse=0
-            for j in range(self.Z,self.NMAXROUSE*self.Z+1):
-                jsq = j * j
-                # stressRouse+=self.Z*self.Z/2.0/j/j*(1-np.exp(-2.0*j*j*t[i]/self.Z/self.Z))/self.Z*gdot
-                stressRouse += (1 - exp(-jsq * t[i] / tmp)) / jsq 
-
-            tt.data[i,1] = (stressTube*4.0/5.0+stressRouse * tmp/self.Z*gdot)*Ge
+        
+        if self.flow_mode == FlowMode.shear:
+            for i in range(len(t)):
+                # Stress from tube theory
+                Fint = [sig[0][i][self.ind(1, j, j)] for j in range(self.N + 1)]
+                stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z #*3.0/self.N
+                # Fast modes inside the tube
+                stressRouse = 0
+                for j in range(self.Z, self.NMAXROUSE*self.Z + 1):
+                    jsq = j * j
+                    # stressRouse+=self.Z*self.Z/2.0/j/j*(1-np.exp(-2.0*j*j*t[i]/self.Z/self.Z))/self.Z*gdot
+                    stressRouse += (1 - exp(-jsq * t[i] / tmp)) / jsq 
+                tt.data[i, 1] = (stressTube * 4.0 / 5.0 + stressRouse * tmp / self.Z * gdot) * Ge
+        else:
+            # extensional flow
+            for i in range(len(t)):
+                # Stress from tube theory
+                Fint = [(sig[0][i][self.ind(0, j, j)] - sig[0][i][self.ind(2, j, j)]) for j in range(self.N + 1)]
+                stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
+                tt.data[i, 1] = stressTube * 4.0 / 5.0 * Ge
 
 class CLTheorySCCR(BaseTheorySCCR, Theory):
     """[summary]
