@@ -393,7 +393,7 @@ class BaseTheorySCCR:
 
         # Initialize the equilibrium function yeq    
         t = ft.data[:, 0]/self.taue
-        # t = np.concatenate([[0], t])
+        t = np.concatenate([[0], t]) # integration starts at t=0
         self.set_yeq()
         sch.set_yeq_static(self.yeq)
         # p = [] # parameters are static in the C code
@@ -412,12 +412,13 @@ class BaseTheorySCCR:
             self.Qprint('&nbsp;100%')
         Sint=np.linspace(0,self.Z,self.N+1)
         Fint=np.zeros(self.N+1)
-        tmp = self.Z * self.Z / 2.0
-        
+        t = t[1:]
+        sigma = sig[0][1:] 
         if self.flow_mode == FlowMode.shear:
+            tmp = self.Z * self.Z / 2.0
             for i in range(len(t)):
                 # Stress from tube theory
-                Fint = [sig[0][i][self.ind(1, j, j)] for j in range(self.N + 1)]
+                Fint = [sigma[i][self.ind(1, j, j)] for j in range(self.N + 1)]
                 stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z #*3.0/self.N
                 # Fast modes inside the tube
                 stressRouse = 0
@@ -428,9 +429,10 @@ class BaseTheorySCCR:
                 tt.data[i, 1] = (stressTube * 4.0 / 5.0 + stressRouse * tmp / self.Z * gdot) * Ge
         else:
             # extensional flow
+            Zsq = self.Z * self.Z
             for i in range(len(t)):
                 # Stress from tube theory
-                Fint = [(sig[0][i][self.ind(0, j, j)] - sig[0][i][self.ind(2, j, j)]) for j in range(self.N + 1)]
+                Fint = [(sigma[i][self.ind(0, j, j)] - sigma[i][self.ind(2, j, j)]) for j in range(self.N + 1)]
                 stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
                 tt.data[i, 1] = stressTube * 4.0 / 5.0 * Ge
 
