@@ -69,9 +69,13 @@ class FlowMode(Enum):
     uext = 1
 
 class TheorySCCR(CmdBase):
-    """SCCR
-    
-    [description]
+    """Full SCCR theory for the Non-linear transient flow of linear entangled polymers.
+        
+    * **Parameters**
+       - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`.
+       - ``Ge`` : Entanglement modulus.
+       - ``Me`` : Entanglement molecular weight.
+       - ``c_nu`` : Constraint release parameter.
     """
     thname = "SCCR"
     description = "SCCR theory for linear entangled polymers"
@@ -102,7 +106,7 @@ class BaseTheorySCCR:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr-theory'
     single_file = False
     thname = TheorySCCR.thname
     citations = TheorySCCR.citations

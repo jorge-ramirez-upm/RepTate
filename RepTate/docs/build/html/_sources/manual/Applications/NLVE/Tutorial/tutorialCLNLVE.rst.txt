@@ -71,7 +71,7 @@ NLVE Tutorial: Command Line
     
 #. Add files to the dataset (master curve tts files)::
 
-    RepTate/NLVE2/DataSet01> open data/DOW/Non-Linear_Rheology/Start-up_Shear/My_dow150-160-*
+    RepTate/NLVE2/DataSet01> open data/DOW/Non-Linear_Rheology/Start-up_Shear/My_dow150-160-*shear.shear
     
 #. Plot the files using the default LVE Application view::
 

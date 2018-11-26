@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TheoryLikhtmanMcLeish2002 &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -53,12 +44,14 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -115,7 +108,9 @@
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
 <span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
 <span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
-
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QStyle</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QLineEdit</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QSize</span>
 
 <div class="viewcode-block" id="TheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">TheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers</span>
@@ -168,8 +163,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LikhtmanMcLeish2002</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;taue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
-            <span class="s2">&quot;taue&quot;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="s2">&quot;tau_e&quot;</span><span class="p">,</span>
             <span class="mf">2e-6</span><span class="p">,</span>
             <span class="s2">&quot;Rouse time of one Entanglement&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
@@ -192,32 +187,47 @@
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">max_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;cnu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cnu&quot;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;c_nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;c_nu&quot;</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Constraint Release parameter&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">discrete_real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
             <span class="n">discrete_values</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;linkMeGe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;linkMeGe&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Link values of Ge &amp; Me through rho and T&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">boolean</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rho0&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Density of the polymer melt (kg/m3)&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span><span class="p">,</span>
+            <span class="n">display_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
         <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="s2">&quot;linlin.npz&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Zarray</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;Z&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cnuarray</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;cnu&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
 
-        <span class="c1"># Estimate initial values of the theory</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">Gp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="n">Gpp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_material_parameters</span><span class="p">():</span>
+            <span class="c1"># Estimate initial values of the theory</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">Gp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">Gpp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
 
-        <span class="n">Gpp_Gp</span> <span class="o">=</span> <span class="n">Gpp</span> <span class="o">/</span> <span class="n">Gp</span>
-        <span class="n">ind</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Gpp_Gp</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">Gpp_Gp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">ind</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)):</span>
-            <span class="n">taue</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">w</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
-            <span class="n">Ge</span> <span class="o">=</span> <span class="n">Gp</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;taue&quot;</span><span class="p">,</span> <span class="n">taue</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;Ge&quot;</span><span class="p">,</span> <span class="n">Ge</span><span class="p">)</span>
+            <span class="n">Gpp_Gp</span> <span class="o">=</span> <span class="n">Gpp</span> <span class="o">/</span> <span class="n">Gp</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Gpp_Gp</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">Gpp_Gp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ind</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)):</span>
+                <span class="n">taue</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">w</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                <span class="n">Ge</span> <span class="o">=</span> <span class="n">Gp</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tau_e&quot;</span><span class="p">,</span> <span class="n">taue</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;Ge&quot;</span><span class="p">,</span> <span class="n">Ge</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002.LikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002.LikhtmanMcLeish2002">[docs]</a>    <span class="k">def</span> <span class="nf">LikhtmanMcLeish2002</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -234,11 +244,16 @@
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">taue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;taue&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">taue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="n">Ge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Ge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="n">Me</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Me&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">cnu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;cnu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">cnu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;c_nu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">rho0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">linkMeGe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;linkMeGe&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="n">Mw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">])</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="mf">273.15</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">linkMeGe</span><span class="p">):</span>
+            <span class="n">Ge</span> <span class="o">=</span> <span class="mf">1000.0</span><span class="o">*</span><span class="n">rho0</span><span class="o">*</span><span class="n">T</span><span class="o">*</span><span class="mf">8.314</span><span class="o">/</span><span class="n">Me</span> <span class="c1"># *5/4 (Pity... With this factor it works much better)</span>
 
         <span class="n">indcnu</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cnuarray</span> <span class="o">==</span> <span class="n">cnu</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">indcnu1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">indcnu</span> <span class="o">*</span> <span class="mi">2</span>
@@ -312,7 +327,58 @@
 <span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="c1"># add widgets specific to the theory</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
+            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/linkGeMe.png&#39;</span><span class="p">),</span> <span class="s1">&#39;Link Me-Ge&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">lbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;&lt;P&gt;&lt;b&gt;rho&lt;/b&gt; (g/cm&lt;sup&gt;3&lt;/sup&gt;)&lt;/P&gt;&lt;/br&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculateStuff</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
+            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-visible.png&#39;</span><span class="p">),</span> <span class="s1">&#39;Calculate Tube Theory stuff&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thToolsLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
+        
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction_change</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculateStuff</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_tube_theory</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">linkMeGeaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s1">&#39;linkMeGe&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Ge&#39;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Ge&#39;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.calculate_tube_theory"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.calculate_tube_theory">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_tube_theory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;h3&gt;Tube theory results&lt;/h3&gt;&#39;</span><span class="p">)</span>
+        <span class="n">CC1</span> <span class="o">=</span> <span class="mf">1.69</span>
+        <span class="n">CC2</span> <span class="o">=</span> <span class="mf">4.17</span>
+        <span class="n">CC3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.55</span>
+        <span class="n">taue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">Me</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Me&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="c1"># table=&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
+        <span class="c1"># table+=&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;File&lt;/th&gt;&lt;th&gt;Z&lt;/th&gt;&lt;th&gt;&amp;tau;&lt;sub&gt;R&lt;/sub&gt;&lt;/th&gt;&lt;th&gt;&amp;tau;&lt;sub&gt;D&lt;/sub&gt;&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;File&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;&amp;tau;&lt;sub&gt;R&lt;/sub&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;&amp;tau;&lt;sub&gt;D&lt;/sub&gt;&#39;</span><span class="p">],</span> <span class="p">]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+            <span class="n">Mw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">])</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">Mw</span> <span class="o">/</span> <span class="n">Me</span>
+            <span class="n">tR</span> <span class="o">=</span> <span class="n">taue</span> <span class="o">*</span> <span class="n">Z</span><span class="o">*</span><span class="n">Z</span>
+            <span class="n">tD</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">taue</span> <span class="o">*</span> <span class="n">Z</span><span class="o">**</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">CC1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">+</span> <span class="n">CC2</span> <span class="o">/</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">CC3</span> <span class="o">/</span> <span class="n">Z</span><span class="o">**</span><span class="mf">1.5</span><span class="p">)</span> 
+            <span class="c1"># table+= &#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;%.10s&lt;/td&gt;&lt;td&gt;%6.1f&lt;/td&gt;&lt;td&gt;%8.4g&lt;/td&gt;&lt;td&gt;%8.4g&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;% (f.file_name_short, Z, tR, tD)</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12.1g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">Z</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tR</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tD</span><span class="p">])</span>
+        <span class="c1"># table+=&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div></div>
+            
 </pre></div>
 
           </div>
@@ -335,7 +401,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

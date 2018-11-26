@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TheoryDiscrMWD &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -53,12 +44,14 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -114,7 +107,7 @@
 <span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">QFile</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QFileDialog</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QMessageBox</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span>
 <span class="kn">from</span> <span class="nn">DraggableArtists</span> <span class="k">import</span> <span class="n">DragType</span><span class="p">,</span> <span class="n">DraggableBinSeries</span>
 
@@ -741,9 +734,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_bar_plot</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1">#leave the bar plot on</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">update_plot</span><span class="p">()</span></div>
         
-<div class="viewcode-block" id="GUITheoryDiscrMWD.do_save"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryDiscrMWD.GUITheoryDiscrMWD.do_save">[docs]</a>    <span class="k">def</span> <span class="nf">do_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryDiscrMWD.do_save"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryDiscrMWD.GUITheoryDiscrMWD.do_save">[docs]</a>    <span class="k">def</span> <span class="nf">do_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">extra_txt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="n">nbin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;nbin&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;current_fname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_TH_</span><span class="si">%d</span><span class="s1">bins&#39;</span> <span class="o">%</span> <span class="n">nbin</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">)</span>
+        <span class="n">file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_TH_</span><span class="si">%d</span><span class="s1">bins</span><span class="si">%s</span><span class="s1">.txt&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;current_fname&#39;</span><span class="p">],</span> <span class="n">nbin</span><span class="p">,</span> <span class="n">extra_txt</span><span class="p">))</span>
         <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_out</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
         <span class="c1"># output polymers</span>
         <span class="n">Mn</span><span class="p">,</span> <span class="n">Mw</span><span class="p">,</span> <span class="n">PDI</span><span class="p">,</span> <span class="n">Mz_Mw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_moments</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;saved_th&#39;</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -754,10 +747,13 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbin_out</span><span class="p">):</span>
             <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10.3e</span><span class="s2"> </span><span class="si">%12.6e</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;saved_th&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
                                              <span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;saved_th&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;*************************</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;Saved </span><span class="si">%d</span><span class="s2"> bins to </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nbin_out</span><span class="p">,</span> <span class="n">file_out</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div></div>
+        <span class="c1"># print information</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Saved </span><span class="si">%d</span><span class="s2"> bins to </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nbin_out</span><span class="p">,</span> <span class="n">file_out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Saved discretized MWD&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -780,7 +776,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Features &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -33,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -61,8 +52,18 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Features</a><ul>
-<li><a class="reference internal" href="#applications">Applications</a></li>
-<li><a class="reference internal" href="#theories">Theories</a></li>
+<li><a class="reference internal" href="#applications-and-theories">Applications and Theories</a><ul>
+<li><a class="reference internal" href="#molecular-weight-distribution-analysis-mwd">Molecular Weight Distribution Analysis (MWD)</a></li>
+<li><a class="reference internal" href="#time-temperature-superposition-tts">Time-Temperature Superposition (TTS)</a></li>
+<li><a class="reference internal" href="#linear-viscoelastic-data-analysis-lve">Linear Viscoelastic data analysis (LVE)</a></li>
+<li><a class="reference internal" href="#start-up-of-shear-and-extensional-flow-nlve">Start-up of shear and extensional flow (NLVE)</a></li>
+<li><a class="reference internal" href="#stress-relaxation-experiments-gt">Stress relaxation experiments (Gt)</a></li>
+<li><a class="reference internal" href="#creep-experiments-creep">Creep experiments (Creep)</a></li>
+<li><a class="reference internal" href="#neutron-scattering-experiments-sans">Neutron scattering experiments (SANS)</a></li>
+<li><a class="reference internal" href="#monte-carlo-polymerisation-react">Monte Carlo polymerisation (React)</a></li>
+<li><a class="reference internal" href="#dielectric-spectroscopy-dielectric">Dielectric Spectroscopy (Dielectric)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#graphical-user-interface">Graphical User Interface</a></li>
 </ul>
 </li>
@@ -83,12 +84,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -101,41 +104,87 @@
             
   <div class="section" id="features">
 <h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="applications">
-<h2>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="applications-and-theories">
+<h2>Applications and Theories<a class="headerlink" href="#applications-and-theories" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="molecular-weight-distribution-analysis-mwd">
+<h3>Molecular Weight Distribution Analysis (MWD)<a class="headerlink" href="#molecular-weight-distribution-analysis-mwd" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Molecular Weight Distribution analysis (MW)</li>
-<li>Time-temperature superposition shift (TTS)</li>
-<li>Linear Viscoelastic data analysis (LVE)</li>
-<li>Start-up of shear and extensional flow (NLVE)</li>
-<li>Stress relaxation experiments (Gt)</li>
-<li>Creep experiments (Creep)</li>
-<li>Neutron scattering experiments (SANS)</li>
-<li>Monte Carlo polymerisation (React)</li>
-<li>Dielectric Spectroscopy (Dielectric)</li>
+<li>Discretization of a Molecular Weight Distribution</li>
+<li>Generalized Exponential (GEX)</li>
+<li>LogNormal distribution</li>
 </ul>
 </div>
-<div class="section" id="theories">
-<h2>Theories<a class="headerlink" href="#theories" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="time-temperature-superposition-tts">
+<h3>Time-Temperature Superposition (TTS)<a class="headerlink" href="#time-temperature-superposition-tts" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Discretize a Molecular Weight Distribution (MW)</li>
-<li>Williams-Landel-Ferry shift (TTS)</li>
-<li>Maxwell modes fitting (LVE, Gt)</li>
-<li>Retardation modes fitting (Creep)</li>
-<li>Likhtman-McLeish 2002 theory (LVE)</li>
-<li>Dynamic-tube dilution for stars (LVE, Gt)</li>
-<li>Rheology of Branch-on-branch polymers (LVE)</li>
-<li>Rolie-Poly equation for linear polymer melts and binary blends (NLVE)</li>
-<li>Rouse model (LVE, Gt)</li>
-<li>Pom-pom model (NLVE)</li>
-<li>Upper-Convected Maxwell constitutive equation (NLVE)</li>
-<li>Giesekus constitutive equation (NLVE)</li>
-<li>Debye theory for neutron scattering from ideal polymer chains (SANS)</li>
-<li>Basic theories (polynomial, power law, exponential decay, etc, available in all applications)</li>
-<li>Debye and Havriliak-Negami relaxation modes (Dielectric)</li>
-<li>Kolhrauch-Williams-Watts (KWW) modes (Dielectric, BETA version).</li>
+<li>Williams-Landel-Ferry shift (WLF)</li>
+<li>Manual and automatic TTS shift</li>
+<li>Analysis of shift factors</li>
 </ul>
-<p>Each theory is associated to the application (MW, TTS, etc.) where the theory can be found.</p>
+</div>
+<div class="section" id="linear-viscoelastic-data-analysis-lve">
+<h3>Linear Viscoelastic data analysis (LVE)<a class="headerlink" href="#linear-viscoelastic-data-analysis-lve" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Maxwell modes fitting</li>
+<li>Likhtman-McLeish 2002 theory</li>
+<li>Carreau-Yasuda equation</li>
+<li>Rouse model</li>
+<li>Dynamic-tube dilution for stars</li>
+<li>BoB: Rheology of Branch-on-branch polymers</li>
+<li>Rolie-Double-Poly</li>
+</ul>
+</div>
+<div class="section" id="start-up-of-shear-and-extensional-flow-nlve">
+<h3>Start-up of shear and extensional flow (NLVE)<a class="headerlink" href="#start-up-of-shear-and-extensional-flow-nlve" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Rolie-Poly equation for linear polymer melts</li>
+<li>Upper-Convected Maxwell constitutive equation</li>
+<li>Giesekus constitutive equation</li>
+<li>Pom-pom model</li>
+<li>Rolie-Double-Poly equation for binary blends</li>
+<li>BoB: Branch-on-branch polymers</li>
+<li>PETS: Pre-averaged for entangled telechelic star polymers</li>
+<li>SCCR: linear entangled polymers</li>
+</ul>
+</div>
+<div class="section" id="stress-relaxation-experiments-gt">
+<h3>Stress relaxation experiments (Gt)<a class="headerlink" href="#stress-relaxation-experiments-gt" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Maxwell modes fitting</li>
+<li>Dynamic-tube dilution for stars</li>
+<li>Rouse model</li>
+</ul>
+</div>
+<div class="section" id="creep-experiments-creep">
+<h3>Creep experiments (Creep)<a class="headerlink" href="#creep-experiments-creep" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Retardation modes</li>
+</ul>
+</div>
+<div class="section" id="neutron-scattering-experiments-sans">
+<h3>Neutron scattering experiments (SANS)<a class="headerlink" href="#neutron-scattering-experiments-sans" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Debye theory for neutron scattering from ideal polymer chains (SANS)</li>
+</ul>
+</div>
+<div class="section" id="monte-carlo-polymerisation-react">
+<h3>Monte Carlo polymerisation (React)<a class="headerlink" href="#monte-carlo-polymerisation-react" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>LDPE batch reaction (Tobita batch)</li>
+<li>LDPE CSTR reaction (Tobita CSTR)</li>
+<li>Multiple-metallocene reaction</li>
+<li>Combine React theories</li>
+<li>Create polymer configuration for BoB rheology</li>
+<li>Diene CSTR reaction</li>
+</ul>
+</div>
+<div class="section" id="dielectric-spectroscopy-dielectric">
+<h3>Dielectric Spectroscopy (Dielectric)<a class="headerlink" href="#dielectric-spectroscopy-dielectric" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Debye and Havriliak-Negami relaxation modes</li>
+<li>Kolhrauch-Williams-Watts (KWW) modes</li>
+</ul>
+</div>
 </div>
 <div class="section" id="graphical-user-interface">
 <h2>Graphical User Interface<a class="headerlink" href="#graphical-user-interface" title="Permalink to this headline">¶</a></h2>
@@ -143,9 +192,9 @@
 <li>Export the figure to PDF, PNG, …</li>
 <li>Flexibility to choose symbols and colors for the data</li>
 <li>Inspection of the experiment and theory data</li>
-<li>Read data from Excel file (Experimental, CL version)</li>
+<li>Read data from Excel file (Experimental)</li>
 <li>i-Rheo Fourier transform to get G’ and G’’ from G(t)</li>
-<li>Zoom with wheel</li>
+<li>Zoom with mouse and wheel</li>
 <li>Calculate integral, find peaks (BETA, only in CL version)</li>
 <li>Save predictions of theory to a RepTate compatible file</li>
 </ul>
@@ -178,7 +227,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

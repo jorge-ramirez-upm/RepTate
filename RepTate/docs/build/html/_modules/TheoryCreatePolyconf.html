@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TheoryCreatePolyconf &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -53,12 +44,14 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -187,10 +180,10 @@
 
 <span class="sd">    The original documentation of BoB can be found here: `&lt;https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download&gt;`_.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">thname</span> <span class="o">=</span> <span class="s1">&#39;Create Polyconf&#39;</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Create Polyconf&#39;</span>
-    <span class="n">citations</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-    <span class="n">doi</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">thname</span> <span class="o">=</span> <span class="s1">&#39;BOB Architecture&#39;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Create and Save Polymer Configuration with BOB&#39;</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="s1">&#39;Das C., Inkson N.J., Read D.J., Kelmanson M.A. and McLeish T.C.B., J. Rheol. 2006, 50, 207-234&#39;</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="s2">&quot;http://dx.doi.org/10.1122/1.2167487&quot;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axarr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
@@ -215,7 +208,7 @@
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1">#help_file = &#39;&#39;</span>
+    <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;https://reptate.readthedocs.io/manual/Applications/React/Theory/BoB_polyconf.html&#39;</span>
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># False if the theory can be applied to multiple files simultaneously</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryCreatePolyconf</span><span class="o">.</span><span class="n">thname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">TheoryCreatePolyconf</span><span class="o">.</span><span class="n">citations</span>
@@ -498,7 +491,7 @@
         <span class="c1">#3 &quot;1&quot; for BoB &#39;compatibility&#39;</span>
         <span class="n">tb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
         <span class="c1">#4 M0, Ne, (density not used)</span>
-        <span class="n">tb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%f</span><span class="s2"> </span><span class="si">%f</span><span class="s2"> 0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">m0</span><span class="o">.</span><span class="n">text</span><span class="p">()),</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.6g</span><span class="s2"> </span><span class="si">%.6g</span><span class="s2"> 0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">m0</span><span class="o">.</span><span class="n">text</span><span class="p">()),</span>
                                <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">ne</span><span class="o">.</span><span class="n">text</span><span class="p">())))</span>
         <span class="c1">#5 tau_e, T (not used)</span>
         <span class="n">tb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;0 0&quot;</span><span class="p">)</span>
@@ -517,7 +510,7 @@
                 <span class="n">w</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pol_dict</span><span class="p">[</span><span class="s2">&quot;Ratio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">/</span> <span class="n">tot_ratio</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">w</span> <span class="o">=</span> <span class="s2">&quot;ERROR&quot;</span>
-            <span class="n">tb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">w</span><span class="p">)</span>
+            <span class="n">tb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.6g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">w</span><span class="p">)</span>
             <span class="c1">#9.. num. polymer and type</span>
             <span class="c1"># float -&gt; int conversion needed for e.g. &quot;1e6&quot;</span>
             <span class="n">npol</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">pol_dict</span><span class="p">[</span><span class="s2">&quot;Num. of polymers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
@@ -850,7 +843,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>
