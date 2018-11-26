@@ -14,6 +14,7 @@ NLVE: Theories
 .. include:: PomPom.rst
 .. include:: RolieDoublePoly.rst
 .. include:: BOB_NLVE.rst
+.. include:: SCCR.rst
 
 
 .. rubric:: References

@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Rouse Frequency &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -67,12 +58,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -94,8 +87,8 @@
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math">\(N\)</span>):</p>
-<div class="last math">
+<dd><p class="first">Continuous Rouse model (valid for “large” <span class="math notranslate">\(N\)</span>):</p>
+<div class="last math notranslate">
 \[\begin{split}G'(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{(\omega\tau_p)^2} {1 +  (\omega\tau_p)^2}\\
 G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omega\tau_p)^2}\\
 \tau_p &amp;= \dfrac{N^2 \tau_0 }{ 2 p^2}\end{split}\]</div>
@@ -105,18 +98,18 @@ G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omeg
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first simple">
-<li><span class="math">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
-<li><span class="math">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
-<li><span class="math">\(M_0\)</span>: molar mass of an elementary segment</li>
+<li><span class="math notranslate">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</li>
+<li><span class="math notranslate">\(\tau_0\)</span>: relaxation time of an elementary segment</li>
+<li><span class="math notranslate">\(M_0\)</span>: molar mass of an elementary segment</li>
 </ul>
 <dl class="last docutils">
 <dt>where</dt>
 <dd><ul class="first last simple">
-<li><span class="math">\(c\)</span>: number of segments per unit volume</li>
-<li><span class="math">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
-<li><span class="math">\(T\)</span>: temperature</li>
-<li><span class="math">\(N=M_w/M_0\)</span>: number of segments par chain</li>
-<li><span class="math">\(M_w\)</span>: weight-average molecular mass</li>
+<li><span class="math notranslate">\(c\)</span>: number of segments per unit volume</li>
+<li><span class="math notranslate">\(k_\mathrm  B\)</span>: Boltzmann constant</li>
+<li><span class="math notranslate">\(T\)</span>: temperature</li>
+<li><span class="math notranslate">\(N=M_w/M_0\)</span>: number of segments par chain</li>
+<li><span class="math notranslate">\(M_w\)</span>: weight-average molecular mass</li>
 </ul>
 </dd>
 </dl>
@@ -149,7 +142,7 @@ G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omeg
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

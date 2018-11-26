@@ -81,9 +81,9 @@ class BaseTheoryGEX:
     
     * **Parameters**
        - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.
-       - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`: .
-       - ``a`` 
-       - ``b``
+       - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`: Proportional to :math:`M_n` and :math:`M_w`.
+       - ``a`` : Parameter related to polydispersity and skewness
+       - ``b`` : Parameter related to polydispersity and skewness
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function'
     single_file = False  # False if the theory can be applied to multiple files simultaneously

@@ -49,9 +49,14 @@ from PyQt5.QtCore import QSize
 
 class TheoryLikhtmanMcLeish2002(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
-    
-    [description]
+        
+    * **Parameters**
+       - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`.
+       - ``Ge`` : Entanglement modulus.
+       - ``Me`` : Entanglement molecular weight.
+       - ``c_nu`` : Constraint release parameter.
     """
+    
     thname = "Likhtman-McLeish"
     description = "Likhtman-McLeish theory for linear entangled polymers"
     citations = "Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"
@@ -228,7 +233,21 @@ class BaseTheoryLikhtmanMcLeish2002:
         tt.data[:, 2] = interp(tt.data[:, 0], table[:, 0] / taue,
                                Ge * table[:, 2])
 
-
+    def do_error(self, line):
+        super().do_error(line)
+        taue = self.parameters["tau_e"].value
+        Me = self.parameters["Me"].value
+        tab_data = [['%-18s' % 'File', '%-18s' % 'Z', '%-18s' % 'tauR', '%-18s' % 'tauD'],]
+        C1 = 1.69
+        C2 = 4.17
+        C3 = -1.55
+        for f in self.theory_files():
+            Z = float(f.file_parameters["Mw"])/Me
+            tauR = taue*Z**2
+            tauD = 3*taue*Z**3*(1.0-2*C1/np.sqrt(Z)+C2/Z+C3/np.power(Z, 1.5))
+            tab_data.append(['%-18s'% f.file_name_short, '%18.4g' % Z,  '%18.4g' % tauR,  '%    18.4g' % tauD ])
+        self.Qprint(tab_data)
+                               
 class CLTheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, Theory):
     """[summary]
     
@@ -275,12 +294,9 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
         self.txtrho = QLineEdit("%.4g"%self.parameters["rho0"].value)
         self.txtrho.setReadOnly(True)
         tb.addWidget(self.txtrho)
-        self.calculateStuff = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'Calculate Tube Theory stuff')
         self.thToolsLayout.insertWidget(0, tb)
         
         connection_id = self.linkMeGeaction.triggered.connect(self.linkMeGeaction_change)
-        connection_id = self.calculateStuff.triggered.connect(self.calculate_tube_theory)
 
     def linkMeGeaction_change(self):
         self.set_param_value('linkMeGe', self.linkMeGeaction.isChecked())
@@ -294,23 +310,4 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
             p.opt_type=OptType.opt
         self.update_parameter_table()
 
-    def calculate_tube_theory(self):
-        self.Qprint('<h3>Tube theory results</h3>')
-        CC1 = 1.69
-        CC2 = 4.17
-        CC3 = -1.55
-        taue = self.parameters["tau_e"].value
-        Me = self.parameters["Me"].value
-        # table='''<table border="1" width="100%">'''
-        # table+='''<tr><th>File</th><th>Z</th><th>&tau;<sub>R</sub></th><th>&tau;<sub>D</sub></th></tr>'''
-        table = [['%-18s' % 'File', '%-12s' % 'Z', '%-12s' % '&tau;<sub>R</sub>', '%-12s' % '&tau;<sub>D</sub>'], ]
-        for f in self.parent_dataset.files:
-            Mw = float(f.file_parameters["Mw"])
-            Z = Mw / Me
-            tR = taue * Z*Z
-            tD = 3 * taue * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5) 
-            # table+= '''<tr><td>%.10s</td><td>%6.1f</td><td>%8.4g</td><td>%8.4g</td></tr>'''% (f.file_name_short, Z, tR, tD)
-            table.append(['%-18s' % f.file_name_short, '%-12.1g' % Z, '%-12.4g' % tR, '%-12.4g' % tD])
-        # table+='''</table><br>'''
-        self.Qprint(table)
             

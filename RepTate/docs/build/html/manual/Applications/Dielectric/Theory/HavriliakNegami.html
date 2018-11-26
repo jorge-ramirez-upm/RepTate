@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Havriliak-Negami modes &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -68,12 +59,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -97,7 +90,7 @@
 <ul>
 <li><dl class="first docutils">
 <dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<dd><div class="first last math notranslate">
 \[\epsilon^* (\omega) = \epsilon_\infty + \frac{\Delta\epsilon}{\left[ 1 + \left( i\omega\tau\right)^\alpha\right]^\gamma}\]</div>
 </dd>
 </dl>
@@ -105,13 +98,13 @@
 <li><dl class="first docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="first last simple">
-<li>einf = <span class="math">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</li>
-<li><span class="math">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math">\(\omega_{min}\)</span> and <span class="math">\(\omega_{max}\)</span>.</li>
-<li>logwmin = <span class="math">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
-<li>logwmax = <span class="math">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
-<li>logDei = <span class="math">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math">\(i\)</span>, where <span class="math">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math">\(i\)</span>.</li>
-<li><span class="math">\(\alpha\)</span>: Asymmetry parameter</li>
-<li><span class="math">\(\gamma\)</span>: Broadness parameter</li>
+<li>einf = <span class="math notranslate">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</li>
+<li><span class="math notranslate">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math notranslate">\(\omega_{min}\)</span> and <span class="math notranslate">\(\omega_{max}\)</span>.</li>
+<li>logwmin = <span class="math notranslate">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
+<li>logwmax = <span class="math notranslate">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
+<li>logDei = <span class="math notranslate">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate">\(i\)</span>, where <span class="math notranslate">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate">\(i\)</span>.</li>
+<li><span class="math notranslate">\(\alpha\)</span>: Asymmetry parameter</li>
+<li><span class="math notranslate">\(\gamma\)</span>: Broadness parameter</li>
 </ul>
 </dd>
 </dl>
@@ -126,24 +119,24 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">NEEDS TO BE WRITTEN!</p>
 </div>
-<p>Fit of dielectric spectroscopy data with a set of <span class="math">\(N\)</span> discrete equidistant Debye modes.
+<p>Fit of dielectric spectroscopy data with a set of <span class="math notranslate">\(N\)</span> discrete equidistant Debye modes.
 The number of modes can be selected by pressing the Up/Down arrows in the theory window.
 The frequencies of the Debye modes are equally distributed in logarithmic scale between
-a minimum frequency, <span class="math">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math">\(\omega_\text{max}\)</span>,
+a minimum frequency, <span class="math notranslate">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math notranslate">\(\omega_\text{max}\)</span>,
 which can be fixed or set free by ticking the corresponding checkboxes.
-The position of <span class="math">\(\omega_\text{min}\)</span> and <span class="math">\(\omega_\text{max}\)</span>
+The position of <span class="math notranslate">\(\omega_\text{min}\)</span> and <span class="math notranslate">\(\omega_\text{max}\)</span>
 can be changed by dragging the leftmost and rightmost modes with the mouse.
 The vertical position of the modes can be changed by dragging the yellow points.</p>
 <p>Each mode contributes to the dielectric relaxation spectrum through the following formulas:</p>
-<div class="math">
+<div class="math notranslate">
 \[\begin{split}\epsilon_i'(\omega) &amp;= \Delta\epsilon_i \frac{1}{1+ (\omega \tau_i)^2}\\
 \epsilon_i''(\omega) &amp;= \Delta\epsilon_i \frac{\omega \tau_i}{1+ (\omega \tau_i)^2}\end{split}\]</div>
-<p>with <span class="math">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math">\(\tau_i\)</span> the characteristic relaxation time of
-the mode <span class="math">\(i\)</span> (inverse of the frequency).</p>
+<p>with <span class="math notranslate">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math notranslate">\(\tau_i\)</span> the characteristic relaxation time of
+the mode <span class="math notranslate">\(i\)</span> (inverse of the frequency).</p>
 <p>The parameters of the theory are the number of modes (which is fixed by the user and
-is not minimized), <span class="math">\(\omega_\text{min}\)</span>, <span class="math">\(\omega_\text{max}\)</span>,
-and a value of <span class="math">\(\Delta\epsilon_i\)</span> for each mode.
-<span class="math">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
+is not minimized), <span class="math notranslate">\(\omega_\text{min}\)</span>, <span class="math notranslate">\(\omega_\text{max}\)</span>,
+and a value of <span class="math notranslate">\(\Delta\epsilon_i\)</span> for each mode.
+<span class="math notranslate">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The theory can only be applied to one file per data set.
@@ -173,7 +166,7 @@ the theory will be applied to the first one in the list of active files.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

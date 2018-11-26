@@ -98,7 +98,7 @@ class BaseTheoryDTDStarsFreq:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dtdstarsFreq'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dynamic-dilution-equation-for-stars'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDTDStarsFreq.thname
     citations = TheoryDTDStarsFreq.citations
@@ -297,7 +297,7 @@ class BaseTheoryDTDStarsTime:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dtdstarsTime'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#dtd-stars-time'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDTDStarsTime.thname
     citations = TheoryDTDStarsTime.citations

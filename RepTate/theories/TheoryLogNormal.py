@@ -71,15 +71,15 @@ class TheoryLogNormal(CmdBase):
 
 
 class BaseTheoryLogNormal:
-    """Log-Normal distribution
+    """Log-Normal distribution: the logarithm of the molecular weight is normally distributed
     
     * **Function**
         .. math::
-            W(M) = W_0 \\frac{1}{\\sigma\\sqrt{\\pi}} \\frac{1}{M} \\exp\\left[ - \\frac{\\left(\\ln{M}-\\ln{M_0}\\right)^2}{2\\sigma^2} \\right]
+            W(M) = W_0 \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\frac{1}{M} \\exp\\left[ - \\frac{\\left(\\ln{M}-\\ln{M_0}\\right)^2}{2\\sigma^2} \\right]
     
     * **Parameters**
        - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.
-       - ``logW0`` :math:`\\equiv\\log_{10}(M_0)`
+       - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`
        - ``sigma`` :math:`\\equiv\\sigma`
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'

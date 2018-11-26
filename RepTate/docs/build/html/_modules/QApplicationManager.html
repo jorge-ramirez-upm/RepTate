@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>QApplicationManager &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -53,12 +44,14 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -274,6 +267,7 @@
 
         <span class="c1">#self.add_save_load_buttons()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">REPTATE_PROJ_JSON</span> <span class="o">=</span> <span class="s1">&#39;reptate_project.json&#39;</span> <span class="c1"># json filename inside zip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># CONSOLE WINDOW (need to integrate it with cmd commands)</span>
         <span class="c1">#self.text_edit = Console(self)</span>
@@ -469,16 +463,24 @@
 
 <div class="viewcode-block" id="QApplicationManager.launch_open_dialog"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.launch_open_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">launch_open_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get filename of RepTate project to open&quot;&quot;&quot;</span>
-        <span class="n">fpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-            <span class="s2">&quot;Open RepTate Project&quot;</span><span class="p">,</span> <span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="s2">&quot;RepTate Project (*.rept)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span><span class="p">:</span>
+            <span class="n">fpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="s2">&quot;Open RepTate Project&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span><span class="p">,</span> <span class="s2">&quot;RepTate Project (*.rept)&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="s2">&quot;Open RepTate Project&quot;</span><span class="p">,</span> <span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="s2">&quot;RepTate Project (*.rept)&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fpath</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">open_project</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QApplicationManager.launch_save_dialog"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.launch_save_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">launch_save_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get filename of RepTate project to save&quot;&quot;&quot;</span>
-        <span class="n">fpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-            <span class="s2">&quot;Save RepTate Project&quot;</span><span class="p">,</span> <span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="s2">&quot;RepTate Project (*.rept)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span><span class="p">:</span>
+            <span class="n">fpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="s2">&quot;Save RepTate Project&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span><span class="p">,</span> <span class="s2">&quot;RepTate Project (*.rept)&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="s2">&quot;Save RepTate Project&quot;</span><span class="p">,</span> <span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="s2">&quot;RepTate Project (*.rept)&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fpath</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_reptate</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
@@ -486,6 +488,7 @@
 
 <div class="viewcode-block" id="QApplicationManager.save_reptate"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.save_reptate">[docs]</a>    <span class="k">def</span> <span class="nf">save_reptate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save RepTate project to &#39;fpath&#39;&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span> <span class="o">=</span> <span class="n">fpath</span>
         <span class="n">apps_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="n">napps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
         <span class="n">nth_saved</span> <span class="o">=</span> <span class="mi">0</span>
@@ -524,6 +527,19 @@
                     <span class="n">th_table_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span> 
                         <span class="p">[</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="n">th</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="p">]</span>
                     <span class="p">)</span>
+                    <span class="c1"># save extra_tables</span>
+                    <span class="n">th_extra_table_dic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+                        <span class="n">dic_copy</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="c1"># loop over extra table and convert np.array to list</span>
+                        <span class="k">for</span> <span class="n">et_key</span> <span class="ow">in</span> <span class="n">th</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span><span class="o">.</span><span class="n">extra_tables</span><span class="p">:</span>
+                            <span class="n">val</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span><span class="o">.</span><span class="n">extra_tables</span><span class="p">[</span><span class="n">et_key</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+                                <span class="n">dic_copy</span><span class="p">[</span><span class="n">et_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">dic_copy</span><span class="p">[</span><span class="n">et_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                        <span class="n">th_extra_table_dic</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic_copy</span>
+
                     <span class="n">th</span><span class="o">.</span><span class="n">get_extra_data</span><span class="p">()</span>
                     <span class="n">e_dic</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">extra_data</span>
                     <span class="n">e_dic_copy</span> <span class="o">=</span> <span class="p">{}</span>
@@ -542,6 +558,7 @@
                             <span class="p">(</span><span class="s1">&#39;th_param&#39;</span><span class="p">,</span> <span class="n">param_dic</span><span class="p">),</span>
                             <span class="p">(</span><span class="s1">&#39;th_textbox&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">th</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">toHtml</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;&lt;br&gt;&lt;i&gt;Saved at </span><span class="si">%s</span><span class="s1"> on </span><span class="si">%s</span><span class="s1">&lt;i&gt;&lt;br&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%X</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a %b </span><span class="si">%d</span><span class="s2">, %Y&quot;</span><span class="p">)</span> <span class="p">)),</span>
                             <span class="p">(</span><span class="s1">&#39;th_tables&#39;</span><span class="p">,</span> <span class="n">th_table_dic</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s1">&#39;th_extra_table_dic&#39;</span><span class="p">,</span> <span class="n">th_extra_table_dic</span><span class="p">),</span>
                             <span class="p">(</span><span class="s1">&#39;extra_data&#39;</span><span class="p">,</span> <span class="n">e_dic_copy</span><span class="p">)</span>
                         <span class="p">]</span>
                     <span class="p">)</span>
@@ -728,6 +745,11 @@
             <span class="n">th_textbox</span> <span class="o">=</span> <span class="n">th_dic</span><span class="p">[</span><span class="s1">&#39;th_textbox&#39;</span><span class="p">]</span>
             <span class="n">th_tables</span> <span class="o">=</span> <span class="n">th_dic</span><span class="p">[</span><span class="s1">&#39;th_tables&#39;</span><span class="p">]</span>
             <span class="n">extra_data</span> <span class="o">=</span> <span class="n">th_dic</span><span class="p">[</span><span class="s1">&#39;extra_data&#39;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">extra_table_dic</span> <span class="o">=</span> <span class="n">th_dic</span><span class="p">[</span><span class="s1">&#39;th_extra_table_dic&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c1"># backward compatibility</span>
+                <span class="n">extra_table_dic</span> <span class="o">=</span> <span class="p">{}</span>
 
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">extra_data</span><span class="p">:</span>
                 <span class="n">val</span> <span class="o">=</span> <span class="n">extra_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -742,7 +764,14 @@
             <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">th_tables</span><span class="p">:</span>
                 <span class="n">tt</span> <span class="o">=</span> <span class="n">new_th</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
                 <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">th_tables</span><span class="p">[</span><span class="n">fname</span><span class="p">])</span>
-                <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">extra_table_dic</span><span class="p">:</span>
+                <span class="n">tt_dic</span> <span class="o">=</span> <span class="n">new_th</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span><span class="o">.</span><span class="n">extra_tables</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">extra_table_dic</span><span class="p">[</span><span class="n">fname</span><span class="p">]:</span>
+                    <span class="n">tt_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">extra_table_dic</span><span class="p">[</span><span class="n">fname</span><span class="p">][</span><span class="n">key</span><span class="p">])</span>
             <span class="n">new_th</span><span class="o">.</span><span class="n">set_extra_data</span><span class="p">(</span><span class="n">extra_data</span><span class="p">)</span>
             <span class="n">new_th</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
             <span class="n">new_th</span><span class="o">.</span><span class="n">thTextBox</span><span class="o">.</span><span class="n">insertHtml</span><span class="p">(</span><span class="n">th_textbox</span><span class="p">)</span>
@@ -797,6 +826,7 @@
         <span class="kn">import</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">zipfile</span><span class="o">,</span> <span class="nn">tempfile</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">project_path</span><span class="p">):</span>
             <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span> <span class="o">=</span> <span class="n">project_path</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdirname</span><span class="p">:</span>
                 <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
@@ -906,7 +936,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
     </div>
   </body>
 </html>

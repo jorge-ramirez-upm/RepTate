@@ -13,6 +13,8 @@ NLVE: Theories
 .. include:: Giesekus.rst
 .. include:: PomPom.rst
 .. include:: RolieDoublePoly.rst
+.. include:: BOB_NLVE.rst
+
 
 .. rubric:: References
 
