@@ -132,6 +132,7 @@ def start_RepTate(argv):
     splash.finish(ex)
 
     # Handle files & open apps accordingly
+    CmdBase.calcmode = CalcMode.singlethread # avoid troubles when loading multiple apps/files/theories
     d = {ex.extension: ex.appname for ex in  list(ex.available_applications.values())}
     for k in dictfiles.keys():
         if k == 'rept':
@@ -150,6 +151,11 @@ def start_RepTate(argv):
                     break
         else:
             print("File type %s cannot be opened"%k)
+    # set the calmode back
+    if args.single:
+        CmdBase.calcmode = CalcMode.singlethread
+    else:
+        CmdBase.calcmode = CalcMode.multithread
 
     def my_excepthook(type, value, tb):
         """Catch exceptions and print error message. Open email client to report bug to devlopers"""
