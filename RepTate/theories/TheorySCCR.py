@@ -77,7 +77,7 @@ class TheorySCCR(CmdBase):
        - ``Me`` : Entanglement molecular weight.
        - ``c_nu`` : Constraint release parameter.
     """
-    thname = "SCCR"
+    thname = "GLaMM"
     description = "SCCR theory for linear entangled polymers"
     citations = "Graham, R.S., Likhtman, A.E., McLeish, T.C.B. & Milner, S.T., J. Rheo., 2003, 47, 1171-1200"
     doi = "http://dx.doi.org/10.1122/1.1595099"

@@ -690,7 +690,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 val = extra_data[key]
                 if type(val) == list:
                     extra_data[key] = np.asarray(val)
-
+            
+            if thname == 'SCCR':
+                thname = 'GLaMM' # backward compatibility
             new_th = ds.new_theory(thname, th_tabname, calculate=False, show=False)
             autocal = new_th.autocalculate
             new_th.autocalculate = False
@@ -799,7 +801,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         ans = QMessageBox.question(self, 'Load Project', 
             'Will load %d %s, %d %s, %d %s, and %d %s.\nDo you want to continue?' % (napps, 
             txtapp, nth_saved, txtth, nfile_saved, txtfiles, ntool_saved, txttool), 
-            QMessageBox.Yes|QMessageBox.No)
+            QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
         if ans != QMessageBox.Yes:
             return
         for app_dic in apps_dic.values():
