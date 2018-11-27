@@ -45,6 +45,7 @@ from DataSet import DataSet
 from DataTable import DataTable
 from QTheory import QTheory
 from DataSetWidget import DataSetWidget
+import numpy as np
 import threading
 import matplotlib.patheffects as pe
 
@@ -57,6 +58,8 @@ class EditFileParametersDialog(QDialog):
 
     def __init__(self, parent, file):
         super().__init__(parent)
+        self.parent_dataset = parent
+        self.file = file
         self.createFormGroupBox(file)
         self.createFormGroupBoxTheory(file)
 
@@ -72,7 +75,7 @@ class EditFileParametersDialog(QDialog):
         mainLayout.addWidget(tab_widget)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
-        self.setWindowTitle("Edit")
+        self.setWindowTitle("Edit Paramters")
 
     def createFormGroupBox(self, file):
         """Create a form to set the new values of the file parameters"""
@@ -99,39 +102,75 @@ class EditFileParametersDialog(QDialog):
         self.formGroupBoxTheory = QGroupBox(
             "Extend theory x-range of \"%s\"" % file.file_name_short)
         layout = QFormLayout()
-        self.with_extra_x = QCheckBox()
+        self.with_extra_x = QCheckBox(self)
         self.with_extra_x.setChecked(file.with_extra_x)
         layout.addRow('Extra theory xrange?', self.with_extra_x)
         self.with_extra_x.toggled.connect(self.activate_th_widgets)
-        # theory xmin/max
-        self.th_xmin = QLineEdit()
-        self.th_xmax = QLineEdit()
-        self.th_linear = QCheckBox()
-        self.th_xmin.setText('%s' % file.theory_xmin)
-        self.th_xmax.setText('%s' % file.theory_xmax)
-        layout.addRow('xmin theory', self.th_xmin)
-        layout.addRow('xmax theory', self.th_xmax)
         # Npoints
-        self.th_num_pts = QLineEdit()
+        self.th_num_pts = QLineEdit(self)
         intvalidator = QIntValidator()
         intvalidator.setBottom(2)
         self.th_num_pts.setValidator(QIntValidator())
         self.th_num_pts.setText('%s' % file.th_num_pts)
         layout.addRow('Num. of extra point', self.th_num_pts)
         # logspace
-        self.th_logspace = QCheckBox()
+        self.th_logspace = QCheckBox(self)
         self.th_logspace.setChecked(file.theory_logspace)
         layout.addRow('logspace', self.th_logspace)
+        # theory xmin/max
+        dvalidator = QDoubleValidator()
+        self.th_xmin = QLineEdit(self)
+        self.th_xmax = QLineEdit(self)
+        self.th_xmin.setValidator(dvalidator)
+        self.th_xmax.setValidator(dvalidator)
+        self.th_xmin.textEdited.connect(self.update_current_view_xrange)
+        self.th_xmax.textEdited.connect(self.update_current_view_xrange)
+        self.th_xmin.setText('%s' % file.theory_xmin)
+        self.th_xmax.setText('%s' % file.theory_xmax)
+        layout.addRow('xmin theory', self.th_xmin)
+        layout.addRow('xmax theory', self.th_xmax)
+        # current view theory xmin/max
+        self.view_xmin = QLabel('')
+        self.view_xmax = QLabel('')
+        layout.addRow('xmin(current view)', self.view_xmin)
+        layout.addRow('xmax(current view)', self.view_xmax)
+        self.update_current_view_xrange()
         # set layout
         self.formGroupBoxTheory.setLayout(layout)
         self.activate_th_widgets()
-    
+
+    def update_current_view_xrange(self):
+        view = self.parent_dataset.parent_application.current_view
+        tmp_dt = DataTable(axarr=[])
+        tmp_dt.data = np.zeros((1, 3))
+        tmp_dt.num_rows = 1
+        tmp_dt.num_columns = 3
+        try:
+            xmin = float(self.th_xmin.text())
+        except ValueError:
+            self.view_xmin.setText('N/A')
+        else:
+            tmp_dt.data[0,0] = xmin
+            x, y, success = view.view_proc(tmp_dt, self.file.file_parameters)
+            self.view_xmin.setText("%.4g" % x[0,0])
+
+        try:
+            xmax = float(self.th_xmax.text())
+        except ValueError:
+            self.view_xmax.setText('N/A')
+        else:
+            tmp_dt.data[0,0] = xmax
+            x, y, success = view.view_proc(tmp_dt, self.file.file_parameters)
+            self.view_xmax.setText("%.4g" % x[0,0])
+
     def activate_th_widgets(self):
         checked = self.with_extra_x.isChecked()
         self.th_xmin.setDisabled(not checked)
         self.th_xmax.setDisabled(not checked)
         self.th_num_pts.setDisabled(not checked)
         self.th_logspace.setDisabled(not checked)
+        self.view_xmin.setDisabled(not checked)
+        self.view_xmax.setDisabled(not checked)
 
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
