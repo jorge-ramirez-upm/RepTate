@@ -447,7 +447,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                             ('fname', os.path.basename(f.file_full_path)),
                             ('is_active', f.active),
                             ('fparam', param_dic),
-                            ('ftable', f.data_table.data.tolist())
+                            ('ftable', f.data_table.data.tolist()),
+                            ('with_extra_x', int(f.with_extra_x)),
+                            ('theory_xmin', f.theory_xmin),
+                            ('theory_xmax', f.theory_xmax),
+                            ('theory_logspace', int(f.theory_logspace)),
+                            ('th_num_pts', f.th_num_pts),
+                            ('nextramin', f.nextramin),
+                            ('nextramax', f.nextramax),
                         ]
                     )
                     files_dic[f.file_name_short] = file_dic
@@ -653,6 +660,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             is_active = file_dic['is_active']
             fparams = file_dic['fparam'] # dict
             ftable = np.asarray(file_dic['ftable'])
+
             
             f_ext = fname.split('.')[-1]
             ft = ds.parent_application.filetypes[f_ext]
@@ -665,6 +673,16 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             f.active = is_active
             for pname in fparams:
                 f.file_parameters[pname] = fparams[pname]
+            try:
+                f.with_extra_x = bool(file_dic['with_extra_x'])
+                f.theory_xmin = file_dic['theory_xmin']
+                f.theory_xmax = file_dic['theory_xmax']
+                f.theory_logspace = bool(file_dic['theory_logspace'])
+                f.th_num_pts = file_dic['th_num_pts']
+                f.nextramin = file_dic['nextramin']
+                f.nextramax = file_dic['nextramax']
+            except KeyError:
+                pass # backward compatibility
 
             ds.parent_application.addTableToCurrentDataSet(f, f_ext)
             ds.do_plot()
