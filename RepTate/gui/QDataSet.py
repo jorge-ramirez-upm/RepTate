@@ -99,6 +99,10 @@ class EditFileParametersDialog(QDialog):
         self.formGroupBoxTheory = QGroupBox(
             "Extend theory x-range of \"%s\"" % file.file_name_short)
         layout = QFormLayout()
+        self.with_extra_x = QCheckBox()
+        self.with_extra_x.setChecked(file.with_extra_x)
+        layout.addRow('Extra theory xrange?', self.with_extra_x)
+        self.with_extra_x.toggled.connect(self.activate_th_widgets)
         # theory xmin/max
         self.th_xmin = QLineEdit()
         self.th_xmax = QLineEdit()
@@ -120,6 +124,14 @@ class EditFileParametersDialog(QDialog):
         layout.addRow('logspace', self.th_logspace)
         # set layout
         self.formGroupBoxTheory.setLayout(layout)
+        self.activate_th_widgets()
+    
+    def activate_th_widgets(self):
+        checked = self.with_extra_x.isChecked()
+        self.th_xmin.setDisabled(not checked)
+        self.th_xmax.setDisabled(not checked)
+        self.th_num_pts.setDisabled(not checked)
+        self.th_logspace.setDisabled(not checked)
 
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
@@ -755,6 +767,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     except ValueError:
                         pass
                     file.theory_logspace = d.th_logspace.isChecked()
+                    file.with_extra_x = d.with_extra_x.isChecked()
                     
 
     def handle_actionNew_Theory(self):

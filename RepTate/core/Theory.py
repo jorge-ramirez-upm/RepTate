@@ -257,11 +257,14 @@ class Theory(CmdBase):
             if f in th_files:
                 if self.stop_theory_flag:
                     break
-                data_copy = f.data_table.data.copy()
-                self.extend_xrange(f)
+                if f.with_extra_x:
+                    data_copy = f.data_table.data.copy()
+                    self.extend_xrange(f)
                 self.function(f)
-                f.data_table.data = data_copy
-                f.data_table.num_rows = data_copy.shape[0]
+                if f.with_extra_x:
+                    # restore f
+                    f.data_table.data = data_copy
+                    f.data_table.num_rows = data_copy.shape[0]
             else:
                 tt = self.tables[f.file_name_short]
                 tt.data = np.empty((tt.num_rows, tt.num_columns))
@@ -314,12 +317,15 @@ class Theory(CmdBase):
     
     def get_non_extended_th_table(self, f):
         """return a copy of the theory table associated with f, where the extra rows are delete"""
-        tmp_dt = DataTable(axarr=[])
-        nrow = self.tables[f.file_name_short].num_rows
-        tmp_dt.data = self.tables[f.file_name_short].data[f.nextramin:nrow-f.nextramax, :]
-        tmp_dt.num_rows = tmp_dt.data.shape[0]
-        tmp_dt.num_columns = tmp_dt.data.shape[1]
-        return tmp_dt
+        if f.with_extra_x:
+            tmp_dt = DataTable(axarr=[])
+            nrow = self.tables[f.file_name_short].num_rows
+            tmp_dt.data = self.tables[f.file_name_short].data[f.nextramin:nrow-f.nextramax, :]
+            tmp_dt.num_rows = tmp_dt.data.shape[0]
+            tmp_dt.num_columns = tmp_dt.data.shape[1]
+            return tmp_dt
+        else:
+            return self.tables[f.file_name_short]
 
     def theory_files(self):
         if not self.single_file:

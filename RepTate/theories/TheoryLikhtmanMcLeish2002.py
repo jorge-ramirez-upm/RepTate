@@ -332,7 +332,7 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
                 self.handle_actionCalculate_Theory()
 
     def set_extra_data(self, _):
-        """Restaure the check state of button and text value"""
+        """Restore the check state of button and text value"""
         self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
         checked = self.parameters['linkMeGe'].value
         self.linkMeGeaction.setChecked(checked)

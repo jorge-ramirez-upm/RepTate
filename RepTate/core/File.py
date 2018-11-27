@@ -79,6 +79,7 @@ class File(object):
         self.active = True
         self.data_table = DataTable(axarr, self.file_name_short)
         # extra theory xrange
+        self.with_extra_x = False
         self.theory_xmin = "None"
         self.theory_xmax = "None"
         self.theory_logspace = True
