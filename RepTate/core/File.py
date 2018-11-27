@@ -78,6 +78,13 @@ class File(object):
         self.file_parameters={}
         self.active = True
         self.data_table = DataTable(axarr, self.file_name_short)
+        # extra theory xrange
+        self.theory_xmin = "None"
+        self.theory_xmax = "None"
+        self.theory_logspace = True
+        self.th_num_pts = 10 # number of points
+        self.nextramin = 0
+        self.nextramax = 0
 
     def __str__(self):
         """[summary]

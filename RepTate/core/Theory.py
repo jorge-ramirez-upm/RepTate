@@ -257,7 +257,11 @@ class Theory(CmdBase):
             if f in th_files:
                 if self.stop_theory_flag:
                     break
+                data_copy = f.data_table.data.copy()
+                self.extend_xrange(f)
                 self.function(f)
+                f.data_table.data = data_copy
+                f.data_table.num_rows = data_copy.shape[0]
             else:
                 tt = self.tables[f.file_name_short]
                 tt.data = np.empty((tt.num_rows, tt.num_columns))
@@ -270,6 +274,52 @@ class Theory(CmdBase):
             self.Qprint('''<i>---Calculated in %.3g seconds---</i><br>''' % (time.time() - self.start_time_cal))
             self.do_cite("")
         self.calculate_is_busy = False
+
+    def extend_xrange(self, fcopy):
+        """Extend the xrange of the fcopy data"""
+        # xmin/xmax of current data
+        ncol = fcopy.data_table.data.shape[1]
+        xmin = fcopy.data_table.data[:, 0][0]
+        xmax = fcopy.data_table.data[:, 0][-1]
+        try:
+            thmin = float(fcopy.theory_xmin)
+        except ValueError:
+            fcopy.nextramin = 0 # number of extra rows added left
+        else:
+            if thmin < xmin:
+                if 0 < thmin and fcopy.theory_logspace:
+                    xextra_min = np.logspace(np.log10(thmin), np.log10(xmin), fcopy.th_num_pts)[:-1]
+                else:
+                    xextra_min = np.linspace(thmin, xmin, fcopy.th_num_pts)[:-1]
+                fcopy.nextramin = len(xextra_min)
+                data_min = np.zeros((len(xextra_min), ncol))
+                data_min[:, 0] = xextra_min
+                fcopy.data_table.data = np.concatenate((data_min, fcopy.data_table.data))
+        
+        try:
+            thmax = float(fcopy.theory_xmax)
+        except ValueError:
+            fcopy.nextramax = 0 # number of extra rows added right
+        else:
+            if thmax > xmax:
+                if 0 < thmax and fcopy.theory_logspace:
+                    xextra_max = np.logspace(np.log10(xmax), np.log10(thmax), fcopy.th_num_pts)[1:]
+                else:
+                    xextra_max = np.linspace(xmax, thmax, fcopy.th_num_pts)[1:]
+                fcopy.nextramax = len(xextra_max)
+                data_max = np.zeros((len(xextra_max), ncol))
+                data_max[:, 0] = xextra_max
+                fcopy.data_table.data = np.concatenate((fcopy.data_table.data, data_max))
+        fcopy.data_table.num_rows = fcopy.data_table.data.shape[0]
+    
+    def get_non_extended_th_table(self, f):
+        """return a copy of the theory table associated with f, where the extra rows are delete"""
+        tmp_dt = DataTable(axarr=[])
+        nrow = self.tables[f.file_name_short].num_rows
+        tmp_dt.data = self.tables[f.file_name_short].data[f.nextramin:nrow-f.nextramax, :]
+        tmp_dt.num_rows = tmp_dt.data.shape[0]
+        tmp_dt.num_columns = tmp_dt.data.shape[1]
+        return tmp_dt
 
     def theory_files(self):
         if not self.single_file:
@@ -311,7 +361,8 @@ class Theory(CmdBase):
                 break
             xexp, yexp, success = view.view_proc(f.data_table,
                                                  f.file_parameters)
-            xth, yth, success = view.view_proc(self.tables[f.file_name_short],
+            tmp_dt = self.get_non_extended_th_table(f)
+            xth, yth, success = view.view_proc(tmp_dt,
                                                f.file_parameters)
             if (self.xrange.get_visible()):
                 conditionx = (xexp > self.xmin) * (xexp < self.xmax)
@@ -376,8 +427,9 @@ class Theory(CmdBase):
 
         for f in self.theory_files():
             if f.active:
+                tmp_dt = self.get_non_extended_th_table(f)
                 xth, yth, success = view.view_proc(
-                    self.tables[f.file_name_short], f.file_parameters)
+                    tmp_dt, f.file_parameters)
                 xexp, yexp, success = view.view_proc(f.data_table,
                                                      f.file_parameters)
                 for i in range(view.n):

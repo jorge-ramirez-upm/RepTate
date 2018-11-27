@@ -40,7 +40,7 @@ import os
 from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon, QIntValidator, QDoubleValidator, QStandardItem
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel, QFileDialog
+from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel, QFileDialog, QCheckBox
 from DataSet import DataSet
 from DataTable import DataTable
 from QTheory import QTheory
@@ -58,6 +58,7 @@ class EditFileParametersDialog(QDialog):
     def __init__(self, parent, file):
         super().__init__(parent)
         self.createFormGroupBox(file)
+        self.createFormGroupBoxTheory(file)
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok
                                      | QDialogButtonBox.Cancel)
@@ -65,7 +66,10 @@ class EditFileParametersDialog(QDialog):
         buttonBox.rejected.connect(self.reject)
 
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.formGroupBox)
+        tab_widget = QTabWidget()
+        tab_widget.addTab(self.formGroupBox, 'File Parameters')
+        tab_widget.addTab(self.formGroupBoxTheory, 'Theory Parameters')
+        mainLayout.addWidget(tab_widget)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
         self.setWindowTitle("Edit")
@@ -89,45 +93,33 @@ class EditFileParametersDialog(QDialog):
                 self.p_new[i].setText("%.4g" % parameters[pname])
             layout.addRow("%s:" % pname, self.p_new[i])
             self.param_dict[pname] = self.p_new[i]
-        # layout.addRow(QLabel("Number of bins for Bob:"), self.e1)
         self.formGroupBox.setLayout(layout)
 
-
-class EditFileParametersDialog_(QDialog):
-    def __init__(
-            self,
-            parent=None,
-            file=None,
-    ):
-        super(EditFileParametersDialog, self).__init__(parent)
-
-        self.setWindowTitle("Parameters - %s" % file.file_name_short)
-        layout = QVBoxLayout(self)
-
-        self.parameters = file.file_parameters
-        self.table = QTableWidget()
-        self.table.setRowCount(len(self.parameters))
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["Parameter", "Value"])
-        k = list(self.parameters.keys())
-        k.sort()
-        for i, p in enumerate(k):
-            self.table.setItem(i, 0, QTableWidgetItem(p))
-            item = self.table.item(i, 0)
-            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-            if isinstance(self.parameters[p], str):
-                self.table.setItem(i, 1, QTableWidgetItem(self.parameters[p]))
-            else:
-                self.table.setItem(i, 1,
-                                   QTableWidgetItem(str(self.parameters[p])))
-
-        layout.addWidget(self.table)
-
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
+    def createFormGroupBoxTheory(self, file):
+        self.formGroupBoxTheory = QGroupBox(
+            "Extend theory x-range of \"%s\"" % file.file_name_short)
+        layout = QFormLayout()
+        # theory xmin/max
+        self.th_xmin = QLineEdit()
+        self.th_xmax = QLineEdit()
+        self.th_linear = QCheckBox()
+        self.th_xmin.setText('%s' % file.theory_xmin)
+        self.th_xmax.setText('%s' % file.theory_xmax)
+        layout.addRow('xmin theory', self.th_xmin)
+        layout.addRow('xmax theory', self.th_xmax)
+        # Npoints
+        self.th_num_pts = QLineEdit()
+        intvalidator = QIntValidator()
+        intvalidator.setBottom(2)
+        self.th_num_pts.setValidator(QIntValidator())
+        self.th_num_pts.setText('%s' % file.th_num_pts)
+        layout.addRow('Num. of extra point', self.th_num_pts)
+        # logspace
+        self.th_logspace = QCheckBox()
+        self.th_logspace.setChecked(file.theory_logspace)
+        layout.addRow('logspace', self.th_logspace)
+        # set layout
+        self.formGroupBoxTheory.setLayout(layout)
 
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
@@ -744,6 +736,26 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                             if p == self.DataSettreeWidget.headerItem().text(
                                     i):
                                 item.setText(i, str(file.file_parameters[p]))
+                    # theory xmin/max
+                    try:
+                        file.theory_xmin = float(d.th_xmin.text())
+                    except ValueError:
+                        file.theory_xmin = "None"
+                    try:
+                        file.theory_xmax = float(d.th_xmax.text())
+                    except ValueError:
+                        file.theory_xmax = "None"
+                    # theory logspace and Npoints
+                    try:
+                        file.th_num_pts = float(d.th_num_pts.text())
+                    except ValueError:
+                        pass 
+                    try:
+                        file.th_num_pts = max(int(d.th_num_pts.text()), 2)
+                    except ValueError:
+                        pass
+                    file.theory_logspace = d.th_logspace.isChecked()
+                    
 
     def handle_actionNew_Theory(self):
         """Create new theory and do fit
