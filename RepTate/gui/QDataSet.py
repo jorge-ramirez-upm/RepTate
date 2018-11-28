@@ -130,8 +130,8 @@ class EditFileParametersDialog(QDialog):
         layout.addRow('xmin theory', self.th_xmin)
         layout.addRow('xmax theory', self.th_xmax)
         # current view theory xmin/max
-        self.view_xmin = QLabel('')
-        self.view_xmax = QLabel('')
+        self.view_xmin = QLabel(self)
+        self.view_xmax = QLabel(self)
         layout.addRow('xmin(current view)', self.view_xmin)
         layout.addRow('xmax(current view)', self.view_xmax)
         self.update_current_view_xrange()
@@ -142,7 +142,8 @@ class EditFileParametersDialog(QDialog):
     def update_current_view_xrange(self):
         view = self.parent_dataset.parent_application.current_view
         tmp_dt = DataTable(axarr=[])
-        tmp_dt.data = np.zeros((1, 3))
+        tmp_dt.data = np.empty((1, 3))
+        tmp_dt.data[:] = np.nan
         tmp_dt.num_rows = 1
         tmp_dt.num_columns = 3
         try:
