@@ -265,7 +265,8 @@ class Theory(CmdBase):
                     # restore f
                     f.data_table.data = data_copy
                     f.data_table.num_rows = data_copy.shape[0]
-            else:
+            elif self.single_file:
+                # delete theory data of other files
                 tt = self.tables[f.file_name_short]
                 tt.data = np.empty((tt.num_rows, tt.num_columns))
                 tt.data[:] = np.nan
@@ -328,19 +329,19 @@ class Theory(CmdBase):
             return self.tables[f.file_name_short]
 
     def theory_files(self):
-        if not self.single_file:
-            return self.parent_dataset.files
         f_list = []
-        selected_file = self.parent_dataset.selected_file
-        if selected_file:
-            if selected_file.active:
-                f_list.append(self.parent_dataset.selected_file
-                              )  #use the selected/highlighted file if active
-        if not f_list:  #there is no selected file or it is inactive
+        if self.single_file:
+            selected_file = self.parent_dataset.selected_file
+            if selected_file:
+                if selected_file.active:
+                    f_list.append(self.parent_dataset.selected_file
+                                )  #use the selected/highlighted file if active
+        if not f_list:  #there is no selected file or it is inactive or single_file=False
             for f in self.parent_dataset.files:
                 if f.active:
                     f_list.append(f)
-                    break
+                    if self.single_file:
+                        break
         return f_list
 
     def do_error(self, line):
