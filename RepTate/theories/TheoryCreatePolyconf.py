@@ -59,7 +59,7 @@ class DistributionType(Enum):
     """Type of molecular weight distribution"""
     Monodisperse = 0
     Gaussian = 1
-    Log_normal = 2
+    LogNormal = 2
     Poisson = 3
     Flory = 4
 
@@ -540,6 +540,8 @@ FunH
         if success:
             # if success, set new tab as active one
             self.d.polymer_tab.setCurrentIndex(index)
+            tip = ArchitectureType[pol_type].value['descr']
+            self.d.polymer_tab.setTabToolTip(index, tip)
         else:
             self.handle_close_polymer_tab(index)
 
@@ -560,13 +562,19 @@ FunH
         e1.setValidator(val_double)
         e1.setMaxLength(6)
         e1.setText(self.d.ratio.text())
-        layout.addRow(QLabel("Ratio"), e1)
+        e1.setToolTip('Ratio weight fraction occupied by this polymer type')
+        label = QLabel("Ratio")
+        label.setToolTip('Ratio weight fraction occupied by this polymer type')
+        layout.addRow(label, e1)
         pol_dict["Ratio"] = e1
 
         e2 = QLineEdit()
         e2.setValidator(val_double)
         e2.setText(self.d.number.text())
-        layout.addRow(QLabel("Num. of polymers"), e2)
+        e2.setToolTip('Number of polymers of this type')
+        label2 = QLabel("Num. of polymers")
+        label2.setToolTip('Number of polymers of this type')
+        layout.addRow(label2, e2)
         pol_dict["Num. of polymers"] = e2
         success = self.set_extra_lines(pol_type, layout, pol_dict)
 
@@ -590,9 +598,9 @@ FunH
             pol_dict["Num. generation"] = ngen
             for i in range(ngen + 1):
                 self.add_new_qline("Mw gen%d (g/mol)" % i, "1e4", layout,
-                                   pol_dict)
-                self.add_new_qline("PDI gen%d" % i, "1.2", layout, pol_dict)
-                self.add_cb_distribution("Distr. gen%d" % i, layout, pol_dict)
+                                   pol_dict, tip='Molecular weight of generation %d' % i)
+                self.add_new_qline("PDI gen%d" % i, "1.2", layout, pol_dict, tip='Polydispersity index of generation %d' % i)
+                self.add_cb_distribution("Distr. gen%d" % i, layout, pol_dict, tip='Molecular weight distribution of generation %d' % i)
 
         elif pol_attr[0] == 40:
             #type 40: give a text box that must be saved to a temp file
@@ -620,29 +628,29 @@ FunH
                 if "arm" in attr:
                     if pol_attr[0] in [4, 6]:
                         # comb Poisson distribution (double)
-                        self.add_new_qline(attr, "4.2", layout, pol_dict)
+                        self.add_new_qline(attr, "4.2", layout, pol_dict, tip='Average number of arms per molecules')
                     else:
                         #star or comb with fixed number of arms (integer)
                         self.add_new_qline(attr, "3", layout, pol_dict,
-                                           QIntValidator())
+                                           QIntValidator(), tip='Number of arms per molecule (integer)')
                 if "Mw" in attr:
                     # add Mw line
-                    self.add_new_qline(attr, "1e4", layout, pol_dict)
+                    self.add_new_qline(attr, "1e4", layout, pol_dict, tip='Weight-average molecular weight')
                 elif "Mn" in attr:
                     # add Mn line
-                    self.add_new_qline(attr, "1e4", layout, pol_dict)
+                    self.add_new_qline(attr, "1e4", layout, pol_dict, tip='Number-average molecular weight')
                 elif "PDI" in attr:
                     #add PDI line
-                    self.add_new_qline(attr, "1.2", layout, pol_dict)
+                    self.add_new_qline(attr, "1.2", layout, pol_dict, tip='Polydispersity index')
                 elif "Dist" in attr:
                     # add distribution combobox
-                    self.add_cb_distribution(attr, layout, pol_dict)
+                    self.add_cb_distribution(attr, layout, pol_dict, tip='Molecular weight distribution')
                 elif "/mol" in attr:
                     # add branch/molecule line
-                    self.add_new_qline(attr, "0.1", layout, pol_dict)
+                    self.add_new_qline(attr, "0.1", layout, pol_dict, tip='Number of branch per molecule')
                 elif "proba" in attr:
                     # add branching proba line
-                    self.add_new_qline(attr, "0.2", layout, pol_dict)
+                    self.add_new_qline(attr, "0.2", layout, pol_dict, tip='Branching probability')
                 elif attr == '':
                     continue
         return True  # success
@@ -663,24 +671,30 @@ FunH
                       default_val,
                       layout,
                       pol_dict,
-                      validator=QDoubleValidator()):
+                      validator=QDoubleValidator(), tip=''):
         """Add a new line to the form layout containing a QLabel widget
         for the parameter name and a QLineEdit to change the parameter value"""
         validator.setBottom(0)  #set smallest double allowed in the form
         e = QLineEdit()
         e.setValidator(validator)
         e.setText("%s" % default_val)
-        layout.addRow(QLabel(name), e)
+        e.setToolTip(tip)
+        label = QLabel(name)
+        label.setToolTip(tip)
+        layout.addRow(label, e)
         pol_dict[name] = e
 
-    def add_cb_distribution(self, name, layout, pol_dict):
+    def add_cb_distribution(self, name, layout, pol_dict, tip=''):
         """Add a new line to the form layout containing a QLabel widget
         for the parameter name and a QComboBox to change the parameter value"""
         cb = QComboBox()
         for dtype in DistributionType:  # list the distribution names
             cb.addItem(dtype.name)
         cb.setCurrentIndex(2)  # log-normal by default
-        layout.addRow(QLabel(name), cb)
+        cb.setToolTip(tip)
+        label = QLabel(name)
+        label.setToolTip(tip)
+        layout.addRow(label, cb)
         pol_dict[name] = cb
 
     def handle_close_polymer_tab(self, index):
