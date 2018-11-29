@@ -89,7 +89,9 @@ void genfromfile(int ni, int *nf, double blend_frac)
   fscanf(tmpfl, "%le", &N_e_dummy);
   fscanf(tmpfl, "%d", &ncur_comp);
   nf[0] = ni + ncur_comp;
-  fprintf(infofl, "Reading %d polymers form %-10.20s \n", ncur_comp, polyfname);
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "Reading %d polymers form %-10.20s \n", ncur_comp, polyfname);
   for (int i = ni; i < nf[0]; i++)
   {
     fscanf(tmpfl, "%d", &segnum);

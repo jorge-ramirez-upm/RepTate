@@ -38,6 +38,7 @@ double NLVE_rate;
 double NLVE_tmin;
 double NLVE_tmax;
 int NLVE_flowmode;
+std::vector<std::vector<double> > vector_supertube;
 
 bool get_bob_nlve_results(double *time_out, double *stress_out, double *N1_out, bool is_shear)
 {
@@ -100,7 +101,7 @@ bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double
 
     ////////////// first pass/////////////////
     // creates "maxwell.dat" and "savedprio.dat"
-    infofl = fopen("info.txt", "w");
+    // infofl = fopen("info.txt", "w");
     rcread();
     // CalcNlin=no, FlowPriority=no, NlinPrep=yes
     set_NLVE_param(flowtime, -1, -1, 0);
@@ -114,7 +115,7 @@ bool run_bob_nlve(int argc, char **argv, double flowrate, double tmin_in, double
 
     ////////////// second pass/////////////////
     // creates stress results
-    infofl = fopen("info.txt", "w");
+    // infofl = fopen("info.txt", "w");
     rcread();
     // CalcNlin=yes, FlowPriority=yes, NlinPrep=no
     set_NLVE_param(flowtime, 0, 0, -1);
@@ -142,7 +143,7 @@ bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int n
 {
   try
   {
-    infofl = fopen("info.txt", "w");
+    // infofl = fopen("info.txt", "w");
     rcread();
     set_flag_stop_bob(false);
     bob_main(argc, argv);
@@ -186,7 +187,8 @@ bool run_bob_lve(int argc, char **argv, int *n)
 {
   try
   {
-    infofl = fopen("info.txt", "w");
+    if (!reptate_flag)
+      infofl = fopen("info.txt", "w");
     rcread();
     extern double FreqMin, FreqMax, FreqInterval;
     // get frequency parameters from Python
@@ -268,31 +270,43 @@ int bob_main(int argc, char *argv[])
       if ((Snipping == 0) || (CalcNlin == 0))
       {
         SnipTime = SnipTime / unit_time;
-        fprintf(infofl, "SnipTime (Sim unit ) = %e \n", SnipTime);
+        if (!reptate_flag)
+          fprintf(infofl, "SnipTime (Sim unit ) = %e \n", SnipTime);
       }
       if (CalcNlin == 0)
       {
-        FILE *fprio = fopen("savedprio.dat", "r"); //reading in previous savedprio.dat
-        if (fprio == NULL)
-        {
-          my_abort((char *)"Was expecting file savedprio.dat here \nPlease run with CalcNlin=no  first. \n");
-        }
+        // FILE *fprio = fopen("savedprio.dat", "r"); //reading in previous savedprio.dat
+        // if (fprio == NULL)
+        // {
+        //   my_abort((char *)"Was expecting file savedprio.dat here \nPlease run with CalcNlin=no  first. \n");
+        // }
+        int counter=0;
         for (int i = 0; i < num_poly; i++)
         {
           int n1 = branched_poly[i].first_end;
           int n2 = arm_pool[n1].down;
-          fscanf(fprio, "%d %lf %lf %lf", &arm_pool[n1].priority, &arm_pool[n1].str_time,
-                 &arm_pool[n1].armtaus, &arm_pool[n1].armzeta);
+          // fscanf(fprio, "%d %lf %lf %lf", &arm_pool[n1].priority, &arm_pool[n1].str_time,
+          //        &arm_pool[n1].armtaus, &arm_pool[n1].armzeta);
+          arm_pool[n1].priority = int(vector_savedprio[counter][0]);
+          arm_pool[n1].str_time = vector_savedprio[counter][1];
+          arm_pool[n1].armtaus = vector_savedprio[counter][2];
+          arm_pool[n1].armzeta = vector_savedprio[counter][3];
+          counter++;
           arm_pool[n1].priority -= 1;
           while (n2 != n1)
           {
-            fscanf(fprio, "%d %lf %lf %lf", &arm_pool[n2].priority, &arm_pool[n2].str_time,
-                   &arm_pool[n2].armtaus, &arm_pool[n2].armzeta);
+            // fscanf(fprio, "%d %lf %lf %lf", &arm_pool[n2].priority, &arm_pool[n2].str_time,
+            //        &arm_pool[n2].armtaus, &arm_pool[n2].armzeta);
+            arm_pool[n2].priority = int(vector_savedprio[counter][0]);
+            arm_pool[n2].str_time = vector_savedprio[counter][1];
+            arm_pool[n2].armtaus = vector_savedprio[counter][2];
+            arm_pool[n2].armzeta = vector_savedprio[counter][3];
+            counter++;
             arm_pool[n2].priority -= 1;
             n2 = arm_pool[n2].down;
           }
         }
-        fclose(fprio);
+        // fclose(fprio);
 
         if (FlowPriority == 0)
         {
@@ -311,21 +325,37 @@ int bob_main(int argc, char *argv[])
             print_to_python(line);
           }
         }
-        fprio = fopen("savedprio.dat", "w"); // re-writing the savedprio.dat file after altitude
+        // fprio = fopen("savedprio.dat", "w"); // re-writing the savedprio.dat file after altitude
+          int size_vector_savedprio = vector_savedprio.size();
+          for (int ii = 0; ii < size_vector_savedprio; ii++)
+            vector_savedprio[ii].clear();
+          vector_savedprio.clear();
+          std::vector<double> temp;
+          temp.resize(4);
         for (int i = 0; i < num_poly; i++)
         {
           int n1 = branched_poly[i].first_end;
           int n2 = arm_pool[n1].down;
-          fprintf(fprio, "%d %e %e %e\n", arm_pool[n1].priority + 1, arm_pool[n1].str_time,
-                  arm_pool[n1].armtaus, arm_pool[n1].armzeta);
+          // fprintf(fprio, "%d %e %e %e\n", arm_pool[n1].priority + 1, arm_pool[n1].str_time,
+          //         arm_pool[n1].armtaus, arm_pool[n1].armzeta);
+          temp[0] = arm_pool[n1].priority + 1;
+          temp[1] = arm_pool[n1].str_time;
+          temp[2] = arm_pool[n1].armtaus;
+          temp[3] = arm_pool[n1].armzeta;
+          vector_savedprio.push_back(temp);
           while (n2 != n1)
           {
-            fprintf(fprio, "%d %e %e %e\n", arm_pool[n2].priority + 1, arm_pool[n2].str_time,
-                    arm_pool[n2].armtaus, arm_pool[n2].armzeta);
+            // fprintf(fprio, "%d %e %e %e\n", arm_pool[n2].priority + 1, arm_pool[n2].str_time,
+            //         arm_pool[n2].armtaus, arm_pool[n2].armzeta);
+          temp[0] = arm_pool[n2].priority + 1;
+          temp[1] = arm_pool[n2].str_time;
+          temp[2] = arm_pool[n2].armtaus;
+          temp[3] = arm_pool[n2].armzeta;
+          vector_savedprio.push_back(temp);
             n2 = arm_pool[n2].down;
           }
         }
-        fclose(fprio);
+        // fclose(fprio);
       }
       br_copy.resize(num_poly);
       for (int i = 0; i < num_poly; i++)
@@ -386,12 +416,29 @@ int bob_main(int argc, char *argv[])
 
 #endif
       /* ******************** Snipping  ********************  */
-      FILE *phifl = fopen("supertube.dat", "w");
+      // FILE *phifl = fopen("supertube.dat", "w");
+      int n = vector_supertube.size();
+      for (int i=0; i<n; i++){
+        vector_supertube[i].clear();
+      }
+      vector_supertube.clear();
+      std::vector<double> temp;
+      temp.resize(4);
+      // fprintf(phifl, "%e %e %e  %e \n", 0.0, 1.0, 1.0, 1.0);
+      temp[0] = 0.0;
+      temp[1] = 1.0;
+      temp[2] = 1.0;
+      temp[3] = 1.0;
+      vector_supertube.push_back(temp);
 
-      fprintf(phifl, "%e %e %e  %e \n", 0.0, 1.0, 1.0, 1.0);
       int ndata = 2;
       int num_alive = time_step(0);
-      fprintf(phifl, "%e %e %e  %e \n", cur_time, phi, phi_ST, phi_true);
+      // fprintf(phifl, "%e %e %e  %e \n", cur_time, phi, phi_ST, phi_true);
+      temp[0] = cur_time;
+      temp[1] = phi;
+      temp[2] = phi_ST;
+      temp[3] = phi_true;
+      vector_supertube.push_back(temp);
 
       if ((CalcNlin != 0) && (Snipping == 0))
       {
@@ -479,12 +526,22 @@ int bob_main(int argc, char *argv[])
         }
         if ((num_alive > 0) && (phi_true > 0.0))
         {
-          fprintf(phifl, "%e %e %e %e  \n", cur_time, phi, phi_ST, phi_true);
+          // fprintf(phifl, "%e %e %e %e  \n", cur_time, phi, phi_ST, phi_true);
+          temp[0] = cur_time;
+          temp[1] = phi;
+          temp[2] = phi_ST;
+          temp[3] = phi_true;
+          vector_supertube.push_back(temp);
         }
         else
         {
           num_alive = 0;
-          fprintf(phifl, "%e %e %e %e  \n", cur_time, 0.0, 0.0, 0.0);
+          // fprintf(phifl, "%e %e %e %e  \n", cur_time, 0.0, 0.0, 0.0);
+          temp[0] = cur_time;
+          temp[1] = 0.0;
+          temp[2] = 0.0;
+          temp[3] = 0.0;
+          vector_supertube.push_back(temp);
         }
       }
       print_to_python((char *)"100% done<br>");
@@ -494,7 +551,7 @@ int bob_main(int argc, char *argv[])
         extern void calcsnipprio(void);
         calcsnipprio();
       }
-      fclose(phifl);
+      // fclose(phifl);
       lin_rheology(ndata);
 #ifdef NBETA
       if ((CalcNlin != 0) && (Snipping == 0))
@@ -504,7 +561,7 @@ int bob_main(int argc, char *argv[])
       }
       if (CalcNlin == 0)
       {
-        fclose(nlin_outfl);
+        // fclose(nlin_outfl);
         pompom();
       }
 #endif

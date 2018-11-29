@@ -26,6 +26,7 @@ void genMPE_wtav(int ni, int nf)
   double mass, b_m;
   extern int runmode;
   int wtav_poly_type = 0;
+  extern bool reptate_flag;
   if (runmode == 2)
   {
     printf(" Weight averaged ensemble for MPE \n");
@@ -38,24 +39,28 @@ void genMPE_wtav(int ni, int nf)
   {
     fscanf(inpfl, "%le %le", &mass, &b_m);
   }
-  fprintf(infofl, "Selected weight averaged metallocene PE \n");
+  if (!reptate_flag)
+    fprintf(infofl, "Selected weight averaged metallocene PE \n");
 
   mass = mass / (2.0 * (b_m + 1.0));
   double mn_arm = mass / (2.0 * b_m + 1.0);
   mn_arm = mn_arm / 28.0; // segment length
-
-  fprintf(infofl, "b_m = %e \n", b_m);
-  fprintf(infofl, "M_n = %e \n", mass);
-  fprintf(infofl, "lambda = %e \n", 14.0e3 * b_m / mass);
-  fprintf(infofl, "P_B = %e \n", b_m / (1.0 + 2.0 * b_m));
-  fprintf(infofl, "M_w = %e \n", 2.0 * (b_m + 1.0) * mass);
-
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "b_m = %e \n", b_m);
+    fprintf(infofl, "M_n = %e \n", mass);
+    fprintf(infofl, "lambda = %e \n", 14.0e3 * b_m / mass);
+    fprintf(infofl, "P_B = %e \n", b_m / (1.0 + 2.0 * b_m));
+    fprintf(infofl, "M_w = %e \n", 2.0 * (b_m + 1.0) * mass);
+  }
   double prop_prob = 1.0 - 28.0 * (b_m + 1.0) / mass;
   double mono_prob = (1.0 - 28.0 * (2.0 * b_m + 1.0) / mass) / prop_prob;
 
-  fprintf(infofl, "Propagation probability = %e \n", prop_prob);
-  fprintf(infofl, "Monomer addition probability = %e \n", mono_prob);
-
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "Propagation probability = %e \n", prop_prob);
+    fprintf(infofl, "Monomer addition probability = %e \n", mono_prob);
+  }
   double logprob = log(1.0 - 1.0 / mn_arm);
   double b_u = b_m / (1.0 + 2.0 * b_m);
   for (int i = ni; i < nf; i++)
@@ -63,5 +68,6 @@ void genMPE_wtav(int ni, int nf)
     branched_poly[i] = polygen_wtav(wtav_poly_type, logprob, b_u);
   }
 
-  fprintf(infofl, "created %d wt av metallocene-PE polymers. \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "created %d wt av metallocene-PE polymers. \n", nf - ni);
 }

@@ -23,7 +23,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 void genProto(int ni, int nf)
 {
   extern int runmode;
-  extern std::vector <polymer> branched_poly;
+  extern std::vector<polymer> branched_poly;
   extern double mass_mono;
   if (runmode != 3)
   {
@@ -88,7 +88,9 @@ void genProto(int ni, int nf)
     branched_poly[i] = polygenProto(narm, arm_type, LL1, LL2, RR1, RR2, mass, pdi);
   }
   extern FILE *infofl;
-  fprintf(infofl, "created %d %s \n", nf - ni, polycode);
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "created %d %s \n", nf - ni, polycode);
 
   delete[] LL1;
   delete[] LL2;

@@ -18,6 +18,9 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include "../../RepTate/reptate_func.h"
+
+std::vector<std::vector<double> > vector_nlin_outfl;
 
 void startup_nlin(void)
 {
@@ -47,17 +50,23 @@ void startup_nlin(void)
   extern std::vector<double> t_maxwell;
   if (DefinedMaxwellModes == 0)
   {
-    FILE *ftmp = fopen("maxwell.dat", "r");
-    if (ftmp != NULL)
+    // FILE *ftmp = fopen("maxwell.dat", "r");
+    // if (ftmp != NULL)
+    // {
+    //   fscanf(ftmp, "%d", &num_maxwell);
+    //   double jnk;
+    //   t_maxwell.resize(num_maxwell);
+    //   for (int i = 0; i < num_maxwell; i++)
+    //   {
+    //     fscanf(ftmp, "%lf %lf", &t_maxwell[i], &jnk);
+    //   }
+    //   fclose(ftmp);
+    // }
+    num_maxwell = max_mode_maxwell;
+    t_maxwell.resize(num_maxwell);
+    for (int i = 0; i < num_maxwell; i++)
     {
-      fscanf(ftmp, "%d", &num_maxwell);
-      double jnk;
-      t_maxwell.resize(num_maxwell);
-      for (int i = 0; i < num_maxwell; i++)
-      {
-        fscanf(ftmp, "%lf %lf", &t_maxwell[i], &jnk);
-      }
-      fclose(ftmp);
+      t_maxwell[i] = maxwell_time[i];
     }
     if (num_maxwell > 0)
     {
@@ -84,6 +93,12 @@ void startup_nlin(void)
     nlin_t_max = t_maxwell[0] * NlinAvDt;
   }
 
-  extern FILE *nlin_outfl;
-  nlin_outfl = fopen("nlin_modes.dat", "w");
+  // extern FILE *nlin_outfl;
+  // nlin_outfl = fopen("nlin_modes.dat", "w");
+  int n = vector_nlin_outfl.size();
+  for (int i = 0; i < n; i++)
+  {
+    vector_nlin_outfl[i].clear();
+  }
+  vector_nlin_outfl.clear();
 }

@@ -45,12 +45,16 @@ void genTobita(int ni, int nf)
   {
     fscanf(inpfl, "%lf %lf %lf %lf %lf", &tau, &beta, &cs, &cb, &fin_conv);
   }
-
-  fprintf(infofl, "Selected LDPE polymers \n");
-  fprintf(infofl, "tau=%e, beta=%e, cs=%e, cb=%e, fin_conv=%e \n", tau, beta, cs, cb, fin_conv);
+  extern bool reptate_flag;
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "Selected LDPE polymers \n");
+    fprintf(infofl, "tau=%e, beta=%e, cs=%e, cb=%e, fin_conv=%e \n", tau, beta, cs, cb, fin_conv);
+  }
   for (int i = ni; i < nf; i++)
   {
     branched_poly[i] = polygenTobita(tau, beta, cs, cb, fin_conv);
   }
-  fprintf(infofl, "Created %d LDPE  polymers \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "Created %d LDPE  polymers \n", nf - ni);
 }

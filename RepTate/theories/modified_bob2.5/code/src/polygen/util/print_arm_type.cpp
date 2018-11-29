@@ -20,6 +20,9 @@ void print_arm_type(int arm_type, double mass, double pdi)
 {
   extern FILE *infofl;
   extern FILE *errfl;
+  extern bool reptate_flag;
+  if (reptate_flag)
+    return;
   switch (arm_type)
   {
   case 0:

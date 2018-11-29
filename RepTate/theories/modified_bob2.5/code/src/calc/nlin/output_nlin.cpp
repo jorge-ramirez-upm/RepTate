@@ -18,6 +18,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 #include <math.h>
 #include <vector>
+#include "../../RepTate/reptate_func.h"
 
 void output_nlin(void)
 {
@@ -41,6 +42,8 @@ void output_nlin(void)
   extern int max_prio_var;
   extern std::vector<std::vector<double> > nlin_prio_phi_relax;
   extern std::vector<std::vector<double> > nlin_prio_phi_held;
+
+
   double tot_phi_relax, tot_phi_held;
   tot_phi_relax = 0.0;
   tot_phi_held = 0.0;
@@ -65,9 +68,16 @@ void output_nlin(void)
   extern double StretchBinWidth;
   extern double unit_time;
   double cur_t_maxwell = t_maxwell[nlin_nxt_data] * unit_time;
-  fprintf(nlin_outfl, "%e %d \n", cur_t_maxwell, num_modes);
+  // fprintf(nlin_outfl, "%e %d \n", cur_t_maxwell, num_modes);
+  std::vector<double> temp;
+  temp.resize(2);
+  temp[0] = cur_t_maxwell;
+  temp[1] = num_modes;
+  vector_nlin_outfl.push_back(temp);
   double cur_rate;
 
+
+  temp.resize(3);
   for (int i = 0; i < max_prio_var; i++)
   {
     cur_rate = 1.0;
@@ -75,13 +85,21 @@ void output_nlin(void)
     {
       if (nlin_prio_phi_relax[i][j] > 1.0e-16)
       {
-        fprintf(nlin_outfl, "%d %e %e \n", i + 1,
-                (1.0 - w_split) * nlin_prio_phi_relax[i][j] / tot_phi_relax, cur_rate);
+        // fprintf(nlin_outfl, "%d %e %e \n", i + 1,
+                // (1.0 - w_split) * nlin_prio_phi_relax[i][j] / tot_phi_relax, cur_rate);
+      temp[0] = i + 1;
+      temp[1] = (1.0 - w_split) * nlin_prio_phi_relax[i][j] / tot_phi_relax;
+      temp[2] = cur_rate;
+      vector_nlin_outfl.push_back(temp);
       }
       if (nlin_prio_phi_held[i][j] > 1.0e-16)
       {
-        fprintf(nlin_outfl, "%d %e %e \n", i + 1,
-                w_split * nlin_prio_phi_held[i][j] / tot_phi_held, cur_rate);
+        // fprintf(nlin_outfl, "%d %e %e \n", i + 1,
+                // w_split * nlin_prio_phi_held[i][j] / tot_phi_held, cur_rate);
+        temp[0] = i + 1;
+        temp[1] = w_split * nlin_prio_phi_held[i][j] / tot_phi_held;
+        temp[2] = cur_rate;
+        vector_nlin_outfl.push_back(temp);
       }
       cur_rate = cur_rate * StretchBinWidth;
     }

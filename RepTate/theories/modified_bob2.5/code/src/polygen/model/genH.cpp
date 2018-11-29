@@ -42,11 +42,15 @@ void genH(int ni, int nf)
     fscanf(inpfl, "%d", &arm_type2);
     fscanf(inpfl, "%le %le", &m_cross, &pdi_cross);
   }
-
-  fprintf(infofl, "Selected H polymer\n");
-  fprintf(infofl, "Side arms : ");
+  extern bool reptate_flag;
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "Selected H polymer\n");
+    fprintf(infofl, "Side arms : ");
+  }
   print_arm_type(arm_type1, m_arm, pdi_arm);
-  fprintf(infofl, "Backbone : ");
+  if (!reptate_flag)
+    fprintf(infofl, "Backbone : ");
   print_arm_type(arm_type2, m_cross, pdi_cross);
 
   m_arm = m_arm / mass_mono;
@@ -64,5 +68,6 @@ void genH(int ni, int nf)
     branched_poly[i] = polygenH(arm_type1, m_arm, pdi_arm, arm_type2, m_cross, pdi_cross);
   }
 
-  fprintf(infofl, "Created %d H  polymers \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "Created %d H  polymers \n", nf - ni);
 }

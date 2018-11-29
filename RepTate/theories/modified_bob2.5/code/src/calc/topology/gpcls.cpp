@@ -85,14 +85,18 @@ void gpcls(int ncomp, int ni, int nf, int number_based)
       sprintf(line, "<b>GPC module for component %d:</b><br>", ncomp);
       print_to_python(line);
     }
-    fprintf(infofl, "GPC module for component %d  : \n", ncomp);
+    else
+      fprintf(infofl, "GPC module for component %d  : \n", ncomp);
   }
   if (reptate_flag)
   {
     sprintf(line, "<b>Mw=%9.4g, Mn=%9.4g, PDI=%.4g</b><br>", mwav, mnav, pdi);
     print_to_python(line);
   }
-  fprintf(infofl, "Mw = %e ,   Mn =  %e, PDI = %e \n", mwav, mnav, pdi);
+  else
+  {
+    fprintf(infofl, "Mw = %e ,   Mn =  %e, PDI = %e \n", mwav, mnav, pdi);
+  }
 
   // if (reptate_flag){
   // snprintf(table, sizeof table, "%s%s", table,

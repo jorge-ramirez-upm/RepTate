@@ -36,26 +36,33 @@ void genMPE(int ni, int nf)
   {
     fscanf(inpfl, "%le %le", &mass, &beta);
   }
-  fprintf(infofl, "Selected metallocene PE \n");
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "Selected metallocene PE \n");
 
   mass = mass / (2.0 * (beta + 1.0));
 
-  fprintf(infofl, "b_m = %e \n", beta);
-  fprintf(infofl, "M_n = %e \n", mass);
-  fprintf(infofl, "lambda = %e \n", 14.0e3 * beta / mass);
-  fprintf(infofl, "P_B = %e \n", beta / (1.0 + 2.0 * beta));
-  fprintf(infofl, "M_w = %e \n", 2.0 * (beta + 1.0) * mass);
-
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "b_m = %e \n", beta);
+    fprintf(infofl, "M_n = %e \n", mass);
+    fprintf(infofl, "lambda = %e \n", 14.0e3 * beta / mass);
+    fprintf(infofl, "P_B = %e \n", beta / (1.0 + 2.0 * beta));
+    fprintf(infofl, "M_w = %e \n", 2.0 * (beta + 1.0) * mass);
+  }
   double prop_prob = 1.0 - 28.0 * (beta + 1.0) / mass;
   double mono_prob = (1.0 - 28.0 * (2.0 * beta + 1.0) / mass) / prop_prob;
 
-  fprintf(infofl, "Propagation probability = %e \n", prop_prob);
-  fprintf(infofl, "Monomer addition probability = %e \n", mono_prob);
-
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "Propagation probability = %e \n", prop_prob);
+    fprintf(infofl, "Monomer addition probability = %e \n", mono_prob);
+  }
   for (int i = ni; i < nf; i++)
   {
     branched_poly[i] = polygenMPE(prop_prob, mono_prob);
   }
 
-  fprintf(infofl, "created %d metallocene-PE polymers. \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "created %d metallocene-PE polymers. \n", nf - ni);
 }

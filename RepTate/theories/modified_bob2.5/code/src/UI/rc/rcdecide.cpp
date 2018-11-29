@@ -34,7 +34,7 @@ void rcdecide(char *rccom, char *rcval)
   extern int SlavePhiToPhiST;
   extern double FlowTime;
   extern int NlinPrep;
-
+  extern bool reptate_flag;
   if (strlen(rcval) > 0)
   {
     int resolved_option = -1;
@@ -43,7 +43,8 @@ void rcdecide(char *rccom, char *rcval)
     {
       resolved_option = 1;
       Alpha = atof(rcval);
-      fprintf(infofl, "Alpha = %e \n", Alpha);
+      if (!reptate_flag)
+        fprintf(infofl, "Alpha = %e \n", Alpha);
     }
 
     if (rccom[0] == 'C')
@@ -55,7 +56,8 @@ void rcdecide(char *rccom, char *rcval)
         {
           CalcGPCLS = 0;
           // fprintf(infofl,"GPCLS : using flat molecular distribution for rheology\n");
-          fprintf(infofl, "Turning on GPC module\n");
+          if (!reptate_flag)
+            fprintf(infofl, "Turning on GPC module\n");
         }
       }
       else
@@ -63,7 +65,8 @@ void rcdecide(char *rccom, char *rcval)
         if ((rcval[0] == 'Y') || (rcval[0] == 'y'))
         {
           CalcNlin = 0;
-          fprintf(infofl, "To calculate Nonlinear rheology \n");
+          if (!reptate_flag)
+            fprintf(infofl, "To calculate Nonlinear rheology \n");
         }
       }
     }
@@ -76,13 +79,15 @@ void rcdecide(char *rccom, char *rcval)
         if ((rcval[0] == 'Y') || (rcval[0] == 'y'))
         {
           DefinedMaxwellModes = 0;
-          fprintf(infofl, "Will use precalculated Maxwell modes\n");
+          if (!reptate_flag)
+            fprintf(infofl, "Will use precalculated Maxwell modes\n");
         }
       }
       else
       {
         DtMult = atof(rcval);
-        fprintf(infofl, "DtMult = %e \n", DtMult);
+        if (!reptate_flag)
+          fprintf(infofl, "DtMult = %e \n", DtMult);
       }
     }
 
@@ -94,12 +99,14 @@ void rcdecide(char *rccom, char *rcval)
         if (rccom[5] == 'a')
         {
           FreqMax = atof(rcval);
-          fprintf(infofl, "FreqMax = %e\n", FreqMax);
+          if (!reptate_flag)
+            fprintf(infofl, "FreqMax = %e\n", FreqMax);
         }
         else
         {
           FreqMin = atof(rcval);
-          fprintf(infofl, "FreqMin = %e\n", FreqMin);
+          if (!reptate_flag)
+            fprintf(infofl, "FreqMin = %e\n", FreqMin);
         }
       }
       else
@@ -107,7 +114,8 @@ void rcdecide(char *rccom, char *rcval)
         if (rccom[4] == 'I')
         {
           FreqInterval = atof(rcval);
-          fprintf(infofl, "FreqInterval = %e\n", FreqInterval);
+          if (!reptate_flag)
+            fprintf(infofl, "FreqInterval = %e\n", FreqInterval);
         }
         else
         {
@@ -121,7 +129,8 @@ void rcdecide(char *rccom, char *rcval)
             if ((rcval[0] == 'Y') || (rcval[0] == 'y'))
             {
               FlowPriority = 0;
-              fprintf(infofl, "Will use flow modified priority \n");
+              if (!reptate_flag)
+                fprintf(infofl, "Will use flow modified priority \n");
             }
           }
         }
@@ -136,7 +145,8 @@ void rcdecide(char *rccom, char *rcval)
         if ((rcval[0] == 'Y') || (rcval[0] == 'y'))
         {
           GenPolyOnly = 0;
-          fprintf(infofl, "Will stop after generating polymers \n");
+          if (!reptate_flag)
+            fprintf(infofl, "Will stop after generating polymers \n");
         }
       }
       else
@@ -144,12 +154,14 @@ void rcdecide(char *rccom, char *rcval)
         if (rccom[3] == 'N')
         {
           GPCNumBin = atoi(rcval);
-          fprintf(infofl, "GPCNumBin = %d\n", GPCNumBin);
+          if (!reptate_flag)
+            fprintf(infofl, "GPCNumBin = %d\n", GPCNumBin);
         }
         else
         {
           GPCPolyMult = atoi(rcval);
-          fprintf(infofl, "GPCPolyMult = %d\n", GPCPolyMult);
+          if (!reptate_flag)
+            fprintf(infofl, "GPCPolyMult = %d\n", GPCPolyMult);
         }
       }
     }
@@ -162,14 +174,16 @@ void rcdecide(char *rccom, char *rcval)
         if ((rcval[0] == 'Y') || (rcval[0] == 'y'))
         {
           LateRouse = 0;
-          fprintf(infofl, "Use independent Rouse relaxation at long times\n");
+          if (!reptate_flag)
+            fprintf(infofl, "Use independent Rouse relaxation at long times\n");
         }
       }
       else
       {
         LtRsFactor = atof(rcval);
         LtRsFactor = 3.980e-4 * LtRsFactor;
-        fprintf(infofl, "Long time independent Rouse factor = %e\n", LtRsFactor);
+        if (!reptate_flag)
+          fprintf(infofl, "Long time independent Rouse factor = %e\n", LtRsFactor);
       }
     }
 
@@ -177,7 +191,8 @@ void rcdecide(char *rccom, char *rcval)
     {
       resolved_option = 1;
       MaxwellInterval = atof(rcval);
-      fprintf(infofl, "MaxwellInterval = %e \n", MaxwellInterval);
+      if (!reptate_flag)
+        fprintf(infofl, "MaxwellInterval = %e \n", MaxwellInterval);
     }
 
     if (rccom[0] == 'N')
@@ -186,7 +201,8 @@ void rcdecide(char *rccom, char *rcval)
       if (rccom[1] == 'u')
       {
         NumNlinStretch = atoi(rcval);
-        fprintf(infofl, "NumNlinStretch = %d \n", NumNlinStretch);
+        if (!reptate_flag)
+          fprintf(infofl, "NumNlinStretch = %d \n", NumNlinStretch);
       }
       else
       {
@@ -195,12 +211,14 @@ void rcdecide(char *rccom, char *rcval)
           if (rccom[6] == 'D')
           {
             NlinAvDt = atof(rcval);
-            fprintf(infofl, "NlinAvDt = %e \n", NlinAvDt);
+            if (!reptate_flag)
+              fprintf(infofl, "NlinAvDt = %e \n", NlinAvDt);
           }
           else
           {
             NlinAvInterval = atof(rcval);
-            fprintf(infofl, "NlinAvInterval = %e \n", NlinAvInterval);
+            if (!reptate_flag)
+              fprintf(infofl, "NlinAvInterval = %e \n", NlinAvInterval);
           }
         }
         else
@@ -218,7 +236,8 @@ void rcdecide(char *rccom, char *rcval)
     {
       resolved_option = 1;
       OutMode = atoi(rcval);
-      fprintf(infofl, "OutMode = %d \n", OutMode);
+      if (!reptate_flag)
+        fprintf(infofl, "OutMode = %d \n", OutMode);
     }
 
     if (rccom[0] == 'P')
@@ -227,21 +246,24 @@ void rcdecide(char *rccom, char *rcval)
       if (rccom[1] == 'S')
       {
         PSquare = atof(rcval);
-        fprintf(infofl, "PSquare = %e \n", PSquare);
+        if (!reptate_flag)
+          fprintf(infofl, "PSquare = %e \n", PSquare);
       }
       else
       {
         if (rccom[2] == 'e')
         {
           PrefMode = atoi(rcval);
-          fprintf(infofl, "PrefMode = %d \n", PrefMode);
+          if (!reptate_flag)
+            fprintf(infofl, "PrefMode = %d \n", PrefMode);
         }
         else
         {
           if (rcval[0] == 'e')
           {
             PrioMode = -1;
-            fprintf(infofl, "Priority is defined only for entangled segments \n");
+            if (!reptate_flag)
+              fprintf(infofl, "Priority is defined only for entangled segments \n");
           }
         }
       }
@@ -253,12 +275,14 @@ void rcdecide(char *rccom, char *rcval)
       if (rccom[2] == 'p')
       {
         ReptScheme = atoi(rcval);
-        fprintf(infofl, "ReptScheme = %d \n", ReptScheme);
+        if (!reptate_flag)
+          fprintf(infofl, "ReptScheme = %d \n", ReptScheme);
       }
       else
       {
         RetLim = atof(rcval);
-        fprintf(infofl, "RetLim = %e \n", RetLim);
+        if (!reptate_flag)
+          fprintf(infofl, "RetLim = %e \n", RetLim);
       }
     }
 
@@ -268,7 +292,8 @@ void rcdecide(char *rccom, char *rcval)
       if (rccom[1] == 't')
       {
         StretchBinWidth = atof(rcval);
-        fprintf(infofl, "StretchBinWidth = %e \n", StretchBinWidth);
+        if (!reptate_flag)
+          fprintf(infofl, "StretchBinWidth = %e \n", StretchBinWidth);
       }
       else
       {
@@ -287,12 +312,14 @@ void rcdecide(char *rccom, char *rcval)
             {
               Snipping = 0;
             }
-            fprintf(infofl, "Use snipping for priority \n");
+            if (!reptate_flag)
+              fprintf(infofl, "Use snipping for priority \n");
           }
           else
           {
             SnipTime = atof(rcval);
-            fprintf(infofl, "Priority at time %e \n", SnipTime);
+            if (!reptate_flag)
+              fprintf(infofl, "Priority at time %e \n", SnipTime);
           }
         }
       }
@@ -303,7 +330,8 @@ void rcdecide(char *rccom, char *rcval)
       resolved_option = 1;
       TStart = atof(rcval);
       cur_time = TStart;
-      fprintf(infofl, "TStart = %e \n", TStart);
+      if (!reptate_flag)
+        fprintf(infofl, "TStart = %e \n", TStart);
     }
 
     if (resolved_option == -1)

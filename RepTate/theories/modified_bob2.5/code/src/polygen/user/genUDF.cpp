@@ -48,8 +48,9 @@ void genUDF(int ni, int nf)
       user_get_arm_type(&arm_type[i], &mass[i], &pdi[i]);
     }
   }
-
-  fprintf(infofl, "User defined polymer with %d segments \n", UDF_segment_num);
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "User defined polymer with %d segments \n", UDF_segment_num);
   for (int i = 0; i < UDF_segment_num; i++)
   {
     print_arm_type(arm_type[i], mass[i], pdi[i]);
@@ -66,5 +67,6 @@ void genUDF(int ni, int nf)
     branched_poly[i] = polygenUDF(arm_type, mass, pdi);
   }
 
-  fprintf(infofl, "Created %d user defined polymers \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "Created %d user defined polymers \n", nf - ni);
 }

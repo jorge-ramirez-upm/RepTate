@@ -28,45 +28,49 @@ void print_io(void)
   extern double Alpha, RetLim, PSquare, mass_mono, N_e, G_0_unit, temp;
   extern double unit_time, rho_poly, ReptAmount;
   extern int PrefMode, ReptScheme;
-  fprintf(infofl, "alpha  = %e \n", Alpha);
-  fprintf(infofl, "R_L  = %e \n", RetLim);
-  fprintf(infofl, "p^2  = %e \n", 2.0 * PSquare);
-  fprintf(infofl, "Mass of monomer  = %e \n", mass_mono);
-  fprintf(infofl, "N_e  = %e \n", N_e);
-  G_0_unit = 6651.58 * (rho_poly * temp / (N_e * mass_mono)); //Pa
-  fprintf(infofl, "Temperature (input) = %e \n", temp);
-  fprintf(infofl, "G_0 = %e \n", G_0_unit);
-  fprintf(infofl, "tau_e = %e sec \n \n", unit_time);
-
-  switch (PrefMode)
+  extern bool reptate_flag;
+  if (!reptate_flag)
   {
-  case 0:
-    fprintf(infofl, "compound arm prefactor same as outermost arm.\n");
-    break;
-  case 1:
-    fprintf(infofl, "compound arm prefactor includes effective armlen.\n");
-    break;
-  case 2:
-    fprintf(infofl, "compound arm prefactor includes effective friction.\n");
-    break;
-  }
+    fprintf(infofl, "alpha  = %e \n", Alpha);
+    fprintf(infofl, "R_L  = %e \n", RetLim);
+    fprintf(infofl, "p^2  = %e \n", 2.0 * PSquare);
+    fprintf(infofl, "Mass of monomer  = %e \n", mass_mono);
+    fprintf(infofl, "N_e  = %e \n", N_e);
+    G_0_unit = 6651.58 * (rho_poly * temp / (N_e * mass_mono)); //Pa
+    fprintf(infofl, "Temperature (input) = %e \n", temp);
+    fprintf(infofl, "G_0 = %e \n", G_0_unit);
+    fprintf(infofl, "tau_e = %e sec \n \n", unit_time);
 
-  switch (ReptScheme)
-  {
-  case 1:
-    fprintf(infofl, "Reptation in thin tube.\n");
-    break;
-  case 2:
-    fprintf(infofl, "Reptation in current tube.\n");
-    break;
-  case 3:
-    fprintf(infofl, "Rept in tube from time at which %le lengh chain reptate \n", ReptAmount);
-    break;
-  case 4:
-    fprintf(infofl, "Rept in tube from time at which %le fraction chain reptate \n", ReptAmount);
-    break;
+    switch (PrefMode)
+    {
+    case 0:
+      fprintf(infofl, "compound arm prefactor same as outermost arm.\n");
+      break;
+    case 1:
+      fprintf(infofl, "compound arm prefactor includes effective armlen.\n");
+      break;
+    case 2:
+      fprintf(infofl, "compound arm prefactor includes effective friction.\n");
+      break;
+    }
+
+    switch (ReptScheme)
+    {
+    case 1:
+      fprintf(infofl, "Reptation in thin tube.\n");
+      break;
+    case 2:
+      fprintf(infofl, "Reptation in current tube.\n");
+      break;
+    case 3:
+      fprintf(infofl, "Rept in tube from time at which %le lengh chain reptate \n", ReptAmount);
+      break;
+    case 4:
+      fprintf(infofl, "Rept in tube from time at which %le fraction chain reptate \n", ReptAmount);
+      break;
+    }
+    fprintf(infofl, "\n End of input parameters \n");
   }
-  fprintf(infofl, "\n End of input parameters \n");
 }
 
 void print_io_to_reptate(void)
@@ -107,39 +111,39 @@ void print_io_to_reptate(void)
     sprintf(line, "<tr><td>p^2</td><td>%9.4g</td></tr>", 2.0 * PSquare);
     snprintf(table, sizeof table, "%s%s", table, line);
   }
-  snprintf(table, sizeof table,  "%s%s", table, "</table>");
+  snprintf(table, sizeof table, "%s%s", table, "</table>");
   if (GenPolyOnly != 0)
   {
-  switch (PrefMode)
-  {
-  case 0:
-    sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor same as outermost arm<br>");
-    break;
-  case 1:
-    sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor includes effective armlen<br>");
-    break;
-  case 2:
-    sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor includes effective friction<br>");
-    break;
-  }
-  snprintf(table, sizeof table, "%s%s", table, line);
+    switch (PrefMode)
+    {
+    case 0:
+      sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor same as outermost arm<br>");
+      break;
+    case 1:
+      sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor includes effective armlen<br>");
+      break;
+    case 2:
+      sprintf(line, "<b>Prefactor Mode:</b><br>Compound arm prefactor includes effective friction<br>");
+      break;
+    }
+    snprintf(table, sizeof table, "%s%s", table, line);
 
-  switch (ReptScheme)
-  {
-  case 1:
-    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in thin tube.<br>");
-    break;
-  case 2:
-    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in current tube<br>");
-    break;
-  case 3:
-    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in tube from time at which %le lengh chain reptate <br>", ReptAmount);
-    break;
-  case 4:
-    sprintf(line, "<b>Reptation Mode:</b><br>Reptation in tube from time at which %le lengh chain reptate <br>", ReptAmount);
-    break;
-  }
-  snprintf(table, sizeof table, "%s%s", table, line);
+    switch (ReptScheme)
+    {
+    case 1:
+      sprintf(line, "<b>Reptation Mode:</b><br>Reptation in thin tube.<br>");
+      break;
+    case 2:
+      sprintf(line, "<b>Reptation Mode:</b><br>Reptation in current tube<br>");
+      break;
+    case 3:
+      sprintf(line, "<b>Reptation Mode:</b><br>Reptation in tube from time at which %le lengh chain reptate <br>", ReptAmount);
+      break;
+    case 4:
+      sprintf(line, "<b>Reptation Mode:</b><br>Reptation in tube from time at which %le lengh chain reptate <br>", ReptAmount);
+      break;
+    }
+    snprintf(table, sizeof table, "%s%s", table, line);
   }
   print_to_python(table);
 }

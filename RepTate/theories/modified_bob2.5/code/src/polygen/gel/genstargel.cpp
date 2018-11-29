@@ -38,8 +38,9 @@ void genstargel(int ni, int nf)
     printf(" Extent of reaction (p) ?  ");
     scanf("%le", &reaction_extent);
   }
-
-  fprintf(infofl, "Selected crosslinked Star ");
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "Selected crosslinked Star ");
   print_arm_type(arm_type, mass, pdi);
 
   mass = mass / mass_mono;

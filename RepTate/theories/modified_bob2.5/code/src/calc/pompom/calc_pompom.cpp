@@ -17,6 +17,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 #include "./pompom.h"
 #include <stdio.h>
+#include "../../RepTate/reptate_func.h"
 
 void calc_pompom(int shearcode, int kmax, double gdot, double tmin, double tmax,
                  double *xp, double *yp, double *stress, double *N1)
@@ -37,25 +38,45 @@ void calc_pompom(int shearcode, int kmax, double gdot, double tmin, double tmax,
   int ferr;
   //
 
-  FILE *maxfl = fopen("maxwell.dat", "r");
-  FILE *nlinfl = fopen("nlin_modes.dat", "r");
+  // FILE *maxfl = fopen("maxwell.dat", "r");
+  // FILE *nlinfl = fopen("nlin_modes.dat", "r");
 
-  fscanf(maxfl, "%d", &num_maxwell);
+  // fscanf(maxfl, "%d", &num_maxwell);
+  num_maxwell = max_mode_maxwell;
+  int counter = 0;
   for (int im = 0; im < num_maxwell; im++)
   {
-    fscanf(maxfl, "%lf %lf", &tauB, &gm);
-    ferr = 2;
-    ferr = fscanf(nlinfl, "%lf %d", &tauB1, &num_modes);
-    if (ferr != 2)
+    // fscanf(maxfl, "%lf %lf", &tauB, &gm);
+    tauB = maxwell_time[im];
+    gm = maxwell_modulus[im];
+    
+    // ferr = fscanf(nlinfl, "%lf %d", &tauB1, &num_modes);
+    // if (ferr != 2)
+    // {
+    //   num_modes = 1;
+    // } // missing data, fudge sensibly
+    if (vector_nlin_outfl[counter].size() != 2)
     {
       num_modes = 1;
-    } // missing data, fudge sensibly
+      ferr = 1;
+    }
+    else{
+      tauB1 = vector_nlin_outfl[counter][0];
+      num_modes = int(vector_nlin_outfl[counter][1]);
+      ferr = 2;
+    }
+    counter++;
 
     for (int jm = 0; jm < num_modes; jm++)
     {
       if (ferr == 2)
       {
-        fscanf(nlinfl, "%d %lf %lf", &q, &g0, &stretchrate);
+        // fscanf(nlinfl, "%d %lf %lf", &q, &g0, &stretchrate);
+        q = vector_nlin_outfl[counter][0];
+        g0 = vector_nlin_outfl[counter][1];
+        stretchrate = vector_nlin_outfl[counter][2];
+        counter++;
+        //
         stretchrateSV = stretchrate;
       }
       else
@@ -123,6 +144,6 @@ void calc_pompom(int shearcode, int kmax, double gdot, double tmin, double tmax,
     }
   }
 
-  fclose(maxfl);
-  fclose(nlinfl);
+  // fclose(maxfl);
+  // fclose(nlinfl);
 }

@@ -57,11 +57,13 @@ void genCayley4(int ni, int nf)
       fscanf(inpfl, "%d %le %le", &arm_type[i], &mass[i], &pdi[i]);
     }
   }
-
-  fprintf(infofl, "Selected Cayley tree with 4 arm star core. \n");
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "Selected Cayley tree with 4 arm star core. \n");
   for (int i = 0; i <= levl; i++)
   {
-    fprintf(infofl, " Generation %d :", i);
+    if (!reptate_flag)
+      fprintf(infofl, " Generation %d :", i);
     print_arm_type(arm_type[i], mass[i], pdi[i]);
     mass[i] = mass[i] / mass_mono;
     if (arm_type[i] != 0)
@@ -74,7 +76,8 @@ void genCayley4(int ni, int nf)
     branched_poly[i] = polygenCayley4(levl, &arm_type[0], &mass[0], &pdi[0]);
   }
 
-  fprintf(infofl, "Created %d Cayley trees with 4 arm star core \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "Created %d Cayley trees with 4 arm star core \n", nf - ni);
 
   delete[] arm_type;
   delete[] mass;

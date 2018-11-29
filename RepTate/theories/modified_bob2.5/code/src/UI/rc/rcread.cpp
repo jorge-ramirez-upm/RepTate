@@ -33,12 +33,13 @@ int rcread(void)
   extern void rcdecide(char *, char *);
   extern void rcdefault(void);
   rcdefault();
-
+  extern bool reptate_flag;
   FILE *flrc = fopen("bob.rc", "r");
   extern FILE *infofl;
   if (flrc != NULL)
   {
-    fprintf(infofl, "Found bob.rc \n");
+    if (!reptate_flag)
+      fprintf(infofl, "Found bob.rc \n");
     while (err != -1)
     {
       err = getline(flrc, linedata);
@@ -56,7 +57,8 @@ int rcread(void)
     }
     fclose(flrc);
     err = 0;
-    fprintf(infofl, "End of rc file \n\n");
+    if (!reptate_flag)
+      fprintf(infofl, "End of rc file \n\n");
   }
   else
   {

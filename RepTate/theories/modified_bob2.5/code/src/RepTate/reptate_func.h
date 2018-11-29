@@ -77,4 +77,15 @@ extern double NLVE_tmin;
 extern double NLVE_tmax;
 extern int NLVE_flowmode;
 
+// maxwell.dat file proxy
+extern int max_mode_maxwell;
+extern std::vector<double> maxwell_time;
+extern std::vector<double> maxwell_modulus;
+// nlin file proxy
+extern std::vector<std::vector<double> > vector_nlin_outfl;
+// supertube.dat file proxy
+extern std::vector<std::vector<double> > vector_supertube;
+// savedprio.dat file proxy
+extern std::vector<std::vector<double> > vector_savedprio;
+
 #endif

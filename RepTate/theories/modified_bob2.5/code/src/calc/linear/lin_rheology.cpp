@@ -22,16 +22,22 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 void lin_rheology(int ndata)
 {
-  FILE *phifl;
-  phifl = fopen("supertube.dat", "r");
+  // FILE *phifl;
+  // phifl = fopen("supertube.dat", "r");
   double *tp = new double[ndata];
   double *phip = new double[ndata];
   double *phip_ST = new double[ndata];
-  double jnk;
-  for (int i = 0; i < ndata; i++)
-    fscanf(phifl, "%le %le %le %le", &tp[i], &jnk, &phip_ST[i], &phip[i]);
-  fclose(phifl);
+  // double jnk;
 
+  // for (int i = 0; i < ndata; i++)
+  //   fscanf(phifl, "%le %le %le %le", &tp[i], &jnk, &phip_ST[i], &phip[i]);
+  // fclose(phifl);
+  for (int i = 0; i < ndata; i++)
+  {
+    tp[i] = vector_supertube[i][0];
+    phip_ST[i] = vector_supertube[i][2];
+    phip[i] = vector_supertube[i][3];
+  }
   // Call routines to calculate response
   lin_time_resp(ndata, tp, phip, phip_ST);
   lin_freq_resp(ndata, tp, phip, phip_ST);

@@ -39,8 +39,9 @@ void set_vol_frac(int n_start, int n_end, int n_component, double blend_frac)
       n2 = arm_pool[n2].down;
     }
   }
-
-  fprintf(infofl, "component  %d : Total mass = %e \n", n_component, total_mass);
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "component  %d : Total mass = %e \n", n_component, total_mass);
 
   for (int i = n_start; i < n_end; i++)
   {

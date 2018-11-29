@@ -628,6 +628,9 @@ FunH
                 if "Mw" in attr:
                     # add Mw line
                     self.add_new_qline(attr, "1e4", layout, pol_dict)
+                elif "Mn" in attr:
+                    # add Mn line
+                    self.add_new_qline(attr, "1e4", layout, pol_dict)
                 elif "PDI" in attr:
                     #add PDI line
                     self.add_new_qline(attr, "1.2", layout, pol_dict)

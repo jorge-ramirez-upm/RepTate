@@ -37,8 +37,9 @@ void genLin(int ni, int nf)
   {
     user_get_arm_type(&arm_type, &mass, &pdi);
   }
-
-  fprintf(infofl, "Selected linear polymer ");
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "Selected linear polymer ");
   print_arm_type(arm_type, mass, pdi);
 
   mass = mass / mass_mono;
@@ -53,5 +54,6 @@ void genLin(int ni, int nf)
     branched_poly[i] = polygenLin(seglen);
   }
 
-  fprintf(infofl, "created %d Linear polymers. \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "created %d Linear polymers. \n", nf - ni);
 }

@@ -39,9 +39,13 @@ void genGEL_wtav(int ni, int nf)
   {
     fscanf(inpfl, "%le %le", &mn_arm, &b_u);
   }
-  fprintf(infofl, "Selected weight averaged gelation ensemble \n");
-  fprintf(infofl, "M_{N,S} = %e \n", mn_arm);
-  fprintf(infofl, "p = %e \n", b_u);
+  extern bool reptate_flag;
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "Selected weight averaged gelation ensemble \n");
+    fprintf(infofl, "M_{N,S} = %e \n", mn_arm);
+    fprintf(infofl, "p = %e \n", b_u);
+  }
 
   mn_arm = mn_arm / mass_mono; // segment length
 
@@ -51,5 +55,6 @@ void genGEL_wtav(int ni, int nf)
     branched_poly[i] = polygen_wtav(wtav_poly_type, logprob, b_u);
   }
 
-  fprintf(infofl, "created %d wt av gelation polymers. \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "created %d wt av gelation polymers. \n", nf - ni);
 }

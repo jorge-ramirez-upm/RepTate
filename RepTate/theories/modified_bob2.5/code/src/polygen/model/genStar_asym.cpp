@@ -40,8 +40,9 @@ void genStar_asym(int ni, int nf)
     printf("Short arm : \n");
     user_get_arm_type(&arm_type_short, &mass_short, &pdi_short);
   }
-
-  fprintf(infofl, "Selected asymmetric Star ");
+  extern bool reptate_flag;
+  if (!reptate_flag)
+    fprintf(infofl, "Selected asymmetric Star ");
   print_arm_type(arm_type, mass, pdi);
 
   mass = mass / mass_mono;
@@ -59,5 +60,6 @@ void genStar_asym(int ni, int nf)
   {
     branched_poly[i] = polygenStar_asym(arm_type, mass, pdi, arm_type_short, mass_short, pdi_short);
   }
-  fprintf(infofl, "created %d asymmetric Stars \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "created %d asymmetric Stars \n", nf - ni);
 }

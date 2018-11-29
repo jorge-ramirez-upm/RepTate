@@ -39,14 +39,19 @@ void genStar(int ni, int nf)
     scanf("%d", &num_arm);
   }
 
+  extern bool reptate_flag;
   if ((num_arm != 3) && (num_arm != 4) && (num_arm != 6) && (num_arm != 18))
   {
-    fprintf(infofl, "Asked to generate %d armed star : unknown type\n", num_arm);
-    fprintf(infofl, "Assuming 3 arm star... \n");
+    if (!reptate_flag)
+    {
+      fprintf(infofl, "Asked to generate %d armed star : unknown type\n", num_arm);
+      fprintf(infofl, "Assuming 3 arm star... \n");
+    }
     num_arm = 3;
   }
 
-  fprintf(infofl, "Selected %d arm Star ", num_arm);
+  if (!reptate_flag)
+    fprintf(infofl, "Selected %d arm Star ", num_arm);
   print_arm_type(arm_type, mass, pdi);
 
   mass = mass / mass_mono;
@@ -83,7 +88,8 @@ void genStar(int ni, int nf)
       break;
     }
   }
-  fprintf(infofl, "created %d Star \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "created %d Star \n", nf - ni);
 }
 
 polymer polygenStar18(int arm_type, double mn_arm, double pdi)

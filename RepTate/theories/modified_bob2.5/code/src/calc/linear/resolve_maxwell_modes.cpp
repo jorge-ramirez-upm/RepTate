@@ -17,19 +17,27 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+#include "../../RepTate/reptate_func.h"
+
+int max_mode_maxwell;
+std::vector<double> maxwell_time;
+std::vector<double> maxwell_modulus;
+
 void resolve_maxwell_modes(int ndata,
                            double *tp, double *phip, double *phip_ST)
 {
   extern double Alpha, unit_time, G_0_unit;
   double phnow, phstnow;
 
-  FILE *resfl = fopen("maxwell.dat", "w");
+  //FILE *resfl = fopen("maxwell.dat", "w");
   // We will take the smallest time to be 100*tp[1] and largest tp[ndata -1]
   double tspan = tp[ndata - 1] / (100.0 * tp[1]);
   // Maxwell times as multiples of 2 (about 3 per decade)
   extern double MaxwellInterval;
   int nummaxmode = (int)floor(log(tspan) / log(MaxwellInterval));
-  fprintf(resfl, "%d \n", nummaxmode + 1);
+  // fprintf(resfl, "%d \n", nummaxmode + 1);
+  max_mode_maxwell = nummaxmode + 1;
   int kk;
   double tau0, tau1, g0;
   tau0 = tp[1] * 100.0;
@@ -43,7 +51,12 @@ void resolve_maxwell_modes(int ndata,
     g0 += (Alpha * phnow * pow(phstnow, Alpha) * (phip_ST[kk - 1] - phip_ST[kk]) / phstnow + pow(phstnow, Alpha) * (phip[kk - 1] - phip[kk]));
     kk++;
   }
-  fprintf(resfl, "%e %e\n", tau0 * unit_time, g0 * G_0_unit);
+  // fprintf(resfl, "%e %e\n", tau0 * unit_time, g0 * G_0_unit);
+  maxwell_time.resize(max_mode_maxwell);
+  maxwell_modulus.resize(max_mode_maxwell);
+
+  maxwell_time[0] = tau0 * unit_time;
+  maxwell_modulus[0] = g0 * G_0_unit;
   for (int j = 1; j <= nummaxmode; j++)
   {
     g0 = 0.0;
@@ -56,7 +69,9 @@ void resolve_maxwell_modes(int ndata,
       g0 += (Alpha * phnow * pow(phstnow, Alpha) * (phip_ST[kk - 1] - phip_ST[kk]) / phstnow + pow(phstnow, Alpha) * (phip[kk - 1] - phip[kk]));
       kk++;
     }
-    fprintf(resfl, "%e %e\n", tau0 * unit_time, g0 * G_0_unit);
+    // fprintf(resfl, "%e %e\n", tau0 * unit_time, g0 * G_0_unit);
+    maxwell_time[j] = tau0 * unit_time;
+    maxwell_modulus[j] = g0 * G_0_unit;
   }
-  fclose(resfl);
+  // fclose(resfl);
 }

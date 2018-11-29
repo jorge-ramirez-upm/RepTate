@@ -41,11 +41,15 @@ void genComb(int ni, int nf)
     fscanf(inpfl, "%d %le %le", &arm_typeb, &m_bbone, &pdi_bbone);
     fscanf(inpfl, "%d %le %le %le", &arm_typea, &m_arm, &pdi_arm, &num_arm);
   }
-
-  fprintf(infofl, "Selected Comb with %e side-arms \n", num_arm);
-  fprintf(infofl, "backbone : ");
+  extern bool reptate_flag;
+  if (!reptate_flag)
+  {
+    fprintf(infofl, "Selected Comb with %e side-arms \n", num_arm);
+    fprintf(infofl, "backbone : ");
+  }
   print_arm_type(arm_typeb, m_bbone, pdi_bbone);
-  fprintf(infofl, "side-arms :");
+  if (!reptate_flag)
+    fprintf(infofl, "side-arms :");
   print_arm_type(arm_typea, m_arm, pdi_arm);
 
   m_bbone = m_bbone / mass_mono;
@@ -64,5 +68,6 @@ void genComb(int ni, int nf)
     branched_poly[i] = polygenComb(arm_typeb, m_bbone, pdi_bbone,
                                    arm_typea, m_arm, pdi_arm, num_arm);
   }
-  fprintf(infofl, "created %d Comb polymers. \n", nf - ni);
+  if (!reptate_flag)
+    fprintf(infofl, "created %d Comb polymers. \n", nf - ni);
 }
