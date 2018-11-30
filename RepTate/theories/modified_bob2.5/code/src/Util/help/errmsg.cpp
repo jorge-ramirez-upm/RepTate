@@ -18,6 +18,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 #include <stdlib.h>
 #include "../../../include/bob.h"
+extern bool reptate_flag;
 
 void errmsg(int code)
 {
@@ -29,7 +30,7 @@ void errmsg(int code)
 
     printf("Aborting now... \n");
   }
-  else
+  else if (!reptate_flag)
   {
     if (errfl == NULL)
     {

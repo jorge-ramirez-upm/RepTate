@@ -27,6 +27,14 @@ void polyout(int m)
 
   int n1 = branched_poly[m].first_end;
   int n2 = arm_pool[n1].down;
+  extern bool reptate_flag;
+  if (reptate_flag)
+  {
+    typedef void pyprint_func(char *s);
+    extern pyprint_func *print_to_python;
+    print_to_python((char *)"<b>Problem in BoB: (num_alive > 0) && (phi_true < -1.0e-6)</b>");
+  }
+
   if (debugfl == NULL)
   {
     debugfl = fopen("debg.dat", "w");

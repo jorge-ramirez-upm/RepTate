@@ -19,6 +19,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+extern bool reptate_flag;
 
 void warnmsgs(int code)
 {
@@ -44,7 +45,7 @@ void warnmsgs(int code)
             break;
         }
     }
-    else
+    else if (!reptate_flag)
     {
         extern FILE *errfl;
         if (errfl == NULL)
@@ -90,7 +91,7 @@ void warnmsgstring(int code, char *wmsg)
             break;
         }
     }
-    else
+    else if (!reptate_flag)
     {
         extern FILE *errfl;
         if (errfl == NULL)

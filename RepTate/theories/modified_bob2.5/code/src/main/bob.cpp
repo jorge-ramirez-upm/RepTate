@@ -187,8 +187,6 @@ bool run_bob_lve(int argc, char **argv, int *n)
 {
   try
   {
-    if (!reptate_flag)
-      infofl = fopen("info.txt", "w");
     rcread();
     extern double FreqMin, FreqMax, FreqInterval;
     // get frequency parameters from Python
