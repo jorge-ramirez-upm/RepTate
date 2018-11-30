@@ -181,7 +181,7 @@ class BaseTheorySCCR:
     def launch_get_MW_dialog(self):
         title = 'Missing "Mw" value'
         msg = 'Set "Mw" value for file \"%s\"' % self.fname_missing_mw
-        def_val = 1e3
+        def_val = 10
         min_val = 0
         val, success = QInputDialog.getDouble(self, title, msg, def_val, min_val)
         self.success_MW = success
