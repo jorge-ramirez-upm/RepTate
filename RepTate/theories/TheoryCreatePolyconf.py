@@ -91,13 +91,13 @@ class ArchitectureType(Enum):
     ], 'descr': "Attach two \"Poisson combs\" at some random point along the two backbones"}
     ##########################
     #Caylay type is handled in a special way. The strings below are not actually used.
-    Cayley3Arm = {'name': "Caley 3-arm Core", 'def': [
+    Cayley3Arm = {'name': "Cayley 3-arm Core", 'def': [
         10, 'Num. generation', '', 'Distr. gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
     ], 'descr': "Cayley trees with 3 arm star inner core"}
-    CayleyLin = {'name': "Caley Linear Core", 'def': [
+    CayleyLin = {'name': "Cayley Linear Core", 'def': [
         11, 'Num. generation', '', 'Distr. gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
     ], 'descr': "Cayley trees with linear inner core"}
-    Cayley4Arm = {'name': "Caley 4-arm Core", 'def': [
+    Cayley4Arm = {'name': "Cayley 4-arm Core", 'def': [
         12, 'Num. generation', '', 'Distr. gen0', 'Mw gen0 (g/mol)', 'PDI gen0'
     ], 'descr': "Cayley trees with 4 arm star inner core"}
     ###########################
@@ -176,6 +176,13 @@ class BaseTheoryCreatePolyconf:
         self.autocalculate = False
         self.bch = BobCtypesHelper(self)
         self.do_priority_seniority = False
+        self.inp_counter = 0 # counter for the 'virtual' input file for BoB
+        self.virtual_input_file = [] # 'virtual' input file for BoB
+        self.proto_counter = 0 # counter for the 'virtual' proto file for BoB
+        self.virtual_proto_file = [] # 'virtual' proto file for BoB
+        self.from_file_filename = [] # file names of the "from file" type
+        self.from_file_filename_counter = 0 # counter
+        self.protoname = [] # list of proto/polycode names
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -265,10 +272,11 @@ class BaseTheoryCreatePolyconf:
         #copy results to RepTate data file
         if gpc_out:
             if not self.is_ascii(self.polyconf_file_out):
-                #copy file to selected loaction
-                temp_polyconf = os.path.join('theories', 'temp',
-                                             'temp_polyconf.dat')
-                copy2(temp_polyconf, self.polyconf_file_out)
+                pass
+                # #copy file to selected loaction
+                # temp_polyconf = os.path.join('theories', 'temp',
+                #                              'temp_polyconf.dat')
+                # copy2(temp_polyconf, self.polyconf_file_out)
 
             try:
                 self.Qprint("<br><b>Mn=%.3g, Mw=%.3g, PDI=%.3g</b>" % (mn, mw, mw / mn))
@@ -413,25 +421,37 @@ FunH
                 'At least one component is needed\nSelect a polymer architecture and click \"Add\"'
             )
             return False
+        self.from_file_filename_counter
         self.npol_tot = 0  # total number of polymers
         tb = self.d.text_box
+        vinp = [] # self.virtual_input_file
         # remove all current text
         tb.clear()
 
         #1 memory line
         tb.append("%d %d" % (float(self.d.n_polymers.text()),
                              float(self.d.n_segments.text())))
+        vinp.append(float(self.d.n_polymers.text()))
+        vinp.append(float(self.d.n_segments.text()))
         #2 alpha (not used)
         tb.append("1.0")
+        vinp.append(1.0)
         #3 "1" for BoB 'compatibility'
         tb.append("1")
+        vinp.append(1)
         #4 M0, Ne, (density not used)
         tb.append("%.6g %.6g 0" % (float(self.d.m0.text()),
                                float(self.d.ne.text())))
+        vinp.append(float(self.d.m0.text()))
+        vinp.append(float(self.d.ne.text()))
+        vinp.append(0)
         #5 tau_e, T (not used)
         tb.append("0 0")
+        vinp.append(0)
+        vinp.append(0)
         #6 number of component(s) in blend
         tb.append("%d" % len(self.dict_component))
+        vinp.append(len(self.dict_component))
 
         #7.. the rest of the lines is specific to the architecture
         tot_ratio = self.sum_ratios(
@@ -446,24 +466,31 @@ FunH
             except:
                 w = "ERROR"
             tb.append("%.6g" % w)
+            vinp.append(w)
             #9.. num. polymer and type
             # float -> int conversion needed for e.g. "1e6"
             npol = int(float(pol_dict["Num. of polymers"].text()))
             type_number = pol_type_list[0]
             tb.append("%d %d" % (npol, type_number))
+            vinp.append(npol)
+            vinp.append(type_number)
             self.npol_tot += npol
 
             if type_number in [10, 11, 12]:
                 # Cayley tree type: handle varible number of generations
                 ngen = pol_dict["Num. generation"]
                 text = "%s\n" % ngen
+                vinp.append(ngen)
                 for i in range(ngen + 1):
                     text += self.poly_param_text(pol_dict, "Distr. gen%d" % i)
+                    vinp.append(self.poly_param_text(pol_dict, "Distr. gen%d" % i))
                     text += self.poly_param_text(pol_dict,
                                                  "Mw gen%d (g/mol)" % i)
+                    vinp.append(self.poly_param_text(pol_dict, "Mw gen%d (g/mol)" % i))
                     text += self.poly_param_text(
                         pol_dict, "PDI gen%d" %
                         i).rstrip()  # remove whitespace on right side
+                    vinp.append(self.poly_param_text(pol_dict, "PDI gen%d" %i))
                     if i < ngen:
                         text += "\n"
             elif type_number == 40:
@@ -474,11 +501,18 @@ FunH
                 for attr in pol_type_list[
                         1:]:  # go over all attributes of the architecture type
                     text += self.poly_param_text(pol_dict, attr)
+                    vinp.append(self.poly_param_text(pol_dict, attr))
+                if type_number == 60:
+                    # from file: remove the sting from virtual file
+                    self.from_file_filename.append(vinp[-1])
+                    vinp = vinp[:-1]
             text = text.rstrip()
             tb.append(text)  # remove whitespace on right side
         tb.append("\n")
         # set current tab to the Text box "result"
         self.d.tabWidget.setCurrentIndex(2)
+        vinp = [float(y) for y in vinp if y != '\n']
+        self.virtual_input_file = vinp
         return True
 
     def poly_param_text(self, pol_dict, attr):
@@ -618,11 +652,13 @@ FunH
             if fpath == '':
                 return False
             if not self.is_ascii(fpath):
-                # copy file
-                ok_path = os.path.join('theories', 'temp', 'my_polyconf.dat')
-                copy2(fpath, ok_path)
-                fpath = ok_path
-            self.add_new_qline(attr, fpath, layout, pol_dict)
+                # # copy file
+                # ok_path = os.path.join('theories', 'temp', 'my_polyconf.dat')
+                # copy2(fpath, ok_path)
+                # fpath = ok_path
+                self.Qprint("<font color=orange><b>\"%s\" contains non-ascii characters. BoB might not like it...</b></font>" % fpath)
+                print("\"%s\" contains non-ascii characters. BoB might not like it..." % fpath)
+            self.add_new_qline(attr, fpath, layout, pol_dict, editable=False)
         else:
             for attr in pol_attr[1:]:
                 if "arm" in attr:
@@ -671,7 +707,7 @@ FunH
                       default_val,
                       layout,
                       pol_dict,
-                      validator=QDoubleValidator(), tip=''):
+                      validator=QDoubleValidator(), tip='', editable=True):
         """Add a new line to the form layout containing a QLabel widget
         for the parameter name and a QLineEdit to change the parameter value"""
         validator.setBottom(0)  #set smallest double allowed in the form
@@ -679,6 +715,7 @@ FunH
         e.setValidator(validator)
         e.setText("%s" % default_val)
         e.setToolTip(tip)
+        e.setReadOnly(editable)
         label = QLabel(name)
         label.setToolTip(tip)
         layout.addRow(label, e)
@@ -716,41 +753,62 @@ FunH
         and all the relevant parameters for each component.
         This function is called via a pyqtSignal for multithread compatibility"""
         if self.dialog.exec_():
-            # create temporary file for BoB input
-            temp_dir = os.path.join('theories', 'temp')
-            #create temp folder if does not exist
-            if not os.path.exists(temp_dir):
-                os.makedirs(temp_dir)
+            # # create temporary file for BoB input
+            # temp_dir = os.path.join('theories', 'temp')
+            # #create temp folder if does not exist
+            # if not os.path.exists(temp_dir):
+            #     os.makedirs(temp_dir)
 
-            # path to 'bob_inp.dat'
-            temp_inp = os.path.join(temp_dir, 'bob_inp.dat')
+            # # path to 'bob_inp.dat'
+            # temp_inp = os.path.join(temp_dir, 'bob_inp.dat')
+            temp_inp = 'bob_inp.dat' # dummy name, virtual files used now
             self.dump_text_to_file(temp_inp, self.d.text_box)
 
             if self.flag_prototype > 0:
                 # path to 'poly.proto'
                 temp_proto = os.path.join(temp_dir, 'poly.proto')
                 self.dump_text_to_file(temp_proto, self.d.proto_text)
+                tmp = self.d.proto_text.toPlainText().split()
+                self.protoname = []
+                self.virtual_proto_file = [] 
+                for x in tmp:
+                    try:
+                        self.virtual_proto_file.append(float(x))
+                    except ValueError:
+                        self.protoname.append(x)
+                if len(self.protoname) < self.flag_prototype:
+                    # weak check on length of protofile
+                    self.Qprint("Error in the prototype file")
+                    return
 
             # ask where to save the polymer config file
             out_file = self.polyconf_file_out
-            if self.polyconf_file_out is not None:
-                if not self.is_ascii(self.polyconf_file_out):
-                    # to avoid path name troubles
-                    out_file = os.path.join(temp_dir, 'temp_polyconf.dat')
-                # BoB main arguments
-                self.argv = ["./bob", "-i", temp_inp, "-c", out_file, "-p"]
-                if self.flag_prototype > 0:
-                    self.argv.append('-x')
-                    self.argv.append(temp_proto)
-                self.success_dialog = True
-                return
+            tmp1, tmp2 = os.path.splitext(out_file)
+            if tmp2 == '':
+                self.Qprint("<font color=red><b>Set the output filepath to write the polyconf file</b></font>")
+            else:
+                if self.polyconf_file_out is not None:
+                    if not self.is_ascii(self.polyconf_file_out):
+                        # to avoid path name troubles
+                        # out_file = os.path.join(temp_dir, 'temp_polyconf.dat') # commented: avoid create files
+                        self.Qprint("<font color=orange><b>\"%s\" contains non-ascii characters. BoB might not like it...</b></font>" % out_file)
+                        print("\"%s\" contains non-ascii characters. BoB might not like it..." % out_file)
+                    # BoB main arguments
+                    self.argv = ["./bob", "-i", temp_inp, "-c", out_file, "-p"]
+                    if self.flag_prototype > 0:
+                        self.argv.append('-x')
+                        self.argv.append(temp_proto)
+                    self.success_dialog = True
+                    return
         self.success_dialog = False
 
     def dump_text_to_file(self, temp_file, text_widget):
-        """Dump the content of the "result" tab of the dialog box
+        """NOT USED ANYMORE. Use virtual files only.
+        Dump the content of the "result" tab of the dialog box
         into a file ``temp_file``"""
-        with open(temp_file, 'w') as tmp:
-            tmp.write(str(text_widget.toPlainText()))
+        pass
+        # with open(temp_file, 'w') as tmp:
+        #     tmp.write(str(text_widget.toPlainText()))
 
     def get_file_name(self):
         """Launch a dialog for selecting a file where to save the

@@ -29,8 +29,12 @@ void genstargel(int ni, int nf)
   double reaction_extent;
   if (runmode == 3)
   {
-    fscanf(inpfl, "%d %le %le", &arm_type, &mass, &pdi);
-    fscanf(inpfl, "%le", &reaction_extent);
+    // fscanf(inpfl, "%d %le %le", &arm_type, &mass, &pdi);
+    // fscanf(inpfl, "%le", &reaction_extent);
+    arm_type = (int) get_next_inp();
+    mass = get_next_inp();
+    pdi = get_next_inp();
+    reaction_extent = get_next_inp();
   }
   else
   {

@@ -15,7 +15,12 @@ void my_abort(char *s);
 // flag to stop BoB calculations
 extern bool flag_stop_bob;
 extern "C" void set_flag_stop_bob(bool b);
-
+// get virtual input file form python
+typedef double pyget_double();
+extern pyget_double *get_next_inp;
+extern pyget_double *get_next_proto;
+typedef void pyget_string(char *s, int i);
+extern pyget_string *get_string;
 
 #include "./class_def.h"
 #include "./routines.h"

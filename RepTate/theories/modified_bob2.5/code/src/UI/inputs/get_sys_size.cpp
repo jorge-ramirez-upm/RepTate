@@ -36,7 +36,10 @@ void get_sys_size(void)
   else
   {
     extern FILE *inpfl;
-    fscanf(inpfl, "%d %d", &max_poly, &max_arm);
+    // fscanf(inpfl, "%d %d", &max_poly, &max_arm);
+    max_poly = (int) get_next_inp();
+    max_arm = (int) get_next_inp();
+
   }
 
   // Do a quick check that numbers are consistent

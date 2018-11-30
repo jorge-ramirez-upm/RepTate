@@ -37,7 +37,9 @@ void genGEL_wtav(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%le %le", &mn_arm, &b_u);
+    // fscanf(inpfl, "%le %le", &mn_arm, &b_u);
+    mn_arm = get_next_inp();
+    b_u = get_next_inp();
   }
   extern bool reptate_flag;
   if (!reptate_flag)

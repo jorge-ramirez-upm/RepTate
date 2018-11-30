@@ -39,10 +39,12 @@
 // callback function
 typedef void pyprint_func(char *s);
 typedef double pyget_double();
+typedef void pyget_string(char *s, int i);
 extern pyprint_func *print_to_python;
 extern pyget_double *get_freqmin;
 extern pyget_double *get_freqmax;
 extern pyget_double *get_freqint;
+extern pyget_string *get_string;
 
 // functions used by Python
 extern "C" void set_NLVE_param(double flowtime, int calcnlin, int flowpriority, int nlinprep);
@@ -54,6 +56,9 @@ extern "C" void def_pyprint_err_func(pyprint_func F);
 extern "C" void def_get_freqmin(pyget_double F);
 extern "C" void def_get_freqmax(pyget_double F);
 extern "C" void def_get_freqint(pyget_double F);
+extern "C" void def_get_next_item_from_inp_file(pyget_double F);
+extern "C" void def_get_next_item_from_proto_file(pyget_double F);
+extern "C" void def_get_string(pyget_string F);
 extern "C" bool reptate_save_polyconf_and_return_gpc(int argc, char **argv, int nbin, int ncomp, int ni, int nf, double *mn, double *mw, double *lgmid_out, double *wtbin_out, double *brbin_out, double *gbin_out);
 extern "C" bool run_bob_lve(int argc, char **argv, int *n);
 extern "C" bool get_bob_lve(double *omega_out, double *gp_out, double *gpp_out);

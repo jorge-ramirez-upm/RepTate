@@ -37,7 +37,9 @@ void genCayley(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%d", &levl);
+    // fscanf(inpfl, "%d", &levl);
+    levl = (int) get_next_inp();
+    
   }
   int *arm_type = new int[levl + 1];
   double *mass = new double[levl + 1];
@@ -54,7 +56,10 @@ void genCayley(int ni, int nf)
   {
     for (int i = 0; i <= levl; i++)
     {
-      fscanf(inpfl, "%d %lf %lf", &arm_type[i], &mass[i], &pdi[i]);
+      // fscanf(inpfl, "%d %lf %lf", &arm_type[i], &mass[i], &pdi[i]);
+      arm_type[i] = (int) get_next_inp();
+      mass[i] = get_next_inp();
+      pdi[i]= get_next_inp();
     }
   }
   extern bool reptate_flag;

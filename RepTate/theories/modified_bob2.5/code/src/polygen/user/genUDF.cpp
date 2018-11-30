@@ -37,7 +37,10 @@ void genUDF(int ni, int nf)
   { // non-interactive mode : read from input file
     for (int i = 0; i < UDF_segment_num; i++)
     {
-      fscanf(inpfl, "%d %le %le", &arm_type[i], &mass[i], &pdi[i]);
+      // fscanf(inpfl, "%d %le %le", &arm_type[i], &mass[i], &pdi[i]);
+      arm_type[i] = (int) get_next_inp();
+      mass[i] = get_next_inp();
+      pdi[i] = get_next_inp();
     }
   }
   else

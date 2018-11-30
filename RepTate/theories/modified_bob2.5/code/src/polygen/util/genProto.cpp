@@ -30,20 +30,33 @@ void genProto(int ni, int nf)
     printf("Looking for prototype file ...  ");
   }
   extern FILE *protofl;
-  if (protofl == NULL)
+  extern bool reptate_flag;
+  if (!reptate_flag)
   {
-    protofl = fopen("poly.proto", "r");
-  }
-  if (protofl == NULL)
-  {
-    errmsg(101);
+    if (protofl == NULL)
+    {
+      protofl = fopen("poly.proto", "r");
+    }
+    if (protofl == NULL)
+    {
+      errmsg(101);
+    }
   }
   extern char polycode[10];
 
   int err;
   extern int getline(FILE *, char *);
   char tmpcar[256];
-  err = getline(protofl, tmpcar);
+  if (reptate_flag)
+  {
+    /* case 0: send filename containing polyconf input 
+         case 1: send polycode for prototype (max 9 caracters) */
+    int code = 1;
+    get_string(tmpcar, code);
+  }
+  else
+    err = getline(protofl, tmpcar);
+
   int nnk = strlen(tmpcar);
   if (nnk < 9)
   {
@@ -62,9 +75,11 @@ void genProto(int ni, int nf)
     polycode[9] = '\0';
   }
 
-  // fscanf(protofl,"%s", &polycode);
   int narm;
-  fscanf(protofl, "%d", &narm);
+
+  // fscanf(protofl, "%d", &narm);
+  narm = (int)get_next_proto();
+
   int *arm_type = new int[narm];
   int *LL1 = new int[narm];
   int *LL2 = new int[narm];
@@ -74,8 +89,15 @@ void genProto(int ni, int nf)
   double *pdi = new double[narm];
   for (int j = 0; j < narm; j++)
   {
-    fscanf(protofl, "%d %d %d %d %d %lf %lf", &LL1[j], &LL2[j], &RR1[j], &RR2[j],
-           &arm_type[j], &mass[j], &pdi[j]);
+    // fscanf(protofl, "%d %d %d %d %d %lf %lf", &LL1[j], &LL2[j], &RR1[j], &RR2[j],
+    //        &arm_type[j], &mass[j], &pdi[j]);
+    LL1[j] = (int)get_next_proto();
+    LL2[j] = (int)get_next_proto();
+    RR1[j] = (int)get_next_proto();
+    RR2[j] = (int)get_next_proto();
+    arm_type[j] = (int)get_next_proto();
+    mass[j] = get_next_proto();
+    pdi[j] = get_next_proto();
     mass[j] = mass[j] / mass_mono;
     if (arm_type[j] != 0)
     {

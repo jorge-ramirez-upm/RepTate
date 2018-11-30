@@ -39,8 +39,16 @@ void genComb_fxd(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%d %le %le", &arm_typeb, &m_bbone, &pdi_bbone);
-    fscanf(inpfl, "%d %le %le %d", &arm_typea, &m_arm, &pdi_arm, &num_arm);
+    // fscanf(inpfl, "%d %le %le", &arm_typeb, &m_bbone, &pdi_bbone);
+    // fscanf(inpfl, "%d %le %le %d", &arm_typea, &m_arm, &pdi_arm, &num_arm);
+    arm_typeb = (int) get_next_inp();
+    m_bbone = get_next_inp();
+    pdi_bbone = get_next_inp();
+    arm_typea = (int) get_next_inp();
+    m_arm = get_next_inp();
+    pdi_arm = get_next_inp();
+    num_arm = (int) get_next_inp();
+
   }
   extern bool reptate_flag;
   if (!reptate_flag)

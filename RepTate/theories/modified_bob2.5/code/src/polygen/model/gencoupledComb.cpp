@@ -35,7 +35,10 @@ void gencoupledComb(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%d %lf %lf", &arm_typeb, &m_bbone, &pdi_bbone);
+    // fscanf(inpfl, "%d %lf %lf", &arm_typeb, &m_bbone, &pdi_bbone);
+    arm_typeb = (int) get_next_inp();
+    m_bbone = get_next_inp();
+    pdi_bbone = get_next_inp();
   }
   if (runmode == 2)
   {
@@ -44,7 +47,10 @@ void gencoupledComb(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%d %lf %lf", &arm_typea, &m_arm, &pdi_arm);
+    // fscanf(inpfl, "%d %lf %lf", &arm_typea, &m_arm, &pdi_arm);
+    arm_typea = (int) get_next_inp();
+    m_arm = get_next_inp();
+    pdi_arm = get_next_inp();
   }
   if (runmode == 2)
   {
@@ -53,7 +59,9 @@ void gencoupledComb(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%lf", &num_arm);
+    // fscanf(inpfl, "%lf", &num_arm);
+    num_arm = get_next_inp();
+
   }
   extern bool reptate_flag;
   if (!reptate_flag)

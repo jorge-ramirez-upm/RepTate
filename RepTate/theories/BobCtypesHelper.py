@@ -33,7 +33,7 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
-from ctypes import CFUNCTYPE, CDLL, c_double, c_int, c_char_p, byref, c_bool, c_void_p
+from ctypes import CFUNCTYPE, CDLL, c_double, c_int, c_char_p, byref, c_bool, c_void_p, POINTER, c_char
 import sys
 import os
 
@@ -45,6 +45,9 @@ class BobError(Exception):
 
 class BobCtypesHelper:
     """Wrapper class to call BoB C++ functions"""
+
+    CB_FTYPE_NONE_PCHAR = CFUNCTYPE(None,
+                         POINTER(c_char), c_int)  # callback [return type, [args types]]
 
     CB_FTYPE_NONE_CHAR = CFUNCTYPE(None,
                          c_char_p)  # callback [return type, [args types]]
@@ -72,6 +75,38 @@ class BobCtypesHelper:
             print('Could not load shared library \"%s\"' % (self.lib_path))
         # link the C function to Python
         self.link_c_functions()
+
+    def send_string(self, pointer_to_str, case):
+        """BoB calls this function to send a string to C
+        case 0: send filename containing polyconf input 
+        case 1: send polymer name (max 9 caracters)
+        """
+        print("DEBUG: pointer_to_str", pointer_to_str.contents)
+        print("DEBUG: case", case)
+        if case == 0:
+            print("DEBUG: fname", self.parent_theory.from_file_filename)
+            print("DEBUG: counter", self.parent_theory.from_file_filename_counter)
+            s = self.parent_theory.from_file_filename[self.parent_theory.from_file_filename_counter]
+            for i, c in enumerate(s):
+                pointer_to_str[i] = c.encode('utf-8')
+            self.parent_theory.from_file_filename_counter += 1
+        elif case == 1:
+            s = self.parent_theory.protoname[self.parent_theory.protoname_counter]
+            for i, c in enumerate(s):
+                pointer_to_str[i] = c.encode('utf-8')
+            self.parent_theory.protoname_counter += 1
+
+    def get_next_item_from_inp_file(self, *arg):
+        """BoB calls this function to read the 'virtual' inp file"""
+        val = self.parent_theory.virtual_input_file[self.parent_theory.inp_counter]
+        self.parent_theory.inp_counter += 1
+        return val
+
+    def get_next_item_from_proto_file(self, *arg):
+        """BoB calls this function to read the 'virtual' inp file"""
+        val = self.parent_theory.virtual_proto_file[self.parent_theory.proto_counter]
+        self.parent_theory.proto_counter += 1
+        return val
 
     def get_freqmin(self, *arg):
         """BoB LVE calls this function to get the min frequency"""
@@ -147,6 +182,15 @@ class BobCtypesHelper:
         self.cb_get_freqint = self.CB_FTYPE_DOUBLE_NONE(self.get_freqint)
         self.bob_lib.def_get_freqint(self.cb_get_freqint)
 
+        self.cb_get_next_item_from_inp_file = self.CB_FTYPE_DOUBLE_NONE(self.get_next_item_from_inp_file)
+        self.bob_lib.def_get_next_item_from_inp_file(self.cb_get_next_item_from_inp_file)
+
+        self.cb_get_next_item_from_proto_file = self.CB_FTYPE_DOUBLE_NONE(self.get_next_item_from_proto_file)
+        self.bob_lib.def_get_next_item_from_proto_file(self.cb_get_next_item_from_proto_file)
+
+        self.cb_send_string = self.CB_FTYPE_NONE_PCHAR(self.send_string)
+        self.bob_lib.def_get_string(self.cb_send_string)
+
     def save_polyconf_and_return_gpc(self, arg_list, npol_tot):
         """Run BoB asking for a polyconf file only (no relaxation etc) and
         output the characteristics of the polymer configuration"""
@@ -155,6 +199,12 @@ class BobCtypesHelper:
         argv = (c_char_p * n_arg)()
         for i in range(n_arg):
             argv[i] = arg_list[i].encode('utf-8')
+
+        # virtual inp and proto file
+        self.parent_theory.inp_counter = 0
+        self.parent_theory.proto_counter = 0
+        self.parent_theory.from_file_filename_counter = 0
+        self.parent_theory.protoname_counter = 0
 
         # prepare the arguments for GPC
         nbin = self.parent_theory.parameters[
@@ -183,6 +233,8 @@ class BobCtypesHelper:
 
     def return_bob_lve(self, arg_list):
         """Run BoB LVE and copy results to arrays"""
+        # virtual inp file
+        self.parent_theory.inp_counter = 0
         # prepare the arguments for bob_main function
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()

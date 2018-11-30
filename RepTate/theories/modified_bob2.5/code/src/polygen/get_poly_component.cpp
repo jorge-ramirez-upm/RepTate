@@ -49,8 +49,11 @@ void get_poly_component(int n, double blend_frac)
   }
   else
   {
-    extern FILE *inpfl;
-    fscanf(inpfl, "%d %d", &num_cur_comp, &polytype);
+    // extern FILE *inpfl;
+    // fscanf(inpfl, "%d %d", &num_cur_comp, &polytype);
+    num_cur_comp = (int) get_next_inp();
+    polytype = (int) get_next_inp();
+
   }
   num_cur_comp += num_poly;
 

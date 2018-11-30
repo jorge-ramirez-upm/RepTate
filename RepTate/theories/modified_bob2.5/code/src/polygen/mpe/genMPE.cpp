@@ -34,7 +34,9 @@ void genMPE(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%le %le", &mass, &beta);
+    // fscanf(inpfl, "%le %le", &mass, &beta);
+    mass = get_next_inp();
+    beta = get_next_inp();
   }
   extern bool reptate_flag;
   if (!reptate_flag)

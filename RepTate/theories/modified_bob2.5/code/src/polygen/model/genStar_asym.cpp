@@ -28,10 +28,16 @@ void genStar_asym(int ni, int nf)
   double mass, pdi, mass_short, pdi_short;
   if (runmode == 3)
   {
-    fscanf(inpfl, "%d", &arm_type);
-    fscanf(inpfl, "%le %le", &mass, &pdi);
-    fscanf(inpfl, "%d", &arm_type_short);
-    fscanf(inpfl, "%le %le", &mass_short, &pdi_short);
+    // fscanf(inpfl, "%d", &arm_type);
+    // fscanf(inpfl, "%le %le", &mass, &pdi);
+    // fscanf(inpfl, "%d", &arm_type_short);
+    // fscanf(inpfl, "%le %le", &mass_short, &pdi_short);
+    arm_type = (int) get_next_inp();
+    mass = get_next_inp();
+    pdi = get_next_inp();
+    arm_type_short = (int) get_next_inp();
+    mass_short = get_next_inp();
+    pdi_short = get_next_inp();
   }
   else
   {

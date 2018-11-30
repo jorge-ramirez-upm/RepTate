@@ -54,6 +54,9 @@ pyprint_func *print_err_to_python;
 pyget_double *get_freqmin;
 pyget_double *get_freqmax;
 pyget_double *get_freqint;
+pyget_double *get_next_inp;
+pyget_double *get_next_proto;
+pyget_string *get_string;
 
 void set_NLVE_param(double flowtime, int calcnlin, int flowpriority, int nlinprep)
 {
@@ -102,6 +105,21 @@ void def_get_freqint(pyget_double F)
 {
     // get a double from Python
     get_freqint = F;
+}
+void def_get_next_item_from_inp_file(pyget_double F)
+{
+    // get a double from Python
+    get_next_inp = F;
+}
+void def_get_next_item_from_proto_file(pyget_double F)
+{
+    // get a double from Python
+    get_next_proto = F;
+}
+void def_get_string(pyget_string F)
+{
+    // get a string from Python
+    get_string = F;
 }
 
 void my_abort(char *s)

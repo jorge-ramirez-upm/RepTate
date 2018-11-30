@@ -43,7 +43,12 @@ void genTobita(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%lf %lf %lf %lf %lf", &tau, &beta, &cs, &cb, &fin_conv);
+    // fscanf(inpfl, "%lf %lf %lf %lf %lf", &tau, &beta, &cs, &cb, &fin_conv);
+    tau = get_next_inp();
+    beta = get_next_inp();
+    cs = get_next_inp();
+    cb = get_next_inp();
+    fin_conv = get_next_inp();
   }
   extern bool reptate_flag;
   if (!reptate_flag)

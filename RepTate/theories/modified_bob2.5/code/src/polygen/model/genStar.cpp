@@ -28,9 +28,13 @@ void genStar(int ni, int nf)
   double mass, pdi;
   if (runmode == 3)
   {
-    fscanf(inpfl, "%d %lf %lf", &arm_type, &mass, &pdi);
-    //                    fscanf(inpfl, "%le %le", &mass, &pdi);
-    fscanf(inpfl, "%d", &num_arm);
+    // fscanf(inpfl, "%d %lf %lf", &arm_type, &mass, &pdi);
+    // //                  ////  fscanf(inpfl, "%le %le", &mass, &pdi);
+    // fscanf(inpfl, "%d", &num_arm);
+    arm_type = (int) get_next_inp();
+    mass = get_next_inp();
+    pdi = get_next_inp();
+    num_arm = (int) get_next_inp();
   }
   else
   {

@@ -16,6 +16,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 */
 
 #include <stdio.h>
+#include "../../../include/bob.h"
 void get_material(void)
 {
   extern double N_e, unit_time, temp, mass_mono, rho_poly;
@@ -38,8 +39,14 @@ void get_material(void)
   else
   {
     extern FILE *inpfl;
-    fscanf(inpfl, "%le %le %le", &mass_mono, &N_e, &rho_poly);
-    fscanf(inpfl, "%le %le ", &unit_time, &temp);
+    // fscanf(inpfl, "%le %le %le", &mass_mono, &N_e, &rho_poly);
+    // fscanf(inpfl, "%le %le ", &unit_time, &temp);
+    mass_mono = get_next_inp();
+    N_e = get_next_inp();
+    rho_poly = get_next_inp();
+    unit_time = get_next_inp();
+    temp = get_next_inp();
+
   }
 
   if (rho_poly < 2.0)

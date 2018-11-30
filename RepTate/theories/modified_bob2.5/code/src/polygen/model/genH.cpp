@@ -37,10 +37,17 @@ void genH(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%d", &arm_type1);
-    fscanf(inpfl, "%le %le", &m_arm, &pdi_arm);
-    fscanf(inpfl, "%d", &arm_type2);
-    fscanf(inpfl, "%le %le", &m_cross, &pdi_cross);
+    // fscanf(inpfl, "%d", &arm_type1);
+    // fscanf(inpfl, "%le %le", &m_arm, &pdi_arm);
+    // fscanf(inpfl, "%d", &arm_type2);
+    // fscanf(inpfl, "%le %le", &m_cross, &pdi_cross);
+    arm_type1 = (int) get_next_inp();
+    m_arm = get_next_inp();
+    pdi_arm = get_next_inp();
+    arm_type2 = (int) get_next_inp();
+    m_cross = get_next_inp();
+    pdi_cross = get_next_inp();
+    
   }
   extern bool reptate_flag;
   if (!reptate_flag)

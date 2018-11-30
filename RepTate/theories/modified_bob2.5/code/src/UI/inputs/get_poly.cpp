@@ -85,7 +85,8 @@ void get_poly(void)
   else
   {
     extern FILE *inpfl;
-    fscanf(inpfl, "%d", &num_comp);
+    // fscanf(inpfl, "%d", &num_comp);
+    num_comp = (int) get_next_inp();
     if (num_comp == 0)
     {
       shouldread = 0;
@@ -111,7 +112,9 @@ void get_poly(void)
       num_poly = 0;
       for (int j1 = 0; j1 < num_comp; j1++)
       {
-        fscanf(inpfl, "%le", &blend_frac);
+        // fscanf(inpfl, "%le", &blend_frac);
+        blend_frac = get_next_inp();
+
         get_poly_component(j1, blend_frac);
       }
     }

@@ -164,12 +164,15 @@ int parser(int argc, char *argv[])
         strcpy(inpfname, "inp.dat");
         printf("Using default input file inp.dat \n");
       }
-      inpfl = fopen(inpfname, "r");
-      if (inpfl == NULL)
-      {
-        char s[256];
-        sprintf(s, "Error opening input file %s \n", inpfname);
-        my_abort(s);
+      extern bool reptate_flag;
+      if (!reptate_flag){
+        inpfl = fopen(inpfname, "r");
+        if (inpfl == NULL)
+        {
+          char s[256];
+          sprintf(s, "Error opening input file %s \n", inpfname);
+          my_abort(s);
+        }
       }
 
       if (defconf != 0)

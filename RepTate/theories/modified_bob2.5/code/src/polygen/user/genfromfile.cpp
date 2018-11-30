@@ -39,14 +39,24 @@ void genfromfile(int ni, int *nf, double blend_frac)
   }
   else
   {
-    err = getline(inpfl, polyfname);
-    if (err == -1)
+    extern bool reptate_flag;
+    if (reptate_flag)
     {
-      my_abort((char *)"Failed to get file name in genfromfile.cpp \n");
+      /* case 0: send filename containing polyconf input 
+         case 1: send polycode for prototype (max 9 caracters) */
+      int code = 0;
+      get_string(polyfname, code);
     }
+    else
+    {
+      err = getline(inpfl, polyfname);
+      if (err == -1)
+      {
+        my_abort((char *)"Failed to get file name in genfromfile.cpp \n");
+      }
+    }
+    
   }
-
-  printf("%s \n", polyfname);
 
   extern void removewhitespace(char *);
   removewhitespace(polyfname);

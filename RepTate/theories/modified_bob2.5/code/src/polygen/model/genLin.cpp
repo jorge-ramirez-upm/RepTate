@@ -30,8 +30,11 @@ void genLin(int ni, int nf)
 
   if (runmode == 3)
   { //batch mode
-    fscanf(inpfl, "%d", &arm_type);
-    fscanf(inpfl, "%lf %lf", &mass, &pdi);
+    // fscanf(inpfl, "%d", &arm_type);
+    // fscanf(inpfl, "%lf %lf", &mass, &pdi);
+    arm_type = (int) get_next_inp();
+    mass = get_next_inp();
+    pdi = get_next_inp();
   }
   else
   {

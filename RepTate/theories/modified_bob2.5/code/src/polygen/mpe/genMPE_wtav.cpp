@@ -37,7 +37,9 @@ void genMPE_wtav(int ni, int nf)
   }
   else
   {
-    fscanf(inpfl, "%le %le", &mass, &b_m);
+    // fscanf(inpfl, "%le %le", &mass, &b_m);
+    mass = get_next_inp();
+    b_m = get_next_inp();
   }
   if (!reptate_flag)
     fprintf(infofl, "Selected weight averaged metallocene PE \n");

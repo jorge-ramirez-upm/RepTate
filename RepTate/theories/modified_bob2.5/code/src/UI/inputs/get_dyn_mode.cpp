@@ -17,6 +17,7 @@ Copyright (C) 2006-2011, 2012 C. Das, D.J. Read, T.C.B. McLeish
 
 // Get assumptions and parameters about the relaxation dynamics
 #include <stdio.h>
+#include "../../../include/bob.h"
 void get_dyn_mode(void)
 {
     extern int runmode, ReptScheme, PrefMode;
@@ -96,18 +97,27 @@ void get_dyn_mode(void)
     else
     {
         extern FILE *inpfl;
-        fscanf(inpfl, "%le", &Alpha);
+        // fscanf(inpfl, "%le", &Alpha);
+        Alpha = get_next_inp();
         int tmpint;
-        fscanf(inpfl, "%d", &tmpint);
+        // fscanf(inpfl, "%d", &tmpint);
+        tmpint = (int) get_next_inp();
         if (tmpint != 1)
         {
-            fscanf(inpfl, "%le %le  %d %d", &RetLim, &PSquare, &PrefMode, &ReptScheme);
+            // fscanf(inpfl, "%le %le  %d %d", &RetLim, &PSquare, &PrefMode, &ReptScheme);
+            RetLim = get_next_inp();
+            PSquare = get_next_inp();
+            PrefMode = (int) get_next_inp();
+            ReptScheme = (int) get_next_inp();
             if ((ReptScheme == 3) || (ReptScheme == 4))
             {
-                fscanf(inpfl, "%le", &ReptAmount);
+                // fscanf(inpfl, "%le", &ReptAmount);
+                ReptAmount = get_next_inp();
             }
-            fscanf(inpfl, "%le %le", &cur_time, &DtMult);
-            printf("DtMult = %le \n", DtMult);
+            // fscanf(inpfl, "%le %le", &cur_time, &DtMult);
+            cur_time = get_next_inp();
+            DtMult = get_next_inp();
+            // printf("DtMult = %le \n", DtMult);
         }
         else
         {
