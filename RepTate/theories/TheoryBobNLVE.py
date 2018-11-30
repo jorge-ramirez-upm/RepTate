@@ -131,7 +131,9 @@ class BaseTheoryBobNLVE:
         self.init_flow_mode()
         self.success_dialog = False
         self.argv = None
-    
+        self.inp_counter = 0 # counter for the 'virtual' input file for BoB
+        self.virtual_input_file = [] # 'virtual' input file for BoB
+
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
         try:
@@ -283,10 +285,10 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, axarr)
-        temp_dir = os.path.join('theories', 'temp')
-        #create temp folder if does not exist
-        if not os.path.exists(temp_dir):
-            os.makedirs(temp_dir)
+        # temp_dir = os.path.join('theories', 'temp')
+        # #create temp folder if does not exist
+        # if not os.path.exists(temp_dir):
+        #     os.makedirs(temp_dir)
         self.selected_file = None
         self.setup_dialog()
 
@@ -385,27 +387,52 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
 
     def create_bob_input_file(self, nlines, inpf):
         """Create a file containing the input BoB parameters from the form dialog"""
-        with open(inpf, 'w') as tmp:
-            #1 memory
-            npol = max(nlines, float(self.d.n_polymers.text()))
-            nseg = max(nlines, float(self.d.n_segments.text()))
+        # with open(inpf, 'w') as tmp:
+        #     #1 memory
+        #     npol = max(nlines, float(self.d.n_polymers.text()))
+        #     nseg = max(nlines, float(self.d.n_segments.text()))
 
-            tmp.write('%d %d\n' % (npol, nseg))
-            #2 alpha
-            tmp.write('%.6g\n' % float(self.d.alpha.text()))
-            #3 dummy "1"
-            tmp.write('1\n')
-            # 4 M0, Ne, density
-            M0 = float(self.d.m0.text())
-            Ne = float(self.d.ne.text())
-            density = float(self.d.density.text())
-            tmp.write('%.6g %.6g %.6g\n' % (M0, Ne, density))
-            #5 tau_e, T
-            taue = float(self.d.taue.text())
-            temperature = float(self.d.temperature.text())
-            tmp.write('%.6g %.6g\n' % (taue, temperature))
-            #6 write "0" so BoB reads a polyconf file
-            tmp.write('0\n')
+        #     tmp.write('%d %d\n' % (npol, nseg))
+        #     #2 alpha
+        #     tmp.write('%.6g\n' % float(self.d.alpha.text()))
+        #     #3 dummy "1"
+        #     tmp.write('1\n')
+        #     # 4 M0, Ne, density
+        #     M0 = float(self.d.m0.text())
+        #     Ne = float(self.d.ne.text())
+        #     density = float(self.d.density.text())
+        #     tmp.write('%.6g %.6g %.6g\n' % (M0, Ne, density))
+        #     #5 tau_e, T
+        #     taue = float(self.d.taue.text())
+        #     temperature = float(self.d.temperature.text())
+        #     tmp.write('%.6g %.6g\n' % (taue, temperature))
+        #     #6 write "0" so BoB reads a polyconf file
+        #     tmp.write('0\n')
+        tmp = []
+        #1 memory
+        npol = max(nlines, float(self.d.n_polymers.text()))
+        nseg = max(nlines, float(self.d.n_segments.text()))
+        tmp.append(npol)
+        tmp.append(nseg)
+        #2 alpha
+        tmp.append(float(self.d.alpha.text()))
+        #3 dummy "1"
+        tmp.append(1)
+        # 4 M0, Ne, density
+        M0 = float(self.d.m0.text())
+        Ne = float(self.d.ne.text())
+        density = float(self.d.density.text())
+        tmp.append(M0)
+        tmp.append(Ne)
+        tmp.append(density)
+        #5 tau_e, T
+        taue = float(self.d.taue.text())
+        temperature = float(self.d.temperature.text())
+        tmp.append(taue)
+        tmp.append(temperature)
+        #6 write "0" so BoB reads a polyconf file
+        tmp.append(0)
+        self.virtual_input_file = tmp + tmp # twice, for the two NLVE passes in bob
 
     def launch_param_dialog(self):
         """Show a dialog to get the filename of the polymer configuration.
@@ -415,13 +442,17 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
             return
         conffile = self.selected_file
         if not self.is_ascii(conffile):
-            ok_path = os.path.join('theories', 'temp', 'target_polyconf.dat')
-            copy2(conffile, ok_path)
-            conffile = ok_path
-        if conffile == '':
+            # ok_path = os.path.join('theories', 'temp', 'target_polyconf.dat')
+            # copy2(conffile, ok_path)
+            # conffile = ok_path
+            self.Qprint("<font color=orange><b>\"%s\" contains non-ascii characters. BoB might not like it...</b></font>" % conffile)
+            print("\"%s\" contains non-ascii characters. BoB might not like it..." % conffile)
+        if conffile == '' or os.path.splitext(conffile)[1] == '':
+            self.Qprint("<font color=red><b>Set the output filepath to write the polyconf file</b></font>")
             return
         nlines = self.num_file_lines(conffile)
-        inpf = os.path.join('theories', 'temp', 'temp_inpf.dat')
+        # inpf = os.path.join('theories', 'temp', 'temp_inpf.dat')
+        inpf = 'inpf.dat' # dummy name
         self.create_bob_input_file(nlines, inpf)
 
         # BoB main arguments

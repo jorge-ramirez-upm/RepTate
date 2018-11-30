@@ -81,11 +81,7 @@ class BobCtypesHelper:
         case 0: send filename containing polyconf input 
         case 1: send polymer name (max 9 caracters)
         """
-        print("DEBUG: pointer_to_str", pointer_to_str.contents)
-        print("DEBUG: case", case)
         if case == 0:
-            print("DEBUG: fname", self.parent_theory.from_file_filename)
-            print("DEBUG: counter", self.parent_theory.from_file_filename_counter)
             s = self.parent_theory.from_file_filename[self.parent_theory.from_file_filename_counter]
             for i, c in enumerate(s):
                 pointer_to_str[i] = c.encode('utf-8')
@@ -258,6 +254,8 @@ class BobCtypesHelper:
 
     def return_bob_nlve(self, arg_list, flowrate, tmin, tmax, is_shear):
         """Run BoB NLVE and copy results to arrays"""
+        # virtual inp file
+        self.parent_theory.inp_counter = 0
         # prepare the arguments for bob_main function
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
