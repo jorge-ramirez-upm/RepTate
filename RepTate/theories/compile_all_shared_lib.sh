@@ -18,7 +18,7 @@ cd ../rouse_source_c_code
 gcc -o ../rouse_lib_${system}.so ${flags} rouse.c
 
 cd ../rp_blend_source_c_code
-gcc -o ../rp_blend_lib_${system}so ${flags} derivs_rolie_poly_blend.c
+gcc -o ../rp_blend_lib_${system}.so ${flags} derivs_rolie_poly_blend.c
 
 cd ../sccr_source_c_code
 gcc -o ../sccr_lib_${system}.so ${flags} sccr.c
