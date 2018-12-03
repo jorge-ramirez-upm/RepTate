@@ -429,7 +429,8 @@ class TheoryRolieDoublePoly(CmdBase):
     """
     thname = "Rolie-Double-Poly"
     description = "Rolie-Double-Poly const. eq. for polydisperse melts of entangled linear polymers"
-    citations = ""
+    citations = "Boudara V.A.H., Peterson J.D., Leal L.G., and Read D.J., J. Rheol. 63, 71-91 (2019)"
+    doi = "http://dx.doi.org/10.1122/1.5052320"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -459,6 +460,7 @@ class BaseTheoryRolieDoublePoly:
     single_file = False
     thname = TheoryRolieDoublePoly.thname
     citations = TheoryRolieDoublePoly.citations
+    doi = TheoryRolieDoublePoly.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """
