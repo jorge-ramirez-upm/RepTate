@@ -141,13 +141,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         
         # # ApplicationXY button
         # #choose the button icon
-        # icon = QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png')
+        # icon = QIcon(':/Icon8/Images/new_icons/XY.png')
         # tool_tip = 'XY'  # text that appear on hover
         # self.actionXY = QAction(icon, tool_tip, self)
         # #insert the new button before the "MWD" button
         # self.toolBar.insertAction(self.actionMWD, self.actionXY)
         # #connect button
-        # self.actionXY.triggered.connect(self.new_xy_window)
+        # self.actionXY.triggered.connect(lambda: self.handle_new_app('XY'))
 
         # App tabs behaviour
         self.ApplicationtabWidget.setMovable(True)

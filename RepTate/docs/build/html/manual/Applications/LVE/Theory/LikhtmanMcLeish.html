@@ -50,6 +50,16 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
+  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Likhtman-McLeish theory</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#recommendations">Recommendations</a></li>
+</ul>
+</li>
+</ul>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -79,7 +89,49 @@
 <h1>Likhtman-McLeish theory<a class="headerlink" href="#likhtman-mcleish-theory" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>Text <a class="reference internal" href="theory.html#lm-likhtman2002" id="id1">[1]</a>.</p>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002">
+<em class="property">class </em><code class="descclassname">TheoryLikhtmanMcLeish2002.</code><code class="descname">TheoryLikhtmanMcLeish2002</code><a class="reference internal" href="../../../../_modules/TheoryLikhtmanMcLeish2002.html#TheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">tau_e</span></code> : Rouse time of one entanglement segment (of length <span class="math">\(M_e\)</span>.</li>
+<li><code class="docutils literal"><span class="pre">Ge</span></code> : Entanglement modulus.</li>
+<li><code class="docutils literal"><span class="pre">Me</span></code> : Entanglement molecular weight.</li>
+<li><code class="docutils literal"><span class="pre">c_nu</span></code> : Constraint release parameter.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Full quantitative theory for the linear dynamics of entangled linear polymers, based on the tube model and considering contour length fluctuations, constraint release and longitudinal stress relaxation along the tube.</p>
+<p>The parameter <span class="math">\(c_\nu\)</span> is related to the number of chains that are needed to create one entanglement. <span class="math">\(c_\nu=0\)</span> means there is no constraint release. The recommended value is <span class="math">\(c_\nu=0.1\)</span>. This value gives slightly worse fitting than <span class="math">\(c_\nu=1\)</span>, but is more consistent with start-up shear experiments.</p>
+<p>For full details about how the predictions are calculated, refer to <a class="reference internal" href="theory.html#lm-likhtman2002" id="id1">[1]</a>. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of <span class="math">\(Z=M_w/M_e\)</span> = 2, 3, 4 … 299, 300, 305, 310, … 1000, and <span class="math">\(c_\nu\)</span> = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of <span class="math">\(Z\)</span> and <span class="math">\(c_\nu\)</span> in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of <span class="math">\(Z\)</span> and <span class="math">\(c_\nu\)</span>, the prediction is interpolated.</p>
+<p>After the calculation is done, the values of the number of entanglements <span class="math">\(Z\)</span>, the Rouse time <span class="math">\(\tau_R\)</span> and the reptation time <span class="math">\(\tau_D\)</span> of the polymer are printed in the Log Window. These values are calculated according to the following formulas:</p>
+<div class="math">
+\[\tau_R = \tau_e Z^2\]</div>
+<div class="math">
+\[\tau_D = 3\tau_e Z^3 \left( 1 - \frac{2C_1}{\sqrt{Z}} + \frac{C_2}{Z} + \frac{C_3}{Z^{3/2}} \right)\]</div>
+<p>with the constants <span class="math">\(C_1=1.69\)</span>, <span class="math">\(C_2=4.17\)</span> and <span class="math">\(C_3=-1.55\)</span>.</p>
+</div>
+<div class="section" id="recommendations">
+<h2>Recommendations<a class="headerlink" href="#recommendations" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The theory is able to fit several molecular weight samples of the same polymer at the same time. That is the recommended procedure to get the material parameters <span class="math">\(\tau_e\)</span>, <span class="math">\(G_e\)</span> and <span class="math">\(M_e\)</span>.</li>
+<li>The theory allows the user to link the values of <span class="math">\(G_e\)</span> and <span class="math">\(M_e\)</span> through the density <span class="math">\(\rho\)</span> (in g/cm3) by means of the standard expression:</li>
+</ul>
+<div class="math">
+\[G_e = \frac{1000\rho R T}{M_e}\]</div>
+<p>The user must input the correct density. If available, <span class="math">\(\rho\)</span> is read from the Materials database. The theory fails to fit correctly the data when the values of <span class="math">\(G_e\)</span> and <span class="math">\(M_e\)</span> are linked in this way.</p>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/Applications/LVE/Theory/LikhtmanMcLeish-0"><table class="docutils citation" frame="void" id="lm-likhtman2002" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -88,6 +140,7 @@
 </tbody>
 </table>
 </p>
+</div>
 </div>
 
 

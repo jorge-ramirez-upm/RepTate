@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Theory &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.3 20180719',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -23,7 +31,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,14 +53,12 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -322,8 +329,16 @@
             <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">th_files</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
                     <span class="k">break</span>
+                <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">with_extra_x</span><span class="p">:</span>
+                    <span class="n">data_copy</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">extend_xrange</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">with_extra_x</span><span class="p">:</span>
+                    <span class="c1"># restore f</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data_copy</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">data_copy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_file</span><span class="p">:</span>
+                <span class="c1"># delete theory data of other files</span>
                 <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
                 <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
                 <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
@@ -336,20 +351,69 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">do_cite</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calculate_is_busy</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+<div class="viewcode-block" id="Theory.extend_xrange"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.extend_xrange">[docs]</a>    <span class="k">def</span> <span class="nf">extend_xrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fcopy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extend the xrange of the fcopy data&quot;&quot;&quot;</span>
+        <span class="c1"># xmin/xmax of current data</span>
+        <span class="n">ncol</span> <span class="o">=</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">thmin</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fcopy</span><span class="o">.</span><span class="n">theory_xmin</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">fcopy</span><span class="o">.</span><span class="n">nextramin</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># number of extra rows added left</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">thmin</span> <span class="o">&lt;</span> <span class="n">xmin</span><span class="p">:</span>
+                <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">thmin</span> <span class="ow">and</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">theory_logspace</span><span class="p">:</span>
+                    <span class="n">xextra_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">thmin</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">xmin</span><span class="p">),</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">th_num_pts</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">xextra_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">thmin</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">th_num_pts</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">fcopy</span><span class="o">.</span><span class="n">nextramin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xextra_min</span><span class="p">)</span>
+                <span class="n">data_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">xextra_min</span><span class="p">),</span> <span class="n">ncol</span><span class="p">))</span>
+                <span class="n">data_min</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xextra_min</span>
+                <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">data_min</span><span class="p">,</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">thmax</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fcopy</span><span class="o">.</span><span class="n">theory_xmax</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">fcopy</span><span class="o">.</span><span class="n">nextramax</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># number of extra rows added right</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">thmax</span> <span class="o">&gt;</span> <span class="n">xmax</span><span class="p">:</span>
+                <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">thmax</span> <span class="ow">and</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">theory_logspace</span><span class="p">:</span>
+                    <span class="n">xextra_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">xmax</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">thmax</span><span class="p">),</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">th_num_pts</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">xextra_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmax</span><span class="p">,</span> <span class="n">thmax</span><span class="p">,</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">th_num_pts</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">fcopy</span><span class="o">.</span><span class="n">nextramax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xextra_max</span><span class="p">)</span>
+                <span class="n">data_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">xextra_max</span><span class="p">),</span> <span class="n">ncol</span><span class="p">))</span>
+                <span class="n">data_max</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xextra_max</span>
+                <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data_max</span><span class="p">))</span>
+        <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+    
+<div class="viewcode-block" id="Theory.get_non_extended_th_table"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.get_non_extended_th_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_non_extended_th_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return a copy of the theory table associated with f, where the extra rows are delete&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">with_extra_x</span><span class="p">:</span>
+            <span class="n">tmp_dt</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="n">axarr</span><span class="o">=</span><span class="p">[])</span>
+            <span class="n">nrow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span><span class="o">.</span><span class="n">num_rows</span>
+            <span class="n">tmp_dt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">nextramin</span><span class="p">:</span><span class="n">nrow</span><span class="o">-</span><span class="n">f</span><span class="o">.</span><span class="n">nextramax</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">tmp_dt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">tmp_dt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">tmp_dt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">tmp_dt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">tmp_dt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="Theory.theory_files"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.theory_files">[docs]</a>    <span class="k">def</span> <span class="nf">theory_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_file</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span>
         <span class="n">f_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">selected_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">selected_file</span>
-        <span class="k">if</span> <span class="n">selected_file</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">selected_file</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
-                <span class="n">f_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">selected_file</span>
-                              <span class="p">)</span>  <span class="c1">#use the selected/highlighted file if active</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">f_list</span><span class="p">:</span>  <span class="c1">#there is no selected file or it is inactive</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_file</span><span class="p">:</span>
+            <span class="n">selected_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">selected_file</span>
+            <span class="k">if</span> <span class="n">selected_file</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">selected_file</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                    <span class="n">f_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">selected_file</span>
+                                <span class="p">)</span>  <span class="c1">#use the selected/highlighted file if active</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f_list</span><span class="p">:</span>  <span class="c1">#there is no selected file or it is inactive or single_file=False</span>
             <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
                     <span class="n">f_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-                    <span class="k">break</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_file</span><span class="p">:</span>
+                        <span class="k">break</span>
         <span class="k">return</span> <span class="n">f_list</span></div>
 
 <div class="viewcode-block" id="Theory.do_error"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.do_error">[docs]</a>    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
@@ -376,7 +440,8 @@
                 <span class="k">break</span>
             <span class="n">xexp</span><span class="p">,</span> <span class="n">yexp</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="p">,</span>
                                                  <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
-            <span class="n">xth</span><span class="p">,</span> <span class="n">yth</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">],</span>
+            <span class="n">tmp_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_non_extended_th_table</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">xth</span><span class="p">,</span> <span class="n">yth</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">tmp_dt</span><span class="p">,</span>
                                                <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xrange</span><span class="o">.</span><span class="n">get_visible</span><span class="p">()):</span>
                 <span class="n">conditionx</span> <span class="o">=</span> <span class="p">(</span><span class="n">xexp</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">xexp</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">)</span>
@@ -441,8 +506,9 @@
 
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theory_files</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                <span class="n">tmp_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_non_extended_th_table</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="n">xth</span><span class="p">,</span> <span class="n">yth</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">],</span> <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+                    <span class="n">tmp_dt</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
                 <span class="n">xexp</span><span class="p">,</span> <span class="n">yexp</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">data_table</span><span class="p">,</span>
                                                      <span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
@@ -1287,7 +1353,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

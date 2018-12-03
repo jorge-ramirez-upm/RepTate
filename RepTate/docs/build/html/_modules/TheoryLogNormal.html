@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TheoryLogNormal &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.3 20180719',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -23,7 +31,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,14 +53,12 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -136,15 +143,15 @@
 
 
 <div class="viewcode-block" id="BaseTheoryLogNormal"><a class="viewcode-back" href="../manual/Applications/MWD/Theory/theory.html#TheoryLogNormal.BaseTheoryLogNormal">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryLogNormal</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Log-Normal distribution</span>
+    <span class="sd">&quot;&quot;&quot;Log-Normal distribution: the logarithm of the molecular weight is normally distributed</span>
 <span class="sd">    </span>
 <span class="sd">    * **Function**</span>
 <span class="sd">        .. math::</span>
-<span class="sd">            W(M) = W_0 \\frac{1}{\\sigma\\sqrt{\\pi}} \\frac{1}{M} \\exp\\left[ - \\frac{\\left(\\ln{M}-\\ln{M_0}\\right)^2}{2\\sigma^2} \\right]</span>
+<span class="sd">            W(M) = W_0 \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\frac{1}{M} \\exp\\left[ - \\frac{\\left(\\ln{M}-\\ln{M_0}\\right)^2}{2\\sigma^2} \\right]</span>
 <span class="sd">    </span>
 <span class="sd">    * **Parameters**</span>
 <span class="sd">       - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.</span>
-<span class="sd">       - ``logW0`` :math:`\\equiv\\log_{10}(M_0)`</span>
+<span class="sd">       - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`</span>
 <span class="sd">       - ``sigma`` :math:`\\equiv\\sigma`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution&#39;</span>
@@ -318,7 +325,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

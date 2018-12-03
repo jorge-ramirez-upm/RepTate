@@ -249,7 +249,7 @@ Bonus: Callback function
 ------------------------
 
 We presented above a method to have Python "request something from C", that is,
-Python calls a C function and get an answer. In the previous example, Python requested
+Python calls a C function and gets an answer. In the previous example, Python requested
 C to calculate the square of an array.
 Sometimes, it is convenient to do the other way around too. For instance, if the array
 is "big", the C function might take some time to finish the calculations, and we may want
@@ -283,15 +283,15 @@ Somewhere before the ``c_square`` function definition, we write:
     give_and_take_double *tell_python;             // pointer to a function of type "give_and_take_double"
     void def_python_callback(give_and_take_double *func)
     {
-        // Called by Python
+        // Function called by Python once
         // Defines what "tell_python" is pointing to
         tell_python = func;
     }
 
 The first line defines a new type: a function that takes a single ``double`` as argument and returns a ``double``.
 This allows us to define the second line: a pointer to a function of type ``give_and_take_double``.
-At this point we do not know that the function will be, be we know it accepts a ``double`` as argument, and 
-it returns a ``double``. The last lines is the function that Python will have to call to actually define what ``tell_python`` is, 
+At this point we do not know that the function will be, but we know it accepts a ``double`` as argument, and 
+it returns a ``double``. The last lines consist of the function that Python will have to call to actually define what ``tell_python`` is, 
 or rather, define towards what it is pointing to.
 
 

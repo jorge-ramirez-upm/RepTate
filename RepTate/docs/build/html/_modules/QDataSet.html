@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>QDataSet &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.3 20180719',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -23,7 +31,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,14 +53,12 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -105,11 +112,12 @@
 <span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QPixmap</span><span class="p">,</span> <span class="n">QColor</span><span class="p">,</span> <span class="n">QPainter</span><span class="p">,</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QIntValidator</span><span class="p">,</span> <span class="n">QDoubleValidator</span><span class="p">,</span> <span class="n">QStandardItem</span>
 <span class="kn">from</span> <span class="nn">PyQt5.uic</span> <span class="k">import</span> <span class="n">loadUiType</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">Qt</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTreeWidget</span><span class="p">,</span> <span class="n">QTreeWidgetItem</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QFrame</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QAbstractItemView</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QTableWidget</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QFileDialog</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTreeWidget</span><span class="p">,</span> <span class="n">QTreeWidgetItem</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QFrame</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QAbstractItemView</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QTableWidget</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QCheckBox</span>
 <span class="kn">from</span> <span class="nn">DataSet</span> <span class="k">import</span> <span class="n">DataSet</span>
 <span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
 <span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
 <span class="kn">from</span> <span class="nn">DataSetWidget</span> <span class="k">import</span> <span class="n">DataSetWidget</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">matplotlib.patheffects</span> <span class="k">as</span> <span class="nn">pe</span>
 
@@ -122,7 +130,10 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">createFormGroupBox</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createFormGroupBoxTheory</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
         <span class="n">buttonBox</span> <span class="o">=</span> <span class="n">QDialogButtonBox</span><span class="p">(</span><span class="n">QDialogButtonBox</span><span class="o">.</span><span class="n">Ok</span>
                                      <span class="o">|</span> <span class="n">QDialogButtonBox</span><span class="o">.</span><span class="n">Cancel</span><span class="p">)</span>
@@ -130,10 +141,13 @@
         <span class="n">buttonBox</span><span class="o">.</span><span class="n">rejected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reject</span><span class="p">)</span>
 
         <span class="n">mainLayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
-        <span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">formGroupBox</span><span class="p">)</span>
+        <span class="n">tab_widget</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
+        <span class="n">tab_widget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">formGroupBox</span><span class="p">,</span> <span class="s1">&#39;File Parameters&#39;</span><span class="p">)</span>
+        <span class="n">tab_widget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">formGroupBoxTheory</span><span class="p">,</span> <span class="s1">&#39;Theory Parameters&#39;</span><span class="p">)</span>
+        <span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tab_widget</span><span class="p">)</span>
         <span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">buttonBox</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">mainLayout</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Edit&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Edit Paramters&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EditFileParametersDialog.createFormGroupBox"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.EditFileParametersDialog.createFormGroupBox">[docs]</a>    <span class="k">def</span> <span class="nf">createFormGroupBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a form to set the new values of the file parameters&quot;&quot;&quot;</span>
@@ -154,45 +168,82 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">p_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">parameters</span><span class="p">[</span><span class="n">pname</span><span class="p">])</span>
             <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">pname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_new</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">param_dict</span><span class="p">[</span><span class="n">pname</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="c1"># layout.addRow(QLabel(&quot;Number of bins for Bob:&quot;), self.e1)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">formGroupBox</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">formGroupBox</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="EditFileParametersDialog.createFormGroupBoxTheory"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.EditFileParametersDialog.createFormGroupBoxTheory">[docs]</a>    <span class="k">def</span> <span class="nf">createFormGroupBoxTheory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">formGroupBoxTheory</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span>
+            <span class="s2">&quot;Extend theory xrange of </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_extra_x</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_extra_x</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">with_extra_x</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Extra theory xrange?&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_extra_x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_extra_x</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activate_th_widgets</span><span class="p">)</span>
+        <span class="c1"># Npoints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_num_pts</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">intvalidator</span> <span class="o">=</span> <span class="n">QIntValidator</span><span class="p">()</span>
+        <span class="n">intvalidator</span><span class="o">.</span><span class="n">setBottom</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_num_pts</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QIntValidator</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_num_pts</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">file</span><span class="o">.</span><span class="n">th_num_pts</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Num. of extra point&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">th_num_pts</span><span class="p">)</span>
+        <span class="c1"># logspace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_logspace</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_logspace</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">theory_logspace</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;logspace&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">th_logspace</span><span class="p">)</span>
+        <span class="c1"># theory xmin/max</span>
+        <span class="n">dvalidator</span> <span class="o">=</span> <span class="n">QDoubleValidator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmin</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmax</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmin</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">dvalidator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmax</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">dvalidator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmin</span><span class="o">.</span><span class="n">textEdited</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_current_view_xrange</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmax</span><span class="o">.</span><span class="n">textEdited</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_current_view_xrange</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmin</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">file</span><span class="o">.</span><span class="n">theory_xmin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmax</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">file</span><span class="o">.</span><span class="n">theory_xmax</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;xmin theory&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">th_xmin</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;xmax theory&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">th_xmax</span><span class="p">)</span>
+        <span class="c1"># current view theory xmin/max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_xmin</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_xmax</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;xmin(current view)&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_xmin</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;xmax(current view)&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_xmax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_current_view_xrange</span><span class="p">()</span>
+        <span class="c1"># set layout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">formGroupBoxTheory</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activate_th_widgets</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EditFileParametersDialog_"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.EditFileParametersDialog_">[docs]</a><span class="k">class</span> <span class="nc">EditFileParametersDialog_</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">EditFileParametersDialog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+<div class="viewcode-block" id="EditFileParametersDialog.update_current_view_xrange"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.EditFileParametersDialog.update_current_view_xrange">[docs]</a>    <span class="k">def</span> <span class="nf">update_current_view_xrange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
+        <span class="n">tmp_dt</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="n">axarr</span><span class="o">=</span><span class="p">[])</span>
+        <span class="n">tmp_dt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">tmp_dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">tmp_dt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">tmp_dt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th_xmin</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view_xmin</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;N/A&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp_dt</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmin</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">tmp_dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view_xmin</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Parameters - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
-        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th_xmax</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view_xmax</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;N/A&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp_dt</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmax</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">tmp_dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view_xmax</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">QTableWidget</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">([</span><span class="s2">&quot;Parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">])</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">k</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
-            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">item</span><span class="o">.</span><span class="n">setFlags</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsSelectable</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsEnabled</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                                   <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">])))</span>
-
-        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
-
-        <span class="n">buttons</span> <span class="o">=</span> <span class="n">QDialogButtonBox</span><span class="p">(</span>
-            <span class="n">QDialogButtonBox</span><span class="o">.</span><span class="n">Ok</span> <span class="o">|</span> <span class="n">QDialogButtonBox</span><span class="o">.</span><span class="n">Cancel</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="n">buttons</span><span class="o">.</span><span class="n">accepted</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accept</span><span class="p">)</span>
-        <span class="n">buttons</span><span class="o">.</span><span class="n">rejected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reject</span><span class="p">)</span>
-        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">buttons</span><span class="p">)</span></div>
+<div class="viewcode-block" id="EditFileParametersDialog.activate_th_widgets"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.EditFileParametersDialog.activate_th_widgets">[docs]</a>    <span class="k">def</span> <span class="nf">activate_th_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">checked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_extra_x</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmin</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">checked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_xmax</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">checked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_num_pts</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">checked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th_logspace</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">checked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_xmin</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">checked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_xmax</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">checked</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="QDataSet"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.QDataSet">[docs]</a><span class="k">class</span> <span class="nc">QDataSet</span><span class="p">(</span><span class="n">DataSet</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">Ui_DataSet</span><span class="p">):</span>
@@ -808,7 +859,27 @@
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">columnCount</span><span class="p">()):</span>
                             <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">headerItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
                                     <span class="n">i</span><span class="p">):</span>
-                                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]))</span></div>
+                                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]))</span>
+                    <span class="c1"># theory xmin/max</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">theory_xmin</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">th_xmin</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">theory_xmin</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">theory_xmax</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">th_xmax</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">theory_xmax</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+                    <span class="c1"># theory logspace and Npoints</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">th_num_pts</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">th_num_pts</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="k">pass</span> 
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">th_num_pts</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">th_num_pts</span><span class="o">.</span><span class="n">text</span><span class="p">()),</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">theory_logspace</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">th_logspace</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">with_extra_x</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">with_extra_x</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">theory_xmin</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span> <span class="ow">or</span> <span class="n">file</span><span class="o">.</span><span class="n">theory_xmax</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QDataSet.handle_actionNew_Theory"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.QDataSet.handle_actionNew_Theory">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionNew_Theory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create new theory and do fit</span>
@@ -890,7 +961,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>

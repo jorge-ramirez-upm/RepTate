@@ -67,14 +67,13 @@
 <li><a class="reference internal" href="#create-a-new-application-file">Create a new application file</a></li>
 <li><a class="reference internal" href="#edit-reptate-s-applicationmanager">Edit RepTate’s <code class="docutils literal"><span class="pre">ApplicationManager</span></code></a></li>
 <li><a class="reference internal" href="#edit-reptate-s-qapplicationmanager">Edit RepTate’s <code class="docutils literal"><span class="pre">QApplicationManager</span></code></a></li>
-<li><a class="reference internal" href="#default-theories">Default theories</a></li>
+<li><a class="reference internal" href="#note-on-default-theories">Note on default theories</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#new-file-type">New file type</a></li>
 <li><a class="reference internal" href="#new-view">New view</a><ul>
 <li><a class="reference internal" href="#about-the-old-view">About the “old” view</a></li>
 <li><a class="reference internal" href="#definition-of-a-new-view">Definition of a new view</a></li>
-<li><a class="reference internal" href="#multi-views">Multi-views</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#new-theory">New theory</a><ul>
@@ -129,23 +128,22 @@
 <li><a class="reference internal" href="#create-a-new-application-file" id="id4">Create a new application file</a></li>
 <li><a class="reference internal" href="#edit-reptate-s-applicationmanager" id="id5">Edit RepTate’s <code class="docutils literal"><span class="pre">ApplicationManager</span></code></a></li>
 <li><a class="reference internal" href="#edit-reptate-s-qapplicationmanager" id="id6">Edit RepTate’s <code class="docutils literal"><span class="pre">QApplicationManager</span></code></a></li>
-<li><a class="reference internal" href="#default-theories" id="id7">Default theories</a></li>
+<li><a class="reference internal" href="#note-on-default-theories" id="id7">Note on default theories</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#new-file-type" id="id8">New file type</a></li>
 <li><a class="reference internal" href="#new-view" id="id9">New view</a><ul>
 <li><a class="reference internal" href="#about-the-old-view" id="id10">About the “old” view</a></li>
 <li><a class="reference internal" href="#definition-of-a-new-view" id="id11">Definition of a new view</a></li>
-<li><a class="reference internal" href="#multi-views" id="id12">Multi-views</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#new-theory" id="id13">New theory</a><ul>
-<li><a class="reference internal" href="#create-a-new-theory-file" id="id14">Create a new theory file</a></li>
-<li><a class="reference internal" href="#edit-applicationxy-py" id="id15">Edit <code class="docutils literal"><span class="pre">ApplicationXY.py</span></code></a></li>
-<li><a class="reference internal" href="#edit-the-theory" id="id16">Edit the theory</a></li>
+<li><a class="reference internal" href="#new-theory" id="id12">New theory</a><ul>
+<li><a class="reference internal" href="#create-a-new-theory-file" id="id13">Create a new theory file</a></li>
+<li><a class="reference internal" href="#edit-applicationxy-py" id="id14">Edit <code class="docutils literal"><span class="pre">ApplicationXY.py</span></code></a></li>
+<li><a class="reference internal" href="#edit-the-theory" id="id15">Edit the theory</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#new-icons" id="id17">New Icons</a></li>
+<li><a class="reference internal" href="#new-icons" id="id16">New Icons</a></li>
 </ul>
 </div>
 <div class="section" id="goals">
@@ -227,12 +225,12 @@ RepTate’s <code class="docutils literal"><span class="pre">ApplicationManager<
 <ol class="arabic">
 <li><p class="first">Insert this line in the top part of the file <code class="docutils literal"><span class="pre">core/ApplicationManager.py</span></code>,
 e.g.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>51</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ApplicationXY</span> <span class="kn">import</span> <span class="n">ApplicationXY</span>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>56</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ApplicationXY</span> <span class="kn">import</span> <span class="n">ApplicationXY</span>
 </pre></div>
 </td></tr></table></div>
 </li>
 <li><p class="first">Insert the following line to add an entry to the <code class="docutils literal"><span class="pre">ApplicationManager</span></code> dictionary</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>104</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationXY</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationXY</span>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>115</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationXY</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationXY</span>
 </pre></div>
 </td></tr></table></div>
 </li>
@@ -252,19 +250,17 @@ We will edit the file <code class="docutils literal"><span class="pre">gui/QAppl
 <ol class="arabic">
 <li><p class="first">Add a button in the main RepTate tool-bar by inserting the following lines in
 the <code class="docutils literal"><span class="pre">__init__</span></code> method of <code class="docutils literal"><span class="pre">gui/QApplicationManager.py</span></code>.
-The icon we choose is
-“icons8-scatter-plot.png” which is readily part of RepTate icons database.
-To add a new custom icon to RepTate icon database, see
-the section <a class="reference internal" href="#new-icons"><span class="std std-ref">New Icons</span></a>.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>100
-101
-102
-103
-104
-105
-106</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1"># ApplicationXY button</span>
+The icon name (filename) should correspond to the <code class="docutils literal"><span class="pre">appmane</span></code>, here <code class="docutils literal"><span class="pre">XY.png</span></code>. See
+the section <a class="reference internal" href="#new-icons"><span class="std std-ref">New Icons</span></a> to create and use your onwn icon in RepTate.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>142
+143
+144
+145
+146
+147
+148</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1"># ApplicationXY button</span>
  <span class="c1">#choose the button icon</span>
- <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-scatter-plot.png&#39;</span><span class="p">)</span>
+ <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/XY.png&#39;</span><span class="p">)</span>
  <span class="n">tool_tip</span> <span class="o">=</span> <span class="s1">&#39;XY&#39;</span>  <span class="c1"># text that appear on hover</span>
  <span class="bp">self</span><span class="o">.</span><span class="n">actionXY</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">tool_tip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
  <span class="c1">#insert the new button before the &quot;MWD&quot; button</span>
@@ -277,49 +273,16 @@ However, if we click on it, nothing happens because it is not linked to any acti
 We need to “wire” (connect) this new button to a “function”.
 In the same file <code class="docutils literal"><span class="pre">gui/QApplicationManager.py</span></code>, below the previous lines,
 add</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>107
-108</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1">#connect button</span>
- <span class="bp">self</span><span class="o">.</span><span class="n">actionXY</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_xy_window</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
-</li>
-<li><p class="first">We need to define the method <code class="docutils literal"><span class="pre">new_xy_window</span></code> as it does not exist yet.
-To define a new method, add at the end of <code class="docutils literal"><span class="pre">class</span> <span class="pre">QApplicationManager</span></code>
-following line:</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>352
-353
-354
-355
-356
-357
-358
-359</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">def</span> <span class="nf">new_xy_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-     <span class="sd">&quot;&quot;&quot;Open a new XY application window</span>
-
-<span class="sd">     [description]</span>
-<span class="sd">     &quot;&quot;&quot;</span>
-     <span class="n">app_name</span> <span class="o">=</span> <span class="s2">&quot;XY&quot;</span>
-     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Qopen_app</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span>
-                             <span class="s1">&#39;:/Icons/Images/new_icons/icons8-scatter-plot.png&#39;</span><span class="p">)</span>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>149
+150</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1">#connect button</span>
+ <span class="bp">self</span><span class="o">.</span><span class="n">actionXY</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;XY&#39;</span><span class="p">))</span>
 </pre></div>
 </td></tr></table></div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>The <code class="docutils literal"><span class="pre">app_name</span></code> must be identical to the <code class="docutils literal"><span class="pre">name</span></code> defined
-in the file <code class="docutils literal"><span class="pre">applications/ApplicationXY.py</span></code>, i.e., it should match</p>
-<div class="last highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>46
-47
-48
-49
-50
-51</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ApplicationXY</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;[summary]</span>
-
-<span class="sd">    [description]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;XY&#39;</span>
-</pre></div>
-</td></tr></table></div>
+<p class="last">The application name (<code class="docutils literal"><span class="pre">appname</span></code>), defined at line 79 of <code class="docutils literal"><span class="pre">ApplicationXY.py</span></code>, should then be “XY”.
+Additionally, the icon name defining the logo of the new application should be named “XY.png”,
+see the definition of the <code class="docutils literal"><span class="pre">handle_new_app</span></code> method.</p>
 </div>
 </li>
 </ol>
@@ -328,14 +291,14 @@ in the file <code class="docutils literal"><span class="pre">applications/Applic
 <p class="last">Our new application is ready to be used in GUI RepTate!</p>
 </div>
 </div>
-<div class="section" id="default-theories">
-<h3><a class="toc-backref" href="#id7">Default theories</a><a class="headerlink" href="#default-theories" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="note-on-default-theories">
+<h3><a class="toc-backref" href="#id7">Note on default theories</a><a class="headerlink" href="#note-on-default-theories" title="Permalink to this headline">¶</a></h3>
 <p>By default, some “basic theories” are included with the application
 (e.g. polynomial, power-law, exponential). To remove all these
 “basic theories” from your new application, comment the following line
 in the <code class="docutils literal"><span class="pre">__init__</span></code> method of <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code></p>
 <blockquote>
-<div><div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>132</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">add_common_theories</span><span class="p">()</span>  <span class="c1"># Add basic theories to the application</span>
+<div><div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>135</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">add_common_theories</span><span class="p">()</span>  <span class="c1"># Add basic theories to the application</span>
 </pre></div>
 </td></tr></table></div>
 </div></blockquote>
@@ -352,13 +315,15 @@ To do so, we modify <code class="docutils literal"><span class="pre">Application
 </pre></div>
 </td></tr></table></div>
 <p>In the <code class="docutils literal"><span class="pre">__init__</span></code> method of <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code> add</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>116
-117
-118
-119
-120
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>120
 121
-122</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span>
+122
+123
+124
+125
+126
+127</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># set the type of files that ApplicationTemplate can open</span>
+<span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;XY data&#39;</span><span class="p">,</span>  <span class="c1"># name the type of data</span>
     <span class="n">extension</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span>  <span class="c1"># file extension</span>
     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;XY data from XY-experiment&#39;</span><span class="p">,</span>
@@ -372,10 +337,11 @@ To do so, we modify <code class="docutils literal"><span class="pre">Application
 <h2><a class="toc-backref" href="#id9">New view</a><a class="headerlink" href="#new-view" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="about-the-old-view">
 <h3><a class="toc-backref" href="#id10">About the “old” view</a><a class="headerlink" href="#about-the-old-view" title="Permalink to this headline">¶</a></h3>
-<p>At the moment, only one view is allowed in our <code class="docutils literal"><span class="pre">ApplicationXY</span></code>.
-It can be seen in the <code class="docutils literal"><span class="pre">__init__</span></code> method of
+<p>At the moment, only one view is allowed in our new <code class="docutils literal"><span class="pre">ApplicationXY</span></code>.
+That view is located in the <code class="docutils literal"><span class="pre">__init__</span></code> method of
 <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>:</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 96
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 95
+ 96
  97
  98
  99
@@ -387,8 +353,7 @@ It can be seen in the <code class="docutils literal"><span class="pre">__init__<
 105
 106
 107
-108
-109</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># VIEWS</span>
+108</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># VIEWS</span>
 <span class="c1"># set the views that can be selected in the view combobox</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;y(x)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;y(x)&#39;</span><span class="p">,</span>
@@ -414,11 +379,21 @@ in log-scale (base 10)</li>
 are done on the data before plotting them (see below),</li>
 <li><code class="docutils literal"><span class="pre">n</span></code> defines the number of series the view is plotting.</li>
 </ul>
+<p>In the line below, you can define the default number of view,
+i.e., the number of views that appear when you open the appliction.
+In case the new application would benefit from having multiple views
+shown at the same time (similar to the React or Stress Relaxation applications),
+this number can be increased (up to 4)</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>110
+111
+112</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># set multiviews</span>
+<span class="c1"># default view order in multiplot views, set nplots=1 for single view</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</td></tr></table></div>
 <p>The definition of the method <code class="docutils literal"><span class="pre">viewyx</span></code> is
 given by</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>138
-139
-140
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>140
 141
 142
 143
@@ -432,7 +407,9 @@ given by</p>
 151
 152
 153
-154</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">viewyx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+154
+155
+156</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">viewyx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 
 <span class="sd">    [description]</span>
@@ -462,7 +439,8 @@ we already have one of the views required from the <a class="reference internal"
 requested in the <a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section, we add a view to
 <code class="docutils literal"><span class="pre">self.views</span></code> dictionary. The new view is called “sqrt(y)”.
 In the <code class="docutils literal"><span class="pre">__init__</span></code> method of <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, add</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>111
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>110
+111
 112
 113
 114
@@ -472,8 +450,7 @@ In the <code class="docutils literal"><span class="pre">__init__</span></code> m
 118
 119
 120
-121
-122</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+121</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">,</span>
     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;sqrt(y) as a function of x&#39;</span><span class="p">,</span>
     <span class="n">x_label</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>
@@ -493,23 +470,23 @@ In the <code class="docutils literal"><span class="pre">__init__</span></code> m
 </div>
 <p>We also need to define the new method <code class="docutils literal"><span class="pre">view_sqrt_y</span></code>.
 In <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, add the definition</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>169
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
 170
 171
 172
 173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">view_sqrt_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+174</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">view_sqrt_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 
 <span class="sd">    [description]</span>
@@ -533,32 +510,11 @@ In <code class="docutils literal"><span class="pre">class</span> <span class="pr
 <p class="last">The new view is ready!</p>
 </div>
 </div>
-<div class="section" id="multi-views">
-<h3><a class="toc-backref" href="#id12">Multi-views</a><a class="headerlink" href="#multi-views" title="Permalink to this headline">¶</a></h3>
-<p>In case the new application would benefit from having multiple views
-shown at the same time (similar to the React or Stress Relaxation applications),
-we need to modify the following line in the <code class="docutils literal"><span class="pre">__init__</span></code> method of
-<code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code></p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>124
-125
-126
-127</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">#set multiviews</span>
-<span class="c1">#default view order in multiplot views, set only one item for single view</span>
-<span class="c1">#if more than one item, modify the &#39;nplots&#39; in the super().__init__ call</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;y(x)&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">]]</span>
-</pre></div>
-</td></tr></table></div>
-<p>In this case, the main view will be composed of two plots</p>
-<ul class="simple">
-<li><span class="math">\(x\)</span> vs <span class="math">\(y\)</span></li>
-<li><span class="math">\(x\)</span> vs <span class="math">\(\sqrt{y}\)</span></li>
-</ul>
-</div>
 </div>
 <div class="section" id="new-theory">
-<h2><a class="toc-backref" href="#id13">New theory</a><a class="headerlink" href="#new-theory" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id12">New theory</a><a class="headerlink" href="#new-theory" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="create-a-new-theory-file">
-<h3><a class="toc-backref" href="#id14">Create a new theory file</a><a class="headerlink" href="#create-a-new-theory-file" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id13">Create a new theory file</a><a class="headerlink" href="#create-a-new-theory-file" title="Permalink to this headline">¶</a></h3>
 <p>To create a new RepTate application, we will use the template
 theory file <code class="docutils literal"><span class="pre">TheoryTemplate.py</span></code> that can be found in RepTate
 <code class="docutils literal"><span class="pre">theories/</span></code> folder.</p>
@@ -569,11 +525,11 @@ relates to the theory purpose. According to the
 </li>
 <li><p class="first">Open <code class="docutils literal"><span class="pre">TheoryLine.py</span></code> with your favourite text editor and
 replace <strong>all</strong> the occurrences of “Template” by “Line”. For example,</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>46</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">TheoryTemplate</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>45</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">TheoryTemplate</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
 </pre></div>
 </td></tr></table></div>
 <p>becomes</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>46</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">TheoryLine</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>45</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">TheoryLine</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
 </pre></div>
 </td></tr></table></div>
 </li>
@@ -601,13 +557,17 @@ But first, we have to let ApplicationXY (developed just above) know about
 our new theory.</p>
 </div>
 <div class="section" id="edit-applicationxy-py">
-<h3><a class="toc-backref" href="#id15">Edit <code class="docutils literal"><span class="pre">ApplicationXY.py</span></code></a><a class="headerlink" href="#edit-applicationxy-py" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id14">Edit <code class="docutils literal"><span class="pre">ApplicationXY.py</span></code></a><a class="headerlink" href="#edit-applicationxy-py" title="Permalink to this headline">¶</a></h3>
 <p>We need to add a reference to this new theory into
 <code class="docutils literal"><span class="pre">ApplicationXY.py</span></code>, so it knows it exists. To do so:</p>
 <ol class="arabic">
 <li><p class="first">Insert the following line in the <code class="docutils literal"><span class="pre">__init__</span></code> method of
 <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, after the “<code class="docutils literal"><span class="pre">#</span> <span class="pre">IMPORT</span> <span class="pre">THEORIES</span></code>” comment</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>92</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="kn">from</span> <span class="nn">TheoryLine</span> <span class="kn">import</span> <span class="n">TheoryLine</span>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>89
+90
+91</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1"># IMPORT THEORIES</span>
+ <span class="c1"># Import theories specific to the Application e.g.:</span>
+ <span class="kn">from</span> <span class="nn">TheoryLine</span> <span class="kn">import</span> <span class="n">TheoryLine</span>
 </pre></div>
 </td></tr></table></div>
 <div class="admonition hint">
@@ -617,20 +577,20 @@ inside the <code class="docutils literal"><span class="pre">__init__</span></cod
 rather than in the very top of the file
 <code class="docutils literal"><span class="pre">ApplicationXY.py</span></code> as this prevents RepTate from loading
 all theories at start. Instead, theories are loaded only when an application
-using them is oppened.</p>
+using them is opened.</p>
 </div>
 </li>
 <li><p class="first">Insert the following line, also in the <code class="docutils literal"><span class="pre">__init__</span></code> method of
-<code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, after the “<code class="docutils literal"><span class="pre">#</span> <span class="pre">THEORIES</span></code>”
-comment to add an entry to the <code class="docutils literal"><span class="pre">theories</span></code> dictionary</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>144</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryLine</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryLine</span>
+<code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, after the <code class="docutils literal"><span class="pre">#</span> <span class="pre">THEORIES</span></code>, and before
+<code class="docutils literal"><span class="pre">self.add_common_theories()</span></code>, the line</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>134</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryLine</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryLine</span>
 </pre></div>
 </td></tr></table></div>
 </li>
 </ol>
 </div>
 <div class="section" id="edit-the-theory">
-<h3><a class="toc-backref" href="#id16">Edit the theory</a><a class="headerlink" href="#edit-the-theory" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id15">Edit the theory</a><a class="headerlink" href="#edit-the-theory" title="Permalink to this headline">¶</a></h3>
 <p>According to the <a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section, the theory should define a straight line
 <span class="math">\(y=ax+b\)</span>, hence there are two parameters. We will (i) write a short documentation of
 our new theory, (ii) define the parameters, and (iii) write the main function that
@@ -669,18 +629,18 @@ online RepTate documentation (<a class="reference external" href="http://reptate
 <li><p class="first">To define the theory parameters, <span class="math">\(a\)</span> and <span class="math">\(b\)</span>, we modify the
 <code class="docutils literal"><span class="pre">__init__</span></code> method of <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseTheoryLine</span></code> to have only these two
 parameter definitions</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>101
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 95
+ 96
+ 97
+ 98
+ 99
+100
+101
 102
 103
 104
 105
-106
-107
-108
-109
-110
-111
-112</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+106</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
      <span class="n">name</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span>
      <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
      <span class="n">description</span><span class="o">=</span><span class="s1">&#39;parameter a&#39;</span><span class="p">,</span>
@@ -706,15 +666,15 @@ be optimised but is not by default.</li>
 </ul>
 </li>
 <li><p class="first">Modify the method <code class="docutils literal"><span class="pre">calculate</span></code> of <code class="docutils literal"><span class="pre">class</span> <span class="pre">BaseTheoryLine</span></code></p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>145
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>143
+144
+145
 146
 147
 148
 149
 150
-151
-152
-153</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+151</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
  <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
  <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
  <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_rows</span>
@@ -748,7 +708,7 @@ Parameters are stored as strings, hence the <code class="docutils literal"><span
 </div>
 </div>
 <div class="section" id="new-icons">
-<span id="id1"></span><h2><a class="toc-backref" href="#id17">New Icons</a><a class="headerlink" href="#new-icons" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2><a class="toc-backref" href="#id16">New Icons</a><a class="headerlink" href="#new-icons" title="Permalink to this headline">¶</a></h2>
 <p>Application icons are stored in a compiled resource file
 <code class="docutils literal"><span class="pre">gui/MainWindow_rc.py</span></code>.
 In order to add a new icon to this resource file, that can later be used as

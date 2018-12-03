@@ -109,7 +109,6 @@ class BaseApplicationTemplate:
 
         # set multiviews
         # default view order in multiplot views, set nplots=1 for single view
-        # increase self.nplot_max for more plots
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):

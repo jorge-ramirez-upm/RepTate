@@ -570,7 +570,7 @@ class ParameterReactMix(QDialog):
         self.scroll.setWidget(inner)
 
     def list_all_open_react_theories(self):
-        """List all oppened React theories in RepTate, excluding the Mix theories"""
+        """List all opened React theories in RepTate, excluding the Mix theories"""
         self.opened_react_theories = []
         current_manager = self.parent_theory.parent_dataset.parent_application.parent_manager
 

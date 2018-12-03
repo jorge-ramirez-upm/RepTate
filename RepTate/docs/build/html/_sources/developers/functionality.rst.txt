@@ -99,16 +99,16 @@ RepTate's ``ApplicationManager``, so it knows it exists. To do so:
     e.g.
 
     .. code-block:: python
-       :lineno-start: 51
+       :lineno-start: 56
 
        from ApplicationXY import ApplicationXY
 
 #.  Insert the following line to add an entry to the ``ApplicationManager`` dictionary
 
     .. code-block:: python
-       :lineno-start: 104
+       :lineno-start: 115
 
-       self.available_applications[ApplicationXY.name] = ApplicationXY
+       self.available_applications[ApplicationXY.appname] = ApplicationXY
 
 .. note::
     Our new application is ready to be used in Command Line RepTate!
@@ -124,17 +124,15 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
 
 #.  Add a button in the main RepTate tool-bar by inserting the following lines in 
     the ``__init__`` method of ``gui/QApplicationManager.py``. 
-    The icon we choose is 
-    "icons8-scatter-plot.png" which is readily part of RepTate icons database.
-    To add a new custom icon to RepTate icon database, see 
-    the section :ref:`new_icons`.
+    The icon name (filename) should correspond to the ``appmane``, here ``XY.png``. See 
+    the section :ref:`new_icons` to create and use your onwn icon in RepTate.
 
     .. code-block:: python
-       :lineno-start: 100
+       :lineno-start: 142
 
         # ApplicationXY button
         #choose the button icon
-        icon = QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png')
+        icon = QIcon(':/Icon8/Images/new_icons/XY.png')
         tool_tip = 'XY'  # text that appear on hover
         self.actionXY = QAction(icon, tool_tip, self)
         #insert the new button before the "MWD" button
@@ -147,47 +145,22 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
     add
 
     .. code-block:: python
-       :lineno-start: 107
+       :lineno-start: 149
         
         #connect button
-        self.actionXY.triggered.connect(self.new_xy_window)
-
-#.  We need to define the method ``new_xy_window`` as it does not exist yet.
-    To define a new method, add at the end of ``class QApplicationManager``
-    following line:
-
-    .. code-block:: python
-       :lineno-start: 352
-
-        def new_xy_window(self):
-            """Open a new XY application window
-            
-            [description]
-            """
-            app_name = "XY" 
-            return self.Qopen_app(app_name,
-                                    ':/Icons/Images/new_icons/icons8-scatter-plot.png')
+        self.actionXY.triggered.connect(lambda: self.handle_new_app('XY'))
 
     .. warning::
-        The ``app_name`` must be identical to the ``name`` defined
-        in the file ``applications/ApplicationXY.py``, i.e., it should match
-
-        .. code-block:: python
-            :lineno-start: 46
-
-            class ApplicationXY(CmdBase):
-                """[summary]
-                
-                [description]
-                """
-                name = 'XY'
+        The application name (``appname``), defined at line 79 of ``ApplicationXY.py``, should then be "XY". 
+        Additionally, the icon name defining the logo of the new application should be named "XY.png",
+        see the definition of the ``handle_new_app`` method.
 
 .. note:: 
     Our new application is ready to be used in GUI RepTate!
 
 
-Default theories
-----------------
+Note on default theories
+------------------------
 
 By default, some "basic theories" are included with the application 
 (e.g. polynomial, power-law, exponential). To remove all these 
@@ -195,7 +168,7 @@ By default, some "basic theories" are included with the application
 in the ``__init__`` method of ``class BaseApplicationXY``
 
  .. code-block:: python
-    :lineno-start: 132
+    :lineno-start: 135
 
     self.add_common_theories()  # Add basic theories to the application
 
@@ -221,8 +194,9 @@ In ``class ApplicationXY``, before ``def __new__``, add
 In the ``__init__`` method of ``class BaseApplicationXY`` add
 
 .. code-block:: python
-    :lineno-start: 116
+    :lineno-start: 120
 
+    # set the type of files that ApplicationTemplate can open
     ftype = TXTColumnFile(
         name='XY data',  # name the type of data
         extension='xy',  # file extension
@@ -239,12 +213,12 @@ New view
 About the "old" view
 --------------------
 
-At the moment, only one view is allowed in our ``ApplicationXY``. 
-It can be seen in the ``__init__`` method of
+At the moment, only one view is allowed in our new ``ApplicationXY``. 
+That view is located in the ``__init__`` method of
 ``class BaseApplicationXY``:
 
 .. code-block:: python
-    :lineno-start: 96
+    :lineno-start: 95
 
     # VIEWS
     # set the views that can be selected in the view combobox
@@ -271,11 +245,24 @@ The important attributes of the view called "y(x)" are:
   are done on the data before plotting them (see below),
 - ``n`` defines the number of series the view is plotting.
 
+In the line below, you can define the default number of view, 
+i.e., the number of views that appear when you open the appliction.
+In case the new application would benefit from having multiple views
+shown at the same time (similar to the React or Stress Relaxation applications),
+this number can be increased (up to 4)
+
+.. code-block:: python
+    :lineno-start: 110
+    
+    # set multiviews
+    # default view order in multiplot views, set nplots=1 for single view
+    self.nplots = 1
+
 The definition of the method ``viewyx`` is 
 given by
 
 .. code-block:: python
-    :lineno-start: 138
+    :lineno-start: 140
     
     def viewyx(self, dt, file_parameters):
         """[summary]
@@ -309,7 +296,7 @@ requested in the :ref:`goals_section` section, we add a view to
 In the ``__init__`` method of ``class BaseApplicationXY``, add
 
 .. code-block:: python
-    :lineno-start: 111
+    :lineno-start: 110
 
     self.views['sqrt(y)'] = View(
         name='sqrt(y)',
@@ -331,7 +318,7 @@ We also need to define the new method ``view_sqrt_y``.
 In ``class BaseApplicationXY``, add the definition
 
 .. code-block:: python
-    :lineno-start: 169
+    :lineno-start: 158
     
     def view_sqrt_y(self, dt, file_parameters):
         """[summary]
@@ -354,28 +341,6 @@ In ``class BaseApplicationXY``, add the definition
 .. note::
     The new view is ready!
 
-Multi-views
------------
-
-In case the new application would benefit from having multiple views
-shown at the same time (similar to the React or Stress Relaxation applications),
-we need to modify the following line in the ``__init__`` method of
-``class BaseApplicationXY``
-
-.. code-block:: python
-    :lineno-start: 124
-    
-    #set multiviews
-    #default view order in multiplot views, set only one item for single view
-    #if more than one item, modify the 'nplots' in the super().__init__ call
-    self.multiviews = [self.views['y(x)'], self.views['sqrt(y)']]
-
-In this case, the main view will be composed of two plots
-
-- :math:`x` vs :math:`y`
-- :math:`x` vs :math:`\sqrt{y}`
-
-
 ----------
 New theory
 ----------
@@ -395,14 +360,14 @@ theory file ``TheoryTemplate.py`` that can be found in RepTate
     replace **all** the occurrences of "Template" by "Line". For example, 
     
     .. code-block:: python
-       :lineno-start: 46
+       :lineno-start: 45
 
         class TheoryTemplate(CmdBase):
     
     becomes
 
     .. code-block:: python
-       :lineno-start: 46
+       :lineno-start: 45
 
         class TheoryLine(CmdBase):
 
@@ -435,8 +400,10 @@ We need to add a reference to this new theory into
     ``class BaseApplicationXY``, after the "``# IMPORT THEORIES``" comment
 
     .. code-block:: python
-       :lineno-start: 92
-
+       :lineno-start: 89
+        
+        # IMPORT THEORIES
+        # Import theories specific to the Application e.g.:
         from TheoryLine import TheoryLine
 
     .. hint::
@@ -445,14 +412,14 @@ We need to add a reference to this new theory into
         rather than in the very top of the file
         ``ApplicationXY.py`` as this prevents RepTate from loading
         all theories at start. Instead, theories are loaded only when an application
-        using them is oppened.
+        using them is opened.
 
 #.  Insert the following line, also in the ``__init__`` method of
-    ``class BaseApplicationXY``, after the "``# THEORIES``" 
-    comment to add an entry to the ``theories`` dictionary
+    ``class BaseApplicationXY``, after the ``# THEORIES``, and before
+    ``self.add_common_theories()``, the line
 
     .. code-block:: python
-       :lineno-start: 144
+       :lineno-start: 134
 
         self.theories[TheoryLine.thname] = TheoryLine
 
@@ -489,7 +456,7 @@ calculates the theory values.
     parameter definitions
 
     .. code-block:: python
-       :lineno-start: 101
+       :lineno-start: 95
 
         self.parameters['a'] = Parameter(
             name='a',
@@ -518,7 +485,7 @@ calculates the theory values.
 #.  Modify the method ``calculate`` of ``class BaseTheoryLine``
 
     .. code-block:: python
-       :lineno-start: 145
+       :lineno-start: 143
 
         ft = f.data_table
         tt = self.tables[f.file_name_short]

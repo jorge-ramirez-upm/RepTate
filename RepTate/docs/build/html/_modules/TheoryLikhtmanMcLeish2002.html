@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TheoryLikhtmanMcLeish2002 &#8212; RepTate 0.9.3 20180719 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.3 20180719',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -23,7 +31,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head><body>
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,14 +53,12 @@
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -108,15 +115,20 @@
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
 <span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
 <span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QStyle</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QLineEdit</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QStyle</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QMessageBox</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QDoubleValidator</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QSize</span>
 
-<div class="viewcode-block" id="TheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">TheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../manual/Applications/LVE/Theory/theory.html#TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">TheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers</span>
-<span class="sd">    </span>
-<span class="sd">    [description]</span>
+<span class="sd">        </span>
+<span class="sd">    * **Parameters**</span>
+<span class="sd">       - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`.</span>
+<span class="sd">       - ``Ge`` : Entanglement modulus.</span>
+<span class="sd">       - ``Me`` : Entanglement molecular weight.</span>
+<span class="sd">       - ``c_nu`` : Constraint release parameter.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">thname</span> <span class="o">=</span> <span class="s2">&quot;Likhtman-McLeish&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Likhtman-McLeish theory for linear entangled polymers&quot;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="s2">&quot;Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343&quot;</span>
@@ -291,9 +303,23 @@
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">table</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">taue</span><span class="p">,</span>
                                <span class="n">Ge</span> <span class="o">*</span> <span class="n">table</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">table</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">taue</span><span class="p">,</span>
-                               <span class="n">Ge</span> <span class="o">*</span> <span class="n">table</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span></div></div>
+                               <span class="n">Ge</span> <span class="o">*</span> <span class="n">table</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span></div>
 
-
+<div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002.do_error"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002.do_error">[docs]</a>    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">do_error</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">taue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">Me</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Me&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">tab_data</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;File&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;tauR&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;tauD&#39;</span><span class="p">],]</span>
+        <span class="n">C1</span> <span class="o">=</span> <span class="mf">1.69</span>
+        <span class="n">C2</span> <span class="o">=</span> <span class="mf">4.17</span>
+        <span class="n">C3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.55</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theory_files</span><span class="p">():</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">])</span><span class="o">/</span><span class="n">Me</span>
+            <span class="n">tauR</span> <span class="o">=</span> <span class="n">taue</span><span class="o">*</span><span class="n">Z</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">tauD</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">taue</span><span class="o">*</span><span class="n">Z</span><span class="o">**</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">C1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span><span class="o">+</span><span class="n">C2</span><span class="o">/</span><span class="n">Z</span><span class="o">+</span><span class="n">C3</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span>
+            <span class="n">tab_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span><span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%18.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">Z</span><span class="p">,</span>  <span class="s1">&#39;</span><span class="si">%18.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tauR</span><span class="p">,</span>  <span class="s1">&#39;</span><span class="si">%    18.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tauD</span> <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">tab_data</span><span class="p">)</span></div></div>
+                               
 <div class="viewcode-block" id="CLTheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.CLTheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">BaseTheoryLikhtmanMcLeish2002</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
@@ -339,46 +365,50 @@
         <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dvalidator</span> <span class="o">=</span> <span class="n">QDoubleValidator</span><span class="p">()</span>  <span class="c1">#prevent letters etc.</span>
+        <span class="n">dvalidator</span><span class="o">.</span><span class="n">setBottom</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">#minimum allowed value</span>
+        <span class="n">dvalidator</span><span class="o">.</span><span class="n">setTop</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1">#maximum allowed value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">dvalidator</span><span class="p">)</span>
         <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calculateStuff</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
-            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-visible.png&#39;</span><span class="p">),</span> <span class="s1">&#39;Calculate Tube Theory stuff&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">thToolsLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
         
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction_change</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculateStuff</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_tube_theory</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">textEdited</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_txtrho_edited</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">linkMeGeaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s1">&#39;linkMeGe&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">linkMeGeaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s1">&#39;linkMeGe&#39;</span><span class="p">,</span> <span class="n">checked</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Ge&#39;</span><span class="p">]</span>
             <span class="n">p</span><span class="o">.</span><span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">const</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setDisabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Ge&#39;</span><span class="p">]</span>
             <span class="n">p</span><span class="o">.</span><span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.calculate_tube_theory"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.calculate_tube_theory">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_tube_theory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;h3&gt;Tube theory results&lt;/h3&gt;&#39;</span><span class="p">)</span>
-        <span class="n">CC1</span> <span class="o">=</span> <span class="mf">1.69</span>
-        <span class="n">CC2</span> <span class="o">=</span> <span class="mf">4.17</span>
-        <span class="n">CC3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.55</span>
-        <span class="n">taue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">Me</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Me&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="c1"># table=&#39;&#39;&#39;&lt;table border=&quot;1&quot; width=&quot;100%&quot;&gt;&#39;&#39;&#39;</span>
-        <span class="c1"># table+=&#39;&#39;&#39;&lt;tr&gt;&lt;th&gt;File&lt;/th&gt;&lt;th&gt;Z&lt;/th&gt;&lt;th&gt;&amp;tau;&lt;sub&gt;R&lt;/sub&gt;&lt;/th&gt;&lt;th&gt;&amp;tau;&lt;sub&gt;D&lt;/sub&gt;&lt;/th&gt;&lt;/tr&gt;&#39;&#39;&#39;</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;File&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;&amp;tau;&lt;sub&gt;R&lt;/sub&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;&amp;tau;&lt;sub&gt;D&lt;/sub&gt;&#39;</span><span class="p">],</span> <span class="p">]</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
-            <span class="n">Mw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;Mw&quot;</span><span class="p">])</span>
-            <span class="n">Z</span> <span class="o">=</span> <span class="n">Mw</span> <span class="o">/</span> <span class="n">Me</span>
-            <span class="n">tR</span> <span class="o">=</span> <span class="n">taue</span> <span class="o">*</span> <span class="n">Z</span><span class="o">*</span><span class="n">Z</span>
-            <span class="n">tD</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">taue</span> <span class="o">*</span> <span class="n">Z</span><span class="o">**</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">CC1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">+</span> <span class="n">CC2</span> <span class="o">/</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">CC3</span> <span class="o">/</span> <span class="n">Z</span><span class="o">**</span><span class="mf">1.5</span><span class="p">)</span> 
-            <span class="c1"># table+= &#39;&#39;&#39;&lt;tr&gt;&lt;td&gt;%.10s&lt;/td&gt;&lt;td&gt;%6.1f&lt;/td&gt;&lt;td&gt;%8.4g&lt;/td&gt;&lt;td&gt;%8.4g&lt;/td&gt;&lt;/tr&gt;&#39;&#39;&#39;% (f.file_name_short, Z, tR, tD)</span>
-            <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12.1g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">Z</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tR</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%-12.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tD</span><span class="p">])</span>
-        <span class="c1"># table+=&#39;&#39;&#39;&lt;/table&gt;&lt;br&gt;&#39;&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div></div>
-            
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.handle_txtrho_edited"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.handle_txtrho_edited">[docs]</a>    <span class="k">def</span> <span class="nf">handle_txtrho_edited</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="s1">&#39;Could not convert &quot;</span><span class="si">%s</span><span class="s1">&quot; to float&#39;</span> <span class="o">%</span> <span class="n">new_text</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s1">&#39;rho0&#39;</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.set_extra_data"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.set_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Restore the check state of button and text value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">checked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;linkMeGe&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">checked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction_change</span><span class="p">(</span><span class="n">checked</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -401,7 +431,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>
 </html>
