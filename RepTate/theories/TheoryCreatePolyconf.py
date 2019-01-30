@@ -715,7 +715,7 @@ FunH
         e.setValidator(validator)
         e.setText("%s" % default_val)
         e.setToolTip(tip)
-        e.setReadOnly(editable)
+        e.setReadOnly(not editable)
         label = QLabel(name)
         label.setToolTip(tip)
         layout.addRow(label, e)
