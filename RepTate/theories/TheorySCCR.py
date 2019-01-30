@@ -64,9 +64,13 @@ class FlowMode(Enum):
     Parameters can be:
         - shear: Shear flow
         - uext: Uniaxial extension flow
+        - bext: Biaxial extension
+        - pext: Planar extension
     """
     shear = 0
     uext = 1
+    bext = 2
+    pext = 3
 
 class TheorySCCR(CmdBase):
     """Full SCCR theory for the Non-linear transient flow of linear entangled polymers.
@@ -193,8 +197,12 @@ class BaseTheorySCCR:
             f = self.theory_files()[0]
             if f.file_type.extension == 'shear':
                 self.flow_mode = FlowMode.shear
-            else:
+            elif f.file_type.extension == 'uext':
                 self.flow_mode = FlowMode.uext
+            elif f.file_type.extension == 'bext':
+                self.flow_mode = FlowMode.bext
+            else:
+                self.flow_mode = FlowMode.pext
         except Exception as e:
             print("in SCCR init:", e)
             self.flow_mode = FlowMode.shear  #default mode: shear
@@ -306,7 +314,7 @@ class BaseTheorySCCR:
     def set_yeq(self):
         aux = self.N/self.Z/2.0
         ind=0
-        for k in range(3):
+        for k in range(4):
             for i in range(self.N+1):
                 mm = max(self.N-i,i)
                 for j in range(mm,self.N+1):
@@ -381,7 +389,7 @@ class BaseTheorySCCR:
         else:
             self.SIZE = (self.N+1)*(self.N+3)//4
         
-        self.yeq = np.zeros(3*self.SIZE) # Integer division (NEED TO STORE 3 COMPONENTS f(0)=fxx f(1)=fxy f(2)=fyy)
+        self.yeq = np.zeros(4*self.SIZE) # Integer division (NEED TO STORE 4 COMPONENTS f(0)=fxx f(1)=fxy f(2)=fyy f(3)=fzz)
         self.beta_rcr=self.Set_beta_rcr(self.Z,self.cnu)
         self.prevt=0
         self.prevtlog=1e-12
@@ -390,8 +398,9 @@ class BaseTheorySCCR:
         self.relerr = 1.0e-3
 
         # send value of N, Z, and SIZE to C code
-        is_shear = c_int(self.flow_mode == FlowMode.shear)
-        sch.set_static_int(c_int(self.N), c_int(self.Z), c_int(self.SIZE), is_shear)
+        #flow_type = c_int(int(self.flow_mode))
+        #is_shear = c_int(self.flow_mode == FlowMode.shear)
+        sch.set_static_int(c_int(self.N), c_int(self.Z), c_int(self.SIZE), self.flow_mode.value)
         # initialise gdot, prevt, dt, beta_rcr, and cnu in C code
         sch.set_static_double(c_double(gdot), c_double(self.prevt), c_double(self.dt), c_double(self.beta_rcr), c_double(self.cnu))
 
@@ -418,28 +427,29 @@ class BaseTheorySCCR:
         Fint=np.zeros(self.N+1)
         t = t[1:]
         sigma = sig[0][1:] 
-        if self.flow_mode == FlowMode.shear:
-            tmp = self.Z * self.Z / 2.0
-            for i in range(len(t)):
-                # Stress from tube theory
-                Fint = [sigma[i][self.ind(1, j, j)] for j in range(self.N + 1)]
-                stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z #*3.0/self.N
-                # Fast modes inside the tube
-                stressRouse = 0
+        
+        tmp = self.Z * self.Z / 2.0
+        for i in range(len(t)):
+            # sigma_xy from tube theory
+            Fint = [sigma[i][self.ind(1, j, j)] for j in range(self.N + 1)]
+            stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z #*3.0/self.N
+            # Fast modes inside the tube
+            stressRouse = 0
+            if (self.flow_mode == FlowMode.shear):
                 for j in range(self.Z, self.NMAXROUSE*self.Z + 1):
                     jsq = j * j
                     # stressRouse+=self.Z*self.Z/2.0/j/j*(1-np.exp(-2.0*j*j*t[i]/self.Z/self.Z))/self.Z*gdot
                     stressRouse += (1 - exp(-jsq * t[i] / tmp)) / jsq 
-                tt.data[i, 1] = (stressTube * 4.0 / 5.0 + stressRouse * tmp / self.Z * gdot) * Ge
-        else:
-            # extensional flow
-            Zsq = self.Z * self.Z
-            for i in range(len(t)):
-                # Stress from tube theory
-                Fint = [(sigma[i][self.ind(0, j, j)] - sigma[i][self.ind(2, j, j)]) for j in range(self.N + 1)]
-                stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
-                tt.data[i, 1] = stressTube * 4.0 / 5.0 * Ge
-
+            tt.data[i, 1] = (stressTube * 4.0 / 5.0 + stressRouse * tmp / self.Z * gdot) * Ge
+            # N1 from tube theory
+            Fint = [(sigma[i][self.ind(0, j, j)] - sigma[i][self.ind(2, j, j)]) for j in range(self.N + 1)]
+            stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
+            tt.data[i, 2] = stressTube * 4.0 / 5.0 * Ge
+            # N2 from tube theory
+            Fint = [(sigma[i][self.ind(2, j, j)] - sigma[i][self.ind(3, j, j)]) for j in range(self.N + 1)]
+            stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
+            tt.data[i, 3] = stressTube * 4.0 / 5.0 * Ge
+            
 class CLTheorySCCR(BaseTheorySCCR, Theory):
     """[summary]
     
@@ -487,10 +497,21 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
         self.extensional_flow_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
             "Extensional Flow")
+        self.biaxial_flow_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icon-bext.png'),
+            "Biaxial Extension Flow")
+        self.planar_flow_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icon-pext.png'),
+            "Planar Extension Flow")
+            
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)
-        else:
+        elif self.flow_mode == FlowMode.uext:
             self.tbutflow.setDefaultAction(self.extensional_flow_action)
+        elif self.flow_mode == FlowMode.bext:
+            self.tbutflow.setDefaultAction(self.biaxial_flow_action)
+        else:
+            self.tbutflow.setDefaultAction(self.planar_flow_action)
         self.tbutflow.setMenu(menu)
         tb.addWidget(self.tbutflow)
 
@@ -514,6 +535,10 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
             self.select_shear_flow)
         connection_id = self.extensional_flow_action.triggered.connect(
             self.select_extensional_flow)                     
+        connection_id = self.biaxial_flow_action.triggered.connect(
+            self.select_biaxial_flow)
+        connection_id = self.planar_flow_action.triggered.connect(
+            self.select_planar_flow)
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged)
         connection_id = self.recommendedN.triggered.connect(
@@ -526,6 +551,14 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
     def select_extensional_flow(self):
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
+    def select_biaxial_flow(self):
+        self.flow_mode = FlowMode.bext
+        self.tbutflow.setDefaultAction(self.biaxial_flow_action)
+
+    def select_planar_flow(self):
+        self.flow_mode = FlowMode.pext
+        self.tbutflow.setDefaultAction(self.planar_flow_action)
 
     def handle_recommendedN(self, checked):
         self.spinbox.setEnabled(not checked)
