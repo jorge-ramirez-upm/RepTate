@@ -41,11 +41,11 @@
 static double *yeq;
 static double gdot, prevt, dt, beta_rcr, cnu;
 static const double Rs = 2.0;
-static int Z, N, SIZE, flow_type;
+static int Z, N, SIZE, shear_flow;
 static int yeq_allocated = 0;
 
 // functions exposed to Python
-void set_static_int(int N_, int Z_, int SIZE_, int flow_type_);
+void set_static_int(int N_, int Z_, int SIZE_, int shear_flow_);
 void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_);
 void set_yeq_static_in_C(double *yeq_in, int n);
 void sccr_dy(double *y, double *dy, double t);
@@ -56,11 +56,11 @@ static double d1(double s);
 static double d(int i, int j);
 
 
-void set_static_int(int N_, int Z_, int SIZE_, int flow_type_){
+void set_static_int(int N_, int Z_, int SIZE_, int shear_flow_){
     N = N_;
     Z = Z_;
     SIZE = SIZE_;
-    flow_type = flow_type_;
+    shear_flow = shear_flow_;
 }
 
 void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_){
@@ -83,7 +83,7 @@ void set_yeq_static_in_C(double *yeq_in, int n)
     }
     else
     {
-        // resize array to (4*SIZE)
+        // resize array to (3*SIZE)
         double *tmp;
         tmp = realloc(yeq, n * sizeof(double)); 
         if (tmp != NULL){
@@ -182,7 +182,7 @@ void sccr_dy(double *y, double *dy, double t)
     double zstar, lam;
     double tmp, N_Z;
     int i, j, k, mm, im;
-    int fkij, fkip1jp1, fkim1jm1, fkip1j, fkim1j, fkijp1, fkijm1, f0ij, f1ij, f2ij, f3ij;
+    int fkij, fkip1jp1, fkim1jm1, fkip1j, fkim1j, fkijp1, fkijm1, f0ij, f1ij, f2ij;
     
     N_Z = (double) N / Z;
     if (t>prevt) {
@@ -195,12 +195,12 @@ void sccr_dy(double *y, double *dy, double t)
     zstar=0.0;
     normf = (double *) malloc((N + 1) * sizeof(double));
     for (j=0; j<=N; ++j) {
-        normf[j]=y[ind(0,j,j)] + y[ind(2,j,j)] + y[ind(3,j,j)];
+        normf[j]=y[ind(0,j,j)] + 2*y[ind(2,j,j)];
         zstar=zstar+sqrt(normf[j]);
     }
     zstar=zstar*((double)Z/N);
 
-    for (k=0;k<4;++k) {
+    for (k=0;k<3;++k) {
         for (i=1;i<N;++i) {
             mm = MAX(N-i,i);
             for (j=mm;j<N;++j) {
@@ -238,13 +238,13 @@ void sccr_dy(double *y, double *dy, double t)
     } 
     
     // Get partially updated y to calculate retraction rate
-    yn = (double *) malloc((4 * SIZE) * sizeof(double));
-    for (i=0; i < 4 * SIZE; ++i)
+    yn = (double *) malloc((3 * SIZE) * sizeof(double));
+    for (i=0; i < 3 * SIZE; ++i)
         yn[i] = y[i] + dy[i]*dt;
 
     normfn = (double *) malloc((N + 1) * sizeof(double));
     for (j=0; j<=N; ++j)
-        normfn[j]=yn[ind(0,j,j)] + yn[ind(2,j,j)] + yn[ind(3,j,j)];  
+        normfn[j]=yn[ind(0,j,j)] + 2*yn[ind(2,j,j)];  
 
     lam=0.0;
     if (dt>0) {
@@ -252,7 +252,7 @@ void sccr_dy(double *y, double *dy, double t)
             lam-=(normfn[i]-normf[i])/(2.0*N)/dt/sqrt(normf[i]);
     }
     
-    for (k=0;k<4;++k) {
+    for (k=0;k<3;++k) {
         for (i=1;i<N;++i) {
             mm = MAX(N-i,i);
             for (j=mm;j<N;++j) {
@@ -279,7 +279,7 @@ void sccr_dy(double *y, double *dy, double t)
         }
     }
 
-    if (flow_type == 0)
+    if (shear_flow == 1)
     { // Shear Flow
         for (i = 1; i < N; ++i) 
         {
@@ -294,49 +294,18 @@ void sccr_dy(double *y, double *dy, double t)
             }
         }
     }
-    else if (flow_type == 1)
+    else
     { // Uniaxial extension Flow
         for (i = 1; i < N; ++i)
         {
             mm = MAX(N - i, i);
             for (j = mm; j < N; ++j) 
             {
-                f0ij = ind(0, i, j);                
+                f0ij = ind(0, i, j);
+                f1ij = ind(1, i, j);
                 f2ij = ind(2, i, j);
-                f3ij = ind(3, i, j);                
                 dy[f0ij] += 2*gdot * y[f0ij];
                 dy[f2ij] -= gdot * y[f2ij];
-                dy[f3ij] -= gdot * y[f3ij];
-            }
-        }
-    }
-    else if (flow_type == 2)
-    { // Biaxial extension Flow
-        for (i = 1; i < N; ++i)
-        {
-            mm = MAX(N - i, i);
-            for (j = mm; j < N; ++j) 
-            {
-                f0ij = ind(0, i, j);
-                f2ij = ind(2, i, j);
-                f3ij = ind(3, i, j);
-                dy[f0ij] += 2*gdot * y[f0ij];
-                dy[f2ij] += 2*gdot * y[f2ij];
-                dy[f3ij] -= 4*gdot * y[f3ij];
-            }
-        }
-    }    
-    else if (flow_type == 3)
-    { // Planar extension Flow
-        for (i = 1; i < N; ++i)
-        {
-            mm = MAX(N - i, i);
-            for (j = mm; j < N; ++j) 
-            {
-                f0ij = ind(0, i, j);
-                f3ij = ind(3, i, j);
-                dy[f0ij] += 2*gdot * y[f0ij];
-                dy[f3ij] -= 2*gdot * y[f3ij];
             }
         }
     }

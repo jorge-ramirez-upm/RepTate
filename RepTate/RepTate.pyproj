@@ -102,7 +102,6 @@
     <Compile Include="theories\TheoryBasic.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="theories\TheoryDieneCSTR.py" />
     <Compile Include="theories\TheoryRDPLVE.py" />
     <Compile Include="theories\TheoryRolieDoublePoly.py" />
     <Compile Include="theories\TheoryBobLVE.py" />
