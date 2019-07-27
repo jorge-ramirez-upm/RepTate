@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dataset Style</string>
+   <string>Plot Style</string>
   </property>
   <property name="windowIcon">
    <iconset resource="Reptate.qrc">
@@ -1828,7 +1828,7 @@
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Axis</string>
+       <string>Axes</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_20">
        <item>
@@ -2008,7 +2008,7 @@
             <item row="3" column="0">
              <widget class="QCheckBox" name="label_size_auto_cb">
               <property name="text">
-               <string>Label Size Autoscale</string>
+               <string>Autoscale Label Size</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -2133,7 +2133,7 @@
             <item row="0" column="0">
              <widget class="QCheckBox" name="tick_label_size_auto_cb">
               <property name="text">
-               <string>Tick Label Size Autoscale</string>
+               <string>Autoscale Tick Label Size</string>
               </property>
               <property name="checked">
                <bool>true</bool>

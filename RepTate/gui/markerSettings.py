@@ -1003,7 +1003,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dataset Style"))
+        Dialog.setWindowTitle(_translate("Dialog", "Plot Style"))
         self.groupBox.setTitle(_translate("Dialog", "Symbol"))
         self.groupBox_3.setTitle(_translate("Dialog", "Type"))
         self.cbSymbolType.setToolTip(_translate("Dialog", "Empty symbol"))
@@ -1159,7 +1159,7 @@ class Ui_Dialog(object):
         self.fontstyleComboBox_ax.setItemText(0, _translate("Dialog", "normal"))
         self.fontstyleComboBox_ax.setItemText(1, _translate("Dialog", "italic"))
         self.fontstyleComboBox_ax.setItemText(2, _translate("Dialog", "oblique"))
-        self.label_size_auto_cb.setText(_translate("Dialog", "Label Size Autoscale"))
+        self.label_size_auto_cb.setText(_translate("Dialog", "Autoscale Label Size"))
         self.fontfamilyComboBox_ax.setItemText(0, _translate("Dialog", "serif"))
         self.fontfamilyComboBox_ax.setItemText(1, _translate("Dialog", "sans-serif"))
         self.fontfamilyComboBox_ax.setItemText(2, _translate("Dialog", "cursive"))
@@ -1170,9 +1170,9 @@ class Ui_Dialog(object):
         self.label_20.setText(_translate("Dialog", "Axes Thickness"))
         self.grid_cb.setText(_translate("Dialog", "Grid"))
         self.label_9.setText(_translate("Dialog", "Color"))
-        self.tick_label_size_auto_cb.setText(_translate("Dialog", "Tick Label Size Autoscale"))
+        self.tick_label_size_auto_cb.setText(_translate("Dialog", "Autoscale Tick Label Size"))
         self.reset_all_pb.setText(_translate("Dialog", "Default"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "Axis"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "Axes"))
         self.pushOK.setText(_translate("Dialog", "OK"))
         self.pushCancel.setText(_translate("Dialog", "Cancel"))
         self.pushApply.setText(_translate("Dialog", "Apply"))
