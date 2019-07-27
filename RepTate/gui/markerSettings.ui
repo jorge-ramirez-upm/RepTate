@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>483</height>
+    <width>451</width>
+    <height>582</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1826,7 +1826,348 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Axis</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_20">
+       <item>
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>Labels</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <item>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="1">
+             <widget class="QLabel" name="labelFontColor_label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QToolButton" name="pickFontColor_label">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_22">
+              <property name="text">
+               <string>Font Weight</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="fontweightComboBox_ax">
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <item>
+               <property name="text">
+                <string>ultralight</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>light</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>normal</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>regular</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>book</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>medium</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>roman</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>semibold</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>demibold</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>demi</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>bold</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>heavy</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>extra bold</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>black</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_25">
+              <property name="text">
+               <string>Font Family</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QSpinBox" name="fontsizeSpinBox_ax">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_23">
+              <property name="text">
+               <string>Font Style</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Font Color</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="fontstyleComboBox_ax">
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <item>
+               <property name="text">
+                <string>normal</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>italic</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>oblique</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="label_size_auto_cb">
+              <property name="text">
+               <string>Label Size Autoscale</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="fontfamilyComboBox_ax">
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <item>
+               <property name="text">
+                <string>serif</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>sans-serif</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursive</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>fantasy</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>monospace</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string>Axes</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <item>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="2" column="2">
+             <widget class="QToolButton" name="pickFontColor_ax">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>Axes Thickness</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="grid_cb">
+              <property name="text">
+               <string>Grid</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Color</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QDoubleSpinBox" name="axis_thickness_cb">
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="singleStep">
+               <double>0.500000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="labelFontColor_ax">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="tick_label_size_cb">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="tick_label_size_auto_cb">
+              <property name="text">
+               <string>Tick Label Size Autoscale</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="reset_all_pb">
+         <property name="text">
+          <string>Default</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -2528,6 +2869,38 @@
     <hint type="destinationlabel">
      <x>224</x>
      <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_size_auto_cb</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>fontsizeSpinBox_ax</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tick_label_size_auto_cb</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>tick_label_size_cb</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>353</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>353</y>
     </hint>
    </hints>
   </connection>

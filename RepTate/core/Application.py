@@ -708,36 +708,66 @@ class Application(CmdBase):
         """
         for nx in range(self.nplots):
             view = self.multiviews[nx]
+            ax = self.axarr[nx]
             if (view.log_x):
-                self.axarr[nx].set_xscale("log")
-                #self.axarr[nx].xaxis.set_minor_locator(LogLocator(subs=range(10)))
+                ax.set_xscale("log")
+                #ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
                 locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                self.axarr[nx].xaxis.set_major_locator(locmaj)
+                ax.xaxis.set_major_locator(locmaj)
                 locmin = LogLocator(
                     base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                self.axarr[nx].xaxis.set_minor_locator(locmin)
-                self.axarr[nx].xaxis.set_minor_formatter(NullFormatter())
+                ax.xaxis.set_minor_locator(locmin)
+                ax.xaxis.set_minor_formatter(NullFormatter())
             else:
-                self.axarr[nx].set_xscale("linear")
-                self.axarr[nx].xaxis.set_minor_locator(AutoMinorLocator())
+                ax.set_xscale("linear")
+                ax.xaxis.set_minor_locator(AutoMinorLocator())
             if (view.log_y):
-                self.axarr[nx].set_yscale("log")
-                #self.axarr[nx].yaxis.set_minor_locator(LogLocator(subs=range(10)))
+                ax.set_yscale("log")
+                #ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
                 locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                self.axarr[nx].yaxis.set_major_locator(locmaj)
+                ax.yaxis.set_major_locator(locmaj)
                 locmin = LogLocator(
                     base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                self.axarr[nx].yaxis.set_minor_locator(locmin)
-                self.axarr[nx].yaxis.set_minor_formatter(NullFormatter())
+                ax.yaxis.set_minor_locator(locmin)
+                ax.yaxis.set_minor_formatter(NullFormatter())
             else:
-                self.axarr[nx].set_yscale("linear")
-                self.axarr[nx].yaxis.set_minor_locator(AutoMinorLocator())
+                ax.set_yscale("linear")
+                ax.yaxis.set_minor_locator(AutoMinorLocator())
 
-            self.axarr[nx].set_xlabel(view.x_label + ' [' + view.x_units + ']')
-            self.axarr[nx].set_ylabel(view.y_label + ' [' + view.y_units + ']')
+            ax.set_xlabel(view.x_label + ' [' + view.x_units + ']')
+            ax.set_ylabel(view.y_label + ' [' + view.y_units + ']')
+            
+            if not self.ax_opts['label_size_auto']:
+                ax.xaxis.label.set_size(self.ax_opts['fontsize'])
+                ax.yaxis.label.set_size(self.ax_opts['fontsize'])
 
-            # self.axarr[nx].plot(self.xData,self.yData)
+            ax.xaxis.label.set_color(self.ax_opts['color_label'])
+            ax.yaxis.label.set_color(self.ax_opts['color_label'])
+            
+            ax.xaxis.label.set_style(self.ax_opts['style'])
+            ax.yaxis.label.set_style(self.ax_opts['style'])
 
+            ax.xaxis.label.set_family(self.ax_opts['family'])
+            ax.yaxis.label.set_family(self.ax_opts['family'])
+
+            ax.xaxis.label.set_weight(self.ax_opts['fontweight'])
+            ax.yaxis.label.set_weight(self.ax_opts['fontweight'])
+
+            ax_thick = self.ax_opts['axis_thickness']
+            ax.tick_params(which='major', width=1.00*ax_thick, length=5*ax_thick)
+            ax.tick_params(which='minor', width=0.75*ax_thick, length=2.5*ax_thick)
+            
+            if not self.ax_opts['tick_label_size_auto']:
+                ax.tick_params(which='major', labelsize=self.ax_opts['tick_label_size'])
+                ax.tick_params(which='minor', labelsize=self.ax_opts['tick_label_size']*.8)
+
+            ax.grid(self.ax_opts['grid'])
+
+            for pos in ['top', 'bottom', 'left', 'right']:
+                ax.spines[pos].set_linewidth(ax_thick)
+                ax.spines[pos].set_color(self.ax_opts['color_ax'])
+            ax.tick_params(which='both', color=self.ax_opts['color_ax'], labelcolor=self.ax_opts['color_ax'])
+            
             if autoscale:
                 self.axarr[nx].relim(True)
                 self.axarr[nx].autoscale(True)

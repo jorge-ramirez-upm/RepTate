@@ -135,11 +135,6 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
 
         self.color = None
 
-    def handle_pickFontColor(self):
-        self.color = self.showColorDialog()
-        if self.color:
-            self.labelFontColor.setStyleSheet("background: %s"%self.color.name())
-
     def showColorDialog(self):
         """Show the color picker and return the picked QtColor or `None`"""
         wtitle = "Select color for the annotation \"%s\""%self.annotation.get_text()
@@ -487,7 +482,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.color2 = None
         self.color_th = None
         self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':12, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
-        self.annotation_opts = {'alpha':1.0, 'color': QColor(0, 0, 0).getRgbF(), 'family':'sans-serif', 'horizontalalignment':'center', 'rotation': 0.0, 'fontsize':16, 'style': 'normal',  'verticalalignment': 'center', 'fontweight':'normal'}
+        self.annotation_opts = {'alpha': 1.0, 'color': QColor(0, 0, 0).getRgbF(), 'family':'sans-serif', 'horizontalalignment':'center', 'rotation': 0.0, 'fontsize':16, 'style': 'normal',  'verticalalignment': 'center', 'fontweight':'normal'}
+        self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
+        self.ax_opts = self.ax_opt_defaults.copy()
+
         self.legend_draggable = True
         self.default_legend_labels = True
         self.legend_labels = ""
@@ -500,6 +498,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.dialog.ui.pickFaceColor.clicked.connect(self.handle_pickFaceColor)
         connection_id = self.dialog.ui.pickEdgeColor.clicked.connect(self.handle_pickEdgeColor)
         connection_id = self.dialog.ui.pickFontColor.clicked.connect(self.handle_pickFontColor)
+        connection_id = self.dialog.ui.pickFontColor_ax.clicked.connect(self.handle_pickFontColor_ax)
+        connection_id = self.dialog.ui.pickFontColor_label.clicked.connect(self.handle_pickFontColor_label)
+        connection_id = self.dialog.ui.reset_all_pb.clicked.connect(self.handle_reset_all_pb)
         connection_id = self.dialog.ui.rbEmpty.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
         connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
@@ -845,6 +846,28 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelFontColor.setStyleSheet("background: %s"%color.name())
             self.annotation_opts['color']=color.getRgbF()            
             
+    def handle_pickFontColor_ax(self):
+        """Call the color picker and save the selected legend face color in 
+        RGB format in the dataset legend info.
+        """
+        color = self.showColorDialog()
+        if color:
+            self.dialog.ui.labelFontColor_ax.setStyleSheet("background: %s"%color.name())
+            self.ax_opts['color_ax'] = color.getRgbF()            
+            
+    def handle_pickFontColor_label(self):
+        """Call the color picker and save the selected legend face color in 
+        RGB format in the dataset legend info.
+        """
+        color = self.showColorDialog()
+        if color:
+            self.dialog.ui.labelFontColor_label.setStyleSheet("background: %s"%color.name())
+            self.ax_opts['color_label'] = color.getRgbF()
+          
+    def handle_reset_all_pb(self):
+        self.ax_opts = self.ax_opt_defaults.copy()
+        self.set_axis_marker_settings()
+
     def showColorDialog(self):
         """Show the color picker and return the picked QtColor or `None`
         
@@ -989,13 +1012,29 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.dialog.ui.fontsizeannotationSpinBox.setValue(self.annotation_opts['fontsize'])
         self.dialog.ui.framealphaannotationSpinBox.setValue(self.annotation_opts['alpha'])
         self.dialog.ui.fontfamilyComboBox.setCurrentText(self.annotation_opts['family']) 
-
+        #Axis stuff
+        self.set_axis_marker_settings()
 
         success = self.dialog.exec_() #this blocks the rest of the app as opposed to .show()
         if success == 1:
             self.handle_apply_button_pressed()
         else:
             ds.do_plot()
+
+    def set_axis_marker_settings(self):
+        col = QColor(self.ax_opts['color_label'][0]*255, self.ax_opts['color_label'][1]*255, self.ax_opts['color_label'][2]*255)
+        self.dialog.ui.labelFontColor_label.setStyleSheet("background: %s"%col.name())
+        col = QColor(self.ax_opts['color_ax'][0]*255, self.ax_opts['color_ax'][1]*255, self.ax_opts['color_ax'][2]*255)
+        self.dialog.ui.labelFontColor_ax.setStyleSheet("background: %s"%col.name())
+        self.dialog.ui.fontweightComboBox_ax.setCurrentText(self.ax_opts['fontweight'])
+        self.dialog.ui.fontstyleComboBox_ax.setCurrentText(self.ax_opts['style'])
+        self.dialog.ui.fontsizeSpinBox_ax.setValue(self.ax_opts['fontsize'])
+        self.dialog.ui.fontfamilyComboBox_ax.setCurrentText(self.ax_opts['family'])
+        self.dialog.ui.axis_thickness_cb.setValue(self.ax_opts['axis_thickness'])
+        self.dialog.ui.tick_label_size_cb.setValue(self.ax_opts['tick_label_size'])
+        self.dialog.ui.grid_cb.setChecked(bool(self.ax_opts['grid']))
+        self.dialog.ui.label_size_auto_cb.setChecked(bool(self.ax_opts['label_size_auto']))
+        self.dialog.ui.tick_label_size_auto_cb.setChecked(bool(self.ax_opts['tick_label_size_auto']))
 
     def handle_apply_button_pressed(self):
         """Apply the selected marker properties to all the files in the current dataset
@@ -1116,6 +1155,17 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.annotation_opts['verticalalignment'] = self.dialog.ui.vacomboBox.currentText()
             self.annotation_opts['fontweight'] = self.dialog.ui.fontweightComboBox.currentText()
 
+            #Axis stuff
+            self.ax_opts['family'] = self.dialog.ui.fontfamilyComboBox_ax.currentText()
+            self.ax_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox_ax.value()
+            self.ax_opts['style'] = self.dialog.ui.fontstyleComboBox_ax.currentText()
+            self.ax_opts['fontweight'] = self.dialog.ui.fontweightComboBox_ax.currentText()
+            self.ax_opts['axis_thickness'] = self.dialog.ui.axis_thickness_cb.value()
+            self.ax_opts['tick_label_size'] = self.dialog.ui.tick_label_size_cb.value()
+            self.ax_opts['grid'] = int(self.dialog.ui.grid_cb.isChecked())
+            self.ax_opts['label_size_auto'] = int(self.dialog.ui.label_size_auto_cb.isChecked())
+            self.ax_opts['tick_label_size_auto'] = int(self.dialog.ui.tick_label_size_auto_cb.isChecked())
+            self.resizeplot()
             ds.do_plot() # update plot and legend
 
     def handle_inspectorVisibilityChanged(self, visible):
@@ -1738,6 +1788,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
         [description]
         """
+        if not (self.ax_opts['label_size_auto'] or self.ax_opts['tick_label_size_auto']):
+            return
         #large window settings
         w_large = 900
         h_large = 650
@@ -1747,15 +1799,21 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         h_small = 400
         font_small = 10
         #interpolate for current window size
-        width = event.width 
-        height = event.height
+        geometry = self.multiplots.frameGeometry()
+        width = geometry.width()
+        height = geometry.height()
         scale_w = font_small + (width - w_small)*(font_large - font_small)/(w_large - w_small)
         scale_h = font_small + (height - h_small)*(font_large - font_small)/(h_large - h_small)
         font_size = min(scale_w, scale_h)
         #resize plot fonts
         for ax in self.axarr:
-            for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
-                item.set_fontsize(font_size)
+            if self.ax_opts['label_size_auto']:
+                ax.xaxis.label.set_size(font_size)
+                ax.yaxis.label.set_size(font_size)
+            if self.ax_opts['tick_label_size_auto']:
+                ax.tick_params(which='major', labelsize=font_size)
+                ax.tick_params(which='minor', labelsize=font_size*.8)
+
   
     def onpick(self, event):
         """Called when clicking on a plot/artist"""

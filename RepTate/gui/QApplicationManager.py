@@ -597,7 +597,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     ('datasets', datasets_dic),
                     ('tools', tools),
                     ('show_inspector', int(app.DataInspectordockWidget.isVisible())),
-                    ('annotations', ann_dict)
+                    ('annotations', ann_dict),
+                    ('axis_options', app.ax_opts)
                 ]
             )
 
@@ -834,6 +835,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             annotations = app_dic['annotations']
 
             new_app_tab, ind = self.restore_app(appname, app_tabname)
+   
+            try:
+                new_app_tab.ax_opts = app_dic['axis_options']
+            except:
+                #backward compatibility
+                pass
+
             if app_indx == current_app_indx:
                 # to be safe in case some apps are open before restore
                 app_indx_now = ind
