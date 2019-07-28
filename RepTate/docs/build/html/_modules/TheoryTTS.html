@@ -114,7 +114,7 @@
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QSize</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span>
 
-<div class="viewcode-block" id="TheoryWLFShift"><a class="viewcode-back" href="../manual/Applications/TTS/Theory/theory.html#TheoryTTS.TheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">TheoryWLFShift</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryWLFShift"><a class="viewcode-back" href="../code.html#TheoryTTS.TheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">TheoryWLFShift</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.</span>
 <span class="sd">    </span>
 <span class="sd">    * **Function**</span>
@@ -160,7 +160,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryWLFShift"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryWLFShift</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryWLFShift</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -237,7 +237,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shift_factor_dic</span> <span class="o">=</span> <span class="p">{}</span>
      
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.TheoryWLFShift"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.TheoryWLFShift">[docs]</a>    <span class="k">def</span> <span class="nf">TheoryWLFShift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.TheoryWLFShift"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.TheoryWLFShift">[docs]</a>    <span class="k">def</span> <span class="nf">TheoryWLFShift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -281,7 +281,7 @@
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">bT</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shift_factor_dic</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Tf</span><span class="p">,</span> <span class="n">aT</span><span class="p">,</span> <span class="n">bT</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.do_error"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.do_error">[docs]</a>    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.do_error"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.do_error">[docs]</a>    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Override the error calculation for TTS</span>
 <span class="sd">        </span>
 <span class="sd">        The error is calculated as the vertical distance between theory points, in the current view,\</span>
@@ -390,7 +390,7 @@
 
         <span class="k">return</span> <span class="n">total_error</span></div>
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.func_fitTTS"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.func_fitTTS">[docs]</a>    <span class="k">def</span> <span class="nf">func_fitTTS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">param_in</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.func_fitTTS"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.func_fitTTS">[docs]</a>    <span class="k">def</span> <span class="nf">func_fitTTS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">param_in</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -413,7 +413,7 @@
         <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_error</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">error</span></div>
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.do_fit"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.do_fit">[docs]</a>    <span class="k">def</span> <span class="nf">do_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.do_fit"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.do_fit">[docs]</a>    <span class="k">def</span> <span class="nf">do_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Minimize the error</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -468,7 +468,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;i&gt;---Fitted in </span><span class="si">%.3g</span><span class="s1"> seconds---&lt;/i&gt;&lt;br&gt;&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.do_print"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.do_print">[docs]</a>    <span class="k">def</span> <span class="nf">do_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.do_print"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.do_print">[docs]</a>    <span class="k">def</span> <span class="nf">do_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print the theory table associated with the given file name</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -481,7 +481,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Theory table for </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.complete_print"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.complete_print">[docs]</a>    <span class="k">def</span> <span class="nf">complete_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.complete_print"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.complete_print">[docs]</a>    <span class="k">def</span> <span class="nf">complete_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -502,7 +502,7 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">file_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.do_save"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.do_save">[docs]</a>    <span class="k">def</span> <span class="nf">do_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">extra_txt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.do_save"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.do_save">[docs]</a>    <span class="k">def</span> <span class="nf">do_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">extra_txt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save the results from WLFShift theory predictions to a TTS file</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -590,11 +590,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryWLFShift.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryWLFShift.destructor"><a class="viewcode-back" href="../code.html#TheoryTTS.BaseTheoryWLFShift.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryWLFShift"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.CLTheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryWLFShift</span><span class="p">(</span><span class="n">BaseTheoryWLFShift</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryWLFShift"><a class="viewcode-back" href="../code.html#TheoryTTS.CLTheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryWLFShift</span><span class="p">(</span><span class="n">BaseTheoryWLFShift</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -612,7 +612,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryWLFShift"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.GUITheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryWLFShift</span><span class="p">(</span><span class="n">BaseTheoryWLFShift</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryWLFShift"><a class="viewcode-back" href="../code.html#TheoryTTS.GUITheoryWLFShift">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryWLFShift</span><span class="p">(</span><span class="n">BaseTheoryWLFShift</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -651,10 +651,10 @@
         <span class="c1"># connection_id = self.savemaster.triggered.connect(self.do_save_dialog)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dir_start</span> <span class="o">=</span> <span class="s2">&quot;data/&quot;</span>
 
-<div class="viewcode-block" id="GUITheoryWLFShift.do_vertical_shift"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.GUITheoryWLFShift.do_vertical_shift">[docs]</a>    <span class="k">def</span> <span class="nf">do_vertical_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryWLFShift.do_vertical_shift"><a class="viewcode-back" href="../code.html#TheoryTTS.GUITheoryWLFShift.do_vertical_shift">[docs]</a>    <span class="k">def</span> <span class="nf">do_vertical_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;vert&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">verticalshift</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="GUITheoryWLFShift.do_isofrictional"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.GUITheoryWLFShift.do_isofrictional">[docs]</a>    <span class="k">def</span> <span class="nf">do_isofrictional</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryWLFShift.do_isofrictional"><a class="viewcode-back" href="../code.html#TheoryTTS.GUITheoryWLFShift.do_isofrictional">[docs]</a>    <span class="k">def</span> <span class="nf">do_isofrictional</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;iso&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">isofrictional</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span></div>
 
     <span class="c1"># def do_save_dialog(self):</span>
@@ -662,7 +662,7 @@
     <span class="c1">#         QFileDialog.getExistingDirectory(</span>
     <span class="c1">#             self, &quot;Select Directory to save Master curves&quot;))</span>
     <span class="c1">#     self.do_save(folder)</span>
-<div class="viewcode-block" id="GUITheoryWLFShift.save_shift_factors"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryTTS.GUITheoryWLFShift.save_shift_factors">[docs]</a>    <span class="k">def</span> <span class="nf">save_shift_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryWLFShift.save_shift_factors"><a class="viewcode-back" href="../code.html#TheoryTTS.GUITheoryWLFShift.save_shift_factors">[docs]</a>    <span class="k">def</span> <span class="nf">save_shift_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dilogue_name</span> <span class="o">=</span> <span class="s2">&quot;Select Folder for Saving Shift Factors&quot;</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getExistingDirectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dilogue_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_start</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)):</span>

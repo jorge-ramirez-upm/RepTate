@@ -112,7 +112,7 @@
 <span class="c1">##################################################################</span>
 
 
-<div class="viewcode-block" id="TheoryPolynomial"><a class="viewcode-back" href="../manual/All_Theories/basic_theories.html#TheoryBasic.TheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">TheoryPolynomial</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryPolynomial"><a class="viewcode-back" href="../code.html#TheoryBasic.TheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">TheoryPolynomial</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit a polynomial of degree :math:`n` to the data</span>
 <span class="sd">    </span>
 <span class="sd">    * **Function**</span>
@@ -134,7 +134,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryPolynomial"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryPolynomial</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryPolynomial"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryPolynomial</span><span class="p">:</span>
     <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial&#39;</span>
     <span class="n">single_file</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">thname</span> <span class="o">=</span> <span class="n">TheoryPolynomial</span><span class="o">.</span><span class="n">thname</span>
@@ -167,7 +167,7 @@
                 <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: A00 + A01*x + A02*x^2 + ...&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">thname</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BaseTheoryPolynomial.set_param_value"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryPolynomial.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryPolynomial.set_param_value"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryPolynomial.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 
 <span class="sd">        [description]</span>
@@ -204,7 +204,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">message</span><span class="p">,</span> <span class="n">success</span></div>
 
-<div class="viewcode-block" id="BaseTheoryPolynomial.polynomial"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryPolynomial.polynomial">[docs]</a>    <span class="k">def</span> <span class="nf">polynomial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryPolynomial.polynomial"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryPolynomial.polynomial">[docs]</a>    <span class="k">def</span> <span class="nf">polynomial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Actual polynomial function.</span>
 <span class="sd">        </span>
 <span class="sd">        .. math::</span>
@@ -224,11 +224,11 @@
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">):</span>
                 <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="n">i</span></div>
 
-<div class="viewcode-block" id="BaseTheoryPolynomial.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryPolynomial.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryPolynomial.destructor"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryPolynomial.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryPolynomial"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.CLTheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryPolynomial</span><span class="p">(</span><span class="n">BaseTheoryPolynomial</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryPolynomial"><a class="viewcode-back" href="../code.html#TheoryBasic.CLTheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryPolynomial</span><span class="p">(</span><span class="n">BaseTheoryPolynomial</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -246,7 +246,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryPolynomial"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.GUITheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryPolynomial</span><span class="p">(</span><span class="n">BaseTheoryPolynomial</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryPolynomial"><a class="viewcode-back" href="../code.html#TheoryBasic.GUITheoryPolynomial">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryPolynomial</span><span class="p">(</span><span class="n">BaseTheoryPolynomial</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -276,7 +276,7 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_spinboxValueChanged</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GUITheoryPolynomial.handle_spinboxValueChanged"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.GUITheoryPolynomial.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryPolynomial.handle_spinboxValueChanged"><a class="viewcode-back" href="../code.html#TheoryBasic.GUITheoryPolynomial.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handle a change of the parameter &#39;nmode&#39;</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
@@ -289,7 +289,7 @@
 <span class="c1">##################################################################</span>
 
 
-<div class="viewcode-block" id="TheoryPowerLaw"><a class="viewcode-back" href="../manual/All_Theories/basic_theories.html#TheoryBasic.TheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">TheoryPowerLaw</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryPowerLaw"><a class="viewcode-back" href="../code.html#TheoryBasic.TheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">TheoryPowerLaw</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit a power law to the data</span>
 <span class="sd">    </span>
 <span class="sd">    * **Function**</span>
@@ -323,7 +323,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryPowerLaw"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryPowerLaw</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryPowerLaw"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryPowerLaw</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Fit a power law to the data</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -349,7 +349,7 @@
             <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;Exponent&quot;</span><span class="p">,</span> <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: a*x^b&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">thname</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BaseTheoryPowerLaw.powerlaw"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryPowerLaw.powerlaw">[docs]</a>    <span class="k">def</span> <span class="nf">powerlaw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryPowerLaw.powerlaw"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryPowerLaw.powerlaw">[docs]</a>    <span class="k">def</span> <span class="nf">powerlaw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -367,11 +367,11 @@
             <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span>
                 <span class="s2">&quot;a&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span></div>
 
-<div class="viewcode-block" id="BaseTheoryPowerLaw.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryPowerLaw.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryPowerLaw.destructor"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryPowerLaw.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryPowerLaw"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.CLTheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryPowerLaw</span><span class="p">(</span><span class="n">BaseTheoryPowerLaw</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryPowerLaw"><a class="viewcode-back" href="../code.html#TheoryBasic.CLTheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryPowerLaw</span><span class="p">(</span><span class="n">BaseTheoryPowerLaw</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -390,7 +390,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryPowerLaw"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.GUITheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryPowerLaw</span><span class="p">(</span><span class="n">BaseTheoryPowerLaw</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryPowerLaw"><a class="viewcode-back" href="../code.html#TheoryBasic.GUITheoryPowerLaw">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryPowerLaw</span><span class="p">(</span><span class="n">BaseTheoryPowerLaw</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -412,7 +412,7 @@
 <span class="c1">##################################################################</span>
 
 
-<div class="viewcode-block" id="TheoryExponential"><a class="viewcode-back" href="../manual/All_Theories/basic_theories.html#TheoryBasic.TheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">TheoryExponential</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryExponential"><a class="viewcode-back" href="../code.html#TheoryBasic.TheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">TheoryExponential</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit a single exponential decay to the data</span>
 <span class="sd">    </span>
 <span class="sd">    * **Function**</span>
@@ -446,7 +446,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryExponential"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryExponential</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryExponential"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryExponential</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Fit an exponential decay to the data</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -477,7 +477,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: a*exp(-x/T)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">thname</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BaseTheoryExponential.exponential"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryExponential.exponential">[docs]</a>    <span class="k">def</span> <span class="nf">exponential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryExponential.exponential"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryExponential.exponential">[docs]</a>    <span class="k">def</span> <span class="nf">exponential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -495,11 +495,11 @@
             <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
                 <span class="o">-</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryExponential.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryExponential.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryExponential.destructor"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryExponential.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryExponential"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.CLTheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryExponential</span><span class="p">(</span><span class="n">BaseTheoryExponential</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryExponential"><a class="viewcode-back" href="../code.html#TheoryBasic.CLTheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryExponential</span><span class="p">(</span><span class="n">BaseTheoryExponential</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -517,7 +517,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryExponential"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.GUITheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryExponential</span><span class="p">(</span><span class="n">BaseTheoryExponential</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryExponential"><a class="viewcode-back" href="../code.html#TheoryBasic.GUITheoryExponential">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryExponential</span><span class="p">(</span><span class="n">BaseTheoryExponential</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -539,7 +539,7 @@
 <span class="c1">##################################################################</span>
 
 
-<div class="viewcode-block" id="TheoryTwoExponentials"><a class="viewcode-back" href="../manual/All_Theories/basic_theories.html#TheoryBasic.TheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">TheoryTwoExponentials</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryTwoExponentials"><a class="viewcode-back" href="../code.html#TheoryBasic.TheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">TheoryTwoExponentials</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit **two** single exponential decay to the data</span>
 <span class="sd">    </span>
 <span class="sd">    * **Function**</span>
@@ -573,7 +573,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryTwoExponentials"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryTwoExponentials</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryTwoExponentials"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryTwoExponentials</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Fit 2 exponentials decay to the data</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -611,7 +611,7 @@
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: a1*exp(-x/T1) + a2*exp(-x/T2)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">thname</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BaseTheoryTwoExponentials.two_exponentials"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryTwoExponentials.two_exponentials">[docs]</a>    <span class="k">def</span> <span class="nf">two_exponentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryTwoExponentials.two_exponentials"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryTwoExponentials.two_exponentials">[docs]</a>    <span class="k">def</span> <span class="nf">two_exponentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -633,11 +633,11 @@
             <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">a1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">T1</span><span class="p">)</span> <span class="o">+</span> <span class="n">a2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
                 <span class="o">-</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">T2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryTwoExponentials.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.BaseTheoryTwoExponentials.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryTwoExponentials.destructor"><a class="viewcode-back" href="../code.html#TheoryBasic.BaseTheoryTwoExponentials.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryTwoExponentials"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.CLTheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryTwoExponentials</span><span class="p">(</span><span class="n">BaseTheoryTwoExponentials</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryTwoExponentials"><a class="viewcode-back" href="../code.html#TheoryBasic.CLTheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryTwoExponentials</span><span class="p">(</span><span class="n">BaseTheoryTwoExponentials</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -655,7 +655,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryTwoExponentials"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryBasic.GUITheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryTwoExponentials</span><span class="p">(</span><span class="n">BaseTheoryTwoExponentials</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryTwoExponentials"><a class="viewcode-back" href="../code.html#TheoryBasic.GUITheoryTwoExponentials">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryTwoExponentials</span><span class="p">(</span><span class="n">BaseTheoryTwoExponentials</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
