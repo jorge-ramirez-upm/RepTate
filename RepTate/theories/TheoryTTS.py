@@ -169,6 +169,7 @@ class BaseTheoryWLFShift:
             display_flag=False)
 
         self.get_material_parameters()
+        self.shift_factor_dic = {}
      
 
     def TheoryWLFShift(self, f=None):
@@ -203,10 +204,8 @@ class BaseTheoryWLFShift:
             Trcorrected = Tr - CTg / Mw + 68.7 * dx12
         else:
             Trcorrected = Tr
-        tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, -B1 *
-                                                 (Tf - Trcorrected) /
-                                                 (B2 + Trcorrected) /
-                                                 (B2 + Tf))
+        aT = np.power(10.0, -B1 *(Tf - Trcorrected) / (B2 + Trcorrected) / (B2 + Tf))
+        tt.data[:, 0] = ft.data[:, 0] * aT
 
         if vert:
             bT = (1 + alpha * Tf) * (Tr + 273.15) / (1 + alpha * Tr) / (
@@ -215,6 +214,7 @@ class BaseTheoryWLFShift:
             bT = 1
         tt.data[:, 1] = ft.data[:, 1] * bT
         tt.data[:, 2] = ft.data[:, 2] * bT
+        self.shift_factor_dic[f.file_name_short] = [Tf, aT, bT]
 
     def do_error(self, line):
         """Override the error calculation for TTS
@@ -574,6 +574,7 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
                                           'Shift to isofrictional state')
         self.isofrictional.setCheckable(True)
         self.isofrictional.setChecked(True)
+        self.saveShiftFactors = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-save-ShiftFactors.png'), 'Save shift factors')
         # self.savemaster = tb.addAction(self.style().standardIcon(
         #     getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
         self.thToolsLayout.insertWidget(0, tb)
@@ -581,7 +582,9 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
             self.do_vertical_shift)
         connection_id = self.isofrictional.triggered.connect(
             self.do_isofrictional)
+        connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
         # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
+        self.dir_start = "data/"
 
     def do_vertical_shift(self):
         self.set_param_value("vert", self.verticalshift.isChecked())
@@ -594,3 +597,46 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
     #         QFileDialog.getExistingDirectory(
     #             self, "Select Directory to save Master curves"))
     #     self.do_save(folder)
+    def save_shift_factors(self):
+        dilogue_name = "Select Folder for Saving Shift Factors"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, self.dir_start)
+        if (not os.path.isdir(folder)):
+            msg = 'Choose a valid folder to save the shift factors'
+            if CmdBase.mode == CmdMode.GUI:
+                QMessageBox.information(self, 'Invalid Folder', msg)
+            else:
+                print(msg)
+            return
+        self.dir_start = folder
+        nsaved = 0
+        Mw_list = []
+        for f in self.parent_dataset.files:
+            if f.active:
+                Mw_list.append(f.file_parameters["Mw"])
+        Mw_list = set(Mw_list)
+        for Mw in Mw_list:
+            flag_first = True
+            list_out = []
+            with open(os.path.join(folder, 'shift_factors_Mw%s.ttsf' % Mw), 'w') as fout:
+                for f in self.parent_dataset.files:
+                    if f.active and f.file_parameters["Mw"] == Mw:
+                        if flag_first:
+                            # write file header
+                            for pname in f.file_parameters:
+                                if pname != 'T':
+                                    fout.write('%s=%s;' % (pname, f.file_parameters[pname]))
+                            fout.write('\n')
+                            fout.write("%-12s %-12s %-12s\n" % ('T', 'aT', 'bT'))
+                            nsaved += 1
+                            flag_first = False
+                        T, aT, bT = self.shift_factor_dic[f.file_name_short]
+                        list_out.append((T, aT, bT))
+                list_out.sort()
+                for (T, aT, bT) in list_out:
+                    fout.write("%-12g %-12g %-12g\n" % (T, aT, bT))
+                        
+        msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
+        if CmdBase.mode == CmdMode.GUI:
+            QMessageBox.information(self, 'Saved Files', msg)
+        else:
+            print(msg)

@@ -615,6 +615,7 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         connection_id = self.cbTemp.currentIndexChanged.connect(self.change_temperature)
         connection_id = self.refreshT.triggered.connect(self.refresh_temperatures)
         connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
+        self.dir_start = "data/"
 
     def populate_TempComboBox(self):
         k = list(self.Tdict.keys())
@@ -649,11 +650,12 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         self.populate_TempComboBox()
 
     def save_shift_factors(self):
-        dir_start = "data/"
-        dilogue_name = "Select Folder for Saving shift factors of current dataset as txt"
-        folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
+        dilogue_name = "Select Folder for Saving Shift Factors"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, self.dir_start)
         if (not isdir(folder)):
             return
+        self.dir_start = folder
+        nsaved = 0
         for case in self.Tdict.keys():
             fname=""
             if (case[0]>0):
@@ -675,11 +677,15 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
                     if pname != 'T':
                         fout.write('%s=%s;' % (pname, f0.file_parameters[pname]))
                 fout.write('\n')
-                fout.write('T aT bT\n')
+                fout.write("%-12s %-12s %-12s\n" % ('T', 'aT', 'bT'))
                 for i in indTsorted:
                     fname = Filenames[i]
                     sparam = self.shiftParameters[fname]
-                    fout.write('%6.3g %11.3g %11.3g\n'%(Temps0[i], 10.0**sparam[0], 10.0**sparam[1]))
-                    
-                
+                    fout.write('%-12g %-12g %-12g\n'%(Temps0[i], 10.0**sparam[0], 10.0**sparam[1]))
+                nsaved += 1
+        msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
+        if CmdBase.mode == CmdMode.GUI:
+            QMessageBox.information(self, 'Saved Files', msg)
+        else:
+            print(msg)
             
