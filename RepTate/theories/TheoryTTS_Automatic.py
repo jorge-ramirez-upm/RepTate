@@ -607,7 +607,7 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         self.cbTemp.setToolTip("Select a goal Temperature")
         tb.addWidget(self.cbTemp)
         self.refreshT = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-reset.png'), 'Refresh T list')
-        self.saveShiftFactors = tb.addAction(QIcon(':/Icon8/Images/new_icons/TTSFactors.png'), 'Save shift factors')
+        self.saveShiftFactors = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-save-ShiftFactors.png'), 'Save shift factors')
 
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
