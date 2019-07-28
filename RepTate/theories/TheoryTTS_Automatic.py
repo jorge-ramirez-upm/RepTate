@@ -678,6 +678,8 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
                         fout.write('%s=%s;' % (pname, f0.file_parameters[pname]))
                 fout.write('\n')
                 fout.write("%-12s %-12s %-12s\n" % ('T', 'aT', 'bT'))
+                fout.write("%-12s %-12s %-12s\n" % ('[°C]', '[-]', '[-]'))
+
                 for i in indTsorted:
                     fname = Filenames[i]
                     sparam = self.shiftParameters[fname]

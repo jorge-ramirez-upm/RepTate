@@ -622,6 +622,7 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
                                     fout.write('%s=%s;' % (pname, f.file_parameters[pname]))
                             fout.write('\n')
                             fout.write("%-12s %-12s %-12s\n" % ('T', 'aT', 'bT'))
+                            fout.write("%-12s %-12s %-12s\n" % ('[°C]', '[-]', '[-]'))
                             nsaved += 1
                             flag_first = False
                         T, aT, bT = self.shift_factor_dic[f.file_name_short]
