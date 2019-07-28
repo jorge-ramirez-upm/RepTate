@@ -86,6 +86,7 @@ class BaseApplicationTTSFactors:
             - parent {[type]} -- [description] (default: {None})
         """
         from TheoryWLF import TheoryWLF
+        from TheoryArrhenius import TheoryArrhenius
         #from TheoryArrhenius import TheoryArrhenius
         super().__init__(name, parent)
 
@@ -152,6 +153,19 @@ class BaseApplicationTTSFactors:
             n=2,
             snames=["log(aT)", "log(bT)"])
 
+        self.views["log(aT) vs 1/T"] = View(
+            name="log(aT) vs 1/T",
+            description="log Horizontal shift factors vs 1/T",
+            x_label="1/T",
+            y_label="$\log(a_T)$",
+            x_units="K$^{-1}$",
+            y_units="-",
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewLogaT_invT,
+            n=1,
+            snames=["log(aT)"])
+
         #set multiviews
         self.nplots = 1
         self.multiviews = []
@@ -169,6 +183,7 @@ class BaseApplicationTTSFactors:
 
         # THEORIES
         self.theories[TheoryWLF.thname] = TheoryWLF
+        self.theories[TheoryArrhenius.thname] = TheoryArrhenius
         #self.theories[TheoryWLFShiftTest.thname] = TheoryWLFShiftTest
         self.add_common_theories()
 
@@ -222,6 +237,15 @@ class BaseApplicationTTSFactors:
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
         
+    def viewLogaT_invT(self, dt, file_parameters):
+        """Logarithm of the horizontal shift factor
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = 1/(dt.data[:, 0] + 273.15)
+        y[:, 0] = np.log10(dt.data[:, 1])
+        return x, y, True
+
 class CLApplicationTTSFactors(BaseApplicationTTSFactors, Application):
     """[summary]
     
