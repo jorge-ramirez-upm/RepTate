@@ -100,6 +100,7 @@ class BaseTheoryPolynomial:
                 "Coefficient order %d" % i,
                 ParameterType.real,
                 opt_type=OptType.opt)
+        self.Qprint("%s: A00 + A01*x + A02*x^2 + ..." % self.thname)
 
     def set_param_value(self, name, value):
         """[summary]
@@ -281,6 +282,7 @@ class BaseTheoryPowerLaw:
             "a", 1.0, "Prefactor", ParameterType.real, opt_type=OptType.opt)
         self.parameters["b"] = Parameter(
             "b", 1.0, "Exponent", ParameterType.real, opt_type=OptType.opt)
+        self.Qprint("%s: a*x^b" % self.thname)
 
     def powerlaw(self, f=None):
         """[summary]
@@ -407,6 +409,8 @@ class BaseTheoryExponential:
             "Exponential time constant",
             ParameterType.real,
             opt_type=OptType.opt)
+        self.Qprint("%s: a*exp(-x/T)" % self.thname)
+
 
     def exponential(self, f=None):
         """[summary]
@@ -540,6 +544,7 @@ class BaseTheoryTwoExponentials:
             "Exponential time constant 2",
             ParameterType.real,
             opt_type=OptType.opt)
+        self.Qprint("%s: a1*exp(-x/T1) + a2*exp(-x/T2)" % self.thname)
 
     def two_exponentials(self, f=None):
         """[summary]
