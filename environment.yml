@@ -3,7 +3,7 @@
  - conda-forge
  - defaults
  dependencies:
- - matplotlib=3.0.3
+ - matplotlib=2.0.2=py35_2
  - numpy=1.13.1=py35_0
  - scipy=0.19.1=np113py35_0
  - sphinxcontrib-bibtex=0.3.6=py35_0
