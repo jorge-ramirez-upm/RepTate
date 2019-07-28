@@ -4,16 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>TTS Tutorial: Command Line &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>TTS Tutorial: Command Line &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -41,7 +43,7 @@
         <li class="right" >
           <a href="../Theory/theory.html" title="TTS Theories"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../TTS.html" accesskey="U"> TTS: Time-Temperature Superposition</a> &#187;</li> 
@@ -66,13 +68,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -90,12 +90,11 @@
 <div class="toctree-wrapper compound">
 </div>
 <div class="admonition hint">
-<p class="first admonition-title">Hint</p>
+<p class="admonition-title">Hint</p>
 <p>Tutorial command line (CL) files can be found in the <cite>tests/</cite> folder. They can be run in batch mode or in interactive mode.</p>
 <ul>
-<li><p class="first">To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal notranslate"><span class="pre">#</span></code> and the line <code class="docutils literal notranslate"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p>
-</li>
-<li><p class="first">To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
+<li><p>To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal notranslate"><span class="pre">#</span></code> and the line <code class="docutils literal notranslate"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p></li>
+<li><p>To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span><span class="o">/</span><span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Linux or Mac</span>
 </pre></div>
 </div>
@@ -105,11 +104,11 @@
 </div>
 </li>
 </ul>
-<p class="last">(the difference is the use of backslash <code class="docutils literal notranslate"><span class="pre">\</span></code> instead of slash <code class="docutils literal notranslate"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
+<p>(the difference is the use of backslash <code class="docutils literal notranslate"><span class="pre">\</span></code> instead of slash <code class="docutils literal notranslate"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
 </div>
 <p><strong>Time-Temperature shift</strong></p>
 <ol class="arabic">
-<li><p class="first">Start RepTate and create LVE Application:</p>
+<li><p>Start RepTate and create LVE Application:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate Version 0.9.3 - 20180719 command processor
 help [command] for instructions
 TAB for completions
@@ -121,7 +120,7 @@ RepTate/TTS1/DataSet01&gt;
 </ol>
 <p>A new plot window for the new application is opened.</p>
 <ol class="arabic">
-<li><p class="first">Add files to the dataset (small amplitude oscillatory shear files <code class="docutils literal notranslate"><span class="pre">.osc</span></code>, see <a class="reference internal" href="../general.html#tts-data-description"><span class="std std-ref">Data Files</span></a>)
+<li><p>Add files to the dataset (small amplitude oscillatory shear files <code class="docutils literal notranslate"><span class="pre">.osc</span></code>, see <a class="reference internal" href="../general.html#tts-data-description"><span class="std std-ref">Data Files</span></a>)
 and display the data:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/TTS1/DataSet01&gt; open data/PI_LINEAR/osc/PI*osc
 RepTate/TTS1/DataSet01&gt; plot
@@ -129,7 +128,7 @@ RepTate/TTS1/DataSet01&gt; plot
 </div>
 <a class="reference internal image-reference" href="../../../../_images/plotOSCfiles.png"><img alt="osc files" class="align-center" src="../../../../_images/plotOSCfiles.png" style="width: 70%;" /></a>
 </li>
-<li><p class="first">Create new WLF theory (the shift is calculated with the default values of the parameters):</p>
+<li><p>Create new WLF theory (the shift is calculated with the default values of the parameters):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/TTS1/DataSet01&gt; theory_new WLF Shift
 </pre></div>
 </div>
@@ -153,12 +152,12 @@ TOTAL ERROR:      0.02638 (  3892)
 </div>
 <a class="reference internal image-reference" href="../../../../_images/WLFdefault.png"><img alt="WLF shift with default parameters" class="align-center" src="../../../../_images/WLFdefault.png" style="width: 70%;" /></a>
 </li>
-<li><p class="first">Change the value of a theory parameter, e.g. the reference temperature:</p>
+<li><p>Change the value of a theory parameter, e.g. the reference temperature:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/TTS1/DataSet01/WLF Shift01&gt; T0=-35
 </pre></div>
 </div>
 </li>
-<li><p class="first">Fit the theory to the data files (in this case, shift according to WLF).
+<li><p>Fit the theory to the data files (in this case, shift according to WLF).
 After the fit is finished, the optimal values of the theory parameters are shown.
 Only those parameters marked with a <code class="docutils literal notranslate"><span class="pre">*</span></code> have been optimized. Also, the error per Mw is
 shown in a table, along with the number of points that were used for the fit, and the
@@ -192,7 +191,7 @@ TOTAL ERROR:   0.00038775 (  3724)
 </div>
 <a class="reference internal image-reference" href="../../../../_images/WLFfit.png"><img alt="WLF shift with fitted parameters" class="align-center" src="../../../../_images/WLFfit.png" style="width: 70%;" /></a>
 </li>
-<li><p class="first">Save theory predictions (by default, tts theory files are saved to the same folder
+<li><p>Save theory predictions (by default, tts theory files are saved to the same folder
 as the osc files):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/TTS1/DataSet01/WLF Shift01&gt; save
 </pre></div>
@@ -212,7 +211,7 @@ File: ***/data/PI_LINEAR/osc/PI_Mw1131.0k_Mw20_phi0_phiB0-35.0.tts
 </pre></div>
 </div>
 </li>
-<li><p class="first">Exit RepTate (the y answer is needed):</p>
+<li><p>Exit RepTate (the y answer is needed):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/TTS1/DataSet01/WLF Shift01&gt; quit
 </pre></div>
 </div>
@@ -241,7 +240,7 @@ File: ***/data/PI_LINEAR/osc/PI_Mw1131.0k_Mw20_phi0_phiB0-35.0.tts
         <li class="right" >
           <a href="../Theory/theory.html" title="TTS Theories"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../TTS.html" > TTS: Time-Temperature Superposition</a> &#187;</li> 
@@ -249,7 +248,7 @@ File: ***/data/PI_LINEAR/osc/PI_Mw1131.0k_Mw20_phi0_phiB0-35.0.tts
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

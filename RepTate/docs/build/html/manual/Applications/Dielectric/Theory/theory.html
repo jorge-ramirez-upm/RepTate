@@ -4,16 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Dielectric Theories &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Dielectric Theories &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -41,7 +43,7 @@
         <li class="right" >
           <a href="../general.html" title="Dielectric: General Description"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../Dielectric.html" accesskey="U"> Dielectric: Dielectric Spectroscopy</a> &#187;</li> 
@@ -52,7 +54,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Dielectric Theories</a><ul>
 <li><a class="reference internal" href="#debye-modes">Debye modes</a><ul>
@@ -88,13 +90,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -112,19 +112,22 @@
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#debye-modes" id="id5">Debye modes</a><ul>
-<li><a class="reference internal" href="#summary" id="id6">Summary</a></li>
-<li><a class="reference internal" href="#description" id="id7">Description</a></li>
+<li><p><a class="reference internal" href="#debye-modes" id="id5">Debye modes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#summary" id="id6">Summary</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id7">Description</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#havriliak-negami-modes" id="id8">Havriliak-Negami modes</a><ul>
-<li><a class="reference internal" href="#id1" id="id9">Summary</a></li>
-<li><a class="reference internal" href="#id2" id="id10">Description</a></li>
+<li><p><a class="reference internal" href="#havriliak-negami-modes" id="id8">Havriliak-Negami modes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id9">Summary</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id10">Description</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#kolhrauch-williams-watts-kww-modes" id="id11">Kolhrauch-Williams-Watts (KWW) modes</a><ul>
-<li><a class="reference internal" href="#id3" id="id12">Summary</a></li>
-<li><a class="reference internal" href="#id4" id="id13">Description</a></li>
+<li><p><a class="reference internal" href="#kolhrauch-williams-watts-kww-modes" id="id11">Kolhrauch-Williams-Watts (KWW) modes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id12">Summary</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id13">Description</a></p></li>
 </ul>
 </li>
 </ul>
@@ -139,12 +142,11 @@
 <h3><a class="toc-backref" href="#id6">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="TheoryDebyeModes.TheoryDebyeModesFrequency">
-<em class="property">class </em><code class="descclassname">TheoryDebyeModes.</code><code class="descname">TheoryDebyeModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryDebyeModes.html#TheoryDebyeModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDebyeModes.TheoryDebyeModesFrequency" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">TheoryDebyeModes.</code><code class="sig-name descname">TheoryDebyeModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryDebyeModes.html#TheoryDebyeModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryDebyeModes.TheoryDebyeModesFrequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit a generalized Debye model to a frequency dependent relaxation function.</p>
 <ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math notranslate">
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
 \[\begin{split}\begin{eqnarray}
 \epsilon'(\omega) &amp; = &amp; \epsilon_\infty + \sum_{1}^{n_{modes}} \Delta\epsilon_i \frac{1}{1+(\omega\tau_i)^2} \\
 \epsilon''(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} \Delta\epsilon_i \frac{\omega\tau_i}{1+(\omega\tau_i)^2}
@@ -152,14 +154,13 @@
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li>einf = <span class="math notranslate">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</li>
-<li><span class="math notranslate">\(n_{modes}\)</span>: number of Debye modes equally distributed in logarithmic scale between <span class="math notranslate">\(\omega_{min}\)</span> and <span class="math notranslate">\(\omega_{max}\)</span>.</li>
-<li>logwmin = <span class="math notranslate">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
-<li>logwmax = <span class="math notranslate">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
-<li>logDei = <span class="math notranslate">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate">\(i\)</span>, where <span class="math notranslate">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate">\(i\)</span>.</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p>einf = <span class="math notranslate nohighlight">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</p></li>
+<li><p><span class="math notranslate nohighlight">\(n_{modes}\)</span>: number of Debye modes equally distributed in logarithmic scale between <span class="math notranslate nohighlight">\(\omega_{min}\)</span> and <span class="math notranslate nohighlight">\(\omega_{max}\)</span>.</p></li>
+<li><p>logwmin = <span class="math notranslate nohighlight">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</p></li>
+<li><p>logwmax = <span class="math notranslate nohighlight">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</p></li>
+<li><p>logDei = <span class="math notranslate nohighlight">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate nohighlight">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate nohighlight">\(i\)</span>, where <span class="math notranslate nohighlight">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -170,27 +171,27 @@
 </div>
 <div class="section" id="description">
 <h3><a class="toc-backref" href="#id7">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
-<p>Fit of dielectric spectroscopy data with a set of <span class="math notranslate">\(N\)</span> discrete equidistant Debye modes.
+<p>Fit of dielectric spectroscopy data with a set of <span class="math notranslate nohighlight">\(N\)</span> discrete equidistant Debye modes.
 The number of modes can be selected by pressing the Up/Down arrows in the theory window.
 The frequencies of the Debye modes are equally distributed in logarithmic scale between
-a minimum frequency, <span class="math notranslate">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math notranslate">\(\omega_\text{max}\)</span>,
+a minimum frequency, <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>,
 which can be fixed or set free by ticking the corresponding checkboxes.
-The position of <span class="math notranslate">\(\omega_\text{min}\)</span> and <span class="math notranslate">\(\omega_\text{max}\)</span>
+The position of <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span> and <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>
 can be changed by dragging the leftmost and rightmost modes with the mouse.
 The vertical position of the modes can be changed by dragging the yellow points.</p>
 <p>Each mode contributes to the dielectric relaxation spectrum through the following formulas:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[\begin{split}\epsilon_i'(\omega) &amp;= \Delta\epsilon_i \frac{1}{1+ (\omega \tau_i)^2}\\
 \epsilon_i''(\omega) &amp;= \Delta\epsilon_i \frac{\omega \tau_i}{1+ (\omega \tau_i)^2}\end{split}\]</div>
-<p>with <span class="math notranslate">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math notranslate">\(\tau_i\)</span> the characteristic relaxation time of
-the mode <span class="math notranslate">\(i\)</span> (inverse of the frequency).</p>
+<p>with <span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math notranslate nohighlight">\(\tau_i\)</span> the characteristic relaxation time of
+the mode <span class="math notranslate nohighlight">\(i\)</span> (inverse of the frequency).</p>
 <p>The parameters of the theory are the number of modes (which is fixed by the user and
-is not minimized), <span class="math notranslate">\(\omega_\text{min}\)</span>, <span class="math notranslate">\(\omega_\text{max}\)</span>,
-and a value of <span class="math notranslate">\(\Delta\epsilon_i\)</span> for each mode.
-<span class="math notranslate">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
+is not minimized), <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span>, <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>,
+and a value of <span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> for each mode.
+<span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The theory can only be applied to one file per data set.
+<p class="admonition-title">Warning</p>
+<p>The theory can only be applied to one file per data set.
 If more than one file is active in the current data set,
 the theory will be applied to the first one in the list of active files.</p>
 </div>
@@ -204,26 +205,24 @@ the theory will be applied to the first one in the list of active files.</p>
 <h3><a class="toc-backref" href="#id9">Summary</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="TheoryHavriliakNegamiModes.TheoryHavriliakNegamiModesFrequency">
-<em class="property">class </em><code class="descclassname">TheoryHavriliakNegamiModes.</code><code class="descname">TheoryHavriliakNegamiModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryHavriliakNegamiModes.html#TheoryHavriliakNegamiModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryHavriliakNegamiModes.TheoryHavriliakNegamiModesFrequency" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">TheoryHavriliakNegamiModes.</code><code class="sig-name descname">TheoryHavriliakNegamiModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryHavriliakNegamiModes.html#TheoryHavriliakNegamiModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryHavriliakNegamiModes.TheoryHavriliakNegamiModesFrequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit a generalized Havriliak-Negami model to a frequency dependent relaxation function.</p>
 <ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math notranslate">
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
 \[\epsilon^* (\omega) = \epsilon_\infty + \frac{\Delta\epsilon}{\left[ 1 + \left( i\omega\tau\right)^\alpha\right]^\gamma}\]</div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li>einf = <span class="math notranslate">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</li>
-<li><span class="math notranslate">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math notranslate">\(\omega_{min}\)</span> and <span class="math notranslate">\(\omega_{max}\)</span>.</li>
-<li>logwmin = <span class="math notranslate">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
-<li>logwmax = <span class="math notranslate">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
-<li>logDei = <span class="math notranslate">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate">\(i\)</span>, where <span class="math notranslate">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate">\(i\)</span>.</li>
-<li><span class="math notranslate">\(\alpha\)</span>: Asymmetry parameter</li>
-<li><span class="math notranslate">\(\gamma\)</span>: Broadness parameter</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p>einf = <span class="math notranslate nohighlight">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</p></li>
+<li><p><span class="math notranslate nohighlight">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math notranslate nohighlight">\(\omega_{min}\)</span> and <span class="math notranslate nohighlight">\(\omega_{max}\)</span>.</p></li>
+<li><p>logwmin = <span class="math notranslate nohighlight">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</p></li>
+<li><p>logwmax = <span class="math notranslate nohighlight">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</p></li>
+<li><p>logDei = <span class="math notranslate nohighlight">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate nohighlight">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate nohighlight">\(i\)</span>, where <span class="math notranslate nohighlight">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span>: Asymmetry parameter</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma\)</span>: Broadness parameter</p></li>
 </ul>
 </dd>
 </dl>
@@ -235,30 +234,30 @@ the theory will be applied to the first one in the list of active files.</p>
 <div class="section" id="id2">
 <h3><a class="toc-backref" href="#id10">Description</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">NEEDS TO BE WRITTEN!</p>
+<p class="admonition-title">Warning</p>
+<p>NEEDS TO BE WRITTEN!</p>
 </div>
-<p>Fit of dielectric spectroscopy data with a set of <span class="math notranslate">\(N\)</span> discrete equidistant Debye modes.
+<p>Fit of dielectric spectroscopy data with a set of <span class="math notranslate nohighlight">\(N\)</span> discrete equidistant Debye modes.
 The number of modes can be selected by pressing the Up/Down arrows in the theory window.
 The frequencies of the Debye modes are equally distributed in logarithmic scale between
-a minimum frequency, <span class="math notranslate">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math notranslate">\(\omega_\text{max}\)</span>,
+a minimum frequency, <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>,
 which can be fixed or set free by ticking the corresponding checkboxes.
-The position of <span class="math notranslate">\(\omega_\text{min}\)</span> and <span class="math notranslate">\(\omega_\text{max}\)</span>
+The position of <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span> and <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>
 can be changed by dragging the leftmost and rightmost modes with the mouse.
 The vertical position of the modes can be changed by dragging the yellow points.</p>
 <p>Each mode contributes to the dielectric relaxation spectrum through the following formulas:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[\begin{split}\epsilon_i'(\omega) &amp;= \Delta\epsilon_i \frac{1}{1+ (\omega \tau_i)^2}\\
 \epsilon_i''(\omega) &amp;= \Delta\epsilon_i \frac{\omega \tau_i}{1+ (\omega \tau_i)^2}\end{split}\]</div>
-<p>with <span class="math notranslate">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math notranslate">\(\tau_i\)</span> the characteristic relaxation time of
-the mode <span class="math notranslate">\(i\)</span> (inverse of the frequency).</p>
+<p>with <span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math notranslate nohighlight">\(\tau_i\)</span> the characteristic relaxation time of
+the mode <span class="math notranslate nohighlight">\(i\)</span> (inverse of the frequency).</p>
 <p>The parameters of the theory are the number of modes (which is fixed by the user and
-is not minimized), <span class="math notranslate">\(\omega_\text{min}\)</span>, <span class="math notranslate">\(\omega_\text{max}\)</span>,
-and a value of <span class="math notranslate">\(\Delta\epsilon_i\)</span> for each mode.
-<span class="math notranslate">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
+is not minimized), <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span>, <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>,
+and a value of <span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> for each mode.
+<span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The theory can only be applied to one file per data set.
+<p class="admonition-title">Warning</p>
+<p>The theory can only be applied to one file per data set.
 If more than one file is active in the current data set,
 the theory will be applied to the first one in the list of active files.</p>
 </div>
@@ -272,33 +271,31 @@ the theory will be applied to the first one in the list of active files.</p>
 <h3><a class="toc-backref" href="#id12">Summary</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="TheoryKWWModes.TheoryKWWModesFrequency">
-<em class="property">class </em><code class="descclassname">TheoryKWWModes.</code><code class="descname">TheoryKWWModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryKWWModes.html#TheoryKWWModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryKWWModes.TheoryKWWModesFrequency" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">TheoryKWWModes.</code><code class="sig-name descname">TheoryKWWModesFrequency</code><a class="reference internal" href="../../../../_modules/TheoryKWWModes.html#TheoryKWWModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryKWWModes.TheoryKWWModesFrequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit a Kohlrausch-Williams-Watts (KWW, stretched exponential) model to a frequency dependent relaxation function.</p>
 <ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math notranslate">
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
 \[\epsilon (t) - \epsilon_\infty =  \Delta\epsilon \left[ 1 - \exp \left( - \frac{t}{\tau} \right)^\beta\right]\]</div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li>einf = <span class="math notranslate">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</li>
-<li><span class="math notranslate">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math notranslate">\(\omega_{min}\)</span> and <span class="math notranslate">\(\omega_{max}\)</span>.</li>
-<li>logwmin = <span class="math notranslate">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</li>
-<li>logwmax = <span class="math notranslate">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</li>
-<li>logDei = <span class="math notranslate">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate">\(i\)</span>, where <span class="math notranslate">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate">\(i\)</span>.</li>
-<li><span class="math notranslate">\(\beta\)</span>: stretched exponential parameter</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p>einf = <span class="math notranslate nohighlight">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</p></li>
+<li><p><span class="math notranslate nohighlight">\(n_{modes}\)</span>: number of Havriliak-Negami modes equally distributed in logarithmic scale between <span class="math notranslate nohighlight">\(\omega_{min}\)</span> and <span class="math notranslate nohighlight">\(\omega_{max}\)</span>.</p></li>
+<li><p>logwmin = <span class="math notranslate nohighlight">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</p></li>
+<li><p>logwmax = <span class="math notranslate nohighlight">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</p></li>
+<li><p>logDei = <span class="math notranslate nohighlight">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate nohighlight">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate nohighlight">\(i\)</span>, where <span class="math notranslate nohighlight">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta\)</span>: stretched exponential parameter</p></li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">It makes use of the libkww code, by Joachim Wuttke, CITE: doi:10.3390/a5040604</p>
+<p class="admonition-title">Note</p>
+<p>It makes use of the libkww code, by Joachim Wuttke, CITE: doi:10.3390/a5040604</p>
 </div>
 </dd></dl>
 
@@ -306,30 +303,30 @@ the theory will be applied to the first one in the list of active files.</p>
 <div class="section" id="id4">
 <h3><a class="toc-backref" href="#id13">Description</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">NEEDS TO BE WRITTEN!</p>
+<p class="admonition-title">Warning</p>
+<p>NEEDS TO BE WRITTEN!</p>
 </div>
-<p>Fit of dielectric spectroscopy data with a set of <span class="math notranslate">\(N\)</span> discrete equidistant Debye modes.
+<p>Fit of dielectric spectroscopy data with a set of <span class="math notranslate nohighlight">\(N\)</span> discrete equidistant Debye modes.
 The number of modes can be selected by pressing the Up/Down arrows in the theory window.
 The frequencies of the Debye modes are equally distributed in logarithmic scale between
-a minimum frequency, <span class="math notranslate">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math notranslate">\(\omega_\text{max}\)</span>,
+a minimum frequency, <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span>, and a maximum frequency, <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>,
 which can be fixed or set free by ticking the corresponding checkboxes.
-The position of <span class="math notranslate">\(\omega_\text{min}\)</span> and <span class="math notranslate">\(\omega_\text{max}\)</span>
+The position of <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span> and <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>
 can be changed by dragging the leftmost and rightmost modes with the mouse.
 The vertical position of the modes can be changed by dragging the yellow points.</p>
 <p>Each mode contributes to the dielectric relaxation spectrum through the following formulas:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[\begin{split}\epsilon_i'(\omega) &amp;= \Delta\epsilon_i \frac{1}{1+ (\omega \tau_i)^2}\\
 \epsilon_i''(\omega) &amp;= \Delta\epsilon_i \frac{\omega \tau_i}{1+ (\omega \tau_i)^2}\end{split}\]</div>
-<p>with <span class="math notranslate">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math notranslate">\(\tau_i\)</span> the characteristic relaxation time of
-the mode <span class="math notranslate">\(i\)</span> (inverse of the frequency).</p>
+<p>with <span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> the amplitude and <span class="math notranslate nohighlight">\(\tau_i\)</span> the characteristic relaxation time of
+the mode <span class="math notranslate nohighlight">\(i\)</span> (inverse of the frequency).</p>
 <p>The parameters of the theory are the number of modes (which is fixed by the user and
-is not minimized), <span class="math notranslate">\(\omega_\text{min}\)</span>, <span class="math notranslate">\(\omega_\text{max}\)</span>,
-and a value of <span class="math notranslate">\(\Delta\epsilon_i\)</span> for each mode.
-<span class="math notranslate">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
+is not minimized), <span class="math notranslate nohighlight">\(\omega_\text{min}\)</span>, <span class="math notranslate nohighlight">\(\omega_\text{max}\)</span>,
+and a value of <span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> for each mode.
+<span class="math notranslate nohighlight">\(\Delta\epsilon_i\)</span> is calculated in logarithmic scale.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The theory can only be applied to one file per data set.
+<p class="admonition-title">Warning</p>
+<p>The theory can only be applied to one file per data set.
 If more than one file is active in the current data set,
 the theory will be applied to the first one in the list of active files.</p>
 </div>
@@ -358,7 +355,7 @@ the theory will be applied to the first one in the list of active files.</p>
         <li class="right" >
           <a href="../general.html" title="Dielectric: General Description"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../Dielectric.html" > Dielectric: Dielectric Spectroscopy</a> &#187;</li> 
@@ -366,7 +363,7 @@ the theory will be applied to the first one in the list of active files.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

@@ -67,9 +67,7 @@ class FlowMode(Enum):
 
 
 class TheoryPETS(CmdBase):
-    """PETS
-    
-    [description]
+    """Preaveraged model for entangled telechelic star polymers
     """
     thname = "PETS"
     description = "Preaveraged model for entangled telechelic star polymers"

@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>BoB LVE &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>BoB LVE &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -31,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -50,7 +43,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">BoB LVE</a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
@@ -66,13 +59,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -91,7 +84,7 @@
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="TheoryBobLVE.TheoryBobLVE">
-<em class="property">class </em><code class="descclassname">TheoryBobLVE.</code><code class="descname">TheoryBobLVE</code><a class="reference internal" href="../../../../_modules/TheoryBobLVE.html#TheoryBobLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBobLVE.TheoryBobLVE" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">TheoryBobLVE.</code><code class="sig-name descname">TheoryBobLVE</code><a class="reference internal" href="../../../../_modules/TheoryBobLVE.html#TheoryBobLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryBobLVE.TheoryBobLVE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Analyse the relaxation of polymers read from a polymer configuration file
 using BoB v2.5 (Chinmay Das and Daniel Read).
 These files can be generated from the React application in RepTate.</p>
@@ -100,24 +93,17 @@ These files can be generated from the React application in RepTate.</p>
 
 <p>Publications related to BoB: <a class="reference internal" href="theory.html#boblve-das2006" id="id1">[1]</a>  <a class="reference internal" href="theory.html#boblve-das2006b" id="id2">[2]</a> <a class="reference internal" href="theory.html#boblve-chambon2008" id="id3">[3]</a>.</p>
 <p class="rubric">References</p>
-<p id="bibtex-bibliography-manual/Applications/LVE/Theory/BoB_LVE-0"><table class="docutils citation" frame="void" id="boblve-das2006" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Chinmay Das, Nathanael&nbsp;J. Inkson, Daniel&nbsp;J. Read, Mark&nbsp;a. Kelmanson, and Tom C.&nbsp;B. McLeish. Computational linear rheology of general branch-on-branch polymers. <em>J. Rheol.</em>, 50(2):207–234, mar 2006. URL: <a class="reference external" href="http://sor.scitation.org/doi/10.1122/1.2167487">http://sor.scitation.org/doi/10.1122/1.2167487</a>, <a class="reference external" href="https://doi.org/10.1122/1.2167487">doi:10.1122/1.2167487</a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="boblve-das2006b" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Chinmay Das, Daniel&nbsp;J. Read, Mark&nbsp;A. Kelmanson, and Tom C.&nbsp;B. McLeish. Dynamic scaling in entangled mean-field gelation polymers. <em>Phys. Rev. E</em>, 74(1):011404, jul 2006. URL: <a class="reference external" href="https://link.aps.org/doi/10.1103/PhysRevE.74.011404">https://link.aps.org/doi/10.1103/PhysRevE.74.011404</a>, <a class="reference external" href="https://doi.org/10.1103/PhysRevE.74.011404">doi:10.1103/PhysRevE.74.011404</a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="boblve-chambon2008" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Pierre Chambon, Christine&nbsp;M. Fernyhough, Kyuhyun Im, Taihyun Chang, Chinmay Das, John Embery, Tom C.&nbsp;B. McLeish, and Daniel&nbsp;J. Read. Synthesis, Temperature Gradient Interaction Chromatography, and Rheology of Entangled Styrene Comb Polymers. <em>Macromolecules</em>, 41(15):5869–5875, aug 2008. URL: <a class="reference external" href="http://pubs.acs.org/doi/abs/10.1021/ma800599m">http://pubs.acs.org/doi/abs/10.1021/ma800599m</a>, <a class="reference external" href="https://doi.org/10.1021/ma800599m">doi:10.1021/ma800599m</a>.</td></tr>
-</tbody>
-</table>
+<p id="bibtex-bibliography-manual/Applications/LVE/Theory/BoB_LVE-0"><dl class="citation">
+<dt class="label" id="boblve-das2006"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Chinmay Das, Nathanael J. Inkson, Daniel J. Read, Mark a. Kelmanson, and Tom C. B. McLeish. Computational linear rheology of general branch-on-branch polymers. <em>J. Rheol.</em>, 50(2):207–234, mar 2006. URL: <a class="reference external" href="http://sor.scitation.org/doi/10.1122/1.2167487">http://sor.scitation.org/doi/10.1122/1.2167487</a>, <a class="reference external" href="https://doi.org/10.1122/1.2167487">doi:10.1122/1.2167487</a>.</p>
+</dd>
+<dt class="label" id="boblve-das2006b"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Chinmay Das, Daniel J. Read, Mark A. Kelmanson, and Tom C. B. McLeish. Dynamic scaling in entangled mean-field gelation polymers. <em>Phys. Rev. E</em>, 74(1):011404, jul 2006. URL: <a class="reference external" href="https://link.aps.org/doi/10.1103/PhysRevE.74.011404">https://link.aps.org/doi/10.1103/PhysRevE.74.011404</a>, <a class="reference external" href="https://doi.org/10.1103/PhysRevE.74.011404">doi:10.1103/PhysRevE.74.011404</a>.</p>
+</dd>
+<dt class="label" id="boblve-chambon2008"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Pierre Chambon, Christine M. Fernyhough, Kyuhyun Im, Taihyun Chang, Chinmay Das, John Embery, Tom C. B. McLeish, and Daniel J. Read. Synthesis, Temperature Gradient Interaction Chromatography, and Rheology of Entangled Styrene Comb Polymers. <em>Macromolecules</em>, 41(15):5869–5875, aug 2008. URL: <a class="reference external" href="http://pubs.acs.org/doi/abs/10.1021/ma800599m">http://pubs.acs.org/doi/abs/10.1021/ma800599m</a>, <a class="reference external" href="https://doi.org/10.1021/ma800599m">doi:10.1021/ma800599m</a>.</p>
+</dd>
+</dl>
 </p>
 </div>
 </div>
@@ -137,12 +123,12 @@ These files can be generated from the React application in RepTate.</p>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

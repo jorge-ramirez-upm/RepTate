@@ -4,16 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Installation &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="about.html" />
@@ -41,7 +43,7 @@
         <li class="right" >
           <a href="features.html" title="Features"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -49,7 +51,7 @@
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#the-shortcut">The “shortcut”</a></li>
@@ -84,13 +86,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -108,30 +108,30 @@
 <p>RepTate can be installed in two ways:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>the “shortcut”, allows you to run RepTate in a couple of clicks;</li>
-<li>the “scenic route”, requires more steps and the use of the command-line interface.</li>
+<li><p>the “shortcut”, allows you to run RepTate in a couple of clicks;</p></li>
+<li><p>the “scenic route”, requires more steps and the use of the command-line interface.</p></li>
 </ol>
 </div></blockquote>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">RepTate is continuously updated by the developers. Option-2 will get you the latest version,
+<p class="admonition-title">Note</p>
+<p>RepTate is continuously updated by the developers. Option-2 will get you the latest version,
 while Option-1 is a “snapshot” in time of the software.</p>
 </div>
 <div class="admonition hint">
-<p class="first admonition-title">Hint</p>
-<p class="last">Ultimately, the “scenic route” is faster than the “shortcut”:
+<p class="admonition-title">Hint</p>
+<p>Ultimately, the “scenic route” is faster than the “shortcut”:
 To update your version of RepTate in the future, the “scenic route” offers
 the powerful <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code> command.</p>
 </div>
 <div class="section" id="the-shortcut">
 <h2>The “shortcut”<a class="headerlink" href="#the-shortcut" title="Permalink to this headline">¶</a></h2>
 <p>Binary packages (containing all the needed files and libraries,
-as well as a Python interpreter), for the latest version (0.9.3 20180719) can be downloaded here:</p>
-<dl class="docutils">
-<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1">RepTate for Windows (Windows 7 64-bit or later)</a></dt>
-<dd>Unzip and uncompress the dowloaded file and look for the RepTate executable <code class="docutils literal notranslate"><span class="pre">RepTate.exe</span></code>.</dd>
-<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1">RepTate for Mac (OS X 10.10 or later)</a></dt>
-<dd>Drag-and-drop the RepTate application in your Applications folder.</dd>
+as well as a Python interpreter), for the latest version (0.9.5 20181205) can be downloaded here:</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1">RepTate for Windows (Windows 7 64-bit or later)</a></dt><dd><p>Unzip and uncompress the dowloaded file and look for the RepTate executable <code class="docutils literal notranslate"><span class="pre">RepTate.exe</span></code>.</p>
+</dd>
+<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1">RepTate for Mac (OS X 10.10 or later)</a></dt><dd><p>Drag-and-drop the RepTate application in your Applications folder.</p>
+</dd>
 </dl>
 <p>Linux users are supposed to follow the instruction below.</p>
 <p>Previous versions of the code can be downloaded from the following <a class="reference external" href="https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz">folder</a>.</p>
@@ -143,12 +143,12 @@ and the “cloning” of RepTate’s repository.</p>
 <div class="section" id="executive-summary">
 <h3>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li>Install Python 3.6 or later via <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a> (or your favourite method)</li>
-<li>Install RepTate’s package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl) via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code></li>
-<li>Install Git (version control system)  via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">git</span></code></li>
-<li>Clone RepTate’s repository via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/jorge-ramirez-upm/RepTate.git</span></code></li>
-<li>Try launching RepTate application: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then again <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">RepTate.py</span></code></li>
-<li>From time to time, check for updates via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code></li>
+<li><p>Install Python 3.6 or later via <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a> (or your favourite method)</p></li>
+<li><p>Install RepTate’s package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl) via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code></p></li>
+<li><p>Install Git (version control system)  via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">git</span></code></p></li>
+<li><p>Clone RepTate’s repository via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/jorge-ramirez-upm/RepTate.git</span></code></p></li>
+<li><p>Try launching RepTate application: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then again <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">RepTate.py</span></code></p></li>
+<li><p>From time to time, check for updates via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code></p></li>
 </ol>
 <p>Should anything go wrong, please read the detailed explanations below.</p>
 </div>
@@ -253,8 +253,8 @@ While you are in the <code class="docutils literal notranslate"><span class="pre
 <p>If there is no update available, it will print someting like <code class="docutils literal notranslate"><span class="pre">Already</span> <span class="pre">up</span> <span class="pre">to</span> <span class="pre">date.</span></code>, otherwise you will the full list of changes printed on your screen.</p>
 <p>Once this is done, you can launch RepTate as usual.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If anything go wrong during the installation, please contact the developers
+<p class="admonition-title">Note</p>
+<p>If anything go wrong during the installation, please contact the developers
 using the contact details given on the <a class="reference external" href="http://reptate.readthedocs.io">documentation’s main page</a>.</p>
 </div>
 </div>
@@ -283,12 +283,12 @@ using the contact details given on the <a class="reference external" href="http:
         <li class="right" >
           <a href="features.html" title="Features"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

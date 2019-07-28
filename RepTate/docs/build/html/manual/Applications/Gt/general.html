@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>G(t): General description &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>G(t): General description &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -33,8 +27,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +43,7 @@
         <li class="right" >
           <a href="Gt.html" title="G(t): Stress Relaxation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="Gt.html" accesskey="U"> G(t): Stress Relaxation</a> &#187;</li> 
@@ -61,20 +54,20 @@
             <p class="logo"><a href="../../../index.html">
               <img class="logo" src="../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">G(t): General description</a><ul>
 <li><a class="reference internal" href="#purpose">Purpose</a></li>
 <li><a class="reference internal" href="#data-files">Data Files</a><ul>
-<li><a class="reference internal" href="#gt-extension"><code class="docutils literal"><span class="pre">.gt</span></code> extension</a></li>
+<li><a class="reference internal" href="#gt-extension"><code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#views">Views</a><ul>
 <li><a class="reference internal" href="#log-g-t">log[G(t)]</a></li>
 <li><a class="reference internal" href="#g-t">G(t)</a></li>
-<li><a class="reference internal" href="#schwarzl-g-g">Schwarzl G’,G’‘</a></li>
-<li><a class="reference internal" href="#i-rheo-g-g">i-Rheo G’,G’‘</a></li>
-<li><a class="reference internal" href="#i-rheo-over-g-g">i-Rheo-Over G’,G’‘</a></li>
+<li><a class="reference internal" href="#schwarzl-g-g">Schwarzl G’,G’’</a></li>
+<li><a class="reference internal" href="#i-rheo-g-g">i-Rheo G’,G’’</a></li>
+<li><a class="reference internal" href="#i-rheo-over-g-g">i-Rheo-Over G’,G’’</a></li>
 </ul>
 </li>
 </ul>
@@ -95,13 +88,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -117,17 +110,19 @@
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#purpose" id="id4">Purpose</a></li>
-<li><a class="reference internal" href="#data-files" id="id5">Data Files</a><ul>
-<li><a class="reference internal" href="#gt-extension" id="id6"><code class="docutils literal"><span class="pre">.gt</span></code> extension</a></li>
+<li><p><a class="reference internal" href="#purpose" id="id4">Purpose</a></p></li>
+<li><p><a class="reference internal" href="#data-files" id="id5">Data Files</a></p>
+<ul>
+<li><p><a class="reference internal" href="#gt-extension" id="id6"><code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#views" id="id7">Views</a><ul>
-<li><a class="reference internal" href="#log-g-t" id="id8">log[G(t)]</a></li>
-<li><a class="reference internal" href="#g-t" id="id9">G(t)</a></li>
-<li><a class="reference internal" href="#schwarzl-g-g" id="id10">Schwarzl G’,G’‘</a></li>
-<li><a class="reference internal" href="#i-rheo-g-g" id="id11">i-Rheo G’,G’‘</a></li>
-<li><a class="reference internal" href="#i-rheo-over-g-g" id="id12">i-Rheo-Over G’,G’‘</a></li>
+<li><p><a class="reference internal" href="#views" id="id7">Views</a></p>
+<ul>
+<li><p><a class="reference internal" href="#log-g-t" id="id8">log[G(t)]</a></p></li>
+<li><p><a class="reference internal" href="#g-t" id="id9">G(t)</a></p></li>
+<li><p><a class="reference internal" href="#schwarzl-g-g" id="id10">Schwarzl G’,G’’</a></p></li>
+<li><p><a class="reference internal" href="#i-rheo-g-g" id="id11">i-Rheo G’,G’’</a></p></li>
+<li><p><a class="reference internal" href="#i-rheo-over-g-g" id="id12">i-Rheo-Over G’,G’’</a></p></li>
 </ul>
 </li>
 </ul>
@@ -138,7 +133,7 @@
 <h2><a class="toc-backref" href="#id4">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="ApplicationGt.ApplicationGt">
-<em class="property">class </em><code class="descclassname">ApplicationGt.</code><code class="descname">ApplicationGt</code><a class="reference internal" href="../../../_modules/ApplicationGt.html#ApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.ApplicationGt" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">ApplicationGt.</code><code class="sig-name descname">ApplicationGt</code><a class="reference internal" href="../../../_modules/ApplicationGt.html#ApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.ApplicationGt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Application to Analyze Stress Relaxation Data</p>
 </dd></dl>
 
@@ -146,27 +141,29 @@
 <div class="section" id="data-files">
 <h2><a class="toc-backref" href="#id5">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal"><span class="pre">;</span></code>).
-It may contain any number of parameters which will be read and saved as file-parameter in RepTate.</li>
-<li>Then the data columns should appear, separated by <strong>spaces</strong> or <strong>tabs</strong>.</li>
+<li><p>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal notranslate"><span class="pre">;</span></code>).
+It may contain any number of parameters which will be read and saved as file-parameter in RepTate.</p></li>
+<li><p>Then the data columns should appear, separated by <strong>spaces</strong> or <strong>tabs</strong>.</p></li>
 </ul>
 <div class="section" id="gt-extension">
-<h3><a class="toc-backref" href="#id6"><code class="docutils literal"><span class="pre">.gt</span></code> extension</a><a class="headerlink" href="#gt-extension" title="Permalink to this headline">¶</a></h3>
-<p>Text files with <code class="docutils literal"><span class="pre">.gt</span></code> extension should be organised as follows:</p>
+<h3><a class="toc-backref" href="#id6"><code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension</a><a class="headerlink" href="#gt-extension" title="Permalink to this headline">¶</a></h3>
+<p>Text files with <code class="docutils literal notranslate"><span class="pre">.gt</span></code> extension should be organised as follows:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">.gt</span></code> files should provide at least parameter values for<ol class="arabic">
-<li>Molecular weight, <span class="math">\(M_w\)</span></li>
-<li>Strain applied, <span class="math">\(\gamma\)</span>. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress, and the value of <span class="math">\(\gamma\)</span> is assumed to be equal to 1.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.gt</span></code> files should provide at least parameter values for</p>
+<ol class="arabic simple">
+<li><p>Molecular weight, <span class="math notranslate nohighlight">\(M_w\)</span></p></li>
+<li><p>Strain applied, <span class="math notranslate nohighlight">\(\gamma\)</span>. If not present, the experimental data file is supposed to contain the relaxation modulus, not the stress, and the value of <span class="math notranslate nohighlight">\(\gamma\)</span> is assumed to be equal to 1.</p></li>
 </ol>
 </li>
-<li>2 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:<ol class="arabic">
-<li>time, <span class="math">\(t\)</span>,</li>
-<li>shear stress, <span class="math">\(\sigma_{xy}\)</span>,</li>
+<li><p>2 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:</p>
+<ol class="arabic simple">
+<li><p>time, <span class="math notranslate nohighlight">\(t\)</span>,</p></li>
+<li><p>shear stress, <span class="math notranslate nohighlight">\(\sigma_{xy}\)</span>,</p></li>
 </ol>
 </li>
 </ul>
-<p>A correct <code class="docutils literal"><span class="pre">.gt</span></code> file looks like:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Mw=224;gamma=1;
+<p>A correct <code class="docutils literal notranslate"><span class="pre">.gt</span></code> file looks like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Mw=224;gamma=1;
 t sxy
 0.0E+0      1.28146E+10
 5.0E-6      1.13402E+10
@@ -182,8 +179,8 @@ t sxy
 <h3><a class="toc-backref" href="#id8">log[G(t)]</a><a class="headerlink" href="#log-g-t" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewLogGt">
-<code class="descclassname">BaseApplicationGt.</code><code class="descname">viewLogGt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewLogGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewLogGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the relaxation modulus <span class="math">\(G(t)\)</span> vs logarithm of time <span class="math">\(t\)</span></p>
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewLogGt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewLogGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewLogGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
 </dd></dl>
 
 <a class="reference internal image-reference" href="../../../_images/Gt_LogGt.png"><img alt="../../../_images/Gt_LogGt.png" class="align-center" src="../../../_images/Gt_LogGt.png" style="width: 45%;" /></a>
@@ -192,58 +189,54 @@ t sxy
 <h3><a class="toc-backref" href="#id9">G(t)</a><a class="headerlink" href="#g-t" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewGt">
-<code class="descclassname">BaseApplicationGt.</code><code class="descname">viewGt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewGt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Relaxation modulus <span class="math">\(G(t)\)</span> vs time <span class="math">\(t\)</span> (both in logarithmic scale)</p>
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewGt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (both in logarithmic scale)</p>
 </dd></dl>
 
 <a class="reference internal image-reference" href="../../../_images/Gt_Gt.png"><img alt="../../../_images/Gt_Gt.png" class="align-center" src="../../../_images/Gt_Gt.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="schwarzl-g-g">
-<h3><a class="toc-backref" href="#id10">Schwarzl G’,G’‘</a><a class="headerlink" href="#schwarzl-g-g" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">Schwarzl G’,G’’</a><a class="headerlink" href="#schwarzl-g-g" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt">
-<code class="descclassname">BaseApplicationGt.</code><code class="descname">viewSchwarzl_Gt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewSchwarzl_Gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Schwarzl transformation: numerical calculation of the storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus 
-<span class="math">\(G''(\omega)\)</span> from the relaxation modulus <span class="math">\(G(t)\)</span></p>
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewSchwarzl_Gt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewSchwarzl_Gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schwarzl transformation: numerical calculation of the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus 
+<span class="math notranslate nohighlight">\(G''(\omega)\)</span> from the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span></p>
 </dd></dl>
 
-<p>The time range of the <span class="math">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math">\(\log(t_{min})\)</span> and <span class="math">\(\log(t_{min})\)</span>. For more details, check <a class="reference internal" href="#gt-schwarzl-1971" id="id1">[1]</a>.</p>
+<p>The time range of the <span class="math notranslate nohighlight">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math notranslate nohighlight">\(\log(t_{min})\)</span> and <span class="math notranslate nohighlight">\(\log(t_{min})\)</span>. For more details, check <a class="reference internal" href="#gt-schwarzl-1971" id="id1">[1]</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/Gt_Schwarzl.png"><img alt="../../../_images/Gt_Schwarzl.png" class="align-center" src="../../../_images/Gt_Schwarzl.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="i-rheo-g-g">
-<h3><a class="toc-backref" href="#id11">i-Rheo G’,G’‘</a><a class="headerlink" href="#i-rheo-g-g" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">i-Rheo G’,G’’</a><a class="headerlink" href="#i-rheo-g-g" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewiRheo">
-<code class="descclassname">BaseApplicationGt.</code><code class="descname">viewiRheo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewiRheo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewiRheo" title="Permalink to this definition">¶</a></dt>
-<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math">\(G(t)\)</span> to obtain the storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus <span class="math">\(G''(\omega)\)</span> (no oversamplig).</p>
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewiRheo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewiRheo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewiRheo" title="Permalink to this definition">¶</a></dt>
+<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> to obtain the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate nohighlight">\(G''(\omega)\)</span> (no oversamplig).</p>
 </dd></dl>
 
-<p>The time range of the <span class="math">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math">\(\log(t_{min})\)</span> and <span class="math">\(\log(t_{min})\)</span>. For more details, check <a class="reference internal" href="#gt-tassieri-2016" id="id2">[2]</a>.</p>
+<p>The time range of the <span class="math notranslate nohighlight">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math notranslate nohighlight">\(\log(t_{min})\)</span> and <span class="math notranslate nohighlight">\(\log(t_{min})\)</span>. For more details, check <a class="reference internal" href="#gt-tassieri-2016" id="id2">[2]</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/Gt_iRheo.png"><img alt="../../../_images/Gt_iRheo.png" class="align-center" src="../../../_images/Gt_iRheo.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="i-rheo-over-g-g">
-<h3><a class="toc-backref" href="#id12">i-Rheo-Over G’,G’‘</a><a class="headerlink" href="#i-rheo-over-g-g" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id12">i-Rheo-Over G’,G’’</a><a class="headerlink" href="#i-rheo-over-g-g" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="ApplicationGt.BaseApplicationGt.viewiRheoOver">
-<code class="descclassname">BaseApplicationGt.</code><code class="descname">viewiRheoOver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewiRheoOver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewiRheoOver" title="Permalink to this definition">¶</a></dt>
-<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math">\(G(t)\)</span> to obtain the storage modulus <span class="math">\(G'(\omega)\)</span> and loss modulus <span class="math">\(G''(\omega)\)</span> (with user selected oversamplig).</p>
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewiRheoOver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ApplicationGt.html#BaseApplicationGt.viewiRheoOver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationGt.BaseApplicationGt.viewiRheoOver" title="Permalink to this definition">¶</a></dt>
+<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> to obtain the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate nohighlight">\(G''(\omega)\)</span> (with user selected oversamplig).</p>
 </dd></dl>
 
-<p>The time range of the <span class="math">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math">\(\log(t_{min})\)</span> and <span class="math">\(\log(t_{min})\)</span>. For more details, check <a class="reference internal" href="#gt-tassieri-2016" id="id3">[2]</a>.</p>
+<p>The time range of the <span class="math notranslate nohighlight">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math notranslate nohighlight">\(\log(t_{min})\)</span> and <span class="math notranslate nohighlight">\(\log(t_{min})\)</span>. For more details, check <a class="reference internal" href="#gt-tassieri-2016" id="id3">[2]</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/Gt_iRheoOver.png"><img alt="../../../_images/Gt_iRheoOver.png" class="align-center" src="../../../_images/Gt_iRheoOver.png" style="width: 45%;" /></a>
 <p class="rubric">References</p>
-<p id="bibtex-bibliography-manual/Applications/Gt/general-0"><table class="docutils citation" frame="void" id="gt-schwarzl-1971" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>F.&nbsp;R. Schwarzl. Numerical calculation of storage and loss modulus from stress relaxation data for linear viscoelastic materials. <em>Rheologica Acta</em>, 10(2):165–173, jun 1971. <a class="reference external" href="https://doi.org/10.1007/bf02040437">doi:10.1007/bf02040437</a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="gt-tassieri-2016" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label">[2]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> Manlio Tassieri, Marco Laurati, Dan&nbsp;J. Curtis, Dietmar&nbsp;W. Auhl, Salvatore Coppola, Andrea Scalfati, Karl Hawkins, Phylip&nbsp;Rhodri Williams, and Jonathan&nbsp;M. Cooper. I-rheo: measuring the materials\textquotesingle  linear viscoelastic properties \textquotedblleft in a step\textquotedblright ! <em>Journal of Rheology</em>, 60(4):649–660, jul 2016. <a class="reference external" href="https://doi.org/10.1122/1.4953443">doi:10.1122/1.4953443</a>.</td></tr>
-</tbody>
-</table>
+<p id="bibtex-bibliography-manual/Applications/Gt/general-0"><dl class="citation">
+<dt class="label" id="gt-schwarzl-1971"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>F. R. Schwarzl. Numerical calculation of storage and loss modulus from stress relaxation data for linear viscoelastic materials. <em>Rheologica Acta</em>, 10(2):165–173, jun 1971. <a class="reference external" href="https://doi.org/10.1007/bf02040437">doi:10.1007/bf02040437</a>.</p>
+</dd>
+<dt class="label" id="gt-tassieri-2016"><span class="brackets">2</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>)</span></dt>
+<dd><p>Manlio Tassieri, Marco Laurati, Dan J. Curtis, Dietmar W. Auhl, Salvatore Coppola, Andrea Scalfati, Karl Hawkins, Phylip Rhodri Williams, and Jonathan M. Cooper. I-rheo: measuring the materials\textquotesingle  linear viscoelastic properties \textquotedblleft in a step\textquotedblright ! <em>Journal of Rheology</em>, 60(4):649–660, jul 2016. <a class="reference external" href="https://doi.org/10.1122/1.4953443">doi:10.1122/1.4953443</a>.</p>
+</dd>
+</dl>
 </p>
 </div>
 </div>
@@ -270,7 +263,7 @@ t sxy
         <li class="right" >
           <a href="Gt.html" title="G(t): Stress Relaxation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="Gt.html" > G(t): Stress Relaxation</a> &#187;</li> 
@@ -278,7 +271,7 @@ t sxy
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

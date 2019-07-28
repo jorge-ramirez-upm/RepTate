@@ -2,6 +2,18 @@
 Version History
 ===============
 
+Release 0.9.5 - 20181205
+========================
+- New React theory "Diene CSTR"
+- New Rolie-Double-Poly-LVE theory for polydisperse entangled linear polymers
+- New BoB NLVE theory
+- New NLVE theory: PETS model
+- New NLVE theory: GLaMM
+- Changed BoB so it doesn´t generate auxiliary files
+- View all theories applied to current dataset simultaneously
+- Added cursor to check data values with the mouse
+- Corrections to bugs
+
 Release 0.9.3 - 20180719
 ========================
 - New App: to handle and fit TTS shift factors

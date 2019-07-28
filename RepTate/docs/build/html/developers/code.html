@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Navigate the source Code of RepTate &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Navigate the source Code of RepTate &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
@@ -33,8 +27,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +43,7 @@
         <li class="right" >
           <a href="callgraphGUI.html" title="Code Diagrams for GUI"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" accesskey="U">RepTate for developers</a> &#187;</li> 
       </ul>
     </div>
@@ -59,7 +52,7 @@
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Navigate the source Code of RepTate</a><ul>
 <li><a class="reference internal" href="#main-application">Main Application</a><ul>
@@ -85,13 +78,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -162,30 +155,24 @@
 <p>Main program that launches the GUI.</p>
 <dl class="function">
 <dt id="RepTate.get_argument_files">
-<code class="descclassname">RepTate.</code><code class="descname">get_argument_files</code><span class="sig-paren">(</span><em>finlist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate.html#get_argument_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.get_argument_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">RepTate.</code><code class="sig-name descname">get_argument_files</code><span class="sig-paren">(</span><em class="sig-param">finlist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate.html#get_argument_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.get_argument_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse files from command line and group them by extension</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>finlist</strong> (<a class="reference internal" href="CodeCoreCL.html#Application.Application.list" title="Application.Application.list"><em>list</em></a>) – List of files from argparse</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>finlist</strong> (<em>list</em>) – List of files from argparse</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="RepTate.start_RepTate">
-<code class="descclassname">RepTate.</code><code class="descname">start_RepTate</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate.html#start_RepTate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.start_RepTate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">RepTate.</code><code class="sig-name descname">start_RepTate</code><span class="sig-paren">(</span><em class="sig-param">argv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate.html#start_RepTate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.start_RepTate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main RepTate application.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argv</strong> (<a class="reference internal" href="CodeCoreCL.html#Application.Application.list" title="Application.Application.list"><em>list</em></a>) – Command line parameters passed to Reptate</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>list</em>) – Command line parameters passed to Reptate</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -195,30 +182,24 @@
 <p>Main program that launches the CL version of RepTate.</p>
 <dl class="function">
 <dt id="RepTateCL.get_argument_files">
-<code class="descclassname">RepTateCL.</code><code class="descname">get_argument_files</code><span class="sig-paren">(</span><em>finlist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTateCL.html#get_argument_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTateCL.get_argument_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">RepTateCL.</code><code class="sig-name descname">get_argument_files</code><span class="sig-paren">(</span><em class="sig-param">finlist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTateCL.html#get_argument_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTateCL.get_argument_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse files from command line and group them by extension</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>finlist</strong> (<a class="reference internal" href="CodeCoreCL.html#Application.Application.list" title="Application.Application.list"><em>list</em></a>) – List of files from argparse</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>finlist</strong> (<em>list</em>) – List of files from argparse</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="RepTateCL.start_RepTate">
-<code class="descclassname">RepTateCL.</code><code class="descname">start_RepTate</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTateCL.html#start_RepTate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTateCL.start_RepTate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">RepTateCL.</code><code class="sig-name descname">start_RepTate</code><span class="sig-paren">(</span><em class="sig-param">argv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTateCL.html#start_RepTate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTateCL.start_RepTate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main RepTate application.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argv</strong> (<a class="reference internal" href="CodeCoreCL.html#Application.Application.list" title="Application.Application.list"><em>list</em></a>) – Command line parameters passed to Reptate</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>list</em>) – Command line parameters passed to Reptate</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -246,13 +227,13 @@
         <li class="right" >
           <a href="callgraphGUI.html" title="Code Diagrams for GUI"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

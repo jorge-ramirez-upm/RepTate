@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>React Tutorial: Graphical User Interface &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>React Tutorial: Graphical User Interface &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -33,8 +27,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +43,7 @@
         <li class="right" >
           <a href="../Theory/dieneCSTR.html" title="Diene CSTR"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../React.html" accesskey="U"> React: Monte-Carlo polymerisation</a> &#187;</li> 
@@ -75,13 +68,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -109,32 +102,30 @@ a particular graph, click on the relevant tab on the side of the graphs panel.
 Then change its view. Now, clicking the “All” tab should return to the
 three-graphs display with the view of the relevant graph changed.</p>
 <ol class="arabic">
-<li><p class="first">Start RepTate and create a new React Application <a class="reference internal" href="../../../../_images/React.png"><img alt="logo" class="align-bottom" src="../../../../_images/React.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<li><p>Start RepTate and create a new React Application <a class="reference internal" href="../../../../_images/React.png"><img alt="logo" class="align-bottom" src="../../../../_images/React.png" style="width: 20pt; height: 20pt;" /></a>:</p>
 <a class="reference internal image-reference" href="../../../../_images/open_React_app.png"><img alt="New React application" class="align-center" src="../../../../_images/open_React_app.png" style="width: 400pt;" /></a>
 </li>
-<li><p class="first">Drag and drop a file with a <code class="docutils literal"><span class="pre">.reac</span></code> extension, e.g. <code class="docutils literal"><span class="pre">out1.reac</span></code> in the <code class="docutils literal"><span class="pre">data/React/</span></code> folder.
+<li><p>Drag and drop a file with a <code class="docutils literal notranslate"><span class="pre">.reac</span></code> extension, e.g. <code class="docutils literal notranslate"><span class="pre">out1.reac</span></code> in the <code class="docutils literal notranslate"><span class="pre">data/React/</span></code> folder.
 See <span class="xref std std-ref">React: General description</span> for more information on the expected data file format.</p>
-<p>The 4 columns of the file should contain (1) the molecular mass <span class="math">\(M\)</span>, (2) the
-relative molecular weight <span class="math">\(w(\log(M))\)</span>, (3) the <span class="math">\(g\)</span>-factor,
+<p>The 4 columns of the file should contain (1) the molecular mass <span class="math notranslate nohighlight">\(M\)</span>, (2) the
+relative molecular weight <span class="math notranslate nohighlight">\(w(\log(M))\)</span>, (3) the <span class="math notranslate nohighlight">\(g\)</span>-factor,
 and (4) the number of branching per 1000 carbon.
-The <span class="math">\(g\)</span>-factor is defined as</p>
-<div class="math">
+The <span class="math notranslate nohighlight">\(g\)</span>-factor is defined as</p>
+<div class="math notranslate nohighlight">
 \[g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}},\]</div>
-<p>where <span class="math">\(\langle R^2_g \rangle_\text{linear}\)</span> is the radius of
+<p>where <span class="math notranslate nohighlight">\(\langle R^2_g \rangle_\text{linear}\)</span> is the radius of
 gyration squared of a linear molecule of the same chemistry and molecular
 weight as a given branched molecule.</p>
 <a class="reference internal image-reference" href="../../../../_images/open_react_file.png"><img alt="Load data" class="align-center" src="../../../../_images/open_react_file.png" style="width: 400pt;" /></a>
 </li>
-<li><p class="first">Select a theory, e.g. the “Tobita Batch” theory <a class="reference internal" href="../../../../_images/TobitaBatchTh.png"><img alt="TobitaBatchTh" class="align-bottom" src="../../../../_images/TobitaBatchTh.png" style="height: 15pt;" /></a>, and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
+<li><p>Select a theory, e.g. the “Tobita Batch” theory <a class="reference internal" href="../../../../_images/TobitaBatchTh.png"><img alt="TobitaBatchTh" class="align-bottom" src="../../../../_images/TobitaBatchTh.png" style="height: 15pt;" /></a>, and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it.</p>
 <p>Note that automatic “minimisation” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="minimisation" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="height: 20pt;" /></a> is disabled for all theories
 in the React application because they are based on Monte Carlo simulations.
 Hence, minimisation seems a risky and time-consuming business.</p>
 <a class="reference internal image-reference" href="../../../../_images/create_tobita_batch_theory.png"><img alt="New TobitaBatch theory" class="align-center" src="../../../../_images/create_tobita_batch_theory.png" style="width: 400pt;" /></a>
 </li>
-<li><p class="first">To adjust the BoB binning settings, click the <a class="reference internal" href="../../../../_images/icons8-BoB-settings.png"><img alt="bob_param" class="align-bottom" src="../../../../_images/icons8-BoB-settings.png" style="width: 20pt; height: 20pt;" /></a> button.</p>
-</li>
-<li><p class="first">To save the polymer configuration for BoB, click the <a class="reference internal" href="../../../../_images/icons8-save-BoB.png"><img alt="save" class="align-bottom" src="../../../../_images/icons8-save-BoB.png" style="width: 20pt; height: 20pt;" /></a> button.</p>
-</li>
+<li><p>To adjust the BoB binning settings, click the <a class="reference internal" href="../../../../_images/icons8-BoB-settings.png"><img alt="bob_param" class="align-bottom" src="../../../../_images/icons8-BoB-settings.png" style="width: 20pt; height: 20pt;" /></a> button.</p></li>
+<li><p>To save the polymer configuration for BoB, click the <a class="reference internal" href="../../../../_images/icons8-save-BoB.png"><img alt="save" class="align-bottom" src="../../../../_images/icons8-save-BoB.png" style="width: 20pt; height: 20pt;" /></a> button.</p></li>
 </ol>
 </div>
 
@@ -159,7 +150,7 @@ Hence, minimisation seems a risky and time-consuming business.</p>
         <li class="right" >
           <a href="../Theory/dieneCSTR.html" title="Diene CSTR"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../React.html" > React: Monte-Carlo polymerisation</a> &#187;</li> 
@@ -167,7 +158,7 @@ Hence, minimisation seems a risky and time-consuming business.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

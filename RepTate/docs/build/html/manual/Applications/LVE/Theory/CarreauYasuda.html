@@ -4,16 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Carreau-Yasuda equation &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Carreau-Yasuda equation &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -33,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -41,7 +43,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Carreau-Yasuda equation</a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
@@ -58,13 +60,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -85,24 +85,22 @@
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="TheoryCarreauYasuda.TheoryCarreauYasuda">
-<em class="property">class </em><code class="descclassname">TheoryCarreauYasuda.</code><code class="descname">TheoryCarreauYasuda</code><a class="reference internal" href="../../../../_modules/TheoryCarreauYasuda.html#TheoryCarreauYasuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryCarreauYasuda.TheoryCarreauYasuda" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">TheoryCarreauYasuda.</code><code class="sig-name descname">TheoryCarreauYasuda</code><a class="reference internal" href="../../../../_modules/TheoryCarreauYasuda.html#TheoryCarreauYasuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryCarreauYasuda.TheoryCarreauYasuda" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the complex viscosity with the Carreau-Yasuda equation.</p>
 <ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math notranslate">
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
 \[\eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^{(n-1)/a}\]</div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math notranslate">\(\eta_0\)</span>: Viscosity at zero shear rate.</li>
-<li><span class="math notranslate">\(\eta_\infty\)</span>: Viscosity at infinite shear rate.</li>
-<li><span class="math notranslate">\(\lambda\)</span>: Relaxation time.</li>
-<li><span class="math notranslate">\(n\)</span>: Power law index.</li>
-<li><span class="math notranslate">\(a\)</span>: Dimensionless parameter (2 in most cases)</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\eta_0\)</span>: Viscosity at zero shear rate.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eta_\infty\)</span>: Viscosity at infinite shear rate.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda\)</span>: Relaxation time.</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span>: Power law index.</p></li>
+<li><p><span class="math notranslate nohighlight">\(a\)</span>: Dimensionless parameter (2 in most cases)</p></li>
 </ul>
 </dd>
 </dl>
@@ -114,18 +112,18 @@
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>Fit of the complex viscosity to the phenomenological Carreau-Yasuda equation. The equation used in the fit is:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[\eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^{(n-1)/a}\]</div>
-<p>In the equation, <span class="math notranslate">\(a\)</span> is a dimensionless parameter that describes the transition from the zero-shear rate region
-to the power law region. It frequently takes the value 2. In some experimental data, it is safe to assume that <span class="math notranslate">\(\eta_\infty\)</span> is equal to zero.</p>
+<p>In the equation, <span class="math notranslate nohighlight">\(a\)</span> is a dimensionless parameter that describes the transition from the zero-shear rate region
+to the power law region. It frequently takes the value 2. In some experimental data, it is safe to assume that <span class="math notranslate nohighlight">\(\eta_\infty\)</span> is equal to zero.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The fit only makes sense when applied using the <code class="docutils literal notranslate"><span class="pre">logstar</span></code> view (logarithm of the complex viscosity). The logarithm
+<p class="admonition-title">Warning</p>
+<p>The fit only makes sense when applied using the <code class="docutils literal notranslate"><span class="pre">logstar</span></code> view (logarithm of the complex viscosity). The logarithm
 is needed, due to the wide range of viscosity values.</p>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The theory can only be applied to one file per data set.
+<p class="admonition-title">Warning</p>
+<p>The theory can only be applied to one file per data set.
 If more than one file is active in the current data set,
 the theory will be applied to the first one in the list of active files.</p>
 </div>
@@ -147,12 +145,12 @@ the theory will be applied to the first one in the list of active files.</p>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

@@ -43,9 +43,25 @@ from DataTable import DataTable
 
 
 class TheoryWLF(CmdBase):
-    """[summary]
+    """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
     
-    [description]
+    * **Function**
+        .. math::
+            \\begin{eqnarray}
+            \\omega(T_r) &= & a_T \\omega(T) \\\\
+            G(T_r) &= & b_T G(T) \\\\
+            \\log_{10} a_T &= & \\frac{-B_1 (T-T_r)}{(B_2+T_r)(B_2+T)} \\\\
+            b_T &= & \\frac{\\rho(T_r)T_r}{\\rho(T)T} = \\frac{(1+\\alpha T)(T_r+273.15)}{(1+\\alpha T_r)(T+273.15)} \\\\
+            T_g &= &T_g^\\infty - \\frac{C_{T_g}}{M_w}
+            \\end{eqnarray}
+    
+    * **Parameters**
+       - :math:`T_r`: Reference temperature to which the experimental data will be shifted.
+       - :math:`B_1`: Material parameter, corresponding to :math:`C_1\cdot C_2`, with :math:`C_1` and :math:`C_2` being the standard WLF material parameters.
+       - :math:`B_2`: Material parameter, corresponding to :math:`C_2-T_r`, :math:`C_2` being the standard WLF material parameter.
+       - logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.
+       - :math:`C_{T_g}`: Material parameter that describes the dependence of :math:`T_g` with :math:`M_w`.
+       - dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).
     """
     thname = 'WLF'
     description = 'Williams-Landel-Ferry'

@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Polymer storage and saving to BoB &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Polymer storage and saving to BoB &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -31,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -50,7 +43,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Polymer storage and saving to BoB</a></li>
 <li><a class="reference internal" href="#memory-issues">Memory issues</a></li>
@@ -64,13 +57,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -84,8 +77,8 @@
   <p>When a molecule is generated, it is straightforward to assess its molecular
 weight and number of branches.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The <cite>g</cite>-factor is calculated based on the
+<p class="admonition-title">Warning</p>
+<p>The <cite>g</cite>-factor is calculated based on the
 assumption of ideal random walk statistics (as opposed to self-avoiding walk
 statistics). Ideal chain radius of gyration is fast to calculate:
 self-avoiding walk radius is not.
@@ -104,7 +97,7 @@ weight, number of branches and <cite>g</cite>-factor).</p>
 possible output into a BoB polymer configuration file. The decision as to
 whether to save a molecule, or not, is based upon whether there have been a
 given number of molecules of similar molecular weight already generated.
-The <span class="math">\(\log_{10}\text{MW}\)</span> axis is split into a set of evenly-spaced bins,
+The <span class="math notranslate nohighlight">\(\log_{10}\text{MW}\)</span> axis is split into a set of evenly-spaced bins,
 and each bin keeps track of how many polymers have been made with molecular
 weight in the range of that bin.
 Once the number made exceeds a given maximum, polymers of
@@ -117,11 +110,11 @@ accordingly, to account for the unsaved molecules.</p>
 <a class="reference internal" href="../../../../_images/icons8-BoB-settings.png"><img alt="bob_param" class="align-bottom" src="../../../../_images/icons8-BoB-settings.png" style="width: 20pt; height: 20pt;" /></a>
 button. This opens a form with four parameters:</p>
 <ul class="simple">
-<li>the maximum molecular weight of the bins,</li>
-<li>the minimum molecular weight of the bins (it is wise to make sure
-these span the MW range of the polymers you are making),</li>
-<li>the number of bins,</li>
-<li>the maximum number of polymers stored per bin.</li>
+<li><p>the maximum molecular weight of the bins,</p></li>
+<li><p>the minimum molecular weight of the bins (it is wise to make sure
+these span the MW range of the polymers you are making),</p></li>
+<li><p>the number of bins,</p></li>
+<li><p>the maximum number of polymers stored per bin.</p></li>
 </ul>
 <p>In particular, increasing either of the last two parameters
 increases the number of polymers saved.</p>
@@ -137,27 +130,27 @@ the BoB documentation.</p>
 and <cite>g</cite>-factor) in a polymer record, and connectivity information in arm
 records.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">There is a fixed amount of computer memory allocated for this. React is designed to
+<p class="admonition-title">Note</p>
+<p>There is a fixed amount of computer memory allocated for this. React is designed to
 cope smoothly with running out of memory - it should kindly ask you to allocate more memory!
 The dialog will propose you to increase the amount of computer memory allocated to React
 and give you an estimate the extra amount or RAM needed.</p>
 </div>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
+<p class="admonition-title">Tip</p>
 <p>There are some things that contribute to using a lot of memory:</p>
-<ul class="last simple">
-<li>Some choices of reaction parameters lead to extremely large molecules,
+<ul class="simple">
+<li><p>Some choices of reaction parameters lead to extremely large molecules,
 with lots of arms being generated on each molecule. For non-zero values of the
-parameter <span class="math">\(\beta\)</span>, gelation (i.e. infinite molecules) is possible. If a
-molecule looks like being particularly large, you will get a warning message!</li>
-<li>If you make too many molecules, you will run out of memory.</li>
-<li>If you save too many molecules, you will run out of arm records (adjust
-the parameters by clicking on the <a class="reference internal" href="../../../../_images/icons8-BoB-settings.png"><img alt="bob_param" class="align-bottom" src="../../../../_images/icons8-BoB-settings.png" style="width: 20pt; height: 20pt;" /></a> button.</li>
-<li>If you have other theories open which are already using a lot of
+parameter <span class="math notranslate nohighlight">\(\beta\)</span>, gelation (i.e. infinite molecules) is possible. If a
+molecule looks like being particularly large, you will get a warning message!</p></li>
+<li><p>If you make too many molecules, you will run out of memory.</p></li>
+<li><p>If you save too many molecules, you will run out of arm records (adjust
+the parameters by clicking on the <a class="reference internal" href="../../../../_images/icons8-BoB-settings.png"><img alt="bob_param" class="align-bottom" src="../../../../_images/icons8-BoB-settings.png" style="width: 20pt; height: 20pt;" /></a> button.</p></li>
+<li><p>If you have other theories open which are already using a lot of
 storage, there might not be enough memory left for your current calculation
 (close un-needed theories, or adjust their parameters so they don’t use as
-much storage).</li>
+much storage).</p></li>
 </ul>
 </div>
 <p><strong>You will get brief hints along these lines in the theory log if you run out of parameters.</strong></p>
@@ -178,12 +171,12 @@ much storage).</li>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

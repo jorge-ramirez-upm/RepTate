@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Likhtman-McLeish theory &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Likhtman-McLeish theory &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -31,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -50,7 +43,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Likhtman-McLeish theory</a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
@@ -68,13 +61,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -93,16 +86,15 @@
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002">
-<em class="property">class </em><code class="descclassname">TheoryLikhtmanMcLeish2002.</code><code class="descname">TheoryLikhtmanMcLeish2002</code><a class="reference internal" href="../../../../_modules/TheoryLikhtmanMcLeish2002.html#TheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">TheoryLikhtmanMcLeish2002.</code><code class="sig-name descname">TheoryLikhtmanMcLeish2002</code><a class="reference internal" href="../../../../_modules/TheoryLikhtmanMcLeish2002.html#TheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers</p>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last">
-<li><code class="docutils literal"><span class="pre">tau_e</span></code> : Rouse time of one entanglement segment (of length <span class="math">\(M_e\)</span>.</li>
-<li><code class="docutils literal"><span class="pre">Ge</span></code> : Entanglement modulus.</li>
-<li><code class="docutils literal"><span class="pre">Me</span></code> : Entanglement molecular weight.</li>
-<li><code class="docutils literal"><span class="pre">c_nu</span></code> : Constraint release parameter.</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tau_e</span></code> : Rouse time of one entanglement segment (of length <span class="math notranslate nohighlight">\(M_e\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ge</span></code> : Entanglement modulus.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Me</span></code> : Entanglement molecular weight.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c_nu</span></code> : Constraint release parameter.</p></li>
 </ul>
 </dd>
 </dl>
@@ -114,31 +106,30 @@
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>Full quantitative theory for the linear dynamics of entangled linear polymers, based on the tube model and considering contour length fluctuations, constraint release and longitudinal stress relaxation along the tube.</p>
-<p>The parameter <span class="math">\(c_\nu\)</span> is related to the number of chains that are needed to create one entanglement. <span class="math">\(c_\nu=0\)</span> means there is no constraint release. The recommended value is <span class="math">\(c_\nu=0.1\)</span>. This value gives slightly worse fitting than <span class="math">\(c_\nu=1\)</span>, but is more consistent with start-up shear experiments.</p>
-<p>For full details about how the predictions are calculated, refer to <a class="reference internal" href="theory.html#lm-likhtman2002" id="id1">[1]</a>. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of <span class="math">\(Z=M_w/M_e\)</span> = 2, 3, 4 … 299, 300, 305, 310, … 1000, and <span class="math">\(c_\nu\)</span> = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of <span class="math">\(Z\)</span> and <span class="math">\(c_\nu\)</span> in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of <span class="math">\(Z\)</span> and <span class="math">\(c_\nu\)</span>, the prediction is interpolated.</p>
-<p>After the calculation is done, the values of the number of entanglements <span class="math">\(Z\)</span>, the Rouse time <span class="math">\(\tau_R\)</span> and the reptation time <span class="math">\(\tau_D\)</span> of the polymer are printed in the Log Window. These values are calculated according to the following formulas:</p>
-<div class="math">
+<p>The parameter <span class="math notranslate nohighlight">\(c_\nu\)</span> is related to the number of chains that are needed to create one entanglement. <span class="math notranslate nohighlight">\(c_\nu=0\)</span> means there is no constraint release. The recommended value is <span class="math notranslate nohighlight">\(c_\nu=0.1\)</span>. This value gives slightly worse fitting than <span class="math notranslate nohighlight">\(c_\nu=1\)</span>, but is more consistent with start-up shear experiments.</p>
+<p>For full details about how the predictions are calculated, refer to <a class="reference internal" href="theory.html#lm-likhtman2002" id="id1">[1]</a>. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of <span class="math notranslate nohighlight">\(Z=M_w/M_e\)</span> = 2, 3, 4 … 299, 300, 305, 310, … 1000, and <span class="math notranslate nohighlight">\(c_\nu\)</span> = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span> in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span>, the prediction is interpolated.</p>
+<p>After the calculation is done, the values of the number of entanglements <span class="math notranslate nohighlight">\(Z\)</span>, the Rouse time <span class="math notranslate nohighlight">\(\tau_R\)</span> and the reptation time <span class="math notranslate nohighlight">\(\tau_D\)</span> of the polymer are printed in the Log Window. These values are calculated according to the following formulas:</p>
+<div class="math notranslate nohighlight">
 \[\tau_R = \tau_e Z^2\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\tau_D = 3\tau_e Z^3 \left( 1 - \frac{2C_1}{\sqrt{Z}} + \frac{C_2}{Z} + \frac{C_3}{Z^{3/2}} \right)\]</div>
-<p>with the constants <span class="math">\(C_1=1.69\)</span>, <span class="math">\(C_2=4.17\)</span> and <span class="math">\(C_3=-1.55\)</span>.</p>
+<p>with the constants <span class="math notranslate nohighlight">\(C_1=1.69\)</span>, <span class="math notranslate nohighlight">\(C_2=4.17\)</span> and <span class="math notranslate nohighlight">\(C_3=-1.55\)</span>.</p>
 </div>
 <div class="section" id="recommendations">
 <h2>Recommendations<a class="headerlink" href="#recommendations" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>The theory is able to fit several molecular weight samples of the same polymer at the same time. That is the recommended procedure to get the material parameters <span class="math">\(\tau_e\)</span>, <span class="math">\(G_e\)</span> and <span class="math">\(M_e\)</span>.</li>
-<li>The theory allows the user to link the values of <span class="math">\(G_e\)</span> and <span class="math">\(M_e\)</span> through the density <span class="math">\(\rho\)</span> (in g/cm3) by means of the standard expression:</li>
+<li><p>The theory is able to fit several molecular weight samples of the same polymer at the same time. That is the recommended procedure to get the material parameters <span class="math notranslate nohighlight">\(\tau_e\)</span>, <span class="math notranslate nohighlight">\(G_e\)</span> and <span class="math notranslate nohighlight">\(M_e\)</span>.</p></li>
+<li><p>The theory allows the user to link the values of <span class="math notranslate nohighlight">\(G_e\)</span> and <span class="math notranslate nohighlight">\(M_e\)</span> through the density <span class="math notranslate nohighlight">\(\rho\)</span> (in g/cm3) by means of the standard expression:</p></li>
 </ul>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[G_e = \frac{1000\rho R T}{M_e}\]</div>
-<p>The user must input the correct density. If available, <span class="math">\(\rho\)</span> is read from the Materials database. The theory fails to fit correctly the data when the values of <span class="math">\(G_e\)</span> and <span class="math">\(M_e\)</span> are linked in this way.</p>
+<p>The user must input the correct density. If available, <span class="math notranslate nohighlight">\(\rho\)</span> is read from the Materials database. The theory fails to fit correctly the data when the values of <span class="math notranslate nohighlight">\(G_e\)</span> and <span class="math notranslate nohighlight">\(M_e\)</span> are linked in this way.</p>
 <p class="rubric">References</p>
-<p id="bibtex-bibliography-manual/Applications/LVE/Theory/LikhtmanMcLeish-0"><table class="docutils citation" frame="void" id="lm-likhtman2002" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Alexei&nbsp;E. Likhtman and Tom C.&nbsp;B. McLeish. Quantitative Theory for Linear Dynamics of Linear Entangled Polymers. <em>Macromolecules</em>, 35(16):6332–6343, jul 2002. <a class="reference external" href="https://doi.org/10.1021/ma0200219">doi:10.1021/ma0200219</a>.</td></tr>
-</tbody>
-</table>
+<p id="bibtex-bibliography-manual/Applications/LVE/Theory/LikhtmanMcLeish-0"><dl class="citation">
+<dt class="label" id="lm-likhtman2002"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Alexei E. Likhtman and Tom C. B. McLeish. Quantitative Theory for Linear Dynamics of Linear Entangled Polymers. <em>Macromolecules</em>, 35(16):6332–6343, jul 2002. <a class="reference external" href="https://doi.org/10.1021/ma0200219">doi:10.1021/ma0200219</a>.</p>
+</dd>
+</dl>
 </p>
 </div>
 </div>
@@ -158,12 +149,12 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

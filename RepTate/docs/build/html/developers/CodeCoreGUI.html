@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Core classes (Graphical User Interface) &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Core classes (Graphical User Interface) &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
@@ -33,8 +27,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +43,7 @@
         <li class="right" >
           <a href="CodeCoreCL.html" title="Core classes (Command Line)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
@@ -60,7 +53,7 @@
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Core classes (Graphical User Interface)</a><ul>
 <li><a class="reference internal" href="#module-QApplicationManager">QApplicationManager</a></li>
@@ -85,13 +78,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -113,20 +106,19 @@
 ApplicationManager.</p>
 <dl class="class">
 <dt id="QApplicationManager.QApplicationManager">
-<em class="property">class </em><code class="descclassname">QApplicationManager.</code><code class="descname">QApplicationManager</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#ApplicationManager.ApplicationManager" title="ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal"><span class="pre">ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_ReptateMainWindow</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationManager.</code><code class="sig-name descname">QApplicationManager</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#ApplicationManager.ApplicationManager" title="ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_ReptateMainWindow</span></code></p>
 <p>Main Reptate window and application manager</p>
 <p>[description]</p>
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.Qopen_app">
-<code class="descname">Qopen_app</code><span class="sig-paren">(</span><em>app_name</em>, <em>icon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.Qopen_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.Qopen_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Qopen_app</code><span class="sig-paren">(</span><em class="sig-param">app_name</em>, <em class="sig-param">icon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.Qopen_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.Qopen_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>app_name {[type]} – [description]</li>
-<li>icon {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>app_name {[type]} – [description]</p></li>
+<li><p>icon {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -134,19 +126,18 @@ ApplicationManager.</p>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.closeEvent">
-<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.closeEvent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.closeEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ask if we want to save project before closing RepTate (uncomment the rest)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.close_app_tab">
-<code class="descname">close_app_tab</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.close_app_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.close_app_tab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">close_app_tab</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.close_app_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.close_app_tab" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -154,42 +145,41 @@ ApplicationManager.</p>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_about_matplotlib">
-<code class="descname">handle_about_matplotlib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_about_matplotlib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_about_matplotlib" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_about_matplotlib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_about_matplotlib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_about_matplotlib" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show matplotlib web site</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_about_numpy">
-<code class="descname">handle_about_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_about_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_about_numpy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_about_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_about_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_about_numpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show numpy web site</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_about_scipy">
-<code class="descname">handle_about_scipy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_about_scipy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_about_scipy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_about_scipy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_about_scipy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_about_scipy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show scipy web site</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_actionShow_offline_help">
-<code class="descname">handle_actionShow_offline_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_actionShow_offline_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_actionShow_offline_help" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionShow_offline_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_actionShow_offline_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_actionShow_offline_help" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_app_coming_soon">
-<code class="descname">handle_app_coming_soon</code><span class="sig-paren">(</span><em>appname=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_app_coming_soon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_app_coming_soon" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_app_coming_soon</code><span class="sig-paren">(</span><em class="sig-param">appname=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_app_coming_soon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_app_coming_soon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show message</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_doubleClickTab">
-<code class="descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit Application name, tab only, the dictinary key remains unchanged</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -197,56 +187,55 @@ ApplicationManager.</p>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_new_app">
-<code class="descname">handle_new_app</code><span class="sig-paren">(</span><em>app_name=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_new_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_new_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_new_app</code><span class="sig-paren">(</span><em class="sig-param">app_name=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_new_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_new_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a new application window from name</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_show_app_help">
-<code class="descname">handle_show_app_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_show_app_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_show_app_help" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_show_app_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_show_app_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_show_app_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show RepTate current application (if any) manual, or all applications</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_show_reptate_help">
-<code class="descname">handle_show_reptate_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_show_reptate_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_show_reptate_help" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_show_reptate_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_show_reptate_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_show_reptate_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show RepTate documentation</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_show_th_help">
-<code class="descname">handle_show_th_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_show_th_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_show_th_help" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_show_th_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_show_th_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_show_th_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show RepTate current theory (if any) manual, or all theories</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="QApplicationManager.QApplicationManager.help_file">
-<code class="descname">help_file</code><em class="property"> = 'http://reptate.readthedocs.io/index.html'</em><a class="headerlink" href="#QApplicationManager.QApplicationManager.help_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">help_file</code><em class="property"> = 'http://reptate.readthedocs.io/index.html'</em><a class="headerlink" href="#QApplicationManager.QApplicationManager.help_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.launch_open_dialog">
-<code class="descname">launch_open_dialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.launch_open_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.launch_open_dialog" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">launch_open_dialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.launch_open_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.launch_open_dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get filename of RepTate project to open</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.launch_save_dialog">
-<code class="descname">launch_save_dialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.launch_save_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.launch_save_dialog" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">launch_save_dialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.launch_save_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.launch_save_dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get filename of RepTate project to save</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.list_theories_Maxwell">
-<code class="descname">list_theories_Maxwell</code><span class="sig-paren">(</span><em>th_exclude=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.list_theories_Maxwell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.list_theories_Maxwell" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_theories_Maxwell</code><span class="sig-paren">(</span><em class="sig-param">th_exclude=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.list_theories_Maxwell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.list_theories_Maxwell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Redefinition for the GUI mode that lists the tab names.
 List the theories in the current RepTate instance that provide and need
 Maxwell modes</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>[type] – [description]</li>
+<dl class="simple">
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>[type] – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -254,68 +243,67 @@ Maxwell modes</p>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.open_project">
-<code class="descname">open_project</code><span class="sig-paren">(</span><em>project_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.open_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.open_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">open_project</code><span class="sig-paren">(</span><em class="sig-param">project_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.open_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.open_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open file and load project</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.restore_annotations">
-<code class="descname">restore_annotations</code><span class="sig-paren">(</span><em>app</em>, <em>annotations</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_annotations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_annotations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_annotations</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">annotations</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_annotations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore the annotations</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.restore_app">
-<code class="descname">restore_app</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_tabname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_app</code><span class="sig-paren">(</span><em class="sig-param">app_name</em>, <em class="sig-param">app_tabname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open new application</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.restore_files">
-<code class="descname">restore_files</code><span class="sig-paren">(</span><em>ds</em>, <em>files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_files</code><span class="sig-paren">(</span><em class="sig-param">ds</em>, <em class="sig-param">files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open data files</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.restore_marker_settings">
-<code class="descname">restore_marker_settings</code><span class="sig-paren">(</span><em>ds</em>, <em>marker_dic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_marker_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_marker_settings" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_marker_settings</code><span class="sig-paren">(</span><em class="sig-param">ds</em>, <em class="sig-param">marker_dic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_marker_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_marker_settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore the dataset marker settings</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.restore_theories">
-<code class="descname">restore_theories</code><span class="sig-paren">(</span><em>ds</em>, <em>theories</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_theories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_theories" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_theories</code><span class="sig-paren">(</span><em class="sig-param">ds</em>, <em class="sig-param">theories</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_theories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_theories" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open theories</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.restore_tools">
-<code class="descname">restore_tools</code><span class="sig-paren">(</span><em>app</em>, <em>tools</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_tools" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_tools</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">tools</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.restore_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.restore_tools" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore the tools</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.save_reptate">
-<code class="descname">save_reptate</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.save_reptate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.save_reptate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_reptate</code><span class="sig-paren">(</span><em class="sig-param">fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.save_reptate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.save_reptate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save RepTate project to ‘fpath’</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.show_about">
-<code class="descname">show_about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.show_about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.show_about" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">show_about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.show_about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.show_about" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show about window</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.tab_changed">
-<code class="descname">tab_changed</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.tab_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.tab_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tab_changed</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.tab_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.tab_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Capture when the active application has changed</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -331,37 +319,32 @@ Maxwell modes</p>
 It is the GUI counterpart of Application.</p>
 <dl class="class">
 <dt id="QApplicationWindow.AddDummyFiles">
-<em class="property">class </em><code class="descclassname">QApplicationWindow.</code><code class="descname">AddDummyFiles</code><span class="sig-paren">(</span><em>parent=None</em>, <em>filetype=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddDummyFiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_Dialog</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationWindow.</code><code class="sig-name descname">AddDummyFiles</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">filetype=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddDummyFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Dialog</span></code></p>
 <dl class="method">
 <dt id="QApplicationWindow.AddDummyFiles.handle_itemDoubleClicked">
-<code class="descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em>item</em>, <em>column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddDummyFiles.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddDummyFiles.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddDummyFiles.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddDummyFiles.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="QApplicationWindow.EditAnnotation">
-<em class="property">class </em><code class="descclassname">QApplicationWindow.</code><code class="descname">EditAnnotation</code><span class="sig-paren">(</span><em>parent=None</em>, <em>annotation=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_Dialog</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationWindow.</code><code class="sig-name descname">EditAnnotation</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">annotation=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Dialog</span></code></p>
 <dl class="method">
 <dt id="QApplicationWindow.EditAnnotation.apply_changes">
-<code class="descname">apply_changes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.apply_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.apply_changes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_changes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.apply_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.apply_changes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.EditAnnotation.delete">
-<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.EditAnnotation.handle_pickFontColor">
-<code class="descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.delete" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.EditAnnotation.showColorDialog">
-<code class="descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.showColorDialog" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.showColorDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the color picker and return the picked QtColor or <cite>None</cite></p>
 </dd></dl>
 
@@ -369,26 +352,25 @@ It is the GUI counterpart of Application.</p>
 
 <dl class="class">
 <dt id="QApplicationWindow.QApplicationWindow">
-<em class="property">class </em><code class="descclassname">QApplicationWindow.</code><code class="descname">QApplicationWindow</code><span class="sig-paren">(</span><em>name='Application Template'</em>, <em>parent=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal"><span class="pre">Application.Application</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationWindow.</code><code class="sig-name descname">QApplicationWindow</code><span class="sig-paren">(</span><em class="sig-param">name='Application Template'</em>, <em class="sig-param">parent=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.addDummyFiles">
-<code class="descname">addDummyFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.addDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.addDummyFiles" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addDummyFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.addDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.addDummyFiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add dummy files to dataset</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet">
-<code class="descname">addTableToCurrentDataSet</code><span class="sig-paren">(</span><em>dt</em>, <em>ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.addTableToCurrentDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addTableToCurrentDataSet</code><span class="sig-paren">(</span><em class="sig-param">dt</em>, <em class="sig-param">ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.addTableToCurrentDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add file table to curent dataset tab</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>dt {[type]} – [description]</li>
-<li>ext {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>dt {[type]} – [description]</p></li>
+<li><p>ext {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -396,32 +378,31 @@ It is the GUI counterpart of Application.</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.add_annotation">
-<code class="descname">add_annotation</code><span class="sig-paren">(</span><em>action_trig=False</em>, <em>text=None</em>, <em>x=0</em>, <em>y=0</em>, <em>annotation_opts={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.add_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.add_annotation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_annotation</code><span class="sig-paren">(</span><em class="sig-param">action_trig=False</em>, <em class="sig-param">text=None</em>, <em class="sig-param">x=0</em>, <em class="sig-param">y=0</em>, <em class="sig-param">annotation_opts={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.add_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.add_annotation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.change_ax_view">
-<code class="descname">change_ax_view</code><span class="sig-paren">(</span><em>n_ax</em>, <em>view_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.change_ax_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.change_ax_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change_ax_view</code><span class="sig-paren">(</span><em class="sig-param">n_ax</em>, <em class="sig-param">view_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.change_ax_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.change_ax_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the view corresponding to axis n_ax</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.change_view">
-<code class="descname">change_view</code><span class="sig-paren">(</span><em>x_vis=False</em>, <em>y_vis=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.change_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change_view</code><span class="sig-paren">(</span><em class="sig-param">x_vis=False</em>, <em class="sig-param">y_vis=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.change_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change plot view</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.check_no_param_missing">
-<code class="descname">check_no_param_missing</code><span class="sig-paren">(</span><em>newtables</em>, <em>ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.check_no_param_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.check_no_param_missing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check_no_param_missing</code><span class="sig-paren">(</span><em class="sig-param">newtables</em>, <em class="sig-param">ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.check_no_param_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.check_no_param_missing" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>newtables {[type]} – [description]</li>
-<li>ext {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>newtables {[type]} – [description]</p></li>
+<li><p>ext {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -429,19 +410,17 @@ It is the GUI counterpart of Application.</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.clear_files_and_th_from_dataset">
-<code class="descname">clear_files_and_th_from_dataset</code><span class="sig-paren">(</span><em>ds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.clear_files_and_th_from_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.clear_files_and_th_from_dataset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clear_files_and_th_from_dataset</code><span class="sig-paren">(</span><em class="sig-param">ds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.clear_files_and_th_from_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.clear_files_and_th_from_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove all files from dataset and widgetTree,
 return a list with the full path of deleted files and opened theories</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>ds {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>ds {[type]} – [description]</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>[type] – [description]</li>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>[type] – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -449,13 +428,12 @@ return a list with the full path of deleted files and opened theories</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.close_data_tab_handler">
-<code class="descname">close_data_tab_handler</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.close_data_tab_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.close_data_tab_handler" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">close_data_tab_handler</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.close_data_tab_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.close_data_tab_handler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a dataset tab from the current application</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -463,20 +441,19 @@ return a list with the full path of deleted files and opened theories</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.createNew_Empty_Dataset">
-<code class="descname">createNew_Empty_Dataset</code><span class="sig-paren">(</span><em>tabname=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.createNew_Empty_Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.createNew_Empty_Dataset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createNew_Empty_Dataset</code><span class="sig-paren">(</span><em class="sig-param">tabname=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.createNew_Empty_Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.createNew_Empty_Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add New empty tab to DataSettabWidget</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.dataset_actions_disabled">
-<code class="descname">dataset_actions_disabled</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.dataset_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.dataset_actions_disabled" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dataset_actions_disabled</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.dataset_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.dataset_actions_disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable buttons when there is no file in the dataset</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>state {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>state {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -484,7 +461,7 @@ return a list with the full path of deleted files and opened theories</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.disconnect_curve_drag">
-<code class="descname">disconnect_curve_drag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.disconnect_curve_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.disconnect_curve_drag" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">disconnect_curve_drag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.disconnect_curve_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.disconnect_curve_drag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the Matplotlib drag connections
 and reset the shift buttons in the data inspector</p>
 <p>[description]</p>
@@ -492,13 +469,12 @@ and reset the shift buttons in the data inspector</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.dragEnterEvent">
-<code class="descname">dragEnterEvent</code><span class="sig-paren">(</span><em>e</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.dragEnterEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.dragEnterEvent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dragEnterEvent</code><span class="sig-paren">(</span><em class="sig-param">e</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.dragEnterEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.dragEnterEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>e {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>e {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -506,13 +482,12 @@ and reset the shift buttons in the data inspector</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.dropEvent">
-<code class="descname">dropEvent</code><span class="sig-paren">(</span><em>e</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.dropEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.dropEvent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dropEvent</code><span class="sig-paren">(</span><em class="sig-param">e</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.dropEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.dropEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>e {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>e {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -520,22 +495,22 @@ and reset the shift buttons in the data inspector</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.edit_annotation">
-<code class="descname">edit_annotation</code><span class="sig-paren">(</span><em>artist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.edit_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.edit_annotation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit_annotation</code><span class="sig-paren">(</span><em class="sig-param">artist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.edit_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.edit_annotation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.finish_shifts">
-<code class="descname">finish_shifts</code><span class="sig-paren">(</span><em>dx</em>, <em>dy</em>, <em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.finish_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.finish_shifts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">finish_shifts</code><span class="sig-paren">(</span><em class="sig-param">dx</em>, <em class="sig-param">dy</em>, <em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.finish_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.finish_shifts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionAutoscale">
-<code class="descname">handle_actionAutoscale</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionAutoscale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionAutoscale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionAutoscale</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionAutoscale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionAutoscale" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionMarkerSettings">
-<code class="descname">handle_actionMarkerSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionMarkerSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionMarkerSettings" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionMarkerSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionMarkerSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionMarkerSettings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the dialog box where the user can change
 the marker properties: size, shape, color, fill</p>
 <p>[description]</p>
@@ -543,53 +518,52 @@ the marker properties: size, shape, color, fill</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionNewTool">
-<code class="descname">handle_actionNewTool</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionNewTool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionNewTool" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionNewTool</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionNewTool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionNewTool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new tool</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionReload_Data">
-<code class="descname">handle_actionReload_Data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionReload_Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionReload_Data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionReload_Data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionReload_Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionReload_Data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reload the data files: remove and reopen the current files</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionResetShiftTriggered">
-<code class="descname">handle_actionResetShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionResetShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionResetShiftTriggered" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionResetShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionResetShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionResetShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionSaveShiftTriggered">
-<code class="descname">handle_actionSaveShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionSaveShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionSaveShiftTriggered" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionSaveShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionSaveShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionSaveShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionShiftTriggered">
-<code class="descname">handle_actionShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionShiftTriggered" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allow the current ‘selected_file’ to be dragged</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionViewShiftTriggered">
-<code class="descname">handle_actionViewShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionViewShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionViewShiftTriggered" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionViewShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionViewShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionViewShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionView_All_SetTheories">
-<code class="descname">handle_actionView_All_SetTheories</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_SetTheories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionView_All_SetTheories" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionView_All_SetTheories</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_SetTheories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionView_All_SetTheories" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets">
-<code class="descname">handle_actionView_All_Sets</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_Sets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionView_All_Sets</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_Sets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show all datasets simultaneously</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>checked {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>checked {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -597,32 +571,31 @@ the marker properties: size, shape, color, fill</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_apply_button_pressed">
-<code class="descname">handle_apply_button_pressed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_apply_button_pressed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_apply_button_pressed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_apply_button_pressed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_apply_button_pressed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_apply_button_pressed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the selected marker properties to all the files in the current dataset</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_change_view">
-<code class="descname">handle_change_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_change_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_change_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_change_view" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_createNew_Empty_Dataset">
-<code class="descname">handle_createNew_Empty_Dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_createNew_Empty_Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_createNew_Empty_Dataset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_createNew_Empty_Dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_createNew_Empty_Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_createNew_Empty_Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when button ‘new dataset’ pushed</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_currentChanged">
-<code class="descname">handle_currentChanged</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_currentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_currentChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_currentChanged</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_currentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_currentChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change figure when the active DataSet tab is changed
 and empty the dataInspector</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -630,14 +603,13 @@ and empty the dataInspector</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_doubleClickTab">
-<code class="descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit DataSet name</p>
 <p>Edit the dataset tab name, leave the ‘dataset’ dictionary keys unchanged.
 Two datasets can share the sae name.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -645,13 +617,12 @@ Two datasets can share the sae name.</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_inspectorVisibilityChanged">
-<code class="descname">handle_inspectorVisibilityChanged</code><span class="sig-paren">(</span><em>visible</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_inspectorVisibilityChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_inspectorVisibilityChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_inspectorVisibilityChanged</code><span class="sig-paren">(</span><em class="sig-param">visible</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_inspectorVisibilityChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_inspectorVisibilityChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle the hide/show event of the data inspector</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>visible {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>visible {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -659,14 +630,14 @@ Two datasets can share the sae name.</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_pickColor1">
-<code class="descname">handle_pickColor1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickColor1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickColor1" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_pickColor1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickColor1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickColor1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected color to <cite>color1</cite> in RGB format</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_pickColor2">
-<code class="descname">handle_pickColor2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickColor2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickColor2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_pickColor2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickColor2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickColor2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected color to <cite>color2</cite> in 
 RGB format used for gradient color type</p>
 <p>[description]</p>
@@ -674,53 +645,71 @@ RGB format used for gradient color type</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_pickEdgeColor">
-<code class="descname">handle_pickEdgeColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickEdgeColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickEdgeColor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_pickEdgeColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickEdgeColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickEdgeColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in 
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_pickFaceColor">
-<code class="descname">handle_pickFaceColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickFaceColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickFaceColor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_pickFaceColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickFaceColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickFaceColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in 
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_pickFontColor">
-<code class="descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the color picker and save the selected legend face color in 
+RGB format in the dataset legend info.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.handle_pickFontColor_ax">
+<code class="sig-name descname">handle_pickFontColor_ax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor_ax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickFontColor_ax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the color picker and save the selected legend face color in 
+RGB format in the dataset legend info.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.handle_pickFontColor_label">
+<code class="sig-name descname">handle_pickFontColor_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickFontColor_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in 
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_pickThColor">
-<code class="descname">handle_pickThColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickThColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickThColor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_pickThColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_pickThColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_pickThColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected theory line color in 
 RGB format used for gradient color type</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.handle_reset_all_pb">
+<code class="sig-name descname">handle_reset_all_pb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_reset_all_pb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_reset_all_pb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_toolTabCloseRequested">
-<code class="descname">handle_toolTabCloseRequested</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_toolTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_toolTabCloseRequested" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_toolTabCloseRequested</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_toolTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_toolTabCloseRequested" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a Tool tab</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_toolTabMoved">
-<code class="descname">handle_toolTabMoved</code><span class="sig-paren">(</span><em>f</em>, <em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_toolTabMoved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_toolTabMoved" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_toolTabMoved</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_toolTabMoved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_toolTabMoved" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.new_tables_from_files">
-<code class="descname">new_tables_from_files</code><span class="sig-paren">(</span><em>paths_to_open</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.new_tables_from_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.new_tables_from_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">new_tables_from_files</code><span class="sig-paren">(</span><em class="sig-param">paths_to_open</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.new_tables_from_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.new_tables_from_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>paths_to_open {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>paths_to_open {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -728,48 +717,47 @@ RGB format used for gradient color type</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.new_tool">
-<code class="descname">new_tool</code><span class="sig-paren">(</span><em>tool_name</em>, <em>tool_tab_id=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.new_tool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.new_tool" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">new_tool</code><span class="sig-paren">(</span><em class="sig-param">tool_name</em>, <em class="sig-param">tool_tab_id=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.new_tool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.new_tool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new tool</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.on_motion">
-<code class="descname">on_motion</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_motion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">on_motion</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_motion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.on_press">
-<code class="descname">on_press</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_press" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_press" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.onpick">
-<code class="descname">onpick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onpick" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onpick</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onpick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when clicking on a plot/artist</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.onrelease">
-<code class="descname">onrelease</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onrelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onrelease" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onrelease</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onrelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onrelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when releasing mouse</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.openDataset">
-<code class="descname">openDataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.openDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.openDataset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">openDataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.openDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.openDataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.openFileNamesDialog">
-<code class="descname">openFileNamesDialog</code><span class="sig-paren">(</span><em>ext_filter='All Files (*)'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.openFileNamesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.openFileNamesDialog" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">openFileNamesDialog</code><span class="sig-paren">(</span><em class="sig-param">ext_filter='All Files (*)'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.openFileNamesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.openFileNamesDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>[type] – [description]</li>
+<dl class="simple">
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>[type] – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -777,20 +765,20 @@ RGB format used for gradient color type</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.open_figure_popup_menu">
-<code class="descname">open_figure_popup_menu</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.open_figure_popup_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.open_figure_popup_menu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">open_figure_popup_menu</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.open_figure_popup_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.open_figure_popup_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a menu to let the user copy data or chart to clipboard</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.populate_cbPalette">
-<code class="descname">populate_cbPalette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.populate_cbPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.populate_cbPalette" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">populate_cbPalette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.populate_cbPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.populate_cbPalette" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate the list color palettes in the marker-settings dialog</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.populate_cbSymbolType">
-<code class="descname">populate_cbSymbolType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.populate_cbSymbolType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.populate_cbSymbolType" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">populate_cbSymbolType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.populate_cbSymbolType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.populate_cbSymbolType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate the list of the markers in the marker-settings dialog</p>
 <p>Populate the list of the markers of the marker-settings dialog
 with filled or empty markers, depending on the user’s choice</p>
@@ -798,39 +786,43 @@ with filled or empty markers, depending on the user’s choice</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.populate_cbTheoryLine">
-<code class="descname">populate_cbTheoryLine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.populate_cbTheoryLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.populate_cbTheoryLine" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">populate_cbTheoryLine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.populate_cbTheoryLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.populate_cbTheoryLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate the list theory linestyle in the marker-settings dialog</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.printPlot">
-<code class="descname">printPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.printPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.printPlot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">printPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.printPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.printPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.resizeplot">
-<code class="descname">resizeplot</code><span class="sig-paren">(</span><em>event=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.resizeplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.resizeplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">resizeplot</code><span class="sig-paren">(</span><em class="sig-param">event=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.resizeplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.resizeplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.save_view">
-<code class="descname">save_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.save_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.save_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.save_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.save_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.set_axis_marker_settings">
+<code class="sig-name descname">set_axis_marker_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.set_axis_marker_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.set_axis_marker_settings" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.showColorDialog">
-<code class="descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.showColorDialog" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.showColorDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the color picker and return the picked QtColor or <cite>None</cite></p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>[type] – [description]</li>
+<dl class="simple">
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>[type] – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -838,13 +830,12 @@ with filled or empty markers, depending on the user’s choice</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.showDataInspector">
-<code class="descname">showDataInspector</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.showDataInspector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.showDataInspector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">showDataInspector</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.showDataInspector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.showDataInspector" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>checked {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>checked {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -852,49 +843,49 @@ with filled or empty markers, depending on the user’s choice</p>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged">
-<code class="descname">sp_nviews_valueChanged</code><span class="sig-paren">(</span><em>new_nplots</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.sp_nviews_valueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sp_nviews_valueChanged</code><span class="sig-paren">(</span><em class="sig-param">new_nplots</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.sp_nviews_valueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the current number of views displayed in the app</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.update_Qplot">
-<code class="descname">update_Qplot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.update_Qplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.update_Qplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_Qplot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.update_Qplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.update_Qplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.update_legend">
-<code class="descname">update_legend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.update_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.update_legend" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_legend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.update_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.update_legend" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.update_shifts">
-<code class="descname">update_shifts</code><span class="sig-paren">(</span><em>dx</em>, <em>dy</em>, <em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.update_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.update_shifts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_shifts</code><span class="sig-paren">(</span><em class="sig-param">dx</em>, <em class="sig-param">dy</em>, <em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.update_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.update_shifts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.viewMPLToolbar">
-<code class="descname">viewMPLToolbar</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.viewMPLToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.viewMPLToolbar" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">viewMPLToolbar</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.viewMPLToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.viewMPLToolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>checked {[type]} – [description]</dd>
+<dl class="simple">
+<dt>Arguments:</dt><dd><p>checked {[type]} – [description]</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.zoom_wheel">
-<code class="descname">zoom_wheel</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.zoom_wheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.zoom_wheel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">zoom_wheel</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.zoom_wheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.zoom_wheel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="QApplicationWindow.ViewShiftFactors">
-<em class="property">class </em><code class="descclassname">QApplicationWindow.</code><code class="descname">ViewShiftFactors</code><span class="sig-paren">(</span><em>parent=None</em>, <em>fnames=None</em>, <em>factorsx=None</em>, <em>factorsy=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#ViewShiftFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.ViewShiftFactors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationWindow.</code><code class="sig-name descname">ViewShiftFactors</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">fnames=None</em>, <em class="sig-param">factorsx=None</em>, <em class="sig-param">factorsy=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#ViewShiftFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.ViewShiftFactors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 </dd></dl>
 
 </div>
@@ -904,92 +895,91 @@ with filled or empty markers, depending on the user’s choice</p>
 <p>Module that defines the GUI counterpart of Dataset.</p>
 <dl class="class">
 <dt id="QDataSet.EditFileParametersDialog">
-<em class="property">class </em><code class="descclassname">QDataSet.</code><code class="descname">EditFileParametersDialog</code><span class="sig-paren">(</span><em>parent</em>, <em>file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QDataSet.</code><code class="sig-name descname">EditFileParametersDialog</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 <p>Create the form that is used to modify the file parameters</p>
 <dl class="method">
 <dt id="QDataSet.EditFileParametersDialog.activate_th_widgets">
-<code class="descname">activate_th_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.activate_th_widgets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.activate_th_widgets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">activate_th_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.activate_th_widgets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.activate_th_widgets" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.EditFileParametersDialog.createFormGroupBox">
-<code class="descname">createFormGroupBox</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.createFormGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.createFormGroupBox" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createFormGroupBox</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.createFormGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.createFormGroupBox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a form to set the new values of the file parameters</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.EditFileParametersDialog.createFormGroupBoxTheory">
-<code class="descname">createFormGroupBoxTheory</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.createFormGroupBoxTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.createFormGroupBoxTheory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createFormGroupBoxTheory</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.createFormGroupBoxTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.createFormGroupBoxTheory" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.EditFileParametersDialog.update_current_view_xrange">
-<code class="descname">update_current_view_xrange</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.update_current_view_xrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.update_current_view_xrange" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_current_view_xrange</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#EditFileParametersDialog.update_current_view_xrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.EditFileParametersDialog.update_current_view_xrange" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="QDataSet.QDataSet">
-<em class="property">class </em><code class="descclassname">QDataSet.</code><code class="descname">QDataSet</code><span class="sig-paren">(</span><em>name='QDataSet'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#DataSet.DataSet" title="DataSet.DataSet"><code class="xref py py-class docutils literal"><span class="pre">DataSet.DataSet</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_Form</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QDataSet.</code><code class="sig-name descname">QDataSet</code><span class="sig-paren">(</span><em class="sig-param">name='QDataSet'</em>, <em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#DataSet.DataSet" title="DataSet.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet.DataSet</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Form</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
 <dt id="QDataSet.QDataSet.Qshow_all">
-<code class="descname">Qshow_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.Qshow_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.Qshow_all" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Qshow_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.Qshow_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.Qshow_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show all the files in this dataset, except those previously hiden</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.copy_parameters">
-<code class="descname">copy_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.copy_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.copy_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">copy_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.copy_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.copy_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy the parameters of the currently active theory to the clipboard</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.end_of_computation">
-<code class="descname">end_of_computation</code><span class="sig-paren">(</span><em>th_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.end_of_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.end_of_computation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">end_of_computation</code><span class="sig-paren">(</span><em class="sig-param">th_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.end_of_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.end_of_computation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Action when theory has finished computations</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_actionCalculate_Theory">
-<code class="descname">handle_actionCalculate_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_actionCalculate_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_actionCalculate_Theory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionCalculate_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_actionCalculate_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_actionCalculate_Theory" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_actionMinimize_Error">
-<code class="descname">handle_actionMinimize_Error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_actionMinimize_Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_actionMinimize_Error" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionMinimize_Error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_actionMinimize_Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_actionMinimize_Error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimize the error</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_actionNew_Theory">
-<code class="descname">handle_actionNew_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_actionNew_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_actionNew_Theory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionNew_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_actionNew_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_actionNew_Theory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new theory and do fit</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_action_save_theory_data">
-<code class="descname">handle_action_save_theory_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_action_save_theory_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_action_save_theory_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_action_save_theory_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_action_save_theory_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_action_save_theory_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save theory data of current theory</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_itemChanged">
-<code class="descname">handle_itemChanged</code><span class="sig-paren">(</span><em>item</em>, <em>column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_itemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_itemChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_itemChanged</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_itemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_itemChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>item {[type]} – [description]</li>
-<li>column {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>item {[type]} – [description]</p></li>
+<li><p>column {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -997,14 +987,13 @@ with filled or empty markers, depending on the user’s choice</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_itemDoubleClicked">
-<code class="descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em>item</em>, <em>column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit item entry upon double click</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>item {[type]} – [description]</li>
-<li>column {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>item {[type]} – [description]</p></li>
+<li><p>column {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1012,21 +1001,20 @@ with filled or empty markers, depending on the user’s choice</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_itemSelectionChanged">
-<code class="descname">handle_itemSelectionChanged</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_itemSelectionChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_itemSelectionChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_itemSelectionChanged</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_itemSelectionChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_itemSelectionChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define actions for when a file table is selected</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_sortIndicatorChanged">
-<code class="descname">handle_sortIndicatorChanged</code><span class="sig-paren">(</span><em>column</em>, <em>order</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_sortIndicatorChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_sortIndicatorChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_sortIndicatorChanged</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">order</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_sortIndicatorChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_sortIndicatorChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sort files according to the selected parameter (column) and replot</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>column {[type]} – [description]</li>
-<li>order {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>column {[type]} – [description]</p></li>
+<li><p>order {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1034,13 +1022,12 @@ with filled or empty markers, depending on the user’s choice</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_thCurrentChanged">
-<code class="descname">handle_thCurrentChanged</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_thCurrentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_thCurrentChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_thCurrentChanged</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_thCurrentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_thCurrentChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change figure when the active theory tab is changed</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1048,14 +1035,13 @@ with filled or empty markers, depending on the user’s choice</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_thTabBarDoubleClicked">
-<code class="descname">handle_thTabBarDoubleClicked</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_thTabBarDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_thTabBarDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_thTabBarDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_thTabBarDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_thTabBarDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit Theory name</p>
 <p>Edit the theory tab name, leave ‘theories’ dictionary keys unchanged.
 Two tabs can share the same name</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1063,13 +1049,12 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_thTabCloseRequested">
-<code class="descname">handle_thTabCloseRequested</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_thTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_thTabCloseRequested" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_thTabCloseRequested</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_thTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_thTabCloseRequested" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a theory tab from the current dataset</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>index {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>index {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1077,32 +1062,31 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.highlight_series">
-<code class="descname">highlight_series</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.highlight_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.highlight_series" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">highlight_series</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.highlight_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.highlight_series" title="Permalink to this definition">¶</a></dt>
 <dd><p>Highligh the data series of the selected file</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.icon_calculate_is_stop">
-<code class="descname">icon_calculate_is_stop</code><span class="sig-paren">(</span><em>ans</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.icon_calculate_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.icon_calculate_is_stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">icon_calculate_is_stop</code><span class="sig-paren">(</span><em class="sig-param">ans</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.icon_calculate_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.icon_calculate_is_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the “calculate” button to “stop” button</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.icon_fit_is_stop">
-<code class="descname">icon_fit_is_stop</code><span class="sig-paren">(</span><em>ans</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.icon_fit_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.icon_fit_is_stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">icon_fit_is_stop</code><span class="sig-paren">(</span><em class="sig-param">ans</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.icon_fit_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.icon_fit_is_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the “fit” button to “stop” button</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.new_theory">
-<code class="descname">new_theory</code><span class="sig-paren">(</span><em>th_name</em>, <em>th_tab_id=''</em>, <em>calculate=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.new_theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.new_theory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">new_theory</code><span class="sig-paren">(</span><em class="sig-param">th_name</em>, <em class="sig-param">th_tab_id=''</em>, <em class="sig-param">calculate=True</em>, <em class="sig-param">show=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.new_theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.new_theory" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>th_name {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>th_name {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1110,26 +1094,25 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.paste_parameters">
-<code class="descname">paste_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.paste_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.paste_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">paste_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.paste_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.paste_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Paste the parameters from the clipboard to the currently active theory</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.populate_inspector">
-<code class="descname">populate_inspector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.populate_inspector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.populate_inspector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">populate_inspector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.populate_inspector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.populate_inspector" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.resizeEvent">
-<code class="descname">resizeEvent</code><span class="sig-paren">(</span><em>evt=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.resizeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.resizeEvent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">resizeEvent</code><span class="sig-paren">(</span><em class="sig-param">evt=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.resizeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.resizeEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd><ul class="first last simple">
-<li>evt {[type]} – [description] (default: {None})</li>
+<dl class="simple">
+<dt>Keyword Arguments:</dt><dd><ul class="simple">
+<li><p>evt {[type]} – [description] (default: {None})</p></li>
 </ul>
 </dd>
 </dl>
@@ -1137,20 +1120,19 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.set_limit_icon">
-<code class="descname">set_limit_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.set_limit_icon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.set_limit_icon" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_limit_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.set_limit_icon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.set_limit_icon" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.set_no_limits">
-<code class="descname">set_no_limits</code><span class="sig-paren">(</span><em>th_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.set_no_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.set_no_limits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_no_limits</code><span class="sig-paren">(</span><em class="sig-param">th_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.set_no_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.set_no_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn the x and yrange selectors off</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>th_name {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>th_name {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1158,13 +1140,12 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.set_table_icons">
-<code class="descname">set_table_icons</code><span class="sig-paren">(</span><em>table_icon_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.set_table_icons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.set_table_icons" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_table_icons</code><span class="sig-paren">(</span><em class="sig-param">table_icon_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.set_table_icons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.set_table_icons" title="Permalink to this definition">¶</a></dt>
 <dd><p>The list ‘table_icon_list’ contains tuples (file_name_short, marker_name, face, color)</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>table_icon_list {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>table_icon_list {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1172,13 +1153,12 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.theory_actions_disabled">
-<code class="descname">theory_actions_disabled</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.theory_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.theory_actions_disabled" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">theory_actions_disabled</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.theory_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.theory_actions_disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable theory buttons if no theory tab is open</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>state {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>state {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1186,14 +1166,14 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.toggle_horizontal_limits">
-<code class="descname">toggle_horizontal_limits</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.toggle_horizontal_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.toggle_horizontal_limits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">toggle_horizontal_limits</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.toggle_horizontal_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.toggle_horizontal_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show/Hide the yrange selector for fit</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.toggle_vertical_limits">
-<code class="descname">toggle_vertical_limits</code><span class="sig-paren">(</span><em>checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.toggle_vertical_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.toggle_vertical_limits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">toggle_vertical_limits</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.toggle_vertical_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.toggle_vertical_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show/Hide the xrange selector for fit</p>
 <p>[description]</p>
 </dd></dl>
@@ -1207,28 +1187,28 @@ Two tabs can share the same name</p>
 <p>Module that defines the GUI counterpart of the class Theory.</p>
 <dl class="class">
 <dt id="QTheory.CalculationThread">
-<em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">CalculationThread</code><span class="sig-paren">(</span><em>fthread</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#CalculationThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.CalculationThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtCore.QObject</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QTheory.</code><code class="sig-name descname">CalculationThread</code><span class="sig-paren">(</span><em class="sig-param">fthread</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#CalculationThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.CalculationThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtCore.QObject</span></code></p>
 <dl class="attribute">
 <dt id="QTheory.CalculationThread.sig_done">
-<code class="descname">sig_done</code><a class="headerlink" href="#QTheory.CalculationThread.sig_done" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sig_done</code><a class="headerlink" href="#QTheory.CalculationThread.sig_done" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QTheory.CalculationThread.work">
-<code class="descname">work</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#CalculationThread.work"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.CalculationThread.work" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">work</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#CalculationThread.work"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.CalculationThread.work" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="QTheory.EditThParametersDialog">
-<em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">EditThParametersDialog</code><span class="sig-paren">(</span><em>parent</em>, <em>p_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#EditThParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.EditThParametersDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QTheory.</code><code class="sig-name descname">EditThParametersDialog</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">p_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#EditThParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.EditThParametersDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 <p>Create the form that is used to modify the theorys parameters</p>
 <dl class="method">
 <dt id="QTheory.EditThParametersDialog.create_param_tab">
-<code class="descname">create_param_tab</code><span class="sig-paren">(</span><em>p_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#EditThParametersDialog.create_param_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.EditThParametersDialog.create_param_tab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_param_tab</code><span class="sig-paren">(</span><em class="sig-param">p_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#EditThParametersDialog.create_param_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.EditThParametersDialog.create_param_tab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a form to set the new values of the file parameters</p>
 </dd></dl>
 
@@ -1236,72 +1216,72 @@ Two tabs can share the same name</p>
 
 <dl class="class">
 <dt id="QTheory.GetModesDialog">
-<em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">GetModesDialog</code><span class="sig-paren">(</span><em>parent=None</em>, <em>th_dict={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#GetModesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.GetModesDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">QTheory.</code><code class="sig-name descname">GetModesDialog</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">th_dict={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#GetModesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.GetModesDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="QTheory.QTheory">
-<em class="property">class </em><code class="descclassname">QTheory.</code><code class="descname">QTheory</code><span class="sig-paren">(</span><em>name='QTheory'</em>, <em>parent_dataset=None</em>, <em>axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Ui_TheoryTab</span></code>, <code class="xref py py-class docutils literal"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal"><span class="pre">Theory.Theory</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">QTheory.</code><code class="sig-name descname">QTheory</code><span class="sig-paren">(</span><em class="sig-param">name='QTheory'</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_TheoryTab</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <a class="reference internal" href="CodeCoreCL.html#Theory.Theory" title="Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theory.Theory</span></code></a></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
 <dt id="QTheory.QTheory.Qcopy_modes">
-<code class="descname">Qcopy_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.Qcopy_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.Qcopy_modes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Qcopy_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.Qcopy_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.Qcopy_modes" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.change_thtextbox_fontsize">
-<code class="descname">change_thtextbox_fontsize</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.change_thtextbox_fontsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.change_thtextbox_fontsize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change_thtextbox_fontsize</code><span class="sig-paren">(</span><em class="sig-param">factor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.change_thtextbox_fontsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.change_thtextbox_fontsize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the thTextBox font size by a factor <cite>factor</cite></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.copy_parameters">
-<code class="descname">copy_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.copy_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.copy_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">copy_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.copy_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.copy_parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.end_thread_calc">
-<code class="descname">end_thread_calc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.end_thread_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.end_thread_calc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">end_thread_calc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.end_thread_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.end_thread_calc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.end_thread_fit">
-<code class="descname">end_thread_fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.end_thread_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.end_thread_fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">end_thread_fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.end_thread_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.end_thread_fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.get_extra_data">
-<code class="descname">get_extra_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.get_extra_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.get_extra_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_extra_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.get_extra_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.get_extra_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the extra data dict before saving (defined in Child class if needed)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.handle_actionCalculate_Theory">
-<code class="descname">handle_actionCalculate_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.handle_actionCalculate_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.handle_actionCalculate_Theory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">handle_actionCalculate_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.handle_actionCalculate_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.handle_actionCalculate_Theory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used only in non GUI mode</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.handle_actionMinimize_Error">
-<code class="descname">handle_actionMinimize_Error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.handle_actionMinimize_Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.handle_actionMinimize_Error" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionMinimize_Error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.handle_actionMinimize_Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.handle_actionMinimize_Error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimize the error</p>
 <p>[description]</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.handle_parameterItemChanged">
-<code class="descname">handle_parameterItemChanged</code><span class="sig-paren">(</span><em>item</em>, <em>column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.handle_parameterItemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.handle_parameterItemChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_parameterItemChanged</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.handle_parameterItemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.handle_parameterItemChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Modify parameter values when changed in the theory table</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li>item {[type]} – [description]</li>
-<li>column {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>item {[type]} – [description]</p></li>
+<li><p>column {[type]} – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1309,19 +1289,18 @@ Two tabs can share the same name</p>
 
 <dl class="method">
 <dt id="QTheory.QTheory.onTreeWidgetItemDoubleClicked">
-<code class="descname">onTreeWidgetItemDoubleClicked</code><span class="sig-paren">(</span><em>item</em>, <em>column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.onTreeWidgetItemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.onTreeWidgetItemDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onTreeWidgetItemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.onTreeWidgetItemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.onTreeWidgetItemDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start editing text when a table cell is double clicked
 Or edit all parameters dialog if parameter name is double clicked</p>
 <p>[description]</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd><ul class="first last simple">
-<li><ul class="first">
-<li>item {[type]} – [description]</li>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><ul>
+<li><p>item {[type]} – [description]</p></li>
 </ul>
 </li>
-<li><ul class="first">
-<li>column {[type]} – [description]</li>
+<li><ul>
+<li><p>column {[type]} – [description]</p></li>
 </ul>
 </li>
 </ul>
@@ -1331,36 +1310,36 @@ Or edit all parameters dialog if parameter name is double clicked</p>
 
 <dl class="method">
 <dt id="QTheory.QTheory.paste_parameters">
-<code class="descname">paste_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.paste_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.paste_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">paste_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.paste_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.paste_parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.save_modes">
-<code class="descname">save_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.save_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.save_modes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.save_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.save_modes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save Maxwell modes to a text file</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.set_extra_data">
-<code class="descname">set_extra_data</code><span class="sig-paren">(</span><em>extra_data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.set_extra_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.set_extra_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_extra_data</code><span class="sig-paren">(</span><em class="sig-param">extra_data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.set_extra_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.set_extra_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the extra data dict at loading, redefined in Child class if needed</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.theory_buttons_disabled">
-<code class="descname">theory_buttons_disabled</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.theory_buttons_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.theory_buttons_disabled" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">theory_buttons_disabled</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.theory_buttons_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.theory_buttons_disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable theory button inside the theory</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.thtextbox_context_menu">
-<code class="descname">thtextbox_context_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.thtextbox_context_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.thtextbox_context_menu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">thtextbox_context_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.thtextbox_context_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.thtextbox_context_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Custom contextual menu for the theory textbox</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="QTheory.QTheory.update_parameter_table">
-<code class="descname">update_parameter_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.update_parameter_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.update_parameter_table" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_parameter_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.update_parameter_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.update_parameter_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the theory parameter table</p>
 <p>[description]</p>
 </dd></dl>
@@ -1391,14 +1370,14 @@ Or edit all parameters dialog if parameter name is double clicked</p>
         <li class="right" >
           <a href="CodeCoreCL.html" title="Core classes (Command Line)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

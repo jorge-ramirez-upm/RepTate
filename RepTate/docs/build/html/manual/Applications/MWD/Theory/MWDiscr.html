@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>MWD Discretization &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>MWD Discretization &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -31,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -58,13 +51,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -79,23 +72,23 @@
 <h1>MWD Discretization<a class="headerlink" href="#mwd-discretization" title="Permalink to this headline">¶</a></h1>
 <a class="reference internal image-reference" href="../../../../_images/create_MWDiscr_theory.png"><img alt="../../../../_images/create_MWDiscr_theory.png" class="align-center" src="../../../../_images/create_MWDiscr_theory.png" style="width: 80%;" /></a>
 <ul>
-<li><p class="first">The area, <span class="math">\(\phi_i\)</span>, of each grey bin corresponds to the area under the data curve delimited by the bin edges.
-The height, <span class="math">\(h_i\)</span>, of the bin is the area divided by the bin width (on a <span class="math">\(\log_{10}\)</span> scale).</p>
+<li><p>The area, <span class="math notranslate nohighlight">\(\phi_i\)</span>, of each grey bin corresponds to the area under the data curve delimited by the bin edges.
+The height, <span class="math notranslate nohighlight">\(h_i\)</span>, of the bin is the area divided by the bin width (on a <span class="math notranslate nohighlight">\(\log_{10}\)</span> scale).</p>
 <p>You can change the number of bins and move the bin edges by dragging the yellow markers.</p>
 </li>
-<li><p class="first">In the bottom of the plot, the grey tick marks indicate the bin molecular weight
+<li><p>In the bottom of the plot, the grey tick marks indicate the bin molecular weight
 taken as the weight-average molecular mass value across the bin width</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[M_{w,i} = \frac{\sum w_j M_j}{\sum w_j}.\]</div>
 </li>
 </ul>
 <ol class="arabic">
-<li><p class="first">To save the discretized molecular weight, click the <a class="reference internal" href="../../../../_images/icons8-save_TH.png"><img alt="th_save" class="align-bottom" src="../../../../_images/icons8-save_TH.png" style="width: 20pt; height: 20pt;" /></a> button.</p>
-<p>The output file contains a header with the moments  <span class="math">\(M_n\)</span>, <span class="math">\(M_w\)</span> and the PDI, and two columns.
-The first column is the molecular weight <span class="math">\(M_{w,i}\)</span> as indicated by the grey tick marks,
-the second column is <span class="math">\(\phi_i\)</span>, the value of the area of the covered by the bin.</p>
+<li><p>To save the discretized molecular weight, click the <a class="reference internal" href="../../../../_images/icons8-save_TH.png"><img alt="th_save" class="align-bottom" src="../../../../_images/icons8-save_TH.png" style="width: 20pt; height: 20pt;" /></a> button.</p>
+<p>The output file contains a header with the moments  <span class="math notranslate nohighlight">\(M_n\)</span>, <span class="math notranslate nohighlight">\(M_w\)</span> and the PDI, and two columns.
+The first column is the molecular weight <span class="math notranslate nohighlight">\(M_{w,i}\)</span> as indicated by the grey tick marks,
+the second column is <span class="math notranslate nohighlight">\(\phi_i\)</span>, the value of the area of the covered by the bin.</p>
 <p>The sum of the areas should equal 1:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\sum \phi_i = 1.\]</div>
 </li>
 </ol>
@@ -116,12 +109,12 @@ the second column is <span class="math">\(\phi_i\)</span>, the value of the area
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

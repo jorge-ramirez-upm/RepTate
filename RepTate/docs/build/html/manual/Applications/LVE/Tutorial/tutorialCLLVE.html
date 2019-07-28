@@ -4,16 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>LVE Tutorial: Command Line &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>LVE Tutorial: Command Line &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -41,7 +43,7 @@
         <li class="right" >
           <a href="../Theory/theory.html" title="LVE Theories"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../LVE.html" accesskey="U"> LVE: Linear ViscoElasticity</a> &#187;</li> 
@@ -52,7 +54,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">LVE Tutorial: Command Line</a><ul>
 <li><a class="reference internal" href="#likhtman-mcleish-theory">Likhtman-McLeish theory</a></li>
@@ -75,13 +77,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -99,19 +99,18 @@
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#likhtman-mcleish-theory" id="id1">Likhtman-McLeish theory</a></li>
-<li><a class="reference internal" href="#fit-maxwell-modes-to-lve" id="id2">Fit Maxwell modes to LVE</a></li>
+<li><p><a class="reference internal" href="#likhtman-mcleish-theory" id="id1">Likhtman-McLeish theory</a></p></li>
+<li><p><a class="reference internal" href="#fit-maxwell-modes-to-lve" id="id2">Fit Maxwell modes to LVE</a></p></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="admonition hint">
-<p class="first admonition-title">Hint</p>
+<p class="admonition-title">Hint</p>
 <p>Tutorial command line (CL) files can be found in the <cite>tests/</cite> folder. They can be run in batch mode or in interactive mode.</p>
 <ul>
-<li><p class="first">To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal notranslate"><span class="pre">#</span></code> and the line <code class="docutils literal notranslate"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p>
-</li>
-<li><p class="first">To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
+<li><p>To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal notranslate"><span class="pre">#</span></code> and the line <code class="docutils literal notranslate"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p></li>
+<li><p>To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span><span class="o">/</span><span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Linux or Mac</span>
 </pre></div>
 </div>
@@ -121,13 +120,13 @@
 </div>
 </li>
 </ul>
-<p class="last">(the difference is the use of backslash <code class="docutils literal notranslate"><span class="pre">\</span></code> instead of slash <code class="docutils literal notranslate"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
+<p>(the difference is the use of backslash <code class="docutils literal notranslate"><span class="pre">\</span></code> instead of slash <code class="docutils literal notranslate"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
 </div>
 <div class="section" id="likhtman-mcleish-theory">
 <h2><a class="toc-backref" href="#id1">Likhtman-McLeish theory</a><a class="headerlink" href="#likhtman-mcleish-theory" title="Permalink to this headline">¶</a></h2>
 <p>Prediction of LVE data of linear polymer melts</p>
 <ol class="arabic">
-<li><p class="first">Start RepTate and create LVE Application:</p>
+<li><p>Start RepTate and create LVE Application:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt; RepTate.py
 RepTate Version 0.9.3 - 20180719 command processor
 help [command] for instructions
@@ -137,7 +136,7 @@ RepTate/LVE1/DataSet01&gt;
 </pre></div>
 </div>
 </li>
-<li><p class="first">Add files to the dataset (master curve tts files, see <a class="reference internal" href="../general.html#lve-data-description"><span class="std std-ref">Data Files</span></a>):</p>
+<li><p>Add files to the dataset (master curve tts files, see <a class="reference internal" href="../general.html#lve-data-description"><span class="std std-ref">Data Files</span></a>):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; open data/PI_LINEAR/PI_13.5k_T-35.tts
 RepTate/LVE1/DataSet01&gt; open data/PI_LINEAR/PI_23.4k_T-35.tts
 RepTate/LVE1/DataSet01&gt; open data/PI_LINEAR/PI_33.6k_T-35.tts
@@ -149,7 +148,7 @@ RepTate/LVE1/DataSet01&gt; open data/PI_LINEAR/PI_1131k_T-35.tts
 </pre></div>
 </div>
 </li>
-<li><p class="first">Plot the files using the default LVE Application view:</p>
+<li><p>Plot the files using the default LVE Application view:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; plot
 </pre></div>
 </div>
@@ -157,7 +156,7 @@ RepTate/LVE1/DataSet01&gt; open data/PI_LINEAR/PI_1131k_T-35.tts
 </ol>
 <a class="reference internal image-reference" href="../../../../_images/PI_LVE_plot.png"><img alt="Empty Graph window" class="align-center" src="../../../../_images/PI_LVE_plot.png" style="width: 70%;" /></a>
 <ol class="arabic">
-<li><p class="first">View the legend. By default, the legend shows the most important file parameters, according to the corresponding file type:</p>
+<li><p>View the legend. By default, the legend shows the most important file parameters, according to the corresponding file type:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; legend
 </pre></div>
 </div>
@@ -165,7 +164,7 @@ RepTate/LVE1/DataSet01&gt; open data/PI_LINEAR/PI_1131k_T-35.tts
 </ol>
 <a class="reference internal image-reference" href="../../../../_images/PI_LVE_legend.png"><img alt="PI_LVE_legend" class="align-center" src="../../../../_images/PI_LVE_legend.png" style="width: 70%;" /></a>
 <ol class="arabic">
-<li><p class="first">Create new theory (calculation is done with default parameter values):</p>
+<li><p>Create new theory (calculation is done with default parameter values):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; theory_new Likhtman-McLeish
 </pre></div>
 </div>
@@ -190,7 +189,7 @@ CITE: Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343
 </pre></div>
 </div>
 </li>
-<li><p class="first">Fit the theory to the data files:</p>
+<li><p>Fit the theory to the data files:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Likhtman-McLeish01&gt; fit
 </pre></div>
 </div>
@@ -228,7 +227,7 @@ CITE: Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343
 </ol>
 <a class="reference internal image-reference" href="../../../../_images/PI_LVE_fit.png"><img alt="PI_LVE_fit" class="align-center" src="../../../../_images/PI_LVE_fit.png" style="width: 70%;" /></a>
 <ol class="arabic">
-<li><p class="first">Save theory predictions. Files with extension <code class="docutils literal notranslate"><span class="pre">_TH.tts</span></code> are saved in the same folder as the experimental data.:</p>
+<li><p>Save theory predictions. Files with extension <code class="docutils literal notranslate"><span class="pre">_TH.tts</span></code> are saved in the same folder as the experimental data.:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Likhtman-McLeish01&gt; save
 </pre></div>
 </div>
@@ -237,7 +236,7 @@ CITE: Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343
 </pre></div>
 </div>
 </li>
-<li><p class="first">Exit RepTate (the y answer is needed):</p>
+<li><p>Exit RepTate (the y answer is needed):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Likhtman-McLeish01&gt; quit
 </pre></div>
 </div>
@@ -247,22 +246,22 @@ CITE: Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343
 <div class="section" id="fit-maxwell-modes-to-lve">
 <h2><a class="toc-backref" href="#id2">Fit Maxwell modes to LVE</a><a class="headerlink" href="#fit-maxwell-modes-to-lve" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Create LVE Application:</p>
+<li><p>Create LVE Application:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate&gt; new LVE
 </pre></div>
 </div>
 </li>
-<li><p class="first">Add files to the dataset (master curve tts files):</p>
+<li><p>Add files to the dataset (master curve tts files):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; open data/PI_LINEAR/PI_483.1k_T-35.tts
 </pre></div>
 </div>
 </li>
-<li><p class="first">Plot the files using the default LVE Application view:</p>
+<li><p>Plot the files using the default LVE Application view:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; plot
 </pre></div>
 </div>
 </li>
-<li><p class="first">Create new theory:</p>
+<li><p>Create new theory:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; theory_new Maxwell Modes
 </pre></div>
 </div>
@@ -280,17 +279,17 @@ Bayesian IC:      -428.98
 </ol>
 <a class="reference internal image-reference" href="../../../../_images/Maxwell_freq.png"><img alt="Graph window" class="align-center" src="../../../../_images/Maxwell_freq.png" style="width: 70%;" /></a>
 <ol class="arabic">
-<li><p class="first">If needed, change the xrange for the fitting (with respect to the current view):</p>
+<li><p>If needed, change the xrange for the fitting (with respect to the current view):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Maxwell Modes01&gt; xrange -8 -3
 </pre></div>
 </div>
 </li>
-<li><p class="first">Change the number of Maxwell modes:</p>
+<li><p>Change the number of Maxwell modes:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Maxwell Modes01&gt; nmodes=5
 </pre></div>
 </div>
 </li>
-<li><p class="first">Fit the theory to the data files, type:</p>
+<li><p>Fit the theory to the data files, type:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Maxwell Modes01&gt; fit
 </pre></div>
 </div>
@@ -324,12 +323,12 @@ Bayesian IC:      -1267.7
 </ol>
 <a class="reference internal image-reference" href="../../../../_images/Maxwell_freq_final.png"><img alt="Graph window" class="align-center" src="../../../../_images/Maxwell_freq_final.png" style="width: 70%;" /></a>
 <ol class="arabic">
-<li><p class="first">Save theory predictions:</p>
+<li><p>Save theory predictions:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Maxwell Modes01&gt; save
 </pre></div>
 </div>
 </li>
-<li><p class="first">Exit RepTate (the y answer is needed):</p>
+<li><p>Exit RepTate (the y answer is needed):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Maxwell Modes01&gt; quit
 </pre></div>
 </div>
@@ -359,7 +358,7 @@ Bayesian IC:      -1267.7
         <li class="right" >
           <a href="../Theory/theory.html" title="LVE Theories"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../LVE.html" > LVE: Linear ViscoElasticity</a> &#187;</li> 
@@ -367,7 +366,7 @@ Bayesian IC:      -1267.7
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

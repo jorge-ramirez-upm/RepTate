@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tutorial SANS Application Command Line &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Tutorial SANS Application Command Line &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -33,8 +27,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,7 +43,7 @@
         <li class="right" >
           <a href="../Theory/theory.html" title="SANS: Theories"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../SANS.html" accesskey="U"> SANS: Small-Angle Neutron Scattering</a> &#187;</li> 
@@ -75,13 +68,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -97,26 +90,25 @@
 <div class="toctree-wrapper compound">
 </div>
 <div class="admonition hint">
-<p class="first admonition-title">Hint</p>
+<p class="admonition-title">Hint</p>
 <p>Tutorial command line (CL) files can be found in the <cite>tests/</cite> folder. They can be run in batch mode or in interactive mode.</p>
 <ul>
-<li><p class="first">To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal"><span class="pre">#</span></code> and the line <code class="docutils literal"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p>
-</li>
-<li><p class="first">To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span><span class="o">/</span><span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Linux or Mac</span>
+<li><p>To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal notranslate"><span class="pre">#</span></code> and the line <code class="docutils literal notranslate"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p></li>
+<li><p>To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span><span class="o">/</span><span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Linux or Mac</span>
 </pre></div>
 </div>
 <p>or:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span>\<span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Windows</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span>\<span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Windows</span>
 </pre></div>
 </div>
 </li>
 </ul>
-<p class="last">(the difference is the use of backslash <code class="docutils literal"><span class="pre">\</span></code> instead of slash <code class="docutils literal"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
+<p>(the difference is the use of backslash <code class="docutils literal notranslate"><span class="pre">\</span></code> instead of slash <code class="docutils literal notranslate"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Tutorial coming soon…</p>
+<p class="admonition-title">Note</p>
+<p>Tutorial coming soon…</p>
 </div>
 </div>
 
@@ -141,7 +133,7 @@
         <li class="right" >
           <a href="../Theory/theory.html" title="SANS: Theories"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../SANS.html" > SANS: Small-Angle Neutron Scattering</a> &#187;</li> 
@@ -149,7 +141,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Rolie-Poly equation &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Rolie-Poly equation &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -31,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -50,7 +43,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Rolie-Poly equation</a><ul>
 <li><a class="reference internal" href="#classic-rolie-poly-model">“Classic” Rolie-Poly model</a></li>
@@ -67,13 +60,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -90,49 +83,49 @@
 </div>
 <div class="section" id="classic-rolie-poly-model">
 <h2>“Classic” Rolie-Poly model<a class="headerlink" href="#classic-rolie-poly-model" title="Permalink to this headline">¶</a></h2>
-<p>The Rolie-Poly (<strong>RO</strong>use <strong>LI</strong>near <strong>E</strong>ntangled <strong>POLY</strong>mers) <a class="reference internal" href="theory.html#nlve-likhtman2003" id="id1">[3]</a> constitutive
-equation is a single mode formulation of the full microscopic model <a class="reference internal" href="theory.html#nlve-graham2003" id="id2">[4]</a>
+<p>The Rolie-Poly (<strong>RO</strong>use <strong>LI</strong>near <strong>E</strong>ntangled <strong>POLY</strong>mers) <a class="reference internal" href="theory.html#nlve-likhtman2003" id="id1">[4]</a> constitutive
+equation is a single mode formulation of the full microscopic model <a class="reference internal" href="theory.html#nlve-graham2003" id="id2">[5]</a>
 for linear entangled polymer chains with chain stretch and convective constraint release.</p>
-<p>The evolution equations for the conformation tensor, <span class="math">\(\boldsymbol{A}\)</span>, solved by RepTate for every stretching mode is:</p>
-<div class="math">
+<p>The evolution equations for the conformation tensor, <span class="math notranslate nohighlight">\(\boldsymbol{A}\)</span>, solved by RepTate for every stretching mode is:</p>
+<div class="math notranslate nohighlight">
 \[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
 }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
 (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2(1 - \lambda^{-1})}{\tau_\mathrm{R}} \left(  \boldsymbol{A}+ \beta \lambda^{2\delta}(\boldsymbol{A
 }- \boldsymbol{I}) \right),\]</div>
-<p>where the stretch ratio, <span class="math">\(\lambda\)</span>, is</p>
-<div class="math">
+<p>where the stretch ratio, <span class="math notranslate nohighlight">\(\lambda\)</span>, is</p>
+<div class="math notranslate nohighlight">
 \[\lambda = \left( \frac 1 3 \text{tr}\, \boldsymbol{A} \right)^{1/2}\]</div>
 <p>and, for non-stretching modes, the equation for each mode is:</p>
-<div class="math" id="equation-non-stretching">
+<div class="math notranslate nohighlight" id="equation-non-stretching">
 <span class="eqno">(1)<a class="headerlink" href="#equation-non-stretching" title="Permalink to this equation">¶</a></span>\[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
 }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
 (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2}{3} \mathrm{tr}
 (\boldsymbol{\kappa}\cdot\boldsymbol{A}) \big(\boldsymbol{A}+
 \beta(\boldsymbol{A}- \boldsymbol{I}) \big).\]</div>
-<p>Given <span class="math">\(n\)</span> modes <span class="math">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
-<div class="math">
+<p>Given <span class="math notranslate nohighlight">\(n\)</span> modes <span class="math notranslate nohighlight">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
+<div class="math notranslate nohighlight">
 \[\boldsymbol{\sigma}(t) = \sum_{i=1}^n G_i\, \boldsymbol{A}_i\]</div>
 </div>
 <div class="section" id="finite-extensibility">
 <h2>Finite extensibility<a class="headerlink" href="#finite-extensibility" title="Permalink to this headline">¶</a></h2>
 <p>A non-Gaussian version of the Rolie–Poly constitutive equation, which accounts
 for finite extensibility of polymer chains, can be written in the following form</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
 }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
 (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2(1 - \lambda^{-1})}{\tau_\mathrm{R}}
 \text{fene}(\lambda) \left( \boldsymbol{A}+ \beta \lambda^{2\delta}(\boldsymbol{A
 }- \boldsymbol{I}) \right),\]</div>
-<p>The nonlinear spring coefficient, <span class="math">\(\text{fene}(\lambda)\)</span>, is
-approximated by the normalized Padé inverse Langevin function <a class="reference internal" href="theory.html#nlve-cohen1991" id="id3">[5]</a></p>
-<div class="math">
+<p>The nonlinear spring coefficient, <span class="math notranslate nohighlight">\(\text{fene}(\lambda)\)</span>, is
+approximated by the normalized Padé inverse Langevin function <a class="reference internal" href="theory.html#nlve-cohen1991" id="id3">[6]</a></p>
+<div class="math notranslate nohighlight">
 \[\text{fene}(\lambda) = \dfrac{3 - \lambda^2/\lambda_\text{max}^2}{1 - \lambda^2/\lambda_\text{max}^2}
 \dfrac{1 - 1/\lambda_\text{max}^2}{3 - 1/\lambda_\text{max}^2},\]</div>
-<p>where <span class="math">\(\lambda_\text{max}\)</span> is the fixed maximum stretch ratio.</p>
-<p>Given <span class="math">\(n\)</span> modes <span class="math">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
-<div class="math">
+<p>where <span class="math notranslate nohighlight">\(\lambda_\text{max}\)</span> is the fixed maximum stretch ratio.</p>
+<p>Given <span class="math notranslate nohighlight">\(n\)</span> modes <span class="math notranslate nohighlight">\((G_i, \tau_{\mathrm d, i}, \tau_{\mathrm R, i})\)</span>, the total stress is calculated as</p>
+<div class="math notranslate nohighlight">
 \[\boldsymbol{\sigma}(t) = \sum_{i=1}^n G_i\,  \text{fene}(\lambda_i)\, \boldsymbol{A}_i\]</div>
-<p>with <span class="math">\(\lambda_i = \left( \frac 1 3 \text{tr}\,\boldsymbol{A}_i \right)^{1/2}\)</span>.</p>
+<p>with <span class="math notranslate nohighlight">\(\lambda_i = \left( \frac 1 3 \text{tr}\,\boldsymbol{A}_i \right)^{1/2}\)</span>.</p>
 </div>
 </div>
 
@@ -151,12 +144,12 @@ approximated by the normalized Padé inverse Langevin function <a class="refere
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

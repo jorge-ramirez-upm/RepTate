@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>&lt;no title&gt; &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>&lt;no title&gt; &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -31,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -58,13 +51,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -75,25 +68,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">num_to_make</span></code>:</dt>
-<dd>controls the number of molecules made in the
+  <dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">num_to_make</span></code>:</dt><dd><p>controls the number of molecules made in the
 simulation - more molecules mean better statistics, but take up more memory
 and take longer to simulate! It is a good idea, when trying to match data, to
 start with just a few molecules - say 1000 to 10000 - and then increase this
-number when you are satisfied the parameters are close to where you want them.</dd>
-<dt><code class="docutils literal"><span class="pre">mon_mass</span></code>:</dt>
-<dd>this is the mass, in a.m.u., of a monomer (usually set to
-28).</dd>
-<dt><code class="docutils literal"><span class="pre">Me</span></code>:</dt>
-<dd>the entanglement molecular weight - needed for output to a BoB
-polymer configuration file, but has no effect on the display within the React module.</dd>
-<dt><code class="docutils literal"><span class="pre">nbins</span></code>:</dt>
-<dd>this is the number of bins - equally spaced in <span class="math">\(\log_{10}\text{MW}\)</span>
+number when you are satisfied the parameters are close to where you want them.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mon_mass</span></code>:</dt><dd><p>this is the mass, in a.m.u., of a monomer (usually set to
+28).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Me</span></code>:</dt><dd><p>the entanglement molecular weight - needed for output to a BoB
+polymer configuration file, but has no effect on the display within the React module.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">nbins</span></code>:</dt><dd><p>this is the number of bins - equally spaced in <span class="math notranslate nohighlight">\(\log_{10}\text{MW}\)</span>
 - used for analysis of the molecules. More bins means more resolution in the
-<span class="math">\(\log_{10}\text{MW}\)</span> axis, but also more noise because there are fewer molecules per
+<span class="math notranslate nohighlight">\(\log_{10}\text{MW}\)</span> axis, but also more noise because there are fewer molecules per
 bin. Thus, the quality of the curves produced is a compromise between these
-two factors. Usually 50 bins is quite adequate for a reasonable number of molecules.</dd>
+two factors. Usually 50 bins is quite adequate for a reasonable number of molecules.</p>
+</dd>
 </dl>
 
 
@@ -111,12 +104,12 @@ two factors. Usually 50 bins is quite adequate for a reasonable number of molecu
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

@@ -41,10 +41,11 @@ from DataTable import DataTable
 
 
 class TheoryArrhenius(CmdBase):
-    """Arrhenius fit
+    """Arrhenius Equation
+
     * **Function**
         .. math::
-            a_T = \\exp(-E_a/R * (1/T - 1-T_{ref}))
+            a_T = \\exp\\left(-\\frac{E_a}{R} \\left(\\frac{1}{T} - \\frac{1}{T_{ref}}\\right) \\right)
     
     * **Parameters**
        - :math:`E_a`: Activation Energy

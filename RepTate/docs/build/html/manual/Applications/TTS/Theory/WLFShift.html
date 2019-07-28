@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Williams-Landel-Ferry TTS Shift &#8212; RepTate 0.9.3 20180719 documentation</title>
+    <meta charset="utf-8" />
+    <title>Williams-Landel-Ferry TTS Shift &#8212; RepTate 0.9.5 20181205 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.9.3 20180719',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -31,8 +25,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -50,7 +43,7 @@
             <p class="logo"><a href="../../../../index.html">
               <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
-  <h3><a href="../../../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Williams-Landel-Ferry TTS Shift</a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
@@ -67,13 +60,13 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -92,12 +85,11 @@
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="TheoryTTS.TheoryWLFShift">
-<em class="property">class </em><code class="descclassname">TheoryTTS.</code><code class="descname">TheoryWLFShift</code><a class="reference internal" href="../../../../_modules/TheoryTTS.html#TheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.TheoryWLFShift" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">TheoryTTS.</code><code class="sig-name descname">TheoryWLFShift</code><a class="reference internal" href="../../../../_modules/TheoryTTS.html#TheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.TheoryWLFShift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.</p>
 <ul>
-<li><dl class="first docutils">
-<dt><strong>Function</strong></dt>
-<dd><div class="first last math">
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
 \[\begin{split}\begin{eqnarray}
 \omega(T_r) &amp;= &amp; a_T \omega(T) \\
 G(T_r) &amp;= &amp; b_T G(T) \\
@@ -108,15 +100,14 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="first last simple">
-<li><span class="math">\(T_r\)</span>: Reference temperature to which the experimental data will be shifted.</li>
-<li><span class="math">\(B_1\)</span>: Material parameter, corresponding to <span class="math">\(C_1\cdot C_2\)</span>, with <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> being the standard WLF material parameters.</li>
-<li><span class="math">\(B_2\)</span>: Material parameter, corresponding to <span class="math">\(C_2-T_r\)</span>, <span class="math">\(C_2\)</span> being the standard WLF material parameter.</li>
-<li>logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.</li>
-<li><span class="math">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math">\(T_g\)</span> with <span class="math">\(M_w\)</span>.</li>
-<li>dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T_r\)</span>: Reference temperature to which the experimental data will be shifted.</p></li>
+<li><p><span class="math notranslate nohighlight">\(B_1\)</span>: Material parameter, corresponding to <span class="math notranslate nohighlight">\(C_1\cdot C_2\)</span>, with <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> being the standard WLF material parameters.</p></li>
+<li><p><span class="math notranslate nohighlight">\(B_2\)</span>: Material parameter, corresponding to <span class="math notranslate nohighlight">\(C_2-T_r\)</span>, <span class="math notranslate nohighlight">\(C_2\)</span> being the standard WLF material parameter.</p></li>
+<li><p>logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.</p></li>
+<li><p><span class="math notranslate nohighlight">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math notranslate nohighlight">\(T_g\)</span> with <span class="math notranslate nohighlight">\(M_w\)</span>.</p></li>
+<li><p>dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).</p></li>
 </ul>
 </dd>
 </dl>
@@ -127,63 +118,63 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>Time-temperature superposition based on a WLF equation with two parameters. Temperature <span class="math">\(T\)</span> of the data is read from the file. The temperature to which the data is shifted is specified by <span class="math">\(T_r\)</span>. This theory shifts many samples simultaneously with the same shift factors which follow exactly the WLF equation. Thus, if there is one temperature for which the data is out of line with the others, the theory does not try to hide it by using an arbitrary shifting - instead the shifted data will clearly show that one of the temperatures went  wrong. Also, the vertical shifts are applied according to the density change only, whereas in other rheometer software some loading errors are hidden into the vertical shifts.</p>
+<p>Time-temperature superposition based on a WLF equation with two parameters. Temperature <span class="math notranslate nohighlight">\(T\)</span> of the data is read from the file. The temperature to which the data is shifted is specified by <span class="math notranslate nohighlight">\(T_r\)</span>. This theory shifts many samples simultaneously with the same shift factors which follow exactly the WLF equation. Thus, if there is one temperature for which the data is out of line with the others, the theory does not try to hide it by using an arbitrary shifting - instead the shifted data will clearly show that one of the temperatures went  wrong. Also, the vertical shifts are applied according to the density change only, whereas in other rheometer software some loading errors are hidden into the vertical shifts.</p>
 <p>In the <strong>horizontal shift</strong>, the frequency is modified according to:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\omega(T_r) = a_T \omega(T)\]</div>
 <p>with</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\log_{10} a_T = \frac{-B_1 (T-T_r)}{(B_2+T_r)(B_2+T)}\]</div>
-<p>where <span class="math">\(B_1\)</span> and <span class="math">\(B_2\)</span> are material parameters.</p>
+<p>where <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> are material parameters.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<p class="admonition-title">Warning</p>
 <ul class="simple">
-<li>The equation and parameters are different with respect to the standard WLF definition. In the WLF equation, the values of the parameters <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> depend on the reference temperature <span class="math">\(T_r\)</span> to which the data is being shifted.</li>
-<li>The parameters <span class="math">\(B_1\)</span> and <span class="math">\(B_2\)</span> do not depend on the choice of <span class="math">\(T_r\)</span> and thus are true material parameters.</li>
-<li>The values the standard parameters <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> can be easily calculated from the values of <span class="math">\(B_1\)</span> and <span class="math">\(B_2\)</span> using the following expressions:</li>
+<li><p>The equation and parameters are different with respect to the standard WLF definition. In the WLF equation, the values of the parameters <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> depend on the reference temperature <span class="math notranslate nohighlight">\(T_r\)</span> to which the data is being shifted.</p></li>
+<li><p>The parameters <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> do not depend on the choice of <span class="math notranslate nohighlight">\(T_r\)</span> and thus are true material parameters.</p></li>
+<li><p>The values the standard parameters <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> can be easily calculated from the values of <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> using the following expressions:</p></li>
 </ul>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}\begin{eqnarray}
 C_1 &amp; = \frac{B_1}{B_2+T_r} \\
 C_2 &amp; = B_2 + T_r
 \end{eqnarray}\end{split}\]</div>
 <ul class="simple">
-<li>Similarly, the values of the parameters <span class="math">\(B_1\)</span> and <span class="math">\(B_2\)</span> can be easily calculated from the values of <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> from the literature using the following expressions:</li>
+<li><p>Similarly, the values of the parameters <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> can be easily calculated from the values of <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> from the literature using the following expressions:</p></li>
 </ul>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}\begin{eqnarray}
 B_1 &amp; = C_1C_2 \\
 B_2 &amp; = C_2 - T_r
 \end{eqnarray}\end{split}\]</div>
-<ul class="last simple">
-<li>Everytime RepTate calculates or fits the theory to a set of experimental data, it will output the values of the standard WLF parameters <span class="math">\(C_1\)</span> and <span class="math">\(C_2\)</span> at the temperature <span class="math">\(T_r\)</span> in the theory window.</li>
+<ul class="simple">
+<li><p>Everytime RepTate calculates or fits the theory to a set of experimental data, it will output the values of the standard WLF parameters <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> at the temperature <span class="math notranslate nohighlight">\(T_r\)</span> in the theory window.</p></li>
 </ul>
 </div>
 <p>In the <strong>vertical shift</strong>, the modulus is modified according to the expression:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[G(T_r) = b_T G(T)\]</div>
 <p>with</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[b_T = \frac{\rho(T_r)T_r}{\rho(T)T} = \frac{(1+\alpha T)(T_r+273.15)}{(1+\alpha T_r)(T+273.15)}\]</div>
-<p>where <span class="math">\(\alpha\)</span> thermal expansion coefficient of the polymer at 0 °C.</p>
-<p>The <strong>molecular weight dependence</strong> of <span class="math">\(T_g\)</span> must be considered when shift data of very short chains or very broad molecular weight distributions containing a significative fraction of short chains. This change is roughly related to the amount of free ends present in the sample. In order to take the effect into account, we use the following phenomenological expression, which was shown to fit the experimental data:</p>
-<div class="math">
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> thermal expansion coefficient of the polymer at 0 °C.</p>
+<p>The <strong>molecular weight dependence</strong> of <span class="math notranslate nohighlight">\(T_g\)</span> must be considered when shift data of very short chains or very broad molecular weight distributions containing a significative fraction of short chains. This change is roughly related to the amount of free ends present in the sample. In order to take the effect into account, we use the following phenomenological expression, which was shown to fit the experimental data:</p>
+<div class="math notranslate nohighlight">
 \[T_g = T_g^\infty - \frac{C_{T_g}}{M_w}\]</div>
-<p>A simple chain ends argument leads to the same expression with <span class="math">\(M_n\)</span> instead of <span class="math">\(M_w\)</span> (here, we are assuming that <span class="math">\(M_w \approx M_n\)</span>). This leads to the following modified expression for the <strong>horizontal shift</strong>:</p>
-<div class="math">
+<p>A simple chain ends argument leads to the same expression with <span class="math notranslate nohighlight">\(M_n\)</span> instead of <span class="math notranslate nohighlight">\(M_w\)</span> (here, we are assuming that <span class="math notranslate nohighlight">\(M_w \approx M_n\)</span>). This leads to the following modified expression for the <strong>horizontal shift</strong>:</p>
+<div class="math notranslate nohighlight">
 \[\log_{10} a_T = \frac{-B_1 (T-T_r+\frac{C_{T_g}}{M_w})}{(B_2+T_r)(B_2+\frac{C_{T_g}}{M_w}+T)}\]</div>
 <p>In most cases, when shifting the data of well entangled monodisperse polymers, this effect can be discarded by unticking the corresponding check box in the theory window.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Try to shift simultaneously different samples of the same material, using the suggested values of the fitting parameters from the Materials Database or taking them from the literature.</p>
+<p class="admonition-title">Warning</p>
+<p>Try to shift simultaneously different samples of the same material, using the suggested values of the fitting parameters from the Materials Database or taking them from the literature.</p>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Load all the <a href="#id1"><span class="problematic" id="id2">*</span></a>.osc files in the same dataset.</p>
+<p class="admonition-title">Warning</p>
+<p>Load all the <a href="#id1"><span class="problematic" id="id2">*</span></a>.osc files in the same dataset.</p>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">It is important to start the fit from reasonable values of the parameters <span class="math">\(B_1\)</span> and <span class="math">\(B_2\)</span>. Otherwise, the minisation procedure will produce wrong results.</p>
+<p class="admonition-title">Warning</p>
+<p>It is important to start the fit from reasonable values of the parameters <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span>. Otherwise, the minisation procedure will produce wrong results.</p>
 </div>
 </div>
 </div>
@@ -203,12 +194,12 @@ B_2 &amp; = C_2 - T_r
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.3 20180719 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>
