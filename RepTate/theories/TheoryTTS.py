@@ -601,11 +601,6 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
         dilogue_name = "Select Folder for Saving Shift Factors"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, self.dir_start)
         if (not os.path.isdir(folder)):
-            msg = 'Choose a valid folder to save the shift factors'
-            if CmdBase.mode == CmdMode.GUI:
-                QMessageBox.information(self, 'Invalid Folder', msg)
-            else:
-                print(msg)
             return
         self.dir_start = folder
         nsaved = 0
