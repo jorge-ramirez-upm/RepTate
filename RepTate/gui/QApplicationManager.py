@@ -797,6 +797,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         except KeyError:
             print("Could not find data in \"%s\"" % project_path)
             return
+        calc_mode_tmp = CmdBase.calcmode
+        CmdBase.calcmode = CalcMode.singlethread
         napps = int(data['napp_saved'])
         nth_saved = int(data['nth_saved'])
         nfile_saved = int(data['nfile_saved'])
@@ -875,5 +877,5 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             QApplication.processEvents()
 
         self.ApplicationtabWidget.setCurrentIndex(app_indx_now)
-
+        CmdBase.calcmode = calc_mode_tmp
 #################
