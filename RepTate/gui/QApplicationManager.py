@@ -102,8 +102,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.toolBarApps.addAction(self.actionSANS)
         self.toolBarApps.addAction(self.actionReact)
         self.toolBarApps.addAction(self.actionDielectric)
-        self.toolBarApps.addAction(self.actionDynamicStructureFactor)
-        self.toolBarApps.addAction(self.actionLAOS)
+        # self.toolBarApps.addAction(self.actionDynamicStructureFactor)
+        # self.toolBarApps.addAction(self.actionLAOS)
 
         #help button
         icon = QIcon(':/Icon8/Images/new_icons/icons8-user-manual.png')
@@ -175,9 +175,9 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionSANS.triggered.connect(lambda: self.handle_new_app('SANS'))
         self.actionReact.triggered.connect(lambda: self.handle_new_app('React'))
         self.actionDielectric.triggered.connect(lambda: self.handle_new_app('Dielectric'))
-        # self.actionLAOS.triggered.connect(lambda: self.handle_new_app('LAOS'))
-        self.actionLAOS.triggered.connect(lambda: self.handle_app_coming_soon('LAOS'))
-        self.actionDynamicStructureFactor.triggered.connect(lambda: self.handle_app_coming_soon('DynamicStructureFactor'))
+
+        # self.actionLAOS.triggered.connect(lambda: self.handle_app_coming_soon('LAOS'))
+        # self.actionDynamicStructureFactor.triggered.connect(lambda: self.handle_app_coming_soon('DynamicStructureFactor'))
 
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)

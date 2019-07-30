@@ -102,8 +102,6 @@
    <addaction name="actionSANS"/>
    <addaction name="actionReact"/>
    <addaction name="actionDielectric"/>
-   <addaction name="actionDynamicStructureFactor"/>
-   <addaction name="actionLAOS"/>
   </widget>
   <widget class="QToolBar" name="toolBarHelpAbout">
    <property name="enabled">
