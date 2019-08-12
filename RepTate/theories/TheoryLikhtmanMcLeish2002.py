@@ -244,7 +244,10 @@ class BaseTheoryLikhtmanMcLeish2002:
         for f in self.theory_files():
             Z = float(f.file_parameters["Mw"])/Me
             tauR = taue*Z**2
-            tauD = 3*taue*Z**3*(1.0-2*C1/np.sqrt(Z)+C2/Z+C3/np.power(Z, 1.5))
+            if Z != 0:
+                tauD = 3*taue*Z**3*(1.0-2*C1/np.sqrt(Z)+C2/Z+C3/np.power(Z, 1.5))
+            else:
+                tauD = 0
             tab_data.append(['%-18s'% f.file_name_short, '%18.4g' % Z,  '%18.4g' % tauR,  '%    18.4g' % tauD ])
         self.Qprint(tab_data)
                                
