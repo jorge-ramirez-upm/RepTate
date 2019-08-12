@@ -1960,7 +1960,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if self.artists_clicked:  #do nothing if list of artists is empty
             menu = QMenu("Copy Data To Clipboard")
             for artist in self.artists_clicked:
-                action_print_coordinates = menu.addAction(artist.aname)
+                action_print_coordinates = menu.addAction(artist._name)
                 action_print_coordinates.triggered.connect(
                     lambda: self.clipboard_coordinates(artist))
             main_menu.addMenu(menu)

@@ -46,7 +46,7 @@ class DataTable(object):
     MAX_NUM_SERIES=3
     PICKRADIUS = 10
 
-    def __init__(self, axarr=None, aname=''):
+    def __init__(self, axarr=None, _name=''):
         """
         **Constructor**
         
@@ -68,9 +68,9 @@ class DataTable(object):
             for i in range(self.MAX_NUM_SERIES): 
                 ss = axarr[nx].plot([], [], label='', picker=self.PICKRADIUS)
                 if i == 0:
-                    ss[0].aname = aname #define artist name
+                    ss[0]._name = _name #define artist name
                 else:    
-                    ss[0].aname = aname + " #%d"%(i + 1) #define artist name
+                    ss[0]._name = _name + " #%d"%(i + 1) #define artist name
                 series_nx.append(ss[0])
             self.series.append(series_nx)
 
