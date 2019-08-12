@@ -46,8 +46,8 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QStandardItem, QFont, QIcon
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-materials_database = np.load(os.path.join(dir_path, 'materials_database.npy')).item()
-materials_user_database = np.load(os.path.join(dir_path, 'user_database.npy')).item()
+materials_database = np.load(os.path.join(dir_path, 'materials_database.npy'), allow_pickle=True).item()
+materials_user_database = np.load(os.path.join(dir_path, 'user_database.npy'), allow_pickle=True).item()
 # materials_database = np.load('tools/materials_database.npy').item()
 # materials_user_database = np.load('tools/user_database.npy').item()
 materials_db = [materials_user_database, materials_database]

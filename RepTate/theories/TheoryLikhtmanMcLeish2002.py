@@ -150,7 +150,7 @@ class BaseTheoryLikhtmanMcLeish2002:
             display_flag=False)
             
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        f = np.load(os.path.join(dir_path, "linlin.npz"))
+        f = np.load(os.path.join(dir_path, "linlin.npz"), allow_pickle=True)
         self.Zarray = f['Z']
         self.cnuarray = f['cnu']
         self.data = f['data']

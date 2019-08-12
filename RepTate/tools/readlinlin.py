@@ -15,7 +15,7 @@ import os
 import numpy as np
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-f=np.load(os.path.join(dir_path, "..", "theories", "linlin.npz"))
+f=np.load(os.path.join(dir_path, "..", "theories", "linlin.npz"), allow_pickle=True)
 Z=f['Z']
 cnu=f['cnu']
 data=f['data']
