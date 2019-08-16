@@ -56,7 +56,7 @@ from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, Qt
 from SplashScreen import SplashScreen
 # from time import time, sleep
 
@@ -100,6 +100,7 @@ def start_RepTate(argv):
     parser = argparse.ArgumentParser(
         description='RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.',
         epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
+    parser.add_argument('-d', '--dpi', help='High DPI support on Windows', action='store_true')
     parser.add_argument('-s', '--single', help='Run Reptate as a single thread application', action='store_true')
     parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
@@ -116,7 +117,13 @@ def start_RepTate(argv):
 
     QApplication.setStyle("Fusion") #comment that line for a native look
                                     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+
+    if args.dpi:
+        os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     app = QApplication(sys.argv)
+    if args.dpi:
+        app.setAttribute(Qt.AA_EnableHighDpiScaling)
+    
     splash = SplashScreen()
     # splash.showMessage("Loading RepTate...\n")
     splash.show()
