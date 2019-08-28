@@ -36,8 +36,11 @@ Module that defines a QTableWidget that allows copy/paste of data.
 
 """ 
 import sys
+import numpy as np
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QTableWidget, QApplication
+
 
 class SpreadsheetWidget(QTableWidget):
     """Subclass of QTableWidget
@@ -54,6 +57,8 @@ class SpreadsheetWidget(QTableWidget):
             - parent {[type]} -- [description] (default: {None})
         """
         super().__init__(parent)
+        delete_disabled = True # disable the possibility to delete rows
+        file_repr = None # store the file object represented in the table
 
     def keyPressEvent(self, event):
         """[summary]
@@ -67,9 +72,26 @@ class SpreadsheetWidget(QTableWidget):
             self.copy()
         elif event.matches(QKeySequence.Paste):
             self.paste()
+        elif event.key() == Qt.Key_Backspace or event.key() == Qt.Key_Delete:
+            self.delete()
         else:
             QTableWidget.keyPressEvent(self, event)
-
+    
+    def delete(self):
+        if self.delete_disabled:
+            pass
+        else:
+            sel = self.selectedIndexes() #returns a list of all selected item indexes in the view
+            if sel:
+                row_list = []
+                for ind in range(len(sel)):
+                    row_list.append(sel[ind].row())
+                row_list = list(set(row_list))
+                self.file_repr.data_table.data = np.delete(self.file_repr.data_table.data, row_list, axis=0)
+                self.file_repr.data_table.num_rows -= len(row_list)
+                self.file_repr.parent_dataset.populate_inspector()
+                self.file_repr.parent_dataset.do_plot() # TODO: we only need to update one data series, not the whole ds
+    
     def copy(self):
         """Copy the selected data of the dataInspector into the clipboard
 

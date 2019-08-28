@@ -662,13 +662,14 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         nrow = dt.num_rows
         ncol = dt.num_columns
         inspec_tab = self.parent_application.inspector_table
+        inspec_tab.file_repr = file
         inspec_tab.setRowCount(nrow)
         inspec_tab.setColumnCount(ncol)
         for i in range(nrow):
             for j in range(ncol):
-                x = "%.3e" % dt.data[i, j]
-                inspec_tab.setItem(
-                    i, j, QTableWidgetItem(x))  # dt.setItem(row, column, item)
+                item = QTableWidgetItem("%.3e" % dt.data[i, j])
+                item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+                inspec_tab.setItem(i, j, item)  # dt.setItem(row, column, item)
         ds_index = self.parent_application.DataSettabWidget.currentIndex()
         self.parent_application.DataInspectordockWidget.setWindowTitle(
             "File: \"%s\" in %s" %

@@ -296,8 +296,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.shiftTable.setVisible(False)
         vblayout.addWidget(self.shiftTable)
 
-        #custom QTable to have the copy/pastefeature
+        #custom QTable to have the copy/paste/delete features
         self.inspector_table = SpreadsheetWidget(self)
+        self.inspector_table.delete_disabled = False
         vblayout.addWidget(self.inspector_table)
         self.data_inspector_panel_widget.setLayout(vblayout)
 
