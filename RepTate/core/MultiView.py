@@ -89,6 +89,7 @@ class MultiView(QWidget):
     TOP=0.98
     WSPACE=0.25
     HSPACE=0.35
+    DPI = 300
 
     def __init__(self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None):
         QDialog.__init__(self)
@@ -97,6 +98,7 @@ class MultiView(QWidget):
         self.nplots = nplots
         self.ncols = ncols
         self.setupUi()
+        mpl.rcParams['savefig.dpi'] = self.DPI
         
     def setupUi(self):
         # Remove seaborn dependency
