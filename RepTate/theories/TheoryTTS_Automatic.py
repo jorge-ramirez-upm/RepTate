@@ -41,7 +41,8 @@ import getpass
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 from scipy import interp
-from scipy.optimize import minimize
+from scipy.optimize import minimize, curve_fit
+from scipy.stats import distributions
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
@@ -142,7 +143,12 @@ class BaseTheoryTTSShiftAutomatic:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        H, V = self.shiftParameters[f.file_name_short]
+        try:
+            H, V = self.shiftParameters[f.file_name_short]
+        except KeyError:
+            # table did not exixt when the TH was opened
+            H, V = self.shiftParameters[f.file_name_short] = (0, 0)
+
         tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, H)
         tt.data[:, 1] = ft.data[:, 1] * np.power(10.0, V)
         tt.data[:, 2] = ft.data[:, 2] * np.power(10.0, V)
@@ -346,7 +352,7 @@ class BaseTheoryTTSShiftAutomatic:
         start_time = time.time()
         #view = self.parent_dataset.parent_application.current_view
         self.Qprint('''<hr><h2>Parameter Fitting</h2>''')
-
+        self.Mwset, self.Mw, self.Tdict = self.get_cases()
         # Case by case, T by T, we optimize the overlap of all files with the
         # corresponding cases at the selected temperature
         Tdesired = self.parameters["T"].value
@@ -436,15 +442,28 @@ class BaseTheoryTTSShiftAutomatic:
 
             # Print final table of T and shift factors
             indTsorted = sorted(range(len(Temps0)), key=lambda k: Temps0[k])
+            invT=[]
+            lnaT=[]
             for i in indTsorted:
                 fname = Filenames[i]
                 sparam = self.shiftParameters[fname]
                 # table+='''<tr><td>%6.3g</td><td>%11.3g</td><td>%11.3g</td></tr>'''%(Temps0[i], sparam[0], sparam[1])
                 table.append(['%-12.3g' % Temps0[i],'%-12.3g' % sparam[0],'%-12.3g' % sparam[1]])
                 #self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], sparam[0], sparam[1]))
-
-            # table+='''</table><br>'''
-            self.Qprint(table)        
+                invT.append(1/(273.15 + Temps0[i]))
+                lnaT.append(np.log(np.power(10, sparam[0])))
+            self.Qprint(table)
+            # Evaluate activation ennergy from Arrhenius fit
+            def f(invT, Ea):
+                return Ea/8.314 * (invT - 1/(273.15 + self.parameters["T"].value))
+            popt, pcov = curve_fit(f, invT, lnaT, p0=[1e3])
+            alpha = 0.05  # 95% confidence interval = 100*(1-alpha)
+            n = len(invT)  # number of data points
+            p = 1  # number of parameters
+            dof = max(0, n - p)  # number of degrees of freedom
+            # student-t value for the dof and confidence level
+            tval = distributions.t.ppf(1.0 - alpha / 2., dof)
+            self.Qprint("<h3>Arrhenius Ea = %.3g ± %.3g J/mol</h3>" % (popt[0], np.sqrt(np.diag(pcov))[0] * tval))
 
         self.fitting = False
         self.do_calculate(line, timing=False)
