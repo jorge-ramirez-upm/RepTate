@@ -41,7 +41,8 @@ import getpass
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 from scipy import interp
-from scipy.optimize import minimize
+from scipy.optimize import minimize, curve_fit
+from scipy.stats import distributions
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
@@ -124,6 +125,7 @@ class BaseTheoryTTSShiftAutomatic:
         self.current_table = None
         self.current_file_min = None
         self.shiftParameters = {}
+        self.aT_vs_T = {}
         for k in self.tables.keys():
             self.shiftParameters[k] = (
                 0.0, 0.0)  # log10 of horizontal, then vertical
@@ -142,7 +144,12 @@ class BaseTheoryTTSShiftAutomatic:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        H, V = self.shiftParameters[f.file_name_short]
+        try:
+            H, V = self.shiftParameters[f.file_name_short]
+        except KeyError:
+            # table did not exixt when the TH was opened
+            H, V = self.shiftParameters[f.file_name_short] = (0, 0)
+
         tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, H)
         tt.data[:, 1] = ft.data[:, 1] * np.power(10.0, V)
         tt.data[:, 2] = ft.data[:, 2] * np.power(10.0, V)
@@ -346,11 +353,12 @@ class BaseTheoryTTSShiftAutomatic:
         start_time = time.time()
         #view = self.parent_dataset.parent_application.current_view
         self.Qprint('''<hr><h2>Parameter Fitting</h2>''')
-
+        self.Mwset, self.Mw, self.Tdict = self.get_cases()
         # Case by case, T by T, we optimize the overlap of all files with the
         # corresponding cases at the selected temperature
         Tdesired = self.parameters["T"].value
         #print (self.Tdict)
+        self.aT_vs_T = {}
         for case in self.Tdict.keys():
             self.Qprint('<h3>Mw=%g Mw2=%g phi=%g phi2=%g</h3>' % (case[0], case[1], case[2], case[3]))
             Temps0 = [x[0] for x in self.Tdict[case]]
@@ -436,16 +444,15 @@ class BaseTheoryTTSShiftAutomatic:
 
             # Print final table of T and shift factors
             indTsorted = sorted(range(len(Temps0)), key=lambda k: Temps0[k])
+            self.aT_vs_T[case[0]] = [] # for Arrhenius activaiton Energy
             for i in indTsorted:
                 fname = Filenames[i]
                 sparam = self.shiftParameters[fname]
                 # table+='''<tr><td>%6.3g</td><td>%11.3g</td><td>%11.3g</td></tr>'''%(Temps0[i], sparam[0], sparam[1])
                 table.append(['%-12.3g' % Temps0[i],'%-12.3g' % sparam[0],'%-12.3g' % sparam[1]])
                 #self.Qprint('%6.3g %11.3g %11.3g' % (Temps0[i], sparam[0], sparam[1]))
-
-            # table+='''</table><br>'''
-            self.Qprint(table)        
-
+                self.aT_vs_T[case[0]].append((sparam[0], Temps0[i]))
+            self.Qprint(table)
         self.fitting = False
         self.do_calculate(line, timing=False)
         self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
@@ -608,6 +615,7 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         tb.addWidget(self.cbTemp)
         self.refreshT = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-reset.png'), 'Refresh T list')
         self.saveShiftFactors = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-save-ShiftFactors.png'), 'Save shift factors')
+        self.arrhe_tb = tb.addAction(QIcon(':/Icon8/Images/new_icons/activation_energy.png'), 'Print Arrhenius activation energy')
 
         self.thToolsLayout.insertWidget(0, tb)
         connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
@@ -615,7 +623,36 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         connection_id = self.cbTemp.currentIndexChanged.connect(self.change_temperature)
         connection_id = self.refreshT.triggered.connect(self.refresh_temperatures)
         connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
+        connection_id = self.arrhe_tb.triggered.connect(self.print_activation_energy)
+
         self.dir_start = "data/"
+
+    def print_activation_energy(self):
+        # Evaluate activation ennergy from Arrhenius fit
+        if self.aT_vs_T == []:
+            self.Qprint("<h3>Apply TTS first</h3>")
+            return
+        def f(invT, Ea):
+            return Ea/8.314 * (invT - 1/(273.15 + self.parameters["T"].value))
+        Ea_list = []
+        for case in self.aT_vs_T:
+            lnaT = [np.log(10)*aT for aT, _ in self.aT_vs_T[case]]
+            invT = [1/(273.15 + T) for _, T in self.aT_vs_T[case]]
+            popt, pcov = curve_fit(f, invT, lnaT, p0=[1e3])
+            alpha = 0.05  # 95% confidence interval = 100*(1-alpha)
+            n = len(invT)  # number of data points
+            p = 1  # number of parameters
+            dof = max(0, n - p)  # number of degrees of freedom
+            # student-t value for the dof and confidence level
+            tval = distributions.t.ppf(1.0 - alpha / 2., dof)
+            Ea_list.append((case, popt[0]/1e3, np.sqrt(np.diag(pcov))[0] * tval/1e3))
+        if len(Ea_list) == 1:
+            self.Qprint("<h3>Arrhenius Ea = %.3g ± %.3g kJ/mol</h3>" % (popt[0]/1e3, np.sqrt(np.diag(pcov))[0] * tval/1e3))
+        else:
+            table = [["Mw", "Ea (kJ/mol)"],]
+            for items in Ea_list:
+                table.append(["%s" % items[0], "%.3g ± %.3g" % (items[1], items[2])])
+            self.Qprint(table)
 
     def populate_TempComboBox(self):
         k = list(self.Tdict.keys())

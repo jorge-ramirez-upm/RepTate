@@ -40,7 +40,8 @@ import time
 import getpass
 import numpy as np
 from scipy import interp
-from scipy.optimize import minimize
+from scipy.optimize import minimize, curve_fit
+from scipy.stats import distributions
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
@@ -214,7 +215,7 @@ class BaseTheoryWLFShift:
             bT = 1
         tt.data[:, 1] = ft.data[:, 1] * bT
         tt.data[:, 2] = ft.data[:, 2] * bT
-        self.shift_factor_dic[f.file_name_short] = [Tf, aT, bT]
+        self.shift_factor_dic[f.file_name_short] = [Tf, aT, bT, Mw]
 
     def do_error(self, line):
         """Override the error calculation for TTS
@@ -360,7 +361,7 @@ class BaseTheoryWLFShift:
         start_time = time.time()
         #view = self.parent_dataset.parent_application.current_view
         self.Qprint('''<hr><h2>Parameter Fitting</h2>''')
-
+        self.shift_factor_dic = {}
         # Mount the vector of parameters (Active ones only)
         initial_guess = []
         k = list(self.parameters.keys())
@@ -398,7 +399,7 @@ class BaseTheoryWLFShift:
                 #table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
                 pass
         # table+='''</table><br>'''
-        self.Qprint(table)        
+        self.Qprint(table)
         self.is_fitting = False
         self.do_calculate(line, timing=False)
         self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
@@ -575,6 +576,7 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
         self.isofrictional.setCheckable(True)
         self.isofrictional.setChecked(True)
         self.saveShiftFactors = tb.addAction(QIcon(':/Icon8/Images/new_icons/icons8-save-ShiftFactors.png'), 'Save shift factors')
+        self.arrhe_tb = tb.addAction(QIcon(':/Icon8/Images/new_icons/activation_energy.png'), 'Print Arrhenius activation energy')
         # self.savemaster = tb.addAction(self.style().standardIcon(
         #     getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
         self.thToolsLayout.insertWidget(0, tb)
@@ -583,8 +585,38 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
         connection_id = self.isofrictional.triggered.connect(
             self.do_isofrictional)
         connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
+        connection_id = self.arrhe_tb.triggered.connect(self.print_activation_energy)
         # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
         self.dir_start = "data/"
+
+    def print_activation_energy(self):
+        # Evaluate activation ennergy from Arrhenius fit
+        M_set = list(set([l[-1] for l in self.shift_factor_dic.values()]))
+        def f(invT, Ea):
+            return Ea/8.314 * (invT - 1/(273.15 + self.parameters["Tr"].value))
+        Ea_list = []
+        for M in M_set:
+            invT = []
+            lnaT = []
+            for s in self.shift_factor_dic.values():
+                if s[-1] == M:
+                    invT.append(1/(273.15 + s[0]))
+                    lnaT.append(np.log(s[1]))
+            popt, pcov = curve_fit(f, invT, lnaT, p0=[1e3])
+            alpha = 0.05  # 95% confidence interval = 100*(1-alpha)
+            n = len(invT)  # number of data points
+            p = 1  # number of parameters
+            dof = max(0, n - p)  # number of degrees of freedom
+            # student-t value for the dof and confidence level
+            tval = distributions.t.ppf(1.0 - alpha / 2., dof)
+            Ea_list.append((M, popt[0]/1e3, np.sqrt(np.diag(pcov))[0] * tval/1e3))
+        if len(M_set) == 1:
+            self.Qprint("<h3>Arrhenius Ea = %.3g ± %.3g kJ/mol</h3>" % (popt[0]/1e3, np.sqrt(np.diag(pcov))[0] * tval/1e3))
+        else:
+            table = [["Mw", "Ea (kJ/mol)"],]
+            for items in Ea_list:
+                table.append(["%s" % items[0], "%.3g ± %.3g" % (items[1], items[2])])
+            self.Qprint(table)
 
     def do_vertical_shift(self):
         self.set_param_value("vert", self.verticalshift.isChecked())
@@ -625,7 +657,7 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
                             fout.write("%-12s %-12s %-12s\n" % ('[°C]', '[-]', '[-]'))
                             nsaved += 1
                             flag_first = False
-                        T, aT, bT = self.shift_factor_dic[f.file_name_short]
+                        T, aT, bT, _ = self.shift_factor_dic[f.file_name_short]
                         list_out.append((T, aT, bT))
                 list_out.sort()
                 for (T, aT, bT) in list_out:
