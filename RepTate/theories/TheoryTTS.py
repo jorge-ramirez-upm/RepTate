@@ -402,22 +402,6 @@ class BaseTheoryWLFShift:
         self.Qprint(table)
         self.is_fitting = False
         self.do_calculate(line, timing=False)
-        # Evaluate activation ennergy from Arrhenius fit
-        invT = []
-        lnaT = []
-        for s in self.shift_factor_dic.values():
-            invT.append(1/(273.15 + s[0]))
-            lnaT.append(np.log(s[1]))
-        def f(invT, Ea):
-            return Ea/8.314 * (invT - 1/(273.15 + self.parameters["Tr"].value))
-        popt, pcov = curve_fit(f, invT, lnaT, p0=[1e3])
-        alpha = 0.05  # 95% confidence interval = 100*(1-alpha)
-        n = len(invT)  # number of data points
-        p = 1  # number of parameters
-        dof = max(0, n - p)  # number of degrees of freedom
-        # student-t value for the dof and confidence level
-        tval = distributions.t.ppf(1.0 - alpha / 2., dof)
-        self.Qprint("<h3>Arrhenius Ea = %.3g ± %.3g J/mol</h3>" % (popt[0], np.sqrt(np.diag(pcov))[0] * tval))
         self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
 
     def do_print(self, line):
