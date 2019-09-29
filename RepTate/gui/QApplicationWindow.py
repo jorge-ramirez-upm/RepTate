@@ -59,6 +59,7 @@ from Application import Application
 from DraggableArtists import DragType, DraggableSeries, DraggableNote
 from SpreadsheetWidget import SpreadsheetWidget
 from collections import OrderedDict
+from ImportExcelWindow import ImportExcelWindow
 
 #To recompile the symbol-settings dialog:
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
@@ -366,6 +367,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tbut.setDefaultAction(self.actionNew_Dataset_From_File)
         menu = QMenu()
         menu.addAction(self.actionAddDummyFiles)
+        menu.addAction(self.action_import_from_excel)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         # view all sets / theories
@@ -430,6 +432,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
         connection_id = self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
+        connection_id = self.action_import_from_excel.triggered.connect(self.handle_action_import_from_excel)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
         connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
 
@@ -486,6 +489,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.annotation_opts = {'alpha': 1.0, 'color': QColor(0, 0, 0).getRgbF(), 'family':'sans-serif', 'horizontalalignment':'center', 'rotation': 0.0, 'fontsize':16, 'style': 'normal',  'verticalalignment': 'center', 'fontweight':'normal'}
         self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
         self.ax_opts = self.ax_opt_defaults.copy()
+
+        # dialog import data from excel 
+        self.excel_import_gui = None
 
         self.legend_draggable = True
         self.default_legend_labels = True
@@ -1617,6 +1623,41 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             return
         self.new_tables_from_files(paths_to_open)
         
+    def handle_action_import_from_excel(self):
+        for ftype in self.filetypes.values():
+            break
+        if self.excel_import_gui is None:
+            self.excel_import_gui = ImportExcelWindow(parent=self, headers=ftype.col_names, file_param=ftype.basic_file_parameters)
+        if self.excel_import_gui.exec_():
+            res_dic = self.excel_import_gui.get_data()
+            if res_dic["x"] == []:
+                return
+            params = self.excel_import_gui.file_param_txt.text().split(";")
+            fparams = {}
+            for p in params:
+                try:
+                    pname, pval = p.split("=")
+                    fparams[pname] = pval
+                except ValueError:
+                    pass
+            for key in fparams:
+                try:
+                    fparams[key] = float(fparams[key])
+                except ValueError:
+                    pass
+            ds = self.DataSettabWidget.currentWidget()
+            fname = "%s_%s_%s_%s" % (res_dic["file"], res_dic["sheet"], res_dic["col1"], res_dic["col2"])
+            try:
+                fname += "_%s" % res_dic["col3"]
+            except:
+                pass
+            f, success = ds.do_new_dummy_file(fname=fname+"_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], fparams=fparams, file_type=ftype)
+            if success:
+                self.addTableToCurrentDataSet(f, ftype.extension)
+            if res_dic["flag_nan"]:
+                QMessageBox.warning(self, 'Open Excel File', 'Some values could not be read from the file and were set to "nan"')
+
+
     def addDummyFiles(self):
         """Add dummy files to dataset"""
         if self.DataSettabWidget.count() == 0:

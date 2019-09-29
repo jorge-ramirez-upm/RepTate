@@ -719,13 +719,16 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             completions = [f for f in file_types if f.startswith(text)]
         return completions
 
-    def do_new_dummy_file(self, xrange=[], yval=0, fparams={}, file_type=None):
+    def do_new_dummy_file(self, fname="", xrange=[], yval=0, zval=[], fparams={}, file_type=None):
         """Create File form xrange and file parameters
         xrange: list of x points
         yval: float
         fparam: dict containing file parameter names and values
         """
-        filename = "dummy_" + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + "." + file_type.extension
+        if fname == "":
+            filename = "dummy_" + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + "." + file_type.extension
+        else:
+            filename = fname + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + "." + file_type.extension
         f = File(file_name=filename, file_type=file_type, parent_dataset=self, axarr=self.parent_application.axarr)
         f.file_parameters = fparams
         dt = f.data_table
@@ -733,8 +736,14 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         dt.num_rows = len(xrange)
         dt.data = np.zeros((dt.num_rows, dt.num_columns))
         dt.data[:,0] = xrange
-        for i in range(1, dt.num_columns):
-            dt.data[:, i] = yval
+        if isinstance(yval, list):
+            for i in range(1, dt.num_columns):
+                dt.data[:, i] = yval[:]
+        else:
+            for i in range(1, dt.num_columns):
+                dt.data[:, i] = yval
+        if zval != []:
+            dt.data[:, 2] = zval[:]
 
         unique = True
         for file in self.files:
