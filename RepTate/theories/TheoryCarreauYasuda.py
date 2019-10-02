@@ -35,6 +35,7 @@
 Carreau-Yasuda equation for the complex viscosity
 """
 import numpy as np
+from math import sqrt
 from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
@@ -199,7 +200,7 @@ class BaseTheoryCarreauYasuda:
         n = self.parameters["n"].value
         a = self.parameters["a"].value
 
-        tt.data[:, 1] = tt.data[:, 2] = (etainf+(eta0-etainf)*np.power(1.0+np.power(lamda*tt.data[:, 0], a), (n-1.0)/a))*tt.data[:, 0]
+        tt.data[:, 1] = tt.data[:, 2] = (etainf+(eta0-etainf)*np.power(1.0+np.power(lamda*tt.data[:, 0], a), (n-1.0)/a))*tt.data[:, 0] / sqrt(2)
 
 
 class CLTheoryCarreauYasuda(BaseTheoryCarreauYasuda, Theory):
