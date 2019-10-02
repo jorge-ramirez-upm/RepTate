@@ -194,7 +194,10 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             offset = 0
         for k in range(self.nskip, max_row):
             # x values
-            cellx = sheet.cell(k + offset, col1 + offset)
+            if self.is_xlsx:
+                cellx = sheet.cell(row=k + 1, column=col1 + 1)
+            else:
+                cellx = sheet.cell(k, col1)
             if hasattr(cellx, "value"):
                 valx = cellx.value
             else:
@@ -206,7 +209,10 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 flag_nan = True
 
             # y values
-            celly = sheet.cell(k + offset, col2 + offset)
+            if self.is_xlsx:
+                celly = sheet.cell(row=k + 1, column=col2 + 1)
+            else:
+                celly = sheet.cell(k, col2)
             if hasattr(celly, "value"):
                 valy = celly.value
             else:
@@ -219,7 +225,10 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             
             if len(self.headers) > 2:
                 # y values
-                cellz = sheet.cell(k + offset, col3 + offset)
+                if self.is_xlsx:
+                    cellz = sheet.cell(row=k + 1, column=col3 + 1)
+                else:
+                    cellz = sheet.cell(k, col3)
                 if hasattr(cellz, "value"):
                     valz = cellz.value
                 else:
@@ -278,18 +287,19 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 sheet = self.wb[sname]
                 max_row = sheet.max_row
                 max_col = sheet.max_column
-                offset = 1
             else:
                 sheet = self.wb.sheet_by_name(sname)
                 max_row = sheet.nrows
                 max_col = sheet.ncols
-                offset = 0
             max_row = min(max_row, self.MAX_ROW)
             qsheet = QTableWidget(max_row, max_col, self)
             qsheet.setSelectionMode(QAbstractItemView.NoSelection)
             for i in range(max_row):
                 for j in range(max_col):
-                    cell = sheet.cell(i + offset, j + offset)
+                    if self.is_xlsx:
+                        cell = sheet.cell(row=i + 1, column=j + 1)
+                    else:
+                        cell = sheet.cell(i, j)
                     if hasattr(cell, "value"):
                         val = cell.value
                     else:
