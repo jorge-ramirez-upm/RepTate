@@ -323,8 +323,8 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             e.ignore()
     
     def dropEvent(self, e):
-        path = e.mimeData().urls()[0].path()
-        if os.path.splitext(path)[-1] == "xls" or os.path.splitext(path)[-1] == "xlsx":
+        path = e.mimeData().urls()[0].toLocalFile()
+        if os.path.splitext(path)[-1] == ".xls" or os.path.splitext(path)[-1] == ".xlsx":
             self.handle_read_new_file(path)
         else:
             pass
