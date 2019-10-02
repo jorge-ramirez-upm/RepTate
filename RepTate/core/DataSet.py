@@ -732,7 +732,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         f = File(file_name=filename, file_type=file_type, parent_dataset=self, axarr=self.parent_application.axarr)
         f.file_parameters = fparams
         dt = f.data_table
-        dt.num_columns = 4
+        dt.num_columns = len(file_type.col_names)
         dt.num_rows = len(xrange)
         dt.data = np.zeros((dt.num_rows, dt.num_columns))
         dt.data[:,0] = xrange
@@ -742,7 +742,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         else:
             for i in range(1, dt.num_columns):
                 dt.data[:, i] = yval
-        if zval != []:
+        if zval != [] and dt.num_columns > 2:
             dt.data[:, 2] = zval[:]
 
         unique = True
