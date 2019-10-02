@@ -1646,6 +1646,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 except ValueError:
                     pass
             ds = self.DataSettabWidget.currentWidget()
+            if ds is None:
+                self.createNew_Empty_Dataset()
+                ds = self.DataSettabWidget.currentWidget()
             fname = "%s_%s_%s_%s" % (res_dic["file"], res_dic["sheet"], res_dic["col1"], res_dic["col2"])
             try:
                 fname += "_%s" % res_dic["col3"]
