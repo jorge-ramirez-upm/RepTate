@@ -145,7 +145,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         # tool_tip = 'XY'  # text that appear on hover
         # self.actionXY = QAction(icon, tool_tip, self)
         # #insert the new button before the "MWD" button
-        # self.toolBar.insertAction(self.actionMWD, self.actionXY)
+        # self.toolBarApps.insertAction(self.actionMWD, self.actionXY)
         # #connect button
         # self.actionXY.triggered.connect(lambda: self.handle_new_app('XY'))
 
