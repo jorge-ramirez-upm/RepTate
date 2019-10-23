@@ -46,6 +46,7 @@ from ApplicationTTS import ApplicationTTS
 from ApplicationTTSFactors import ApplicationTTSFactors
 from ApplicationLVE import ApplicationLVE
 from ApplicationNLVE import ApplicationNLVE
+from ApplicationCrystal import ApplicationCrystal
 from ApplicationMWD import ApplicationMWD
 from ApplicationGt import ApplicationGt
 from ApplicationCreep import ApplicationCreep
@@ -106,6 +107,7 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationTTSFactors.appname] = ApplicationTTSFactors
         self.available_applications[ApplicationLVE.appname] = ApplicationLVE
         self.available_applications[ApplicationNLVE.appname] = ApplicationNLVE
+        self.available_applications[ApplicationCrystal.appname] = ApplicationCrystal
         self.available_applications[ApplicationGt.appname] = ApplicationGt
         self.available_applications[ApplicationCreep.appname] = ApplicationCreep
         self.available_applications[ApplicationSANS.appname] = ApplicationSANS

@@ -148,6 +148,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         # self.toolBarApps.insertAction(self.actionMWD, self.actionXY)
         # #connect button
         # self.actionXY.triggered.connect(lambda: self.handle_new_app('XY'))
+        icon = QIcon(':/Icons/Images/new_icons/Crystal.png')
+        tool_tip = 'Flow Induced Crystallisation'  # text that appear on hover
+        self.actionCrystal = QAction(icon, tool_tip, self)
+        #insert the new button before the "MWD" button
+        self.toolBarApps.insertAction(self.actionGt, self.actionCrystal)
 
         # App tabs behaviour
         self.ApplicationtabWidget.setMovable(True)
@@ -170,6 +175,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionTTSFactors.triggered.connect(lambda: self.handle_new_app('TTSF'))
         self.actionLVE.triggered.connect(lambda: self.handle_new_app('LVE'))
         self.actionNLVE.triggered.connect(lambda: self.handle_new_app('NLVE'))
+        self.actionCrystal.triggered.connect(lambda: self.handle_new_app('Crystal'))
         self.actionGt.triggered.connect(lambda: self.handle_new_app('Gt'))
         self.actionCreep.triggered.connect(lambda: self.handle_new_app('Creep'))
         self.actionSANS.triggered.connect(lambda: self.handle_new_app('SANS'))
