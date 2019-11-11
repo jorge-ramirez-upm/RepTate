@@ -1,2 +1,11 @@
-conda:
-    file: environment.yml
+version: 2
+
+#conda:
+#    file: environment.yml
+    
+python:
+  version: 3.7
+  install:
+    - method: pip
+    - requirements: docs/requirements.txt    
+    
