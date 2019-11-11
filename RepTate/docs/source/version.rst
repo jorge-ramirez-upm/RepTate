@@ -2,6 +2,14 @@
 Version History
 ===============
 
+Release 0.9.6 - 20191111
+========================
+- NEW axes and label setting options
+- NEW Arrhenius theory in TTSFactor app
+- NEW enable delete data points
+- NEW: import excel files dialog
+- Correction to Carreau-Yasuda theory
+
 Release 0.9.5 - 20181205
 ========================
 - New React theory "Diene CSTR"
