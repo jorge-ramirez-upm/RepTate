@@ -3,9 +3,9 @@
  - conda-forge
  - defaults
  dependencies:
- - matplotlib=2.2.2
- - numpy=1.13.1
- - scipy=0.19.1
- - sphinxcontrib-bibtex=0.3.6
- - openpyxl=2.5.0b1
+ - matplotlib
+ - numpy
+ - scipy
+ - sphinxcontrib-bibtex
+ - openpyxl
  

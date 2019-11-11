@@ -17,6 +17,7 @@ copy gui\MainWindow_rc.py dist\RepTate
 copy gui\annotationedit.ui dist\RepTate
 copy gui\dummyfilesDialog.ui dist\RepTate
 copy gui\import_excel_dialog.ui dist\RepTate
+copy ..\Reptate_license.txt dist\RepTate
 
 copy tools\materials_database.npy dist\RepTate
 copy tools\user_database.npy dist\RepTate
