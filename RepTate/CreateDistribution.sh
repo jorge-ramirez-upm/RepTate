@@ -19,6 +19,7 @@ cp gui/QApplicationWindow.ui dist/RepTate
 cp gui/AboutDialog.ui dist/RepTate
 cp gui/About_rc.py dist/RepTate
 cp gui/ReptateMainWindow.ui dist/RepTate
+cp gui/import_excel_dialog.ui dist/RepTate
 cp gui/MainWindow_rc.py dist/RepTate
 cp /home/jramirez/miniconda3/lib/libiomp5.so dist/RepTate
 mkdir dist/RepTate/data
@@ -28,6 +29,7 @@ cp theories/linlin.npz dist/RepTate/theories
 cp theories/*so dist/RepTate
 mkdir -p dist/RepTate/gui/Images
 cp gui/Images/logo.jpg dist/RepTate/gui/Images
+
 
 # Then CREATE CL Version
 rm -rf build/RepTateCL
