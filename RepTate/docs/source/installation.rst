@@ -25,7 +25,7 @@ as well as a Python interpreter), for the latest version (|release|) can be down
 `RepTate for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1>`_
     Unzip and uncompress the dowloaded file and look for the RepTate executable ``RepTate.exe``.
 
-`RepTate for Mac (OS X 10.10 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1>`_ 
+`RepTate for Mac (OS X 10.11 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1>`_ 
     Drag-and-drop the RepTate application in your Applications folder. 
     
 Linux users are supposed to follow the instruction below.
