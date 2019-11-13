@@ -1,3 +1,4 @@
 openpyxl==3.0.0
 sphinxcontrib-bibtex>=1.0.0
 PyQt5>=5.0.0
+xlrd>=1.2.0
