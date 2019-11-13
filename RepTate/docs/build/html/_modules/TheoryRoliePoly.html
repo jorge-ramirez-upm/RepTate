@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>TheoryRoliePoly &#8212; RepTate 0.9.5 20181205 documentation</title>
+    <title>TheoryRoliePoly &#8212; RepTate 0.9.6 20191111 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -119,7 +119,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">EndComputationRequested</span>
 
-<div class="viewcode-block" id="FlowMode"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.FlowMode">[docs]</a><span class="k">class</span> <span class="nc">FlowMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="FlowMode"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.FlowMode">[docs]</a><span class="k">class</span> <span class="nc">FlowMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Defines the flow geometry used</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters can be:</span>
@@ -130,7 +130,7 @@
     <span class="n">uext</span> <span class="o">=</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="FeneMode"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.FeneMode">[docs]</a><span class="k">class</span> <span class="nc">FeneMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="FeneMode"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.FeneMode">[docs]</a><span class="k">class</span> <span class="nc">FeneMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Defines the finite extensibility function</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters can be:</span>
@@ -141,7 +141,7 @@
     <span class="n">with_fene</span> <span class="o">=</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="EditModesDialog"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.EditModesDialog">[docs]</a><span class="k">class</span> <span class="nc">EditModesDialog</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+<div class="viewcode-block" id="EditModesDialog"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.EditModesDialog">[docs]</a><span class="k">class</span> <span class="nc">EditModesDialog</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">MAX_MODES</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EditModesDialog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 
@@ -176,14 +176,14 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_spinboxValueChanged</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EditModesDialog.handle_spinboxValueChanged"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.EditModesDialog.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="EditModesDialog.handle_spinboxValueChanged"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.EditModesDialog.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">nrow_old</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrow_old</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>  <span class="c1">#create extra rows with defaut values</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="s2">&quot;1000&quot;</span><span class="p">))</span></div></div>
 
-<div class="viewcode-block" id="TheoryRoliePoly"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.TheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">TheoryRoliePoly</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryRoliePoly"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.TheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">TheoryRoliePoly</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Rolie-Poly</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -212,7 +212,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryRoliePoly</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryRoliePoly</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -312,16 +312,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">with_fene</span> <span class="o">=</span> <span class="n">FeneMode</span><span class="o">.</span><span class="n">none</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_flow_mode</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.set_extra_data"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.set_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra_data</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.set_extra_data"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.set_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra_data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set extra data when loading project&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handle_with_fene_button</span><span class="p">(</span><span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;with_fene&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nstretch&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.get_extra_data"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.get_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.get_extra_data"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.get_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set extra_data when saving project&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;with_fene&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_fene</span> <span class="o">==</span> <span class="n">FeneMode</span><span class="o">.</span><span class="n">with_fene</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.init_flow_mode"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.init_flow_mode">[docs]</a>    <span class="k">def</span> <span class="nf">init_flow_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.init_flow_mode"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.init_flow_mode">[docs]</a>    <span class="k">def</span> <span class="nf">init_flow_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Find if data files are shear or extension&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theory_files</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
@@ -333,7 +333,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;in RP init:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">=</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span>  <span class="c1">#default mode: shear</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.destructor"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called when the theory tab is closed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -341,7 +341,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_graphic_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.show_theory_extras"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.show_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.show_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.show_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called when the active theory is changed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -350,7 +350,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Qhide_theory_extras</span><span class="p">(</span><span class="n">show</span><span class="p">)</span></div>
         <span class="c1"># self.extra_graphic_visible(self.linearenvelope.isChecked())</span>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.extra_graphic_visible"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.extra_graphic_visible">[docs]</a>    <span class="k">def</span> <span class="nf">extra_graphic_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.extra_graphic_visible"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.extra_graphic_visible">[docs]</a>    <span class="k">def</span> <span class="nf">extra_graphic_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -358,7 +358,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">update_plot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.get_modes"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.get_modes">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.get_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.get_modes">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -374,7 +374,7 @@
             <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="k">return</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.set_modes"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.set_modes">[docs]</a>    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.set_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.set_modes">[docs]</a>    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -391,7 +391,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">tau</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_shear"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_shear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_shear"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_shear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Rolie-Poly differential equation under *shear* flow</span>
 <span class="sd">        with stretching and finite extensibility if selected</span>
 <span class="sd">        </span>
@@ -424,7 +424,7 @@
             <span class="n">gammadot</span> <span class="o">*</span> <span class="n">syy</span> <span class="o">-</span> <span class="n">sxy</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="n">aux1</span> <span class="o">*</span> <span class="p">(</span><span class="n">sxy</span> <span class="o">+</span> <span class="n">aux2</span> <span class="o">*</span> <span class="n">sxy</span><span class="p">)</span>
         <span class="p">]</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_shear_nostretch"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear_nostretch">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_shear_nostretch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_shear_nostretch"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear_nostretch">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_shear_nostretch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Rolie-Poly differential equation under shear flow, without stretching</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -450,7 +450,7 @@
             <span class="p">(</span><span class="n">sxy</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">sxy</span><span class="p">)</span>
         <span class="p">]</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_uext"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_uext">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_uext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_uext"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_uext">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_uext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Rolie-Poly differential equation under *uniaxial elongational* flow</span>
 <span class="sd">        with stretching and finite extensibility if selecter</span>
 
@@ -482,7 +482,7 @@
                                                                  <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">dsxx</span><span class="p">,</span> <span class="n">dsyy</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_uext_nostretch"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_uext_nostretch">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_uext_nostretch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_uext_nostretch"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_uext_nostretch">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_uext_nostretch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Rolie-Poly differential equation under elongation flow, wihtout stretching</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -506,13 +506,13 @@
             <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="n">aux1</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span>
         <span class="p">]</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.calculate_fene"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.calculate_fene">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_fene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l_square</span><span class="p">,</span> <span class="n">lmax</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.calculate_fene"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.calculate_fene">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_fene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l_square</span><span class="p">,</span> <span class="n">lmax</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;calculate finite extensibility function value&quot;&quot;&quot;</span>
         <span class="n">ilm2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">lmax</span> <span class="o">*</span> <span class="n">lmax</span><span class="p">)</span>  <span class="c1"># 1/lambda_max^2</span>
         <span class="n">l2_lm2</span> <span class="o">=</span> <span class="n">l_square</span> <span class="o">*</span> <span class="n">ilm2</span>  <span class="c1"># (lambda/lambda_max)^2</span>
         <span class="k">return</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">l2_lm2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">l2_lm2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.RoliePoly"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.RoliePoly">[docs]</a>    <span class="k">def</span> <span class="nf">RoliePoly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.RoliePoly"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.RoliePoly">[docs]</a>    <span class="k">def</span> <span class="nf">RoliePoly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -600,7 +600,7 @@
                     <span class="mf">1.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span>  <span class="c1"># fene array</span>
                 <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">fene_arr</span></div>
 
-<div class="viewcode-block" id="BaseTheoryRoliePoly.set_param_value"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.BaseTheoryRoliePoly.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryRoliePoly.set_param_value"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -654,7 +654,7 @@
         <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">True</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryRoliePoly"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.CLTheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryRoliePoly</span><span class="p">(</span><span class="n">BaseTheoryRoliePoly</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryRoliePoly"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.CLTheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryRoliePoly</span><span class="p">(</span><span class="n">BaseTheoryRoliePoly</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -672,7 +672,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryRoliePoly"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryRoliePoly</span><span class="p">(</span><span class="n">BaseTheoryRoliePoly</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryRoliePoly</span><span class="p">(</span><span class="n">BaseTheoryRoliePoly</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -776,7 +776,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_flowsolve_btn</span><span class="p">)</span>
             
             
-<div class="viewcode-block" id="GUITheoryRoliePoly.handle_flowsolve_btn"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.handle_flowsolve_btn">[docs]</a>    <span class="k">def</span> <span class="nf">handle_flowsolve_btn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.handle_flowsolve_btn"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.handle_flowsolve_btn">[docs]</a>    <span class="k">def</span> <span class="nf">handle_flowsolve_btn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save theory parameters in FlowSolve format&quot;&quot;&quot;</span>
 
         <span class="c1">#Get filename of RepTate project to open</span>
@@ -831,7 +831,7 @@
         <span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span>
                                 <span class="s1">&#39;Wrote FlowSolve parameters in </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fpath</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.handle_with_fene_button"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.handle_with_fene_button">[docs]</a>    <span class="k">def</span> <span class="nf">handle_with_fene_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.handle_with_fene_button"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.handle_with_fene_button">[docs]</a>    <span class="k">def</span> <span class="nf">handle_with_fene_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">with_fene</span> <span class="o">=</span> <span class="n">FeneMode</span><span class="o">.</span><span class="n">with_fene</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">with_fene_button</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -849,13 +849,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.handle_spinboxValueChanged"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.handle_spinboxValueChanged"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;nstretch&quot;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">nmodes</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.Qhide_theory_extras"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.Qhide_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Uncheck the LVE button. Called when curent theory is changed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -865,13 +865,13 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.show_linear_envelope"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.show_linear_envelope">[docs]</a>    <span class="k">def</span> <span class="nf">show_linear_envelope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.show_linear_envelope"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.show_linear_envelope">[docs]</a>    <span class="k">def</span> <span class="nf">show_linear_envelope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_graphic_visible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
         <span class="c1"># self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())</span>
         <span class="c1"># self.plot_theory_stuff()</span>
         <span class="c1"># self.parent_dataset.parent_application.update_plot()</span>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.plot_theory_stuff"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.plot_theory_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.plot_theory_stuff"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.plot_theory_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -904,18 +904,18 @@
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.select_shear_flow"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.select_shear_flow">[docs]</a>    <span class="k">def</span> <span class="nf">select_shear_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.select_shear_flow"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.select_shear_flow">[docs]</a>    <span class="k">def</span> <span class="nf">select_shear_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">=</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shear_flow_action</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.select_extensional_flow"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.select_extensional_flow">[docs]</a>    <span class="k">def</span> <span class="nf">select_extensional_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.select_extensional_flow"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.select_extensional_flow">[docs]</a>    <span class="k">def</span> <span class="nf">select_extensional_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">=</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">uext</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensional_flow_action</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.get_modes_reptate"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.get_modes_reptate">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes_reptate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.get_modes_reptate"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.get_modes_reptate">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes_reptate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qcopy_modes</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GUITheoryRoliePoly.edit_modes_window"><a class="viewcode-back" href="../code.html#TheoryRoliePoly.GUITheoryRoliePoly.edit_modes_window">[docs]</a>    <span class="k">def</span> <span class="nf">edit_modes_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryRoliePoly.edit_modes_window"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.edit_modes_window">[docs]</a>    <span class="k">def</span> <span class="nf">edit_modes_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">times</span><span class="p">,</span> <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modes</span><span class="p">()</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">EditModesDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MODES</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">exec_</span><span class="p">():</span>
@@ -955,13 +955,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

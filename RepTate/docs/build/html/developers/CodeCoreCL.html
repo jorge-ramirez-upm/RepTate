@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Core classes (Command Line) &#8212; RepTate 0.9.5 20181205 documentation</title>
+    <title>Core classes (Command Line) &#8212; RepTate 0.9.6 20191111 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="code.html" title="Navigate the source Code of RepTate"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
@@ -645,7 +645,7 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 
 <dl class="attribute">
 <dt id="ApplicationManager.ApplicationManager.date">
-<code class="sig-name descname">date</code><em class="property"> = '20181205'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.date" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">date</code><em class="property"> = '20191111'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.date" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -822,7 +822,7 @@ Maxwell modes</p>
 
 <dl class="attribute">
 <dt id="ApplicationManager.ApplicationManager.intro">
-<code class="sig-name descname">intro</code><em class="property"> = 'RepTate Version 0.9.5 - 20181205 command processor\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">intro</code><em class="property"> = 'RepTate Version 0.9.6 - 20191111 command processor\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -876,7 +876,7 @@ Maxwell modes</p>
 
 <dl class="attribute">
 <dt id="ApplicationManager.ApplicationManager.version">
-<code class="sig-name descname">version</code><em class="property"> = '0.9.5'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.version" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">version</code><em class="property"> = '0.9.6'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1448,7 +1448,7 @@ to that data set.</p>
 
 <dl class="method">
 <dt id="DataSet.DataSet.do_new_dummy_file">
-<code class="sig-name descname">do_new_dummy_file</code><span class="sig-paren">(</span><em class="sig-param">xrange=[]</em>, <em class="sig-param">yval=0</em>, <em class="sig-param">fparams={}</em>, <em class="sig-param">file_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/DataSet.html#DataSet.do_new_dummy_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataSet.DataSet.do_new_dummy_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">do_new_dummy_file</code><span class="sig-paren">(</span><em class="sig-param">fname=''</em>, <em class="sig-param">xrange=[]</em>, <em class="sig-param">yval=0</em>, <em class="sig-param">zval=[]</em>, <em class="sig-param">fparams={}</em>, <em class="sig-param">file_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/DataSet.html#DataSet.do_new_dummy_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataSet.DataSet.do_new_dummy_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create File form xrange and file parameters
 xrange: list of x points
 yval: float
@@ -1725,7 +1725,7 @@ sort Mw [,reverse]</p>
 <p>Module for the actual object that contains the data, both for experiments and theory.</p>
 <dl class="class">
 <dt id="DataTable.DataTable">
-<em class="property">class </em><code class="sig-prename descclassname">DataTable.</code><code class="sig-name descname">DataTable</code><span class="sig-paren">(</span><em class="sig-param">axarr=None</em>, <em class="sig-param">aname=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/DataTable.html#DataTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataTable.DataTable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">DataTable.</code><code class="sig-name descname">DataTable</code><span class="sig-paren">(</span><em class="sig-param">axarr=None</em>, <em class="sig-param">_name=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/DataTable.html#DataTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataTable.DataTable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class that stores data and series</p>
 <p>[description]</p>
@@ -3236,14 +3236,14 @@ the data graphically.</p>
         <li class="right" >
           <a href="code.html" title="Navigate the source Code of RepTate"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

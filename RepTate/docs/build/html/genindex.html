@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Index &#8212; RepTate 0.9.5 20181205 documentation</title>
+    <title>Index &#8212; RepTate 0.9.6 20191111 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -1093,6 +1093,8 @@
 </li>
       <li><a href="developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_about_scipy">handle_about_scipy() (QApplicationManager.QApplicationManager method)</a>
 </li>
+      <li><a href="developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_action_import_from_excel">handle_action_import_from_excel() (QApplicationWindow.QApplicationWindow method)</a>
+</li>
       <li><a href="developers/CodeCoreGUI.html#QDataSet.QDataSet.handle_action_save_theory_data">handle_action_save_theory_data() (QDataSet.QDataSet method)</a>
 </li>
       <li><a href="developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionAutoscale">handle_actionAutoscale() (QApplicationWindow.QApplicationWindow method)</a>
@@ -1555,10 +1557,10 @@
       </ul></li>
       <li><a href="developers/CodeTools.html#polymer_data.polymer">polymer (class in polymer_data)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="developers/CodeTools.html#module-polymer_data">polymer_data (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code.html#TheoryBasic.BaseTheoryPolynomial.polynomial">polynomial() (TheoryBasic.BaseTheoryPolynomial method)</a>, <a href="developers/CodeTheories.html#TheoryBasic.BaseTheoryPolynomial.polynomial">[1]</a>
 </li>
       <li><a href="developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.populate_cbPalette">populate_cbPalette() (QApplicationWindow.QApplicationWindow method)</a>
@@ -1572,6 +1574,8 @@
       <li><a href="code.html#TheoryBasic.BaseTheoryPowerLaw.powerlaw">powerlaw() (TheoryBasic.BaseTheoryPowerLaw method)</a>, <a href="developers/CodeTheories.html#TheoryBasic.BaseTheoryPowerLaw.powerlaw">[1]</a>
 </li>
       <li><a href="developers/CodeCoreCL.html#Theory.Theory.precmd">precmd() (Theory.Theory method)</a>
+</li>
+      <li><a href="code.html#TheoryTTS.GUITheoryWLFShift.print_activation_energy">print_activation_energy() (TheoryTTS.GUITheoryWLFShift method)</a>, <a href="developers/CodeTheories.html#TheoryTTS.GUITheoryWLFShift.print_activation_energy">[1]</a>
 </li>
       <li><a href="developers/CodeCoreCL.html#Theory.Theory.print_qtextbox">print_qtextbox() (Theory.Theory method)</a>
 </li>
@@ -1901,8 +1905,6 @@
 </li>
       <li><a href="code.html#module-TheoryBasic">TheoryBasic (module)</a>, <a href="developers/CodeTheories.html#module-TheoryBasic">[1]</a>
 </li>
-      <li><a href="manual/Applications/NLVE/Theory/RoliePolyBlend.html#TheoryBlendRoliePoly.TheoryBlendRoliePoly">TheoryBlendRoliePoly (class in TheoryBlendRoliePoly)</a>
-</li>
       <li><a href="manual/Applications/LVE/Theory/BoB_LVE.html#TheoryBobLVE.TheoryBobLVE">TheoryBobLVE (class in TheoryBobLVE)</a>, <a href="manual/Applications/LVE/Theory/theory.html#TheoryBobLVE.TheoryBobLVE">[1]</a>
 </li>
       <li><a href="manual/Applications/NLVE/Theory/BOB_NLVE.html#TheoryBobNLVE.TheoryBobNLVE">TheoryBobNLVE (class in TheoryBobNLVE)</a>, <a href="manual/Applications/NLVE/Theory/theory.html#TheoryBobNLVE.TheoryBobNLVE">[1]</a>
@@ -1988,8 +1990,6 @@
       <li><a href="code.html#TheoryTTS.TheoryWLFShift">TheoryWLFShift (class in TheoryTTS)</a>, <a href="developers/CodeTheories.html#TheoryTTS.TheoryWLFShift">[1]</a>, <a href="manual/Applications/TTS/Theory/WLFShift.html#TheoryTTS.TheoryWLFShift">[2]</a>, <a href="manual/Applications/TTS/Theory/theory.html#TheoryTTS.TheoryWLFShift">[3]</a>
 </li>
       <li><a href="code.html#TheoryTTS.BaseTheoryWLFShift.TheoryWLFShift">TheoryWLFShift() (TheoryTTS.BaseTheoryWLFShift method)</a>, <a href="developers/CodeTheories.html#TheoryTTS.BaseTheoryWLFShift.TheoryWLFShift">[1]</a>
-</li>
-      <li><a href="manual/Applications/TTS/Theory/WLFShiftTest.html#TheoryTTS_Test.TheoryWLFShiftTest">TheoryWLFShiftTest (class in TheoryTTS_Test)</a>, <a href="manual/Applications/TTS/Theory/theory.html#TheoryTTS_Test.TheoryWLFShiftTest">[1]</a>
 </li>
       <li><a href="code.html#DataSet.ThLineMode">ThLineMode (class in DataSet)</a>, <a href="developers/CodeCoreCL.html#DataSet.ThLineMode">[1]</a>
 </li>
@@ -2372,12 +2372,12 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

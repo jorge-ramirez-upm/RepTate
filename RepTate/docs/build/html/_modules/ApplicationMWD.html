@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>ApplicationMWD &#8212; RepTate 0.9.5 20181205 documentation</title>
+    <title>ApplicationMWD &#8212; RepTate 0.9.6 20191111 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -108,7 +108,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="ApplicationMWD"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationMWD.ApplicationMWD">[docs]</a><span class="k">class</span> <span class="nc">ApplicationMWD</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ApplicationMWD"><a class="viewcode-back" href="../manual/Applications/MWD/general.html#ApplicationMWD.ApplicationMWD">[docs]</a><span class="k">class</span> <span class="nc">ApplicationMWD</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application to analyze Molecular Weight Distributions</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -222,7 +222,7 @@
         <span class="c1">#set the current view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseApplicationMWD.view_WM"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationMWD.BaseApplicationMWD.view_WM">[docs]</a>    <span class="k">def</span> <span class="nf">view_WM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationMWD.view_WM"><a class="viewcode-back" href="../manual/Applications/MWD/general.html#ApplicationMWD.BaseApplicationMWD.view_WM">[docs]</a>    <span class="k">def</span> <span class="nf">view_WM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:math:`W(M)` vs :math:`M`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -231,7 +231,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationMWD.view_logWM"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationMWD.BaseApplicationMWD.view_logWM">[docs]</a>    <span class="k">def</span> <span class="nf">view_logWM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationMWD.view_logWM"><a class="viewcode-back" href="../manual/Applications/MWD/general.html#ApplicationMWD.BaseApplicationMWD.view_logWM">[docs]</a>    <span class="k">def</span> <span class="nf">view_logWM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:math:`\\log(W(M))` vs :math:`\\log(M)` </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -288,13 +288,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

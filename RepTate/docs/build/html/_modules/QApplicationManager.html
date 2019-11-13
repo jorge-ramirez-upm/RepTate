@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>QApplicationManager &#8212; RepTate 0.9.5 20181205 documentation</title>
+    <title>QApplicationManager &#8212; RepTate 0.9.6 20191111 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -167,8 +167,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionSANS</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionReact</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDielectric</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDynamicStructureFactor</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLAOS</span><span class="p">)</span>
+        <span class="c1"># self.toolBarApps.addAction(self.actionDynamicStructureFactor)</span>
+        <span class="c1"># self.toolBarApps.addAction(self.actionLAOS)</span>
 
         <span class="c1">#help button</span>
         <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-user-manual.png&#39;</span><span class="p">)</span>
@@ -210,7 +210,7 @@
         <span class="c1"># tool_tip = &#39;XY&#39;  # text that appear on hover</span>
         <span class="c1"># self.actionXY = QAction(icon, tool_tip, self)</span>
         <span class="c1"># #insert the new button before the &quot;MWD&quot; button</span>
-        <span class="c1"># self.toolBar.insertAction(self.actionMWD, self.actionXY)</span>
+        <span class="c1"># self.toolBarApps.insertAction(self.actionMWD, self.actionXY)</span>
         <span class="c1"># #connect button</span>
         <span class="c1"># self.actionXY.triggered.connect(lambda: self.handle_new_app(&#39;XY&#39;))</span>
 
@@ -240,9 +240,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">actionSANS</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;SANS&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionReact</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;React&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionDielectric</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;Dielectric&#39;</span><span class="p">))</span>
-        <span class="c1"># self.actionLAOS.triggered.connect(lambda: self.handle_new_app(&#39;LAOS&#39;))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actionLAOS</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_app_coming_soon</span><span class="p">(</span><span class="s1">&#39;LAOS&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actionDynamicStructureFactor</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_app_coming_soon</span><span class="p">(</span><span class="s1">&#39;DynamicStructureFactor&#39;</span><span class="p">))</span>
+
+        <span class="c1"># self.actionLAOS.triggered.connect(lambda: self.handle_app_coming_soon(&#39;LAOS&#39;))</span>
+        <span class="c1"># self.actionDynamicStructureFactor.triggered.connect(lambda: self.handle_app_coming_soon(&#39;DynamicStructureFactor&#39;))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">tabCloseRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close_app_tab</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">currentChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_changed</span><span class="p">)</span>
@@ -862,6 +862,8 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not find data in </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">project_path</span><span class="p">)</span>
             <span class="k">return</span>
+        <span class="n">calc_mode_tmp</span> <span class="o">=</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">calcmode</span>
+        <span class="n">CmdBase</span><span class="o">.</span><span class="n">calcmode</span> <span class="o">=</span> <span class="n">CalcMode</span><span class="o">.</span><span class="n">singlethread</span>
         <span class="n">napps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;napp_saved&#39;</span><span class="p">])</span>
         <span class="n">nth_saved</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;nth_saved&#39;</span><span class="p">])</span>
         <span class="n">nfile_saved</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;nfile_saved&#39;</span><span class="p">])</span>
@@ -939,8 +941,8 @@
             
             <span class="n">QApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">app_indx_now</span><span class="p">)</span></div></div>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">app_indx_now</span><span class="p">)</span>
+        <span class="n">CmdBase</span><span class="o">.</span><span class="n">calcmode</span> <span class="o">=</span> <span class="n">calc_mode_tmp</span></div></div>
 <span class="c1">#################</span>
 </pre></div>
 
@@ -958,13 +960,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.5 20181205 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
