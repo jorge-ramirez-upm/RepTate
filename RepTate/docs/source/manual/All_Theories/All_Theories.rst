@@ -7,6 +7,7 @@ All RepTate Theories
 
     ../Applications/MWD/Theory/theory
     ../Applications/TTS/Theory/theory
+    ../Applications/TTSFactors/Theory/theory
     ../Applications/LVE/Theory/theory
     ../Applications/NLVE/Theory/theory
     ../Applications/Gt/Theory/theory
