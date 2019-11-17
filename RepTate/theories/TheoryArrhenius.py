@@ -45,7 +45,7 @@ class TheoryArrhenius(CmdBase):
 
     * **Function**
         .. math::
-            a_T = \\exp\\left(-\\frac{E_a}{R} \\left(\\frac{1}{T} - \\frac{1}{T_{ref}}\\right) \\right)
+            a_T = \\exp\\left(\\frac{E_a}{R} \\left(\\frac{1}{T} - \\frac{1}{T_{ref}}\\right) \\right)
     
     * **Parameters**
        - :math:`E_a`: Activation Energy
