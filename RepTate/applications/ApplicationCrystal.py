@@ -89,7 +89,9 @@ class BaseApplicationCrystal:
         #from TheoryUCM import TheoryUCM
         #from TheoryGiesekus import TheoryGiesekus
         #from TheoryPomPom import TheoryPomPom
-        from TheoryRolieDoublePoly import TheoryRolieDoublePoly
+        #from TheoryRolieDoublePoly import TheoryRolieDoublePoly
+        from TheoryGoPolyStrand import TheoryGoPolyStrand
+        from TheorySimple import TheorySimple
         #from TheoryBobNLVE import TheoryBobNLVE
         #from TheoryPETS import TheoryPETS
         #from TheorySCCR import TheorySCCR
@@ -222,7 +224,7 @@ class BaseApplicationCrystal:
             filled=True)
 
         #set multiviews
-        self.nplots = 2
+        self.nplots = 4
         self.multiviews = []
         for i in range(self.nplot_max):
             # set views in the same order as declared above
@@ -237,22 +239,24 @@ class BaseApplicationCrystal:
         ftype = TXTColumnFile("Elongation flow with crystallisation", "uextxs",
                               "Elongation crystallisation files", ['t', 'N1', 'Ndot', 'phi_X', 'N'],
                               ['gdot', 'T','tstop'], ['s', 'Pa$\cdot$s', 's$^{-1}$m$^{-3}$', '-', 'm$^{-3}$'])
-        self.filetypes[ftype.extension] = ftype
-        ftype = TXTColumnFile("Start-up of shear flow", "shear",
-                              "Shear flow files", ['t', 'sigma_xy'], ['gdot', 'T'],
-                              ['s', 'Pa$\cdot$s'])
-        self.filetypes[ftype.extension] = ftype
-        ftype = TXTColumnFile("Elongation flow", "uext",
-                              "Elongation flow files", ['t', 'N1'],
-                              ['gdot', 'T'], ['s', 'Pa$\cdot$s'])
-        self.filetypes[ftype.extension] = ftype
+        #self.filetypes[ftype.extension] = ftype
+        #ftype = TXTColumnFile("Start-up of shear flow", "shear",
+        #                      "Shear flow files", ['t', 'sigma_xy'], ['gdot', 'T'],
+        #                      ['s', 'Pa$\cdot$s'])
+        #self.filetypes[ftype.extension] = ftype
+        #ftype = TXTColumnFile("Elongation flow", "uext",
+        #                      "Elongation flow files", ['t', 'N1'],
+        #                      ['gdot', 'T'], ['s', 'Pa$\cdot$s'])
+        #self.filetypes[ftype.extension] = ftype
 
         # THEORIES
         #self.theories[TheoryRoliePoly.thname] = TheoryRoliePoly
         #self.theories[TheoryUCM.thname] = TheoryUCM
         #self.theories[TheoryGiesekus.thname] = TheoryGiesekus
         #self.theories[TheoryPomPom.thname] = TheoryPomPom
-        self.theories[TheoryRolieDoublePoly.thname] = TheoryRolieDoublePoly
+        #self.theories[TheoryRolieDoublePoly.thname] = TheoryRolieDoublePoly
+        self.theories[TheoryGoPolyStrand.thname] = TheoryGoPolyStrand
+        self.theories[TheorySimple.thname] = TheorySimple
         #self.theories[TheoryBobNLVE.thname] = TheoryBobNLVE
         #self.theories[TheoryPETS.thname] = TheoryPETS
         #self.theories[TheorySCCR.thname] = TheorySCCR
