@@ -1325,9 +1325,9 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
         logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
         ntimes = int((logtmax - logtmin) * 20)
         data_table_tmp = DataTable(self.axarr)
-        data_table_tmp.num_columns = 2
+        data_table_tmp.num_columns = 5
         data_table_tmp.num_rows = ntimes
-        data_table_tmp.data = np.zeros((ntimes, 2))
+        data_table_tmp.data = np.zeros((ntimes, 5))
 
         times = np.logspace(logtmin, logtmax, ntimes)
         data_table_tmp.data[:, 0] = times
