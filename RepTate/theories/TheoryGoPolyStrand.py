@@ -54,6 +54,7 @@ import time
 import Version
 
 import rp_blend_ctypes_helper as rpch
+import goLandscape_ctypes_helper as goL
 from Theory import EndComputationRequested
 from collections import OrderedDict
 
@@ -831,8 +832,12 @@ class BaseTheoryGoPolyStrand:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         fel = np.zeros((tt.num_rows, self.parameters["nmodes"].value))
         Gamma = self.parameters['Gamma'].value
+        epsilonB = self.parameters['epsilonB'].value
+        muS = self.parameters['muS'].value
         tt.data[:, 0] = ft.data[:, 0] #time
-        
+
+        #Compute the quiescent free energy barrier
+        print( goL.GO_Landscape(202.0, epsilonB, muS) )
                 
         # ODE solver parameters
         abserr = 1.0e-8
@@ -960,11 +965,12 @@ class BaseTheoryGoPolyStrand:
                     sss_xx += phi_arr[j] * sig[time, I + c * j ]
                     sss_yy += phi_arr[j] * sig[time, I + c * j + 1]
                     sss_xy += phi_arr[j] * sig[time, I + c * j + 2]
+                #print(tt.data[time,0],  sss_xx , sss_yy , sss_xy)
                 fel[time,i] = self.computeFel(sss_xx , sss_yy , sss_xy)
                 
                 
-            print(tt.data[time,0], fel[time,:] )
-        print( sss_xx, sss_yy, sss_xy)
+            #print(tt.data[time,0], fel[time,:] )
+        
                 
                     
 
