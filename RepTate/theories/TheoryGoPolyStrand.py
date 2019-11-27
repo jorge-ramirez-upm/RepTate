@@ -481,12 +481,42 @@ class BaseTheoryGoPolyStrand:
             description='Order parameter prefactor',
             type=ParameterType.real,
             opt_type=OptType.opt)
-        self.parameters['b'] = Parameter(
-            name='b',
-            value=0,
-            description='parameter b',
+        self.parameters['Ne'] = Parameter(
+            name='Ne',
+            value=25,
+            description='Monomers between entanglements',
             type=ParameterType.real,
             opt_type=OptType.opt)
+        self.parameters['epsilonB'] = Parameter(
+            name='epsilonB',
+            value=-0.117,
+            description='Bulk free energy per monomer',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['muS'] = Parameter(
+            name='muS',
+            value=0.85,
+            description='Surface area energy',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['tau0'] = Parameter(
+            name='tau0',
+            value=0.38E-9,
+            description='Monomer attachment time',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['rhoK'] = Parameter(
+            name='rhoK',
+            value=2.7E9,
+            description='Kuhn step density',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['G_C'] = Parameter(
+            name='G_C',
+            value=0.063,
+            description='Crystal growth rate',
+            type=ParameterType.real,
+            opt_type=OptType.opt)        
         self.parameters["beta"] = Parameter(
             name="beta",
             value=1,
@@ -774,6 +804,15 @@ class BaseTheoryGoPolyStrand:
         l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
         return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
 
+    def computeFel( self, Fxx, Fyy, Fxy):
+        Gamma = self.parameters['Gamma'].value
+        Ne = self.parameters['Ne'].value
+
+        tmp= Fxx/2 + Fyy/2 + np.sqrt( ((Fxx-Fyy)/2.0)**2 + Fxy**2 ) - 1
+		    
+        return Gamma* tmp/Ne
+    
+
     def RolieDoublePoly_Crystal(self, f=None):
         """[summary]
         
@@ -790,14 +829,10 @@ class BaseTheoryGoPolyStrand:
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        fel = np.zeros((tt.num_rows, self.parameters["nmodes"].value))
         Gamma = self.parameters['Gamma'].value
-        b = self.parameters['b'].value
         tt.data[:, 0] = ft.data[:, 0] #time
-        #tt.data[:, 1] = Gamma*ft.data[:, 0] + b #stress
-        tt.data[:, 2] = Gamma #Nucleation rate
-        tt.data[:, 3] = Gamma*ft.data[:, 0]**4 #Phi_X
-        tt.data[:, 4] = Gamma*ft.data[:, 0] #Number of nuclei
-
+        
                 
         # ODE solver parameters
         abserr = 1.0e-8
@@ -914,7 +949,34 @@ class BaseTheoryGoPolyStrand:
 
             tt.data[:, 1] *= self.parameters["GN0"].value
 
+        #Extract the configuration of each mode
+        for time in range(nt):
+            for i in range(nmodes):
+                I = c * nmodes * i
+                sss_xx = 0.0
+                sss_yy = 0.0
+                sss_xy = 0.0
+                for j in range(nmodes):
+                    sss_xx += phi_arr[j] * sig[time, I + c * j ]
+                    sss_yy += phi_arr[j] * sig[time, I + c * j + 1]
+                    sss_xy += phi_arr[j] * sig[time, I + c * j + 2]
+                fel[time,i] = self.computeFel(sss_xx , sss_yy , sss_xy)
+                
+                
+            print(tt.data[time,0], fel[time,:] )
+        print( sss_xx, sss_yy, sss_xy)
+                
+                    
 
+            
+        #Run the nucleation model using the RDP data
+        #tt.data[:, 1] = Gamma*ft.data[:, 0] + b #stress
+        tt.data[:, 2] = Gamma #Nucleation rate
+        tt.data[:, 3] = Gamma*ft.data[:, 0]**4 #Phi_X
+        tt.data[:, 4] = Gamma*ft.data[:, 0] #Number of nuclei
+
+        
+        
     def set_param_value(self, name, value):
         """[summary]
         
