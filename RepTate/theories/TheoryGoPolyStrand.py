@@ -806,13 +806,64 @@ class BaseTheoryGoPolyStrand:
         return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
 
     def computeFel( self, Fxx, Fyy, Fxy):
+        """Converts RDP configurations into a free energy change (via nematic order parameter"""
         Gamma = self.parameters['Gamma'].value
         Ne = self.parameters['Ne'].value
 
         tmp= Fxx/2 + Fyy/2 + np.sqrt( ((Fxx-Fyy)/2.0)**2 + Fxy**2 ) - 1
 		    
         return Gamma* tmp/Ne
-    
+
+    def computeQuiescentBarrier( self ):
+        """Calculates the GO model quiescent barrier and nucleation rate"""
+        epsilonB = self.parameters['epsilonB'].value
+        muS = self.parameters['muS'].value
+        rhoK = self.parameters['rhoK'].value
+        tau0 = self.parameters['tau0'].value
+        dN=1
+        curvature_skip=5
+        alpha=0.8
+
+        #Calculate quiescent barrier
+        landscape = []
+        landscape.append( 0.0) #0
+        landscape.append( 0.0) #1
+        landscape.append( 0.0) #2
+        NT=2
+        while( landscape[NT]>landscape[NT-1]-0.005):
+            NT += 1
+            landscape.append(goL.GO_Landscape(NT, epsilonB,muS) )
+            if( NT> 10000):
+                self.Qprint(
+                    '<font color=green><b>Quiescent barrier does not have \
+                    a maximum below 10,000 monomers - change epsilonB \
+                    and/or muS</b></font>')
+                break
+
+        #Compute barrier peak and curvature
+        quiescent_height = max(landscape)
+        nStar = landscape.index( quiescent_height)
+
+        d2Fqstar=(landscape[nStar-curvature_skip]-2*landscape[nStar]+landscape[nStar+curvature_skip]) \
+          /(curvature_skip**2*dN**2)
+
+        #Calculate initial slope
+        sumDFq=0.0
+        for i in range(1, nStar+1):
+            sumDFq += np.exp(-landscape[i])
+
+        #Compute the nucleation rate
+        xqtime = (sumDFq*np.exp(quiescent_height)/(2*nStar**0.66666666)) \
+          *(1+np.sqrt(-2*np.pi/d2Fqstar) \
+            *np.exp(-(alpha**2)/(2*d2Fqstar*nStar**2)+alpha/nStar))
+        NqRate = rhoK/tau0/xqtime
+
+        self.Qprint('Quiescent barrier height= %.3g'% quiescent_height,end='kBT; ')
+
+        self.Qprint('Quiescent nucleation rate= %.3g'% NqRate,end=' micro m-3 s-1')
+
+        return landscape, NqRate, quiescent_height
+
 
     def RolieDoublePoly_Crystal(self, f=None):
         """[summary]
@@ -835,9 +886,6 @@ class BaseTheoryGoPolyStrand:
         epsilonB = self.parameters['epsilonB'].value
         muS = self.parameters['muS'].value
         tt.data[:, 0] = ft.data[:, 0] #time
-
-        #Compute the quiescent free energy barrier
-        print( goL.GO_Landscape(202.0, epsilonB, muS) )
                 
         # ODE solver parameters
         abserr = 1.0e-8
@@ -971,7 +1019,8 @@ class BaseTheoryGoPolyStrand:
                 
             #print(tt.data[time,0], fel[time,:] )
         
-                
+        #Compute the quiescent free energy barrier
+        q_barrier, NdotQ, DfStarQ = self.computeQuiescentBarrier()
                     
 
             
