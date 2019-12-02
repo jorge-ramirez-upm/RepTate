@@ -1027,14 +1027,25 @@ class BaseTheoryGoPolyStrand:
         #Compute the flow-induced barrier
         q_barrier=np.asarray(q_barrier)
         phi = np.asarray(phi_arr)
+        nspecies=phi.size
+        sumdf=1e5
         for i in range(tt.num_rows):
-            df= fel[i,:]
-            
-            params={'landscape':q_barrier, 'phi':phi, 'df':df, \
-                        'epsilonB':epsilonB, 'muS':muS}
-            DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
+            #See how much change there is from last time
+            if(i>0):
+                sumdf=0.0
+                for j in range(nspecies):
+                    sumdf += (df[j]-fel[i,j])**2
+                print(tt.data[i,0],sumdf)
+
+            if(sumdf>1e-12): #Otherwise assume no change from last timestep
+                df= fel[i,:]
+                params={'landscape':q_barrier, 'phi':phi, 'df':df, \
+                            'epsilonB':epsilonB, 'muS':muS}
+                DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
+                nucRate=NdotQ*np.exp( DfStarQ - DfStarFlow)
+                
             #DfStarFlow = GOpolySTRAND.findDfStar(params)
-            tt.data[i,2]=NdotQ*np.exp( DfStarQ - DfStarFlow)
+            tt.data[i,2]=nucRate
             print('Barrier/Nucleation rate = ', DfStarFlow,tt.data[i,2]  )
             
 
