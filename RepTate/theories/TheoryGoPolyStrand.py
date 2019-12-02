@@ -58,6 +58,7 @@ import goLandscape_ctypes_helper as goL
 from Theory import EndComputationRequested
 from collections import OrderedDict
 import GOpolySTRAND
+import GOpolySTRAND_initialGuess
 
 
 class Dilution():
@@ -1031,7 +1032,8 @@ class BaseTheoryGoPolyStrand:
             
             params={'landscape':q_barrier, 'phi':phi, 'df':df, \
                         'epsilonB':epsilonB, 'muS':muS}
-            DfStarFlow = GOpolySTRAND.findDfStar(params)
+            DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
+            #DfStarFlow = GOpolySTRAND.findDfStar(params)
             tt.data[i,2]=NdotQ*np.exp( DfStarQ - DfStarFlow)
             print('Barrier/Nucleation rate = ', DfStarFlow,tt.data[i,2]  )
             
