@@ -298,7 +298,7 @@ class BaseApplicationCrystal:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = dt.data[:, 2]
+        y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
     
     def viewphiX(self, dt, file_parameters):

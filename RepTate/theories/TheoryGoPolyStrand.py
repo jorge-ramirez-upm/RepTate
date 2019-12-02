@@ -57,6 +57,7 @@ import rp_blend_ctypes_helper as rpch
 import goLandscape_ctypes_helper as goL
 from Theory import EndComputationRequested
 from collections import OrderedDict
+import GOpolySTRAND
 
 
 class Dilution():
@@ -1021,12 +1022,24 @@ class BaseTheoryGoPolyStrand:
         
         #Compute the quiescent free energy barrier
         q_barrier, NdotQ, DfStarQ = self.computeQuiescentBarrier()
-                    
+
+        #Compute the flow-induced barrier
+        q_barrier=np.asarray(q_barrier)
+        phi = np.asarray(phi_arr)
+        for i in range(tt.num_rows):
+            df= fel[i,:]
+            
+            params={'landscape':q_barrier, 'phi':phi, 'df':df, \
+                        'epsilonB':epsilonB, 'muS':muS}
+            DfStarFlow = GOpolySTRAND.findDfStar(params)
+            tt.data[i,2]=NdotQ*np.exp( DfStarQ - DfStarFlow)
+            print('Barrier/Nucleation rate = ', DfStarFlow,tt.data[i,2]  )
+            
 
             
         #Run the nucleation model using the RDP data
         #tt.data[:, 1] = Gamma*ft.data[:, 0] + b #stress
-        tt.data[:, 2] = Gamma #Nucleation rate
+        #!3tt.data[:, 2] = Gamma #Nucleation rate
         tt.data[:, 3] = Gamma*ft.data[:, 0]**4 #Phi_X
         tt.data[:, 4] = Gamma*ft.data[:, 0] #Number of nuclei
 

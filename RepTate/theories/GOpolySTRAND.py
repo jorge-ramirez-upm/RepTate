@@ -160,9 +160,10 @@ def findDfStar( params):
   
     for i in range(int((maxNT-1)/2)):
         NT=(i+1)*2
-    
         Barrierlist.append(trueQuiescent[NT]+Freefluc(NT)-Freeflucqui(NT) )
-        if( i % 100 == 0):
-           print (i,str(NT)+ " / "+  str((maxNT-1)/2 ))#!3, Freefluc(NT)-Freeflucqui(NT))
 
+        #if( i % 100 == 0):
+         #  print (i,str(NT)+ " / "+  str((maxNT-1)/2 ))#!3, Freefluc(NT)-Freeflucqui(NT))
+
+           
     return max(Barrierlist)
