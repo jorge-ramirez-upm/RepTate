@@ -59,6 +59,7 @@ from Theory import EndComputationRequested
 from collections import OrderedDict
 import GOpolySTRAND
 import GOpolySTRAND_initialGuess
+import SchneiderRate
 
 
 class Dilution():
@@ -519,6 +520,12 @@ class BaseTheoryGoPolyStrand:
             value=0.063,
             description='Crystal growth rate',
             type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['N_0'] = Parameter(
+            name='N_0',
+            value=0.0,
+            description='Hetrogeneous nucleation density',
+            type=ParameterType.real,
             opt_type=OptType.opt)        
         self.parameters["beta"] = Parameter(
             name="beta",
@@ -887,6 +894,8 @@ class BaseTheoryGoPolyStrand:
         Gamma = self.parameters['Gamma'].value
         epsilonB = self.parameters['epsilonB'].value
         muS = self.parameters['muS'].value
+        G_C = self.parameters['G_C'].value
+        N_0 = self.parameters['N_0'].value
         tt.data[:, 0] = ft.data[:, 0] #time
                 
         # ODE solver parameters
@@ -1019,8 +1028,6 @@ class BaseTheoryGoPolyStrand:
                 fel[time,i] = self.computeFel(sss_xx , sss_yy , sss_xy)
                 
                 
-            #print(tt.data[time,0], fel[time,:] )
-        
         #Compute the quiescent free energy barrier
         q_barrier, NdotQ, DfStarQ = self.computeQuiescentBarrier()
 
@@ -1035,8 +1042,7 @@ class BaseTheoryGoPolyStrand:
                 sumdf=0.0
                 for j in range(nspecies):
                     sumdf += (df[j]-fel[i,j])**2
-                print(tt.data[i,0],sumdf)
-
+                
             if(sumdf>1e-12): #Otherwise assume no change from last timestep
                 df= fel[i,:]
                 params={'landscape':q_barrier, 'phi':phi, 'df':df, \
@@ -1044,19 +1050,17 @@ class BaseTheoryGoPolyStrand:
                 DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
                 nucRate=NdotQ*np.exp( DfStarQ - DfStarFlow)
                 
-            #DfStarFlow = GOpolySTRAND.findDfStar(params)
             tt.data[i,2]=nucRate
-            print('Barrier/Nucleation rate = ', DfStarFlow,tt.data[i,2]  )
-            
 
             
-        #Run the nucleation model using the RDP data
-        #tt.data[:, 1] = Gamma*ft.data[:, 0] + b #stress
-        #!3tt.data[:, 2] = Gamma #Nucleation rate
-        tt.data[:, 3] = Gamma*ft.data[:, 0]**4 #Phi_X
-        tt.data[:, 4] = Gamma*ft.data[:, 0] #Number of nuclei
+        #Now use a spline to interpolate the N_dot data and solve for crystal
+        t = tt.data[:,0]
+        Ndot = tt.data[:,2]
+        Cry_Evol = SchneiderRate.intSchneider(t, Ndot,NdotQ,N_0,G_C)
+        tt.data[:, 3] = Cry_Evol[:,0] #Phi_X
+        tt.data[:, 4] = Cry_Evol[:,3]/8/np.pi #Number of nuclei
 
-        
+
         
     def set_param_value(self, name, value):
         """[summary]
@@ -1508,4 +1512,5 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+
 

@@ -307,7 +307,7 @@ class BaseApplicationCrystal:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = dt.data[:, 3]
+        y[:, 0] = np.log10(dt.data[:, 3])
         return x, y, True
           
     def viewNt(self, dt, file_parameters):
@@ -316,7 +316,7 @@ class BaseApplicationCrystal:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = dt.data[:, 4]
+        y[:, 0] = np.log10(dt.data[:, 4])
         return x, y, True
     
     def viewLogSigmaTime(self, dt, file_parameters):
