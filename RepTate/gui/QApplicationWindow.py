@@ -745,6 +745,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     for p in params:
                         if p in file.file_parameters:
                             val = file.file_parameters[p]
+                            try:
+                                val = "%g" % float(val) #format number
+                            except ValueError:
+                                pass
                             label = label.replace('['+p+']', str(val))
                     N.append(label)
             self.legend = ax.legend(L, N, **self.legend_opts)            
