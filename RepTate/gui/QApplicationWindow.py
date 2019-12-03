@@ -485,7 +485,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.color1 = None
         self.color2 = None
         self.color_th = None
-        self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':12, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
+        self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':12, 'title_fontsize':12, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
         self.annotation_opts = {'alpha': 1.0, 'color': QColor(0, 0, 0).getRgbF(), 'family':'sans-serif', 'horizontalalignment':'center', 'rotation': 0.0, 'fontsize':16, 'style': 'normal',  'verticalalignment': 'center', 'fontweight':'normal'}
         self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
         self.ax_opts = self.ax_opt_defaults.copy()
@@ -1104,7 +1104,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             # Legend stuff
             self.legend_opts['loc'] = self.dialog.ui.locationComboBox.currentText()
             self.legend_opts['ncol'] = self.dialog.ui.colSpinBox.value()
-            self.legend_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox.value()
+            self.legend_opts['title_fontsize'] = self.legend_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox.value()
             self.legend_opts['markerfirst'] = self.dialog.ui.markerfirstCheckBox.isChecked()
             self.legend_opts['frameon'] = self.dialog.ui.frameonCheckBox.isChecked()
             self.legend_opts['fancybox'] = self.dialog.ui.fancyboxCheckBox.isChecked()
