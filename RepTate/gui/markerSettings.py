@@ -1083,7 +1083,7 @@ class Ui_Dialog(object):
         self.legendtitleStr.setToolTip(_translate("Dialog", "Legend’s title (none if left empty)"))
         self.borderpadCheckBox.setToolTip(_translate("Dialog", "Fractional whitespace inside the legend border"))
         self.borderpadCheckBox.setText(_translate("Dialog", "Legend Border Pad"))
-        self.labelspacingCheckBox.setText(_translate("Dialog", "Space Bertween Entries"))
+        self.labelspacingCheckBox.setText(_translate("Dialog", "Space Between Entries"))
         self.handletextpadCheckBox.setText(_translate("Dialog", "Space Handle-Label"))
         self.columnspacingCheckBox.setText(_translate("Dialog", "Space Between Columns"))
         self.legendlabelCheckBox.setToolTip(_translate("Dialog", "Set Legend label (default = all basic file parameters with values)"))

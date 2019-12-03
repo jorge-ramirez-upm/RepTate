@@ -1144,7 +1144,7 @@
              <item>
               <widget class="QCheckBox" name="labelspacingCheckBox">
                <property name="text">
-                <string>Space Bertween Entries</string>
+                <string>Space Between Entries</string>
                </property>
               </widget>
              </item>
