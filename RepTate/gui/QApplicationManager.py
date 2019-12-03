@@ -598,7 +598,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     ('tools', tools),
                     ('show_inspector', int(app.DataInspectordockWidget.isVisible())),
                     ('annotations', ann_dict),
-                    ('axis_options', app.ax_opts)
+                    ('axis_options', app.ax_opts),
+                    ('legend_opts', app.legend_opts)
                 ]
             )
 
@@ -840,6 +841,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
    
             try:
                 new_app_tab.ax_opts = app_dic['axis_options']
+            except:
+                #backward compatibility
+                pass
+            
+            try:
+                new_app_tab.legend_opts = app_dic['legend_opts']
             except:
                 #backward compatibility
                 pass
