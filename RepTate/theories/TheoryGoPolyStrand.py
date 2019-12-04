@@ -57,10 +57,11 @@ import rp_blend_ctypes_helper as rpch
 import goLandscape_ctypes_helper as goL
 from Theory import EndComputationRequested
 from collections import OrderedDict
+
 import GOpolySTRAND
 import GOpolySTRAND_initialGuess
 import SchneiderRate
-
+import timeArraySplit
 
 class Dilution():
     def __init__(self, m, phi, taue, Me, parent_theory):
@@ -908,6 +909,7 @@ class BaseTheoryGoPolyStrand:
         delta = self.parameters["delta"].value
         lmax = self.parameters["lmax"].value
         flow_rate = float(f.file_parameters["gdot"])
+        tstop = float(f.file_parameters["tstop"])
         nmodes = self.parameters["nmodes"].value
 
         #flow geometry
@@ -935,11 +937,31 @@ class BaseTheoryGoPolyStrand:
         ]
         self.count = 0.2
         self.Qprint('Rate %.3g<br>  0%% ' % flow_rate, end='')
-        try:
-            sig = odeint(
-                pde_stretch, sigma0, t, args=(p, ), atol=abserr, rtol=relerr)
-        except EndComputationRequested:
-            return
+
+        if t[-1] < tstop:
+            try:
+                sig = odeint(
+                    pde_stretch, sigma0, t, args=(p, ), atol=abserr, rtol=relerr)
+            except EndComputationRequested:
+                return
+        else: #tstop must happen during computation
+            t1,t2=timeArraySplit.timeArraySplit(t,tstop)
+            #solve for t < tmax
+            tmax = t1[-1]
+            p = [ nmodes, lmax, phi_arr, taud_arr, taus_arr, beta, delta,
+                  flow_rate,  tmax]
+            sig1 = odeint( pde_stretch, sigma0, t1, args=(p, ),
+                               atol=abserr, rtol=relerr)
+            #solve for t > tmax
+            tmax = t2[-1]
+            p = [ nmodes, lmax, phi_arr, taud_arr, taus_arr, beta, delta,
+                  0.0,  tmax]
+            sig2 = odeint( pde_stretch, sig1[-1], t2, args=(p, ),
+                               atol=abserr, rtol=relerr)
+            #Merge two solutions
+            sig=np.concatenate((sig1[:-1],sig2[1:]),0)
+            
+        
         self.Qprint(' 100%')
         # sig.shape is (len(t), 3*n^2) in shear
         if self.flow_mode == FlowMode.shear:

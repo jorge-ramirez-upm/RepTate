@@ -123,19 +123,7 @@ class BaseApplicationCrystal:
             log_y=False,
             view_proc=self.viewNdot,
             n=1,
-            snames=["Ndot"])  
-        self.views["phiX(t)"] = View(
-            name="phiX(t)",
-            description="Crystal fraction",
-            x_label="t",
-            y_label="$\phi_X$",
-            x_units="s",
-            y_units="-",
-            log_x=False,
-            log_y=False,
-            view_proc=self.viewphiX,
-            n=1,
-            snames=["phiX"])  
+            snames=["Ndot"])
         self.views["N(t)"] = View(
             name="N(t)",
             description="Nucleation density",
@@ -147,7 +135,19 @@ class BaseApplicationCrystal:
             log_y=False,
             view_proc=self.viewNt,
             n=1,
-            snames=["N"]) 
+            snames=["N"])
+        self.views["phiX(t)"] = View(
+            name="phiX(t)",
+            description="Crystal fraction",
+            x_label="t",
+            y_label="$\phi_X$",
+            x_units="s",
+            y_units="-",
+            log_x=False,
+            log_y=False,
+            view_proc=self.viewphiX,
+            n=1,
+            snames=["phiX"])   
         self.views["eta(t)"] = View(
             name="eta(t)",
             description="transient viscosity",
@@ -301,14 +301,6 @@ class BaseApplicationCrystal:
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
     
-    def viewphiX(self, dt, file_parameters):
-        """Crystal fraction as a function of time on log axis :math:`\\phi_X(t)` vs time :math:`t` (x-axis on log scale by default)
-        """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(dt.data[:, 3])
-        return x, y, True
           
     def viewNt(self, dt, file_parameters):
         """Nucleation density as a function of time on log axis :math:`N(t)` vs time :math:`t` (x-axis on log scale by default)
@@ -318,6 +310,16 @@ class BaseApplicationCrystal:
         x[:, 0] = np.log10(dt.data[:, 0])
         y[:, 0] = np.log10(dt.data[:, 4])
         return x, y, True
+
+    def viewphiX(self, dt, file_parameters):
+        """Crystal fraction as a function of time on log axis :math:`\\phi_X(t)` vs time :math:`t` (x-axis on log scale by default)
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 3])
+        return x, y, True
+
     
     def viewLogSigmaTime(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`
