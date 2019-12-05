@@ -230,6 +230,18 @@ class GcorrMode(Enum):
     with_gcorr = 1
 
 
+class NoquMode(Enum):
+    """Primitive path fluctuations reduce the terminal modulus due to shortened tube.
+    Defines if we include that correction.
+
+    Parameters can be:
+        - none: No finite extensibility
+        - with_gcorr: With finite extensibility
+    """
+    none = 0
+    with_noqu = 1
+
+    
 class FeneMode(Enum):
     """Defines the finite extensibility function
     
@@ -623,6 +635,7 @@ class BaseTheoryGoPolyStrand:
         self.MAX_MODES = 40
         self.with_fene = FeneMode.none
         self.with_gcorr = GcorrMode.none
+        self.with_noqu = NoquMode.none
         self.Zeff = []
         self.MWD_m = [100, 1000]
         self.MWD_phi = [0.5, 0.5]
@@ -637,6 +650,9 @@ class BaseTheoryGoPolyStrand:
         # FENE button
         self.handle_with_fene_button(extra_data['with_fene'])
 
+        # noqu button
+        self.handle_noqu_fene_button(extra_data['with_noqu'])
+        
         # G button
         if extra_data['with_gcorr']:
             self.with_gcorr == GcorrMode.with_gcorr
@@ -649,6 +665,7 @@ class BaseTheoryGoPolyStrand:
         self.extra_data['Zeff'] = self.Zeff
         self.extra_data['with_fene'] = self.with_fene == FeneMode.with_fene
         self.extra_data['with_gcorr'] = self.with_gcorr == GcorrMode.with_gcorr
+        self.extra_data['with_noqu'] = self.with_noqu == NoquMode.with_noqu
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -1052,6 +1069,10 @@ class BaseTheoryGoPolyStrand:
                 
         #Compute the quiescent free energy barrier
         q_barrier, NdotQ, DfStarQ = self.computeQuiescentBarrier()
+        if self.with_noqu == NoquMode.with_noqu:
+            NdotInitial = 0.0
+        else:
+            NdotInitial = NdotQ
 
         #Compute the flow-induced barrier
         q_barrier=np.asarray(q_barrier)
@@ -1071,14 +1092,18 @@ class BaseTheoryGoPolyStrand:
                             'epsilonB':epsilonB, 'muS':muS}
                 DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
                 nucRate=NdotQ*np.exp( DfStarQ - DfStarFlow)
-                
-            tt.data[i,2]=nucRate
+
+            if self.with_noqu == NoquMode.with_noqu:
+                tt.data[i,2]=nucRate - NdotQ
+            else:
+                tt.data[i,2]=nucRate
+            
 
             
         #Now use a spline to interpolate the N_dot data and solve for crystal
         t = tt.data[:,0]
         Ndot = tt.data[:,2]
-        Cry_Evol = SchneiderRate.intSchneider(t, Ndot,NdotQ,N_0,G_C)
+        Cry_Evol = SchneiderRate.intSchneider(t, Ndot,NdotInitial,N_0,G_C)
         tt.data[:, 3] = Cry_Evol[:,0] #Phi_X
         tt.data[:, 4] = Cry_Evol[:,3]/8/np.pi #Number of nuclei
 
@@ -1237,6 +1262,11 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
             QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
             'Modulus Correction')
         self.with_gcorr_button.setCheckable(True)
+        #Ignore quiescent button
+        self.with_noqu_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
+            'Neglect quiescent nucleation')
+        self.with_noqu_button.setCheckable(True)
 
         #Save to flowsolve button
         self.flowsolve_btn = tb.addAction(
@@ -1266,6 +1296,10 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
             self.handle_with_fene_button)
         connection_id = self.with_gcorr_button.triggered.connect(
             self.handle_with_gcorr_button)
+        connection_id = self.with_noqu_button.triggered.connect(
+            self.handle_with_noqu_button)
+#!3        connection_id = self.noqu_button.triggered.connect(
+#!3            self.handle_with_gcorr_button)
         connection_id = self.flowsolve_btn.triggered.connect(
             self.handle_flowsolve_btn)
 
@@ -1338,6 +1372,16 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
         self.Qprint(
             '<font color=green><b>Press "Calculate" to update theory</b></font>'
         )
+
+    def handle_with_noqu_button(self, checked):
+        if checked:
+            self.Qprint(
+            '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
+        )
+            self.with_noqu = NoquMode.with_noqu
+            self.with_noqu_button.setChecked(True)
+
+            
 
     def handle_with_fene_button(self, checked):
         if checked:
