@@ -1264,7 +1264,7 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
         self.with_gcorr_button.setCheckable(True)
         #Ignore quiescent button
         self.with_noqu_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
+            QIcon(':/Icon8/Images/new_icons/icons8-noquiescent.png'),
             'Neglect quiescent nucleation')
         self.with_noqu_button.setCheckable(True)
 
@@ -1375,13 +1375,15 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
 
     def handle_with_noqu_button(self, checked):
         if checked:
-            self.Qprint(
-            '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
-        )
+            
             self.with_noqu = NoquMode.with_noqu
             self.with_noqu_button.setChecked(True)
+        else:
+            self.with_noqu = NoquMode.none
 
-            
+        self.Qprint(
+            '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
+        )
 
     def handle_with_fene_button(self, checked):
         if checked:
