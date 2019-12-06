@@ -53,11 +53,13 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
        'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ',
         'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX', 'BY', 'BZ']
     MAX_ROW = 100
+    MAX_COL = len(list_AZ)
     def __init__(self, parent=None, headers=["w", "G'", "G''"], file_param=["Mw", "T"]):
         super().__init__()
         self.setupUi(self)
         # self.show()
         self.filepath = ""
+        self.dir_start = "~"
         self.is_xlsx = True
         self.wb = None
         self.sheet = None
@@ -107,14 +109,14 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
     def update_cols_cb(self):
         self.col1_cb.clear()
         self.col2_cb.clear()
-        self.col1.setText("Select Column " + self.headers[0])
-        self.col2.setText("Select Column " + self.headers[1])
+        self.col1.setText("Select Column <b>%s</b>" % self.headers[0])
+        self.col2.setText("Select Column <b>%s</b>" % self.headers[1])
         self.col1_cb.addItems(self.list_AZ[:self.max_col])
         self.col2_cb.addItems(self.list_AZ[:self.max_col])
         self.col2_cb.setCurrentIndex(1)
         if self.ncol > 2:
             self.col3_cb.clear()
-            self.col3.setText("Select Column " + self.headers[2])
+            self.col3.setText("Select Column <b>%s</b>" % self.headers[2])
             self.col3_cb.addItems(self.list_AZ[:self.max_col])
             self.col3_cb.setCurrentIndex(2)
         else:
@@ -253,16 +255,16 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
     def handle_get_file(self):
         # file browser window  
         options = QFileDialog.Options()
-        dir_start = "~"
         dilogue_name = "Select Excel Data File"
         ext_filter = "Excel file (*.xls *xlsx)"
         selected_file, _ = QFileDialog.getOpenFileName(
-            self, dilogue_name, dir_start, ext_filter, options=options)
+            self, dilogue_name, self.dir_start, ext_filter, options=options)
         self.handle_read_new_file(selected_file)
 
     def handle_read_new_file(self, path):
         if not os.path.isfile(path):
             return
+        self.dir_start = os.path.dirname(path)
         self.qtabs.blockSignals(True)
         self.clear_tabs()
         fname = os.path.basename(path)
@@ -292,6 +294,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 max_row = sheet.nrows
                 max_col = sheet.ncols
             max_row = min(max_row, self.MAX_ROW)
+            max_col = min(max_col, self.MAX_COL)
             qsheet = QTableWidget(max_row, max_col, self)
             qsheet.setSelectionMode(QAbstractItemView.NoSelection)
             for i in range(max_row):
