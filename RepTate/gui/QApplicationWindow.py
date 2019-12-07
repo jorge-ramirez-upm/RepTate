@@ -2004,6 +2004,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #copy chart action
         copy_chart_action = main_menu.addAction("Copy Chart To Clipboard")
         copy_chart_action.triggered.connect(self.copy_chart)
+        #save chart action
+        save_chart_action = main_menu.addAction("Save Chart")
+        save_chart_action.triggered.connect(self.mpl_toolbar.save_figure)
 
         #copy data sub-menu
         if self.artists_clicked:  #do nothing if list of artists is empty
