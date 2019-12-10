@@ -19,8 +19,8 @@
 
 #ifndef __GSL_COMPLEX_MATH_H__
 #define __GSL_COMPLEX_MATH_H__
-#include <gsl/gsl_inline.h>
-#include <gsl/gsl_complex.h>
+#include "gsl_inline.h"
+#include "gsl_complex.h"
 
 #undef __BEGIN_DECLS
 #undef __END_DECLS

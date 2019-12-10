@@ -17,14 +17,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <math.h>
 
 #if HAVE_IEEEFP_H
 #include <ieeefp.h>
 #endif
 
-#include <gsl/gsl_sys.h>
+#include "gsl/gsl_sys.h"
 
 double gsl_nan (void)
 {

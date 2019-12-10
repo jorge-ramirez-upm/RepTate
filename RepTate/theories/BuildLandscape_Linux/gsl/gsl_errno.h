@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <errno.h>
-#include <gsl/gsl_types.h>
+#include "gsl_types.h"
 
 #undef __BEGIN_DECLS
 #undef __END_DECLS

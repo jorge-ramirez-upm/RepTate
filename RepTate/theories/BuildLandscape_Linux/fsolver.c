@@ -17,11 +17,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <stdlib.h>
 #include <string.h>
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_roots.h>
+#include "gsl/gsl_errno.h"
+#include "gsl/gsl_roots.h"
 
 gsl_root_fsolver *
 gsl_root_fsolver_alloc (const gsl_root_fsolver_type * T)

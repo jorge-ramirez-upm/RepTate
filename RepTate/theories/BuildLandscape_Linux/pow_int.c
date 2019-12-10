@@ -16,14 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <config.h>
+#include "config.h"
 #include <math.h>
 
 /* Compile all the inline functions */
 
 #define COMPILE_INLINE_STATIC
 #include "build.h"
-#include <gsl/gsl_pow_int.h>
+#include "gsl/gsl_pow_int.h"
 
 double gsl_pow_int(double x, int n)
 {

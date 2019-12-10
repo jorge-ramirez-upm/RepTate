@@ -19,7 +19,7 @@
 
 #ifndef __GSL_POW_INT_H__
 #define __GSL_POW_INT_H__
-#include <gsl/gsl_inline.h>
+#include "gsl_inline.h"
 
 #undef __BEGIN_DECLS
 #undef __END_DECLS

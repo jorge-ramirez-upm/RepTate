@@ -17,13 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_message.h>
+#include "gsl/gsl_errno.h"
+#include "gsl/gsl_message.h"
 
 FILE * gsl_stream = NULL ;
 gsl_stream_handler_t * gsl_stream_handler = NULL;
