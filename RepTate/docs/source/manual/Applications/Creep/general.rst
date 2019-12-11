@@ -25,7 +25,7 @@ Data Files
 
 Text files with ``.creep`` extension should be organised as follows:
 
-- ``.creep`` files should **at least** the value parameter values for the:
+- ``.creep`` files should contain **at least** the parameter value for the:
 
   #. Applied stress ``stress``
 
@@ -38,7 +38,7 @@ A correct ``.creep`` file looks like:
 
 .. code-block:: none
 
-  chem=PE;label=CM3;T=150;stress=10;
+  stress=10;chem=PE;label=CM3;T=150;
   t	    strain	    stress	T 
   s	    -	        Pa	    C
   1E-3	1.413E-5	10	    149.9

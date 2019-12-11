@@ -27,7 +27,7 @@ Data Files
 
 Text files with ``.tts`` extension should be organised as follows:
 
-- ``.tts`` files should **at least** the value parameter values for the:
+- ``.tts`` files should contain **at least** the parameter values for the:
 
   #. sample molar mass ``Mw``,
   #. temperature ``T``.
