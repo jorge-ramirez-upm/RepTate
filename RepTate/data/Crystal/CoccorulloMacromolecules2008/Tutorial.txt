@@ -1,0 +1,8 @@
+Load experimental data into crystal
+Click 'Get modes MWD data'
+      -Set Me to 4400.
+      -Set tau_e 9.0E-8
+      - Set number of modes to 23
+      - Paste in T30G.mwd
+      -Turn on the modulus correction
+      - Set GN0 to 506000
