@@ -28,7 +28,7 @@ Data Files
 
 Text files with ``.dls`` extension should be organised as follows:
 
-- ``.dls`` files should **at least** the value parameter values for the:
+- ``.dls`` files should contaion **at least** the parameter values for the:
 
   #. sample molar mass ``Mw``,
   #. temperature ``T``.

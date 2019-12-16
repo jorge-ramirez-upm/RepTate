@@ -9,7 +9,7 @@ import math
 import scipy
 #import matplotlib.pyplot as plt
 from scipy import optimize
-import pandas as pa
+#import pandas as pa
 import numpy as np
 import re
 import sys

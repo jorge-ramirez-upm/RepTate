@@ -26,7 +26,7 @@ Data Files
 
 Text files with ``.ttsf`` extension should be organised as follows:
 
-- ``.ttsf`` files should **at least** the value parameter values for the:
+- ``.ttsf`` files should contaion **at least** the parameter value for the:
 
   #. sample molar mass ``Mw``,
 

@@ -25,7 +25,7 @@ Data Files
 
 Text files with ``.sans`` extension should be organised as follows:
 
-- ``.sans`` files should **at least** the value parameter values for the:
+- ``.sans`` files should contaion **at least** the parameter values for the:
 
   #. Sample molecular weight ``Mw``,
   #. Volume fraction of deuterated chains ``Phi``.
