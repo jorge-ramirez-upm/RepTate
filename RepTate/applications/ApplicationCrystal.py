@@ -258,6 +258,21 @@ class BaseApplicationCrystal:
             snames=["sigma"],
             with_thline=False,
             filled=True)
+        self.views["Steady Nucleation"] = View(
+            name="Flow Curve",
+            description="Steady state nucleation rate vs flow rate",
+            x_label="Flow rate",
+            y_label="$\dot{N}$",
+            x_units="s$^{-1}$",
+            y_units="s$^{-1}$m$^{-3}",
+            log_x=True,
+            log_y=True,
+            view_proc=self.view_steadyNuc,
+            n=1,
+            snames=["Ndot"],
+            with_thline=False,
+            filled=True)
+
 
         #set multiviews
         self.nplots = 4
@@ -440,6 +455,20 @@ class BaseApplicationCrystal:
         y = np.zeros((1, 1))
         x[0, 0] = flow_rate
         y[0, 0] = dt.data[-1,1]
+        return x, y, True
+
+    def view_steadyNuc(self, dt, file_parameters):
+        """ :math:`\\sigma(t_{\\to\\infty})` vs flow rate
+        """
+
+        try:
+            flow_rate = float(file_parameters["gdot"])
+        except KeyError:
+            flow_rate = float(file_parameters["edot"])
+        x = np.zeros((1, 1))
+        y = np.zeros((1, 1))
+        x[0, 0] = flow_rate
+        y[0, 0] = dt.data[-1,2]
         return x, y, True
 
 
