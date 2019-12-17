@@ -5,4 +5,5 @@ Click 'Get modes MWD data'
       - Set number of modes to 23
       - Paste in T30G.mwd
       -Turn on the modulus correction
-      - Set GN0 to 506000
+      - Set GN0 to 5.06E5
+      - Set Gamma to 4.3

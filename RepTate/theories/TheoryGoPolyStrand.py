@@ -1063,7 +1063,7 @@ class BaseTheoryGoPolyStrand:
                     sss_xx += phi_arr[j] * sig[time, I + c * j ]
                     sss_yy += phi_arr[j] * sig[time, I + c * j + 1]
                     sss_xy += phi_arr[j] * sig[time, I + c * j + 2]
-                #print(tt.data[time,0],  sss_xx , sss_yy , sss_xy)
+                print('Stress:',tt.data[time,0], i, sss_xx , sss_yy , sss_xy)
                 fel[time,i] = self.computeFel(sss_xx , sss_yy , sss_xy)
                 
                 
@@ -1088,6 +1088,8 @@ class BaseTheoryGoPolyStrand:
                 
             if(sumdf>1e-12): #Otherwise assume no change from last timestep
                 df= fel[i,:]
+                print('phi',phi)
+                print('df',df)
                 params={'landscape':q_barrier, 'phi':phi, 'df':df, \
                             'epsilonB':epsilonB, 'muS':muS}
                 DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
@@ -1097,6 +1099,7 @@ class BaseTheoryGoPolyStrand:
                 tt.data[i,2]=nucRate - NdotQ
             else:
                 tt.data[i,2]=nucRate
+            print ('Nuc rate',tt.data[i,0],nucRate)
             
 
             
