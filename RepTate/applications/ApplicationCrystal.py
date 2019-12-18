@@ -264,7 +264,7 @@ class BaseApplicationCrystal:
             x_label="Flow rate",
             y_label="$\dot{N}$",
             x_units="s$^{-1}$",
-            y_units="s$^{-1}$m$^{-3}",
+            y_units="s$^{-1}$m$^{-3}$",
             log_x=True,
             log_y=True,
             view_proc=self.view_steadyNuc,
@@ -458,7 +458,7 @@ class BaseApplicationCrystal:
         return x, y, True
 
     def view_steadyNuc(self, dt, file_parameters):
-        """ :math:`\\sigma(t_{\\to\\infty})` vs flow rate
+        """ :math:`\\N_dot(t_{\\to\\infty})` vs flow rate
         """
 
         try:
