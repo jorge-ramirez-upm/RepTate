@@ -44,7 +44,7 @@ import numpy as np
 
 
 class ApplicationCrystal(CmdBase):
-    """Application to Analyze Start up of Nonlinear flow
+    """Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.
     
     """
     appname = "Crystal"
@@ -74,7 +74,7 @@ class BaseApplicationCrystal:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/NLVE.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html'
     appname = ApplicationCrystal.appname
 
     def __init__(self, name="Crystal", parent=None):
