@@ -651,7 +651,7 @@ class BaseTheoryGoPolyStrand:
         self.handle_with_fene_button(extra_data['with_fene'])
 
         # noqu button
-        self.handle_noqu_fene_button(extra_data['with_noqu'])
+        self.handle_with_noqu_button(extra_data['with_noqu'])
         
         # G button
         if extra_data['with_gcorr']:
@@ -885,9 +885,9 @@ class BaseTheoryGoPolyStrand:
             *np.exp(-(alpha**2)/(2*d2Fqstar*nStar**2)+alpha/nStar))
         NqRate = rhoK/tau0/xqtime
 
-        self.Qprint('Quiescent barrier height= %.3g'% quiescent_height,end='kBT; ')
+        self.Qprint('Quiescent barrier height=%.3g k<sub>B</sub>T' % quiescent_height) # HTML syntax
 
-        self.Qprint('Quiescent nucleation rate= %.3g'% NqRate,end=' micro m-3 s-1')
+        self.Qprint('Quiescent nucleation rate=%.3g &mu;m<sup>-3</sup>s<sup>-1</sup><br>' % NqRate) # HTML syntax
 
         return landscape, NqRate, quiescent_height
 
