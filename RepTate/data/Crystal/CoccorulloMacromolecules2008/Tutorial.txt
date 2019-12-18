@@ -1,9 +1,39 @@
-Load experimental data into crystal
+====Load data and set view====
+Load crystal application
+Reduce the number of views to 1
+Drag and drop Coccurollo data
+Select 'Steady Nucleation' View
+
+====Set-up a fast-running calculation====
+Load GO-polyStrand model
+
 Click 'Get modes MWD data'
       -Set Me to 4400.
       -Set tau_e 9.0E-8
-      - Set number of modes to 23
-      - Paste in T30G.mwd
-      -Turn on the modulus correction
-      - Set GN0 to 5.06E5
-      - Set Gamma to 4.3
+      - Set number of modes to 10
+	- Open 'T30G_10modes.mwd' and copy whole file contents
+	- Paste into mode window
+	- Close the mode window by clicking 'Ok'
+
+Set other parameters in the Theory window
+      -Turn on the modulus correction button 
+	-Set Gamma=4.3
+	-Set GNO=5.06E5
+
+Other parameters default to the correct values, here's a full list.
+Gamma	4.3
+Ne	25
+epsilonB	-0.117
+muS	0.85
+tau0	3.8e-10
+rhoK	2.7e+09
+G_C	0.063
+N_0	0
+beta	1
+GN0	506000
+
+Hit compute, and the calculation should take about 15 secs (depending on how good your laptop is!)
+
+You should see
+
+====Adjus
