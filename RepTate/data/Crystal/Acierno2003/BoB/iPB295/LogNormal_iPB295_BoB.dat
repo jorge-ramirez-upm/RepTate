@@ -1,0 +1,11 @@
+1000 5000  
+1.0
+1
+100.0 95.0 0.9
+8.6e-6 413.0
+1
+1.0
+100 112
+2 295000 4.6
+
+#These final lines choose a log-normal distribution with the specified Mw and PDI. Whichever is the top of these lines will run.

@@ -1,0 +1,16 @@
+Load MWD application
+Drag and drop GPC/Aciern177_GEXxxxxx.gpc
+Load descritized molecular weight distribution
+Choose 11 bins and run the model
+
+Load Linear Viscoelasticty module
+Drag and drop Acierno_iPB177.tts
+Load RDP LVE theory (the linear viscoelastic version of the Rolie-Double Poly model)
+Click Get modes (MWD app)
+      - Set Me=9.5e3
+      - Set tau_e=3.50E-06
+      -Click OK to exit
+Set GN=2.60E+05
+This confirms that the Rolie-Double Poly parameters are consistent with the linear rheology.
+
+Load the Crystal module
