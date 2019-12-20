@@ -1094,6 +1094,10 @@ class BaseTheoryGoPolyStrand:
 
             if self.with_noqu == NoquMode.with_noqu:
                 tt.data[i,2]=nucRate - NdotQ
+                if(tt.data[i,2]<0):
+                    if(tt.data[i,2]/(NdotQ+1e-20)<-0.01):
+                        self.Qprint("<font color=red><b>Warning: nucleation rate < 0 !!!</b></font>")
+                    tt.data[i,2]=0.0
             else:
                 tt.data[i,2]=nucRate
             
