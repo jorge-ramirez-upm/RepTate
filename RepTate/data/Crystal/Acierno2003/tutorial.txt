@@ -8,9 +8,27 @@ Drag and drop Acierno_iPB177.tts
 Load RDP LVE theory (the linear viscoelastic version of the Rolie-Double Poly model)
 Click Get modes (MWD app)
       - Set Me=9.5e3
-      - Set tau_e=3.50E-06
+      - Set tau_e=3.90E-06
       -Click OK to exit
 Set GN=2.60E+05
 This confirms that the Rolie-Double Poly parameters are consistent with the linear rheology.
 
 Load the Crystal module
+Drag and drop the data
+Click Get modes (MWD app)
+      - Set Me=9.5e3
+      - Set tau_e=2.34E-05
+      -Click OK to exit
+Ignore quiescent
+Gamma	2
+Ne	9
+epsilonB	-0.002
+muS	1.04
+tau0	3.12e-07
+rhoK	5.3e+08
+N_0	1.3e-12
+Go to view 4, 
+	-select phiX [lin-log]
+	- xaxis min = 100,
+	- lock axis
+View all

@@ -52,7 +52,7 @@ double landscape( double Nt, double mu, double epsilon)
 
 
   //find turning point
-  if ( params.mu  <  1.0){
+  if ( params.mu  <  1.13001){
     root = newton( &params);
   }else{
     root = brent( &params);
