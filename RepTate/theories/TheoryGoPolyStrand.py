@@ -241,6 +241,18 @@ class NoquMode(Enum):
     none = 0
     with_noqu = 1
 
+class SingleSpeciesMode(Enum):
+    """Uses a single average species to compute the nucleation rate.
+    Defines if we include that approximation.
+
+    Parameters can be:
+        - none: use all modes
+        - with_single: Just use a single mode
+    """
+    none = 0
+    with_single = 1
+
+
     
 class FeneMode(Enum):
     """Defines the finite extensibility function
@@ -473,7 +485,7 @@ class BaseTheoryGoPolyStrand:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
     single_file = False
     thname = TheoryGoPolyStrand.thname
     citations = TheoryGoPolyStrand.citations
@@ -636,6 +648,7 @@ class BaseTheoryGoPolyStrand:
         self.with_fene = FeneMode.none
         self.with_gcorr = GcorrMode.none
         self.with_noqu = NoquMode.none
+        self.with_single = NoquMode.none
         self.Zeff = []
         self.MWD_m = [100, 1000]
         self.MWD_phi = [0.5, 0.5]
@@ -651,7 +664,11 @@ class BaseTheoryGoPolyStrand:
         self.handle_with_fene_button(extra_data['with_fene'])
 
         # noqu button
-        self.handle_noqu_fene_button(extra_data['with_noqu'])
+        self.handle_with_noqu_button(extra_data['with_noqu'])
+
+        # single species button
+        self.handle_with_single_button(extra_data['with_single'])
+
         
         # G button
         if extra_data['with_gcorr']:
@@ -666,6 +683,7 @@ class BaseTheoryGoPolyStrand:
         self.extra_data['with_fene'] = self.with_fene == FeneMode.with_fene
         self.extra_data['with_gcorr'] = self.with_gcorr == GcorrMode.with_gcorr
         self.extra_data['with_noqu'] = self.with_noqu == NoquMode.with_noqu
+        self.extra_data['with_single'] = self.with_single == NoquMode.with_single
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -885,9 +903,9 @@ class BaseTheoryGoPolyStrand:
             *np.exp(-(alpha**2)/(2*d2Fqstar*nStar**2)+alpha/nStar))
         NqRate = rhoK/tau0/xqtime
 
-        self.Qprint('Quiescent barrier height= %.3g'% quiescent_height,end='kBT; ')
+        self.Qprint('Quiescent barrier height=%.3g k<sub>B</sub>T' % quiescent_height) # HTML syntax
 
-        self.Qprint('Quiescent nucleation rate= %.3g'% NqRate,end=' micro m-3 s-1')
+        self.Qprint('Quiescent nucleation rate=%.3g &mu;m<sup>-3</sup>s<sup>-1</sup><br>' % NqRate) # HTML syntax
 
         return landscape, NqRate, quiescent_height
 
@@ -909,6 +927,7 @@ class BaseTheoryGoPolyStrand:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         fel = np.zeros((tt.num_rows, self.parameters["nmodes"].value))
+        felAve = np.zeros((tt.num_rows,1))
         Gamma = self.parameters['Gamma'].value
         epsilonB = self.parameters['epsilonB'].value
         muS = self.parameters['muS'].value
@@ -1054,6 +1073,9 @@ class BaseTheoryGoPolyStrand:
 
         #Extract the configuration of each mode
         for time in range(nt):
+            total_sss_xx=0.0
+            total_sss_yy=0.0
+            total_sss_xy=0.0
             for i in range(nmodes):
                 I = c * nmodes * i
                 sss_xx = 0.0
@@ -1064,6 +1086,11 @@ class BaseTheoryGoPolyStrand:
                     sss_yy += phi_arr[j] * sig[time, I + c * j + 1]
                     sss_xy += phi_arr[j] * sig[time, I + c * j + 2]
                 fel[time,i] = self.computeFel(sss_xx , sss_yy , sss_xy)
+                #Compute the total stress for the average stress model
+                total_sss_xx += phi_arr[i] * sss_xx
+                total_sss_yy += phi_arr[i] * sss_yy
+                total_sss_xy += phi_arr[i] * sss_xy
+            felAve[time,0] = self.computeFel(total_sss_xx , total_sss_yy , total_sss_xy)
                 
                 
         #Compute the quiescent free energy barrier
@@ -1075,18 +1102,28 @@ class BaseTheoryGoPolyStrand:
 
         #Compute the flow-induced barrier
         q_barrier=np.asarray(q_barrier)
-        phi = np.asarray(phi_arr)
+        if self.with_single == SingleSpeciesMode.with_single:
+            phi = np.asarray([1.0])
+        else:   
+            phi = np.asarray(phi_arr)
         nspecies=phi.size
+
+            
         sumdf=1e5
         for i in range(tt.num_rows):
             #See how much change there is from last time
             if(i>0):
+                
                 sumdf=0.0
                 for j in range(nspecies):
                     sumdf += (df[j]-fel[i,j])**2
                 
             if(sumdf>1e-12): #Otherwise assume no change from last timestep
-                df= fel[i,:]
+                if self.with_single == SingleSpeciesMode.with_single:
+                    df=felAve[i,:]
+                else:
+                    df= fel[i,:]
+
                 params={'landscape':q_barrier, 'phi':phi, 'df':df, \
                             'epsilonB':epsilonB, 'muS':muS}
                 DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
@@ -1094,6 +1131,10 @@ class BaseTheoryGoPolyStrand:
 
             if self.with_noqu == NoquMode.with_noqu:
                 tt.data[i,2]=nucRate - NdotQ
+                if(tt.data[i,2]<0):
+                    if(tt.data[i,2]/(NdotQ+1e-20)<-0.01):
+                        self.Qprint("<font color=red><b>Warning: nucleation rate < 0 !!!</b></font>")
+                    tt.data[i,2]=0.0
             else:
                 tt.data[i,2]=nucRate
             
@@ -1266,6 +1307,12 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
             QIcon(':/Icon8/Images/new_icons/icons8-noquiescent.png'),
             'Neglect quiescent nucleation')
         self.with_noqu_button.setCheckable(True)
+        #Single species button
+        self.with_single_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-SingleSpecies.png'),
+            'Average to single species for nucleation')
+        self.with_single_button.setCheckable(True)
+
 
         #Save to flowsolve button
         self.flowsolve_btn = tb.addAction(
@@ -1297,6 +1344,9 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
             self.handle_with_gcorr_button)
         connection_id = self.with_noqu_button.triggered.connect(
             self.handle_with_noqu_button)
+        connection_id = self.with_single_button.triggered.connect(
+            self.handle_with_single_button)
+
 #!3        connection_id = self.noqu_button.triggered.connect(
 #!3            self.handle_with_gcorr_button)
         connection_id = self.flowsolve_btn.triggered.connect(
@@ -1382,6 +1432,19 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
 
         self.Qprint(
             '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
+        )
+
+        
+    def handle_with_single_button(self, checked):
+        if checked:
+            
+            self.with_single = SingleSpeciesMode.with_single
+            self.with_single_button.setChecked(True)
+        else:
+            self.with_single= SingleSpeciesMode.none
+
+        self.Qprint(
+            '<font color=green><b>Single species: Press "Calculate" to update theory</b></font>'
         )
 
     def handle_with_fene_button(self, checked):

@@ -15,6 +15,7 @@ Applications
    SANS/SANS
    React/React
    Dielectric/Dielectric
+   Crystal/Crystal
    
 - Detailed description of all applications:
 	- Views and theories included

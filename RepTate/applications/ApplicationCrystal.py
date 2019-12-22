@@ -44,7 +44,7 @@ import numpy as np
 
 
 class ApplicationCrystal(CmdBase):
-    """Application to Analyze Start up of Nonlinear flow
+    """Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.
     
     """
     appname = "Crystal"
@@ -74,7 +74,7 @@ class BaseApplicationCrystal:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/NLVE.html'
+    help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html'
     appname = ApplicationCrystal.appname
 
     def __init__(self, name="Crystal", parent=None):
@@ -240,6 +240,18 @@ class BaseApplicationCrystal:
             x_units="s",
             y_units="Pa",
             log_x=False,
+            log_y=False,
+            view_proc=self.viewSigmaTime,
+            n=1,
+            snames=["sigma"])
+        self.views["sigma(log(t))"] = View(
+            name="sigma(t)",
+            description="transient shear stress vs time",
+            x_label="t",
+            y_label="$\sigma^+$",
+            x_units="s",
+            y_units="Pa",
+            log_x=True,
             log_y=False,
             view_proc=self.viewSigmaTime,
             n=1,
