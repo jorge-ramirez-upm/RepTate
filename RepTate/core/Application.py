@@ -711,25 +711,25 @@ class Application(CmdBase):
             ax = self.axarr[nx]
             if (view.log_x):
                 ax.set_xscale("log")
-                #ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
-                locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                ax.xaxis.set_major_locator(locmaj)
-                locmin = LogLocator(
-                    base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                ax.xaxis.set_minor_locator(locmin)
-                ax.xaxis.set_minor_formatter(NullFormatter())
+                ##ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
+                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+                # ax.xaxis.set_major_locator(locmaj)
+                # locmin = LogLocator(
+                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+                # ax.xaxis.set_minor_locator(locmin)
+                # ax.xaxis.set_minor_formatter(NullFormatter())
             else:
                 ax.set_xscale("linear")
                 ax.xaxis.set_minor_locator(AutoMinorLocator())
             if (view.log_y):
                 ax.set_yscale("log")
-                #ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
-                locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                ax.yaxis.set_major_locator(locmaj)
-                locmin = LogLocator(
-                    base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                ax.yaxis.set_minor_locator(locmin)
-                ax.yaxis.set_minor_formatter(NullFormatter())
+                ##ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
+                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+                # ax.yaxis.set_major_locator(locmaj)
+                # locmin = LogLocator(
+                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+                # ax.yaxis.set_minor_locator(locmin)
+                # ax.yaxis.set_minor_formatter(NullFormatter())
             else:
                 ax.set_yscale("linear")
                 ax.yaxis.set_minor_locator(AutoMinorLocator())
