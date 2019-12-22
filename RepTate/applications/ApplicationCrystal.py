@@ -285,7 +285,6 @@ class BaseApplicationCrystal:
             with_thline=False,
             filled=True)
 
-
         #set multiviews
         self.nplots = 4
         self.multiviews = []
