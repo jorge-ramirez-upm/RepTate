@@ -60,6 +60,9 @@ from PyQt5.QtCore import QUrl, Qt
 from SplashScreen import SplashScreen
 # from time import time, sleep
 
+np.seterr(divide = 'ignore')
+np.seterr(over = 'ignore')
+
 def get_argument_files(finlist):
     """
     Parse files from command line and group them by extension
