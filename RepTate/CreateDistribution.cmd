@@ -16,6 +16,7 @@ copy gui\ReptateMainWindow.ui dist\RepTate
 copy gui\MainWindow_rc.py dist\RepTate
 copy gui\annotationedit.ui dist\RepTate
 copy gui\dummyfilesDialog.ui dist\RepTate
+copy dist\RepTate\Qt5Core.dll dist\RepTate\PyQt5\Qt\bin\Qt5Core.dll 
 
 copy tools\materials_database.npy dist\RepTate
 copy tools\user_database.npy dist\RepTate
