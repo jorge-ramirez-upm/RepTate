@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['RepTate.py'],
-             pathex=['applications', 'core', 'theories', 'tools', 'gui', 'c:\\Users\\Jorge Ramirez\\OneDrive - Universidad Politécnica de Madrid\\Projects\\RepTate\\RepTate\\RepTate'],
+             pathex=['applications', 'core', 'theories', 'tools', 'gui', 'C:\\Users\\Jorge\\OneDrive - Universidad Politécnica de Madrid\\Projects\\RepTate\\RepTate\\RepTate'],
              binaries=[],
              datas=[],
              hiddenimports=['packaging', 'packaging.version', 'packaging.specifiers', 'packaging.requirements', 'scipy._lib.messagestream', 'pandas._libs.tslibs.timedeltas'],
