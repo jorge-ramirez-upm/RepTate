@@ -56,7 +56,7 @@ from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtCore import QUrl, Qt, QCoreApplication
 from SplashScreen import SplashScreen
 # from time import time, sleep
 
@@ -123,9 +123,13 @@ def start_RepTate(argv):
 
     if args.dpi:
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+        QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+        QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+
     app = QApplication(sys.argv)
-    if args.dpi:
-        app.setAttribute(Qt.AA_EnableHighDpiScaling)
+    #if args.dpi:
+    #    app.setAttribute(Qt.AA_EnableHighDpiScaling)
     
     splash = SplashScreen()
     # splash.showMessage("Loading RepTate...\n")
