@@ -21,6 +21,7 @@ copy gui\annotationedit.ui dist\RepTate
 copy gui\dummyfilesDialog.ui dist\RepTate
 copy gui\import_excel_dialog.ui dist\RepTate
 copy ..\Reptate_license.txt dist\RepTate
+copy ..\Reptate_license.rtf dist\RepTate
 
 copy tools\materials_database.npy dist\RepTate
 copy tools\user_database.npy dist\RepTate
@@ -33,7 +34,11 @@ copy theories\linlin.npz dist\RepTate\theories
 copy theories\linlin.npz dist\RepTate
 copy theories\*win32.so dist\RepTate
 mkdir dist\RepTate\gui\Images
-copy gui\Images\logo.jpg dist\RepTate\gui\Images
+copy gui\Images\logo_with_uni_logo.png dist\RepTate\gui\Images
+copy gui\Images\RepTate_logo_100.png dist\RepTate\gui\Images
+copy gui\Images\Reptate64.ico dist\RepTate\gui\Images
+copy gui\Images\new_icons\*.ico dist\RepTate\gui\Images
+
 mkdir dist\RepTate\platforms
 copy dist\RepTate\PyQt5\Qt\plugins\platforms\* dist\RepTate\platforms 
 mkdir dist\RepTate\tests
