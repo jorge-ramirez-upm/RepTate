@@ -48,7 +48,7 @@ from Tool import *
 
 from MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QColor
 from PyQt5.QtCore import Qt
 
 from collections import OrderedDict
@@ -134,6 +134,8 @@ class Application(CmdBase):
         # self.figure = self.multiplots.figure
         # self.axarr = self.multiplots.axarr  #
         # self.canvas = self.multiplots.canvas
+        self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
+        self.ax_opts = self.ax_opt_defaults.copy()
 
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
