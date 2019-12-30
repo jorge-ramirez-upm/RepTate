@@ -109,7 +109,7 @@ def start_RepTate(argv):
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
     parser.add_argument('finlist', nargs='*')
 
-    args = parser.parse_args() 
+    args = parser.parse_args(args=argv) 
 
     # Get files from command line
     dictfiles=get_argument_files(args.finlist)
