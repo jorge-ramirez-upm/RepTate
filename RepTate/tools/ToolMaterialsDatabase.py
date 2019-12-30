@@ -41,16 +41,66 @@ from Parameter import Parameter, ParameterType, OptType
 from Tool import Tool
 from QTool import QTool
 from DataTable import DataTable
-from PyQt5.QtWidgets import QComboBox, QLabel, QToolBar, QLineEdit, QAction
+from PyQt5.QtWidgets import QComboBox, QLabel, QToolBar, QLineEdit, QAction, QMessageBox, QDialog, QDialogButtonBox, QVBoxLayout, QGroupBox, QFormLayout, QInputDialog
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QStandardItem, QFont, QIcon
+from PyQt5.QtGui import QStandardItem, QFont, QIcon, QColor, QDoubleValidator
+from pathlib import Path
+import polymer_data
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 materials_database = np.load(os.path.join(dir_path, 'materials_database.npy'), allow_pickle=True).item()
-materials_user_database = np.load(os.path.join(dir_path, 'user_database.npy'), allow_pickle=True).item()
-# materials_database = np.load('tools/materials_database.npy').item()
-# materials_user_database = np.load('tools/user_database.npy').item()
+home_path = str(Path.home())
+file_user_database = os.path.join(home_path, 'user_database.npy')
+if os.path.exists(file_user_database):
+    materials_user_database = np.load(file_user_database, allow_pickle=True).item()
+else:
+    materials_user_database = {}
 materials_db = [materials_user_database, materials_database]
+
+class EditMaterialParametersDialog(QDialog):
+    """Create the form that is used to edit/modify the material parameters"""
+
+    def __init__(self, parent, material, parameterdata):
+        super().__init__(parent)
+        self.parent_dataset = parent
+        self.material = material
+        self.createFormGroupBox(material, parameterdata)
+
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok
+                                     | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.formGroupBox)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Edit Material Parameters")
+
+    def createFormGroupBox(self, material, parameterdata):
+        """Create a form to set the new values of the material parameters"""
+        self.formGroupBox = QGroupBox(
+            "Parameters of material \"%s\"" % material.data['name'])
+        layout = QFormLayout()
+
+        parameters = material.data
+        self.param_dict = {}
+        self.p_new = []
+        for i, pname in enumerate(material.data.keys()):
+            self.p_new.append(QLineEdit())
+            if isinstance(material.data[pname], str):  #the parameter is a string
+                self.p_new[i].setText("%s" % material.data[pname])
+            else:  #parameter is a number:
+                self.p_new[i].setValidator(
+                    QDoubleValidator())  #prevent letters
+                self.p_new[i].setText("%.4g" % material.data[pname])
+            self.p_new[i].setToolTip(parameterdata[pname].description)
+            if pname == "name":
+                self.p_new[i].setReadOnly(True)
+            layout.addRow("%s:" % pname, self.p_new[i])
+            self.param_dict[pname] = self.p_new[i]
+        self.formGroupBox.setLayout(layout)
+
 
 def check_chemistry(chem):
     """Check if the file contains chemistry. If so, check if the chemistry appears in 
@@ -140,9 +190,11 @@ def get_single_parameter(chem, param, fparam, dbindex):
         return value, True
 
 class ToolMaterialsDatabase(CmdBase):
-    """[summary]
-    
-    [description]
+    """A special Tool to store the material parameters. Many apps and theories rely on the
+    parameters stored in this database. There are two copies of the database: i) a general one
+    that is distributed with RepTate, is stored in the software installation folder and contains
+    well established values of the parameters and ii) a user database that contains material
+    parameters introduced by the user and is stored in the user HOME folder.
     """
     toolname = 'Materials Database'
     description = 'Materials Database Explorer'
@@ -265,19 +317,20 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.actionApplyToTheory.setVisible(False)
         self.cbmaterial = QComboBox()
         self.cbmaterial.setToolTip("Choose a Material from the database")
-        model = self.cbmaterial.model()
+        self.model = self.cbmaterial.model()
         i = 0
         for polymer in materials_database.keys():
             item = QStandardItem(polymer)
             item.setToolTip(materials_database[polymer].data['long'])
-            model.appendRow(item)
+            self.model.appendRow(item)
             i += 1
         self.num_materials_base = i
-        self.cbmaterial.insertSeparator(i)
+        #self.cbmaterial.insertSeparator(i)
         for polymer in materials_user_database.keys():
             item = QStandardItem(polymer)
             item.setToolTip(materials_user_database[polymer].data['long'])
-            model.appendRow(item)
+            item.setForeground(QColor('red'))
+            self.model.appendRow(item)
         self.tb.addWidget(self.cbmaterial)
         connection_id = self.cbmaterial.currentIndexChanged.connect(self.change_material)
 
@@ -287,9 +340,18 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.tb.addAction(self.actionNew)
         self.actionEdit = QAction(QIcon(':/Icon8/Images/new_icons/icons8-edit-property.png'), "Edit/View Material Properties", self)
         self.tb.addAction(self.actionEdit)
+        self.actionCopy = QAction(QIcon(':/Icon8/Images/new_icons/icons8-copy-96.png'), "Duplicate Material", self)
+        self.tb.addAction(self.actionCopy)
+        self.actionDelete = QAction(QIcon(':/Icon8/Images/new_icons/icons8-delete-document-96.png'), "Delete Material", self)
+        self.tb.addAction(self.actionDelete)
         self.actionSave = QAction(QIcon(':/Icon8/Images/new_icons/icons8-save.png'), "Save User Material Database", self)
         self.tb.addAction(self.actionSave)
         connection_id = self.actionCalculate.triggered.connect(self.calculate_stuff)
+        connection_id = self.actionNew.triggered.connect(self.new_material)
+        connection_id = self.actionEdit.triggered.connect(self.edit_material)
+        connection_id = self.actionCopy.triggered.connect(self.copy_material)
+        connection_id = self.actionDelete.triggered.connect(self.delete_material)
+        connection_id = self.actionSave.triggered.connect(self.save_usermaterials)
 
         self.labelPolymer = QLabel("None")
         self.labelPolymer.setFont(QFont("Times",weight=QFont.Bold))
@@ -367,8 +429,8 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
 
         self.Qprint('<h3>Tube Theory parameters</h3>')
-        Ge /= bT;
-        tau_e /= aT;
+        Ge /= bT
+        tau_e /= aT
         self.Qprint("<b>tau_e</b> = %g" % tau_e)
         self.Qprint("<b>Ge</b> = %g<br>" % Ge)
 
@@ -376,10 +438,108 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         CC1 = 1.69
         CC2 = 4.17
         CC3 = -1.55
-        Z = Mw / Me;
-        tR = tau_e * Z*Z;
+        Z = Mw / Me
+        tR = tau_e * Z*Z
         tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
         self.Qprint("<b>Z</b> = %g" % Z)
         self.Qprint("<b>tau_R</b> = %g" % tR)
         self.Qprint("<b>tau_D</b> = %g<br>" % tD)
-        
+
+    def new_material(self):
+        # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
+        ok = False
+        while not ok:
+            name, ok = QInputDialog.getText(self, 'New name', 'Enter the short name of the new material:')
+            if not ok:
+                return
+            if name in materials_user_database:
+                QMessageBox.warning(self, 'New name', 'Error: The name already exists in your database')
+                ok = False
+
+        # Create new material with empty  parameters and open the edit dialog
+        newmaterial=polymer_data.polymer(name=name,long='Long Name', author='Author', date='dd/mm/yyyy', 
+                                         source='lab', comment='comment', B1=900, B2=100, logalpha=-3, CTg=0, 
+                                         tau_e=1.e-6, Ge=1.E6, Me=1.6, c_nu=0.1, rho0=1.0, chem='C6H6', Te=25, M0=0)
+        newmaterial.data['name']=name
+        materials_user_database[name]=newmaterial
+        item = QStandardItem(name)
+        item.setToolTip(materials_user_database[name].data['long'])
+        item.setForeground(QColor('red'))
+        self.model.appendRow(item)
+        self.cbmaterial.setCurrentText(name)
+        self.edit_material()
+
+    """
+    Edit the parameters of a user material. 
+        - dbindex {int} -- Index of the database to use (0 user, 1 general)
+    """
+    def edit_material(self):
+        selected_material_name = self.cbmaterial.currentText()
+        if (self.cbmaterial.currentIndex() < self.num_materials_base):
+            QMessageBox.warning(self, 'Edit material parameters', 'Error: Only user materials can be edited.')
+            return
+        material = materials_user_database[selected_material_name]
+        d = EditMaterialParametersDialog(self, material, self.parameters)
+        if d.exec_():
+            for p in d.param_dict:
+                if isinstance(material.data[p], str):
+                    material.data[p] = d.param_dict[p].text()
+                else:
+                    try:
+                        material.data[p] = float(
+                            d.param_dict[p].text())
+                    except Exception as e:
+                        print(e)
+                self.set_param_value(p, material.data[p])
+            self.change_material()
+                
+    def save_usermaterials(self):
+        home_path = str(Path.home())
+        file_user_database = os.path.join(home_path, 'user_database.npy')
+        np.save(file_user_database, materials_user_database) 
+
+    def copy_material(self):
+        # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
+        name=""
+        ok = False
+        while not ok:
+            name, ok = QInputDialog.getText(self, 'New name', 'Enter the name of the new parameter:')
+            if not ok:
+                return
+            if name in materials_user_database:
+                QMessageBox.warning(self, 'New name', 'Error: The name already exists in your database')
+                ok = False
+        # Create new user material with same parameters as source material and new NAME
+        #newpar=
+        selected_material_name = self.cbmaterial.currentText()        
+        if (self.cbmaterial.currentIndex() < self.num_materials_base):
+            dbindex = 1
+        else:
+            dbindex = 0
+        aux=materials_db[dbindex][selected_material_name].data
+        newmaterial=polymer_data.polymer(name=name, long=aux['long'], author='Alexei Likhtman', date='17/03/2006', 
+                                         source=aux['source'], comment=aux['comment'], B1=aux['B1'], B2=aux['B2'],
+                                         logalpha=aux['logalpha'], CTg=aux['CTg'], tau_e=aux['tau_e'], Ge=aux['Ge'], 
+                                         Me=aux['Me'], c_nu=aux['c_nu'], rho0=aux['rho0'], chem=aux['chem'], 
+                                         Te=aux['Te'], M0=aux['M0'])
+        materials_user_database[name]=newmaterial
+        item = QStandardItem(name)
+        item.setToolTip(materials_user_database[name].data['long'])
+        item.setForeground(QColor('red'))
+        self.model.appendRow(item)
+
+
+    def delete_material(self):
+        # Check that the material is in the user database
+        selected_material_name = self.cbmaterial.currentText()
+        if (self.cbmaterial.currentIndex() < self.num_materials_base):
+            QMessageBox.warning(self, 'Dekete material parameters', 'Error: Only user materials can be deleted.')
+            return
+        # Dialog to ask for confimarion
+        ans = QMessageBox.question(self, "Delete material parameters", 
+                "Do you want to delete the material %s?"%selected_material_name, 
+                buttons=(QMessageBox.Yes | QMessageBox.No))
+        # Delete from ComboBox and User Material dictionary
+        if ans == QMessageBox.Yes:
+            self.cbmaterial.removeItem(self.cbmaterial.currentIndex()) 
+            materials_user_database.pop(selected_material_name)

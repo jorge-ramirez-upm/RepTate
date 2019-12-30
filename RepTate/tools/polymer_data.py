@@ -49,3 +49,8 @@ class polymer:
         }
 
         self.data.update(kwargs)
+
+    # def __init__ (self, oldpolymer):
+    #     self.data={}
+    #     for k in oldpolymer.data.keys():
+    #         self.data[k] = oldpolymer.data[k]
