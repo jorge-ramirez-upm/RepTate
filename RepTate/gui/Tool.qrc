@@ -16,5 +16,7 @@
         <file>Images/new_icons/icons8-save.png</file>
         <file>Images/new_icons/icons8-iso.png</file>
         <file>Images/new_icons/icons8-vertical-shift.png</file>
+		<file>Images/new_icons/icons8-delete-document-96.png</file>
+		<file>Images/new_icons/icons8-copy-96.png</file>
     </qresource>
 </RCC>
