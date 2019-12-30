@@ -5,6 +5,7 @@ rmdir /s /q build\RepTate
 rmdir /s /q dist\RepTate
 rem ADAPT THE FOLLOWING LINE TO MATCH YOUR PYTHON DISTRIBUTION
 set PATH=%PATH%;c:\WPy64-3741\python-3.7.4.amd64\Lib\site-packages\scipy\.libs\;
+rem TO DEBUG THE CREATION OF THE INSTALLER ADD FLAGS: -d all
 pyinstaller -w -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements --hidden-import=scipy._lib.messagestream --hidden-import=pandas._libs.tslibs.timedeltas -p applications;core;theories;tools;gui RepTate.py
 mkdir dist\RepTate\gui
 copy gui\theorytab.ui dist\RepTate
@@ -47,6 +48,7 @@ xcopy tests dist\RepTate\tests /E
 rem Then CREATE CL Version
 rmdir /s /q build\RepTateCL
 rmdir /s /q dist\RepTateCL
+rem TO DEBUG THE CREATION OF THE INSTALLER ADD FLAGS: -d all
 pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements --hidden-import=scipy._lib.messagestream --hidden-import=pandas._libs.tslibs.timedeltas -p applications;core;theories;tools;gui RepTateCL.py
 copy dist\RepTateCL\RepTateCL.exe dist\RepTate
 

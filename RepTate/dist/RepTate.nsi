@@ -1,12 +1,33 @@
+!include "MUI2.nsh"
+!define MUI_ICON "RepTate\gui\Images\Reptate64.ico"
+#!define MUI_UNICON "RepTate\gui\Images\Reptate64.ico"
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "RepTate"
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "RepTate\Reptate_license.rtf"
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+Var StartMenuFolder
+!insertmacro MUI_PAGE_STARTMENU "RepTate" $StartMenuFolder
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+!insertmacro MUI_LANGUAGE "English"
+
+LangString DESC_RepTate ${LANG_ENGLISH} "Install RepTate software"
+LangString DESC_FileAssoc ${LANG_ENGLISH} "Associate common RepTate files (*.tts, *.osc, *.shear, etc) with the software"
+
 # Version must be with the format x.x.x.x
 !define VERSION "0.9.6.0"
 !define DATE "20191111"
 Name "RepTate v${VERSION}"
 OutFile "RepTate Installer - v${VERSION} ${DATE}.exe"
-Icon "RepTate\gui\Images\Reptate64.ico"
+#Icon "RepTate\gui\Images\Reptate64.ico"
 InstallDir "$PROGRAMFILES64\RepTate"
 InstallDirRegKey HKLM "Software\RepTate" "Install_Dir"
-LicenseData "RepTate\Reptate_license.rtf"
+#LicenseData "RepTate\Reptate_license.rtf"
 #AddBrandingImage left 100u
 VIProductVersion ${VERSION}
 VIAddVersionKey "ProductName" "RepTate"
@@ -15,33 +36,27 @@ VIAddVersionKey "LegalCopyright" "© UPM, ULeeds"
 VIAddVersionKey "FileDescription" "Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments"
 VIAddVersionKey "FileVersion" ${VERSION}
 
-Page license
-Page components
-Page directory
-Page instfiles
-UninstPage uninstConfirm
-UninstPage instfiles
+#Page license
+#Page components
+#Page directory
+#Page instfiles
+#UninstPage uninstConfirm
+#UninstPage instfiles
 
-Section "RepTate v${VERSION}"
-	# TEST MessageBox
-	#Messagebox MB_OK|MB_ICONINFORMATION \
-	#"This is a sample that shows how to use line breaks for larger commands in NSIS scripts"
+Section "RepTate v${VERSION}" SectionRepTate
 	#SetBrandingImage "RepTate\gui\Images\logo_with_uni_logo.png"
 	SetOutPath $INSTDIR
 	File /r "RepTate\*"
 	WriteUninstaller "$INSTDIR\Uninstall RepTate.exe"
 SectionEnd
 
-Section "Start Menu Shortcuts"
+#Section "Start Menu Shortcuts"
+#  CreateDirectory "$SMPROGRAMS\RepTate"
+#  CreateShortcut "$SMPROGRAMS\RepTate\Uninstall.lnk" "$INSTDIR\Uninstall RepTate.exe" "" "$INSTDIR\Uninstall RepTate.exe" 0
+#  CreateShortcut "$SMPROGRAMS\RepTate\RepTate.lnk" "$INSTDIR\RepTate.exe" "" "$INSTDIR\RepTate.exe" 0
+#SectionEnd
 
-  CreateDirectory "$SMPROGRAMS\RepTate"
-  CreateShortcut "$SMPROGRAMS\RepTate\Uninstall.lnk" "$INSTDIR\Uninstall RepTate.exe" "" "$INSTDIR\Uninstall RepTate.exe" 0
-  CreateShortcut "$SMPROGRAMS\RepTate\RepTate.lnk" "$INSTDIR\RepTate.exe" "" "$INSTDIR\RepTate.exe" 0
-  
-SectionEnd
-
-
-Section "File Associations"
+Section "File Associations" SectionFileAssociations
 
 	!macro AssocAddFileExtAndProgId _hkey _exe _dotext _pid _ico
 	ReadRegStr $R0 ${_hkey} ${_dotext} ""  ; read current file association
@@ -73,8 +88,8 @@ Section "File Associations"
 
 SectionEnd
 
-UninstallText "This will uninstall example2. Hit next to continue."
-UninstallIcon "RepTate\gui\Images\Reptate64.ico"
+#UninstallText "This will uninstall example2. Hit next to continue."
+#UninstallIcon "RepTate\gui\Images\Reptate64.ico"
 
 Section "Uninstall"
 	#Delete "$INSTDIR\*"
@@ -101,9 +116,7 @@ Section "Uninstall"
 	
 SectionEnd
 
-
-#Function .onInit
-#  MessageBox MB_YESNO "This will install RepTate on your Windows PC. Do you wish to continue?" IDYES gogogo
-#    Abort
-#  gogogo:
-#FunctionEnd
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionRepTate} $(DESC_RepTate)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionFileAssociations} $(DESC_FileAssoc)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
