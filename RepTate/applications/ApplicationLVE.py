@@ -94,6 +94,7 @@ class BaseApplicationLVE:
         from TheoryDTDStars import TheoryDTDStarsFreq
         from TheoryBobLVE import TheoryBobLVE
         from TheoryRDPLVE import TheoryRDPLVE
+        from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesFrequency
         super().__init__(name, parent)
 
         # VIEWS
@@ -318,6 +319,7 @@ class BaseApplicationLVE:
         self.theories[TheoryDTDStarsFreq.thname]=TheoryDTDStarsFreq
         self.theories[TheoryBobLVE.thname]=TheoryBobLVE
         self.theories[TheoryRDPLVE.thname] = TheoryRDPLVE
+        self.theories[TheoryShanbhagMaxwellModesFrequency.thname] = TheoryShanbhagMaxwellModesFrequency
         self.add_common_theories()
 
         #set the current view
