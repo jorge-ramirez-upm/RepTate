@@ -42,14 +42,27 @@ from DataTable import DataTable
 from Parameter import Parameter, ParameterType, ShiftType, OptType
 from Theory import Theory
 from QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
+from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QComboBox, QSpinBox, QAction, QStyle, QMessageBox, QFileDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from DraggableArtists import DragType, DraggableModesSeries
 from scipy.optimize import nnls, minimize, least_squares
 from scipy.interpolate import interp1d
 from scipy.integrate import cumtrapz, quad
+from enum import Enum
+import Version
 import time
+
+class PredictionMode(Enum):
+    """Define which prediction we want to see
+    
+    Parameters can be:
+        - cont: Prediction from Continuous spectrum
+        - disc: Prediction from Discrete spectrum
+    """
+    cont = 0
+    disc = 1
+
 
 class TheoryShanbhagMaxwellModesFrequency(CmdBase):
     """Extract continuous and discrete relaxation spectra from complex modulus G*(w)
@@ -198,32 +211,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.Hdisc = np.zeros(ns)
         self.setup_graphic_modes()
 
-    # def drag_mode(self, dx, dy):
-    #     """[summary]
-        
-    #     [description]
-        
-    #     Arguments:
-    #         - dx {[type]} -- [description]
-    #         - dy {[type]} -- [description]
-    #     """
-    #     nmodes = self.parameters["nmodes"].value
-    #     if self.parent_dataset.parent_application.current_view.log_x:
-    #         self.set_param_value("logwmin", np.log10(dx[0]))
-    #         self.set_param_value("logwmax", np.log10(dx[nmodes - 1]))
-    #     else:
-    #         self.set_param_value("logwmin", dx[0])
-    #         self.set_param_value("logwmax", dx[nmodes - 1])
-
-    #     if self.parent_dataset.parent_application.current_view.log_y:
-    #         for i in range(nmodes):
-    #             self.set_param_value("logG%02d" % i, np.log10(dy[i]))
-    #     else:
-    #         for i in range(nmodes):
-    #             self.set_param_value("logG%02d" % i, dy[i])
-
-    #     self.do_calculate("")
-    #     self.update_parameter_table()
+        self.prediction_mode = PredictionMode.cont 
 
     def setup_graphic_modes(self):
         """[summary]
@@ -281,11 +269,6 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.view_modes = state
         self.contspectrum.set_visible(self.view_modes)
         self.discspectrum.set_visible(self.view_modes)
-        # if self.view_modes:
-        #     self.artistmodes.connect()
-        # else:
-        #     self.artistmodes.disconnect()
-        # self.do_calculate("")
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
@@ -296,13 +279,9 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         Returns:
             - [type] -- [description]
         """
-        nmodes = self.parameters["nmodes"].value
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
-        tau = 1.0 / freq
-        G = np.zeros(nmodes)
-        for i in range(nmodes):
-            G[i] = np.power(10, self.parameters["logG%02d" % i].value)
+        nmodes = len(self.sdisc)
+        tau = self.sdisc
+        G = self.Hdisc
         return tau, G
 
     def set_modes(self, tau, G):
@@ -682,22 +661,6 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         elif SmFacLam < 0:
             lamM = np.exp(np.log(lamM) + SmFacLam*(np.log(lamM) - min(np.log(lam))))
 
-        #
-        # printing this here for now because storing lamC for sometime only
-        #
-        # if par['plotting']:
-        #     plt.clf()
-        #     plt.axvline(x=lamC, c='k', label=r'$\lambda_c$')
-        #     plt.axvline(x=lamM, c='gray', label=r'$\lambda_m$')
-        #     plt.ylim(-20,1)
-        #     plt.plot(lam, logP, 'o-')
-        #     plt.xscale('log')
-        #     plt.xlabel(r'$\lambda$')
-        #     plt.ylabel(r'$\log\,p(\lambda)$')
-        #     plt.legend(loc='upper left')
-        #     plt.tight_layout()
-        #     plt.savefig('output/logP.pdf')
-
         return lamM, lam, rho, eta, logP, Hlambda
 
     def MaxwellModes(self, z, w, Gexp, isPlateau):
@@ -1056,15 +1019,16 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
 		# Save inferred H(s) and Gw
         if lamC != 0:
             if plateau:
-                K   = self.kernel_prestore(H, kernMat, G0);	
+                self.K   = self.kernel_prestore(H, kernMat, G0);	
                 #np.savetxt('output/H.dat', np.c_[s, H], fmt='%e', header='G0 = {0:0.3e}'.format(G0))
             else:
-                K   = self.kernel_prestore(H, kernMat)
+                self.K   = self.kernel_prestore(H, kernMat)
                 #np.savetxt('output/H.dat', np.c_[s, H], fmt='%e')
              
             #np.savetxt('output/Gfit.dat', np.c_[w, K[:n], K[n:]], fmt='%e')
-            tt.data[:, 1] = K[:n]
-            tt.data[:, 2] = K[n:]
+            if self.prediction_mode == PredictionMode.cont:
+                tt.data[:, 1] = self.K[:n]
+                tt.data[:, 2] = self.K[n:]
 
         # Spectrum
         self.scont = s
@@ -1073,11 +1037,15 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         # GET DISCRETE SPECTRUM
 
         # range of N scanned
-        Nmax  = min(np.floor(3.0 * np.log10(max(w)/min(w))),n/4); # maximum N
-        Nmin  = max(np.floor(0.5 * np.log10(max(w)/min(w))),3);   # minimum N
-        Nv    = np.arange(Nmin, Nmax + 1).astype(int)
+        MaxNumModes=self.parameters['MaxNumModes'].value
+        if(MaxNumModes == 0):
+            Nmax  = min(np.floor(3.0 * np.log10(max(w)/min(w))),n/4); # maximum N
+            Nmin  = max(np.floor(0.5 * np.log10(max(w)/min(w))),3);   # minimum N
+            Nv    = np.arange(Nmin, Nmax + 1).astype(int)
+        else:
+            Nv    = np.arange(MaxNumModes, MaxNumModes + 1).astype(int)
 
-        Cerror  = 1./(np.std(K/Gexp - 1.))  #	Cerror = 1.?
+        Cerror  = 1./(np.std(self.K/Gexp - 1.))  #	Cerror = 1.?
         npts = len(Nv)
 
         # range of wtBaseDist scanned
@@ -1162,6 +1130,18 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.Hdisc = g
 
         # TODO: DECIDE IF WE PLOT THE CONTINUOUS OR DISCRETE FIT TO G*(omega)
+        if self.prediction_mode == PredictionMode.disc:
+            S, W    = np.meshgrid(tau, w)
+            ws      = S*W
+            ws2     = ws**2
+            Kdisc       = np.vstack((ws2/(1+ws2), ws/(1+ws2)))   # 2n * nmodes
+            self.GstM   	= np.dot(Kdisc, g)
+
+            if plateau:
+                self.GstM[:n] += G0
+
+            tt.data[:, 1] = self.GstM[:n]
+            tt.data[:, 2] = self.GstM[n:]
 
 
     def plot_theory_stuff(self):
@@ -1240,26 +1220,84 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
-        #self.spinbox = QSpinBox()
-        #self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
-        #self.spinbox.setSuffix(" modes")
-        #self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
-        #tb.addWidget(self.spinbox)
+
+        self.tbutpredmode = QToolButton()
+        self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu()
+        self.cont_pred_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
+            "Fit from Spectrum")
+        self.disc_pred_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+            "Fit from Discrete")
+        if self.prediction_mode == PredictionMode.cont:
+            self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+        else:
+            self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+        self.tbutpredmode.setMenu(menu)
+        tb.addWidget(self.tbutpredmode)
+
         self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes/spectrum')
         self.save_modes_action = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
             "Save Modes")            
+        self.save_spectrum_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save_Ht.png'),
+            "Save Spectrum")            
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
-        #connection_id = self.spinbox.valueChanged.connect(
-        #    self.handle_spinboxValueChanged)
-        #connection_id = self.modesaction.triggered.connect(
-        #    self.modesaction_change)
-        #connection_id = self.save_modes_action.triggered.connect(
-        #    self.save_modes)
+        connection_id = self.modesaction.triggered.connect(
+            self.modesaction_change)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
+        connection_id = self.save_spectrum_action.triggered.connect(
+            self.save_spectrum)
+        connection_id = self.cont_pred_action.triggered.connect(
+            self.select_cont_pred)
+        connection_id = self.disc_pred_action.triggered.connect(
+            self.select_disc_pred)
+
+    def select_cont_pred(self):
+        self.prediction_mode = PredictionMode.cont
+        self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+        # HERE WE SELECT THE CONT SPECTRUM
+
+    def select_disc_pred(self):
+        self.prediction_mode = PredictionMode.disc
+        self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+        # HERE WE PLOT THE DISC SPECTRUM
+
+    def save_spectrum(self):
+        """Save Spectrum to a text file"""
+        fpath, _ = QFileDialog.getSaveFileName(self,
+                                               "Save spectrum to a text file",
+                                               "data/", "Text (*.txt)")
+        if fpath == '':
+            return
+            
+        with open(fpath, 'w') as f:
+
+            header = '# Continuous spectrum\n'
+            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
+                                                             Version.DATE)
+            header += '# At %s on %s\n' % (time.strftime("%X"),
+                                           time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n#%15s\t%15s\n'%('tau_i','G_i'))
+
+            n = len(self.scont)
+            for i in range(n):
+                f.write('%15g\t%15g\n'%(self.scont[i],np.exp(self.Hcont[i])))
+            
+            f.write('\n#end')
+
+        QMessageBox.information(self, 'Success',
+                                'Wrote spectrum \"%s\"' % fpath)
+
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed
