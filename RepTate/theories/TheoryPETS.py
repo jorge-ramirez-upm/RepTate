@@ -67,7 +67,20 @@ class FlowMode(Enum):
 
 
 class TheoryPETS(CmdBase):
-    """Preaveraged model for entangled telechelic star polymers
+    """Preaveraged model for Entangled Telechelic Star polymers: This theory is intended for the prediction of non-linear transient flows of 
+entangled telechelic (with sticky functional groups at the chain-ends) star polymers. 
+
+    * **Parameters**
+       - ``G`` : Plateau Modulus
+       - ``tauD`` : Orientation relaxation time
+       - ``tauS`` : Stretch Relxation time
+       - ``tau_as`` : Typical time the sticker spends associated
+       - ``tau_free`` : Typical time the sticker spends free
+       - ``lmax`` : Maximum extensibility
+       - ``beta`` : CCR coefficient
+       - ``delta`` : CCR exponent
+       - ``Z`` : Entanglement number
+       - ``r_a`` : Ratio of sticker size to tube diameter
     """
     thname = "PETS"
     description = "Preaveraged model for entangled telechelic star polymers"
@@ -129,7 +142,7 @@ class BaseTheoryPETS:
         self.parameters["tauD"] = Parameter(
             name="tauD",
             value=100.0,
-            description="Reptation time",
+            description="Orientation relaxation time",
             type=ParameterType.real,
             opt_type=OptType.nopt,
             bracketed=True,
