@@ -93,6 +93,7 @@ class BaseApplicationGt:
         from TheoryMaxwellModes import TheoryMaxwellModesTime
         from TheoryRouse import TheoryRouseTime
         from TheoryDTDStars import TheoryDTDStarsTime
+        from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesTime
 
         super().__init__(name, parent)
 
@@ -189,6 +190,7 @@ class BaseApplicationGt:
         self.theories[TheoryMaxwellModesTime.thname] = TheoryMaxwellModesTime
         self.theories[TheoryRouseTime.thname] = TheoryRouseTime
         self.theories[TheoryDTDStarsTime.thname] = TheoryDTDStarsTime
+        self.theories[TheoryShanbhagMaxwellModesTime.thname] = TheoryShanbhagMaxwellModesTime
 
         self.add_common_theories()
 
