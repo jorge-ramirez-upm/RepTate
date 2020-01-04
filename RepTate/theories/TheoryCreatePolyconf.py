@@ -114,6 +114,17 @@ class TheoryCreatePolyconf(CmdBase):
     in the BoB LVE theory, in the LVE application of RepTate.
 
     The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
+    
+    * **Parameters**
+       - ``M0`` : Mass of a Monomer
+       - ``Ne`` : Number of monomers in an entanglement length
+       - ``Ratio`` : Ratio weight fraction occupied by component
+       - ``Architecture`` : Polymer architecture type (e.g. Linear, Star, Comb, etc.)
+       - ``Num. of polymer`` : Number of polymers to generate of the above architecture type
+       - ``Num. generations`` : Number of generations (for Cayley architecture type only)
+       - ``Distr.`` : Molecular weight distribution (e.g. Monodisperse, LogNormal, etc.)
+       - ``Mw`` : Weight-average molecular weight
+       - ``PDI`` : Polydispersity index (PDI :math:`=M_w/M_n`)
     """
     thname = 'BOB Architecture'
     description = 'Create and Save Polymer Configuration with BOB'
