@@ -1,25 +1,33 @@
 Load MWD application
-Drag and drop GPC/Aciern177_GEXxxxxx.gpc
+Drag and drop GPC/Acierno116_GEX.gpc
 Load descritized molecular weight distribution
-Choose 11 bins and run the model
+Choose 10 bins and run the model
+Double click on the theory name and name it 'iPB116'
 
 Load Linear Viscoelasticty module
-Drag and drop Acierno_iPB177.tts
+Drag and drop Acierno_iPB116.tts
 Load RDP LVE theory (the linear viscoelastic version of the Rolie-Double Poly model)
 Click Get modes (MWD app)
       - Set Me=9.5e3
       - Set tau_e=3.90E-06
+      - Choose MWD1.Set1.iPB116 from the list of molecular weight distributions
       -Click OK to exit
 Set GN=2.60E+05
+Click the 'modulus correction' button
 This confirms that the Rolie-Double Poly parameters are consistent with the linear rheology.
 
 Load the Crystal module
 Drag and drop the data
+Go to view 1,
+	select 'sigma(log(t))'
+View all
+Load the 'GO-Strand' model
 Click Get modes (MWD app)
       - Set Me=9.5e3
-      - Set tau_e=2.34E-05
+      - Set tau_e=2.34E-05 (this is the 140 tau_e from above shifted to 103oC)
       -Click OK to exit
 Ignore quiescent
+Modulus correction
 Gamma	2
 Ne	9
 epsilonB	-0.002
@@ -27,8 +35,32 @@ muS	1.04
 tau0	3.12e-07
 rhoK	5.3e+08
 N_0	1.3e-12
+
+Run the model - [should take about 30 seconds]
+
 Go to view 4, 
 	-select phiX [lin-log]
 	- xaxis min = 100,
 	- lock axis
-View all
+
+Repeat for other materials (iPB177, iPB295, iPB398)
+
+iPB177
+RDP modes:11
+Tau_e (140oC): 3.5e-06
+Tau_e (103oc): XXXX
+N_0: XXXX
+
+iPB295
+RDP modes:14
+Tau_e (140oC): 3.30E-06
+Tau_e (103oc): XXXX
+N_0: XXXX
+
+
+iPB398
+RDP modes:12
+Tau_e (140oC): 2.30E-06
+Tau_e (103oc): XXXX
+N_0: XXXX
+
