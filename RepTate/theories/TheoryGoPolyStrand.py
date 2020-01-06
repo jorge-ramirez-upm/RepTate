@@ -1144,7 +1144,7 @@ class BaseTheoryGoPolyStrand:
         t = tt.data[:,0]
         Ndot = tt.data[:,2]
         Cry_Evol = SchneiderRate.intSchneider(t, Ndot,NdotInitial,N_0,G_C)
-        tt.data[:, 3] = Cry_Evol[:,0] #Phi_X
+        tt.data[:, 3] = 1.0-np.exp(-Cry_Evol[:,0])#Cry_Evol[:,0] #Phi_X
         tt.data[:, 4] = Cry_Evol[:,3]/8/np.pi #Number of nuclei
 
 
