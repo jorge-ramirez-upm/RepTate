@@ -58,8 +58,7 @@ import goLandscape_ctypes_helper as goL
 from Theory import EndComputationRequested
 from collections import OrderedDict
 
-import GOpolySTRAND
-import GOpolySTRAND_initialGuess
+import SmoothPolySTRAND
 import SchneiderRate
 import timeArraySplit
 
@@ -508,6 +507,18 @@ class BaseTheorySmoothPolyStrand:
             name='Gamma',
             value=1,
             description='Order parameter prefactor',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['Kappa0'] = Parameter(
+            name='Kappa0',
+            value=0.1,
+            description='Nucleus roughness penalty',
+            type=ParameterType.real,
+            opt_type=OptType.opt)
+        self.parameters['Qs0'] = Parameter(
+            name='Qs0',
+            value=30,
+            description='Strand search volume parameter',
             type=ParameterType.real,
             opt_type=OptType.opt)
         self.parameters['Ne'] = Parameter(
@@ -1126,7 +1137,7 @@ class BaseTheorySmoothPolyStrand:
 
                 params={'landscape':q_barrier, 'phi':phi, 'df':df, \
                             'epsilonB':epsilonB, 'muS':muS}
-                DfStarFlow = GOpolySTRAND_initialGuess.findDfStar(params)
+                DfStarFlow = SmoothPolySTRAND.findDfStar(params)
                 nucRate=NdotQ*np.exp( DfStarQ - DfStarFlow)
 
             if self.with_noqu == NoquMode.with_noqu:
