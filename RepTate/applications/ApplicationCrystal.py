@@ -91,7 +91,7 @@ class BaseApplicationCrystal:
         #from TheoryPomPom import TheoryPomPom
         #from TheoryRolieDoublePoly import TheoryRolieDoublePoly
         from TheoryGoPolyStrand import TheoryGoPolyStrand
-        from TheorySimple import TheorySimple
+        from TheorySmoothPolyStrand import TheorySmoothPolyStrand
         #from TheoryBobNLVE import TheoryBobNLVE
         #from TheoryPETS import TheoryPETS
         #from TheorySCCR import TheorySCCR
@@ -318,7 +318,7 @@ class BaseApplicationCrystal:
         #self.theories[TheoryPomPom.thname] = TheoryPomPom
         #self.theories[TheoryRolieDoublePoly.thname] = TheoryRolieDoublePoly
         self.theories[TheoryGoPolyStrand.thname] = TheoryGoPolyStrand
-        self.theories[TheorySimple.thname] = TheorySimple
+        self.theories[TheorySmoothPolyStrand.thname] = TheorySmoothPolyStrand
         #self.theories[TheoryBobNLVE.thname] = TheoryBobNLVE
         #self.theories[TheoryPETS.thname] = TheoryPETS
         #self.theories[TheorySCCR.thname] = TheorySCCR
