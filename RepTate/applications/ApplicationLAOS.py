@@ -50,7 +50,7 @@ class ApplicationLAOS(CmdBase):
     """
     appname = 'LAOS'
     description = 'LAOS Application'  #used in the command-line Reptate
-    extension = ".laos"  # drag and drop this extension automatically opens this application
+    extension = "laos"  # drag and drop this extension automatically opens this application
 
     def __new__(cls, name='LAOS', parent=None):
         """[summary]
@@ -78,7 +78,7 @@ class BaseApplicationLAOS:
     #help_file = ''
     appname = ApplicationLAOS.appname
 
-    def __init__(self, name='LAOS', parent=None, nplots=1, ncols=2):
+    def __init__(self, name='LAOS', parent=None, **kwargs):
         """
         **Constructor**
         
@@ -90,7 +90,7 @@ class BaseApplicationLAOS:
         # Import theories specific to the Application e.g.:
         # from TheoryLAOS import TheoryA
 
-        super().__init__(name, parent, nplot_max=1)
+        super().__init__(name, parent)
 
         # VIEWS
         # set the views that can be selected in the view combobox
@@ -105,25 +105,51 @@ class BaseApplicationLAOS:
             log_y=False,
             view_proc=self.view_sigmagamma,
             n=1,
+            snames=['$\sigma(\gamma)$'])
+
+        self.views['sigma(t),gamma(t)'] = View(
+            name='sigma-gamma(t)',
+            description='Stress and strain as a function of time',
+            x_label='$t$',
+            y_label='$\sigma(t),\gamma(t)$',
+            x_units='s',
+            y_units='Pa, -',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sigmatgammat,
+            n=2,
+            snames=['$\sigma(t)$', '$\gamma(t)$'])
+
+        self.views['sigma(t)'] = View(
+            name='sigma(t)',
+            description='Stress as a function of time',
+            x_label='$t$',
+            y_label='$\sigma(t)$',
+            x_units='s',
+            y_units='Pa',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sigmat,
+            n=1,
             snames=['$\sigma(t)$'])
 
-        # self.views['sigma(gdot)'] = View(
-        #     name='sigma(gdot)',
-        #     description='Stress as a function of shear rate',
-        #     x_label='$\dot\gamma(t)$',
-        #     y_label='$\sigma(t)$',
-        #     x_units='s$^{-1}$',
-        #     y_units='Pa',
-        #     log_x=False,
-        #     log_y=False,
-        #     view_proc=self.view_sigmagdot,
-        #     n=1,
-        #     snames=['$\sigma(t)$'])
+        self.views['gamma(t)'] = View(
+            name='gamma(t)',
+            description='Strain as a function of time',
+            x_label='$t$',
+            y_label='$\gamma(t)$',
+            x_units='s',
+            y_units='-',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_gammat,
+            n=1,
+            snames=['$\gamma(t)$'])
 
         #set multiviews
         #default view order in multiplot views, set only one item for single view
         #if more than one item, modify the 'nplots' in the super().__init__ call
-        self.nplots = 1
+        self.nplots = 4
         self.multiviews = []
         for i in range(self.nplot_max):
             # set views in the same order as declared above
@@ -133,12 +159,12 @@ class BaseApplicationLAOS:
         # FILES
         # set the type of files that ApplicationLAOS can open
         ftype = TXTColumnFile(
-            name='content of files',
+            name='Large-Angle Oscillatory Shear data',
             extension='laos',
             description='file containing laos data',
-            col_names=['gamma', 'sigma', 'time'],
+            col_names=['time', 'gamma', 'sigma'],
             basic_file_parameters=['omega', 'gamma'],
-            col_units=['-', 'Pa'])
+            col_units=['s','-', 'Pa'])
         self.filetypes[
             ftype.extension] = ftype  #add each the file type to dictionary
 
@@ -165,11 +191,11 @@ class BaseApplicationLAOS:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 1]
+        x[:, 0] = dt.data[:, 1]
+        y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def view_sigmagdot(self, dt, file_parameters):
+    def view_sigmat(self, dt, file_parameters):
         """[summary]
         
         [description]
@@ -181,12 +207,60 @@ class BaseApplicationLAOS:
         Returns:
             - [type] -- [description]
         """
-        pass
-        # x = np.zeros((dt.num_rows, 1))
-        # y = np.zeros((dt.num_rows, 1))
-        # x[:, 0] = dt.data[:, 0]
-        # y[:, 0] = dt.data[:, 1]
-        # return x, y, True
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 2]
+
+        # If times==0, set time column using the index
+        # if (np.max(x)==0):
+        #     x[:, 0] = np.linspace(1, dt.num_rows, dt.num_rows)
+        return x, y, True
+
+    def view_gammat(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 1]
+        # If times==0, set time column using the index
+        # if (np.max(x)==0):
+        #     x[:, 0] = np.linspace(1, dt.num_rows, dt.num_rows)
+        return x, y, True
+
+    def view_sigmatgammat(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = dt.data[:, 0]
+        x[:, 1] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 2]
+        y[:, 1] = dt.data[:, 1]
+        # If times==0, set time column using the index
+        # if (np.max(x)==0):
+        #     x[:, 0] = np.linspace(1, dt.num_rows, dt.num_rows)
+        #     x[:, 1] = np.linspace(1, dt.num_rows, dt.num_rows)
+        return x, y, True
 
 
 class CLApplicationLAOS(BaseApplicationLAOS, Application):
