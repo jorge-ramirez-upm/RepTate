@@ -54,7 +54,7 @@ import time
 import Version
 
 import rp_blend_ctypes_helper as rpch
-import goLandscape_ctypes_helper as goL
+import QuiescentSmoothStrand
 from Theory import EndComputationRequested
 from collections import OrderedDict
 
@@ -529,13 +529,13 @@ class BaseTheorySmoothPolyStrand:
             opt_type=OptType.opt)
         self.parameters['epsilonB'] = Parameter(
             name='epsilonB',
-            value=-0.117,
+            value=0.0429,
             description='Bulk free energy per monomer',
             type=ParameterType.real,
             opt_type=OptType.opt)
         self.parameters['muS'] = Parameter(
             name='muS',
-            value=0.85,
+            value=0.94,
             description='Surface area energy',
             type=ParameterType.real,
             opt_type=OptType.opt)
@@ -876,6 +876,7 @@ class BaseTheorySmoothPolyStrand:
         muS = self.parameters['muS'].value
         rhoK = self.parameters['rhoK'].value
         tau0 = self.parameters['tau0'].value
+        Kappa0 = self.parameters['Kappa0'].value
         dN=1
         curvature_skip=5
         alpha=0.8
@@ -883,12 +884,10 @@ class BaseTheorySmoothPolyStrand:
         #Calculate quiescent barrier
         landscape = []
         landscape.append( 0.0) #0
-        landscape.append( 0.0) #1
-        landscape.append( 0.0) #2
-        NT=2
+        NT=0
         while( landscape[NT]>landscape[NT-1]-0.005):
             NT += 1
-            landscape.append(goL.GO_Landscape(NT, epsilonB,muS) )
+            landscape.append(QuiescentSmoothStrand.wholeLandscape(NT, epsilonB,muS, Kappa0) )
             if( NT> 10000):
                 self.Qprint(
                     '<font color=green><b>Quiescent barrier does not have \
@@ -1358,8 +1357,8 @@ class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
         connection_id = self.with_single_button.triggered.connect(
             self.handle_with_single_button)
 
-#!3        connection_id = self.noqu_button.triggered.connect(
-#!3            self.handle_with_gcorr_button)
+#        connection_id = self.noqu_button.triggered.connect(
+#            self.handle_with_gcorr_button)
         connection_id = self.flowsolve_btn.triggered.connect(
             self.handle_flowsolve_btn)
 
