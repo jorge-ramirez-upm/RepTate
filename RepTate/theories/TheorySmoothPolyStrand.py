@@ -943,6 +943,9 @@ class BaseTheorySmoothPolyStrand:
         muS = self.parameters['muS'].value
         G_C = self.parameters['G_C'].value
         N_0 = self.parameters['N_0'].value
+        Kappa0 = self.parameters['Kappa0'].value
+        Qs0 = self.parameters['Qs0'].value
+
         tt.data[:, 0] = ft.data[:, 0] #time
                 
         # ODE solver parameters
@@ -1134,8 +1137,9 @@ class BaseTheorySmoothPolyStrand:
                 else:
                     df= fel[i,:]
 
-                params={'landscape':q_barrier, 'phi':phi, 'df':df, \
-                            'epsilonB':epsilonB, 'muS':muS}
+                params={'maxNT':q_barrier.size, 'phi':phi, 'df':df, \
+                            'epsilonB':epsilonB, 'muS':muS, \
+                            'Kappa0':Kappa0, 'Qs0':Qs0}
                 DfStarFlow = SmoothPolySTRAND.findDfStar(params)
                 nucRate=NdotQ*np.exp( DfStarQ - DfStarFlow)
 

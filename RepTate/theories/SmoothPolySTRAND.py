@@ -11,60 +11,59 @@ import scipy
 from scipy import optimize
 #import pandas as pa
 import numpy as np
-import re
-import sys
-import os
+#!3import re
+#!3import sys
+#!3import os
 
 
+def wfun( phi, Df, P, B, NS):
+    return Qs*phi/( NS + (Qs-NS)*B*np.exp(-LL*Df - Df**2/2.0/kappa  +  Df/kappa*P))
 
-def afun(A,LL):
+def afun(x, NS):
+    P=x[0]
+    B=x[1]
     sum1=0.0
     sum2=0.0
     for i in range(numc):
-        tem=1.0-A*edf[i]
-        sum1+=phi[i]*edf[i]/tem
-        sum2+=phi[i]*edf[i]/tem**2
-    tem=LL*sum1/sum2-1.0
-    return tem
+        wi=wfun( phi[i], df[i],P,B ,NS)
+        sum1+=wi
+        sum2+=wi*df[i]
+    return np.array([sum1-1.0 , sum2-P])
 
-def Free2(NS,NT):
+def Free2(Ns,NT):
+    global LL,Qs,kappa, Pprevious, Bprevious
+    NS=Ns[0]
     LL=NT/NS
-    A=scipy.optimize.brenth(afun,0,iedfmax,args=(LL))
-    sum1=0.0
+    Qs=Qs0*NS
+    kappa=Kappa0+1.0/LL**2
+    
+    sol = scipy.optimize.root(afun, np.array([ max(0.00001,Pprevious), Bprevious]),  args=(NS),method='hybr', jac = False)
+    P = sol.x[0]
+    B = sol.x[1]
+    Pprevious=P
+    Bprevious=B
+    
+    w=np.zeros(numc)
+    theta=np.zeros(numc)
+    sum1=0
+    sum2=0
+    sum3=0
+    sum4=0
+    sum5=0
     for i in range(numc):
-        tem=1.0-A*edf[i]
-        sum1+=phi[i]*edf[i]/tem
-    AB=1.0/sum1
-    w=[]
-    v=[]
-    for i in range(numc):
-        tem=1.0-A*edf[i]
-        w.append(AB*phi[i]*edf[i]/tem)
-        v.append(w[i]/tem/LL)
-    # now, put together free energy terms
-    sum1=0.0
-    for i in range(numc):
-        logw=math.log(w[i])
-        logv=math.log(v[i])
-        logc=math.log(v[i]-w[i]/LL)
-        sum1+=w[i]*(2*logw-logphi[i])/LL-v[i]*logv+(v[i]-w[i]/LL)*logc-v[i]*df[i]    
-    FF=NT*sum1-NS*math.log(LL)-NT*E0
-    #surface terms
-    aspect=NS**3/NT**2/arsq
-    if aspect<1:
-        ep=math.sqrt(1.0-aspect)
-        Stil=2.0*NS+2.0*ar*NT*math.asin(ep)/ep/math.sqrt(NS)
-    elif aspect>1:
-        eps0=math.sqrt(1.0-1.0/aspect)
-        Stil=2.0*NS+arsq*NT**2*math.log((1.0+eps0)/(1.0-eps0))/eps0/NS**2
-    else:
-        Stil=2.0*NS+2.0*ar*NT/math.sqrt(NS)
-    FF+=mus*Stil
-    return FF
-        
-def Freequi(NS,NT):
-    LL=NT/NS    
-    FF=-NS*math.log(LL)-NT*E0+(NT-NS)*math.log(1.0-1.0/LL)
+        w[i]=wfun( phi[i], df[i], P ,B, NS)
+        theta[i] = max(thetaMin,Qs/(Qs - NS)*phi[i] - NS/ (Qs - NS)*w[i])
+        sum1 += theta[i]*np.log(theta[i])
+        sum2 += phi[i]*np.log(phi[i])
+        sum3 += w[i]*np.log(w[i])
+        sum4 += w[i]*df[i]
+        sum5 += w[i]*df[i]**2
+    
+    #print w
+    #print theta
+    
+    FF = (Qs-NS)*sum1 - Qs*sum2 + NS*sum3 - 0.5*(NS-1)*np.log(2.0*math.pi/kappa)+0.5*np.log(NS) \
+        - NT*sum4 - 0.5*NS/kappa*(sum5 - sum4**2) - E0*NT
     #surface terms
     aspect=NS**3/NT**2/arsq
     if aspect<1:
@@ -79,85 +78,86 @@ def Freequi(NS,NT):
     return FF
 
 def Free1(NT):
-    res=scipy.optimize.minimize_scalar(Free2, bounds=(1,0.999999*NT), args=(NT), method='bounded')
+    x0 = NSprevious
+    res=scipy.optimize.minimize(Free2, x0,method='Nelder-Mead' ,args=(NT))
+    #res=scipy.optimize.minimize_scalar(Free2, bounds=(1,0.999999*NT), args=(NT), method='bounded')
+    print(res)
     return res.fun
     
 def Freefluc(NT):
-    res=scipy.optimize.minimize_scalar(Free2, bounds=(1,0.999999*NT), args=(NT), method='bounded')
-    nsmid=res.x
+    global NSprevious
+    x0 = NSprevious
+    res=scipy.optimize.minimize(Free2, x0,method='Nelder-Mead' ,args=(NT))
+    #print res
+    #res=scipy.optimize.minimize_scalar(Free2, bounds=(1,0.999999*NT), args=(NT), method='bounded')
+    nsmid=res.x[0]
+    NSprevious=nsmid
     ##second derivative
-    d2fdn2=(Free2(nsmid+0.1,NT)+Free2(nsmid-0.1,NT)-2*Free2(nsmid,NT))/0.01
+    d2fdn2=(Free2([nsmid+0.1],NT)+Free2([nsmid-0.1],NT)-2*Free2([nsmid],NT))/0.01
     fNT=res.fun+math.log(d2fdn2/2/math.pi)
     return fNT
-
-
-def Free1qui(NT):
-    res=scipy.optimize.minimize_scalar(Freequi, bounds=(1,0.999999*NT), args=(NT), method='bounded')
-    return res.fun
-    
-def Freeflucqui(NT):
-    res=scipy.optimize.minimize_scalar(Freequi, bounds=(1,0.999999*NT), args=(NT), method='bounded')
-    nsmid=res.x
-    ##second derivative
-    d2fdn2=(Freequi(nsmid+0.1,NT)+Freequi(nsmid-0.1,NT)-2*Freequi(nsmid,NT))/0.01
-    fNT=res.fun+math.log(d2fdn2/2/math.pi)
-    return fNT
-
-def Freesum(NT):
-    sum=0.0
-    NS=1
-    while NS<NT:
-        sum=sum+math.exp(-Free2(NS,NT))
-        NS=NS+1
-    fren=-math.log(sum)
-    return fren
-
-def Freesumqui(NT):
-    sum=0.0
-    NS=1
-    while NS<NT:
-        sum=sum+math.exp(-Freequi(NS,NT))
-        NS=NS+1
-    fren=-math.log(sum)
-    return fren
-
 
 def findDfStar( params):
+    global E0, mus, Kappa0, Qs0, maxNT,phi, df, edf, edfmax, logphi, iedfmax, arsq, ar,numc, NSprevious, Pprevious, Bprevious, thetaMin
+
     #Extract params
-    global E0, mus, phi, df, edf, edfmax, logphi, iedfmax, arsq, ar,numc, trueQuiescent
-    
-    trueQuiescent = params['landscape']
     phi = params['phi']
     df = params['df']
     numc=phi.size
     E0 = params['epsilonB']
     mus = params['muS']
-    maxNT=trueQuiescent.size
+    Kappa0 = params['Kappa0']
+    Qs0 = params['Qs0']
+    maxNT = params['maxNT']
 
     
-
+    #Initialise variables
     #a_r
     arsq=9.0/16.0*math.pi
+    thetaMin=1e-300
     ar=math.sqrt(arsq)
+    #edf = [0] * numc
+    #edfmax=0
+    #logphi=[]
 
-    #setting up some parameters
-    edf = [0] * numc
-    edfmax=0
-    logphi=[]
+    #for i in range(numc):
+    #    edf[i]=math.exp(df[i])
+    #    logphi.append(math.log(phi[i]))
+    #    edfmax=max(edfmax,edf[i])
+    #iedfmax=0.999999999999999/edfmax
 
-    for i in range(numc):
-        edf[i]=math.exp(df[i])
-        logphi.append(math.log(phi[i]))
-        edfmax=max(edfmax,edf[i])
-    iedfmax=0.999999999999999/edfmax
+    #March up the barrier
+    NTlist=[]
+    Flist=[]
+    Fluclist=[]
+    Barrierlist=[]
 
+    BestBarrier=-10000.0
+    NTlist=[]
+    Flist=[]
+    Fluclist=[]
+    Barrierlist=[]
+    NSprevious=1.1
+    Pprevious=0.5*(max(df)-min(df))
+    Bprevious=1.0
 
-    res=scipy.optimize.minimize_scalar(FreeTrue, bounds=(3.0,maxNT), method='bounded')
-    return -res.fun
+    ratio=2.0
+    for i in range(int((maxNT-1)/ratio)):
+        NT=2.0+i*ratio
+        NTlist.append(NT)
+        ans=Freefluc(1.0*NT)
+        Fluclist.append(ans)
+    
+        if(ans>BestBarrier):
+            BestBarrier=ans
+
+        if( BestBarrier-ans > 1.0):
+            break
+
+    return BestBarrier
+
+    #res=scipy.optimize.minimize_scalar(FreeTrue, bounds=(3.0,maxNT), method='bounded')
+    #return -res.fun
     
 def FreeTrue(NT):
-    NTlow = math.floor(NT)
-    NThigh = NTlow +1
-    trueQ = trueQuiescent[NTlow] + \
-      (trueQuiescent[NThigh]-trueQuiescent[NTlow])*(NT-NTlow)
-    return -(trueQ+Freefluc(NT)-Freeflucqui(NT))
+    return -Freefluc(1.0*NT)
