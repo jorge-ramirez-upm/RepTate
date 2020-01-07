@@ -85,6 +85,7 @@ Section "File Associations" SectionFileAssociations
 	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".SANS" "RepTate.SANS" "$INSTDIR\gui\Images\SANS.ico"	
 	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".DLS" "RepTate.DLS" "$INSTDIR\gui\Images\Dielectric.ico"	
 	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".CREEP" "RepTate.CREEP" "$INSTDIR\gui\Images\Creep.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".LAOS" "RepTate.LAOS" "$INSTDIR\gui\Images\LAOS.ico"	
 
 SectionEnd
 
@@ -113,6 +114,7 @@ Section "Uninstall"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".SANS" "RepTate.SANS"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".DLS" "RepTate.DLS"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".CREEP" "RepTate.CREEP"
+	!insertmacro AssocDeleteFileExtAndProgId HKLM ".LAOS" "RepTate.LAOS"
 	
 SectionEnd
 
