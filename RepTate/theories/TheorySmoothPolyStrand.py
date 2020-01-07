@@ -1140,7 +1140,8 @@ class BaseTheorySmoothPolyStrand:
                 params={'maxNT':q_barrier.size, 'phi':phi, 'df':df, \
                             'epsilonB':epsilonB, 'muS':muS, \
                             'Kappa0':Kappa0, 'Qs0':Qs0}
-                DfStarFlow = SmoothPolySTRAND.findDfStar(params)
+                #DfStarFlow = SmoothPolySTRAND.findDfStar(params)
+                DfStarFlow = SmoothPolySTRAND.findDfStar_Direct(params)
                 nucRate=NdotQ*np.exp( DfStarQ - DfStarFlow)
 
             if self.with_noqu == NoquMode.with_noqu:

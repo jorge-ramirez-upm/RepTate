@@ -98,7 +98,7 @@ def Freefluc(NT):
     return fNT
 
 def findDfStar( params):
-    global E0, mus, Kappa0, Qs0, maxNT,phi, df, edf, edfmax, logphi, iedfmax, arsq, ar,numc, NSprevious, Pprevious, Bprevious, thetaMin
+    global E0, mus, Kappa0, Qs0, maxNT,phi, df, arsq, ar,numc, NSprevious, Pprevious, Bprevious, thetaMin
 
     #Extract params
     phi = params['phi']
@@ -116,15 +116,6 @@ def findDfStar( params):
     arsq=9.0/16.0*math.pi
     thetaMin=1e-300
     ar=math.sqrt(arsq)
-    #edf = [0] * numc
-    #edfmax=0
-    #logphi=[]
-
-    #for i in range(numc):
-    #    edf[i]=math.exp(df[i])
-    #    logphi.append(math.log(phi[i]))
-    #    edfmax=max(edfmax,edf[i])
-    #iedfmax=0.999999999999999/edfmax
 
     #March up the barrier
     NTlist=[]
@@ -158,6 +149,35 @@ def findDfStar( params):
 
     #res=scipy.optimize.minimize_scalar(FreeTrue, bounds=(3.0,maxNT), method='bounded')
     #return -res.fun
+
+def findDfStar_Direct( params):
+    global E0, mus, Kappa0, Qs0, maxNT,phi, df, arsq, ar,numc, NSprevious, Pprevious, Bprevious, thetaMin
+
+    #Extract params
+    phi = params['phi']
+    df = params['df']
+    numc=phi.size
+    E0 = params['epsilonB']
+    mus = params['muS']
+    Kappa0 = params['Kappa0']
+    Qs0 = params['Qs0']
+    maxNT = params['maxNT']
+
+    
+    #Initialise variables
+    #a_r
+    arsq=9.0/16.0*math.pi
+    thetaMin=1e-300
+    ar=math.sqrt(arsq)
+
+    NSprevious=1.1
+    Pprevious=0.5*(max(df)-min(df))
+    Bprevious=1.0
+
+
+    res=scipy.optimize.minimize_scalar(FreeTrue, bounds=(3.0,maxNT), method='bounded')
+    return -res.fun
+
     
 def FreeTrue(NT):
     return -Freefluc(1.0*NT)
