@@ -659,7 +659,7 @@ class BaseTheorySmoothPolyStrand:
         self.with_fene = FeneMode.none
         self.with_gcorr = GcorrMode.none
         self.with_noqu = NoquMode.none
-        self.with_single = NoquMode.none
+        self.with_single = SingleSpeciesMode.none
         self.Zeff = []
         self.MWD_m = [100, 1000]
         self.MWD_phi = [0.5, 0.5]
@@ -694,7 +694,7 @@ class BaseTheorySmoothPolyStrand:
         self.extra_data['with_fene'] = self.with_fene == FeneMode.with_fene
         self.extra_data['with_gcorr'] = self.with_gcorr == GcorrMode.with_gcorr
         self.extra_data['with_noqu'] = self.with_noqu == NoquMode.with_noqu
-        self.extra_data['with_single'] = self.with_single == NoquMode.with_single
+        self.extra_data['with_single'] = self.with_single == SingleSpeciesMode.with_single
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
