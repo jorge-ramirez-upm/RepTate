@@ -749,8 +749,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                                 pass
                             label = label.replace('['+p+']', str(val))
                     N.append(label)
-            self.legend = ax.legend(L, N, **self.legend_opts)            
-                
+            try:
+                self.legend = ax.legend(L, N, **self.legend_opts)            
+            except TypeError:
+                # "title_fontsize" key invalid for Matplotlib < 3.0.0
+                tempdic = self.legend_opts.copy()
+                tempdic.pop("title_fontsize", None)
+                self.legend = ax.legend(L, N, **tempdic)   
+            
             self.legend.draggable(self.legend_draggable)
 
             try:
