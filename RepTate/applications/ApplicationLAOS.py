@@ -78,6 +78,7 @@ class BaseApplicationLAOS:
     #help_file = ''
     appname = ApplicationLAOS.appname
 
+
     def __init__(self, name='LAOS', parent=None, **kwargs):
         """
         **Constructor**
@@ -87,8 +88,7 @@ class BaseApplicationLAOS:
             - parent {[type]} -- [description] (default: {None})
         """
         # IMPORT THEORIES
-        # Import theories specific to the Application e.g.:
-        # from TheoryLAOS import TheoryA
+        from TheoryMITlaos import TheoryMITlaos
 
         super().__init__(name, parent)
 
@@ -169,9 +169,7 @@ class BaseApplicationLAOS:
             ftype.extension] = ftype  #add each the file type to dictionary
 
         # THEORIES
-        # add the theories related to ApplicationLAOS to the dictionary, e.g.:
-        # self.theories[TheoryA.thname] = TheoryA
-        # self.theories[TheoryB.thname] = TheoryB
+        self.theories[TheoryMITlaos.thname] = TheoryMITlaos
         self.add_common_theories()  # Add basic theories to the application
 
         #set the current view
