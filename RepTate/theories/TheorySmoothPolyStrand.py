@@ -904,7 +904,7 @@ class BaseTheorySmoothPolyStrand:
 
         #Calculate initial slope
         sumDFq=0.0
-        for i in range(1, nStar+1):
+        for i in range(0, nStar+1):
             sumDFq += np.exp(-landscape[i])
 
         #Compute the nucleation rate
