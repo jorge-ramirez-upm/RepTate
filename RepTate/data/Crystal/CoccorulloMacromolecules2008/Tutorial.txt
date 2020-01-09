@@ -34,6 +34,33 @@ GN0	506000
 
 Hit compute, and the calculation should take about 15 secs (depending on how good your laptop is!)
 
-You should see
+====Average stress model====
+Copy parameters
+New GO-polyStrand model
+Paste parameters
+Click the average stress button
+Run model
+Click view all theories
 
-====Adjus
+====Smooth polyStrand====
+Create new model
+Add modes as before
+Enhance final mode to 3e8????
+Set Kappa0=0.1, Qs=30.0, epsilonB=0.044, muS=0.94, Gamma=4.3
+Click view all theories
+
+====144oc====
+Rename crystal application to 140oC
+Open new crystal application
+Rename this to 144oC
+Switch to one view and make that view 'Steady Nucleation'
+Drag and drop 144 data
+Create new GO model theory
+Go back to 140 and copy the GO-model parameters
+Return to 144 and paste these parameters onto the theory
+Run the model to confirm that this gives the predictions for 140
+Change epsilonB to -0.118
+Rerun the model to get improved agreement.
+
+
+

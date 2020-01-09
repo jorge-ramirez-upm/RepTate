@@ -529,7 +529,7 @@ class BaseTheorySmoothPolyStrand:
             opt_type=OptType.opt)
         self.parameters['epsilonB'] = Parameter(
             name='epsilonB',
-            value=0.0429,
+            value=0.044,
             description='Bulk free energy per monomer',
             type=ParameterType.real,
             opt_type=OptType.opt)
@@ -541,7 +541,7 @@ class BaseTheorySmoothPolyStrand:
             opt_type=OptType.opt)
         self.parameters['tau0'] = Parameter(
             name='tau0',
-            value=0.38E-9,
+            value=0.74E-9,
             description='Monomer attachment time',
             type=ParameterType.real,
             opt_type=OptType.opt)
