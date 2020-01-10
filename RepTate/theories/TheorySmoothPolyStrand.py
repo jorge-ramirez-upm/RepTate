@@ -917,7 +917,7 @@ class BaseTheorySmoothPolyStrand:
 
         self.Qprint('Quiescent nucleation rate=%.3g &mu;m<sup>-3</sup>s<sup>-1</sup><br>' % NqRate) # HTML syntax
 
-        return landscape, NqRate, quiescent_height
+        return landscape, NqRate, quiescent_height, nStar
 
 
     def RolieDoublePoly_Crystal(self, f=None):
@@ -1107,13 +1107,14 @@ class BaseTheorySmoothPolyStrand:
                 
                 
         #Compute the quiescent free energy barrier
-        q_barrier, NdotQ, DfStarQ = self.computeQuiescentBarrier()
+        q_barrier, NdotQ, DfStarQ, nStarQ = self.computeQuiescentBarrier()
         if self.with_noqu == NoquMode.with_noqu:
             NdotInitial = 0.0
         else:
             NdotInitial = NdotQ
 
-        #Compute the flow-induced barrier
+        #====Compute the flow-induced barrier====
+        #First setup the concentration
         q_barrier=np.asarray(q_barrier)
         if self.with_single == SingleSpeciesMode.with_single:
             phi = np.asarray([1.0])
@@ -1121,7 +1122,10 @@ class BaseTheorySmoothPolyStrand:
             phi = np.asarray(phi_arr)
         nspecies=phi.size
 
-            
+        nStarPrevious = nStarQ+2 #Use the quiescent nstar as an initial guess
+        NSprevious=1.1
+        Pprevious=0.0
+        Bprevious=1.0   
         sumdf=1e5
         for i in range(tt.num_rows):
             #See how much change there is from last time
@@ -1137,11 +1141,15 @@ class BaseTheorySmoothPolyStrand:
                 else:
                     df= fel[i,:]
 
-                params={'maxNT':q_barrier.size, 'phi':phi, 'df':df, \
+                    params={'NTprevious':nStarPrevious, 'phi':phi, 'df':df, \
                             'epsilonB':epsilonB, 'muS':muS, \
-                            'Kappa0':Kappa0, 'Qs0':Qs0}
+                            'Kappa0':Kappa0, 'Qs0':Qs0,\
+                            'NSprevious':NSprevious,\
+                            'Pprevious':Pprevious,\
+                            'Bprevious':Bprevious}
                 #DfStarFlow = SmoothPolySTRAND.findDfStar(params)
-                DfStarFlow = SmoothPolySTRAND.findDfStar_Direct(params)
+                DfStarFlow , nStarPrevious, NSprevious, Pprevious, Bprevious\
+                  = SmoothPolySTRAND.findDfStar_Direct(params)
                 nucRate=NdotQ*np.exp( DfStarQ - DfStarFlow)
 
             if self.with_noqu == NoquMode.with_noqu:

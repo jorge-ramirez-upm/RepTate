@@ -7,13 +7,9 @@ Created on Fri Nov 30 13:15:57 2018
 
 import math
 import scipy
-#import matplotlib.pyplot as plt
 from scipy import optimize
-#import pandas as pa
 import numpy as np
-#!3import re
-#!3import sys
-#!3import os
+
 
 
 def wfun( phi, Df, P, B, NS):
@@ -141,11 +137,12 @@ def findDfStar( params):
     
         if(ans>BestBarrier):
             BestBarrier=ans
+            nStar=NT
 
         if( BestBarrier-ans > 1.0):
             break
 
-    return BestBarrier
+    return BestBarrier,NT
 
     #res=scipy.optimize.minimize_scalar(FreeTrue, bounds=(3.0,maxNT), method='bounded')
     #return -res.fun
@@ -161,8 +158,10 @@ def findDfStar_Direct( params):
     mus = params['muS']
     Kappa0 = params['Kappa0']
     Qs0 = params['Qs0']
-    maxNT = params['maxNT']
-
+    NTprevious = params['NTprevious']
+    NSprevious= params['NSprevious']
+    Pprevious= params['Pprevious']
+    Bprevious= params['Bprevious']
     
     #Initialise variables
     #a_r
@@ -170,13 +169,11 @@ def findDfStar_Direct( params):
     thetaMin=1e-300
     ar=math.sqrt(arsq)
 
-    NSprevious=1.1
-    Pprevious=0.5*(max(df)-min(df))
-    Bprevious=1.0
-
-
-    res=scipy.optimize.minimize_scalar(FreeTrue, bounds=(3.0,maxNT), method='bounded')
-    return -res.fun
+    search_frac=0.1
+    upper=NTprevious*(1+search_frac/100.0)
+    lower=NTprevious*(1-search_frac)
+    res=scipy.optimize.minimize_scalar(FreeTrue, bounds=(lower,upper), method='bounded')
+    return -res.fun, res.x, NSprevious, Pprevious, Bprevious
 
     
 def FreeTrue(NT):
