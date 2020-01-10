@@ -67,6 +67,7 @@ Tau_e (103oc): 7.90E-6
 N_0: 37e-12
 
 ====Smooth polystrand model====
+Copy parameters from the Go-polyStrand model
 Load smoothPolystrand model
 Paste parameters from GO-polystrand model
 Click 'Neglect quiescent'
