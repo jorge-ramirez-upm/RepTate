@@ -25,3 +25,9 @@ def intSchneider( t, Ndot, Ndot0, N_0, G_C):
 def Schneider(phiSc,t,G_C):
     return  G_C*phiSc[1],  G_C*phiSc[2],  G_C*phiSc[3], \
       8*np.pi*abs(N_dot_func(t)) #When Ndot is small interpolation is sometimes negative!!
+
+#def N_dot_func(t):
+#    if t<600:
+#        return 6e-16
+#    else:
+#        return 0.0

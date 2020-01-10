@@ -527,7 +527,9 @@ class BaseTheoryGoPolyStrand:
             value=0.85,
             description='Surface area energy',
             type=ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=0.0,
+            max_value=1.125)
         self.parameters['tau0'] = Parameter(
             name='tau0',
             value=0.38E-9,
