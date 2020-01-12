@@ -57,7 +57,12 @@ rmdir /s /q build\RepTate
 rmdir /s /q build\RepTateCL
 rmdir /s /q dist\RepTateCL
 
+rem Create ZIP (portable package)
 for /f %%i in ('python tools\getreptateversion.py') do set version=%%i
 cd dist
 c:\Progra~1\7-zip\7z.exe a RepTate%version%.zip RepTate
 cd ..
+
+rem Run NSIS to create installation package
+C:\Progra~2\NSIS\makensis.exe dist\RepTate.nsi
+
