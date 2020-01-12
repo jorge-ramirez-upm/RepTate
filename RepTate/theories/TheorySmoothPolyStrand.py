@@ -518,7 +518,7 @@ class BaseTheorySmoothPolyStrand:
         self.parameters['Qs0'] = Parameter(
             name='Qs0',
             value=30,
-            description='Strand search volume parameter',
+            description='Stem search volume parameter',
             type=ParameterType.real,
             opt_type=OptType.opt)
         self.parameters['Ne'] = Parameter(
