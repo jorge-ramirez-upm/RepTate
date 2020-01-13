@@ -42,7 +42,7 @@ Text files with ``.shearxs`` extension should be organised as follows:
   #. crystal fraction, :math:`\phi_X(t)`,
   #. nucleation density, :math:`N(t)`,
 
-Other columns will be ingored. A correct ``.shearxs`` file looks like:
+Other columns will be ignored. A correct ``.shearxs`` file looks like:
 
 .. code-block:: none
 
