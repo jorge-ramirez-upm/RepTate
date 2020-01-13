@@ -239,10 +239,20 @@ class BaseApplicationLAOS:
         Returns:
             - [type] -- [description]
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 1]
-        y[:, 0] = dt.data[:, 2]
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,3])>0
+            gamma=dt.data[pickindex, 3]
+            tau=dt.data[pickindex, 4]
+            ndata=len(gamma)
+            x = np.zeros((ndata, 1))
+            y = np.zeros((ndata, 1))
+            x[:, 0] = gamma
+            y[:, 0] = tau
+        else:
+            x = np.zeros((dt.num_rows, 1))
+            y = np.zeros((dt.num_rows, 1))
+            x[:, 0] = dt.data[:, 1]
+            y[:, 0] = dt.data[:, 2]
         return x, y, True
 
     def view_sigmat(self, dt, file_parameters):
@@ -325,9 +335,9 @@ class BaseApplicationLAOS:
             - [type] -- [description]
         """
         if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,3])>0
-            gdot=dt.data[pickindex, 3]
-            tau=dt.data[pickindex, 4]
+            pickindex=np.abs(dt.data[:,5])>0
+            gdot=dt.data[pickindex, 5]
+            tau=dt.data[pickindex, 6]
             ndata=len(gdot)
             x = np.zeros((ndata, 1))
             y = np.zeros((ndata, 1))
@@ -351,9 +361,9 @@ class BaseApplicationLAOS:
             - [type] -- [description]
         """
         if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,5])>0
-            w=dt.data[pickindex, 5]
-            Gn=dt.data[pickindex, 6]
+            pickindex=np.abs(dt.data[:,7])>0
+            w=dt.data[pickindex, 7]
+            Gn=dt.data[pickindex, 8]
             ndata=len(w)
             x = np.zeros((ndata, 1))
             y = np.zeros((ndata, 1))
@@ -377,9 +387,9 @@ class BaseApplicationLAOS:
             - [type] -- [description]
         """
         if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,7])>0
-            n=dt.data[pickindex, 7]
-            en=dt.data[pickindex, 8]
+            pickindex=np.abs(dt.data[:,9])>0
+            n=dt.data[pickindex, 9]
+            en=dt.data[pickindex, 10]
             ndata=len(n)
             x = np.zeros((ndata, 1))
             y = np.zeros((ndata, 1))
@@ -403,9 +413,9 @@ class BaseApplicationLAOS:
             - [type] -- [description]
         """
         if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,7])>0
-            n=dt.data[pickindex, 7]
-            vn=dt.data[pickindex, 9]
+            pickindex=np.abs(dt.data[:,9])>0
+            n=dt.data[pickindex, 9]
+            vn=dt.data[pickindex, 11]
             ndata=len(n)
             x = np.zeros((ndata, 1))
             y = np.zeros((ndata, 1))

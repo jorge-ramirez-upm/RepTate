@@ -40,7 +40,22 @@ from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from DataTable import DataTable
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+from enum import Enum
 
+class ShowMode(Enum):
+    """Defines how to show the reconstruction of the data
+    
+    Parameters can be:
+        - total: Total (filtered)
+        - ev: elastic/viscous
+        - cheb13: Chebyshev  modes 1+3
+    """
+    total = 0
+    ev = 1
+    cheb13 = 2
 
 class TheoryMITlaos(CmdBase):
     """[summary]
@@ -106,6 +121,8 @@ class BaseTheoryMITlaos:
             description='Points per quarter cycle in FT reconstruction (20-500)',
             type=ParameterType.integer,
             opt_type=OptType.const)
+
+        self.showmode=ShowMode.total
 
     def get_modes(self):
         """[summary]
@@ -295,7 +312,7 @@ class BaseTheoryMITlaos:
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
-        tt.num_columns = 10
+        tt.num_columns = 12
 
         time_uneven  = ft.data[:,0]  # raw time
         gamma_uneven = ft.data[:,1]  # raw strain
@@ -552,8 +569,25 @@ class BaseTheoryMITlaos:
         tt.data[:, 1] = gam
         tt.data[:, 2] = tau
 
-        tt.data[0:len(gamdot_recon), 3] = gamdot_recon # gamdot_recon interp1d
-        tt.data[0:len(tau_recon), 4] = tau_recon # tau_recon interp1d
+        if self.showmode==ShowMode.total:
+            tt.data[0:len(gam_recon), 3] = gam_recon # gamdot_recon interp1d
+            tt.data[0:len(tau_recon), 4] = tau_recon # tau_recon interp1d
+            tt.data[0:len(gamdot_recon), 5] = gamdot_recon # gamdot_recon interp1d
+            tt.data[0:len(tau_recon), 6] = tau_recon # tau_recon interp1d
+        elif self.showmode==ShowMode.ev:
+            #gam_0*Xe,fe    
+            tt.data[0:len(Xe), 3] = gam_0*Xe # gamdot_recon interp1d
+            tt.data[0:len(Xe), 4] = fe # gamdot_recon interp1d
+            # gam_0*w*Xv
+            tt.data[0:len(Xv), 5] = gam_0*w*Xv # tau_recon interp1d
+            tt.data[0:len(Xv), 6] = fv # tau_recon interp1d
+        else:
+            #gam_0*Xe,fe3
+            tt.data[0:len(Xe), 3] = gam_0*Xe # gamdot_recon interp1d
+            tt.data[0:len(Xe), 4] = fe3 # NEED TO SEPARATE fe3 and fv3
+            # gam_0*w*Xv,fv3
+            tt.data[0:len(Xv), 5] = gam_0*w*Xv # gamdot_recon interp1d
+            tt.data[0:len(Xv), 6] = fv3 # NEED TO SEPARATE fe3 and fv3
 
         dw = w/Ncycles
         wn = np.linspace(dw,N*dw,N)
@@ -561,12 +595,12 @@ class BaseTheoryMITlaos:
             wn_end = 25*Ncycles
         else:
             wn_end = length(wn)
-        tt.data[0:wn_end, 5] = wn[0:wn_end]
-        tt.data[0:wn_end, 6] = G_compNORM[0:wn_end]
+        tt.data[0:wn_end, 7] = wn[0:wn_end]
+        tt.data[0:wn_end, 8] = G_compNORM[0:wn_end]
 
-        tt.data[0:m, 7] = np.linspace(1,m,m)
-        tt.data[0:m, 8] = e_n[0:m]
-        tt.data[0:m, 9] = v_n[0:m]
+        tt.data[0:m, 9] = np.linspace(1,m,m)
+        tt.data[0:m, 10] = e_n[0:m]
+        tt.data[0:m, 11] = v_n[0:m]
 
 class CLTheoryMITlaos(BaseTheoryMITlaos, Theory):
     """[summary]
@@ -605,4 +639,51 @@ class GUITheoryMITlaos(BaseTheoryMITlaos, QTheory):
         """
         super().__init__(name, parent_dataset, axarr)
 
-    # add widgets specific to the theory here:
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        self.tbutshowmode = QToolButton()
+        self.tbutshowmode.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu()
+        self.show_total_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
+            "Show total")
+        self.show_ev_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+            "Show elastic/viscous")
+        self.show_cheb13_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+            "Show Chebyshev modes 1-3")
+        if self.showmode == ShowMode.total:
+            self.tbutshowmode.setDefaultAction(self.show_total_action)
+        elif self.showmode == ShowMode.ev:
+            self.tbutshowmode.setDefaultAction(self.show_ev_action)
+        else:
+            self.tbutshowmode.setDefaultAction(self.show_cheb13_action)
+        self.tbutshowmode.setMenu(menu)
+        tb.addWidget(self.tbutshowmode)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.show_total_action.triggered.connect(
+            self.select_show_total)
+        connection_id = self.show_ev_action.triggered.connect(
+            self.select_show_ev)
+        connection_id = self.show_cheb13_action.triggered.connect(
+            self.select_show_cheb13)
+
+    def select_show_total(self):
+        self.showmode = ShowMode.total
+        self.tbutshowmode.setDefaultAction(self.show_total_action)
+        self.handle_actionCalculate_Theory()
+
+    def select_show_ev(self):
+        self.showmode = ShowMode.ev
+        self.tbutshowmode.setDefaultAction(self.show_ev_action)
+        self.handle_actionCalculate_Theory()
+
+    def select_show_cheb13(self):
+        self.showmode = ShowMode.cheb13
+        self.tbutshowmode.setDefaultAction(self.show_cheb13_action)
+        self.handle_actionCalculate_Theory()
