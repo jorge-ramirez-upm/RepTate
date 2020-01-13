@@ -42,7 +42,7 @@ Text files with ``.shearxs`` extension should be organised as follows:
   #. crystal fraction, :math:`\phi_X(t)`,
   #. nucleation density, :math:`N(t)`,
 
-Other columns will be ingnored. A correct ``.shearxs`` file looks like:
+Other columns will be ingored. A correct ``.shearxs`` file looks like:
 
 .. code-block:: none
 
@@ -62,3 +62,25 @@ Views
 log(eta(t))
 ---------------------
 .. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewLogeta()
+Ndot(t) [log-log]
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewNdot
+
+N(t) [log-log]
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewNt
+
+phiX(t) [log-log]
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewphiX
+
+Ndot(t) [log-lin]
+---------------------
+Nucleation rate as a function of time on log axis :math:`\dot{N}(t)` vs time :math:`t`
+
+eta(t))
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.vieweta()
+
+
+
