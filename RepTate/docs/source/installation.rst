@@ -23,7 +23,7 @@ Binary packages (containing all the needed files and libraries,
 as well as a Python interpreter), for the latest version (|release|) can be downloaded here: 
 
 `RepTate for Windows (Windows 7 64-bit or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1>`_
-    Unzip and uncompress the dowloaded file and look for the RepTate executable ``RepTate.exe``.
+    Unzip and uncompress the dowloaded file and look for the RepTate executable ``RepTate.exe``. 
 
 `RepTate for Mac (OS X 10.11 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1>`_ 
     Drag-and-drop the RepTate application in your Applications folder. 
@@ -43,8 +43,8 @@ Executive summary
 -----------------
 
 #. Install Python 3.6 or later via `Minconda <https://conda.io/miniconda.html>`_ (or your favourite method)
-#. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd) via ``conda install <package>``
-#. Install Git (version control system)  via ``conda install git``
+#. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd) via ``conda install <package>`` (or via ``pip install <package>`` if you are using a different Python distribution).
+#. Install Git (version control system)  via ``conda install git`` (or a native implementation of git for your operating system).
 #. Clone RepTate's repository via ``git clone https://github.com/jorge-ramirez-upm/RepTate.git``
 #. Try launching RepTate application: ``cd RepTate`` then again ``cd RepTate`` then ``python RepTate.py``
 #. From time to time, check for updates via ``git pull``
@@ -59,7 +59,7 @@ Install Python 3
 
 To install Python 3, you can either install `Minconda <https://conda.io/miniconda.html>`_ (requires 300 MB of disk space)
 or install the full `Anaconda <https://www.anaconda.com/download/>`_ Python (requires 3 GB of disk space). Note that depending on your
-operating system, other methods, not covered here, are available.
+operating system, other methods, not covered here, are available. Another convenient distribution for Windows is `WinPython <https://winpython.github.io/>`.
 
 We recommend you to install the former, `Minconda <https://conda.io/miniconda.html>`_, that contains Python only (and a small number of useful packages) and to 
 install "manually" the extra packages that RepTate needs, as explained below.  
@@ -111,7 +111,7 @@ For example, something like::
 
     ModuleNotFoundError: No module named 'openpyxl'
 
-tells you that you need to install the ``openpyxl`` package.
+tells you that you need to install the ``openpyxl`` package. Note that, in other Python distributions, the standard command to install packages is ``pip``. 
 
 
 Install Git
@@ -121,6 +121,8 @@ Git is a free and open source distributed version control system. We use it
 for the development of RepTate. To install Git, do::
 
     conda install git
+
+Alternatively, you can install a binary implementation of Git for your Operating System.
 
 "Clone" RepTate repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
