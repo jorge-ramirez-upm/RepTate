@@ -94,6 +94,19 @@ class BaseApplicationLAOS:
 
         # VIEWS
         # set the views that can be selected in the view combobox
+        self.views['sigma(t),gamma(t)'] = View(
+            name='sigma-gamma(t)',
+            description='Stress and strain as a function of time',
+            x_label='$t$',
+            y_label='$\sigma(t),\gamma(t)$',
+            x_units='s',
+            y_units='Pa, -',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sigmatgammat,
+            n=2,
+            snames=['$\sigma(t)$', '$\gamma(t)$'])
+
         self.views['sigma(gamma)'] = View(
             name='sigma(gamma)',
             description='Stress as a function of strain',
@@ -107,18 +120,57 @@ class BaseApplicationLAOS:
             n=1,
             snames=['$\sigma(\gamma)$'])
 
-        self.views['sigma(t),gamma(t)'] = View(
-            name='sigma-gamma(t)',
-            description='Stress and strain as a function of time',
-            x_label='$t$',
-            y_label='$\sigma(t),\gamma(t)$',
-            x_units='s',
-            y_units='Pa, -',
+        self.views['FFT spectrum'] = View(
+            name='FFT spectrum',
+            description='Full Fast Fourier Transform spectrum',
+            x_label='$\omega$',
+            y_label='$|\sigma^*_n|/|\sigma^*_1|$',
+            x_units='rad.s$^{-1}$',
+            y_units='-',
+            log_x=False,
+            log_y=True,
+            view_proc=self.view_fftspectrum,
+            n=1,
+            snames=['FFT'])
+
+        self.views['sigma(gammadot)'] = View(
+            name='sigma(gammadot)',
+            description='Stress as a function of strain-rate',
+            x_label='$\dot\gamma(t)$',
+            y_label='$\sigma(t)$',
+            x_units='s$^{-1}$',
+            y_units='Pa',
             log_x=False,
             log_y=False,
-            view_proc=self.view_sigmatgammat,
-            n=2,
-            snames=['$\sigma(t)$', '$\gamma(t)$'])
+            view_proc=self.view_sigmagammadot,
+            n=1,
+            snames=['$\sigma(\dot\gamma)$'])
+
+        self.views['Cheb elastic'] = View(
+            name='Cheb elastic',
+            description='Chebyshev Coeff tau_elastic',
+            x_label='Polynomial order, $n$',
+            y_label='$e_n$',
+            x_units='-',
+            y_units='Pa',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_chebelastic,
+            n=1,
+            snames=['chebelastic'])
+
+        self.views['Cheb viscous'] = View(
+            name='Cheb viscous',
+            description='Chebyshev Coeff tau_viscous',
+            x_label='Polynomial order, $n$',
+            y_label='$v_n$',
+            x_units='-',
+            y_units='Pa.s',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_chebviscous,
+            n=1,
+            snames=['chebviscous'])
 
         self.views['sigma(t)'] = View(
             name='sigma(t)',
@@ -260,6 +312,109 @@ class BaseApplicationLAOS:
         #     x[:, 1] = np.linspace(1, dt.num_rows, dt.num_rows)
         return x, y, True
 
+    def view_sigmagammadot(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,3])>0
+            gdot=dt.data[pickindex, 3]
+            tau=dt.data[pickindex, 4]
+            ndata=len(gdot)
+            x = np.zeros((ndata, 1))
+            y = np.zeros((ndata, 1))
+            x[:, 0] = gdot
+            y[:, 0] = tau
+        else:
+            x = np.zeros((0,1))
+            y = np.zeros((0,1))
+        return x, y, True
+
+    def view_fftspectrum(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,5])>0
+            w=dt.data[pickindex, 5]
+            Gn=dt.data[pickindex, 6]
+            ndata=len(w)
+            x = np.zeros((ndata, 1))
+            y = np.zeros((ndata, 1))
+            x[:, 0] = w
+            y[:, 0] = Gn
+        else:
+            x = np.zeros((0,1))
+            y = np.zeros((0,1))
+        return x, y, True
+
+    def view_chebelastic(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,7])>0
+            n=dt.data[pickindex, 7]
+            en=dt.data[pickindex, 8]
+            ndata=len(n)
+            x = np.zeros((ndata, 1))
+            y = np.zeros((ndata, 1))
+            x[:, 0] = n
+            y[:, 0] = en
+        else:
+            x = np.zeros((0,1))
+            y = np.zeros((0,1))
+        return x, y, True
+
+    def view_chebviscous(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,7])>0
+            n=dt.data[pickindex, 7]
+            vn=dt.data[pickindex, 9]
+            ndata=len(n)
+            x = np.zeros((ndata, 1))
+            y = np.zeros((ndata, 1))
+            x[:, 0] = n
+            y[:, 0] = vn
+        else:
+            x = np.zeros((0,1))
+            y = np.zeros((0,1))
+        return x, y, True
 
 class CLApplicationLAOS(BaseApplicationLAOS, Application):
     """[summary]

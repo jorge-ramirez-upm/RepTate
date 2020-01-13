@@ -295,7 +295,7 @@ class BaseTheoryMITlaos:
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
+        tt.num_columns = 10
 
         time_uneven  = ft.data[:,0]  # raw time
         gamma_uneven = ft.data[:,1]  # raw strain
@@ -385,6 +385,7 @@ class BaseTheoryMITlaos:
             # perform cycle trimming as usual
             [gam, tau, Ncycles, istart, istop] = self.cycletrim_MITlaos(gamma, tauxy)
             time = time[istart:istop]
+            self.Qprint('Ncycles = %d'%Ncycles)
 
         n = self.parameters['n'].value
         self.maxharmonic = 0
@@ -551,7 +552,21 @@ class BaseTheoryMITlaos:
         tt.data[:, 1] = gam
         tt.data[:, 2] = tau
 
+        tt.data[0:len(gamdot_recon), 3] = gamdot_recon # gamdot_recon interp1d
+        tt.data[0:len(tau_recon), 4] = tau_recon # tau_recon interp1d
 
+        dw = w/Ncycles
+        wn = np.linspace(dw,N*dw,N)
+        if N > 25*Ncycles: # display a maximum of 25 harmonics, so that plot is not too "squished"
+            wn_end = 25*Ncycles
+        else:
+            wn_end = length(wn)
+        tt.data[0:wn_end, 5] = wn[0:wn_end]
+        tt.data[0:wn_end, 6] = G_compNORM[0:wn_end]
+
+        tt.data[0:m, 7] = np.linspace(1,m,m)
+        tt.data[0:m, 8] = e_n[0:m]
+        tt.data[0:m, 9] = v_n[0:m]
 
 class CLTheoryMITlaos(BaseTheoryMITlaos, Theory):
     """[summary]
