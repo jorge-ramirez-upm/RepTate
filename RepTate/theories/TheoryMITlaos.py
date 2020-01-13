@@ -189,11 +189,11 @@ class BaseTheoryMITlaos:
             if (lgth/2 != np.round(lgth/2)):   # Check if lgth is odd
                 istart = d_zero[0]
                 istop  = d_zero[-1]-1
-                N = (lgth - 1)/2
+                N = int((lgth - 1)/2)
             else:
                 istart = d_zero[0]
-                istop  = d_zero[lgth-2] - 1;
-                N = (lgth - 2)/2;
+                istop  = d_zero[lgth-2]
+                N = int((lgth - 2)/2)
 
         istrain = gamma[istart:istop]
         istress = tau[istart:istop]
@@ -219,14 +219,14 @@ class BaseTheoryMITlaos:
         if int(len(f)/2) != len(f)/2:
             # trim last data point to force even number of data points
             # f MUST HAVE EVEN NUMBER OF DATA POINTS!
-            f = f[0:len(f)-2]
+            f = f[0:len(f)-1]
 
         n=len(f)
         N=int(n/2)       # N will be the number of harmonics to consider
 
         Fn = np.fft.fft(f)
         # rearrange values such that: Fn_new = [ high < low | low > high ]
-        Fn_new = np.array([np.conj(Fn[N])]+Fn[N+1:].tolist()+Fn[1:N].tolist())
+        Fn_new = np.array([np.conj(Fn[N])]+Fn[N+1:].tolist()+Fn[0:N+1].tolist())
         Fn_new /= n  # scale results
 
         #A0 = Fn_new[N]
@@ -235,6 +235,48 @@ class BaseTheoryMITlaos:
         Bn = -2*np.imag(Fn_new[N+1:])   # sine terms
 
         return A0, An, Bn
+
+    def chebyshev_decompose_MITlaos(self, F,N,X=None):
+        """
+        Find Chebyshev Polynomial components of input data vector:
+        f = A0*T0(x) + A1*T1(x) + A2*T2(x) + ...
+
+        [An]= chebyshev_decompose(F,N,X)
+                *Assumes F occupies the domain [-1 : +1] 
+        with an arbitrary number of data points
+        Uses trapz.m to calculate integrals
+              INPUT VARIABLES
+              F: vector of data, in domain [-1:1]
+              N: degree of desired Legendre Polynomial decomposition
+              X: Range points associated with F
+              OUTPUT VARIABLE
+              An: vector of Chebyshev coefficients
+                  An(i) = A_{i-1}
+        """
+        M=len(F)
+        if X is None: # Make X (input range) linear spaced and same length as F
+            X=np.linspace(-1,1,M)
+            
+        An = np.zeros(N) # initialize vector of Chebyshev coefficients
+
+        #T = gallery('chebvand',X);  # Matrix of Chebyshev polynomials evaluated at X
+                                    #T(i,:) is (i-1)order polynomial
+        T = np.zeros((M,M))
+        T = np.transpose(np.polynomial.chebyshev.chebvander(X,M-1))
+        #for i in range(M):
+        #    T[i,:] = np.transpose(np.polynomial.chebyshev.chebvander(X,i))
+
+        # COORDINATE TRANSFORM TECHNIQUE: NO WEIGHTING NECESSARY
+
+        THETA = np.arcsin(X)
+
+        # 0th order polynomial has different front factor
+        An[0] = 1/np.pi * np.trapz(F, THETA)
+        # Remaining coefficients use same front factor
+        for i in range (1,N):
+            An[i] = 2/np.pi * np.trapz(T[i,:]*F, THETA)
+        
+        return An
 
     def do_error(self, line):
         self.Qprint('No error calculated in this theory')
@@ -361,13 +403,13 @@ class BaseTheoryMITlaos:
         gA0, gAnS, gBnS = self.FTtrig_MITlaos(gam)
 
         gam_0 = np.sqrt( gBnS[Ncycles-1]**2 + gAnS[Ncycles-1]**2 )  # acknowledge possible phase shift, but neglect h.o.t.
-        delta = np.atan( gAnS[Ncycles-1] / gBnS[Ncycles-1])         # raw signal phase shift
+        delta = np.arctan( gAnS[Ncycles-1] / gBnS[Ncycles-1])         # raw signal phase shift
 
         An = np.zeros(len(AnS))
         Bn = np.zeros(len(BnS))
         for q in range(len(AnS)):  # Create NOT SHIFTED Fourier coefficients
-            An[q] = AnS[q]*np.cos(q*delta/Ncycles) - BnS[q]*np.sin(q*delta/Ncycles)
-            Bn[q] = BnS[q]*np.cos(q*delta/Ncycles) + AnS[q]*np.sin(q*delta/Ncycles)
+            An[q] = AnS[q]*np.cos((q+1)*delta/Ncycles) - BnS[q]*np.sin((q+1)*delta/Ncycles)
+            Bn[q] = BnS[q]*np.cos((q+1)*delta/Ncycles) + AnS[q]*np.sin((q+1)*delta/Ncycles)
 
         if abs(An[Ncycles-1]) > abs(Bn[Ncycles-1]):
             if An[Ncycles-1] < 0:
@@ -378,7 +420,8 @@ class BaseTheoryMITlaos:
                 An = -An
                 Bn = -Bn
 
-        PPC=4*self.parameters['pq'] #Points Per Cycle
+        PPQC = self.parameters['pq'].value
+        PPC=4*PPQC #Points Per Cycle
         TP=6*PPQC+1 # Total Points: Points for Three Half-Cycles plus one for overlap
 
         gam_recon=np.zeros(PPC)
@@ -386,150 +429,121 @@ class BaseTheoryMITlaos:
             gam_recon[q] = gam_0*np.sin(2*np.pi*q/PPC) # Reconstruct WITHOUT phase shift
 
         # make gam_recon 1.5 cycles with 1 point overlap
-        gam_recon = np.array(gam_recon.tolist() + gam_recon[:2*PPQC].tolist())
+        gam_recon = np.array(gam_recon.tolist() + gam_recon[:2*PPQC+1].tolist())
 
         # w (omega) is currently a MANUAL input
         # strain-rate is equal to omega*strain-shifted-1/4-cycle
         w = float(f.file_parameters["omega"])
-        gamdot_recon=w*gam_recon[PPQC:PPQC+PPC-1]  # One cylce of gamdot
-        gamdot_recon = np.array(gamdot_recon.tolist() + gamdot_recon[:2*PPQC].tolist()) # make 1.5 cycles
+        gamdot_recon=w*gam_recon[PPQC:PPQC+PPC]  # One cylce of gamdot
+        gamdot_recon = np.array(gamdot_recon.tolist() + gamdot_recon[:2*PPQC+1].tolist()) # make 1.5 cycles
 
+        tau_recon = np.zeros(PPC) # initialize tau_recon   (m harmonics included)
+        FTtau_e = np.zeros(PPC+1)
+        FTtau_v = np.zeros(PPC+1)
 
-        # HERE!!!
-        tau_recon = zeros(PPC,1); # initialize tau_recon   (m harmonics included)
-        FTtau_e = zeros(PPC,1);
-        FTtau_v = zeros(PPC,1);
+        tau_recon1 = np.zeros(PPC)  # initialize tau_recon1 (1st harmonic only)
+        tau_recon3 = np.zeros(PPC)  # initialize tau_recon3 (1st & 3rd Harmonics)
+        tau_e_3    = np.zeros(PPC+1)  # "elastic" stress, from 1st & 3rd Harmonics
+        tau_v_3    = np.zeros(PPC+1)  # "viscous" stress, from 1st & 3rd Harmonics
 
-        tau_recon1 = zeros(PPC,1); # initialize tau_recon1 (1st harmonic only)
-        tau_recon3 = zeros(PPC,1); # initialize tau_recon3 (1st & 3rd Harmonics)
-        tau_e_3    = zeros(PPC,1); # "elastic" stress, from 1st & 3rd Harmonics
-        tau_v_3    = zeros(PPC,1); # "viscous" stress, from 1st & 3rd Harmonics
+        m = self.parameters['n'].value
+        for q in range(PPC):  # sum for each point in time for 1 full cycle, no overlap
+            for p in range(1,m+1,2): # m:total number of harmonics to consider; sum over ODD harmonics only
+                tau_recon[q] += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC) + An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
+                FTtau_e[q]   += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC)
+                FTtau_v[q]   += An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
 
-        for q=1:PPC # sum for each point in time for 1 full cycle, no overlap
-            for p=1:2:m # m:total number of harmonics to consider
-                        # sum over ODD harmonics only
-                tau_recon(q) = tau_recon(q) + Bn(Ncycles*p)*sin(p*2*pi*(q-1)/PPC) ...
-                    + An(Ncycles*p)*cos(p*2*pi*(q-1)/PPC);
-                
-                FTtau_e(q)   = FTtau_e(q) + Bn(Ncycles*p)*sin(p*2*pi*(q-1)/PPC);
-                FTtau_v(q)   = FTtau_v(q) + An(Ncycles*p)*cos(p*2*pi*(q-1)/PPC);
+            for p in range(1, 4):  # Now just the first 3 harmonics
+                tau_recon3[q] += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*(q+1)/PPC) + An[Ncycles*p-1]*np.cos(p*2*np.pi*(q+1)/PPC)
 
-            end
-            for p=1:3 # Now just the first 3 harmonics
-                tau_recon3(q) = tau_recon3(q) + Bn(Ncycles*p)*sin(p*2*pi*(q)/PPC) ...
-                    + An(Ncycles*p)*cos(p*2*pi*(q)/PPC);
-            end
         #RHE, added June 15, 2007, trying to use FT to reconstruct "Chebyshev"
         #curves
-            for p=1 #Now just the first harmonic
-                tau_recon1(q) = tau_recon1(q) + Bn(Ncycles*p)*sin(p*2*pi*(q-1)/PPC) ...
-                    + An(Ncycles*p)*cos(p*2*pi*(q-1)/PPC);
-            end
-            for p=1:2:3 #Harmonics 1 & 3, for "elastic" stress
-                tau_e_3(q) = tau_e_3(q) + Bn(Ncycles*p)*sin(p*2*pi*(q-1)/PPC);
-            end
-            for p=1:2:3 #Harmonics 1 & 3, for "elastic" stress
-                tau_v_3(q) = tau_v_3(q) + An(Ncycles*p)*cos(p*2*pi*(q-1)/PPC);
-            end
-        end
-
+            for p in range(1,2): #Now just the first harmonic
+                tau_recon1[q] += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC) + An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
+            for p in range(1,4,2): #Harmonics 1 & 3, for "elastic" stress
+                tau_e_3[q] += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC)
+            for p in range(1,4,2): #Harmonics 1 & 3, for "elastic" stress
+                tau_v_3[q] += An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
 
         #make FTtau_* have one point overlap
-        FTtau_e(PPC+1,1)=FTtau_e(1);
-        FTtau_v(PPC+1,1)=FTtau_v(1);
-        tau_e_3(PPC+1,1)=tau_e_3(1);
-        tau_v_3(PPC+1,1)=tau_v_3(1);
+        FTtau_e[PPC]=FTtau_e[0]
+        FTtau_v[PPC]=FTtau_v[0]
+        tau_e_3[PPC]=tau_e_3[0]
+        tau_v_3[PPC]=tau_v_3[0]
         #make tau_recon* 1.5 cycles with 1 point overlap
-        tau_recon = [tau_recon; tau_recon(1:2*PPQC+1)];
-        tau_recon3 = [tau_recon3; tau_recon3(1:2*PPQC+1)];
+        tau_recon = np.array(tau_recon.tolist() + tau_recon[0:2*PPQC+1].tolist())
+        tau_recon3 = np.array(tau_recon3.tolist() + tau_recon3[0:2*PPQC+1].tolist())
 
-        tau_recon_Ncycles = [];
-        for r=1:Ncycles
-            tau_recon_Ncycles = [tau_recon_Ncycles; tau_recon(1:PPC)];
-        end
+        tau_recon_Ncycles = np.tile(tau_recon[:PPC], Ncycles)
+        tau_recon_max = np.max(np.abs(tau_recon)); # 080422 RHE, for VEparameters data output
 
-        tau_recon_max = max(abs(tau_recon)); # 080422 RHE, for VEparameters data output
+        Xe=gam_recon[3*PPQC:5*PPQC+1]/gam_0 # gam_recon is 1.5 cycles
+        Xv=gamdot_recon[2*PPQC:4*PPQC+1]/(gam_0*w) # gamdot_recon is 1.5 cycles
+        # Create corresponding input function from Geo. Interp. decomposition
+        fe = np.array(FTtau_e[3*PPQC:4*PPQC].tolist() + FTtau_e[:PPQC+1].tolist()) # tau_e is 1 cycle
+        fv = FTtau_v[2*PPQC:4*PPQC+1] # tau_v is 1 cycle
 
+        fe3 = np.array(tau_e_3[3*PPQC:4*PPQC].tolist() + tau_e_3[:PPQC+1].tolist()) # tau_e is 1 cycle
+        fv3 = tau_v_3[2*PPQC:4*PPQC+1] # tau_v is 1 cycle
 
-Xe=gam_recon(3*PPQC+1:5*PPQC+1)/gam_0; %gam_recon is 1.5 cycles
-Xv=gamdot_recon(2*PPQC+1:4*PPQC+1)/(gam_0*w); %gamdot_recon is 1.5 cycles
-% Create corresponding input function from Geo. Interp. decomposition
-fe=[FTtau_e(3*PPQC+1:4*PPQC); FTtau_e(1:PPQC+1)]; %tau_e is 1 cycle
-fv=FTtau_v(2*PPQC+1:4*PPQC+1); %tau_v is 1 cycle
+        An_e = self.chebyshev_decompose_MITlaos(fe,15,Xe)
+        An_v = self.chebyshev_decompose_MITlaos(fv,15,Xv)
 
-fe3 =[tau_e_3(3*PPQC+1:4*PPQC); tau_e_3(1:PPQC+1)]; %tau_e is 1 cycle
-fv3 = tau_v_3(2*PPQC+1:4*PPQC+1); %tau_v is 1 cycle
+        if Bn[Ncycles-1]>0:  # ensure that G_1' is positive
+            Gp = Bn/gam_0    # G' from sine terms
+        else:
+            Gp = -Bn/gam_0
 
- An_e = chebyshev_decompose_MITlaos(fe,15,Xe);
- An_v = chebyshev_decompose_MITlaos(fv,15,Xv);
+        if An[Ncycles-1]>0:  # ensure that G_1'' is positive
+            Gpp = An/gam_0   # G'' from cosine terms
+        else: 
+            Gpp = -An/gam_0
 
-if Bn(Ncycles)>0  %ensure that G_1' is positive
-    Gp = Bn/gam_0;  %G' from sine terms
-else
-    Gp = -Bn/gam_0;
-end
+        N=len(An) # number of available harmonics
+        G_complex = np.zeros(N)
+        G_compNORM = np.zeros(N)
+        for j in range(N):
+            G_complex[j]=(Gp[j]**2+Gpp[j]**2)**0.5
+        for j in range(N):
+            G_compNORM[j] = G_complex[j]/G_complex[Ncycles-1] # max intensity occurs at Ncycles frequency
 
-if An(Ncycles) > 0  %ensure that G_1'' is positive
-    Gpp = An/gam_0; %G'' from cosine terms
-else 
-    Gpp = -An/gam_0;
-end
+        dn = 1/Ncycles
+        # n = (dn:dn:maxharmonic);  % FTharmonicGUI_MITlaos.m calculation (but I changed it 080422 RHE)
+        n = np.linspace(dn, dn*len(Gp), len(Gp)) # I do NOT want to truncate at the largest odd, integer harmonic
 
-N=length(An); % number of available harmonics
-G_complex = zeros(N,1);
-G_compNORM = zeros(N,1);
-for j=1:N
-    G_complex(j)=(Gp(j)^2+Gpp(j)^2)^0.5;
-end
-for j=1:N
-    G_compNORM(j) = G_complex(j)/G_complex(Ncycles); %max intensity occurs at Ncycles frequency
-end
+        # Chebyshev coefficients, found from FT results
+        e_n = np.zeros(int(np.floor(len(Gp)/Ncycles)))
+        # contains e1, e2, e3, e4, ...
+        for o in range(0,int(np.floor(len(Gp)/Ncycles)),2):
+            e_n[o] = Gp[Ncycles*(o+1)-1]*(-1)**(o/2)  # only works for ODD Chebyshevs, so I leave even Chebyshevs = 0;
 
-dn = 1/Ncycles;
-% n = (dn:dn:maxharmonic);  % FTharmonicGUI_MITlaos.m calculation (but I changed it 080422 RHE)
-n = (dn:dn:dn*length(Gp));  % I do NOT want to truncate at the largest odd, integer harmonic
+        v_n = np.zeros(int(np.floor(len(Gp)/Ncycles)))
+        for o in range(0,int(np.floor(len(Gp)/Ncycles)),2):
+            v_n[o] = Gpp[Ncycles*(o+1)-1]/w   
+            # I'm suppressing output of even Chebyshevs, since they should all = 0
+            # due to reconstruction with only ODD FT harmonics
+            # See An_e and An_v for the true polynomial decomposition of the raw
+            # tau_elastic signal (but if even harmonics exist it's due due to
+            #  noise in numerical calculation RHE
 
-% Chebyshev coefficients, found from FT results
-e_n(1:floor(length(Gp)/Ncycles)) = zeros;
-%contains e1, e2, e3, e4, ...
-for o = 1:2:floor(length(Gp)/Ncycles)
-    e_n(o) = Gp(Ncycles*o)*(-1)^((o-1)/2);  %only works for ODD Chebyshevs, so I leave even Chebyshevs = 0;
-end
+        # 080422 RHE - Also determine the n-spectrum for the integer harmonics
+        #n_integer =   (1:1:length(e_n));
 
-
-v_n(1:floor(length(Gp)/Ncycles)) = zeros;
-for o = 1:2:floor(length(Gpp)/Ncycles)
-    v_n(o) = Gpp(Ncycles*o)/w;   
-    %I'm suppressing output of even Chebyshevs, since they should all = 0
-    %due to reconstruction with only ODD FT harmonics
-    %  See An_e and An_v for the true polynomial decomposition of the raw
-    %  tau_elastic signal (but if even harmonics exist it's due due to
-    %  noise in numerical calculation RHE
-end
-
-% 080422 RHE - Also determine the n-spectrum for the integer harmonics
-n_integer = (1:1:length(e_n));
-
-M=0;
-Lo=0;
-EtaM = 0;
-EtaL = 0;
-for p=1:2:m
-    M = M + p*Gp(Ncycles*p);
-    Lo = Lo + Gp(Ncycles*p)*(-1)^((p-1)/2);
-    
-    EtaM = EtaM + (1/w)*p*Gpp(Ncycles*p)*(-1)^((p-1)/2);
-    EtaL = EtaL + (1/w)*Gpp(Ncycles*p);
-end
-%M
-L=Lo;
-
-S=L/M;
-EtaT=EtaL/EtaM;
-
-S2=(L-M)/L;
-
-
+        M=0
+        Lo=0
+        EtaM = 0
+        EtaL = 0
+        for p in range(1,m+1,2):
+            M += p*Gp[Ncycles*p-1]
+            Lo += Gp[Ncycles*p-1]*(-1)**((p-1)/2)
+            
+            EtaM += (1/w)*p*Gpp[Ncycles*p-1]*(-1)**((p-1)/2)
+            EtaL += (1/w)*Gpp[Ncycles*p-1]
+        # M
+        L=Lo
+        S=L/M
+        EtaT=EtaL/EtaM
+        S2=(L-M)/L
 
         tt.num_rows = len(time)
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
