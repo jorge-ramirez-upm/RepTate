@@ -113,7 +113,7 @@
 <span class="kn">import</span> <span class="nn">schwarzl_ctypes_helper</span> <span class="k">as</span> <span class="nn">sch</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log10</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
 
-<div class="viewcode-block" id="ApplicationGt"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.ApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">ApplicationGt</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ApplicationGt"><a class="viewcode-back" href="../code.html#ApplicationGt.ApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">ApplicationGt</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application to Analyze Stress Relaxation Data</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -139,7 +139,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseApplicationGt"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.BaseApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">BaseApplicationGt</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseApplicationGt"><a class="viewcode-back" href="../code.html#ApplicationGt.BaseApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">BaseApplicationGt</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -260,7 +260,7 @@
         <span class="c1">#set the current view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseApplicationGt.viewGt"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.BaseApplicationGt.viewGt">[docs]</a>    <span class="k">def</span> <span class="nf">viewGt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationGt.viewGt"><a class="viewcode-back" href="../code.html#ApplicationGt.BaseApplicationGt.viewGt">[docs]</a>    <span class="k">def</span> <span class="nf">viewGt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -275,7 +275,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">gamma</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationGt.viewLogGt"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.BaseApplicationGt.viewLogGt">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogGt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationGt.viewLogGt"><a class="viewcode-back" href="../code.html#ApplicationGt.BaseApplicationGt.viewLogGt">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogGt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -290,7 +290,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">gamma</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationGt.viewSchwarzl_Gt"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt">[docs]</a>    <span class="k">def</span> <span class="nf">viewSchwarzl_Gt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationGt.viewSchwarzl_Gt"><a class="viewcode-back" href="../code.html#ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt">[docs]</a>    <span class="k">def</span> <span class="nf">viewSchwarzl_Gt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Schwarzl transformation: numerical calculation of the storage modulus :math:`G&#39;(\\omega)` and loss modulus </span>
 <span class="sd">        :math:`G&#39;&#39;(\\omega)` from the relaxation modulus :math:`G(t)` </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -315,7 +315,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Gpp</span><span class="p">[:]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationGt.viewiRheo"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.BaseApplicationGt.viewiRheo">[docs]</a>    <span class="k">def</span> <span class="nf">viewiRheo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationGt.viewiRheo"><a class="viewcode-back" href="../code.html#ApplicationGt.BaseApplicationGt.viewiRheo">[docs]</a>    <span class="k">def</span> <span class="nf">viewiRheo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G&#39;(\\omega)` and loss modulus :math:`G&#39;&#39;(\\omega)` (no oversamplig).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data_x</span><span class="p">,</span> <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_xy_data_in_xrange</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
@@ -364,7 +364,7 @@
 
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationGt.viewiRheoOver"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.BaseApplicationGt.viewiRheoOver">[docs]</a>    <span class="k">def</span> <span class="nf">viewiRheoOver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationGt.viewiRheoOver"><a class="viewcode-back" href="../code.html#ApplicationGt.BaseApplicationGt.viewiRheoOver">[docs]</a>    <span class="k">def</span> <span class="nf">viewiRheoOver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G&#39;(\\omega)` and loss modulus :math:`G&#39;&#39;(\\omega)` (with user selected oversamplig).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data_x</span><span class="p">,</span> <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_xy_data_in_xrange</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
@@ -418,7 +418,7 @@
                 <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">xdata</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">xdata</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span> <span class="o">/</span> <span class="n">w</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationGt.get_xy_data_in_xrange"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.BaseApplicationGt.get_xy_data_in_xrange">[docs]</a>    <span class="k">def</span> <span class="nf">get_xy_data_in_xrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationGt.get_xy_data_in_xrange"><a class="viewcode-back" href="../code.html#ApplicationGt.BaseApplicationGt.get_xy_data_in_xrange">[docs]</a>    <span class="k">def</span> <span class="nf">get_xy_data_in_xrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the x and y data that with t in [self.tmin_view, self.tmax_view]&quot;&quot;&quot;</span>
         <span class="c1">#get indices of data in xrange</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmin_view</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax_view</span><span class="p">))</span>
@@ -426,7 +426,7 @@
         <span class="n">y_in_range</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">][</span><span class="n">args</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x_in_range</span><span class="p">,</span> <span class="n">y_in_range</span></div></div>
 
-<div class="viewcode-block" id="CLApplicationGt"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.CLApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">CLApplicationGt</span><span class="p">(</span><span class="n">BaseApplicationGt</span><span class="p">,</span> <span class="n">Application</span><span class="p">):</span>
+<div class="viewcode-block" id="CLApplicationGt"><a class="viewcode-back" href="../code.html#ApplicationGt.CLApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">CLApplicationGt</span><span class="p">(</span><span class="n">BaseApplicationGt</span><span class="p">,</span> <span class="n">Application</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -442,14 +442,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
-<div class="viewcode-block" id="CLApplicationGt.show_sb_oversampling"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.CLApplicationGt.show_sb_oversampling">[docs]</a>    <span class="k">def</span> <span class="nf">show_sb_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CLApplicationGt.show_sb_oversampling"><a class="viewcode-back" href="../code.html#ApplicationGt.CLApplicationGt.show_sb_oversampling">[docs]</a>    <span class="k">def</span> <span class="nf">show_sb_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="CLApplicationGt.hide_sb_oversampling"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.CLApplicationGt.hide_sb_oversampling">[docs]</a>    <span class="k">def</span> <span class="nf">hide_sb_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CLApplicationGt.hide_sb_oversampling"><a class="viewcode-back" href="../code.html#ApplicationGt.CLApplicationGt.hide_sb_oversampling">[docs]</a>    <span class="k">def</span> <span class="nf">hide_sb_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="GUIApplicationGt"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">GUIApplicationGt</span><span class="p">(</span><span class="n">BaseApplicationGt</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt">[docs]</a><span class="k">class</span> <span class="nc">GUIApplicationGt</span><span class="p">(</span><span class="n">BaseApplicationGt</span><span class="p">,</span> <span class="n">QApplicationWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -471,7 +471,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_xrange_widget_view</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GUIApplicationGt.add_oversampling_widget"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.add_oversampling_widget">[docs]</a>    <span class="k">def</span> <span class="nf">add_oversampling_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.add_oversampling_widget"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.add_oversampling_widget">[docs]</a>    <span class="k">def</span> <span class="nf">add_oversampling_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add spinbox for the oversampling ratio&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MIN_OVER</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_OVER</span><span class="p">)</span>
@@ -480,7 +480,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">viewLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUIApplicationGt.add_xrange_widget_view"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.add_xrange_widget_view">[docs]</a>    <span class="k">def</span> <span class="nf">add_xrange_widget_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.add_xrange_widget_view"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.add_xrange_widget_view">[docs]</a>    <span class="k">def</span> <span class="nf">add_xrange_widget_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add widgets below the view combobox to select the </span>
 <span class="sd">        x-range applied to view transformation&quot;&quot;&quot;</span>
         <span class="n">hlayout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
@@ -514,7 +514,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">hlayout_view</span> <span class="o">=</span> <span class="n">hlayout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ViewDataTheoryLayout</span><span class="o">.</span><span class="n">insertLayout</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hlayout_view</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUIApplicationGt.change_xmin"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.change_xmin">[docs]</a>    <span class="k">def</span> <span class="nf">change_xmin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.change_xmin"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.change_xmin">[docs]</a>    <span class="k">def</span> <span class="nf">change_xmin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the value of t_min&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="s2">&quot;-np.inf -inf&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tmin_view</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
@@ -524,7 +524,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="GUIApplicationGt.change_xmax"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.change_xmax">[docs]</a>    <span class="k">def</span> <span class="nf">change_xmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.change_xmax"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.change_xmax">[docs]</a>    <span class="k">def</span> <span class="nf">change_xmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the value of t_max&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="s2">&quot;np.inf inf&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tmax_view</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
@@ -534,16 +534,16 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="GUIApplicationGt.change_oversampling"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.change_oversampling">[docs]</a>    <span class="k">def</span> <span class="nf">change_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.change_oversampling"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.change_oversampling">[docs]</a>    <span class="k">def</span> <span class="nf">change_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change the value of the oversampling ratio.</span>
 <span class="sd">        Called when the spinbox value is changed&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">OVER</span> <span class="o">=</span> <span class="n">val</span></div>
 
-<div class="viewcode-block" id="GUIApplicationGt.set_oversampling_widget_visible"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.set_oversampling_widget_visible">[docs]</a>    <span class="k">def</span> <span class="nf">set_oversampling_widget_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.set_oversampling_widget_visible"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.set_oversampling_widget_visible">[docs]</a>    <span class="k">def</span> <span class="nf">set_oversampling_widget_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show/Hide the extra widget &quot;sampling ratio&quot; &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sb_oversampling</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUIApplicationGt.set_xrange_widgets_view_visible"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.set_xrange_widgets_view_visible">[docs]</a>    <span class="k">def</span> <span class="nf">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.set_xrange_widgets_view_visible"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.set_xrange_widgets_view_visible">[docs]</a>    <span class="k">def</span> <span class="nf">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show/Hide the extra widgets for xrange selection&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xmin_label</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
@@ -551,7 +551,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">xmin_view</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xmax_view</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="GUIApplicationGt.set_view_tools"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationGt.GUIApplicationGt.set_view_tools">[docs]</a>    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
+<div class="viewcode-block" id="GUIApplicationGt.set_view_tools"><a class="viewcode-back" href="../code.html#ApplicationGt.GUIApplicationGt.set_view_tools">[docs]</a>    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show/Hide extra view widgets depending on the current view&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">view_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;i-Rheo G&#39;,G&#39;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;Schwarzl G&#39;,G&#39;&#39;&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_xrange_widgets_view_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -587,7 +587,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

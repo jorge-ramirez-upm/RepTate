@@ -136,7 +136,7 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
         tool_tip = 'XY'  # text that appear on hover
         self.actionXY = QAction(icon, tool_tip, self)
         #insert the new button before the "MWD" button
-        self.toolBar.insertAction(self.actionMWD, self.actionXY)
+        self.toolBarApps.insertAction(self.actionMWD, self.actionXY)
 
 #.  The new button has been successfully inserted into the application tool bar.
     However, if we click on it, nothing happens because it is not linked to any action.

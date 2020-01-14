@@ -107,7 +107,7 @@
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>Full quantitative theory for the linear dynamics of entangled linear polymers, based on the tube model and considering contour length fluctuations, constraint release and longitudinal stress relaxation along the tube.</p>
 <p>The parameter <span class="math notranslate nohighlight">\(c_\nu\)</span> is related to the number of chains that are needed to create one entanglement. <span class="math notranslate nohighlight">\(c_\nu=0\)</span> means there is no constraint release. The recommended value is <span class="math notranslate nohighlight">\(c_\nu=0.1\)</span>. This value gives slightly worse fitting than <span class="math notranslate nohighlight">\(c_\nu=1\)</span>, but is more consistent with start-up shear experiments.</p>
-<p>For full details about how the predictions are calculated, refer to <a class="reference internal" href="theory.html#lm-likhtman2002" id="id1">[1]</a>. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of <span class="math notranslate nohighlight">\(Z=M_w/M_e\)</span> = 2, 3, 4 … 299, 300, 305, 310, … 1000, and <span class="math notranslate nohighlight">\(c_\nu\)</span> = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span> in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span>, the prediction is interpolated.</p>
+<p>For full details about how the predictions are calculated, refer to <a class="bibtex reference internal" href="theory.html#lm-likhtman2002" id="id1">[1]</a>. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of <span class="math notranslate nohighlight">\(Z=M_w/M_e\)</span> = 2, 3, 4 … 299, 300, 305, 310, … 1000, and <span class="math notranslate nohighlight">\(c_\nu\)</span> = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span> in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span>, the prediction is interpolated.</p>
 <p>After the calculation is done, the values of the number of entanglements <span class="math notranslate nohighlight">\(Z\)</span>, the Rouse time <span class="math notranslate nohighlight">\(\tau_R\)</span> and the reptation time <span class="math notranslate nohighlight">\(\tau_D\)</span> of the polymer are printed in the Log Window. These values are calculated according to the following formulas:</p>
 <div class="math notranslate nohighlight">
 \[\tau_R = \tau_e Z^2\]</div>
@@ -126,7 +126,7 @@
 <p>The user must input the correct density. If available, <span class="math notranslate nohighlight">\(\rho\)</span> is read from the Materials database. The theory fails to fit correctly the data when the values of <span class="math notranslate nohighlight">\(G_e\)</span> and <span class="math notranslate nohighlight">\(M_e\)</span> are linked in this way.</p>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/Applications/LVE/Theory/LikhtmanMcLeish-0"><dl class="citation">
-<dt class="label" id="lm-likhtman2002"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dt class="bibtex label" id="lm-likhtman2002"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>Alexei E. Likhtman and Tom C. B. McLeish. Quantitative Theory for Linear Dynamics of Linear Entangled Polymers. <em>Macromolecules</em>, 35(16):6332–6343, jul 2002. <a class="reference external" href="https://doi.org/10.1021/ma0200219">doi:10.1021/ma0200219</a>.</p>
 </dd>
 </dl>
@@ -154,7 +154,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

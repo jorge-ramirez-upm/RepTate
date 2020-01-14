@@ -9,4 +9,5 @@ Flow Induced Crystallization Theories
    :maxdepth: 2
 
 .. include:: GOPolyStrand.rst
+.. include:: SmoothPolyStrand.rst	     
 

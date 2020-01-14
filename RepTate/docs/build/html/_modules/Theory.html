@@ -465,7 +465,7 @@
             <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
                 <span class="n">free_p</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="k">if</span> <span class="n">npoints</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">npoints</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">total_error</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;TOTAL ERROR&lt;/b&gt;: </span><span class="si">%12.5g</span><span class="s2"> (</span><span class="si">%d</span><span class="s2"> Pts)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">total_error</span> <span class="o">/</span> <span class="n">npoints</span><span class="p">,</span> <span class="n">npoints</span><span class="p">))</span>
             <span class="c1"># Bayesian information criterion (BIC) penalise free parametters (overfitting)</span>
             <span class="c1"># Model with lowest BIC number is prefered</span>
@@ -1346,7 +1346,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

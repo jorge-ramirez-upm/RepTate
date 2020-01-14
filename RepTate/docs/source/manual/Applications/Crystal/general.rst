@@ -78,9 +78,45 @@ Ndot(t) [log-lin]
 ---------------------
 Nucleation rate as a function of time on log axis :math:`\dot{N}(t)` vs time :math:`t`
 
+
+N(t) [log-lin]
+---------------------
+Nucleation density as a function of time on log axis :math:`N(t)` vs
+time :math:`t`
+
+phiX(t) [log-lin]
+---------------------
+Crystal fraction as a function of time on log axis :math:`\\phi_X(t)`
+vs time :math:`t`
+
+
 eta(t))
 ---------------------
 .. automethod:: ApplicationCrystal.BaseApplicationCrystal.vieweta()
 
 
+log(sigma(gamma))
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaGamma()
+    
+sigma(gamma)
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewSigmaGamma()
 
+log(sigma(t))
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaTime()
+
+    
+sigma(t)
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.viewSigmaTime()
+
+
+Flow Curve
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.view_flowcurve()
+
+Steady Nucleation
+---------------------
+.. automethod:: ApplicationCrystal.BaseApplicationCrystal.view_steadyNuc

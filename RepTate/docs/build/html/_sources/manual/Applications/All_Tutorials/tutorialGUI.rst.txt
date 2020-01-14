@@ -15,4 +15,5 @@ Examples of use of RepTate using the Graphical User Interface.
    ../Creep/Tutorial/tutorialGUICreep
    ../SANS/Tutorial/tutorialGUISANS
    ../React/Tutorial/tutorialGUIReact
+   ../Crystal/Tutorial/tutorialGUICrystal
    

@@ -140,7 +140,7 @@
         <span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tab_widget</span><span class="p">)</span>
         <span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">buttonBox</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">mainLayout</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Edit Paramters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Edit Parameters&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EditFileParametersDialog.createFormGroupBox"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.EditFileParametersDialog.createFormGroupBox">[docs]</a>    <span class="k">def</span> <span class="nf">createFormGroupBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a form to set the new values of the file parameters&quot;&quot;&quot;</span>
@@ -572,7 +572,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">actionCalculate_Theory</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Stop current calculations&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">actionCalculate_Theory</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s2">&quot;:/Icon8/Images/new_icons/icons8-abacus.png&quot;</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">actionCalculate_Theory</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Calculate Theory (ALT + C)&quot;</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actionCalculate_Theory</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Calculate Theory (Alt+C)&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QDataSet.icon_fit_is_stop"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.QDataSet.icon_fit_is_stop">[docs]</a>    <span class="k">def</span> <span class="nf">icon_fit_is_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ans</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change the &quot;fit&quot; button to &quot;stop&quot; button&quot;&quot;&quot;</span>
@@ -581,7 +581,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">actionCalculate_Theory</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Stop current calculations&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">actionMinimize_Error</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s2">&quot;:/Icon8/Images/new_icons/icons8-minimum-value.png&quot;</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">actionCalculate_Theory</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Minimize error (ALT + M)&quot;</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actionCalculate_Theory</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Calculate Theory (Alt+C)&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QDataSet.handle_thCurrentChanged"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QDataSet.QDataSet.handle_thCurrentChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_thCurrentChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change figure when the active theory tab is changed</span>
@@ -727,13 +727,14 @@
         <span class="n">nrow</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span>
         <span class="n">ncol</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">num_columns</span>
         <span class="n">inspec_tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">inspector_table</span>
+        <span class="n">inspec_tab</span><span class="o">.</span><span class="n">file_repr</span> <span class="o">=</span> <span class="n">file</span>
         <span class="n">inspec_tab</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="n">nrow</span><span class="p">)</span>
         <span class="n">inspec_tab</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="n">ncol</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrow</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncol</span><span class="p">):</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.3e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
-                <span class="n">inspec_tab</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span>
-                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1"># dt.setItem(row, column, item)</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.3e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">setFlags</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsSelectable</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsEnabled</span><span class="p">)</span>
+                <span class="n">inspec_tab</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>  <span class="c1"># dt.setItem(row, column, item)</span>
         <span class="n">ds_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
             <span class="s2">&quot;File: </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
@@ -954,7 +955,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

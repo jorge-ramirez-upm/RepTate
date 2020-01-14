@@ -421,9 +421,10 @@ class EditModesDialog(QDialog):
 
 
 class TheorySmoothPolyStrand(CmdBase):
-    """Rolie-Double-Poly equations for the nonlinear predictions of polydisperse melts of entangled linear polymers
+    """Smooth-polyStrand model for flow-induced crystallisation in polydisperse melts of entangled linear polymers
 
-    * **Function**
+    * **Rheological model: The Rolie-Double-Poly model**
+    Evolution of chain structure under flow is computed by the Rolie-Double-Poly model. Implementation and parameters are the same as in the NVLE application.
         .. math::
             \\boldsymbol \\sigma = G_N^0 \\sum_i g(Z_{\\text{eff},i}) \\text{fene}(\\lambda_i) \\phi_i \\boldsymbol A_i
 
@@ -445,8 +446,18 @@ class TheorySmoothPolyStrand(CmdBase):
         :math:`Z_{\\text{eff},i}=Z_i\\phi_{\\text{dil},i}` is the
         effective entanglement number of the molecular weight component :math:`i`, and :math:`\\phi_{\\text{dil},i}` the
         dilution factor (:math:`\\phi_{\\text{dil},i}\\leq \\phi_i`).
+    * **Nucleation model: The smooth-polyStrand model**
+    This model takes the stress output from the Rolie-Double-Poly model for each mode, computes the flow-induced nucleation rate, using the Kuhn segment nematic order as the order parameter.
+
+       -Neglect quiescent nucleation button: this subtracts the quiescent nucleation rate and assumes all quiescent nucleation occurs from hetrogeneous nuclei.
+
+       -Average to single species button: this preaverages the chain configuration over all species in the melt and computes the nucleation rate with a single species based on this average.
+       
+    * **Crystal evolution model: The Schneider rate equations**
+    From the computed nucleation rate and the crystal growth rate, the model computes the evolution of total crystallinity using the Schneider rate equations [W. Schneider, A. Koppl, and J. Berger, Int. Polym. Proc.II 3, 151 (1988)]. This calculatiom uses the Avrami expression to account approximately for impingement. 
 
     * **Parameters**
+        Rheological
        - ``GN0`` :math:`\\equiv G_N^0`: Plateau modulus
        - ``beta`` :math:`\\equiv\\beta_\\text{CCR}`: Rolie-Poly CCR parameter
        - ``delta`` :math:`\\equiv\\delta`: Rolie-Poly CCR exponent
@@ -454,7 +465,23 @@ class TheorySmoothPolyStrand(CmdBase):
        - ``tauD_i`` :math:`\\equiv\\tau_{\\mathrm d,i}`: Reptation time of species :math:`i` (including CLF)
        - ``tauR_i`` :math:`\\equiv\\tau_{\\mathrm s,i}`: Stretch relaxation time of species :math:`i`
        - ``lmax`` :math:`\\equiv\\lambda_\\text{max}`: Maximum stretch ratio (active only when the "fene button" is pressed)
+       - ``Ne`` :math:`\\equiv N_e`: Number of Kuhn steps between entanglements
+        Quiescient Crystallisation
+       - ``epsilonB`` :math:`\\equiv \epsilon_B`: Bulk free energy gain of crystallisation per Kuhn step [dimensionless]
+       - ``muS`` :math:`\\equiv \mu_S`: Nucleus surface area cost [dimensionless]
+       - ``tau0`` :math:`\\equiv \\tau_0`: Kuhn step nucleation timescale [sec]
+       - ``rhoK`` :math:`\\equiv \\rho_K`: Kuhn step density [:math:`\mu\mathrm{m}^{-3}`]
+       - ``G_C`` :math:`\\equiv G_C`: Crystal growth rate [:math:`\\mu\mathrm{m/sec}`]
+       - ``N_0`` :math:`\\equiv N_0`: Heterogeneous nucleation density [:math:`\mu\mathrm{m}^{-3}`]
+
+
+        Flow-induced crystallisation       
+       - ``Gamma`` :math:`\\equiv \Gamma`: Prefactor connecting the Kuhn segment nematic order and the monomer entropy loss [dimensionless].
+       - ``Kappa0`` :math:`\\equiv \kappa _0`: Free energy penalty for the nucleus surface roughness [dimensionless].
+       - ``Qs0`` :math:`\\equiv Q_{s0}`: Parameter setting the volume of the search region for new stems joining the nucleus [dimensionless].
+
     """
+
     thname = "Smooth-polySTRAND"
     description = "Smooth-polySTRAND model for flow-induced nucleation"
     citations = "Daniel J. Read, Claire McIlroy, Chinmay Das, Oliver G. Harlen and Richard S.~Graham (Under review)"
