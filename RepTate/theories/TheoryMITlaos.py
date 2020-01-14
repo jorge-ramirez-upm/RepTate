@@ -171,11 +171,11 @@ class BaseTheoryMITlaos:
             #it is impossible to extract the minimum of 1 cycle
         
             # give an output before exiting
-            istrain = 0;
-            istress = 0;
-            N       = 0;
-            istart  = 0;
-            istop   = 0;
+            istrain = 0
+            istress = 0
+            N       = 0
+            istart  = 0
+            istop   = 0
             return istrain, istress, N, istart, istop
 
         if lgth == 2:
@@ -191,21 +191,21 @@ class BaseTheoryMITlaos:
             
             if (len(gamma) < Npts): # if there are not enough points
                 # give an output before exiting
-                istrain = 0;
-                istress = 0;
-                N       = 0;
-                istart  = 0;
-                istop   = 0;
+                istrain = 0
+                istress = 0
+                N       = 0
+                istart  = 0
+                istop   = 0
                 return istrain, istress, N, istart, istop
             else: # if there are enough points
                 istart = len(gamma) - Npts
-                istop  = len(gamma)-1
+                istop  = len(gamma)
                 N = 1
 
         if lgth > 2:
             if (lgth/2 != np.round(lgth/2)):   # Check if lgth is odd
                 istart = d_zero[0]
-                istop  = d_zero[-1]-1
+                istop  = d_zero[-1]
                 N = int((lgth - 1)/2)
             else:
                 istart = d_zero[0]
@@ -328,7 +328,7 @@ class BaseTheoryMITlaos:
         d_zero=[]
 
         k=0  # k is a counter for the number of times gamma changes sign
-        sign_gam = np.sign(gamma);
+        sign_gam = np.sign(gamma)
         for i in range(len(gamma)-1):
             if sign_gam[i] != sign_gam[i+1]:
                 k+=1
@@ -350,9 +350,9 @@ class BaseTheoryMITlaos:
         elif lgth == 1:   
             # if there are 0 or 1 locations of gamma crossing zero, it is impossible to extract the minimum of 1 cycle
             self.Qprint('WARNING: It looks like you have only one cycle, but this cannot be confirmed.')
-            Ncycles = 1;
-            istart  = 0;
-            istop   = len(gamma)-1
+            Ncycles = 1
+            istart  = 0
+            istop   = len(gamma)
             
             time = time[istart:istop]
             istrain     = gamma[istart:istop]
@@ -369,9 +369,9 @@ class BaseTheoryMITlaos:
             if len(gamma) < (0.95*Npts):  # if there are not enough points
                 # give an output before exiting
                 self.Qprint('WARNING: It looks like there aren''t enough points for a complete cycle. Proceed with extreme caution.')
-                istart  = 0;
-                istop   = len(gamma)-1
-                Ncycles       = 1;
+                istart  = 0
+                istop   = len(gamma)
+                Ncycles       = 1
                 
                 time = time[istart:istop]
                 istrain     = gamma[istart:istop]
@@ -379,9 +379,9 @@ class BaseTheoryMITlaos:
                 
                 
             elif len(gamma) > (1.05*Npts): #  check for excess data beyond one cycle (x% tolerance)
-                istart = len(gamma) - Npts;
-                istop  = len(gamma)-1
-                Ncycles = 1;
+                istart = len(gamma) - Npts
+                istop  = len(gamma)
+                Ncycles = 1
                 
                 time = time[istart:istop]
                 istrain     = gamma[istart:istop]
@@ -390,7 +390,7 @@ class BaseTheoryMITlaos:
                 self.Qprint('WARNING: The beginning of your data was trimmed in order to have exactly one cycle')
             else:
                 istart = 0
-                istop  = len(gamma)-1
+                istop  = len(gamma)
                 Ncycles = 1
                 
                 time = time[istart:istop]
