@@ -267,14 +267,21 @@ class BaseApplicationLAOS:
         Returns:
             - [type] -- [description]
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 2]
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,0])>0
+            time=dt.data[pickindex, 0]
+            sigma=dt.data[pickindex, 2]
+            ndata=len(time)
+            x = np.zeros((ndata, 1))
+            y = np.zeros((ndata, 1))
+            x[:, 0] = time
+            y[:, 0] = sigma
+        else:
+            x = np.zeros((dt.num_rows, 1))
+            y = np.zeros((dt.num_rows, 1))
+            x[:, 0] = dt.data[:, 0]
+            y[:, 0] = dt.data[:, 2]
 
-        # If times==0, set time column using the index
-        # if (np.max(x)==0):
-        #     x[:, 0] = np.linspace(1, dt.num_rows, dt.num_rows)
         return x, y, True
 
     def view_gammat(self, dt, file_parameters):
@@ -289,13 +296,20 @@ class BaseApplicationLAOS:
         Returns:
             - [type] -- [description]
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 1]
-        # If times==0, set time column using the index
-        # if (np.max(x)==0):
-        #     x[:, 0] = np.linspace(1, dt.num_rows, dt.num_rows)
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,0])>0
+            time=dt.data[pickindex, 0]
+            gamma=dt.data[pickindex, 1]
+            ndata=len(time)
+            x = np.zeros((ndata, 1))
+            y = np.zeros((ndata, 1))
+            x[:, 0] = time
+            y[:, 0] = gamma
+        else:
+            x = np.zeros((dt.num_rows, 1))
+            y = np.zeros((dt.num_rows, 1))
+            x[:, 0] = dt.data[:, 0]
+            y[:, 0] = dt.data[:, 1]
         return x, y, True
 
     def view_sigmatgammat(self, dt, file_parameters):
@@ -310,16 +324,27 @@ class BaseApplicationLAOS:
         Returns:
             - [type] -- [description]
         """
-        x = np.zeros((dt.num_rows, 2))
-        y = np.zeros((dt.num_rows, 2))
-        x[:, 0] = dt.data[:, 0]
-        x[:, 1] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 2]
-        y[:, 1] = dt.data[:, 1]
-        # If times==0, set time column using the index
-        # if (np.max(x)==0):
-        #     x[:, 0] = np.linspace(1, dt.num_rows, dt.num_rows)
-        #     x[:, 1] = np.linspace(1, dt.num_rows, dt.num_rows)
+        if dt.num_columns>3:
+            pickindex=np.abs(dt.data[:,0])>0
+            time=dt.data[pickindex, 0]
+            gamma=dt.data[pickindex, 1]
+            sigma=dt.data[pickindex, 2]
+            ndata=len(time)
+            x = np.zeros((ndata, 2))
+            y = np.zeros((ndata, 2))
+            x[:, 0] = time
+            x[:, 1] = time
+            y[:, 0] = sigma
+            y[:, 1] = gamma
+        else:
+            x = np.zeros((dt.num_rows, 2))
+            y = np.zeros((dt.num_rows, 2))
+            x[:, 0] = dt.data[:, 0]
+            x[:, 1] = dt.data[:, 0]
+            y[:, 0] = dt.data[:, 2]
+            y[:, 1] = dt.data[:, 1]
+
+
         return x, y, True
 
     def view_sigmagammadot(self, dt, file_parameters):

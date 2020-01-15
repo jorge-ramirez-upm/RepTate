@@ -563,11 +563,11 @@ class BaseTheoryMITlaos:
         EtaT=EtaL/EtaM
         S2=(L-M)/L
 
-        tt.num_rows = len(time)
+        tt.num_rows = max(len(time),len(gam_recon),len(Xe),N,m)
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = time
-        tt.data[:, 1] = gam
-        tt.data[:, 2] = tau
+        tt.data[:len(time), 0] = time
+        tt.data[:len(time), 1] = gam
+        tt.data[:len(time), 2] = tau
 
         if self.showmode==ShowMode.total:
             tt.data[0:len(gam_recon), 3] = gam_recon # gamdot_recon interp1d
