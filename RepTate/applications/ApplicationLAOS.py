@@ -94,7 +94,7 @@ class BaseApplicationLAOS:
 
         # VIEWS
         # set the views that can be selected in the view combobox
-        self.views['sigma(t),gamma(t)'] = View(
+        self.views['sigma(t),gamma(t) RAW'] = View(
             name='sigma-gamma(t)',
             description='Stress and strain as a function of time',
             x_label='$t$',
@@ -105,9 +105,22 @@ class BaseApplicationLAOS:
             log_y=False,
             view_proc=self.view_sigmatgammat,
             n=2,
-            snames=['$\sigma(t)$', '$\gamma(t)$'])
+            snames=['$\sigma(t)^\mathrm{raw}$', '$\gamma(t)^\mathrm{raw}$'])
 
-        self.views['sigma(gamma)'] = View(
+        self.views['sigma(gamma) RAW'] = View(
+            name='sigma(gamma)',
+            description='Stress as a function of strain - RAW',
+            x_label='$\gamma(t)^\mathrm{raw}$',
+            y_label='$\sigma(t)^\mathrm{raw}$',
+            x_units='-',
+            y_units='Pa',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sigmagammaRAW,
+            n=1,
+            snames=['$\sigma^\mathrm{raw}(\gamma^\mathrm{raw})$'])
+
+        self.views['sigma(gamma) FILTERED'] = View(
             name='sigma(gamma)',
             description='Stress as a function of strain',
             x_label='$\gamma(t)$',
@@ -116,7 +129,7 @@ class BaseApplicationLAOS:
             y_units='Pa',
             log_x=False,
             log_y=False,
-            view_proc=self.view_sigmagamma,
+            view_proc=self.view_sigmagammaFILTERED,
             n=1,
             snames=['$\sigma(\gamma)$'])
 
@@ -172,31 +185,31 @@ class BaseApplicationLAOS:
             n=1,
             snames=['chebviscous'])
 
-        self.views['sigma(t)'] = View(
+        self.views['sigma(t) RAW'] = View(
             name='sigma(t)',
-            description='Stress as a function of time',
+            description='Stress as a function of time - RAW',
             x_label='$t$',
-            y_label='$\sigma(t)$',
+            y_label='$\sigma(t)^\mathrm{raw}$',
             x_units='s',
             y_units='Pa',
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmat,
             n=1,
-            snames=['$\sigma(t)$'])
+            snames=['$\sigma(t)^\mathrm{raw}$'])
 
-        self.views['gamma(t)'] = View(
+        self.views['gamma(t) RAW'] = View(
             name='gamma(t)',
-            description='Strain as a function of time',
+            description='Strain as a function of time - RAW',
             x_label='$t$',
-            y_label='$\gamma(t)$',
+            y_label='$\gamma(t)^\mathrm{raw}$',
             x_units='s',
             y_units='-',
             log_x=False,
             log_y=False,
             view_proc=self.view_gammat,
             n=1,
-            snames=['$\gamma(t)$'])
+            snames=['$\gamma(t)^\mathrm{raw}$'])
 
         #set multiviews
         #default view order in multiplot views, set only one item for single view
@@ -227,7 +240,7 @@ class BaseApplicationLAOS:
         #set the current view
         self.set_views()
 
-    def view_sigmagamma(self, dt, file_parameters):
+    def view_sigmagammaRAW(self, dt, file_parameters):
         """[summary]
         
         [description]
@@ -239,21 +252,279 @@ class BaseApplicationLAOS:
         Returns:
             - [type] -- [description]
         """
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,3])>0
-            gamma=dt.data[pickindex, 3]
-            tau=dt.data[pickindex, 4]
-            ndata=len(gamma)
-            x = np.zeros((ndata, 1))
-            y = np.zeros((ndata, 1))
-            x[:, 0] = gamma
-            y[:, 0] = tau
-        else:
-            x = np.zeros((dt.num_rows, 1))
-            y = np.zeros((dt.num_rows, 1))
-            x[:, 0] = dt.data[:, 1]
-            y[:, 0] = dt.data[:, 2]
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 1]
+        y[:, 0] = dt.data[:, 2]
         return x, y, True
+
+
+    def cycletrim_MITlaos(self, gamma, tau):
+        d_zero=[]
+
+        k=0 # k is a counter for the number of times gamma changes sign
+        sign_gam = np.sign(gamma)
+        for i in range(len(gamma)-1):
+            if sign_gam[i] != sign_gam[i+1]:
+                d_zero.append(i+1)  # index location after sign change
+                k+=1
+
+        lgth = len(d_zero)
+
+        if lgth <= 1:
+            #if there are 0 or 1 locations of gamma crossing zero,
+            #it is impossible to extract the minimum of 1 cycle
+        
+            # give an output before exiting
+            istrain = 0
+            istress = 0
+            N       = 0
+            istart  = 0
+            istop   = 0
+            return istrain, istress, N, istart, istop
+
+        if lgth == 2:
+            #if there are 2 locations where gamma crosses zero,
+            #a fancy cycle trimming must be performed, which will NOT start with a
+            #sine wave
+            #SEQUENCE:  estimate points per cycle
+            #           check if there are enough points for single cycle (Npts) (error if not)
+            #           include final Npts of signal
+
+            #estimate number of points per cycle
+            Npts = (d_zero[1] - d_zero[0]) *2 
+            
+            if (len(gamma) < Npts): # if there are not enough points
+                # give an output before exiting
+                istrain = 0
+                istress = 0
+                N       = 0
+                istart  = 0
+                istop   = 0
+                return istrain, istress, N, istart, istop
+            else: # if there are enough points
+                istart = len(gamma) - Npts
+                istop  = len(gamma)
+                N = 1
+
+        if lgth > 2:
+            if (lgth/2 != np.round(lgth/2)):   # Check if lgth is odd
+                istart = d_zero[0]
+                istop  = d_zero[-1]
+                N = int((lgth - 1)/2)
+            else:
+                istart = d_zero[0]
+                istop  = d_zero[lgth-2]
+                N = int((lgth - 2)/2)
+
+        istrain = gamma[istart:istop]
+        istress = tau[istart:istop]
+
+        return istrain, istress, N, istart, istop
+
+    def FTtrig_MITlaos(self, f):
+        """
+        Find trigonometric Fourier Series components from FFT:
+        f = A0 + SUM_n( An*cos(n*2*pi*t/T + Bn*sin(n*2*pi*t/T)
+
+        VARIABLES
+        f           vector to be transformed
+        A0          essentially mean(f)
+        An          cosine terms
+        Bn          sine terms
+
+        SEQUENCE
+        force input to have EVEN number of data points (reqd for fft.m)
+        take FFT > complex vector results
+        extract trigonometric terms from complex vector
+        """
+        if int(len(f)/2) != len(f)/2:
+            # trim last data point to force even number of data points
+            # f MUST HAVE EVEN NUMBER OF DATA POINTS!
+            f = f[0:len(f)-1]
+
+        n=len(f)
+        N=int(n/2)       # N will be the number of harmonics to consider
+
+        Fn = np.fft.fft(f)
+        # rearrange values such that: Fn_new = [ high < low | low > high ]
+        Fn_new = np.array([np.conj(Fn[N])]+Fn[N+1:].tolist()+Fn[0:N+1].tolist())
+        Fn_new /= n  # scale results
+
+        #A0 = Fn_new[N]
+        A0 = np.mean(f)
+        An = 2*np.real(Fn_new[N+1:])    # cosine terms
+        Bn = -2*np.imag(Fn_new[N+1:])   # sine terms
+
+        return A0, An, Bn
+
+    def view_sigmagammaFILTERED(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+
+        # DO EVERYTHING IN THEORYMITLAOS UNTIL COLUMNS 3 (gam_recon) AND 4 (tau_recon) ARE CREATED
+        time_uneven  = dt.data[:,0]  # raw time
+        gamma_uneven = dt.data[:,1]  # raw strain
+        tau_uneven =   dt.data[:,2]  # raw stress
+
+        # Force strain & stress data to be linearly space in time
+        time   = np.linspace(time_uneven[0],time_uneven[-1],len(time_uneven))
+        gamma  = np.interp(time, time_uneven,gamma_uneven)  # untrimmed strain
+        tauxy  = np.interp(time, time_uneven,tau_uneven)    # untrimmed stress
+
+        # This section is equivilent to cycletrim 
+
+        d_zero=[]
+
+        k=0  # k is a counter for the number of times gamma changes sign
+        sign_gam = np.sign(gamma)
+        for i in range(len(gamma)-1):
+            if sign_gam[i] != sign_gam[i+1]:
+                k+=1
+                d_zero.append(i+1) # index location after sign change
+
+        # if the sign changed, and the previous point was NEGATIVE (or ZERO)
+        # then it's the beginning of the sine wave
+
+        # NB: the following assumes that strain signal is smooth enough so that the
+        # cycles can be trimmed by finding the gamma=0 crossover points.
+
+        lgth = len(d_zero)
+
+        if lgth == 0:
+            # give an output before exiting
+            #self.Qprint('ERROR: Selected data never crosses zero.  Unable to find integer number of cycles')
+            return
+            
+        elif lgth == 1:   
+            # if there are 0 or 1 locations of gamma crossing zero, it is impossible to extract the minimum of 1 cycle
+            #self.Qprint('WARNING: It looks like you have only one cycle, but this cannot be confirmed.')
+            Ncycles = 1
+            istart  = 0
+            istop   = len(gamma)
+            
+            time = time[istart:istop]
+            istrain     = gamma[istart:istop]
+            istress     = tauxy[istart:istop]          
+            
+        elif lgth == 2:
+            # if there are 2 locations where gamma crosses zero, a fancy cycle trimming must be performed, which will NOT start with a sine wave
+            # SEQUENCE:  estimate points per cycle
+            #           check if there are enough points for single cycle (Npts) (error if not)
+            #           include final Npts of signal
+
+            Npts = (d_zero[1] - d_zero[0] ) *2 # estimate number of points per cycle
+            
+            if len(gamma) < (0.95*Npts):  # if there are not enough points
+                # give an output before exiting
+                #self.Qprint('WARNING: It looks like there aren''t enough points for a complete cycle. Proceed with extreme caution.')
+                istart  = 0
+                istop   = len(gamma)
+                Ncycles       = 1
+                
+                time = time[istart:istop]
+                istrain     = gamma[istart:istop]
+                istress     = tauxy[istart:istop]
+                
+                
+            elif len(gamma) > (1.05*Npts): #  check for excess data beyond one cycle (x% tolerance)
+                istart = len(gamma) - Npts
+                istop  = len(gamma)
+                Ncycles = 1
+                
+                time = time[istart:istop]
+                istrain     = gamma[istart:istop]
+                istress     = tauxy[istart:istop]
+                
+                #self.Qprint('WARNING: The beginning of your data was trimmed in order to have exactly one cycle')
+            else:
+                istart = 0
+                istop  = len(gamma)
+                Ncycles = 1
+                
+                time = time[istart:istop]
+                istrain     = gamma[istart:istop]
+                istress     = tauxy[istart:istop]
+                #self.Qprint('WARNING: It looks like you have exactly one cycle.  It will not be trimmed.')            
+            
+        elif lgth > 2:
+            # perform cycle trimming as usual
+            [gam, tau, Ncycles, istart, istop] = self.cycletrim_MITlaos(gamma, tauxy)
+            time = time[istart:istop]
+            #self.Qprint('Ncycles = %d'%Ncycles)
+
+        #n = self.parameters['n'].value
+        n=15
+        self.maxharmonic = 0
+        if Ncycles !=0:
+            # finds max odd harmonic
+            self.maxharmonic = int(np.floor(len(gam)/(2*Ncycles)))
+            evencheck = self.maxharmonic/2
+            if (evencheck == round(evencheck)):
+                self.maxharmonic = self.maxharmonic-1
+        #self.Qprint('Max odd harminic = %d'%self.maxharmonic)
+
+        n = min(n, self.maxharmonic)
+
+        # FTtrig_MITlaos
+        A0, AnS, BnS = self.FTtrig_MITlaos(tau)
+        gA0, gAnS, gBnS = self.FTtrig_MITlaos(gam)
+
+        gam_0 = np.sqrt( gBnS[Ncycles-1]**2 + gAnS[Ncycles-1]**2 )  # acknowledge possible phase shift, but neglect h.o.t.
+        delta = np.arctan( gAnS[Ncycles-1] / gBnS[Ncycles-1])         # raw signal phase shift
+
+        An = np.zeros(len(AnS))
+        Bn = np.zeros(len(BnS))
+        for q in range(len(AnS)):  # Create NOT SHIFTED Fourier coefficients
+            An[q] = AnS[q]*np.cos((q+1)*delta/Ncycles) - BnS[q]*np.sin((q+1)*delta/Ncycles)
+            Bn[q] = BnS[q]*np.cos((q+1)*delta/Ncycles) + AnS[q]*np.sin((q+1)*delta/Ncycles)
+
+        if abs(An[Ncycles-1]) > abs(Bn[Ncycles-1]):
+            if An[Ncycles-1] < 0:
+                An = -An
+                Bn = -Bn
+        else: # if the fundamental of Bn was larger, use it as the reference
+            if Bn[Ncycles-1] < 0:
+                An = -An
+                Bn = -Bn
+
+        #PPQC = self.parameters['pq'].value
+        PPQC=50
+        PPC=4*PPQC #Points Per Cycle
+
+        gam_recon=np.zeros(PPC)
+        for q in range(PPC): # sum for each point in time, 1 full cycle, no overlap
+            gam_recon[q] = gam_0*np.sin(2*np.pi*q/PPC) # Reconstruct WITHOUT phase shift
+
+        # make gam_recon 1.5 cycles with 1 point overlap
+        gam_recon = np.array(gam_recon.tolist() + gam_recon[:2*PPQC+1].tolist())
+
+        tau_recon = np.zeros(PPC) # initialize tau_recon   (m harmonics included)
+
+        #m = self.parameters['n'].value
+        m = 15
+        for q in range(PPC):  # sum for each point in time for 1 full cycle, no overlap
+            for p in range(1,m+1,2): # m:total number of harmonics to consider; sum over ODD harmonics only
+                tau_recon[q] += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC) + An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
+
+        #make tau_recon* 1.5 cycles with 1 point overlap
+        tau_recon = np.array(tau_recon.tolist() + tau_recon[0:2*PPQC+1].tolist())
+
+        ndata=len(gam_recon)
+        x = np.zeros((ndata, 1))
+        y = np.zeros((ndata, 1))
+        x[:, 0] = gam_recon
+        y[:, 0] = tau_recon
+        return x, y, True        
 
     def view_sigmat(self, dt, file_parameters):
         """[summary]
@@ -385,6 +656,12 @@ class BaseApplicationLAOS:
         Returns:
             - [type] -- [description]
         """
+        # EVERYTHING UP TO         
+        # tt.data[0:wn_end, 7] = wn[0:wn_end]
+        # tt.data[0:wn_end, 8] = G_compNORM[0:wn_end]
+
+
+
         if dt.num_columns>3:
             pickindex=np.abs(dt.data[:,7])>0
             w=dt.data[pickindex, 7]
