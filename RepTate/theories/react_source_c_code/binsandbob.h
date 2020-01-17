@@ -13,7 +13,8 @@
 
 // --------------------------------------------------------------------------------------------------------
 
-// Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+// Copyright (2017-2020): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+
 
 // This file is part of RepTate.
 
