@@ -43,7 +43,7 @@ Executive summary
 -----------------
 
 #. Install Python 3.6 or later via `Minconda <https://conda.io/miniconda.html>`_ (or your favourite method)
-#. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd) via ``conda install <package>`` (or via ``pip install <package>`` if you are using a different Python distribution).
+#. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd, psutil) via ``conda install <package>`` (or via ``pip install <package>`` if you are using a different Python distribution).
 #. Install Git (version control system)  via ``conda install git`` (or a native implementation of git for your operating system).
 #. Clone RepTate's repository via ``git clone https://github.com/jorge-ramirez-upm/RepTate.git``
 #. Try launching RepTate application: ``cd RepTate`` then again ``cd RepTate`` then ``python RepTate.py``
