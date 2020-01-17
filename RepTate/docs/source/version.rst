@@ -2,6 +2,13 @@
 Version History
 ===============
 
+Release 0.9.7 - 20200117
+========================
+- NEW right-click to save chart
+- New Windows installation package with association of common RepTate files
+- New functionality for Materials Database (new/edit/duplicate materials)
+
+
 Release 0.9.6 - 20191111
 ========================
 - NEW axes and label setting options
