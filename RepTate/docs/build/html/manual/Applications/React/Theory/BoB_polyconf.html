@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Create Polymer Configuaration with BoB &#8212; RepTate 0.9.6 20191111 documentation</title>
+    <title>Create Polymer Configuaration with BoB &#8212; RepTate 0.9.7 20200117 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="MetalloceneCSTR.html" title="Metallocene CSTR"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../React.html" > React: Monte-Carlo polymerisation</a> &#187;</li>
@@ -111,18 +111,35 @@
 The configuration file created with this theory can then be analysed
 in the BoB LVE theory, in the LVE application of RepTate.</p>
 <p>The original documentation of BoB can be found here: <a class="reference external" href="https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download">https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download</a>.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">M0</span></code> : Mass of a Monomer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ne</span></code> : Number of monomers in an entanglement length</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ratio</span></code> : Ratio weight fraction occupied by component</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Architecture</span></code> : Polymer architecture type (e.g. Linear, Star, Comb, etc.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Num.</span> <span class="pre">of</span> <span class="pre">polymer</span></code> : Number of polymers to generate of the above architecture type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Num.</span> <span class="pre">generations</span></code> : Number of generations (for Cayley architecture type only)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Distr.</span></code> : Molecular weight distribution (e.g. Monodisperse, LogNormal, etc.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Mw</span></code> : Weight-average molecular weight</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PDI</span></code> : Polydispersity index (PDI <span class="math notranslate nohighlight">\(=M_w/M_n\)</span>)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </dd></dl>
 
-<p>Publications related to BoB: <a class="bibtex reference internal" href="#polyconf-das2006" id="id1">[1]</a>  <a class="bibtex reference internal" href="#polyconf-das2006b" id="id2">[2]</a> <a class="bibtex reference internal" href="#polyconf-chambon2008" id="id3">[3]</a>.</p>
+<p>Publications related to BoB: <a class="reference internal" href="#polyconf-das2006" id="id1">[1]</a>  <a class="reference internal" href="#polyconf-das2006b" id="id2">[2]</a> <a class="reference internal" href="#polyconf-chambon2008" id="id3">[3]</a>.</p>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/Applications/React/Theory/BoB_polyconf-0"><dl class="citation">
-<dt class="bibtex label" id="polyconf-das2006"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dt class="label" id="polyconf-das2006"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>Chinmay Das, Nathanael J. Inkson, Daniel J. Read, Mark a. Kelmanson, and Tom C. B. McLeish. Computational linear rheology of general branch-on-branch polymers. <em>J. Rheol.</em>, 50(2):207–234, mar 2006. URL: <a class="reference external" href="http://sor.scitation.org/doi/10.1122/1.2167487">http://sor.scitation.org/doi/10.1122/1.2167487</a>, <a class="reference external" href="https://doi.org/10.1122/1.2167487">doi:10.1122/1.2167487</a>.</p>
 </dd>
-<dt class="bibtex label" id="polyconf-das2006b"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dt class="label" id="polyconf-das2006b"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p>Chinmay Das, Daniel J. Read, Mark A. Kelmanson, and Tom C. B. McLeish. Dynamic scaling in entangled mean-field gelation polymers. <em>Phys. Rev. E</em>, 74(1):011404, jul 2006. URL: <a class="reference external" href="https://link.aps.org/doi/10.1103/PhysRevE.74.011404">https://link.aps.org/doi/10.1103/PhysRevE.74.011404</a>, <a class="reference external" href="https://doi.org/10.1103/PhysRevE.74.011404">doi:10.1103/PhysRevE.74.011404</a>.</p>
 </dd>
-<dt class="bibtex label" id="polyconf-chambon2008"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dt class="label" id="polyconf-chambon2008"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
 <dd><p>Pierre Chambon, Christine M. Fernyhough, Kyuhyun Im, Taihyun Chang, Chinmay Das, John Embery, Tom C. B. McLeish, and Daniel J. Read. Synthesis, Temperature Gradient Interaction Chromatography, and Rheology of Entangled Styrene Comb Polymers. <em>Macromolecules</em>, 41(15):5869–5875, aug 2008. URL: <a class="reference external" href="http://pubs.acs.org/doi/abs/10.1021/ma800599m">http://pubs.acs.org/doi/abs/10.1021/ma800599m</a>, <a class="reference external" href="https://doi.org/10.1021/ma800599m">doi:10.1021/ma800599m</a>.</p>
 </dd>
 </dl>
@@ -151,7 +168,7 @@ in the BoB LVE theory, in the LVE application of RepTate.</p>
         <li class="right" >
           <a href="MetalloceneCSTR.html" title="Metallocene CSTR"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../React.html" > React: Monte-Carlo polymerisation</a> &#187;</li>
@@ -159,8 +176,8 @@ in the BoB LVE theory, in the LVE application of RepTate.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

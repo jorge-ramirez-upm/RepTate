@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Installation &#8212; RepTate 0.9.6 20191111 documentation</title>
+    <title>Installation &#8212; RepTate 0.9.7 20200117 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="features.html" title="Features"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -126,9 +126,11 @@ the powerful <code class="docutils literal notranslate"><span class="pre">git</s
 <div class="section" id="the-shortcut">
 <h2>The “shortcut”<a class="headerlink" href="#the-shortcut" title="Permalink to this headline">¶</a></h2>
 <p>Binary packages (containing all the needed files and libraries,
-as well as a Python interpreter), for the latest version (0.9.6 20191111) can be downloaded here:</p>
+as well as a Python interpreter), for the latest version (0.9.7 20200117) can be downloaded here:</p>
 <dl class="simple">
-<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1">RepTate for Windows (Windows 7 64-bit or later)</a></dt><dd><p>Unzip and uncompress the dowloaded file and look for the RepTate executable <code class="docutils literal notranslate"><span class="pre">RepTate.exe</span></code>.</p>
+<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1">RepTate for Windows (Windows 7 64-bit or later) PORTABLE</a></dt><dd><p>Unzip and uncompress the dowloaded file and look for the RepTate executable <code class="docutils literal notranslate"><span class="pre">RepTate.exe</span></code>.</p>
+</dd>
+<dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZl6Wthe90FMnHaAZpKpbIEBAWTljqIVrHW13rbAE68MMg?download=1">RepTate for Windows (Windows 7 64-bit or later) INSTALLATION</a></dt><dd><p>Execute the dowloaded file and install it on your PC.</p>
 </dd>
 <dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1">RepTate for Mac (OS X 10.11 or later)</a></dt><dd><p>Drag-and-drop the RepTate application in your Applications folder.</p>
 </dd>
@@ -144,8 +146,8 @@ and the “cloning” of RepTate’s repository.</p>
 <h3>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><p>Install Python 3.6 or later via <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a> (or your favourite method)</p></li>
-<li><p>Install RepTate’s package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl) via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code></p></li>
-<li><p>Install Git (version control system)  via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">git</span></code></p></li>
+<li><p>Install RepTate’s package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd, psutil) via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code> (or via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code> if you are using a different Python distribution).</p></li>
+<li><p>Install Git (version control system)  via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">git</span></code> (or a native implementation of git for your operating system).</p></li>
 <li><p>Clone RepTate’s repository via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/jorge-ramirez-upm/RepTate.git</span></code></p></li>
 <li><p>Try launching RepTate application: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then again <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">RepTate.py</span></code></p></li>
 <li><p>From time to time, check for updates via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code></p></li>
@@ -158,7 +160,7 @@ and the “cloning” of RepTate’s repository.</p>
 <h4>Install Python 3<a class="headerlink" href="#install-python-3" title="Permalink to this headline">¶</a></h4>
 <p>To install Python 3, you can either install <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a> (requires 300 MB of disk space)
 or install the full <a class="reference external" href="https://www.anaconda.com/download/">Anaconda</a> Python (requires 3 GB of disk space). Note that depending on your
-operating system, other methods, not covered here, are available.</p>
+operating system, other methods, not covered here, are available. Another convenient distribution for Windows is <cite>WinPython &lt;https://winpython.github.io/&gt;</cite>.</p>
 <p>We recommend you to install the former, <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a>, that contains Python only (and a small number of useful packages) and to
 install “manually” the extra packages that RepTate needs, as explained below.
 The latter contains Python and 100+ automatically installed open source scientific
@@ -189,6 +191,7 @@ This will open up a window where you can type commands to install the extra pack
 <span class="n">conda</span> <span class="n">install</span> <span class="n">matplotlib</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="n">scipy</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="n">openpyxl</span>
+    <span class="n">conda</span> <span class="n">install</span> <span class="n">xlrd</span>
 </pre></div>
 </div>
 <p>Additionally, on Windows:</p>
@@ -205,7 +208,7 @@ For example, something like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ModuleNotFoundError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;openpyxl&#39;</span>
 </pre></div>
 </div>
-<p>tells you that you need to install the <code class="docutils literal notranslate"><span class="pre">openpyxl</span></code> package.</p>
+<p>tells you that you need to install the <code class="docutils literal notranslate"><span class="pre">openpyxl</span></code> package. Note that, in other Python distributions, the standard command to install packages is <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
 </div>
 <div class="section" id="install-git">
 <h4>Install Git<a class="headerlink" href="#install-git" title="Permalink to this headline">¶</a></h4>
@@ -214,6 +217,7 @@ for the development of RepTate. To install Git, do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">git</span>
 </pre></div>
 </div>
+<p>Alternatively, you can install a binary implementation of Git for your Operating System.</p>
 </div>
 <div class="section" id="clone-reptate-repository">
 <h4>“Clone” RepTate repository<a class="headerlink" href="#clone-reptate-repository" title="Permalink to this headline">¶</a></h4>
@@ -283,12 +287,12 @@ using the contact details given on the <a class="reference external" href="http:
         <li class="right" >
           <a href="features.html" title="Features"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>NLVE: Theories &#8212; RepTate 0.9.6 20191111 documentation</title>
+    <title>NLVE: Theories &#8212; RepTate 0.9.7 20200117 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="../general.html" title="NLVE: General description"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../NLVE.html" accesskey="U"> NLVE: Start-up of Flow</a> &#187;</li> 
@@ -181,8 +181,8 @@
 </div>
 <div class="section" id="classic-rolie-poly-model">
 <h3><a class="toc-backref" href="#id16">“Classic” Rolie-Poly model</a><a class="headerlink" href="#classic-rolie-poly-model" title="Permalink to this headline">¶</a></h3>
-<p>The Rolie-Poly (<strong>RO</strong>use <strong>LI</strong>near <strong>E</strong>ntangled <strong>POLY</strong>mers) <a class="bibtex reference internal" href="#nlve-likhtman2003" id="id1">[4]</a> constitutive
-equation is a single mode formulation of the full microscopic model <a class="bibtex reference internal" href="#nlve-graham2003" id="id2">[5]</a>
+<p>The Rolie-Poly (<strong>RO</strong>use <strong>LI</strong>near <strong>E</strong>ntangled <strong>POLY</strong>mers) <a class="reference internal" href="#nlve-likhtman2003" id="id1">[4]</a> constitutive
+equation is a single mode formulation of the full microscopic model <a class="reference internal" href="#nlve-graham2003" id="id2">[5]</a>
 for linear entangled polymer chains with chain stretch and convective constraint release.</p>
 <p>The evolution equations for the conformation tensor, <span class="math notranslate nohighlight">\(\boldsymbol{A}\)</span>, solved by RepTate for every stretching mode is:</p>
 <div class="math notranslate nohighlight">
@@ -194,8 +194,8 @@ for linear entangled polymer chains with chain stretch and convective constraint
 <div class="math notranslate nohighlight">
 \[\lambda = \left( \frac 1 3 \text{tr}\, \boldsymbol{A} \right)^{1/2}\]</div>
 <p>and, for non-stretching modes, the equation for each mode is:</p>
-<div class="math notranslate nohighlight" id="equation-non-stretching">
-<span class="eqno">(1)<a class="headerlink" href="#equation-non-stretching" title="Permalink to this equation">¶</a></span>\[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
+<div class="math notranslate nohighlight">
+\[\dfrac{\text D \boldsymbol{A}}{\text Dt} = \boldsymbol{\kappa}\cdot\boldsymbol{A
 }+ \boldsymbol{A}\cdot\boldsymbol{\kappa}^{T} - \dfrac{1}{\tau_\mathrm{d}}
 (\boldsymbol{A}- \boldsymbol{I}) - \dfrac{2}{3} \mathrm{tr}
 (\boldsymbol{\kappa}\cdot\boldsymbol{A}) \big(\boldsymbol{A}+
@@ -215,7 +215,7 @@ for finite extensibility of polymer chains, can be written in the following form
 \text{fene}(\lambda) \left( \boldsymbol{A}+ \beta \lambda^{2\delta}(\boldsymbol{A
 }- \boldsymbol{I}) \right),\]</div>
 <p>The nonlinear spring coefficient, <span class="math notranslate nohighlight">\(\text{fene}(\lambda)\)</span>, is
-approximated by the normalized Padé inverse Langevin function <a class="bibtex reference internal" href="#nlve-cohen1991" id="id3">[6]</a></p>
+approximated by the normalized Padé inverse Langevin function <a class="reference internal" href="#nlve-cohen1991" id="id3">[6]</a></p>
 <div class="math notranslate nohighlight">
 \[\text{fene}(\lambda) = \dfrac{3 - \lambda^2/\lambda_\text{max}^2}{1 - \lambda^2/\lambda_\text{max}^2}
 \dfrac{1 - 1/\lambda_\text{max}^2}{3 - 1/\lambda_\text{max}^2},\]</div>
@@ -233,7 +233,7 @@ approximated by the normalized Padé inverse Langevin function <a class="bibtex
 <dl class="class">
 <dt id="TheoryUCM.TheoryUCM">
 <em class="property">class </em><code class="sig-prename descclassname">TheoryUCM.</code><code class="sig-name descname">TheoryUCM</code><a class="reference internal" href="../../../../_modules/TheoryUCM.html#TheoryUCM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryUCM.TheoryUCM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multi-mode Upper Convected Maxwell model (see Chapter 1 of <a class="bibtex reference internal" href="#nlve-larson1988" id="id4">[1]</a>):</p>
+<dd><p>Multi-mode Upper Convected Maxwell model (see Chapter 1 of <a class="reference internal" href="#nlve-larson1988" id="id4">[1]</a>):</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol A_i\\
 \dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
@@ -287,7 +287,7 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <dl class="class">
 <dt id="TheoryGiesekus.TheoryGiesekus">
 <em class="property">class </em><code class="sig-prename descclassname">TheoryGiesekus.</code><code class="sig-name descname">TheoryGiesekus</code><a class="reference internal" href="../../../../_modules/TheoryGiesekus.html#TheoryGiesekus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryGiesekus.TheoryGiesekus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multi-mode Giesekus Model (see Chapter 6 of <a class="bibtex reference internal" href="#nlve-larson1988" id="id6">[1]</a>):</p>
+<dd><p>Multi-mode Giesekus Model (see Chapter 6 of <a class="reference internal" href="#nlve-larson1988" id="id6">[1]</a>):</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol  {A_i},\\
@@ -324,7 +324,7 @@ A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i
 <dl class="class">
 <dt id="TheoryPomPom.TheoryPomPom">
 <em class="property">class </em><code class="sig-prename descclassname">TheoryPomPom.</code><code class="sig-name descname">TheoryPomPom</code><a class="reference internal" href="../../../../_modules/TheoryPomPom.html#TheoryPomPom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryPomPom.TheoryPomPom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multi-mode PomPom Model based on <a class="bibtex reference internal" href="#nlve-blackwell2000" id="id8">[3]</a>:</p>
+<dd><p>Multi-mode PomPom Model based on <a class="reference internal" href="#nlve-blackwell2000" id="id8">[3]</a>:</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\begin{split}\boldsymbol \sigma &amp;= 3 \sum_{i=1}^n G_i  \lambda_i^2(t) \boldsymbol S_i (t),\\
@@ -440,12 +440,31 @@ Polymer configuration files can be generated from the React application in RepTa
 <dl class="class">
 <dt id="TheoryPETS.TheoryPETS">
 <em class="property">class </em><code class="sig-prename descclassname">TheoryPETS.</code><code class="sig-name descname">TheoryPETS</code><a class="reference internal" href="../../../../_modules/TheoryPETS.html#TheoryPETS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryPETS.TheoryPETS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preaveraged model for entangled telechelic star polymers</p>
+<dd><p>Preaveraged model for Entangled Telechelic Star polymers: This theory is intended for the prediction of non-linear transient flows of 
+entangled telechelic (with sticky functional groups at the chain-ends) star polymers.</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">G</span></code> : Plateau Modulus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tauD</span></code> : Orientation relaxation time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tauS</span></code> : Stretch Relxation time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tau_as</span></code> : Typical time the sticker spends associated</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tau_free</span></code> : Typical time the sticker spends free</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lmax</span></code> : Maximum extensibility</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beta</span></code> : CCR coefficient</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delta</span></code> : CCR exponent</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Z</span></code> : Entanglement number</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r_a</span></code> : Ratio of sticker size to tube diameter</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
-<p>This theory is intended for the prediction of non-linear transient flows of
-entangled telechelic star polymers.
-For full details about how the predictions are calculated, refer to <a class="bibtex reference internal" href="#nlve-boudara2017" id="id12">[2]</a>.</p>
+<p>For full details about how the predictions are calculated, refer to <a class="reference internal" href="#nlve-boudara2017" id="id12">[2]</a>.</p>
 </div>
 </div>
 <div class="section" id="glamm-model">
@@ -472,25 +491,25 @@ For full details about how the predictions are calculated, refer to <a class="bi
 </ul>
 </dd></dl>
 
-<p>This theory is intended for the prediction of non-linear transient flows of linear entangled polymers. The model includes the contribution from contour length fluctuations, reptation, retraction, constraint release and variable number of entanglements. For full details about how the predictions are calculated, refer to <a class="bibtex reference internal" href="#nlve-graham2003" id="id14">[5]</a>.</p>
+<p>This theory is intended for the prediction of non-linear transient flows of linear entangled polymers. The model includes the contribution from contour length fluctuations, reptation, retraction, constraint release and variable number of entanglements. For full details about how the predictions are calculated, refer to <a class="reference internal" href="#nlve-graham2003" id="id14">[5]</a>.</p>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/Applications/NLVE/Theory/theory-0"><dl class="citation">
-<dt class="bibtex label" id="nlve-larson1988"><span class="brackets">1</span><span class="fn-backref">(<a href="#id4">1</a>,<a href="#id6">2</a>)</span></dt>
+<dt class="label" id="nlve-larson1988"><span class="brackets">1</span><span class="fn-backref">(<a href="#id4">1</a>,<a href="#id6">2</a>)</span></dt>
 <dd><p>Ronald G. Larson. <em>Constitutive equations for polymer melts and solutions</em>. Butterworths, Stoneham, 1988. URL: <a class="reference external" href="https://www.elsevier.com/books/constitutive-equations-for-polymer-melts-and-solutions/larson/978-0-409-90119-1">https://www.elsevier.com/books/constitutive-equations-for-polymer-melts-and-solutions/larson/978-0-409-90119-1</a>.</p>
 </dd>
-<dt class="bibtex label" id="nlve-boudara2017"><span class="brackets"><a class="fn-backref" href="#id12">2</a></span></dt>
+<dt class="label" id="nlve-boudara2017"><span class="brackets"><a class="fn-backref" href="#id12">2</a></span></dt>
 <dd><p>Victor AH Boudara and Daniel J Read. Stochastic and preaveraged nonlinear rheology models for entangled telechelic star polymers. <em>Journal of Rheology</em>, 61(2):339–362, 2017. URL: <a class="reference external" href="https://doi.org/10.1122/1.4974908">https://doi.org/10.1122/1.4974908</a>, <a class="reference external" href="https://doi.org/10.1122/1.4974908">doi:10.1122/1.4974908</a>.</p>
 </dd>
-<dt class="bibtex label" id="nlve-blackwell2000"><span class="brackets"><a class="fn-backref" href="#id8">3</a></span></dt>
+<dt class="label" id="nlve-blackwell2000"><span class="brackets"><a class="fn-backref" href="#id8">3</a></span></dt>
 <dd><p>R. J. Blackwell, T. C. B. McLeish, and O. G. Harlen. Molecular drag–strain coupling in branched polymer melts. <em>J. Rheol.</em>, 44(1):121–136, 2000. <a class="reference external" href="https://doi.org/10.1122/1.551081">doi:10.1122/1.551081</a>.</p>
 </dd>
-<dt class="bibtex label" id="nlve-likhtman2003"><span class="brackets"><a class="fn-backref" href="#id1">4</a></span></dt>
+<dt class="label" id="nlve-likhtman2003"><span class="brackets"><a class="fn-backref" href="#id1">4</a></span></dt>
 <dd><p>Alexei E. Likhtman and Richard S. Graham. Simple constitutive equation for linear polymer melts derived from molecular theory: Rolie–Poly equation. <em>J. Nonnewton. Fluid Mech.</em>, 114(1):1–12, 2003. URL: <a class="reference external" href="http://www.personal.reading.ac.uk/~sms06al2/papers/rolie-poly.pdf">http://www.personal.reading.ac.uk/~sms06al2/papers/rolie-poly.pdf</a>, <a class="reference external" href="https://doi.org/10.1016/S0377-0257(03)00114-9">doi:10.1016/S0377-0257(03)00114-9</a>.</p>
 </dd>
-<dt class="bibtex label" id="nlve-graham2003"><span class="brackets">5</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id14">2</a>)</span></dt>
+<dt class="label" id="nlve-graham2003"><span class="brackets">5</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id14">2</a>)</span></dt>
 <dd><p>Richard S. Graham, Alexei E. Likhtman, Tom C. B. McLeish, and Scott T. Milner. Microscopic theory of linear, entangled polymer chains under rapid deformation including chain stretch and convective constraint release. <em>J. Rheol.</em>, 47(5):1171–1200, 2003. URL: <a class="reference external" href="http://www.che.psu.edu/faculty/milner/group/eprints/JournalofRheology2003Graham.pdf">http://www.che.psu.edu/faculty/milner/group/eprints/JournalofRheology2003Graham.pdf</a>, <a class="reference external" href="https://doi.org/10.1122/1.1595099">doi:10.1122/1.1595099</a>.</p>
 </dd>
-<dt class="bibtex label" id="nlve-cohen1991"><span class="brackets"><a class="fn-backref" href="#id3">6</a></span></dt>
+<dt class="label" id="nlve-cohen1991"><span class="brackets"><a class="fn-backref" href="#id3">6</a></span></dt>
 <dd><p>A Cohen. A Padé approximant to the inverse Langevin function. <em>Rheol. Acta</em>, 30(3):270–273, 1991. <a class="reference external" href="https://doi.org/10.1007/BF00366640">doi:10.1007/BF00366640</a>.</p>
 </dd>
 </dl>
@@ -520,15 +539,15 @@ For full details about how the predictions are calculated, refer to <a class="bi
         <li class="right" >
           <a href="../general.html" title="NLVE: General description"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>
