@@ -45,6 +45,9 @@ copy dist\RepTate\PyQt5\Qt\plugins\platforms\* dist\RepTate\platforms
 mkdir dist\RepTate\tests
 xcopy tests dist\RepTate\tests /E
 
+mkdir dist\RepTate\docs\build\html
+xcopy docs\build\html dist\RepTate\docs\build\html /E
+
 rem Then CREATE CL Version
 rmdir /s /q build\RepTateCL
 rmdir /s /q dist\RepTateCL

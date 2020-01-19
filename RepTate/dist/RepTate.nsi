@@ -6,8 +6,14 @@
 !insertmacro MUI_PAGE_LICENSE "RepTate\Reptate_license.rtf"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
+
+;Start Menu Folder Page Configuration
 Var StartMenuFolder
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\RepTate" 
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 !insertmacro MUI_PAGE_STARTMENU "RepTate" $StartMenuFolder
+
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_WELCOME
@@ -48,6 +54,15 @@ Section "RepTate v${VERSION}" SectionRepTate
 	SetOutPath $INSTDIR
 	File /r "RepTate\*"
 	WriteUninstaller "$INSTDIR\Uninstall RepTate.exe"
+
+	!insertmacro MUI_STARTMENU_WRITE_BEGIN "RepTate"
+
+	;Create shortcuts
+	CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk" "$INSTDIR\RepTate.exe"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall RepTate.lnk" "$INSTDIR\Uninstall RepTate.exe"
+
+	!insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 #Section "Start Menu Shortcuts"
@@ -115,6 +130,15 @@ Section "Uninstall"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".DLS" "RepTate.DLS"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".CREEP" "RepTate.CREEP"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".LAOS" "RepTate.LAOS"
+
+	!insertmacro MUI_STARTMENU_GETFOLDER "RepTate" $StartMenuFolder
+
+	Delete "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk"
+	Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall RepTate.lnk"
+	RMDir "$SMPROGRAMS\$StartMenuFolder"
+
+	DeleteRegKey /ifempty HKCU "Software\RepTate"
+
 	
 SectionEnd
 
