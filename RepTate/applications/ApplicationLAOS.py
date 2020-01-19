@@ -41,6 +41,7 @@ from QApplicationWindow import QApplicationWindow
 from View import View
 from FileType import TXTColumnFile
 import numpy as np
+from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
 
 
 class ApplicationLAOS(CmdBase):
@@ -94,20 +95,33 @@ class BaseApplicationLAOS:
 
         # VIEWS
         # set the views that can be selected in the view combobox
-        self.views['sigma(t),gamma(t) RAW'] = View(
-            name='sigma-gamma(t)',
-            description='Stress and strain as a function of time',
+        self.views['sigma,gamma(t)'] = View(
+            name='sigma,gamma(t)',
+            description='RAW Stress and RAW strain as a function of time',
             x_label='$t$',
-            y_label='$\sigma(t),\gamma(t)$',
+            y_label='$\sigma^\mathrm{raw}(t),\gamma^\mathrm{raw}(t)$',
             x_units='s',
             y_units='Pa, -',
             log_x=False,
             log_y=False,
-            view_proc=self.view_sigmatgammat,
+            view_proc=self.view_sigmatgammatRAW,
             n=2,
             snames=['$\sigma(t)^\mathrm{raw}$', '$\gamma(t)^\mathrm{raw}$'])
 
-        self.views['sigma(gamma) RAW'] = View(
+        self.views['sigma SCA,gamma(t)'] = View(
+            name='sigma SCA,gamma(t)',
+            description='RAW SCALED Stress and RAW strain as a function of time',
+            x_label='$t$',
+            y_label='$\sigma^\mathrm{raw,scaled}(t),\gamma^\mathrm{raw}(t)$',
+            x_units='s',
+            y_units='Pa, -',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sigmatgammatRAWSCALED,
+            n=2,
+            snames=['$\sigma(t)^\mathrm{raw,scaled}$', '$\gamma(t)^\mathrm{raw}$'])
+
+        self.views['sigma(gamma)'] = View(
             name='sigma(gamma)',
             description='Stress as a function of strain - RAW',
             x_label='$\gamma(t)^\mathrm{raw}$',
@@ -120,18 +134,18 @@ class BaseApplicationLAOS:
             n=1,
             snames=['$\sigma^\mathrm{raw}(\gamma^\mathrm{raw})$'])
 
-        self.views['sigma(gamma) FILTERED'] = View(
-            name='sigma(gamma)',
+        self.views['sigma(gamma) FILT'] = View(
+            name='sigma(gamma) FILT',
             description='Stress as a function of strain',
-            x_label='$\gamma(t)$',
-            y_label='$\sigma(t)$',
+            x_label='$\gamma^\mathrm{filtered}(t)$',
+            y_label='$\sigma^\mathrm{filtered}(t)$',
             x_units='-',
             y_units='Pa',
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmagammaFILTERED,
             n=1,
-            snames=['$\sigma(\gamma)$'])
+            snames=['$\sigma^\mathrm{filtered}(\gamma^\mathrm{filtered})$'])
 
         self.views['FFT spectrum'] = View(
             name='FFT spectrum',
@@ -146,11 +160,11 @@ class BaseApplicationLAOS:
             n=1,
             snames=['FFT'])
 
-        self.views['sigma(gammadot)'] = View(
-            name='sigma(gammadot)',
-            description='Stress as a function of strain-rate',
-            x_label='$\dot\gamma(t)$',
-            y_label='$\sigma(t)$',
+        self.views['sigma(gdot) FILT'] = View(
+            name='sigma(gdot) FILT',
+            description='FILTERED Stress as a function of strain-rate',
+            x_label='$\dot\gamma^\mathrm{filtered}(t)$',
+            y_label='$\sigma^\mathrm{filtered}(t)$',
             x_units='s$^{-1}$',
             y_units='Pa',
             log_x=False,
@@ -158,6 +172,32 @@ class BaseApplicationLAOS:
             view_proc=self.view_sigmagammadot,
             n=1,
             snames=['$\sigma(\dot\gamma)$'])
+
+        self.views['sigma(gamma) ANLS'] = View(
+            name='sigma(gamma) ANLS',
+            description='FILTERED Stress as a function of strain - Analysis of contributions',
+            x_label='$\gamma^\mathrm{filtered}(t)$',
+            y_label='$\sigma^\mathrm{filtered}(t)$',
+            x_units='s$^{-1}$',
+            y_units='Pa',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sigmagammaANLS,
+            n=3,
+            snames=['$\sigma^\mathrm{filtered}$', '$\sigma^\mathrm{elastic}$', '$\sigma^\mathrm{Chebyshev 1+3}$'])
+
+        self.views['sigma(gdot) ANLS'] = View(
+            name='sigma(gdot) ANLS',
+            description='FILTERED Stress as a function of strain-rate - Analysis of contributions',
+            x_label='$\dot\gamma^\mathrm{filtered}(t)$',
+            y_label='$\sigma^\mathrm{filtered}(t)$',
+            x_units='s$^{-1}$',
+            y_units='Pa',
+            log_x=False,
+            log_y=False,
+            view_proc=self.view_sigmagammadotANLS,
+            n=3,
+            snames=['$\sigma^\mathrm{filtered}$', '$\sigma^\mathrm{elastic}$', '$\sigma^\mathrm{Chebyshev 1+3}$'])
 
         self.views['Cheb elastic'] = View(
             name='Cheb elastic',
@@ -185,7 +225,7 @@ class BaseApplicationLAOS:
             n=1,
             snames=['chebviscous'])
 
-        self.views['sigma(t) RAW'] = View(
+        self.views['sigma(t)'] = View(
             name='sigma(t)',
             description='Stress as a function of time - RAW',
             x_label='$t$',
@@ -194,11 +234,11 @@ class BaseApplicationLAOS:
             y_units='Pa',
             log_x=False,
             log_y=False,
-            view_proc=self.view_sigmat,
+            view_proc=self.view_sigmatRAW,
             n=1,
             snames=['$\sigma(t)^\mathrm{raw}$'])
 
-        self.views['gamma(t) RAW'] = View(
+        self.views['gamma(t)'] = View(
             name='gamma(t)',
             description='Strain as a function of time - RAW',
             x_label='$t$',
@@ -207,9 +247,12 @@ class BaseApplicationLAOS:
             y_units='-',
             log_x=False,
             log_y=False,
-            view_proc=self.view_gammat,
+            view_proc=self.view_gammatRAW,
             n=1,
             snames=['$\gamma(t)^\mathrm{raw}$'])
+
+        self.HHSR = 15  # Highest harmonic to consider in stress reconstruction
+        self.PPQC = 50  # Points per quarter cycle in FT reconstruction (20-500)
 
         #set multiviews
         #default view order in multiplot views, set only one item for single view
@@ -240,6 +283,48 @@ class BaseApplicationLAOS:
         #set the current view
         self.set_views()
 
+    def view_sigmatgammatRAW(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = dt.data[:, 0]
+        x[:, 1] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 2]
+        y[:, 1] = dt.data[:, 1]
+
+        return x, y, True
+
+    def view_sigmatgammatRAWSCALED(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = dt.data[:, 0]
+        x[:, 1] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 2]/np.max(np.abs(dt.data[:, 2]))
+        y[:, 1] = dt.data[:, 1]
+
+        return x, y, True
+
     def view_sigmagammaRAW(self, dt, file_parameters):
         """[summary]
         
@@ -258,6 +343,317 @@ class BaseApplicationLAOS:
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
+    def view_sigmagammaFILTERED(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
+ 
+        gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
+
+        ndata=len(gam_recon)
+        x = np.zeros((ndata, 1))
+        y = np.zeros((ndata, 1))
+        x[:, 0] = gam_recon
+        y[:, 0] = tau_recon
+        return x, y, True        
+
+    def view_fftspectrum(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
+
+        if Bn[Ncycles-1]>0:  # ensure that G_1' is positive
+            Gp = Bn/gam_0    # G' from sine terms
+        else:
+            Gp = -Bn/gam_0
+
+        if An[Ncycles-1]>0:  # ensure that G_1'' is positive
+            Gpp = An/gam_0   # G'' from cosine terms
+        else: 
+            Gpp = -An/gam_0
+
+        N=len(An) # number of available harmonics
+        G_complex = np.zeros(N)
+        G_compNORM = np.zeros(N)
+        for j in range(N):
+            G_complex[j]=(Gp[j]**2+Gpp[j]**2)**0.5
+        for j in range(N):
+            G_compNORM[j] = G_complex[j]/G_complex[Ncycles-1] # max intensity occurs at Ncycles frequency
+
+        # strain-rate is equal to omega*strain-shifted-1/4-cycle
+        w = float(file_parameters["omega"])
+        dw = w/Ncycles
+        wn = np.linspace(dw,N*dw,N)
+        if N > 25*Ncycles: # display a maximum of 25 harmonics, so that plot is not too "squished"
+            wn_end = 25*Ncycles
+        else:
+            wn_end = length(wn)
+
+        x = np.zeros((wn_end, 1))
+        y = np.zeros((wn_end, 1))
+        x[:, 0] = wn[0:wn_end]
+        y[:, 0] = G_compNORM[0:wn_end]
+
+        return x, y, True
+
+
+    def view_sigmagammadot(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
+        gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
+
+        PPC=4*self.PPQC #Points Per Cycle
+
+        # w (omega) is currently a MANUAL input
+        # strain-rate is equal to omega*strain-shifted-1/4-cycle
+        w = float(file_parameters["omega"])
+        gamdot_recon=w*gam_recon[self.PPQC:self.PPQC+PPC]  # One cylce of gamdot
+        gamdot_recon = np.array(gamdot_recon.tolist() + gamdot_recon[:2*self.PPQC+1].tolist()) # make 1.5 cycles
+
+        x = np.zeros((len(gamdot_recon), 1))
+        y = np.zeros((len(tau_recon), 1))
+        x[:, 0] = gamdot_recon # gamdot_recon interp1d
+        y[:, 0] = tau_recon # tau_recon interp1d
+        return x, y, True
+
+
+    def view_sigmagammaANLS(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
+        gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
+
+        PPC=4*self.PPQC #Points Per Cycle
+
+        FTtau_e = np.zeros(PPC+1)
+        tau_e_3    = np.zeros(PPC+1)  # "elastic" stress, from 1st & 3rd Harmonics
+
+        for q in range(PPC):  # sum for each point in time for 1 full cycle, no overlap
+            for p in range(1,self.HHSR+1,2): # self.HHSR:total number of harmonics to consider; sum over ODD harmonics only
+                FTtau_e[q]   += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC)
+
+        #RHE, added June 15, 2007, trying to use FT to reconstruct "Chebyshev"
+        #curves
+            for p in range(1,4,2): #Harmonics 1 & 3, for "elastic" stress
+                tau_e_3[q] += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC)
+
+        #make FTtau_* have one point overlap
+        FTtau_e[PPC]=FTtau_e[0]
+        tau_e_3[PPC]=tau_e_3[0]
+
+        Xe=gam_recon[3*self.PPQC:5*self.PPQC+1]/gam_0 # gam_recon is 1.5 cycles
+        # Create corresponding input function from Geo. Interp. decomposition
+        fe = np.array(FTtau_e[3*self.PPQC:4*self.PPQC].tolist() + FTtau_e[:self.PPQC+1].tolist()) # tau_e is 1 cycle
+
+        fe3 = np.array(tau_e_3[3*self.PPQC:4*self.PPQC].tolist() + tau_e_3[:self.PPQC+1].tolist()) # tau_e is 1 cycle
+
+        ndata=max(len(gam_recon), len(Xe))
+        x = np.zeros((ndata, 3))
+        y = np.zeros((ndata, 3))
+        x[:len(gam_recon), 0] = gam_recon
+        y[:len(gam_recon), 0] = tau_recon
+        x[:len(Xe), 1] = gam_0*Xe
+        y[:len(Xe), 1] = fe
+        x[:len(Xe), 2] = gam_0*Xe
+        y[:len(Xe), 2] = fe3
+
+        return x, y, True        
+
+    def view_sigmagammadotANLS(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+
+        gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
+        gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
+
+        PPC=4*self.PPQC #Points Per Cycle
+
+        # w (omega) is currently a MANUAL input
+        # strain-rate is equal to omega*strain-shifted-1/4-cycle
+        w = float(file_parameters["omega"])
+        gamdot_recon=w*gam_recon[self.PPQC:self.PPQC+PPC]  # One cylce of gamdot
+        gamdot_recon = np.array(gamdot_recon.tolist() + gamdot_recon[:2*self.PPQC+1].tolist()) # make 1.5 cycles
+
+        FTtau_v = np.zeros(PPC+1)
+        tau_v_3    = np.zeros(PPC+1)  # "viscous" stress, from 1st & 3rd Harmonics
+
+        for q in range(PPC):  # sum for each point in time for 1 full cycle, no overlap
+            for p in range(1,self.HHSR+1,2): # self.HHSR:total number of harmonics to consider; sum over ODD harmonics only
+                FTtau_v[q]   += An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
+
+        #RHE, added June 15, 2007, trying to use FT to reconstruct "Chebyshev"
+        #curves
+            for p in range(1,4,2): #Harmonics 1 & 3, for "elastic" stress
+                tau_v_3[q] += An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
+
+        #make FTtau_* have one point overlap
+        FTtau_v[PPC]=FTtau_v[0]
+        tau_v_3[PPC]=tau_v_3[0]
+
+        Xv=gamdot_recon[2*self.PPQC:4*self.PPQC+1]/(gam_0*w) # gamdot_recon is 1.5 cycles
+        # Create corresponding input function from Geo. Interp. decomposition
+        fv = FTtau_v[2*self.PPQC:4*self.PPQC+1] # tau_v is 1 cycle
+
+        fv3 = tau_v_3[2*self.PPQC:4*self.PPQC+1] # tau_v is 1 cycle
+
+        ndata=max(len(gamdot_recon), len(Xv))
+        x = np.zeros((ndata, 3))
+        y = np.zeros((ndata, 3))
+        x[:len(gamdot_recon), 0] = gamdot_recon
+        y[:len(gamdot_recon), 0] = tau_recon
+        x[:len(Xv), 1] = gam_0*w*Xv
+        y[:len(Xv), 1] = fv
+        x[:len(Xv), 2] = gam_0*w*Xv
+        y[:len(Xv), 2] = fv3
+
+        return x, y, True        
+
+
+    def view_chebelastic(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
+
+        if Bn[Ncycles-1]>0:  # ensure that G_1' is positive
+            Gp = Bn/gam_0    # G' from sine terms
+        else:
+            Gp = -Bn/gam_0
+
+        # Chebyshev coefficients, found from FT results
+        e_n = np.zeros(int(np.floor(len(Gp)/Ncycles)))
+        # contains e1, e2, e3, e4, ...
+        for o in range(0,int(np.floor(len(Gp)/Ncycles)),2):
+            e_n[o] = Gp[Ncycles*(o+1)-1]*(-1)**(o/2)  # only works for ODD Chebyshevs, so I leave even Chebyshevs = 0;
+    
+        x = np.zeros((self.HHSR, 1))
+        y = np.zeros((self.HHSR, 1))
+        x[:, 0] = np.linspace(1,self.HHSR,self.HHSR)
+        y[:, 0] = e_n[0:self.HHSR]
+        return x, y, True
+
+    def view_chebviscous(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
+
+        if An[Ncycles-1]>0:  # ensure that G_1'' is positive
+            Gpp = An/gam_0   # G'' from cosine terms
+        else: 
+            Gpp = -An/gam_0
+
+        w = float(file_parameters["omega"])
+
+        # Chebyshev coefficients, found from FT results
+        v_n = np.zeros(int(np.floor(len(Gpp)/Ncycles)))
+        for o in range(0,int(np.floor(len(Gpp)/Ncycles)),2):
+            v_n[o] = Gpp[Ncycles*(o+1)-1]/w   
+    
+        x = np.zeros((self.HHSR, 1))
+        y = np.zeros((self.HHSR, 1))
+        x[:, 0] = np.linspace(1,self.HHSR,self.HHSR)
+        y[:, 0] = v_n[0:self.HHSR]
+        return x, y, True
+
+    def view_sigmatRAW(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 2]
+
+        return x, y, True
+
+    def view_gammatRAW(self, dt, file_parameters):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            - dt {[type]} -- [description]
+            - file_parameters {[type]} -- [description]
+        
+        Returns:
+            - [type] -- [description]
+        """
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = dt.data[:, 0]
+        y[:, 0] = dt.data[:, 1]
+        return x, y, True
 
     def cycletrim_MITlaos(self, gamma, tau):
         d_zero=[]
@@ -358,20 +754,49 @@ class BaseApplicationLAOS:
 
         return A0, An, Bn
 
-    def view_sigmagammaFILTERED(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+    def chebyshev_decompose_MITlaos(self, F,N,X=None):
         """
+        Find Chebyshev Polynomial components of input data vector:
+        f = A0*T0(x) + A1*T1(x) + A2*T2(x) + ...
 
-        # DO EVERYTHING IN THEORYMITLAOS UNTIL COLUMNS 3 (gam_recon) AND 4 (tau_recon) ARE CREATED
+        [An]= chebyshev_decompose(F,N,X)
+                *Assumes F occupies the domain [-1 : +1] 
+        with an arbitrary number of data points
+        Uses trapz.m to calculate integrals
+              INPUT VARIABLES
+              F: vector of data, in domain [-1:1]
+              N: degree of desired Legendre Polynomial decomposition
+              X: Range points associated with F
+              OUTPUT VARIABLE
+              An: vector of Chebyshev coefficients
+                  An(i) = A_{i-1}
+        """
+        M=len(F)
+        if X is None: # Make X (input range) linear spaced and same length as F
+            X=np.linspace(-1,1,M)
+            
+        An = np.zeros(N) # initialize vector of Chebyshev coefficients
+
+        #T = gallery('chebvand',X);  # Matrix of Chebyshev polynomials evaluated at X
+                                    #T(i,:) is (i-1)order polynomial
+        T = np.zeros((M,M))
+        T = np.transpose(np.polynomial.chebyshev.chebvander(X,M-1))
+        #for i in range(M):
+        #    T[i,:] = np.transpose(np.polynomial.chebyshev.chebvander(X,i))
+
+        # COORDINATE TRANSFORM TECHNIQUE: NO WEIGHTING NECESSARY
+
+        THETA = np.arcsin(X)
+
+        # 0th order polynomial has different front factor
+        An[0] = 1/np.pi * np.trapz(F, THETA)
+        # Remaining coefficients use same front factor
+        for i in range (1,N):
+            An[i] = 2/np.pi * np.trapz(T[i,:]*F, THETA)
+        
+        return An
+
+    def do_FFT_and_STUFF(self, dt): 
         time_uneven  = dt.data[:,0]  # raw time
         gamma_uneven = dt.data[:,1]  # raw strain
         tau_uneven =   dt.data[:,2]  # raw stress
@@ -462,19 +887,6 @@ class BaseApplicationLAOS:
             time = time[istart:istop]
             #self.Qprint('Ncycles = %d'%Ncycles)
 
-        #n = self.parameters['n'].value
-        n=15
-        self.maxharmonic = 0
-        if Ncycles !=0:
-            # finds max odd harmonic
-            self.maxharmonic = int(np.floor(len(gam)/(2*Ncycles)))
-            evencheck = self.maxharmonic/2
-            if (evencheck == round(evencheck)):
-                self.maxharmonic = self.maxharmonic-1
-        #self.Qprint('Max odd harminic = %d'%self.maxharmonic)
-
-        n = min(n, self.maxharmonic)
-
         # FTtrig_MITlaos
         A0, AnS, BnS = self.FTtrig_MITlaos(tau)
         gA0, gAnS, gBnS = self.FTtrig_MITlaos(gam)
@@ -496,237 +908,29 @@ class BaseApplicationLAOS:
             if Bn[Ncycles-1] < 0:
                 An = -An
                 Bn = -Bn
+        
+        return gam_0, Bn, An, Ncycles
 
-        #PPQC = self.parameters['pq'].value
-        PPQC=50
-        PPC=4*PPQC #Points Per Cycle
+    def reconstruct_gamma_tau(self, An, Bn, gam_0, Ncycles):
+        PPC=4*self.PPQC #Points Per Cycle
 
         gam_recon=np.zeros(PPC)
         for q in range(PPC): # sum for each point in time, 1 full cycle, no overlap
             gam_recon[q] = gam_0*np.sin(2*np.pi*q/PPC) # Reconstruct WITHOUT phase shift
 
         # make gam_recon 1.5 cycles with 1 point overlap
-        gam_recon = np.array(gam_recon.tolist() + gam_recon[:2*PPQC+1].tolist())
+        gam_recon = np.array(gam_recon.tolist() + gam_recon[:2*self.PPQC+1].tolist())
 
         tau_recon = np.zeros(PPC) # initialize tau_recon   (m harmonics included)
 
-        #m = self.parameters['n'].value
-        m = 15
         for q in range(PPC):  # sum for each point in time for 1 full cycle, no overlap
-            for p in range(1,m+1,2): # m:total number of harmonics to consider; sum over ODD harmonics only
+            for p in range(1,self.HHSR+1,2): # self.HHSR:total number of harmonics to consider; sum over ODD harmonics only
                 tau_recon[q] += Bn[Ncycles*p-1]*np.sin(p*2*np.pi*q/PPC) + An[Ncycles*p-1]*np.cos(p*2*np.pi*q/PPC)
 
         #make tau_recon* 1.5 cycles with 1 point overlap
-        tau_recon = np.array(tau_recon.tolist() + tau_recon[0:2*PPQC+1].tolist())
+        tau_recon = np.array(tau_recon.tolist() + tau_recon[0:2*self.PPQC+1].tolist())
 
-        ndata=len(gam_recon)
-        x = np.zeros((ndata, 1))
-        y = np.zeros((ndata, 1))
-        x[:, 0] = gam_recon
-        y[:, 0] = tau_recon
-        return x, y, True        
-
-    def view_sigmat(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,0])>0
-            time=dt.data[pickindex, 0]
-            sigma=dt.data[pickindex, 2]
-            ndata=len(time)
-            x = np.zeros((ndata, 1))
-            y = np.zeros((ndata, 1))
-            x[:, 0] = time
-            y[:, 0] = sigma
-        else:
-            x = np.zeros((dt.num_rows, 1))
-            y = np.zeros((dt.num_rows, 1))
-            x[:, 0] = dt.data[:, 0]
-            y[:, 0] = dt.data[:, 2]
-
-        return x, y, True
-
-    def view_gammat(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,0])>0
-            time=dt.data[pickindex, 0]
-            gamma=dt.data[pickindex, 1]
-            ndata=len(time)
-            x = np.zeros((ndata, 1))
-            y = np.zeros((ndata, 1))
-            x[:, 0] = time
-            y[:, 0] = gamma
-        else:
-            x = np.zeros((dt.num_rows, 1))
-            y = np.zeros((dt.num_rows, 1))
-            x[:, 0] = dt.data[:, 0]
-            y[:, 0] = dt.data[:, 1]
-        return x, y, True
-
-    def view_sigmatgammat(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,0])>0
-            time=dt.data[pickindex, 0]
-            gamma=dt.data[pickindex, 1]
-            sigma=dt.data[pickindex, 2]
-            ndata=len(time)
-            x = np.zeros((ndata, 2))
-            y = np.zeros((ndata, 2))
-            x[:, 0] = time
-            x[:, 1] = time
-            y[:, 0] = sigma
-            y[:, 1] = gamma
-        else:
-            x = np.zeros((dt.num_rows, 2))
-            y = np.zeros((dt.num_rows, 2))
-            x[:, 0] = dt.data[:, 0]
-            x[:, 1] = dt.data[:, 0]
-            y[:, 0] = dt.data[:, 2]
-            y[:, 1] = dt.data[:, 1]
-
-
-        return x, y, True
-
-    def view_sigmagammadot(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,5])>0
-            gdot=dt.data[pickindex, 5]
-            tau=dt.data[pickindex, 6]
-            ndata=len(gdot)
-            x = np.zeros((ndata, 1))
-            y = np.zeros((ndata, 1))
-            x[:, 0] = gdot
-            y[:, 0] = tau
-        else:
-            x = np.zeros((0,1))
-            y = np.zeros((0,1))
-        return x, y, True
-
-    def view_fftspectrum(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        # EVERYTHING UP TO         
-        # tt.data[0:wn_end, 7] = wn[0:wn_end]
-        # tt.data[0:wn_end, 8] = G_compNORM[0:wn_end]
-
-
-
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,7])>0
-            w=dt.data[pickindex, 7]
-            Gn=dt.data[pickindex, 8]
-            ndata=len(w)
-            x = np.zeros((ndata, 1))
-            y = np.zeros((ndata, 1))
-            x[:, 0] = w
-            y[:, 0] = Gn
-        else:
-            x = np.zeros((0,1))
-            y = np.zeros((0,1))
-        return x, y, True
-
-    def view_chebelastic(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,9])>0
-            n=dt.data[pickindex, 9]
-            en=dt.data[pickindex, 10]
-            ndata=len(n)
-            x = np.zeros((ndata, 1))
-            y = np.zeros((ndata, 1))
-            x[:, 0] = n
-            y[:, 0] = en
-        else:
-            x = np.zeros((0,1))
-            y = np.zeros((0,1))
-        return x, y, True
-
-    def view_chebviscous(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        if dt.num_columns>3:
-            pickindex=np.abs(dt.data[:,9])>0
-            n=dt.data[pickindex, 9]
-            vn=dt.data[pickindex, 11]
-            ndata=len(n)
-            x = np.zeros((ndata, 1))
-            y = np.zeros((ndata, 1))
-            x[:, 0] = n
-            y[:, 0] = vn
-        else:
-            x = np.zeros((0,1))
-            y = np.zeros((0,1))
-        return x, y, True
+        return gam_recon, tau_recon
 
 class CLApplicationLAOS(BaseApplicationLAOS, Application):
     """[summary]
@@ -762,4 +966,59 @@ class GUIApplicationLAOS(BaseApplicationLAOS, QApplicationWindow):
         """
         super().__init__(name, parent)
 
-        #add the GUI-specific objects here:
+        self.add_HHSR_widget()
+        self.set_HHSR_widget_visible(False)
+        self.add_PPQC_widget()
+        self.set_PPQC_widget_visible(False)
+
+    def add_HHSR_widget(self):
+        """Add spinbox for HHSR"""
+        self.sb_HHSR = QSpinBox()
+        self.sb_HHSR.setRange(1, 99)
+        self.sb_HHSR.setSingleStep(2)
+        self.sb_HHSR.setValue(self.HHSR)
+        self.sb_HHSR.setToolTip("Highest harmonic to consider in stress reconstruction")
+        self.sb_HHSR.valueChanged.connect(self.change_HHSR)
+        self.viewLayout.insertWidget(3, self.sb_HHSR)
+
+    def change_HHSR(self, val):
+        """Change the value of the HHSR.
+        Called when the spinbox value is changed"""
+        self.HHSR = val
+        self.update_all_ds_plots()
+
+    def set_HHSR_widget_visible(self, state):
+        """Show/Hide the extra widget "HHSR" """
+        self.sb_HHSR.setVisible(state)
+
+    def add_PPQC_widget(self):
+        """Add spinbox for HHSR"""
+        self.sb_PPQC = QSpinBox()
+        self.sb_PPQC.setRange(20, 500)
+        self.sb_PPQC.setSingleStep(10)
+        self.sb_PPQC.setValue(self.PPQC)
+        self.sb_PPQC.setToolTip("Points per quarter cycle in FT reconstruction (20-500)")
+        self.sb_PPQC.valueChanged.connect(self.change_PPQC)
+        self.viewLayout.insertWidget(3, self.sb_PPQC)
+
+    def change_PPQC(self, val):
+        """Change the value of the PPQC.
+        Called when the spinbox value is changed"""
+        self.PPQC = val
+        self.update_all_ds_plots()
+
+    def set_PPQC_widget_visible(self, state):
+        """Show/Hide the extra widget "PPQC" """
+        self.sb_PPQC.setVisible(state)
+
+    def set_view_tools(self, view_name):
+        """Show/Hide extra view widgets depending on the current view"""
+        if view_name in ["sigma(gamma) FILT", "FFT spectrum", "sigma(gdot) FILT", "sigma(gamma) ANLS", "sigma(gdot) ANLS", "Cheb elastic", "Cheb viscous"]:
+            self.set_HHSR_widget_visible(True)
+            self.set_PPQC_widget_visible(True)
+        else:
+            try:
+                self.set_HHSR_widget_visible(False)
+                self.set_PPQC_widget_visible(False)
+            except AttributeError:
+                pass
