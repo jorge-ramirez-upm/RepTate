@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>TTS Theories &#8212; RepTate 0.9.6 20191111 documentation</title>
+    <title>TTS Theories &#8212; RepTate 0.9.7 20200117 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="../general.html" title="TTS: General description"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../TTS.html" accesskey="U"> TTS: Time-Temperature Superposition</a> &#187;</li> 
@@ -62,14 +62,9 @@
 <li><a class="reference internal" href="#description">Description</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#williams-landel-ferry-tts-shift-test">Williams-Landel-Ferry TTS Shift Test</a><ul>
+<li><a class="reference internal" href="#automatic-tts-shift">Automatic TTS Shift</a><ul>
 <li><a class="reference internal" href="#id3">Summary</a></li>
 <li><a class="reference internal" href="#id4">Description</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#automatic-tts-shift">Automatic TTS Shift</a><ul>
-<li><a class="reference internal" href="#id7">Summary</a></li>
-<li><a class="reference internal" href="#id8">Description</a></li>
 </ul>
 </li>
 </ul>
@@ -112,22 +107,16 @@
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#williams-landel-ferry-tts-shift" id="id11">Williams-Landel-Ferry TTS Shift</a></p>
+<li><p><a class="reference internal" href="#williams-landel-ferry-tts-shift" id="id7">Williams-Landel-Ferry TTS Shift</a></p>
 <ul>
-<li><p><a class="reference internal" href="#summary" id="id12">Summary</a></p></li>
-<li><p><a class="reference internal" href="#description" id="id13">Description</a></p></li>
+<li><p><a class="reference internal" href="#summary" id="id8">Summary</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id9">Description</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#williams-landel-ferry-tts-shift-test" id="id14">Williams-Landel-Ferry TTS Shift Test</a></p>
+<li><p><a class="reference internal" href="#automatic-tts-shift" id="id10">Automatic TTS Shift</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id3" id="id15">Summary</a></p></li>
-<li><p><a class="reference internal" href="#id4" id="id16">Description</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#automatic-tts-shift" id="id17">Automatic TTS Shift</a></p>
-<ul>
-<li><p><a class="reference internal" href="#id7" id="id18">Summary</a></p></li>
-<li><p><a class="reference internal" href="#id8" id="id19">Description</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id11">Summary</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id12">Description</a></p></li>
 </ul>
 </li>
 </ul>
@@ -135,11 +124,11 @@
 <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="williams-landel-ferry-tts-shift">
-<h2><a class="toc-backref" href="#id11">Williams-Landel-Ferry TTS Shift</a><a class="headerlink" href="#williams-landel-ferry-tts-shift" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Williams-Landel-Ferry TTS Shift</a><a class="headerlink" href="#williams-landel-ferry-tts-shift" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="summary">
-<h3><a class="toc-backref" href="#id12">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="TheoryTTS.TheoryWLFShift">
 <em class="property">class </em><code class="sig-prename descclassname">TheoryTTS.</code><code class="sig-name descname">TheoryWLFShift</code><a class="reference internal" href="../../../../_modules/TheoryTTS.html#TheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS.TheoryWLFShift" title="Permalink to this definition">¶</a></dt>
@@ -174,7 +163,7 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
 
 </div>
 <div class="section" id="description">
-<h3><a class="toc-backref" href="#id13">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id9">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
 <p>Time-temperature superposition based on a WLF equation with two parameters. Temperature <span class="math notranslate nohighlight">\(T\)</span> of the data is read from the file. The temperature to which the data is shifted is specified by <span class="math notranslate nohighlight">\(T_r\)</span>. This theory shifts many samples simultaneously with the same shift factors which follow exactly the WLF equation. Thus, if there is one temperature for which the data is out of line with the others, the theory does not try to hide it by using an arbitrary shifting - instead the shifted data will clearly show that one of the temperatures went  wrong. Also, the vertical shifts are applied according to the density change only, whereas in other rheometer software some loading errors are hidden into the vertical shifts.</p>
 <p>In the <strong>horizontal shift</strong>, the frequency is modified according to:</p>
 <div class="math notranslate nohighlight">
@@ -235,81 +224,12 @@ B_2 &amp; = C_2 - T_r
 </div>
 </div>
 </div>
-<div class="section" id="williams-landel-ferry-tts-shift-test">
-<h2><a class="toc-backref" href="#id14">Williams-Landel-Ferry TTS Shift Test</a><a class="headerlink" href="#williams-landel-ferry-tts-shift-test" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="automatic-tts-shift">
+<h2><a class="toc-backref" href="#id10">Automatic TTS Shift</a><a class="headerlink" href="#automatic-tts-shift" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="id3">
-<h3><a class="toc-backref" href="#id15">Summary</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id4">
-<h3><a class="toc-backref" href="#id16">Description</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<p>Time-temperature superposition based on a WLF equation with two parameters. Temperature <span class="math notranslate nohighlight">\(T\)</span> of the data is read from the file. The temperature to which the data is shifted is specified by <span class="math notranslate nohighlight">\(T_r\)</span>. This theory shifts many samples simultaneously with the same shift factors which follow exactly the WLF equation. Thus, if there is one temperature for which the data is out of line with the others, the theory does not try to hide it by using an arbitrary shifting - instead the shifted data will clearly show that one of the temperatures went  wrong. Also, the vertical shifts are applied according to the density change only, whereas in other rheometer software some loading errors are hidden into the vertical shifts.</p>
-<p>In the <strong>horizontal shift</strong>, the frequency is modified according to:</p>
-<div class="math notranslate nohighlight">
-\[\omega(T_r) = a_T \omega(T)\]</div>
-<p>with</p>
-<div class="math notranslate nohighlight">
-\[\log_{10} a_T = \frac{-B_1 (T-T_r)}{(B_2+T_r)(B_2+T)}\]</div>
-<p>where <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> are material parameters.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<ul class="simple">
-<li><p>The equation and parameters are different with respect to the standard WLF definition. In the WLF equation, the values of the parameters <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> depend on the reference temperature <span class="math notranslate nohighlight">\(T_r\)</span> to which the data is being shifted.</p></li>
-<li><p>The parameters <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> do not depend on the choice of <span class="math notranslate nohighlight">\(T_r\)</span> and thus are true material parameters.</p></li>
-<li><p>The values the standard parameters <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> can be easily calculated from the values of <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> using the following expressions:</p></li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{eqnarray}
-C_1 &amp; = \frac{B_1}{B_2+T_r} \\
-C_2 &amp; = B_2 + T_r
-\end{eqnarray}\end{split}\]</div>
-<ul class="simple">
-<li><p>Similarly, the values of the parameters <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span> can be easily calculated from the values of <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> from the literature using the following expressions:</p></li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{eqnarray}
-B_1 &amp; = C_1C_2 \\
-B_2 &amp; = C_2 - T_r
-\end{eqnarray}\end{split}\]</div>
-<ul class="simple">
-<li><p>Everytime Reptate calculates or fits the theory to a set of experimental data, it will output the values of the standard WLF parameters <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> at the temperature <span class="math notranslate nohighlight">\(T_r\)</span> in the theory window.</p></li>
-</ul>
-</div>
-<p>In the <strong>vertical shift</strong>, the modulus is modified according to the expression:</p>
-<div class="math notranslate nohighlight">
-\[G(T_r) = b_T G(T)\]</div>
-<p>with</p>
-<div class="math notranslate nohighlight">
-\[b_T = \frac{\rho(T_r)T_r}{\rho(T)T} = \frac{(1+\alpha T)(T_r+273.15)}{(1+\alpha T_r)(T+273.15)}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> thermal expansion coefficient of the polymer at 0 °C.</p>
-<p>The <strong>molecular weight dependence</strong> of <span class="math notranslate nohighlight">\(T_g\)</span> must be considered when shift data of very short chains or very broad molecular weight distributions containing a significative fraction of short chains. This change is roughly related to the amount of free ends present in the sample. In order to take the effect into account, we use the following phenomenological expression, which was shown to fit the experimental data:</p>
-<div class="math notranslate nohighlight">
-\[T_g = T_g^\infty - \frac{C_{T_g}}{M_w}\]</div>
-<p>A simple chain ends argument leads to the same expression with <span class="math notranslate nohighlight">\(M_n\)</span> instead of <span class="math notranslate nohighlight">\(M_w\)</span> (here, we are assuming that <span class="math notranslate nohighlight">\(M_w \approx M_n\)</span>). This leads to the following modified expression for the <strong>horizontal shift</strong>:</p>
-<div class="math notranslate nohighlight">
-\[\log_{10} a_T = \frac{-B_1 (T-T_r+\frac{C_{T_g}}{M_w})}{(B_2+T_r)(B_2+\frac{C_{T_g}}{M_w}+T)}\]</div>
-<p>In most cases, when shifting the data of well entangled monodisperse polymers, this effect can be discarded by unticking the corresponding check box in the theory window.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Try to shift simultaneously different samples of the same material, using the suggested values of the fitting parameters from the Materials Database or taking them from the literature.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Load all the <a href="#id5"><span class="problematic" id="id6">*</span></a>.osc files in the same dataset.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>It is important to start the fit from reasonable values of the parameters <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span>. Otherwise, the minisation procedure will produce wrong results.</p>
-</div>
-</div>
-</div>
-<div class="section" id="automatic-tts-shift">
-<h2><a class="toc-backref" href="#id17">Automatic TTS Shift</a><a class="headerlink" href="#automatic-tts-shift" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-</div>
-<div class="section" id="id7">
-<h3><a class="toc-backref" href="#id18">Summary</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">Summary</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="TheoryTTS_Automatic.TheoryTTSShiftAutomatic">
 <em class="property">class </em><code class="sig-prename descclassname">TheoryTTS_Automatic.</code><code class="sig-name descname">TheoryTTSShiftAutomatic</code><a class="reference internal" href="../../../../_modules/TheoryTTS_Automatic.html#TheoryTTSShiftAutomatic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryTTS_Automatic.TheoryTTSShiftAutomatic" title="Permalink to this definition">¶</a></dt>
@@ -326,8 +246,8 @@ B_2 &amp; = C_2 - T_r
 </dd></dl>
 
 </div>
-<div class="section" id="id8">
-<h3><a class="toc-backref" href="#id19">Description</a><a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3><a class="toc-backref" href="#id12">Description</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>This theory attempts to perform an automatic Time-temperature superposition shift of experimental data without assuming any preconceived behaviour.</p>
 <p>When a dataset is loaded, the program creates a database of the datafiles according the molecular weight <span class="math notranslate nohighlight">\(M_w\)</span> and the volume fraction <span class="math notranslate nohighlight">\(\phi\)</span> of the samples in the file. Then, it allows the user to select the temperature to which he or she wants to shift the data (from a dropdown box). The list of allowed values of temperature is limited to those values of <span class="math notranslate nohighlight">\(T\)</span> that are present in all the different samples loaded in the datafile.</p>
 <p>The fitting procedure goes sample by sample, starting from the file that is at the selected reference temperature. Then, it walks over the other files of the same sample, in ascending order of the difference between their temperature and the reference temperature, and finds the right horizontal and vertical shift factors so that the overlap between each file and the previously shifted files is optimal. For each file, the program stores the optimal shift factors.</p>
@@ -338,7 +258,7 @@ B_2 &amp; = C_2 - T_r
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Load all the <a href="#id9"><span class="problematic" id="id10">*</span></a>.osc files in the same dataset.</p>
+<p>Load all the <a href="#id5"><span class="problematic" id="id6">*</span></a>.osc files in the same dataset.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -369,15 +289,15 @@ B_2 &amp; = C_2 - T_r
         <li class="right" >
           <a href="../general.html" title="TTS: General description"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../TTS.html" > TTS: Time-Temperature Superposition</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

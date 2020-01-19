@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>LVE Theories &#8212; RepTate 0.9.6 20191111 documentation</title>
+    <title>LVE Theories &#8212; RepTate 0.9.7 20200117 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="../general.html" title="LVE: General Description"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../LVE.html" accesskey="U"> LVE: Linear ViscoElasticity</a> &#187;</li> 
@@ -325,7 +325,7 @@ the theory will be applied to the first one in the list of active files.</p>
 <h3><a class="toc-backref" href="#id21">Description</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Full quantitative theory for the linear dynamics of entangled linear polymers, based on the tube model and considering contour length fluctuations, constraint release and longitudinal stress relaxation along the tube.</p>
 <p>The parameter <span class="math notranslate nohighlight">\(c_\nu\)</span> is related to the number of chains that are needed to create one entanglement. <span class="math notranslate nohighlight">\(c_\nu=0\)</span> means there is no constraint release. The recommended value is <span class="math notranslate nohighlight">\(c_\nu=0.1\)</span>. This value gives slightly worse fitting than <span class="math notranslate nohighlight">\(c_\nu=1\)</span>, but is more consistent with start-up shear experiments.</p>
-<p>For full details about how the predictions are calculated, refer to <a class="bibtex reference internal" href="#lm-likhtman2002" id="id5">[1]</a>. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of <span class="math notranslate nohighlight">\(Z=M_w/M_e\)</span> = 2, 3, 4 … 299, 300, 305, 310, … 1000, and <span class="math notranslate nohighlight">\(c_\nu\)</span> = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span> in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span>, the prediction is interpolated.</p>
+<p>For full details about how the predictions are calculated, refer to <a class="reference internal" href="#lm-likhtman2002" id="id5">[1]</a>. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of <span class="math notranslate nohighlight">\(Z=M_w/M_e\)</span> = 2, 3, 4 … 299, 300, 305, 310, … 1000, and <span class="math notranslate nohighlight">\(c_\nu\)</span> = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span> in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(c_\nu\)</span>, the prediction is interpolated.</p>
 <p>After the calculation is done, the values of the number of entanglements <span class="math notranslate nohighlight">\(Z\)</span>, the Rouse time <span class="math notranslate nohighlight">\(\tau_R\)</span> and the reptation time <span class="math notranslate nohighlight">\(\tau_D\)</span> of the polymer are printed in the Log Window. These values are calculated according to the following formulas:</p>
 <div class="math notranslate nohighlight">
 \[\tau_R = \tau_e Z^2\]</div>
@@ -344,7 +344,7 @@ the theory will be applied to the first one in the list of active files.</p>
 <p>The user must input the correct density. If available, <span class="math notranslate nohighlight">\(\rho\)</span> is read from the Materials database. The theory fails to fit correctly the data when the values of <span class="math notranslate nohighlight">\(G_e\)</span> and <span class="math notranslate nohighlight">\(M_e\)</span> are linked in this way.</p>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/Applications/LVE/Theory/theory-0"><dl class="citation">
-<dt class="bibtex label" id="lm-likhtman2002"><span class="brackets"><a class="fn-backref" href="#id5">1</a></span></dt>
+<dt class="label" id="lm-likhtman2002"><span class="brackets"><a class="fn-backref" href="#id5">1</a></span></dt>
 <dd><p>Alexei E. Likhtman and Tom C. B. McLeish. Quantitative Theory for Linear Dynamics of Linear Entangled Polymers. <em>Macromolecules</em>, 35(16):6332–6343, jul 2002. <a class="reference external" href="https://doi.org/10.1021/ma0200219">doi:10.1021/ma0200219</a>.</p>
 </dd>
 </dl>
@@ -451,16 +451,16 @@ These files can be generated from the React application in RepTate.</p>
 <p>The original documentation of BoB can be found here: <a class="reference external" href="https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download">https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download</a>.</p>
 </dd></dl>
 
-<p>Publications related to BoB: <a class="bibtex reference internal" href="#boblve-das2006" id="id9">[1]</a>  <a class="bibtex reference internal" href="#boblve-das2006b" id="id10">[2]</a> <a class="bibtex reference internal" href="#boblve-chambon2008" id="id11">[3]</a>.</p>
+<p>Publications related to BoB: <a class="reference internal" href="#boblve-das2006" id="id9">[1]</a>  <a class="reference internal" href="#boblve-das2006b" id="id10">[2]</a> <a class="reference internal" href="#boblve-chambon2008" id="id11">[3]</a>.</p>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/Applications/LVE/Theory/theory-1"><dl class="citation">
-<dt class="bibtex label" id="boblve-das2006"><span class="brackets"><a class="fn-backref" href="#id9">1</a></span></dt>
+<dt class="label" id="boblve-das2006"><span class="brackets"><a class="fn-backref" href="#id9">1</a></span></dt>
 <dd><p>Chinmay Das, Nathanael J. Inkson, Daniel J. Read, Mark a. Kelmanson, and Tom C. B. McLeish. Computational linear rheology of general branch-on-branch polymers. <em>J. Rheol.</em>, 50(2):207–234, mar 2006. URL: <a class="reference external" href="http://sor.scitation.org/doi/10.1122/1.2167487">http://sor.scitation.org/doi/10.1122/1.2167487</a>, <a class="reference external" href="https://doi.org/10.1122/1.2167487">doi:10.1122/1.2167487</a>.</p>
 </dd>
-<dt class="bibtex label" id="boblve-das2006b"><span class="brackets"><a class="fn-backref" href="#id10">2</a></span></dt>
+<dt class="label" id="boblve-das2006b"><span class="brackets"><a class="fn-backref" href="#id10">2</a></span></dt>
 <dd><p>Chinmay Das, Daniel J. Read, Mark A. Kelmanson, and Tom C. B. McLeish. Dynamic scaling in entangled mean-field gelation polymers. <em>Phys. Rev. E</em>, 74(1):011404, jul 2006. URL: <a class="reference external" href="https://link.aps.org/doi/10.1103/PhysRevE.74.011404">https://link.aps.org/doi/10.1103/PhysRevE.74.011404</a>, <a class="reference external" href="https://doi.org/10.1103/PhysRevE.74.011404">doi:10.1103/PhysRevE.74.011404</a>.</p>
 </dd>
-<dt class="bibtex label" id="boblve-chambon2008"><span class="brackets"><a class="fn-backref" href="#id11">3</a></span></dt>
+<dt class="label" id="boblve-chambon2008"><span class="brackets"><a class="fn-backref" href="#id11">3</a></span></dt>
 <dd><p>Pierre Chambon, Christine M. Fernyhough, Kyuhyun Im, Taihyun Chang, Chinmay Das, John Embery, Tom C. B. McLeish, and Daniel J. Read. Synthesis, Temperature Gradient Interaction Chromatography, and Rheology of Entangled Styrene Comb Polymers. <em>Macromolecules</em>, 41(15):5869–5875, aug 2008. URL: <a class="reference external" href="http://pubs.acs.org/doi/abs/10.1021/ma800599m">http://pubs.acs.org/doi/abs/10.1021/ma800599m</a>, <a class="reference external" href="https://doi.org/10.1021/ma800599m">doi:10.1021/ma800599m</a>.</p>
 </dd>
 </dl>
@@ -527,15 +527,15 @@ otherwise <span class="math notranslate nohighlight">\(G=G_N^0\)</span></p>
         <li class="right" >
           <a href="../general.html" title="LVE: General Description"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../LVE.html" > LVE: Linear ViscoElasticity</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

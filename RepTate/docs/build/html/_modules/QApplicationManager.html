@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>QApplicationManager &#8212; RepTate 0.9.6 20191111 documentation</title>
+    <title>QApplicationManager &#8212; RepTate 0.9.7 20200117 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -77,7 +77,7 @@
 <span class="c1">#</span>
 <span class="c1"># --------------------------------------------------------------------------------------------------------</span>
 <span class="c1">#</span>
-<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1"># Copyright (2017-2020): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
 <span class="c1">#</span>
 <span class="c1"># This file is part of RepTate.</span>
 <span class="c1">#</span>
@@ -376,8 +376,7 @@
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#dlg = AboutWindow(self, self.version + &#39; &#39; + self.date)</span>
-        <span class="n">dlg</span> <span class="o">=</span> <span class="n">AboutWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;RepTate Version &quot;</span><span class="o">+</span><span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span><span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">Version</span><span class="o">.</span><span class="n">DATE</span> <span class="o">+</span>
-            <span class="s2">&quot;</span><span class="se">\n\u00A9</span><span class="s2"> Jorge Ramírez, Universidad Politécnica de Madrid, 2018</span><span class="se">\n\u00A9</span><span class="s2"> Victor Boudara, University of Leeds, 2018</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">AboutWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&lt;br&gt;&lt;small&gt;</span><span class="se">\u00A9</span><span class="s2"> Jorge Ramírez, Universidad Politécnica de Madrid (2017-2020)&lt;br&gt;</span><span class="se">\u00A9</span><span class="s2"> Victor Boudara, University of Leeds (2017-2020)&lt;/small&gt;&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="n">Version</span><span class="o">.</span><span class="n">DATE</span><span class="p">))</span>
         <span class="n">dlg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="QApplicationManager.tab_changed"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.tab_changed">[docs]</a>    <span class="k">def</span> <span class="nf">tab_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
@@ -663,7 +662,8 @@
                     <span class="p">(</span><span class="s1">&#39;tools&#39;</span><span class="p">,</span> <span class="n">tools</span><span class="p">),</span>
                     <span class="p">(</span><span class="s1">&#39;show_inspector&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">DataInspectordockWidget</span><span class="o">.</span><span class="n">isVisible</span><span class="p">())),</span>
                     <span class="p">(</span><span class="s1">&#39;annotations&#39;</span><span class="p">,</span> <span class="n">ann_dict</span><span class="p">),</span>
-                    <span class="p">(</span><span class="s1">&#39;axis_options&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">)</span>
+                    <span class="p">(</span><span class="s1">&#39;axis_options&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;legend_opts&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">legend_opts</span><span class="p">)</span>
                 <span class="p">]</span>
             <span class="p">)</span>
 
@@ -908,6 +908,12 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="c1">#backward compatibility</span>
                 <span class="k">pass</span>
+            
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">new_app_tab</span><span class="o">.</span><span class="n">legend_opts</span> <span class="o">=</span> <span class="n">app_dic</span><span class="p">[</span><span class="s1">&#39;legend_opts&#39;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="c1">#backward compatibility</span>
+                <span class="k">pass</span>
 
             <span class="k">if</span> <span class="n">app_indx</span> <span class="o">==</span> <span class="n">current_app_indx</span><span class="p">:</span>
                 <span class="c1"># to be safe in case some apps are open before restore</span>
@@ -960,13 +966,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

@@ -28,7 +28,7 @@ Data Files
 
 Text files with ``.osc`` extension should be organised as follows:
 
-- ``.osc`` files should **at least** the value parameter values for the:
+- ``.osc`` files should contaion **at least** the parameter values for the:
 
   #. sample molar mass ``Mw``,
   #. temperature ``T``.

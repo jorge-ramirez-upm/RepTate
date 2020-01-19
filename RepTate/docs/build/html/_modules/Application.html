@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Application &#8212; RepTate 0.9.6 20191111 documentation</title>
+    <title>Application &#8212; RepTate 0.9.7 20200117 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -77,7 +77,7 @@
 <span class="c1">#</span>
 <span class="c1"># --------------------------------------------------------------------------------------------------------</span>
 <span class="c1">#</span>
-<span class="c1"># Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
+<span class="c1"># Copyright (2017-2020): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds</span>
 <span class="c1">#</span>
 <span class="c1"># This file is part of RepTate.</span>
 <span class="c1">#</span>
@@ -113,7 +113,7 @@
 
 <span class="kn">from</span> <span class="nn">MultiView</span> <span class="k">import</span> <span class="n">MultiView</span><span class="p">,</span> <span class="n">PlotOrganizationType</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QApplication</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QImage</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QImage</span><span class="p">,</span> <span class="n">QColor</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">Qt</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
@@ -199,6 +199,8 @@
         <span class="c1"># self.figure = self.multiplots.figure</span>
         <span class="c1"># self.axarr = self.multiplots.axarr  #</span>
         <span class="c1"># self.canvas = self.multiplots.canvas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax_opt_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fontweight&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> <span class="s1">&#39;color_ax&#39;</span><span class="p">:</span>  <span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">(),</span><span class="s1">&#39;color_label&#39;</span><span class="p">:</span>  <span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">(),</span> <span class="s1">&#39;tick_label_size&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;axis_thickness&#39;</span><span class="p">:</span> <span class="mf">1.25</span><span class="p">,</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;label_size_auto&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;tick_label_size_auto&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opt_defaults</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">cmdline</span><span class="p">):</span>
             <span class="c1"># self.figure.show()</span>
@@ -776,25 +778,25 @@
             <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">log_x</span><span class="p">):</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-                <span class="c1">#ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))</span>
-                <span class="n">locmaj</span> <span class="o">=</span> <span class="n">LogLocator</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">),</span> <span class="n">numticks</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">locmaj</span><span class="p">)</span>
-                <span class="n">locmin</span> <span class="o">=</span> <span class="n">LogLocator</span><span class="p">(</span>
-                    <span class="n">base</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">numticks</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">locmin</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">NullFormatter</span><span class="p">())</span>
+                <span class="c1">##ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))</span>
+                <span class="c1"># locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)</span>
+                <span class="c1"># ax.xaxis.set_major_locator(locmaj)</span>
+                <span class="c1"># locmin = LogLocator(</span>
+                    <span class="c1"># base=10.0, subs=np.arange(2, 10) * .1, numticks=100)</span>
+                <span class="c1"># ax.xaxis.set_minor_locator(locmin)</span>
+                <span class="c1"># ax.xaxis.set_minor_formatter(NullFormatter())</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">AutoMinorLocator</span><span class="p">())</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">log_y</span><span class="p">):</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-                <span class="c1">#ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))</span>
-                <span class="n">locmaj</span> <span class="o">=</span> <span class="n">LogLocator</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">),</span> <span class="n">numticks</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">locmaj</span><span class="p">)</span>
-                <span class="n">locmin</span> <span class="o">=</span> <span class="n">LogLocator</span><span class="p">(</span>
-                    <span class="n">base</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">numticks</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">locmin</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">NullFormatter</span><span class="p">())</span>
+                <span class="c1">##ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))</span>
+                <span class="c1"># locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)</span>
+                <span class="c1"># ax.yaxis.set_major_locator(locmaj)</span>
+                <span class="c1"># locmin = LogLocator(</span>
+                    <span class="c1"># base=10.0, subs=np.arange(2, 10) * .1, numticks=100)</span>
+                <span class="c1"># ax.yaxis.set_minor_locator(locmin)</span>
+                <span class="c1"># ax.yaxis.set_minor_formatter(NullFormatter())</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">AutoMinorLocator</span><span class="p">())</span>
@@ -870,13 +872,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.6 20191111 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

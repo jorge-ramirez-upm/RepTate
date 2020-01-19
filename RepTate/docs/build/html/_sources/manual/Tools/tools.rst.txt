@@ -50,3 +50,5 @@ Smooth
 ------------------
 Materials Database
 ------------------
+
+.. autoclass:: ToolMaterialsDatabase.ToolMaterialsDatabase()
