@@ -757,7 +757,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 tempdic.pop("title_fontsize", None)
                 self.legend = ax.legend(L, N, **tempdic)   
             
-            self.legend.draggable(self.legend_draggable)
+            self.legend.set_draggable(self.legend_draggable)
 
             try:
                 self.canvas.draw()

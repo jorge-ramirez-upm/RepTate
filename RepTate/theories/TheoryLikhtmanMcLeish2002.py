@@ -51,7 +51,7 @@ class TheoryLikhtmanMcLeish2002(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
         
     * **Parameters**
-       - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`.
+       - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`).
        - ``Ge`` : Entanglement modulus.
        - ``Me`` : Entanglement molecular weight.
        - ``c_nu`` : Constraint release parameter.
