@@ -49,7 +49,7 @@ class TheoryStickyReptation(CmdBase):
     """
     thname = 'StickyReptation'
     description = 'Sticky Reptation'
-    citations = 'L. Leibler, M. Rubinstein and Ralph H. Colby, Macromolecules, 1991, 24, 4701-4704'
+    citations = 'Ludwig Leibler, Michael Rubinstein and Ralph H. Colby, Macromolecules, 1991, 24, 4701-4704'
     doi = "http://dx.doi.org/10.1021/ma00016a034"
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
@@ -107,7 +107,7 @@ class BaseTheoryStickyReptation:
             opt_type=OptType.opt)
         self.parameters['Zs'] = Parameter(
             name='Zs',
-            value=4.022881,
+            value=8.045762,
             description='Number of stickers per chain',
             type=ParameterType.real,
             opt_type=OptType.opt)
@@ -120,7 +120,7 @@ class BaseTheoryStickyReptation:
         self.parameters['alpha'] = Parameter(
             name='alpha',
             value=10,
-            description='CLF parameter?',
+            description='CLF parameter',
             type=ParameterType.real,
             opt_type=OptType.const)
 
@@ -170,53 +170,111 @@ class BaseTheoryStickyReptation:
         return gx
 
     def calculate(self, f=None):
-        """Template function that returns the square of y
-        
-        [description]
-        
+        """
+ 
+        STICKY-REPTATION MODEL FOR LINEAR VISCOELASTICITY
+
+          PARAMETERS:
+          > Ge    - elastic modulus
+          > tau_s - sticker dissociation time
+          > Zs    - number of stickers per chain
+          > Ze    - number of entanglements per chain
+          > alpha - magnitude of the contour-length fluctuations in the
+                    double-reptation model. This is principle a universal
+                    dimensionless number with a value around ~10.
+          IMPORTANT: 
+          I. This sticky-reptation model assumes high Rouse frequencies
+             not to affect the rheology at times of the order of the 
+             sticker time, due to which the rheology is independent 
+             of both the elementary (non-sticky) Rouse time, tau0, 
+             and the degree of polymerisation, N. See below.
+          II. The results may be affected by numerical approximations,
+             see below.
+
+          I. MODEL APPROXIMATION:
+          1: Most stickers/reversible crosslinks are bound.
+             This implies that after sticker dissociation a strand
+             of length 2*N/Zs can relax, with N the number of monomers
+             per chain. The Rouse time of this strand, which is not 
+             affected by the stickers, is tau0*(2*N/Zs)^2.
+          2. The model assumes that the sticker dissociation time tau_s
+             is much larger than tau0*(2*N/Zs)^2. The shape of the sticker
+             plateau in G' and G'' is therefore not affected by the 
+             early-time Rouse relaxation, and is independent of tau0 and
+             N: Including the high frequencies requires tau0 and N as
+             additional parameters.
+
+          II. NUMERICAL SETTINGS:
+          Some numerical 
+          1. The infinite sums in the double-reptation model are
+             truncated using a numerical tolerance level.
+          2. To transform G(t) to G'(w) and G''(w) a time range with
+             a finite number of samples is defined. The time range
+             and number of samples may affect the results. 
+                        
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         
         Returns:
             - [type] -- [description]
         """
+
+        #---------------------------------------------
+        # FUNCTION INPUT
         ft = f.data_table
         tt = self.tables[f.file_name_short]
-
         w = ft.data[:, 0]   # angular frequency [rad/s]
-        tmin = 0.1/max(w)   
-        tmax = 10/min(w)
-        n = 100                                          # number of time points
-        t=np.logspace(np.log10(tmin), np.log10(tmax), n) # time range [s]
 
         Ge    = self.parameters['Ge'   ].value
         tau_s = self.parameters['tau_s'].value
         Zs    = self.parameters['Zs'   ].value
         Ze    = self.parameters['Ze'   ].value
         alpha = self.parameters['alpha'].value
+        # END FUNCTION INPUT
+        #---------------------------------------------
 
 
-        # STICKY ROUSE
+        #---------------------------------------------
+        # NUMERICAL SETTINGS
+        # 1. Double reptation
+        tol   =1e-6          # tolerance to truncate infinite sums
+        # 2. Transform of G(t) to G'(w) and G''(w) 
+        tmin  = 0.1/max(w)   # shortest time outside omega interval
+        tmax  = 10/min(w)    # largest  time outside omega interval
+        ntime = 100          # number of time points
+        # END NUMERICAL SETTINGS
+        #---------------------------------------------
+
+
+        #---------------------------------------------
+        # CALCULATE RELAXATION MODULUS
+        # time range [s] to calculate relaxation modulus G(t)
+        t=np.logspace(np.log10(tmin), np.log10(tmax), ntime) 
+
+        #- - - - - - - - - - - - - - - - - - - - - - -
+        # CALCULATE STICKY-ROUSE RELAXATION MODULUS
         GSR = 0               # initialise output
-        tS = t/(tau_s*Zs**2); # tau_s*Zs**2 = Rouse time of the strand between stickers 
+        tau_srouse=(tau_s*(0.5*Zs)**2) # Sticky-Rouse time of the strand that relaxes after sticker dissociation. The factor 0.5 arises because the length of this strand is twice the length of a strand between stickers.
+        tS = t/tau_srouse;   
         dsum=0.0
-        for q in range (1, int(Zs)+1):
+        for q in range (1, int(0.5*Zs)+1):
           if q<Ze:
             GSR += 0.2*np.exp(-tS*q**2)
             dsum+= 0.2
           else:
             GSR += np.exp(-tS*q**2)
             dsum+= 1
-            
-        if(Zs>0):
-          GSR *= Ge*Zs/(dsum*Ze)
+        
+          # Normalise (verified using the asymptotic value of G(t) 
+          #            for short times, t->0.)     
+        GSR *= 0.5*Zs/(dsum*Ze)
 
-        # DOUBLE REPTATION
-        GREP=np.zeros(len(t))    # initialise output
-        tol=1e-6                 # numerical tolerance
-        tau_rep=tau_s*Ze*Zs**2   # sticky-reptation time
-        tR=t/tau_rep             # Time in units of reptation time
-        H=Ze/alpha               # Prefactor in des Cloizeaux model
+        #- - - - - - - - - - - - - - - - - - - - - - -
+        # CALCULATE DOUBLE-REPTATION RELAXATION MODULUS
+        GREP=np.zeros(len(t))          # initialise output
+        tau_rep=Ze*tau_srouse          # sticky-reptation time
+        tR=t/tau_rep                   # Time in units of reptation time
+        H=Ze/alpha                     # Prefactor in des Cloizeaux model
         Ut = tR + self.g_descloizeaux(H*tR, tol)/H
 
         for n in range(0,len(Ut)):
@@ -228,11 +286,15 @@ class BaseTheoryStickyReptation:
             dGrep=np.exp( -q2*Ut[n] )/q2
             GREP[n] += dGrep
             err=dGrep/GREP[n]
-        GREP=Ge*(GREP*8/np.pi**2)**2
+        GREP=(GREP*8/np.pi**2)**2
 
-        # RELAXATION MODULUS G(t) = SUM OF STICKY ROUSE + REPTATION
-        G = GSR + GREP
+        # Relaxation modulus G(t) = sum of Sticky Rouse and Reptation
+        G = Ge*(GSR + GREP)
+        # END CALCULATE RELAXATION MODULUS
+        #---------------------------------------------
 
+
+        #---------------------------------------------
         # GET DYNAMIC MODULI G(w) from G(t)
         f = interpolate.interp1d(
             t,
@@ -245,10 +307,10 @@ class BaseTheoryStickyReptation:
         t1 = t[ind1]
         g1 = G[ind1]
         tinf = np.max(t)
-        wp = np.logspace(np.log10(1 / tinf), np.log10(1 / t1), n)
+        wp = np.logspace(np.log10(1 / tinf), np.log10(1 / t1), ntime)
         tt.num_columns = ft.num_columns
-        tt.num_rows = n
-        G1G2 = np.zeros((n, 3))
+        tt.num_rows = ntime
+        G1G2 = np.zeros((ntime, 3))
         G1G2[:, 0] = wp[:]
 
         coeff = (G[ind1 + 1:] - G[ind1:-1]) / (
