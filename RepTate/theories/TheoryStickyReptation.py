@@ -158,7 +158,7 @@ class BaseTheoryStickyReptation:
     def g_descloizeaux(self, x, tol):
         N=len(x) 
         gx = np.zeros(len(x)) # output array
-        for n in range(0,N-1):
+        for n in range(0,N):
           err=2*tol # initialise error
           m=0
           while err>tol:
@@ -189,53 +189,51 @@ class BaseTheoryStickyReptation:
         n = 100                                          # number of time points
         t=np.logspace(np.log10(tmin), np.log10(tmax), n) # time range [s]
 
-        Ge = self.parameters['Ge'].value
+        Ge    = self.parameters['Ge'   ].value
         tau_s = self.parameters['tau_s'].value
-        Zs = self.parameters['Zs'].value
-        Ze = self.parameters['Ze'].value
+        Zs    = self.parameters['Zs'   ].value
+        Ze    = self.parameters['Ze'   ].value
         alpha = self.parameters['alpha'].value
 
 
         # STICKY ROUSE
-        GSR = 0
+        GSR = 0               # initialise output
         tS = t/(tau_s*Zs**2); # tau_s*Zs**2 = Rouse time of the strand between stickers 
         dsum=0.0
-        count=0
-        Z0 = min(Ze, Zs)
-        for q in range (1, int(Z0)):
+        for q in range (1, int(Zs)+1):
+          if q<Ze:
             GSR += 0.2*np.exp(-tS*q**2)
-            dsum+=0.2
-            count+=1
-        for q in range (int(Z0)+1, int(Zs)):
+            dsum+= 0.2
+          else:
             GSR += np.exp(-tS*q**2)
-            dsum+=1
-            count+=1
-        GSR *= Ge/Ze*count/dsum
+            dsum+= 1
+            
+        if(Zs>0):
+          GSR *= Ge*Zs/(dsum*Ze)
 
         # DOUBLE REPTATION
-        tol=1e-4 # numerical tolerance
-        GREP=0
-        tau_rep=tau_s*Ze*Zs**2 # sticky-reptation time
-        H=Ze/alpha    # Prefactor in des Cloizeaux model
-        tR=t/tau_rep  # Time in units of reptation time
+        GREP=np.zeros(len(t))    # initialise output
+        tol=1e-6                 # numerical tolerance
+        tau_rep=tau_s*Ze*Zs**2   # sticky-reptation time
+        tR=t/tau_rep             # Time in units of reptation time
+        H=Ze/alpha               # Prefactor in des Cloizeaux model
         Ut = tR + self.g_descloizeaux(H*tR, tol)/H
 
-        N=len(Ut)
-        GREP=np.zeros(N) # initialise
-        for n in range(0,N-1):
+        for n in range(0,len(Ut)):
           err=2*tol
           q=-1
-          while err>tol:
-            q+=2  # sum only over odd values of q
+          while err>tol:  # truncate infinite sum when tolerance is met
+            q+=2          # sum only over odd values of q
             q2=q*q
             dGrep=np.exp( -q2*Ut[n] )/q2
             GREP[n] += dGrep
             err=dGrep/GREP[n]
         GREP=Ge*(GREP*8/np.pi**2)**2
 
-        # Relaxation modulus is sum of Sticky Rouse and Reptation moduli
+        # RELAXATION MODULUS G(t) = SUM OF STICKY ROUSE + REPTATION
         G = GSR + GREP
 
+        # GET DYNAMIC MODULI G(w) from G(t)
         f = interpolate.interp1d(
             t,
             G,
