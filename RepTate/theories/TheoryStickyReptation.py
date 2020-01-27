@@ -95,25 +95,25 @@ class BaseTheoryStickyReptation:
         self.has_modes = False  # True if the theory has modes
         self.parameters['Ge'] = Parameter(
             name='Ge',
-            value=10000,
+            value=10605.97,
             description='Entanglement modulus',
             type=ParameterType.real,
             opt_type=OptType.opt)
         self.parameters['tau_s'] = Parameter(
             name='tau_s',
-            value=0.02,
+            value=0.01435800,
             description='sticker time',
             type=ParameterType.real,
             opt_type=OptType.opt)
         self.parameters['Zs'] = Parameter(
             name='Zs',
-            value=10,
+            value=4.022881,
             description='Number of stickers per chain',
             type=ParameterType.real,
             opt_type=OptType.opt)
         self.parameters['Ze'] = Parameter(
             name='Ze',
-            value=10,
+            value=10.49686,
             description='Number of entanglements',
             type=ParameterType.real,
             opt_type=OptType.opt)
@@ -155,11 +155,18 @@ class BaseTheoryStickyReptation:
         """
         pass
 
-    def g(self, x):
-        mmax=100
-        gx = np.zeros(len(x))
-        for m in range(1, mmax):
-            gx += (1-np.exp(-m**2*x))/m**2
+    def g_descloizeaux(self, x, tol):
+        N=len(x) 
+        gx = np.zeros(len(x)) # output array
+        for n in range(0,N-1):
+          err=2*tol # initialise error
+          m=0
+          while err>tol:
+            m+=1
+            m2=m*m
+            dgx = ( 1-np.exp(-m2*x[n]) )/m2
+            gx[n] += dgx
+            err=dgx/gx[n]
         return gx
 
     def calculate(self, f=None):
@@ -176,11 +183,11 @@ class BaseTheoryStickyReptation:
         ft = f.data_table
         tt = self.tables[f.file_name_short]
 
-        w = ft.data[:, 0]
-        tmin = 0.1/max(w)
+        w = ft.data[:, 0]   # angular frequency [rad/s]
+        tmin = 0.1/max(w)   
         tmax = 10/min(w)
-        n = 100
-        t=np.logspace(np.log10(tmin), np.log10(tmax), n)
+        n = 100                                          # number of time points
+        t=np.logspace(np.log10(tmin), np.log10(tmax), n) # time range [s]
 
         Ge = self.parameters['Ge'].value
         tau_s = self.parameters['tau_s'].value
@@ -188,20 +195,30 @@ class BaseTheoryStickyReptation:
         Ze = self.parameters['Ze'].value
         alpha = self.parameters['alpha'].value
 
-        GSR = 0
-        Z0 = min(Ze, Zs)
-        Z1 = max(Ze, Zs)
-        for q in range (1, int(Z0)+1):
-            GSR += 0.2*np.exp(-t*q**2/tau_s/Zs**2)
-        for q in range (int(Z0)+2, int(Z1)+1):
-            GSR += np.exp(-t*q**2/tau_s/Zs**2)
-        GSR *= Ge/Ze
 
-        tau_rep=tau_s*Ze*Zs**2
-        x = Ze*t/alpha/tau_rep
-        Ut = t/tau_rep + alpha/Ze*self.g(x)
+        # STICKY ROUSE
+        GSR = 0
+        tS = t/(tau_s*Zs**2); # tau_s*Zs**2 = Rouse time of the strand between stickers 
+        dsum=0.0
+        count=0
+        Z0 = min(Ze, Zs)
+        for q in range (1, int(Z0)):
+            GSR += 0.2*np.exp(-tS*q**2)
+            dsum+=0.2
+            count+=1
+        for q in range (int(Z0)+1, int(Zs)):
+            GSR += np.exp(-tS*q**2)
+            dsum+=1
+            count+=1
+        GSR *= Ge/Ze*count/dsum
+
+        # DOUBLE REPTATION
+        tol=1e-4 # numerical tolerance
         GREP=0
-        qmax=100
+        tau_rep=tau_s*Ze*Zs**2 # sticky-reptation time
+        x = Ze*t/alpha/tau_rep
+        Ut = t/tau_rep + alpha/Ze*self.g_descloizeaux(x, tol)
+        qmax=500
         for q in range (1, qmax, 2):
             GREP+=np.exp(-q**2*Ut)/q**2
         GREP=Ge*(GREP*8/np.pi**2)**2
