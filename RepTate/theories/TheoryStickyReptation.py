@@ -216,13 +216,24 @@ class BaseTheoryStickyReptation:
         tol=1e-4 # numerical tolerance
         GREP=0
         tau_rep=tau_s*Ze*Zs**2 # sticky-reptation time
-        x = Ze*t/alpha/tau_rep
-        Ut = t/tau_rep + alpha/Ze*self.g_descloizeaux(x, tol)
-        qmax=500
-        for q in range (1, qmax, 2):
-            GREP+=np.exp(-q**2*Ut)/q**2
+        H=Ze/alpha    # Prefactor in des Cloizeaux model
+        tR=t/tau_rep  # Time in units of reptation time
+        Ut = tR + self.g_descloizeaux(H*tR, tol)/H
+
+        N=len(Ut)
+        GREP=np.zeros(N) # initialise
+        for n in range(0,N-1):
+          err=2*tol
+          q=-1
+          while err>tol:
+            q+=2  # sum only over odd values of q
+            q2=q*q
+            dGrep=np.exp( -q2*Ut[n] )/q2
+            GREP[n] += dGrep
+            err=dGrep/GREP[n]
         GREP=Ge*(GREP*8/np.pi**2)**2
 
+        # Relaxation modulus is sum of Sticky Rouse and Reptation moduli
         G = GSR + GREP
 
         f = interpolate.interp1d(
