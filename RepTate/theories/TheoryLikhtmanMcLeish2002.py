@@ -109,24 +109,24 @@ class BaseTheoryLikhtmanMcLeish2002:
             "Rouse time of one Entanglement",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0.0,
-            max_value=np.inf)
+            min_value=1e-7,
+            max_value=1e2)
         self.parameters["Ge"] = Parameter(
             "Ge",
             1e6,
             "Entanglement modulus",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0.0,
-            max_value=np.inf)
+            min_value=1e3,
+            max_value=1e7)
         self.parameters["Me"] = Parameter(
             "Me",
             5,
             "Entanglement molecular weight",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0.0,
-            max_value=np.inf)
+            min_value=0.4,
+            max_value=50.0)
         self.parameters["c_nu"] = Parameter(
             name="c_nu",
             value=0.1,

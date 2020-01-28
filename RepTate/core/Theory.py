@@ -40,7 +40,7 @@ import enum
 import time
 import getpass
 import numpy as np
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, basinhopping, dual_annealing, differential_evolution, shgo, brute
 from scipy.stats.distributions import t
 
 from CmdBase import CmdBase, CmdMode
@@ -70,8 +70,24 @@ class MLStripper(HTMLParser):
     def get_data(self):
         return ''.join(self.fed)
         
+class MinimizationMethod(enum.Enum):
+    """Method used during minimization
+    
+    Parameters can be:
+        - ls: Non-linear Least Squares (default)
+        - basinhopping: Basin-hopping method
+        - dualannealing: Dual-Annealing method
+        - diffevol: Differential Evolution method
+        - SHGO: simplicial homology global optimization
+        - bruteforce: Find the minimum on a hypergrid
 
-
+    """
+    ls=0
+    basinhopping=1
+    dualannealing=2
+    diffevol=3
+    SHGO=4
+    bruteforce=5
 
 class EndComputationRequested(Exception):
     """Exception class to end computations"""
@@ -133,7 +149,6 @@ class Theory(CmdBase):
         self.autocalculate = True
         self.extra_data = {} # Dictionary saved during "Save Project"
 
-
         # THEORY OPTIONS
         self.npoints = 100
         self.dt = 0.001
@@ -191,6 +206,8 @@ class Theory(CmdBase):
                                            self.change_ymax, self)
         self.is_yrange_visible = False
 
+        self.setup_default_minimization_options()
+
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
             self.tables[f.file_name_short] = DataTable(
@@ -206,8 +223,61 @@ class Theory(CmdBase):
 
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
-        # flag for requesting end of computations
+         # flag for requesting end of computations
         self.stop_theory_flag = False
+
+    def setup_default_minimization_options(self):
+        # MINIMIZATION OPTIONS
+        self.mintype=MinimizationMethod.ls
+        self.LSmethod='trf'
+        self.LSjac='2-point'
+        self.LSftol=1e-8
+        self.LSxtol=1e-8
+        self.LSgtol=1e-8
+        self.LSloss='linear' 
+        self.LSf_scale=1.0
+        self.LSmax_fnev=None
+        self.LStr_solver=None
+        self.basinniter=100
+        self.basinT=1.0
+        self.basinstepsize=0.5
+        self.basininterval=50
+        self.basinniter_success=None
+        self.basinseed=None
+        self.annealmaxiter=1000
+        self.annealinitial_temp=5230.0
+        self.annealrestart_temp_ratio=2e-5
+        self.annealvisit=2.62
+        self.annealaccept=-5.0
+        self.annealmaxfun=10000000
+        self.annealseed=None
+        self.annealno_local_search=False
+        self.diffevolstrategy='best1bin'
+        self.diffevolmaxiter=1000
+        self.diffevolpopsize=15
+        self.diffevoltol=0.01
+        self.diffevolmutation=(0.5, 1)
+        self.diffevolrecombination=0.7
+        self.diffevolseed=None
+        self.diffevolpolish=True
+        self.diffevolinit='latinhypercube'
+        self.diffevolatol=0
+        self.diffevolupdating='immediate'
+        self.SHGOn=100
+        self.SHGOiters=1
+        self.SHGOmaxfev=None
+        self.SHGOf_min=None
+        self.SHGOf_tol=1e-4
+        self.SHGOmaxiter=None
+        self.SHGOmaxev=None
+        self.SHGOmaxtime=None
+        self.SHGOminhgrd=None
+        self.SHGOsymmetry=False
+        self.SHGOminimize_every_iter=False
+        self.SHGOlocal_iter=False
+        self.SHGOinfty_constraints=True
+        self.SHGOsampling_method='simplicial'
+        self.BruteNs=20
 
     def destructor(self):
         pass
@@ -317,7 +387,7 @@ class Theory(CmdBase):
         fcopy.data_table.num_rows = fcopy.data_table.data.shape[0]
     
     def get_non_extended_th_table(self, f):
-        """return a copy of the theory table associated with f, where the extra rows are delete"""
+        """return a copy of the theory table associated with f, where the extra rows are deleted"""
         if f.with_extra_x:
             tmp_dt = DataTable(axarr=[])
             nrow = self.tables[f.file_name_short].num_rows
@@ -408,8 +478,48 @@ class Theory(CmdBase):
         else:
             self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
 
+    def fit_callback_basinhopping(self, x, f, accepted):
+        if accepted and f<self.fminnow:
+            self.fminnow=f
+            self.Qprint("nfeval %6d f=%g" % (self.nfev, f))
+        if self.stop_theory_flag:
+            return True
+
+    def fit_callback_dualannealing(self, x, f, context):
+        if f<self.fminnow:
+            self.fminnow=f
+            self.Qprint("nfeval %6d f=%g" % (self.nfev, f))
+        if self.stop_theory_flag:
+            return True
+
+    def fit_callback_diffevol(self, xk, convergence):
+        self.Qprint("nfeval %6d frac=%g"%(self.nfev, convergence))
+        if self.stop_theory_flag:
+            return True
+
+    def fit_callback_shgo(self, xk):
+        if self.nfev%10==0:
+            self.Qprint("nfeval %6d"%self.nfev)
+        if self.stop_theory_flag:
+            return True
+
+    def fit_check_bounds(self, **kwargs):
+        x = kwargs["x_new"]
+        tmax = bool(np.all(x <= self.param_max))
+        tmin = bool(np.all(x >= self.param_min))
+        return tmax and tmin
+
+    def func_fit_and_error(self, x):
+        """Calls the theory function, constructs the vector with the theory predictions and 
+           returns the sum of the squares of the residuals
+        """
+        # NEED TO RECOVER THE VECTOR y THAT WE CONSTRUCTED DURING FUNCTION FIT
+        residuals = self.fittingy - self.func_fit(self.fittingx, *x)
+        fres = sum(residuals**2)
+        return fres
+
     def func_fit(self, x, *param_in):
-        """[summary]
+        """Calls the theory function and constructs the vector with the theory predictions
         
         [description]
         
@@ -420,6 +530,7 @@ class Theory(CmdBase):
         Returns:
             - [type] -- [description]
         """
+        # 1. Assign the current values of the parameters being optimized
         ind = 0
         k = list(self.parameters.keys())
         k.sort()
@@ -428,7 +539,11 @@ class Theory(CmdBase):
             if par.opt_type == OptType.opt:
                 par.value = param_in[ind]
                 ind += 1
+        # 2. Call the theory function
         self.do_calculate("", timing=False)
+
+        # 3. Constructs the y vector that contains all the Y values from the theory after 
+        #    applying the current view and respecting the {xmin, xmax} & {ymin, ymax} limits
         y = []
         view = self.parent_dataset.parent_application.current_view
 
@@ -467,6 +582,7 @@ class Theory(CmdBase):
         Arguments:
             - line {[type]} -- [description]
         """
+        # Do some initial checks on the status of datasets and theories
         if not self.tables:
             self.is_fitting = False
             return
@@ -479,6 +595,9 @@ class Theory(CmdBase):
             self.is_fitting = False
             return
 
+        # Start the fitting procedure
+        # 1. Create x and y vectors that contain the X and Y values of all the active files
+        #    in the current view that respect the {xmin, xmax} & {ymin, ymax} limits
         self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
@@ -528,42 +647,175 @@ class Theory(CmdBase):
                     x = np.append(x, xcond)
                     y = np.append(y, ycond)
 
-        # Mount the vector of parameters (Active ones only)
-        initial_guess = []
-        param_min = []
-        param_max = []
+        # 2. Create the array of theory parameters that will be chenged during the fitting (checked parameters)
+        #    It also creates the arrays with the upper and lower bounds for parameters
+        initial_guess = [] # Take the initial guess for the fit from the current value of the parameter
+        self.param_min = []     # list of min values for fitting parameters
+        self.param_max = []     # list of max values for fitting parameters
         k = list(self.parameters.keys())
         k.sort()
         for p in k:
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 initial_guess.append(par.value)
-                param_min.append(
-                    par.min_value)  #list of min values for fitting parameters
-                param_max.append(
-                    par.max_value)  #list of max values for fitting parameters
-        if (not param_min) or (not param_max):
+                self.param_min.append(par.min_value)  
+                self.param_max.append(par.max_value)  
+        # Return if the list of checked parameters is empty
+        if (not initial_guess) or (not self.param_min) or (not self.param_max):
             self.Qprint("No parameter to minimize")
             self.is_fitting = False
             return
-        opt = dict(return_full=True)
+        
+        # 3. This is where the actual optimization is done
+        # TODO: We should add the option to use different minimization methods
+        #       like those included in scipy or even other ones implemented by us (MC methods)
+        #opt = dict(return_full=True) # I think this is not used
         self.nfev = 0
-        try:
-            #pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1)
-            pars, pcov = curve_fit(
-                self.func_fit,
-                x,
-                y,
-                p0=initial_guess,
-                bounds=(param_min, param_max),
-                method='trf')
-            #bounded parameter space 'bound=(0, np.inf)' triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq
-        except Exception as e:
-            print("In do_fit()", e)
-            self.Qprint("%s" % e)
-            self.is_fitting = False
-            return
+        self.fittingx = x # MAKE EXPERIMENTAL x VECTOR AVAILABLE GLOBAL OPTIMISATION
+        self.fittingy = y # MAKE EXPERIMENTAL y VECTOR AVAILABLE GLOBAL OPTIMISATION
+        self.fminnow = np.inf
 
+        if (self.mintype==MinimizationMethod.dualannealing or self.mintype==MinimizationMethod.diffevol or
+            self.mintype==MinimizationMethod.SHGO):
+            if (np.any(np.isinf(self.param_min)) or np.any(np.isinf(self.param_max)) or np.any(
+                np.isnan(self.param_min)) or np.any(np.isnan(self.param_max))):
+                msg = 'This fitting method cannot be used if any of the bounds is ± nan or ± inf'
+                self.Qprint(msg)
+                self.is_fitting = False
+                return
+
+        if self.mintype==MinimizationMethod.ls:
+            self.Qprint('<b>Non-linear Least-squares</b>')
+            self.Qprint('<b>Local optimisation</b>')
+            try:
+                if self.LSmethod=='trf':
+                    self.Qprint("Method: Trust Region Reflective")
+                elif self.LSmethod=='dogbox':
+                    self.Qprint("Method: dogleg")
+                elif self.LSmethod=='lm':
+                    self.Qprint("Method: Levenberg-Marquardt")
+                if self.LSmethod=='trf' or self.LSmethod=='dogbox':
+                    pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max), 
+                                        method=self.LSmethod, jac=self.LSjac, ftol=self.LSftol, xtol=self.LSxtol,
+                                        gtol=self.LSgtol, loss=self.LSloss, f_scale=self.LSf_scale, max_nfev=self.LSmax_fnev,
+                                        tr_solver=self.LStr_solver)
+                else:
+                    if self.LSmax_fnev==None:
+                        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max), 
+                                            method=self.LSmethod, ftol=self.LSftol, xtol=self.LSxtol,
+                                            gtol=self.LSgtol)
+                    else:
+                        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max), 
+                                            method=self.LSmethod, ftol=self.LSftol, xtol=self.LSxtol,
+                                            gtol=self.LSgtol, maxfev=self.LSmax_fnev)
+            except Exception as e:
+                print("In do_fit()", e)
+                self.Qprint("%s" % e)
+                self.is_fitting = False
+                return
+
+        elif self.mintype==MinimizationMethod.basinhopping:
+            self.Qprint("<b>Basin Hopping<b>")
+            self.Qprint('<b>Global optimisation</b>')
+            minimizer_kwargs = {"method": "BFGS"}
+            try:
+                ret = basinhopping(self.func_fit_and_error, initial_guess, niter=self.basinniter, T=self.basinT, 
+                                   stepsize=self.basinstepsize, minimizer_kwargs=minimizer_kwargs,  
+                                   accept_test=self.fit_check_bounds, callback=self.fit_callback_basinhopping, 
+                                   interval=self.basininterval, niter_success=self.basinniter_success, seed=self.basinseed)
+                initial_guess1=ret.x
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), method='trf')
+            except Exception as e:
+                print("In do_fit()", e)
+                self.Qprint("%s" % e)
+                self.is_fitting = False
+                return
+
+        elif self.mintype==MinimizationMethod.dualannealing:
+            self.Qprint("<b>Dual Annealing<b>")
+            self.Qprint('<b>Global optimisation</b>')
+            try:
+                param_bounds=list(zip(self.param_min, self.param_max))
+                ret = dual_annealing(self.func_fit_and_error, bounds=param_bounds, 
+                                     maxiter=self.annealmaxiter, initial_temp=self.annealinitial_temp, 
+                                     restart_temp_ratio=self.annealrestart_temp_ratio, 
+                                     visit=self.annealvisit, accept=self.annealaccept, 
+                                     maxfun=self.annealmaxfun, seed=self.annealseed,
+                                     no_local_search=self.annealno_local_search,
+                                     callback=self.fit_callback_dualannealing, x0=initial_guess)
+                initial_guess1=ret.x
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, 
+                                       bounds=(self.param_min, self.param_max), method='trf')
+            except Exception as e:
+                print("In do_fit()", e)
+                self.Qprint("%s" % e)
+                self.is_fitting = False
+                return 
+
+        elif self.mintype==MinimizationMethod.diffevol:
+            self.Qprint("<b>Differential Evolution<b>")
+            self.Qprint('<b>Global optimisation</b>')
+            try:
+                param_bounds=list(zip(self.param_min, self.param_max))
+                ret = differential_evolution(self.func_fit_and_error, bounds=param_bounds, 
+                                             strategy=self.diffevolstrategy, maxiter=self.diffevolmaxiter,
+                                             popsize=self.diffevolpopsize, tol=self.diffevoltol, 
+                                             mutation=self.diffevolmutation, recombination=self.diffevolrecombination,
+                                             seed=self.diffevolseed, callback=self.fit_callback_diffevol,
+                                             polish=self.diffevolpolish, init=self.diffevolinit, 
+                                             atol=self.diffevolatol, updating=self.diffevolupdating)
+                initial_guess1=ret.x
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), 
+                                       method='trf')
+            except Exception as e:
+                print("In do_fit()", e)
+                self.Qprint("%s" % e)
+                self.is_fitting = False
+                return 
+                
+        elif self.mintype==MinimizationMethod.SHGO:
+            self.Qprint("<b>Simplicial Homology Global Optimization<b>")
+            try:
+                param_bounds=list(zip(self.param_min, self.param_max))
+                # options={'maxfev': self.SHGOmaxfev, 'f_min': self.SHGOf_min, 'f_tol': self.SHGOf_tol,
+                #          'maxiter': self.SHGOmaxiter, 'maxev': self.SHGOmaxev, 'maxtime': self.SHGOmaxtime,
+                #          'minhgrd': self.SHGOminhgrd, 'symmetry': self.SHGOsymmetry, 
+                #          'minimize_every_iter': self.SHGOminimize_every_iter, 
+                #          'local_iter': self.SHGOlocal_iter, 'infty_constraints': self.SHGOinfty_constraints,
+                #          'disp': True}
+                options={'maxfev': self.SHGOmaxfev, 'f_min': self.SHGOf_min, 'f_tol': self.SHGOf_tol,
+                         'maxiter': self.SHGOmaxiter, 'maxev': self.SHGOmaxev, 'maxtime': self.SHGOmaxtime,
+                         'minhgrd': self.SHGOminhgrd, 'minimize_every_iter': self.SHGOminimize_every_iter, 
+                         'local_iter': self.SHGOlocal_iter, 'infty_constraints': self.SHGOinfty_constraints}
+                # ret = shgo(self.func_fit_and_error, bounds=param_bounds, n=self.SHGOn, iters=self.SHGOiters,
+                #            callback=self.fit_callback_shgo, options=options, 
+                #            sampling_method=self.SHGOsampling_method)
+                ret = shgo(self.func_fit_and_error, bounds=param_bounds, n=self.SHGOn, iters=self.SHGOiters,
+                           callback=self.fit_callback_shgo, options=options, sampling_method=self.SHGOsampling_method)
+                initial_guess1=ret.x
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), 
+                                       method='trf')
+            except Exception as e:
+                print("In do_fit()", e)
+                self.Qprint("%s" % e)
+                self.is_fitting = False
+                return 
+
+        elif self.mintype==MinimizationMethod.bruteforce:
+            self.Qprint("<b>Brute Force Global Optimization<b>")
+            try:
+                param_bounds=list(zip(self.param_min, self.param_max))
+                ret = brute(self.func_fit_and_error, ranges=param_bounds, Ns=self.BruteNs)
+                initial_guess1=ret
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), 
+                                       method='trf')
+            except Exception as e:
+                print("In do_fit()", e)
+                self.Qprint("%s" % e)
+                self.is_fitting = False
+                return 
+
+        # 4. Statistical analysis of the solution found
         residuals = y - self.func_fit(x, *initial_guess)
         fres0 = sum(residuals**2)
         residuals = y - self.func_fit(x, *pars)

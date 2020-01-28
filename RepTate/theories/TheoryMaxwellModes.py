@@ -120,13 +120,17 @@ class BaseTheoryMaxwellModesFrequency:
             np.log10(wmin),
             "Log of frequency range minimum",
             ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=-10,
+            max_value=10)
         self.parameters["logwmax"] = Parameter(
             "logwmax",
             np.log10(wmax),
             "Log of frequency range maximum",
             ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=-10,
+            max_value=10)
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=nmodes,
@@ -146,7 +150,9 @@ class BaseTheoryMaxwellModesFrequency:
                 np.log10(G[i]),
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt)
+                opt_type=OptType.opt,
+                min_value=-10,
+                max_value=10)
 
         # GRAPHIC MODES
         self.graphicmodes = []
