@@ -567,7 +567,6 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                 th.SHGOminhgrd=int(th.dialog.ui.SHGOminhgrdlineEdit.text())
             else:
                 th.SHGOminhgrd=None
-            th.SHGOsymmetry=th.dialog.ui.SHGOsymmetrycheckBox.isChecked()
             th.SHGOminimize_every_iter=th.dialog.ui.SHGOminimize_every_itercheckBox.isChecked()
             th.SHGOlocal_iter=th.dialog.ui.SHGOlocal_itercheckBox.isChecked()
             th.SHGOinfty_constraints=th.dialog.ui.SHGOinfty_constraintscheckBox.isChecked()

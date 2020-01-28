@@ -272,7 +272,6 @@ class Theory(CmdBase):
         self.SHGOmaxev=None
         self.SHGOmaxtime=None
         self.SHGOminhgrd=None
-        self.SHGOsymmetry=False
         self.SHGOminimize_every_iter=False
         self.SHGOlocal_iter=False
         self.SHGOinfty_constraints=True
@@ -777,19 +776,10 @@ class Theory(CmdBase):
             self.Qprint("<b>Simplicial Homology Global Optimization<b>")
             try:
                 param_bounds=list(zip(self.param_min, self.param_max))
-                # options={'maxfev': self.SHGOmaxfev, 'f_min': self.SHGOf_min, 'f_tol': self.SHGOf_tol,
-                #          'maxiter': self.SHGOmaxiter, 'maxev': self.SHGOmaxev, 'maxtime': self.SHGOmaxtime,
-                #          'minhgrd': self.SHGOminhgrd, 'symmetry': self.SHGOsymmetry, 
-                #          'minimize_every_iter': self.SHGOminimize_every_iter, 
-                #          'local_iter': self.SHGOlocal_iter, 'infty_constraints': self.SHGOinfty_constraints,
-                #          'disp': True}
                 options={'maxfev': self.SHGOmaxfev, 'f_min': self.SHGOf_min, 'f_tol': self.SHGOf_tol,
                          'maxiter': self.SHGOmaxiter, 'maxev': self.SHGOmaxev, 'maxtime': self.SHGOmaxtime,
                          'minhgrd': self.SHGOminhgrd, 'minimize_every_iter': self.SHGOminimize_every_iter, 
                          'local_iter': self.SHGOlocal_iter, 'infty_constraints': self.SHGOinfty_constraints}
-                # ret = shgo(self.func_fit_and_error, bounds=param_bounds, n=self.SHGOn, iters=self.SHGOiters,
-                #            callback=self.fit_callback_shgo, options=options, 
-                #            sampling_method=self.SHGOsampling_method)
                 ret = shgo(self.func_fit_and_error, bounds=param_bounds, n=self.SHGOn, iters=self.SHGOiters,
                            callback=self.fit_callback_shgo, options=options, sampling_method=self.SHGOsampling_method)
                 initial_guess1=ret.x
