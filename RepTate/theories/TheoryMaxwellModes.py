@@ -183,7 +183,9 @@ class BaseTheoryMaxwellModesFrequency:
                     Gnew[i],
                     "Log of Mode %d amplitude" % i,
                     ParameterType.real,
-                    opt_type=OptType.opt)
+                    opt_type=OptType.opt,
+                    min_value=-10,
+                    max_value=10)
             if CmdBase.mode == CmdMode.GUI:
                 self.spinbox.blockSignals(True)
                 self.spinbox.setValue(nmodesnew)
@@ -597,7 +599,9 @@ class BaseTheoryMaxwellModesTime:
                     Gnew[i],
                     "Log of Mode %d amplitude" % i,
                     ParameterType.real,
-                    opt_type=OptType.opt)
+                    opt_type=OptType.opt,
+                    min_value=-10,
+                    max_value=10)
             if CmdBase.mode == CmdMode.GUI:
                 self.spinbox.setValue(value)
         else:
