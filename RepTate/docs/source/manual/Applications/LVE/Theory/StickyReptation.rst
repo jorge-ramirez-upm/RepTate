@@ -14,7 +14,7 @@ Description
 -----------
 
 Theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks.
-The relaxation modulus, :math:`G(t)`, is modeled as the sum of a Sticky-Rouse, :math:`G_\mathrm{SR}(t)`, (Leibler-Rubinstein-Colby, 1991 :cite:`Leibler1991`) and a Double-Reptation, :math:`G_\mathrm{rep}(t)`, (des Cloizeaux, 1990 :cite:`desCloizeaux1990`) contribution,
+The relaxation modulus, :math:`G(t)`, is modeled as the sum of a Sticky-Rouse, :math:`G_\mathrm{SR}(t)`, (Leibler-Rubinstein-Colby, 1991 :cite:`SRlve-Leibler1991`) and a Double-Reptation, :math:`G_\mathrm{rep}(t)`, (des Cloizeaux, 1990 :cite:`SRlve-desCloizeaux1990`) contribution,
 
 .. math::
     G(t) = G_\mathrm{SR}(t) + G_\mathrm{rep}(t)
@@ -56,9 +56,20 @@ Parameters
 :math:`\alpha`: dimensionless constant (value around 10) that is in principle universal.
 
 
+Recommendations
+---------------
+To verify the theory, the calculated viscosity :math:`G_\mathrm{e}\times \tau_\mathrm{s}Z_\mathrm{s}^2 Z_\mathrm{e}`: should be close to the experimental value. 
+Further, the fitted value of the elastic plateau modulus should be close to
+
+.. math::
+    G_\mathrm{e} = \dfrac{4}{5}\dfrac{\phi Z_\mathrm{e}}{\upsilon N} k_\mathrm{B}T
+
+with :math:`\phi` the volume fraction occupied by the polymer, :\upsilon: the volume of a monomer and :math:`N` the number of monomers per chain.
+:math:`k_\mathrm{B}` is Boltzmann's constant and :math:`T` is the absolute temperature in Kelvin.
+
 .. rubric:: References
 
 .. bibliography:: ../bibliography.bib
     :style: unsrt
-    :keyprefix: boblve-
+    :keyprefix: SRlve-
 
