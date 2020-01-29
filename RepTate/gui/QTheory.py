@@ -39,11 +39,11 @@ Module that defines the GUI counterpart of the class Theory.
 import sys
 from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
-from Theory import Theory
+from Theory import Theory, MinimizationMethod
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog, QApplication, QTextBrowser, QSplitter, QMenu
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QDoubleValidator, QCursor
+from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
 from Parameter import OptType, ParameterType, ShiftType
 from math import ceil, floor
 import Version
@@ -51,6 +51,7 @@ import time
 import ast
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH, 'theorytab.ui'))
+from fittingoptions import Ui_Dialog
 
 # def trap_exc_during_debug(*args):
 #     # when app raises uncaught exception, print info
@@ -229,10 +230,97 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.thread_calc_busy = False
         self.thread_fit_busy = False
 
+        # Setup Theory Parameters Dialog
+        self.dialog = QDialog()
+        self.dialog.ui = Ui_Dialog()
+        self.dialog.ui.setupUi(self.dialog)
+        self.populate_default_minimization_options()
+
         connection_id = self.thParamTable.itemDoubleClicked.connect(
             self.onTreeWidgetItemDoubleClicked)
         connection_id = self.thParamTable.itemChanged.connect(
             self.handle_parameterItemChanged)
+
+    def populate_default_minimization_options(self):
+        dvalidator = QDoubleValidator()
+        ivalidator = QIntValidator()
+        # LEAST-SQUARES LOCAL MIN
+        self.dialog.ui.LSftollineEdit.setValidator(dvalidator)
+        self.dialog.ui.LSxtollineEdit.setValidator(dvalidator)
+        self.dialog.ui.LSgtollineEdit.setValidator(dvalidator)
+        self.dialog.ui.LSf_scalelineEdit.setValidator(dvalidator)
+        self.dialog.ui.LSmax_nfevlineEdit.setValidator(ivalidator) 
+        self.dialog.ui.LSmethodcomboBox.setCurrentIndex(self.dialog.ui.LSmethodcomboBox.findText(self.LSmethod))
+        self.dialog.ui.LSjaccomboBox.setCurrentIndex(self.dialog.ui.LSjaccomboBox.findText(self.LSjac))
+        self.dialog.ui.LSftollineEdit.setText('%g'%self.LSftol)
+        self.dialog.ui.LSxtollineEdit.setText('%g'%self.LSxtol)
+        self.dialog.ui.LSgtollineEdit.setText('%g'%self.LSgtol)
+        self.dialog.ui.LSlosscomboBox.setCurrentIndex(self.dialog.ui.LSlosscomboBox.findText(self.LSloss))
+        self.dialog.ui.LSf_scalelineEdit.setText('%g'%self.LSf_scale)
+        self.dialog.ui.LSmax_nfevlineEdit.setText('100')
+        # BASIN HOPPING
+        self.dialog.ui.basinniterlineEdit.setValidator(ivalidator)
+        self.dialog.ui.basinTlineEdit.setValidator(dvalidator)
+        self.dialog.ui.basinstepsizelineEdit.setValidator(dvalidator)
+        self.dialog.ui.basinintervallineEdit.setValidator(ivalidator)
+        self.dialog.ui.basinniter_successlineEdit.setValidator(ivalidator)
+        self.dialog.ui.basinseedlineEdit.setValidator(ivalidator)
+        self.dialog.ui.basinniterlineEdit.setText('%d'%self.basinniter)
+        self.dialog.ui.basinTlineEdit.setText('%g'%self.basinT)
+        self.dialog.ui.basinstepsizelineEdit.setText('%g'%self.basinstepsize)
+        self.dialog.ui.basinintervallineEdit.setText('%d'%self.basininterval)
+        self.dialog.ui.basinniter_successlineEdit.setText('30')
+        self.dialog.ui.basinseedlineEdit.setText('4398495')
+        # DUAL ANNEALING
+        self.dialog.ui.annealmaxiterlineEdit.setValidator(ivalidator)
+        self.dialog.ui.annealinitial_templineEdit.setValidator(dvalidator)
+        self.dialog.ui.annealrestart_temp_ratiolineEdit.setValidator(dvalidator)
+        self.dialog.ui.annealvisitlineEdit.setValidator(dvalidator)
+        self.dialog.ui.annealacceptlineEdit.setValidator(dvalidator)
+        self.dialog.ui.annealmaxfunlineEdit.setValidator(ivalidator)
+        self.dialog.ui.annealseedlineEdit.setValidator(ivalidator)
+        self.dialog.ui.annealmaxiterlineEdit.setText('%d'%self.annealmaxiter)
+        self.dialog.ui.annealinitial_templineEdit.setText('%g'%self.annealinitial_temp)
+        self.dialog.ui.annealrestart_temp_ratiolineEdit.setText('%g'%self.annealrestart_temp_ratio)
+        self.dialog.ui.annealvisitlineEdit.setText('%g'%self.annealvisit)
+        self.dialog.ui.annealacceptlineEdit.setText('%g'%self.annealaccept)
+        self.dialog.ui.annealmaxfunlineEdit.setText('%d'%self.annealmaxfun)
+        self.dialog.ui.annealseedlineEdit.setText('4389439')
+        # DIFFERENTIAL EVOLUTION
+        self.dialog.ui.diffevolmaxiterlineEdit.setValidator(ivalidator)
+        self.dialog.ui.diffevolpopsizelineEdit.setValidator(ivalidator)
+        self.dialog.ui.diffevoltollineEdit.setValidator(dvalidator)
+        self.dialog.ui.diffevolmutationAlineEdit.setValidator(dvalidator)
+        self.dialog.ui.diffevolmutationBlineEdit.setValidator(dvalidator)
+        self.dialog.ui.diffevolrecombinationlineEdit.setValidator(dvalidator)
+        self.dialog.ui.diffevolseedlineEdit.setValidator(ivalidator)
+        self.dialog.ui.diffevolatollineEdit.setValidator(dvalidator)
+        self.dialog.ui.diffevolstrategycomboBox.setCurrentIndex(self.dialog.ui.diffevolstrategycomboBox.findText(self.diffevolstrategy))
+        self.dialog.ui.diffevolmaxiterlineEdit.setText('%d'%self.diffevolmaxiter)
+        self.dialog.ui.diffevolpopsizelineEdit.setText('%d'%self.diffevolpopsize)
+        self.dialog.ui.diffevoltollineEdit.setText('%g'%self.diffevoltol)
+        self.dialog.ui.diffevolmutationAlineEdit.setText('%g'%self.diffevolmutation[0])
+        self.dialog.ui.diffevolmutationBlineEdit.setText('%g'%self.diffevolmutation[1])
+        self.dialog.ui.diffevolrecombinationlineEdit.setText('%g'%self.diffevolrecombination)
+        self.dialog.ui.diffevolseedlineEdit.setText('4389439')
+        self.dialog.ui.diffevolinitcomboBox.setCurrentIndex(self.dialog.ui.diffevolinitcomboBox.findText(self.diffevolinit))
+        self.dialog.ui.diffevolatollineEdit.setText('%g'%self.diffevolatol)
+        # SHGO
+        self.dialog.ui.SHGOnlineEdit.setValidator(ivalidator)
+        self.dialog.ui.SHGOiterslineEdit.setValidator(ivalidator)
+        self.dialog.ui.SHGOmaxfevlineEdit.setValidator(ivalidator)
+        self.dialog.ui.SHGOf_minlineEdit.setValidator(dvalidator)
+        self.dialog.ui.SHGOf_tollineEdit.setValidator(dvalidator)
+        self.dialog.ui.SHGOmaxiterlineEdit.setValidator(ivalidator)
+        self.dialog.ui.SHGOmaxevlineEdit.setValidator(ivalidator)
+        self.dialog.ui.SHGOmaxtimelineEdit.setValidator(dvalidator)
+        self.dialog.ui.SHGOminhgrdlineEdit.setValidator(ivalidator)
+        self.dialog.ui.SHGOnlineEdit.setText('%d'%self.SHGOn)
+        self.dialog.ui.SHGOiterslineEdit.setText('%d'%self.SHGOiters)
+        self.dialog.ui.SHGOf_tollineEdit.setText('%g'%self.SHGOf_tol)
+        # Brute Force
+        self.dialog.ui.BruteNslineEdit.setValidator(ivalidator)
+        self.dialog.ui.BruteNslineEdit.setText('%d'%self.BruteNs)
 
     def thtextbox_context_menu(self):
         """Custom contextual menu for the theory textbox"""

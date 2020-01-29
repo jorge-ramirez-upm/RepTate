@@ -246,6 +246,18 @@
     <string>Paste Parameters</string>
    </property>
   </action>
+  <action name="actionFitting_Options">
+   <property name="icon">
+    <iconset resource="Theory.qrc">
+     <normaloff>:/Icon8/Images/new_icons/icons8-minimum-value-options.png</normaloff>:/Icon8/Images/new_icons/icons8-minimum-value-options.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fitting Options</string>
+   </property>
+   <property name="toolTip">
+    <string>Fitting Options</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Theory.qrc"/>
