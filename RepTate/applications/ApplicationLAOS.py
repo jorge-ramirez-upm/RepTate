@@ -90,6 +90,7 @@ class BaseApplicationLAOS:
         """
         # IMPORT THEORIES
         from TheoryMITlaos import TheoryMITlaos
+        from TheoryUCM import TheoryUCMLAOS
 
         super().__init__(name, parent)
 
@@ -277,6 +278,7 @@ class BaseApplicationLAOS:
             ftype.extension] = ftype  #add each the file type to dictionary
 
         # THEORIES
+        self.theories[TheoryUCMLAOS.thname] = TheoryUCMLAOS
         self.theories[TheoryMITlaos.thname] = TheoryMITlaos
         self.add_common_theories()  # Add basic theories to the application
 
