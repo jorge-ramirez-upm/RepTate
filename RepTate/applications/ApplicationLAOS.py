@@ -38,7 +38,7 @@ Large Amplitude Oscillatory Shear
 from CmdBase import CmdBase, CmdMode
 from Application import Application
 from QApplicationWindow import QApplicationWindow
-from View import View
+from View import View, ViewMode
 from FileType import TXTColumnFile
 import numpy as np
 from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
@@ -211,7 +211,8 @@ class BaseApplicationLAOS:
             log_y=False,
             view_proc=self.view_chebelastic,
             n=1,
-            snames=['chebelastic'])
+            snames=['chebelastic'],
+            viewmode_data=ViewMode.bar)
 
         self.views['Cheb viscous'] = View(
             name='Cheb viscous',

@@ -47,9 +47,9 @@ class ViewMode(Enum):
         - line: Show lines (default for theories)
         - bar: Show bars 
     """
-    total = 0
-    ev = 1
-    cheb13 = 2
+    symbol = 0
+    line = 1
+    bar = 2
 
 class View(object):
     """Abstract class to describe a view
@@ -72,7 +72,9 @@ class View(object):
                  inverse_view_proc=None,
                  index=0,
                  with_thline=True,
-                 filled=False):
+                 filled=False,
+                 viewmode_data=ViewMode.symbol,
+                 viewmode_theory=ViewMode.line):
         """
         **Constructor**
         
@@ -108,3 +110,5 @@ class View(object):
         self.snames = snames
         self.with_thline = with_thline
         self.filled = filled
+        self.viewmode_data=viewmode_data
+        self.viewmode_theory=viewmode_theory
