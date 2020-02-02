@@ -90,7 +90,7 @@ class BaseApplicationLAOS:
         """
         # IMPORT THEORIES
         from TheoryMITlaos import TheoryMITlaos
-        from TheoryUCM import TheoryUCMLAOS
+        from TheoryUCMLAOS import TheoryUCMLAOS
 
         super().__init__(name, parent)
 
