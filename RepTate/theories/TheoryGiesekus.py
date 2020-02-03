@@ -51,6 +51,7 @@ from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
 from Theory import EndComputationRequested
+from ApplicationLAOS import GUIApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -302,6 +303,14 @@ class BaseTheoryGiesekus:
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
+    def sigma_xy_shearLAOS(self, p, times):
+        _, G, tauD, g0, w = p
+        eta = G*tauD
+
+        return eta*g0*w*(tauD*w*np.sin(w*times)
+                        -np.exp(-times/tauD)
+                        +np.cos(w*times))/(1+w**2*tauD**2)
+
     def sigmadot_shear(self, sigma, times, p):
         """Giesekus model in shear"""
         if self.stop_theory_flag:
@@ -343,6 +352,25 @@ class BaseTheoryGiesekus:
     #     dsxx = 2 * gdot * sxx - (sxx - 1) / tau - alpha / tau * sxx * (sxx - 1)
     #     dsyy = -gdot * syy - (syy - 1) / tau - alpha / tau * syy * (syy - 1)
     #     return [dsxx, dsyy]
+
+    def sigmadot_shearLAOS(self, sigma, times, p):
+        """Giesekus model in shear"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        alpha, _, tau, g0, w = p
+        sxx, syy, sxy = sigma
+        gdot = g0*w*np.cos(w*times)
+
+        dsxx = 2 * gdot * sxy + (alpha - 1) * (sxx - 1) / tau - alpha / tau * (
+            sxx * sxx + sxy * sxy - sxx)
+
+        dsyy = (alpha - 1) * (syy - 1) / tau - alpha / tau * (
+            sxy * sxy + syy * syy - syy)
+
+        dsxy = gdot * syy + (alpha - 1) * sxy / tau - alpha / tau * (
+            sxx * sxy + sxy * syy - sxy)
+
+        return [dsxx, dsyy, dsxy]
 
     def calculate_giesekus(self, f=None):
         """[summary]
@@ -413,6 +441,61 @@ class BaseTheoryGiesekus:
                 elif self.flow_mode == FlowMode.uext:
                     tt.data[:, 1] += self.n1_uext(p, ft.data[:, 0])
 
+    def calculate_giesekusLAOS(self, f=None):
+        """[summary]
+        
+        [description]
+        
+        Keyword Arguments:
+            - f {[type]} -- [description] (default: {None})
+        
+        Returns:
+            - [type] -- [description]
+        """
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+
+        sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
+        pde_stretchLAOS = self.sigmadot_shearLAOS
+
+        # ODE solver parameters
+        abserr = 1.0e-8
+        relerr = 1.0e-6
+        g0 = float(f.file_parameters["gamma"])
+        w = float(f.file_parameters["omega"])
+        nmodes = self.parameters["nmodes"].value
+        nstretch = self.parameters["nstretch"].value
+        t = ft.data[:, 0]
+        tt.data[:, 1] = g0*np.sin(w*t)
+        t = np.concatenate([[0], t])
+        for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
+            G = self.parameters["G%02d" % i].value
+            tauD = self.parameters["tauD%02d" % i].value
+            alpha = self.parameters["alpha%02d" % i].value
+            p = [alpha, G, tauD, g0, w]
+            if i < nstretch:
+                try:
+                    sig = odeint(
+                        pde_stretchLAOS,
+                        sigma0,
+                        t,
+                        args=(p, ),
+                        atol=abserr,
+                        rtol=relerr)
+                except EndComputationRequested:
+                    break
+                sxy = np.delete(sig[:, 2], [0])
+                tt.data[:, 2] += G * sxy
+            else:
+                # use UCM for non stretching modes
+                tt.data[:, 1] += self.sigma_xy_shearLAOS(p, ft.data[:, 0])
+ 
     def set_param_value(self, name, value):
         """[summary]
         
@@ -506,21 +589,28 @@ class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
-        self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
-            "Shear Flow")
-        self.extensional_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
-            "Extensional Flow")
-        if self.flow_mode == FlowMode.shear:
-            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
+            self.tbutflow = QToolButton()
+            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu = QMenu()
+            self.shear_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
+                "Shear Flow")
+            self.extensional_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+                "Extensional Flow")
+            if self.flow_mode == FlowMode.shear:
+                self.tbutflow.setDefaultAction(self.shear_flow_action)
+            else:
+                self.tbutflow.setDefaultAction(self.extensional_flow_action)
+            self.tbutflow.setMenu(menu)
+            tb.addWidget(self.tbutflow)
+            connection_id = self.shear_flow_action.triggered.connect(
+                self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(
+                self.select_extensional_flow)
         else:
-            self.tbutflow.setDefaultAction(self.extensional_flow_action)
-        self.tbutflow.setMenu(menu)
-        tb.addWidget(self.tbutflow)
+            self.function = self.calculate_giesekusLAOS
 
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
@@ -552,10 +642,6 @@ class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(
-            self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(
             self.get_modes_reptate)
         connection_id = self.edit_modes_action.triggered.connect(

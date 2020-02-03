@@ -89,8 +89,10 @@ class BaseApplicationLAOS:
             - parent {[type]} -- [description] (default: {None})
         """
         # IMPORT THEORIES
-        from TheoryMITlaos import TheoryMITlaos
-        from TheoryUCMLAOS import TheoryUCMLAOS
+        from TheoryRoliePoly import TheoryRoliePoly
+        from TheoryUCM import TheoryUCM
+        from TheoryGiesekus import TheoryGiesekus
+        from TheoryPomPom import TheoryPomPom
 
         super().__init__(name, parent)
 
@@ -279,8 +281,10 @@ class BaseApplicationLAOS:
             ftype.extension] = ftype  #add each the file type to dictionary
 
         # THEORIES
-        self.theories[TheoryUCMLAOS.thname] = TheoryUCMLAOS
-        self.theories[TheoryMITlaos.thname] = TheoryMITlaos
+        self.theories[TheoryRoliePoly.thname] = TheoryRoliePoly
+        self.theories[TheoryUCM.thname] = TheoryUCM
+        self.theories[TheoryGiesekus.thname] = TheoryGiesekus
+        self.theories[TheoryPomPom.thname] = TheoryPomPom
         self.add_common_theories()  # Add basic theories to the application
 
         #set the current view

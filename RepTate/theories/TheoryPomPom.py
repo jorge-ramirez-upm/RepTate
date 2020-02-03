@@ -52,6 +52,7 @@ from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
 from Theory import EndComputationRequested
+from ApplicationLAOS import GUIApplicationLAOS
 import Version
 import time
 
@@ -339,6 +340,32 @@ class BaseTheoryPomPom:
                 dydx = firstterm - (l - 1) / tauS * exp(nustar * (l - 1))
         return dydx
 
+    def sigmadot_shearLAOS(self, l, t, p):
+        """PomPom model in shear LAOS"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        q, tauB, tauS, g0, w = p
+        gdot = g0*w*np.cos(w*t)
+        if (l >= q) or (q == 1):
+            l = q
+            dydx = 0
+        elif l < 1:
+            l = 1
+            dydx = 0
+        else:
+            nustar = 2.0 / (q - 1)
+            Axy = tauB*g0*w*(tauB*w*np.sin(w*t)-np.exp(-t/tauB)+np.cos(w*t))/(1+w**2*tauB**2)
+            Axx = 1-tauB*g0**2*w*(2*np.cos(2*w*t)*tauB**3*w**3 + 2*np.exp(-t/tauB)*tauB**3*w**3 + 8*np.exp(-t/tauB)*tauB**2*w**2*np.sin(w*t) - 4*tauB**3*w**3 - 3*np.sin(2*w*t)*tauB**2*w**2 - np.cos(2*w*t)*tauB*w + 2*tauB*np.exp(-t/tauB)*w + 2*np.exp(-t/tauB)*np.sin(w*t) - tauB*w)/(4*tauB**4*w**4 + 5*tauB**2*w**2 + 1)
+            Trace = Axx + 2
+            #For very fast modes, avoid integrating
+            aux = tauS / exp(nustar * (l - 1))
+            if (aux * gdot < 1e-3):
+                dydx = 0
+            else:
+                dydx = l * gdot * Axy / Trace - (
+                    l - 1) / tauS * exp(nustar * (l - 1))
+        return dydx
+
     def calculate_PomPom(self, f=None):
         """[summary]
         
@@ -419,6 +446,55 @@ class BaseTheoryPomPom:
                     Axx_arr + 2 * Ayy_arr)  # k=1 if Axx > 1e240
 
                 tt.data[:, 1] += 3 * G * l * l * k
+
+    def calculate_PomPomLAOS(self, f=None):
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+
+        pde_stretchLAOS = self.sigmadot_shearLAOS
+
+        # ODE solver parameters
+        abserr = 1.0e-8
+        relerr = 1.0e-6
+
+        #create parameters list
+        g0 = float(f.file_parameters["gamma"])
+        w = float(f.file_parameters["omega"])
+        nmodes = self.parameters["nmodes"].value
+        times = ft.data[:, 0]
+        tt.data[:, 1] = g0*np.sin(w*times)
+        times = np.concatenate([[0], times])
+        for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
+            G = self.parameters["G%02d" % i].value
+            q = self.parameters["q%02d" % i].value
+            tauB = self.parameters["tauB%02d" % i].value
+            tauS = tauB / self.parameters["ratio%02d" % i].value
+            p = [q, tauB, tauS, g0, w]
+
+            #solve ODEs
+            stretch_ini = 1
+            try:
+                l = odeint(
+                    pde_stretchLAOS,
+                    stretch_ini,
+                    times,
+                    args=(p, ),
+                    atol=abserr,
+                    rtol=relerr)
+            except EndComputationRequested:
+                break
+            # write results in table
+            l = np.delete(l, [0])  # delete the t=0 value
+            t = np.delete(times, [0])  # delete the t=0 value
+            Axy_arr = tauB*g0*w*(tauB*w*np.sin(w*t)-np.exp(-t/tauB)+np.cos(w*t))/(1+w**2*tauB**2)
+            Axx_arr = 1-tauB*g0**2*w*(2*np.cos(2*w*t)*tauB**3*w**3 + 2*np.exp(-t/tauB)*tauB**3*w**3 + 8*np.exp(-t/tauB)*tauB**2*w**2*np.sin(w*t) - 4*tauB**3*w**3 - 3*np.sin(2*w*t)*tauB**2*w**2 - np.cos(2*w*t)*tauB*w + 2*tauB*np.exp(-t/tauB)*w + 2*np.exp(-t/tauB)*np.sin(w*t) - tauB*w)/(4*tauB**4*w**4 + 5*tauB**2*w**2 + 1)
+            tt.data[:, 2] += 3 * G * l * l * Axy_arr / (Axx_arr + 2.0)            
 
     def set_param_value(self, name, value):
         """[summary]
@@ -523,21 +599,28 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
-        self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
-            "Shear Flow")
-        self.extensional_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
-            "Extensional Flow")
-        if self.flow_mode == FlowMode.shear:
-            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
+            self.tbutflow = QToolButton()
+            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu = QMenu()
+            self.shear_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
+                "Shear Flow")
+            self.extensional_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+                "Extensional Flow")
+            if self.flow_mode == FlowMode.shear:
+                self.tbutflow.setDefaultAction(self.shear_flow_action)
+            else:
+                self.tbutflow.setDefaultAction(self.extensional_flow_action)
+            self.tbutflow.setMenu(menu)
+            tb.addWidget(self.tbutflow)
+            connection_id = self.shear_flow_action.triggered.connect(
+                self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(
+                self.select_extensional_flow)
         else:
-            self.tbutflow.setDefaultAction(self.extensional_flow_action)
-        self.tbutflow.setMenu(menu)
-        tb.addWidget(self.tbutflow)
+            self.function = self.calculate_PomPomLAOS
 
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
@@ -566,10 +649,6 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(
-            self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(
             self.get_modes_reptate)
         connection_id = self.edit_modes_action.triggered.connect(
