@@ -8,25 +8,13 @@ Sticky Reptation
 Summary
 -------
 
-.. autoclass:: StickyReptation.TheoryStickyReptation()
+.. autoclass:: TheoryStickyReptation.TheoryStickyReptation()
    
-
-Sticky Reptation model for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks. The key ingredients to this model are sticky Rouse :cite:`SRlve-Leibler1991` and double reptation :cite:`SRlve-desCloizeaux1990` (see Description for more detail). The parameters are
-
-    *   :math:`G_\mathrm{e}`: elastic plateau modulus
-    *   :math:`Z_\mathrm{e}`: number of entanglements per chain
-    *   :math:`Z_\mathrm{s}`: number of stickers per chain
-    *   :math:`\tau_\mathrm{s}`: sticker dissociation time
-    *   :math:`\alpha`: dimensionless constant that is in principle universal, but in practice varies between different polymers (see e.g. Ref. :cite:`SRlve-Ruymbeke2002`). Note that :math:`Z_\mathrm{e}/\alpha` is equivalent to the parameter :math:`H` in Ref. :cite:`SRlve-desCloizeaux1990`.
-
-.. warning::
-    The high-frequency Rouse modes with time scales shorter than the sticker dissociation time are not included.  This is only valid if the sticker dissociation time is much larger than the Rouse time of those substrands.
-
 
 Description
 -----------
 
-Theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks.
+Theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks. 
 The relaxation modulus, :math:`G(t)`, is modeled as the sum of a Sticky-Rouse, :math:`G_\mathrm{SR}(t)` :cite:`SRlve-Leibler1991` and a Double-Reptation, :math:`G_\mathrm{rep}(t)` :cite:`SRlve-desCloizeaux1990` contribution,
 
 .. math::
@@ -40,6 +28,11 @@ with
 This equation assumes that most stickers are bound, and after sticker dissociation a strand of length :math:`2N/Z_\mathrm{s}` can relax, with :math:`N` the number of monomers per chain and :math:`Z_\mathrm{s}` the number of stickers per chain. :math:`\tau_\mathrm{s}` is the dissociation time of a sticker.
 The truncation :math:`Z_\mathrm{s}/2` implies that we ignore high-frequency (non-sticky) Rouse relaxation of the subchains between stickers.
 This is only valid if the sticker dissociation time is much larger than the Rouse time of those substrands.
+
+.. warning::
+    The high-frequency Rouse modes with time scales shorter than the sticker dissociation time are not included.  This is only valid if the sticker dissociation time is much larger than the Rouse time of those substrands.
+
+
 Finally, the factor  :math:`\kappa` is 0.2 for long wavelengths (i.e., for :math:`q < Z_\mathrm{e}`  and unity for short wavelengths (i.e., for :math:`q \geq Z_\mathrm{e}`) (see Likhtman-McLeish, 2002). 
 The factor :math:`Z_\mathrm{e}` is the number of entanglements per chain.
     
@@ -53,11 +46,9 @@ with
 .. math::
     U(t) = \frac{t}{\tau_\mathrm{rep}} + \frac{\alpha}{Z_\mathrm{e}}g\left(\frac{Z_\mathrm{e}}{\alpha} \frac{t}{\tau_\mathrm{rep}}\right)
 
-and with :math:`g(x)=\sum_{m=1}^{\infty}m^{-2}\left[1-\exp(-m^2 x)\right]`.
+and with :math:`g(x)=\sum_{m=1}^{\infty}m^{-2}\left[1-\exp(-m^2 x)\right]`. The dimensionless constant :math:`\alpha`: is in principle universal, but in practice varies between different polymers (see e.g. Ref. :cite:`SRlve-Ruymbeke2002`). Note that :math:`Z_\mathrm{e}/\alpha` is equivalent to the parameter :math:`H` in Ref. :cite:`SRlve-desCloizeaux1990`.
+
 The sticky reptation time is :math:`\tau_\mathrm{rep} = \tau_\mathrm{s}Z_\mathrm{s}^2Z_\mathrm{e}`.
-
-
-
 
 
 Recommendations

@@ -43,10 +43,16 @@ from DataTable import DataTable
 from scipy import interpolate
 
 class TheoryStickyReptation(CmdBase):
-    """[summary]
-    
-    [description]
+    """Fit the Sticky Reptation theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks.
+        
+    * **Parameters**
+       - ``Ge`` : elastic plateau modulus.
+       - ``Ze`` : number of entanglements per chain.
+       - ``Zs`` : number of stickers per chain.
+       - ``tau_s`` : sticker dissociation time.
+       - ``alpha`` : dimensionless constant.
     """
+
     thname = 'StickyReptation'
     description = 'Sticky Reptation'
     citations = 'Ludwik Leibler, Michael Rubinstein and Ralph H. Colby, Macromolecules, 1991, 24, 4701-4704'
