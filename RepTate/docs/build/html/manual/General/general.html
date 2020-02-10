@@ -52,6 +52,20 @@
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">General Description of RepTate</a><ul>
+<li><a class="reference internal" href="#main-reptate-window">Main RepTate Window</a></li>
+<li><a class="reference internal" href="#plot-area">Plot Area</a></li>
+<li><a class="reference internal" href="#view-selection">View selection</a></li>
+<li><a class="reference internal" href="#operating-with-datasets">Operating with Datasets</a></li>
+<li><a class="reference internal" href="#id6">Operating with Datasets</a></li>
+<li><a class="reference internal" href="#inspecting-the-data">Inspecting the Data</a></li>
+<li><a class="reference internal" href="#using-the-tools">Using the Tools</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="../manual.html"
                         title="previous chapter">User Manual</a></p>
@@ -85,49 +99,167 @@
             
   <div class="section" id="general-description-of-reptate">
 <h1>General Description of RepTate<a class="headerlink" href="#general-description-of-reptate" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#main-reptate-window" id="id11">Main RepTate Window</a></p></li>
+<li><p><a class="reference internal" href="#plot-area" id="id12">Plot Area</a></p></li>
+<li><p><a class="reference internal" href="#view-selection" id="id13">View selection</a></p></li>
+<li><p><a class="reference internal" href="#operating-with-datasets" id="id14">Operating with Datasets</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id15">Operating with Datasets</a></p></li>
+<li><p><a class="reference internal" href="#inspecting-the-data" id="id16">Inspecting the Data</a></p></li>
+<li><p><a class="reference internal" href="#using-the-tools" id="id17">Using the Tools</a></p></li>
+</ul>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <p>RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory &amp; Experiment) is a software package for viewing, exchanging and analysing experimental data. Several of the classical and latest theories of polymer dynamics are included in RepTate, so they can be tested and fitted to the experimental data.</p>
 <p>The software is designed in a modular way, so it is easy to extend to analyze new types of data and fit with new theories.</p>
-<p>The main RepTate window is called the <em>Application Manager</em> and is a multiple document interface (MDI). All the applications can be opened from the Application Manager and will reside inside it. At the top of the Application Manager there is a toolbar that allows to open different applications, load and save projects, read the help and exit RepTate.</p>
-<p>Applications have three separate areas:</p>
-<ul class="simple">
-<li><p>The plot, in the center, is where the experimental data files and theoretical fits are shown.</p></li>
-<li><p>A vertical region at the right of the window, that allows to:</p>
-<ul>
-<li><p>Select the current <em>View</em> (way of representing the data)</p></li>
-<li><p>Open data <em>Files</em> and arrange them into different <em>Datasets</em></p></li>
-<li><p>Create a <em>Theory</em> associated to a given Dataset and fit it (minimize the error with respect to the Files within that Dataset).</p></li>
-</ul>
-</li>
-<li><p>A vertical region at the left of the window, where the user can inspect the contents of the data of the selected File in the current Dataset. This region is hidden by default.</p></li>
-</ul>
 <p>RepTate makes extensive use of the following packages and libraries:</p>
 <ul class="simple">
-<li><p>Matplotlib: Text <a class="reference internal" href="#general-hunter-2007" id="id1">[1]</a>.</p></li>
-<li><p>Scipy: Text <a class="reference internal" href="#general-jones-2018" id="id2">[2]</a>.</p></li>
-<li><p>Numpy: Text <a class="reference internal" href="#general-oliphant-2006" id="id3">[3]</a>.</p></li>
-<li><p>Qt and Pyqt: Text <a class="reference internal" href="#general-pyqt-2018" id="id4">[4]</a>, Text <a class="reference internal" href="#general-qt-2018" id="id5">[5]</a>.</p></li>
+<li><p>Matplotlib: Text <a class="bibtex reference internal" href="#general-hunter-2007" id="id1">[1]</a>.</p></li>
+<li><p>Scipy: Text <a class="bibtex reference internal" href="#general-jones-2018" id="id2">[2]</a>.</p></li>
+<li><p>Numpy: Text <a class="bibtex reference internal" href="#general-oliphant-2006" id="id3">[3]</a>.</p></li>
+<li><p>Qt and Pyqt: Text <a class="bibtex reference internal" href="#general-pyqt-2018" id="id4">[4]</a>, Text <a class="bibtex reference internal" href="#general-qt-2018" id="id5">[5]</a>.</p></li>
+</ul>
+<div class="section" id="main-reptate-window">
+<h2><a class="toc-backref" href="#id11">Main RepTate Window</a><a class="headerlink" href="#main-reptate-window" title="Permalink to this headline">¶</a></h2>
+<p>The main RepTate window is called the <em>Application Manager</em> and is a multiple document interface (MDI) (see <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). All the applications can be opened from the Application Manager and will reside inside it. At the top of the Application Manager there is a toolbar that allows to open different applications, load and save projects, read the help and exit RepTate (label <strong>1</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). Currently open applications can are shown as tabs below the toolbar (label <strong>2</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). By default, tabs are named after the application name and a number. The name can be changed by double-clicking on the tab.</p>
+<div class="figure align-center" id="id7">
+<span id="figmainwindow"></span><a class="reference internal image-reference" href="../../_images/RepTate_Window.png"><img alt="../../_images/RepTate_Window.png" src="../../_images/RepTate_Window.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Main RepTate window showing the most important elements in the user interface.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<p>Applications have three main separate areas:</p>
+<ul class="simple">
+<li><p>The plot, in the center, is where the experimental data files and theoretical fits are shown (label <strong>4</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>).</p></li>
+<li><p>A vertical region at the right of the window, that allows to:</p>
+<ul>
+<li><p>Select the current <em>View</em> (way of representing the data, label <strong>3</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>)</p></li>
+<li><p>Open data <em>Files</em> and arrange them into different <em>Datasets</em> (label <strong>5</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). Different <em>Datasets</em> are shown as tabs, named by default as “Set” + number. The name of a <em>Dataset</em> can be changed by double-clicking on the tab.</p></li>
+<li><p>Create a <em>Theory</em> associated to a given Dataset and fit it (minimize the error with respect to the Files within that Dataset, label <strong>7</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). Currently open theories are named after the theory name + a number. The name can be changed by double-clicking on the tab.</p></li>
+</ul>
+</li>
+</ul>
+<p>Files in the current <em>DataSet</em> are shown in a table, along with the main parameters that describe each file (label <strong>6</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). Files can be added to a <em>Dataset</em> with the “Open Data File” button (Ctrl+O) or by dragging them from the file explorer and dropping them on the RepTate window. In the <em>Theory</em> area, the parameters of the current theory are shown in a table, with their current value and error. A blue box below the table shows information during the calculation and fitting procedure (label <strong>8</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>)</p>
+<p>By clicling on the “Data Inspection” button (label <strong>1</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>), a new region on the left of the plot area is shown where the user can inspect the contents of a file, shift data and use the Tools. Two separate areas are shown:</p>
+<div class="figure align-center" id="id8">
+<span id="figextendedwindow"></span><a class="reference internal image-reference" href="../../_images/RepTate_Extended_Window.png"><img alt="../../_images/RepTate_Extended_Window.png" src="../../_images/RepTate_Extended_Window.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Extended RepTate window showing file data and Tools.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<ul class="simple">
+<li><p>A region (label <strong>3</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>) where the file contents are shown in a table. Above the table (label <strong>2</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>) there is a toolbar that allows the user to do some operations on the data (copy, paste, shift, etc).</p></li>
+<li><p>A region (label <strong>4</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>) that lets the user apply different Tools to the current Dataset.</p></li>
+</ul>
+<p>The data inspection and Tools region is hidden by default.</p>
+</div>
+<div class="section" id="plot-area">
+<h2><a class="toc-backref" href="#id12">Plot Area</a><a class="headerlink" href="#plot-area" title="Permalink to this headline">¶</a></h2>
+<p>The plot area shows the graphical representation of the data files in the current Dataset (or all the Datasets in the current application, if the “View all Datasets simultaneously” button is clicked). Several operations can be done in the plot area:</p>
+<ul class="simple">
+<li><p>By clicking on a data point, a label is shown with  its (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>) coordinates, with respect to the current View (label <strong>1</strong> in <a class="reference internal" href="#figplotarea"><span class="std std-numref">Fig. 3</span></a>). The label can be hidden by clicking on it again.</p></li>
+<li><p>By right-clicking on the plot area and dragging the mouse, the user can zoom to an specific region of the plot.</p></li>
+<li><p>By using the mouse wheel, the user can zoom in or out in the plot.</p></li>
+<li><dl class="simple">
+<dt>By right-clicking on the plot, a menu is shown with the following operations (label <strong>3</strong> in <a class="reference internal" href="#figplotarea"><span class="std std-numref">Fig. 3</span></a>):</dt><dd><ul>
+<li><p>The chart can be copied to the clipboard as an image. The image can be pasted on any other program (such as Microsoft Word or Powerpoint)</p></li>
+<li><p>The chart can be saved to an image file, using different formats (png, pdf, etc).</p></li>
+<li><p>An annotation label can be added to the plot (label <strong>2</strong> in <a class="reference internal" href="#figplotarea"><span class="std std-numref">Fig. 3</span></a>). LaTeX commands can be used in the text of the annotation. Annotation labels can be moved around by dragging them with the mouse and edited by double-clicking on them.</p></li>
+<li><p>The view can be reset to the default zoom.</p></li>
+<li><p>The view can be changed to any of the available views in the current application.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="figure align-center" id="id9">
+<span id="figplotarea"></span><a class="reference internal image-reference" href="../../_images/Plot_Area.png"><img alt="../../_images/Plot_Area.png" src="../../_images/Plot_Area.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Plot area showing data point coordinates (1), annotations (2) and pop-up menu (3).</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<p>Additional view options can be set by clicking on the “Show/Hide Figure Toolbar” button on the Dataset area. The x-y ranges can be fixed by clicking on the “Lock XY axes” in the Dataset area.</p>
+</div>
+<div class="section" id="view-selection">
+<h2><a class="toc-backref" href="#id13">View selection</a><a class="headerlink" href="#view-selection" title="Permalink to this headline">¶</a></h2>
+<p>The data read from the files can be represented in several different ways, which are different for each application. In RepTate, the way some experimental or theory data are represented is referred to as the <strong>View</strong>.</p>
+<p>There are two different ways to select a View:</p>
+<ul class="simple">
+<li><p>From the drop-down box at the top-right corner of the Application window. By clicking on the box, a menu is shown with all the Views that are defined in the current application. By hovering the mouse over the View names, some additional information may be displayed.</p></li>
+<li><p>By right-clicking on the plot area, a menu is displayed. By selecting the submenu “Select View”, the user can select the view from a list (the contents of the list are exactly the same as in the drop-down box).</p></li>
+</ul>
+<p>At the left of the drop-down box, there is a small up-down selector that allows the user to change the number of graphs that are shown in the plot area. When there are more than one graph, a small set of tabs is shown on the left of the Plot area (see <a class="reference internal" href="#figmanyviews"><span class="std std-numref">Fig. 4</span></a>). The number of tabs is equal to the number of Views + 1. The tab 0 shows all views and the other tabs show a single view.</p>
+<div class="figure align-center" id="id10">
+<span id="figmanyviews"></span><a class="reference internal image-reference" href="../../_images/ManyViews.png"><img alt="../../_images/ManyViews.png" src="../../_images/ManyViews.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Plot area showing 4 different views and the tabs to switch from all to particular views (left).</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<p>Most Applications in RepTate show just one graph by default.</p>
+<p>The data, as represented by the current View/Views, can be saved to a text file by clicking on the button at the right of the View combo box.</p>
+</div>
+<div class="section" id="operating-with-datasets">
+<h2><a class="toc-backref" href="#id14">Operating with Datasets</a><a class="headerlink" href="#operating-with-datasets" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Creating new datasets</p></li>
+<li><p>Adding files to datasets</p></li>
+<li><p>Adding <em>Dummy</em> files to datasets</p></li>
+<li><p>Importing data from Excel files</p></li>
+<li><p>Sorting Files in a Dataset by name or parameter value</p></li>
+<li><p>Activating/Deactivating particular files in a Dataset.</p></li>
+<li><p>Showing all DataSets (or all theories applied to current DataSet)</p></li>
+<li><p>Setting plot style</p></li>
+<li><p>Reloading the data</p></li>
+<li><p>Showing/Editing file parameters</p></li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2><a class="toc-backref" href="#id15">Operating with Datasets</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Opening a new Theory</p></li>
+<li><p>Viewing/Editing Parameter values and options</p></li>
+<li><p>Calculating the theory</p></li>
+<li><p>Fitting the theory</p></li>
+<li><p>Fitting options</p></li>
+<li><p>Setting x and y-range limits to the fitting graphically</p></li>
+<li><p>Saving theory predictions</p></li>
+<li><p>Copying/Pasting theory parameters</p></li>
+</ul>
+</div>
+<div class="section" id="inspecting-the-data">
+<h2><a class="toc-backref" href="#id16">Inspecting the Data</a><a class="headerlink" href="#inspecting-the-data" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>View the current file data</p></li>
+<li><p>Copy data</p></li>
+<li><p>Paste data</p></li>
+<li><p>Shift the data vertically and/or horizontally.</p></li>
+<li><p>View the shift factors</p></li>
+<li><p>Save the shift factors</p></li>
+<li><p>Reset shift factors</p></li>
+</ul>
+</div>
+<div class="section" id="using-the-tools">
+<h2><a class="toc-backref" href="#id17">Using the Tools</a><a class="headerlink" href="#using-the-tools" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Opening a New Tool</p></li>
+<li><p>How the Tooks work</p></li>
+<li><p>Shuffling the Tools</p></li>
 </ul>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/General/general-0"><dl class="citation">
-<dt class="label" id="general-hunter-2007"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dt class="bibtex label" id="general-hunter-2007"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>J. D. Hunter. Matplotlib: a 2d graphics environment. <em>Computing In Science &amp; Engineering</em>, 9(3):90–95, 2007. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">doi:10.1109/MCSE.2007.55</a>.</p>
 </dd>
-<dt class="label" id="general-jones-2018"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dt class="bibtex label" id="general-jones-2018"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p>Eric Jones, Travis Oliphant, Pearu Peterson, and others. SciPy: open source scientific tools for Python. 2001–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="http://www.scipy.org/">http://www.scipy.org/</a>.</p>
 </dd>
-<dt class="label" id="general-oliphant-2006"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dt class="bibtex label" id="general-oliphant-2006"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
 <dd><p>Travis E. Oliphant. <em>Guide to NumPy</em>. Provo, UT, March 2006. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="http://web.mit.edu/dvp/Public/numpybook.pdf">http://web.mit.edu/dvp/Public/numpybook.pdf</a>.</p>
 </dd>
-<dt class="label" id="general-pyqt-2018"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
+<dt class="bibtex label" id="general-pyqt-2018"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
 <dd><p>Riverbank Computing. Pyqt. 2009–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="https://en.wikipedia.org/wiki/PyQt">https://en.wikipedia.org/wiki/PyQt</a>.</p>
 </dd>
-<dt class="label" id="general-qt-2018"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
+<dt class="bibtex label" id="general-qt-2018"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
 <dd><p>The Qt Company. Qt. 1991–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="https://en.wikipedia.org/wiki/PyQt">https://en.wikipedia.org/wiki/PyQt</a>.</p>
 </dd>
 </dl>
 </p>
+</div>
 </div>
 
 
@@ -157,7 +289,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

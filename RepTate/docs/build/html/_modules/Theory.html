@@ -105,7 +105,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">getpass</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span><span class="p">,</span> <span class="n">basinhopping</span><span class="p">,</span> <span class="n">dual_annealing</span><span class="p">,</span> <span class="n">differential_evolution</span><span class="p">,</span> <span class="n">shgo</span><span class="p">,</span> <span class="n">brute</span>
 <span class="kn">from</span> <span class="nn">scipy.stats.distributions</span> <span class="k">import</span> <span class="n">t</span>
 
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
@@ -135,8 +135,24 @@
 <div class="viewcode-block" id="MLStripper.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.MLStripper.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fed</span><span class="p">)</span></div></div>
         
+<div class="viewcode-block" id="MinimizationMethod"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.MinimizationMethod">[docs]</a><span class="k">class</span> <span class="nc">MinimizationMethod</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Method used during minimization</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters can be:</span>
+<span class="sd">        - ls: Non-linear Least Squares (default)</span>
+<span class="sd">        - basinhopping: Basin-hopping method</span>
+<span class="sd">        - dualannealing: Dual-Annealing method</span>
+<span class="sd">        - diffevol: Differential Evolution method</span>
+<span class="sd">        - SHGO: simplicial homology global optimization</span>
+<span class="sd">        - bruteforce: Find the minimum on a hypergrid</span>
 
-
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ls</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">basinhopping</span><span class="o">=</span><span class="mi">1</span>
+    <span class="n">dualannealing</span><span class="o">=</span><span class="mi">2</span>
+    <span class="n">diffevol</span><span class="o">=</span><span class="mi">3</span>
+    <span class="n">SHGO</span><span class="o">=</span><span class="mi">4</span>
+    <span class="n">bruteforce</span><span class="o">=</span><span class="mi">5</span></div>
 
 <div class="viewcode-block" id="EndComputationRequested"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.EndComputationRequested">[docs]</a><span class="k">class</span> <span class="nc">EndComputationRequested</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Exception class to end computations&quot;&quot;&quot;</span>
@@ -198,7 +214,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_data</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># Dictionary saved during &quot;Save Project&quot;</span>
 
-
         <span class="c1"># THEORY OPTIONS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">100</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="mf">0.001</span>
@@ -256,6 +271,8 @@
                                            <span class="bp">self</span><span class="o">.</span><span class="n">change_ymax</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_yrange_visible</span> <span class="o">=</span> <span class="kc">False</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_default_minimization_options</span><span class="p">()</span>
+
         <span class="c1"># Pre-create as many tables as files in the dataset</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span>
@@ -271,8 +288,60 @@
 
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">print_signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_qtextbox</span><span class="p">)</span>  <span class="c1"># Asynchronous print when using multithread</span>
-        <span class="c1"># flag for requesting end of computations</span>
+         <span class="c1"># flag for requesting end of computations</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Theory.setup_default_minimization_options"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.setup_default_minimization_options">[docs]</a>    <span class="k">def</span> <span class="nf">setup_default_minimization_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># MINIMIZATION OPTIONS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">=</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">ls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="o">=</span><span class="s1">&#39;trf&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSjac</span><span class="o">=</span><span class="s1">&#39;2-point&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSftol</span><span class="o">=</span><span class="mf">1e-8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSxtol</span><span class="o">=</span><span class="mf">1e-8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSgtol</span><span class="o">=</span><span class="mf">1e-8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSloss</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSf_scale</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSmax_fnev</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LStr_solver</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basinniter</span><span class="o">=</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basinT</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basinstepsize</span><span class="o">=</span><span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basininterval</span><span class="o">=</span><span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basinniter_success</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basinseed</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealmaxiter</span><span class="o">=</span><span class="mi">1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealinitial_temp</span><span class="o">=</span><span class="mf">5230.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealrestart_temp_ratio</span><span class="o">=</span><span class="mf">2e-5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealvisit</span><span class="o">=</span><span class="mf">2.62</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealaccept</span><span class="o">=-</span><span class="mf">5.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealmaxfun</span><span class="o">=</span><span class="mi">10000000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealseed</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annealno_local_search</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolstrategy</span><span class="o">=</span><span class="s1">&#39;best1bin&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolmaxiter</span><span class="o">=</span><span class="mi">1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolpopsize</span><span class="o">=</span><span class="mi">15</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevoltol</span><span class="o">=</span><span class="mf">0.01</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolmutation</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolrecombination</span><span class="o">=</span><span class="mf">0.7</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolseed</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolpolish</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolinit</span><span class="o">=</span><span class="s1">&#39;latinhypercube&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolatol</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffevolupdating</span><span class="o">=</span><span class="s1">&#39;immediate&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOn</span><span class="o">=</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOiters</span><span class="o">=</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxfev</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOf_min</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOf_tol</span><span class="o">=</span><span class="mf">1e-4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxiter</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxev</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxtime</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOminhgrd</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOminimize_every_iter</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOlocal_iter</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOinfty_constraints</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SHGOsampling_method</span><span class="o">=</span><span class="s1">&#39;simplicial&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BruteNs</span><span class="o">=</span><span class="mi">20</span></div>
 
 <div class="viewcode-block" id="Theory.destructor"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
@@ -382,7 +451,7 @@
         <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">fcopy</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
     
 <div class="viewcode-block" id="Theory.get_non_extended_th_table"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.get_non_extended_th_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_non_extended_th_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;return a copy of the theory table associated with f, where the extra rows are delete&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;return a copy of the theory table associated with f, where the extra rows are deleted&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">with_extra_x</span><span class="p">:</span>
             <span class="n">tmp_dt</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="n">axarr</span><span class="o">=</span><span class="p">[])</span>
             <span class="n">nrow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span><span class="o">.</span><span class="n">num_rows</span>
@@ -473,8 +542,48 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;TOTAL ERROR&lt;/b&gt;: </span><span class="si">%12s</span><span class="s2"> (</span><span class="si">%6d</span><span class="s2">)&lt;br&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">,</span> <span class="n">npoints</span><span class="p">))</span></div>
 
+<div class="viewcode-block" id="Theory.fit_callback_basinhopping"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.fit_callback_basinhopping">[docs]</a>    <span class="k">def</span> <span class="nf">fit_callback_basinhopping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">accepted</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">accepted</span> <span class="ow">and</span> <span class="n">f</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">fminnow</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fminnow</span><span class="o">=</span><span class="n">f</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;nfeval </span><span class="si">%6d</span><span class="s2"> f=</span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfev</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Theory.fit_callback_dualannealing"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.fit_callback_dualannealing">[docs]</a>    <span class="k">def</span> <span class="nf">fit_callback_dualannealing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">f</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">fminnow</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fminnow</span><span class="o">=</span><span class="n">f</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;nfeval </span><span class="si">%6d</span><span class="s2"> f=</span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfev</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Theory.fit_callback_diffevol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.fit_callback_diffevol">[docs]</a>    <span class="k">def</span> <span class="nf">fit_callback_diffevol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xk</span><span class="p">,</span> <span class="n">convergence</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;nfeval </span><span class="si">%6d</span><span class="s2"> frac=</span><span class="si">%g</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfev</span><span class="p">,</span> <span class="n">convergence</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Theory.fit_callback_shgo"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.fit_callback_shgo">[docs]</a>    <span class="k">def</span> <span class="nf">fit_callback_shgo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xk</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfev</span><span class="o">%</span><span class="mi">10</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;nfeval </span><span class="si">%6d</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">nfev</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Theory.fit_check_bounds"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.fit_check_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">fit_check_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;x_new&quot;</span><span class="p">]</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">))</span>
+        <span class="n">tmin</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tmax</span> <span class="ow">and</span> <span class="n">tmin</span></div>
+
+<div class="viewcode-block" id="Theory.func_fit_and_error"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.func_fit_and_error">[docs]</a>    <span class="k">def</span> <span class="nf">func_fit_and_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calls the theory function, constructs the vector with the theory predictions and </span>
+<span class="sd">           returns the sum of the squares of the residuals</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NEED TO RECOVER THE VECTOR y THAT WE CONSTRUCTED DURING FUNCTION FIT</span>
+        <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fittingy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fittingx</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">fres</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">residuals</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fres</span></div>
+
 <div class="viewcode-block" id="Theory.func_fit"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.func_fit">[docs]</a>    <span class="k">def</span> <span class="nf">func_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">param_in</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
+        <span class="sd">&quot;&quot;&quot;Calls the theory function and constructs the vector with the theory predictions</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        </span>
@@ -485,6 +594,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            - [type] -- [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 1. Assign the current values of the parameters being optimized</span>
         <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">k</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">k</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
@@ -493,7 +603,11 @@
             <span class="k">if</span> <span class="n">par</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
                 <span class="n">par</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">param_in</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
                 <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># 2. Call the theory function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># 3. Constructs the y vector that contains all the Y values from the theory after </span>
+        <span class="c1">#    applying the current view and respecting the {xmin, xmax} &amp; {ymin, ymax} limits</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
 
@@ -532,6 +646,7 @@
 <span class="sd">        Arguments:</span>
 <span class="sd">            - line {[type]} -- [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Do some initial checks on the status of datasets and theories</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">return</span>
@@ -544,6 +659,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">return</span>
 
+        <span class="c1"># Start the fitting procedure</span>
+        <span class="c1"># 1. Create x and y vectors that contain the X and Y values of all the active files</span>
+        <span class="c1">#    in the current view that respect the {xmin, xmax} &amp; {ymin, ymax} limits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
@@ -593,42 +711,166 @@
                     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xcond</span><span class="p">)</span>
                     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ycond</span><span class="p">)</span>
 
-        <span class="c1"># Mount the vector of parameters (Active ones only)</span>
-        <span class="n">initial_guess</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">param_min</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">param_max</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># 2. Create the array of theory parameters that will be chenged during the fitting (checked parameters)</span>
+        <span class="c1">#    It also creates the arrays with the upper and lower bounds for parameters</span>
+        <span class="n">initial_guess</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Take the initial guess for the fit from the current value of the parameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_min</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c1"># list of min values for fitting parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c1"># list of max values for fitting parameters</span>
         <span class="n">k</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">k</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
             <span class="n">par</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">par</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">==</span> <span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">:</span>
                 <span class="n">initial_guess</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-                <span class="n">param_min</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">par</span><span class="o">.</span><span class="n">min_value</span><span class="p">)</span>  <span class="c1">#list of min values for fitting parameters</span>
-                <span class="n">param_max</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">par</span><span class="o">.</span><span class="n">max_value</span><span class="p">)</span>  <span class="c1">#list of max values for fitting parameters</span>
-        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">param_min</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">param_max</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">min_value</span><span class="p">)</span>  
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">max_value</span><span class="p">)</span>  
+        <span class="c1"># Return if the list of checked parameters is empty</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">initial_guess</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;No parameter to minimize&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">return</span>
-        <span class="n">opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">return_full</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># 3. This is where the actual optimization is done</span>
+        <span class="c1"># TODO: We should add the option to use different minimization methods</span>
+        <span class="c1">#       like those included in scipy or even other ones implemented by us (MC methods)</span>
+        <span class="c1">#opt = dict(return_full=True) # I think this is not used</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nfev</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1">#pars, pcov, infodict, errmsg, ier = curve_fit(self.func_fit, x, y, p0=initial_guess, full_output=1)</span>
-            <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span>
-                <span class="n">x</span><span class="p">,</span>
-                <span class="n">y</span><span class="p">,</span>
-                <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess</span><span class="p">,</span>
-                <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">param_min</span><span class="p">,</span> <span class="n">param_max</span><span class="p">),</span>
-                <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trf&#39;</span><span class="p">)</span>
-            <span class="c1">#bounded parameter space &#39;bound=(0, np.inf)&#39; triggers scipy.optimize.least_squares instead of scipy.optimize.leastsq</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In do_fit()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fittingx</span> <span class="o">=</span> <span class="n">x</span> <span class="c1"># MAKE EXPERIMENTAL x VECTOR AVAILABLE GLOBAL OPTIMISATION</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fittingy</span> <span class="o">=</span> <span class="n">y</span> <span class="c1"># MAKE EXPERIMENTAL y VECTOR AVAILABLE GLOBAL OPTIMISATION</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fminnow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">dualannealing</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">diffevol</span> <span class="ow">or</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">SHGO</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">))</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">))</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">))</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">))):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;This fitting method cannot be used if any of the bounds is ± nan or ± inf&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">ls</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;b&gt;Non-linear Least-squares&lt;/b&gt;&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;b&gt;Local optimisation&lt;/b&gt;&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="o">==</span><span class="s1">&#39;trf&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Method: Trust Region Reflective&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="o">==</span><span class="s1">&#39;dogbox&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Method: dogleg&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="o">==</span><span class="s1">&#39;lm&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;Method: Levenberg-Marquardt&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="o">==</span><span class="s1">&#39;trf&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="o">==</span><span class="s1">&#39;dogbox&#39;</span><span class="p">:</span>
+                    <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> 
+                                        <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSjac</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSftol</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSxtol</span><span class="p">,</span>
+                                        <span class="n">gtol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSgtol</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSloss</span><span class="p">,</span> <span class="n">f_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSf_scale</span><span class="p">,</span> <span class="n">max_nfev</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSmax_fnev</span><span class="p">,</span>
+                                        <span class="n">tr_solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LStr_solver</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LSmax_fnev</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+                        <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> 
+                                            <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSftol</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSxtol</span><span class="p">,</span>
+                                            <span class="n">gtol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSgtol</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> 
+                                            <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSmethod</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSftol</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSxtol</span><span class="p">,</span>
+                                            <span class="n">gtol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSgtol</span><span class="p">,</span> <span class="n">maxfev</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LSmax_fnev</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In do_fit()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">basinhopping</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;Basin Hopping&lt;b&gt;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;b&gt;Global optimisation&lt;/b&gt;&#39;</span><span class="p">)</span>
+            <span class="n">minimizer_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;BFGS&quot;</span><span class="p">}</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">basinhopping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit_and_error</span><span class="p">,</span> <span class="n">initial_guess</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basinniter</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basinT</span><span class="p">,</span> 
+                                   <span class="n">stepsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basinstepsize</span><span class="p">,</span> <span class="n">minimizer_kwargs</span><span class="o">=</span><span class="n">minimizer_kwargs</span><span class="p">,</span>  
+                                   <span class="n">accept_test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_check_bounds</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_callback_basinhopping</span><span class="p">,</span> 
+                                   <span class="n">interval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basininterval</span><span class="p">,</span> <span class="n">niter_success</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basinniter_success</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basinseed</span><span class="p">)</span>
+                <span class="n">initial_guess1</span><span class="o">=</span><span class="n">ret</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess1</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trf&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In do_fit()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">dualannealing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;Dual Annealing&lt;b&gt;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;b&gt;Global optimisation&lt;/b&gt;&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">param_bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">))</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">dual_annealing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit_and_error</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">param_bounds</span><span class="p">,</span> 
+                                     <span class="n">maxiter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealmaxiter</span><span class="p">,</span> <span class="n">initial_temp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealinitial_temp</span><span class="p">,</span> 
+                                     <span class="n">restart_temp_ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealrestart_temp_ratio</span><span class="p">,</span> 
+                                     <span class="n">visit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealvisit</span><span class="p">,</span> <span class="n">accept</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealaccept</span><span class="p">,</span> 
+                                     <span class="n">maxfun</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealmaxfun</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealseed</span><span class="p">,</span>
+                                     <span class="n">no_local_search</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annealno_local_search</span><span class="p">,</span>
+                                     <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_callback_dualannealing</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">initial_guess</span><span class="p">)</span>
+                <span class="n">initial_guess1</span><span class="o">=</span><span class="n">ret</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess1</span><span class="p">,</span> 
+                                       <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trf&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In do_fit()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span> 
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">diffevol</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;Differential Evolution&lt;b&gt;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s1">&#39;&lt;b&gt;Global optimisation&lt;/b&gt;&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">param_bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">))</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">differential_evolution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit_and_error</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">param_bounds</span><span class="p">,</span> 
+                                             <span class="n">strategy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolstrategy</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolmaxiter</span><span class="p">,</span>
+                                             <span class="n">popsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolpopsize</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevoltol</span><span class="p">,</span> 
+                                             <span class="n">mutation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolmutation</span><span class="p">,</span> <span class="n">recombination</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolrecombination</span><span class="p">,</span>
+                                             <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolseed</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_callback_diffevol</span><span class="p">,</span>
+                                             <span class="n">polish</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolpolish</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolinit</span><span class="p">,</span> 
+                                             <span class="n">atol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolatol</span><span class="p">,</span> <span class="n">updating</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diffevolupdating</span><span class="p">)</span>
+                <span class="n">initial_guess1</span><span class="o">=</span><span class="n">ret</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess1</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> 
+                                       <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trf&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In do_fit()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span> 
+                
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">SHGO</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;Simplicial Homology Global Optimization&lt;b&gt;&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">param_bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">))</span>
+                <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxfev&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxfev</span><span class="p">,</span> <span class="s1">&#39;f_min&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOf_min</span><span class="p">,</span> <span class="s1">&#39;f_tol&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOf_tol</span><span class="p">,</span>
+                         <span class="s1">&#39;maxiter&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxiter</span><span class="p">,</span> <span class="s1">&#39;maxev&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxev</span><span class="p">,</span> <span class="s1">&#39;maxtime&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOmaxtime</span><span class="p">,</span>
+                         <span class="s1">&#39;minhgrd&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOminhgrd</span><span class="p">,</span> <span class="s1">&#39;minimize_every_iter&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOminimize_every_iter</span><span class="p">,</span> 
+                         <span class="s1">&#39;local_iter&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOlocal_iter</span><span class="p">,</span> <span class="s1">&#39;infty_constraints&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SHGOinfty_constraints</span><span class="p">}</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">shgo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit_and_error</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">param_bounds</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SHGOn</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SHGOiters</span><span class="p">,</span>
+                           <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_callback_shgo</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">sampling_method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SHGOsampling_method</span><span class="p">)</span>
+                <span class="n">initial_guess1</span><span class="o">=</span><span class="n">ret</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess1</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> 
+                                       <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trf&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In do_fit()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span> 
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mintype</span><span class="o">==</span><span class="n">MinimizationMethod</span><span class="o">.</span><span class="n">bruteforce</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;Brute Force Global Optimization&lt;b&gt;&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">param_bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">))</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">brute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit_and_error</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="n">param_bounds</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BruteNs</span><span class="p">)</span>
+                <span class="n">initial_guess1</span><span class="o">=</span><span class="n">ret</span>
+                <span class="n">pars</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">initial_guess1</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_max</span><span class="p">),</span> 
+                                       <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trf&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In do_fit()&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_fitting</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span> 
+
+        <span class="c1"># 4. Statistical analysis of the solution found</span>
         <span class="n">residuals</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_guess</span><span class="p">)</span>
         <span class="n">fres0</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">residuals</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">residuals</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">pars</span><span class="p">)</span>
@@ -1346,7 +1588,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

@@ -107,7 +107,7 @@ ApplicationManager.</p>
 <dl class="class">
 <dt id="QApplicationManager.QApplicationManager">
 <em class="property">class </em><code class="sig-prename descclassname">QApplicationManager.</code><code class="sig-name descname">QApplicationManager</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#ApplicationManager.ApplicationManager" title="ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_ReptateMainWindow</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../code.html#ApplicationManager.ApplicationManager" title="ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_ReptateMainWindow</span></code></p>
 <p>Main Reptate window and application manager</p>
 <p>[description]</p>
 <dl class="method">
@@ -343,6 +343,13 @@ It is the GUI counterpart of Application.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="QApplicationWindow.EditAnnotation.handle_pickFontColor">
+<code class="sig-name descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the color picker and save the selected legend face color in 
+RGB format in the dataset legend info.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="QApplicationWindow.EditAnnotation.showColorDialog">
 <code class="sig-name descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation.showColorDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the color picker and return the picked QtColor or <cite>None</cite></p>
@@ -353,7 +360,7 @@ It is the GUI counterpart of Application.</p>
 <dl class="class">
 <dt id="QApplicationWindow.QApplicationWindow">
 <em class="property">class </em><code class="sig-prename descclassname">QApplicationWindow.</code><code class="sig-name descname">QApplicationWindow</code><span class="sig-paren">(</span><em class="sig-param">name='Application Template'</em>, <em class="sig-param">parent=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../code.html#Application.Application" title="Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application.Application</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -929,7 +936,7 @@ with filled or empty markers, depending on the user’s choice</p>
 <dl class="class">
 <dt id="QDataSet.QDataSet">
 <em class="property">class </em><code class="sig-prename descclassname">QDataSet.</code><code class="sig-name descname">QDataSet</code><span class="sig-paren">(</span><em class="sig-param">name='QDataSet'</em>, <em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#DataSet.DataSet" title="DataSet.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet.DataSet</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Form</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../code.html#DataSet.DataSet" title="DataSet.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet.DataSet</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Form</span></code></p>
 <p>[summary]</p>
 <p>[description]</p>
 <dl class="method">
@@ -975,6 +982,11 @@ with filled or empty markers, depending on the user’s choice</p>
 <code class="sig-name descname">handle_action_save_theory_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_action_save_theory_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_action_save_theory_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save theory data of current theory</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="QDataSet.QDataSet.handle_fitting_options">
+<code class="sig-name descname">handle_fitting_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_fitting_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_fitting_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="QDataSet.QDataSet.handle_itemChanged">
@@ -1319,6 +1331,11 @@ Or edit all parameters dialog if parameter name is double clicked</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="QTheory.QTheory.populate_default_minimization_options">
+<code class="sig-name descname">populate_default_minimization_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.populate_default_minimization_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.populate_default_minimization_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="QTheory.QTheory.save_modes">
 <code class="sig-name descname">save_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.save_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.save_modes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save Maxwell modes to a text file</p>
@@ -1382,7 +1399,7 @@ Or edit all parameters dialog if parameter name is double clicked</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

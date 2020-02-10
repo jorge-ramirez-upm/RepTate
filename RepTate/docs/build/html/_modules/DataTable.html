@@ -103,7 +103,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<div class="viewcode-block" id="DataTable"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataTable.DataTable">[docs]</a><span class="k">class</span> <span class="nc">DataTable</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="DataTable"><a class="viewcode-back" href="../code.html#DataTable.DataTable">[docs]</a><span class="k">class</span> <span class="nc">DataTable</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class that stores data and series</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -148,7 +148,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
         
-<div class="viewcode-block" id="DataTable.mincol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataTable.DataTable.mincol">[docs]</a>    <span class="k">def</span> <span class="nf">mincol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+<div class="viewcode-block" id="DataTable.mincol"><a class="viewcode-back" href="../code.html#DataTable.DataTable.mincol">[docs]</a>    <span class="k">def</span> <span class="nf">mincol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Minimum value in table column col</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -156,7 +156,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="n">col</span><span class="p">])</span></div>
         
-<div class="viewcode-block" id="DataTable.minpositivecol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataTable.DataTable.minpositivecol">[docs]</a>    <span class="k">def</span> <span class="nf">minpositivecol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+<div class="viewcode-block" id="DataTable.minpositivecol"><a class="viewcode-back" href="../code.html#DataTable.DataTable.minpositivecol">[docs]</a>    <span class="k">def</span> <span class="nf">minpositivecol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Minimum positive value in table column col</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -164,7 +164,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="n">col</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">col</span><span class="p">])</span><span class="o">.</span><span class="n">min</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DataTable.maxcol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataTable.DataTable.maxcol">[docs]</a>    <span class="k">def</span> <span class="nf">maxcol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+<div class="viewcode-block" id="DataTable.maxcol"><a class="viewcode-back" href="../code.html#DataTable.DataTable.maxcol">[docs]</a>    <span class="k">def</span> <span class="nf">maxcol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Maximum value in table column col</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -194,7 +194,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

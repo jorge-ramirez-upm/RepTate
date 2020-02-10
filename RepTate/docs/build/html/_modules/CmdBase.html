@@ -107,7 +107,7 @@
 <span class="kn">import</span> <span class="nn">enum</span>
 <span class="c1">#from pint import UnitRegistry</span>
 
-<div class="viewcode-block" id="CmdMode"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdMode">[docs]</a><span class="k">class</span> <span class="nc">CmdMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdMode"><a class="viewcode-back" href="../code.html#CmdBase.CmdMode">[docs]</a><span class="k">class</span> <span class="nc">CmdMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -124,7 +124,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;cmdline: </span><span class="si">%d</span><span class="se">\n</span><span class="s2">batch: </span><span class="si">%d</span><span class="se">\n</span><span class="s2">GUI: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="CalcMode"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CalcMode">[docs]</a><span class="k">class</span> <span class="nc">CalcMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="CalcMode"><a class="viewcode-back" href="../code.html#CmdBase.CalcMode">[docs]</a><span class="k">class</span> <span class="nc">CalcMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 
 <span class="sd">    [decription]</span>
@@ -140,7 +140,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Single thread: </span><span class="si">%d</span><span class="se">\n</span><span class="s2">Multi-thread: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="CmdBase"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase">[docs]</a><span class="k">class</span> <span class="nc">CmdBase</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">Cmd</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase">[docs]</a><span class="k">class</span> <span class="nc">CmdBase</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">Cmd</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Basic Cmd Console that is inherited by most Reptate objects</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -165,7 +165,7 @@
         <span class="n">delims</span> <span class="o">=</span> <span class="n">delims</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">set_completer_delims</span><span class="p">(</span><span class="n">delims</span><span class="p">)</span>
         
-<div class="viewcode-block" id="CmdBase.do_shell"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_shell">[docs]</a>    <span class="k">def</span> <span class="nf">do_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.do_shell"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.do_shell">[docs]</a>    <span class="k">def</span> <span class="nf">do_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run a shell command</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -178,7 +178,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_output</span> <span class="o">=</span> <span class="n">output</span></div>
 
-<div class="viewcode-block" id="CmdBase.do_cd"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_cd">[docs]</a>    <span class="k">def</span> <span class="nf">do_cd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.do_cd"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.do_cd">[docs]</a>    <span class="k">def</span> <span class="nf">do_cd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change folder</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -240,7 +240,7 @@
         <span class="c1"># exact file match terminates this completion</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="p">]</span>
         
-<div class="viewcode-block" id="CmdBase.complete_cd"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.complete_cd">[docs]</a>    <span class="k">def</span> <span class="nf">complete_cd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.complete_cd"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.complete_cd">[docs]</a>    <span class="k">def</span> <span class="nf">complete_cd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Completions for the cd command.</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -262,7 +262,7 @@
         
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="CmdBase.do_ls"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_ls">[docs]</a>    <span class="k">def</span> <span class="nf">do_ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.do_ls"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.do_ls">[docs]</a>    <span class="k">def</span> <span class="nf">do_ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List contents of current folder</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -275,7 +275,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">d</span><span class="p">)</span></div>
     <span class="n">do_dir</span> <span class="o">=</span> <span class="n">do_ls</span>
 
-<div class="viewcode-block" id="CmdBase.do_pwd"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_pwd">[docs]</a>    <span class="k">def</span> <span class="nf">do_pwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.do_pwd"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.do_pwd">[docs]</a>    <span class="k">def</span> <span class="nf">do_pwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print the current folder</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -286,14 +286,14 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span></div>
     <span class="n">do_cwd</span> <span class="o">=</span> <span class="n">do_pwd</span>
 
-<div class="viewcode-block" id="CmdBase.emptyline"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.emptyline">[docs]</a>    <span class="k">def</span> <span class="nf">emptyline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.emptyline"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.emptyline">[docs]</a>    <span class="k">def</span> <span class="nf">emptyline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="CmdBase.do_EOF"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_EOF">[docs]</a>    <span class="k">def</span> <span class="nf">do_EOF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.do_EOF"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.do_EOF">[docs]</a>    <span class="k">def</span> <span class="nf">do_EOF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Exit Console and Return to Parent or exit</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -308,7 +308,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
     <span class="n">do_up</span> <span class="o">=</span> <span class="n">do_EOF</span>
     
-<div class="viewcode-block" id="CmdBase.do_quit"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.do_quit"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Exit from the application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -328,7 +328,7 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
             
     
-<div class="viewcode-block" id="CmdBase.default"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.default"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on an input line when the command prefix is not recognized.</span>
 <span class="sd">        In that case we execute the line as Python code.</span>
 <span class="sd">        </span>
@@ -342,7 +342,7 @@
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CmdBase.do_console"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_console">[docs]</a>    <span class="k">def</span> <span class="nf">do_console</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdBase.do_console"><a class="viewcode-back" href="../code.html#CmdBase.CmdBase.do_console">[docs]</a>    <span class="k">def</span> <span class="nf">do_console</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print/Set current &amp; available Console modes</span>
 <span class="sd">        </span>
 <span class="sd">           - console --&gt; print current mode</span>
@@ -387,7 +387,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

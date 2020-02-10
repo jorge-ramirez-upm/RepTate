@@ -109,7 +109,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">WARNING</span><span class="p">)</span>
  
-<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="c1"># set cwd as *this* dir</span>
+<span class="c1"># os.chdir(os.path.dirname(sys.argv[0])) # set cwd as *this* dir</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;core&#39;</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;gui&#39;</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">)</span>
@@ -128,7 +128,7 @@
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span> <span class="o">=</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">over</span> <span class="o">=</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="get_argument_files"><a class="viewcode-back" href="../developers/code.html#RepTate.get_argument_files">[docs]</a><span class="k">def</span> <span class="nf">get_argument_files</span><span class="p">(</span><span class="n">finlist</span><span class="p">):</span>
+<div class="viewcode-block" id="get_argument_files"><a class="viewcode-back" href="../code.html#RepTate.get_argument_files">[docs]</a><span class="k">def</span> <span class="nf">get_argument_files</span><span class="p">(</span><span class="n">finlist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse files from command line and group them by extension</span>
 
@@ -157,7 +157,7 @@
                     <span class="n">df</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="start_RepTate"><a class="viewcode-back" href="../developers/code.html#RepTate.start_RepTate">[docs]</a><span class="k">def</span> <span class="nf">start_RepTate</span><span class="p">(</span><span class="n">argv</span><span class="p">):</span>
+<div class="viewcode-block" id="start_RepTate"><a class="viewcode-back" href="../code.html#RepTate.start_RepTate">[docs]</a><span class="k">def</span> <span class="nf">start_RepTate</span><span class="p">(</span><span class="n">argv</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Main RepTate application. </span>
 <span class="sd">    </span>
@@ -280,7 +280,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

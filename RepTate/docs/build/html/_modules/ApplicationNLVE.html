@@ -108,7 +108,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="ApplicationNLVE"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.ApplicationNLVE">[docs]</a><span class="k">class</span> <span class="nc">ApplicationNLVE</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ApplicationNLVE"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.ApplicationNLVE">[docs]</a><span class="k">class</span> <span class="nc">ApplicationNLVE</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application to Analyze Start up of Nonlinear flow</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -283,7 +283,7 @@
         <span class="c1">#set the current view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseApplicationNLVE.viewLogeta"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewLogeta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogeta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewLogeta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewLogeta">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogeta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -296,7 +296,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">flow_rate</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationNLVE.vieweta"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.vieweta">[docs]</a>    <span class="k">def</span> <span class="nf">vieweta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.vieweta"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.vieweta">[docs]</a>    <span class="k">def</span> <span class="nf">vieweta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -309,7 +309,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">flow_rate</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaTime"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaTime"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -318,7 +318,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaTime"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaTime"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaTime">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs time :math:`t`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -327,7 +327,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaGamma"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewLogSigmaGamma"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewLogSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewLogSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -340,7 +340,7 @@
         <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span></div>
         
-<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaGamma"><a class="viewcode-back" href="../manual/Applications/NLVE/general.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseApplicationNLVE.viewSigmaGamma"><a class="viewcode-back" href="../developers/CodeApplications.html#ApplicationNLVE.BaseApplicationNLVE.viewSigmaGamma">[docs]</a>    <span class="k">def</span> <span class="nf">viewSigmaGamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -422,7 +422,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>
