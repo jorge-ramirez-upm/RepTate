@@ -2,6 +2,11 @@
 View selection 
 -----------------------
 
+.. |saveview| image:: /gui_icons/icons8-saveView.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
+
 The data read from the files can be represented in several different ways, which are different for each application. In RepTate, the way some experimental or theory data are represented is referred to as the **View**. 
 
 There are two different ways to select a View:
@@ -20,4 +25,4 @@ At the left of the drop-down box, there is a small up-down selector that allows 
 
 Most Applications in RepTate show just one graph by default. 
 
-The data, as represented by the current View/Views, can be saved to a text file by clicking on the button at the right of the View combo box.
+The data, as represented by the current View/Views, can be saved to a text file by clicking on the button |saveview| at the right of the View combo box.

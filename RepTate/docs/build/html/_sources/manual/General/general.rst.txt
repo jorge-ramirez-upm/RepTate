@@ -23,11 +23,11 @@ RepTate makes extensive use of the following packages and libraries:
 - Qt and Pyqt: Text :cite:`General-Pyqt_2018`, Text :cite:`General-Qt_2018`.
 
 .. include:: MainWindow.rst
-.. include:: Plot.rst
-.. include:: View.rst
 .. include:: DataSet.rst
-.. include:: Theory.rst
+.. include:: View.rst
+.. include:: Plot.rst
 .. include:: Datainspection.rst
+.. include:: Theory.rst
 .. include:: Tools.rst
 
 .. rubric:: References

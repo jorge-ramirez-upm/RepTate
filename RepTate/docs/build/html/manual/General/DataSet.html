@@ -43,6 +43,22 @@
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/RepTatelogo.jpg" alt="Logo"/>
             </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Operating with Datasets</a><ul>
+<li><a class="reference internal" href="#structure-of-data-files">Structure of data files</a></li>
+<li><a class="reference internal" href="#adding-files-to-datasets">Adding files to datasets</a></li>
+<li><a class="reference internal" href="#importing-data-from-excel-files">Importing data from Excel files</a></li>
+<li><a class="reference internal" href="#sorting-files-in-a-dataset">Sorting Files in a Dataset</a></li>
+<li><a class="reference internal" href="#viewing-hiding-files">Viewing/Hiding Files</a></li>
+<li><a class="reference internal" href="#showing-editing-file-parameters">Showing/Editing file parameters</a></li>
+<li><a class="reference internal" href="#creating-new-datasets">Creating new datasets</a></li>
+<li><a class="reference internal" href="#adding-dummy-files-to-datasets">Adding <em>Dummy</em> files to datasets</a></li>
+<li><a class="reference internal" href="#reloading-the-data">Reloading the data</a></li>
+</ul>
+</li>
+</ul>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -70,18 +86,98 @@
             
   <div class="section" id="operating-with-datasets">
 <h1>Operating with Datasets<a class="headerlink" href="#operating-with-datasets" title="Permalink to this headline">¶</a></h1>
+<p>When an new application is opened, a new tab is created in the Main RepTate window, showing an empty application with an empty dataset, no theories and the default view. New data files must be added to the dataset in order to use all the functionality of RepTate.</p>
+<div class="section" id="structure-of-data-files">
+<h2>Structure of data files<a class="headerlink" href="#structure-of-data-files" title="Permalink to this headline">¶</a></h2>
+<p>Only text files that have the right extension and contain the expected data can be added to the current application. The general structure of the text files that can be read by RepTate is as follows (see the example below for a quick reference):</p>
 <ul class="simple">
-<li><p>Creating new datasets</p></li>
-<li><p>Adding files to datasets</p></li>
-<li><p>Adding <em>Dummy</em> files to datasets</p></li>
-<li><p>Importing data from Excel files</p></li>
-<li><p>Sorting Files in a Dataset by name or parameter value</p></li>
-<li><p>Activating/Deactivating particular files in a Dataset.</p></li>
-<li><p>Showing all DataSets (or all theories applied to current DataSet)</p></li>
-<li><p>Setting plot style</p></li>
-<li><p>Reloading the data</p></li>
-<li><p>Showing/Editing file parameters</p></li>
+<li><p>[<strong>Required</strong>] The first line contains a <strong>list of parameters</strong> that describe the contents of the data in the file, as a list of variables and values separated by semicolons. Typically, the parameters will describe the conditions (temperature, pressure, etc) at which the experiment was done, plus some additional parameters to characterize the material (chemistry, molecular weight, etc) and the author of the data. Some parameters are needed by some applications and theories (for example, the temperature in the TTS module) and RepTate will show a warning if their values are missing. The values of the parameters can be real numbers, integers or strings.</p></li>
+<li><p>[<strong>Optional</strong>] Some <strong>additional text lines</strong> may be present in the file with further info about the experimental data (the date and location where the data was taken, the equipment, etc). These lines ignored by RepTate.</p></li>
+<li><p>[<strong>Required</strong>] The <strong>data</strong> itself must be stored in the file as <strong>columns separated by spaces or tabs</strong>. The number of columns must be greater or equal than the number of columns required by the application, and in the expected order. Additional columns are discarded. For more information, check the documentation for each particular application.</p></li>
 </ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var1=value1;var2=value2;var3=value3;...
+Some text
+# Some text
+1.90165E+0      7.38023E+1      1.35152E+4
+3.01392E+0      1.99063E+1      2.14834E+4
+4.51700E+0      3.72861E+1      3.17756E+4
+...             ...             ...
+</pre></div>
+</div>
+<p>For more info about valid extensions and data structure inside the files, check the documentation for each application.</p>
+</div>
+<div class="section" id="adding-files-to-datasets">
+<h2>Adding files to datasets<a class="headerlink" href="#adding-files-to-datasets" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways to add Files to the current application:</p>
+<ul class="simple">
+<li><p>By dragging and dropping them from the system file explorer to the Application window (see <a class="reference internal" href="general.html#figdragdrop"><span class="std std-numref">Fig. 3</span></a>).</p></li>
+<li><p>By pressing the Open Data File button <a class="reference internal" href="../../_images/icons8-open-view-in-new-tab.png"><img alt="open" class="align-bottom" src="../../_images/icons8-open-view-in-new-tab.png" style="width: 15pt; height: 15pt;" /></a> (Ctrl+O). A file dialog is shown where one file or more files of the right type can be selected.</p></li>
+</ul>
+<div class="figure align-center" id="id1">
+<span id="figdragdrop"></span><a class="reference internal image-reference" href="../../_images/dragdropfiles.gif"><img alt="../../_images/dragdropfiles.gif" src="../../_images/dragdropfiles.gif" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Dragging and dropping some files to the RepTate window.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="importing-data-from-excel-files">
+<h2>Importing data from Excel files<a class="headerlink" href="#importing-data-from-excel-files" title="Permalink to this headline">¶</a></h2>
+<p>This feature is experimental and will be improved in the future. In the current version, when the user selects the button “Import from Excel” <a class="reference internal" href="../../_images/icons8-microsoft-excel.png"><img alt="excel" class="align-bottom" src="../../_images/icons8-microsoft-excel.png" style="width: 15pt; height: 15pt;" /></a>, under the button <a class="reference internal" href="../../_images/icons8-open-view-in-new-tab.png"><img alt="open" class="align-bottom" src="../../_images/icons8-open-view-in-new-tab.png" style="width: 15pt; height: 15pt;" /></a> menu, a dialog is shown that allows the user to (see <a class="reference internal" href="general.html#figimportexcel"><span class="std std-numref">Fig. 4</span></a>):</p>
+<ul class="simple">
+<li><p>select the Excel file</p></li>
+<li><p>set the file parameters</p></li>
+<li><p>select Excel Sheet that contains the data</p></li>
+<li><p>set the number of rows in the Excel sheet that must be skipped</p></li>
+<li><p>set the columns in the Excel sheet that correspond to the columns that the RepTate application expects to read.</p></li>
+</ul>
+<div class="figure align-center" id="id2">
+<span id="figimportexcel"></span><a class="reference internal image-reference" href="../../_images/ImportfromExcel.png"><img alt="../../_images/ImportfromExcel.png" src="../../_images/ImportfromExcel.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Importing data from an Excel file into the LVE application.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="sorting-files-in-a-dataset">
+<h2>Sorting Files in a Dataset<a class="headerlink" href="#sorting-files-in-a-dataset" title="Permalink to this headline">¶</a></h2>
+<p>The files in a Dataset can be sorted by name or parameter value, in increasing and decreasing order, by clicking in the corresponding column header. Clicking several times on the same header will invert the sorting order. A small arrow next to a column header name will indicate how the files in the current Dataset are sorted (see <a class="reference internal" href="general.html#figsortfiles"><span class="std std-numref">Fig. 5</span></a>).</p>
+<div class="figure align-center" id="id3">
+<span id="figsortfiles"></span><a class="reference internal image-reference" href="../../_images/SortingFiles.png"><img alt="../../_images/SortingFiles.png" src="../../_images/SortingFiles.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">A Dataset with files sorted by decreasing value of the <em>gdot</em> parameter.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<p>When the files in a Dataset are sorted, the colours assigned to each file are also changed. The order of the colours is assigned by the selected palette. The number of colours in some palettes is limited and, therefore, if the number of files exceed the number of colours available, some files may end up having the same colour.</p>
+</div>
+<div class="section" id="viewing-hiding-files">
+<h2>Viewing/Hiding Files<a class="headerlink" href="#viewing-hiding-files" title="Permalink to this headline">¶</a></h2>
+<p>Each file in a Dataset can be in the enabled (checked) or disabled state (unchecked, see <a class="reference internal" href="general.html#figdisablefile"><span class="std std-numref">Fig. 6</span></a>). When files are disabled, they are not shown in the current view and they are not considered during theory calculation and fitting.</p>
+<div class="figure align-center" id="id4">
+<span id="figdisablefile"></span><a class="reference internal image-reference" href="../../_images/disablingfiles.gif"><img alt="../../_images/disablingfiles.gif" src="../../_images/disablingfiles.gif" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Enabling/disabling files in a Dataset.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="showing-editing-file-parameters">
+<h2>Showing/Editing file parameters<a class="headerlink" href="#showing-editing-file-parameters" title="Permalink to this headline">¶</a></h2>
+<p>By double-clicking on a file name in the Dataset area, it is possible to view/edit the parameters of the file. A dialog will open, where all the file parameters are shown and all their values can be viewed/edited.</p>
+</div>
+<div class="section" id="creating-new-datasets">
+<h2>Creating new datasets<a class="headerlink" href="#creating-new-datasets" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes, it is convenient to load data into separate data sets, because the data correspond to different materials or the experiments have been done in different conditions. In order to create a new empty dataset, the user must click on the “Create an empty DataSet” button <a class="reference internal" href="../../_images/icons8-add-row.png"><img alt="newdataset" class="align-bottom" src="../../_images/icons8-add-row.png" style="width: 15pt; height: 15pt;" /></a> (Ctrl+N) in the DataSet toolbar. By default, new DataSets are named Set <em>i</em>, where <em>i</em> is an integer that starts from 1 and increments as new DataSets are opened. The DataSet name can be changed by double-clicking on the DataSet tab.</p>
+<p>When there are more than one Dataset in the current application, the user can switch Datasets by clicking on the corresponding tab. By default, RepTate only plots the data in the currently active Dataset. If the button “View all Datasets simultaneously” button <a class="reference internal" href="../../_images/icons8-binoculars.png"><img alt="viewall" class="align-bottom" src="../../_images/icons8-binoculars.png" style="width: 20pt; height: 20pt;" /></a> is clicked, all the data in all open Datasets is shown.</p>
+</div>
+<div class="section" id="adding-dummy-files-to-datasets">
+<h2>Adding <em>Dummy</em> files to datasets<a class="headerlink" href="#adding-dummy-files-to-datasets" title="Permalink to this headline">¶</a></h2>
+<p>In some cases, the user may want to explore the results of a given theory but he/she does not have any experimental data files available. Since the theories are only applied to the active files of the Dataset that owns the theory, it is convenient to be able to create <em>empty</em> files with parameters that span some range of values of interest (for example, the user may be interested in exploring the results of some theory when the molecular weight of the samples is changed). In RepTate, this can be done by adding <em>Dummy files</em>, in the submenu under the “Open Data File” button.</p>
+<p>When the “Add Dummy files” button is clicked, a dialog is shown allowing the user to configure how the files are going to be generated (see <a class="reference internal" href="general.html#figdummyfiles"><span class="std std-numref">Fig. 7</span></a>):</p>
+<ul class="simple">
+<li><p>The parameter(s) that are going to be changed systematically in the dummy files. By default, the possible parameters are selected from the list of <em>important</em> parameters, defined for every application. By ticking the check-box next to a parameter, it is selected.</p></li>
+<li><p>The range of values over which the parameter will be swept, which is defined by a minimum value, a maximum value, the number of points and scale (linear or logarithmic) that will be used to separate the points between the minumum and the maximum.</p></li>
+<li><p>The data in the dummy files is arbitrary. The user can select the range, number of points and scale (linear or log) in the dummy file for the first column (which frequently will act as the <em>x</em>-coordinate in views), as well as the default <em>y</em> value for the remaining columns.</p></li>
+<li><p>The user can also input the chemistry, which may be interesting if a certain material is available in the Materials Database.</p></li>
+</ul>
+<div class="figure align-center" id="id5">
+<span id="figdummyfiles"></span><a class="reference internal image-reference" href="../../_images/DummyFiles.png"><img alt="../../_images/DummyFiles.png" src="../../_images/DummyFiles.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-text">Dialog for adding <em>Dummy</em> files to a DataSet.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="reloading-the-data">
+<h2>Reloading the data<a class="headerlink" href="#reloading-the-data" title="Permalink to this headline">¶</a></h2>
+<p>Some times, the user may be representing some data that is being updated in real time (because an experiment or simulation is running at the same time as the RepTate session). In this cases, it is interesting to update the data in RepTate by reading again the file. This can be done by clicking the button “Reload Data Files &amp; Theories” <a class="reference internal" href="../../_images/icons8-file-reload.png"><img alt="filereload" class="align-bottom" src="../../_images/icons8-file-reload.png" style="width: 20pt; height: 20pt;" /></a> (Ctrl+R).</p>
+</div>
 </div>
 
 

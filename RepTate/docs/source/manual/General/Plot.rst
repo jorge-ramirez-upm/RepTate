@@ -2,7 +2,22 @@
 Plot Area 
 -----------------------
 
-The plot area shows the graphical representation of the data files in the current Dataset (or all the Datasets in the current application, if the "View all Datasets simultaneously" button is clicked). Several operations can be done in the plot area:
+.. |viewall| image:: /gui_icons/icons8-binoculars.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
+
+.. |figuretoolbar| image:: /gui_icons/icons8-sine-100.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
+
+.. |plotsettings| image:: /gui_icons/icons8-color-wheel-2.png
+    :width: 20pt
+    :height: 20pt
+    :align: bottom
+
+The plot area shows the graphical representation of the data files in the current Dataset (or all the Datasets in the current application, if the "View all Datasets simultaneously" button |viewall| is clicked). Several operations can be done in the plot area:
 
 - By clicking on a data point, a label is shown with  its (:math:`x`, :math:`y`) coordinates, with respect to the current View (label **1** in :numref:`figplotarea`). The label can be hidden by clicking on it again.
 - By right-clicking on the plot area and dragging the mouse, the user can zoom to an specific region of the plot.
@@ -21,4 +36,9 @@ The plot area shows the graphical representation of the data files in the curren
     	
     Plot area showing data point coordinates (1), annotations (2) and pop-up menu (3).
 
-Additional view options can be set by clicking on the "Show/Hide Figure Toolbar" button on the Dataset area. The x-y ranges can be fixed by clicking on the "Lock XY axes" in the Dataset area.
+Additional view options can be set by clicking on the "Show/Hide Figure Toolbar" button |figuretoolbar| on the Dataset area. The x-y ranges can be fixed by clicking on the "Lock XY axes" in the Dataset area.
+
+Changing the Plot Properties
+------------------------
+
+- Clicking the "Plot Settings" button |plotsettings| (Ctrl+M)

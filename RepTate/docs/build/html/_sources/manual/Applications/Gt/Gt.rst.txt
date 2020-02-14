@@ -3,7 +3,7 @@
 ==============================
 
 .. |logo| image:: /app_logo/Gt.png
-	:height: 15pt
+	:height: 20pt
 	:align: bottom
 
 ..	toctree::
