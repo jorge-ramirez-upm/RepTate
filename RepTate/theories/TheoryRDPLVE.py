@@ -123,7 +123,6 @@ class BaseTheoryRDPLVE:
             description="Plateau modulus",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0)
         self.parameters["Me"] = Parameter(
             name="Me",
@@ -131,7 +130,6 @@ class BaseTheoryRDPLVE:
             description="Entanglement molecular mass",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0,
             display_flag=False)
         self.parameters["tau_e"] = Parameter(
@@ -140,7 +138,6 @@ class BaseTheoryRDPLVE:
             description="Entanglement relaxation time",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0,
             display_flag=False)
         self.parameters["nmodes"] = Parameter(
@@ -160,7 +157,6 @@ class BaseTheoryRDPLVE:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0,
                 max_value=1)
             self.parameters["tauD%02d" % i] = Parameter(
@@ -170,7 +166,6 @@ class BaseTheoryRDPLVE:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
         self.with_gcorr = GcorrMode.none
         self.MWD_m = [100, 1000]
@@ -289,7 +284,6 @@ class BaseTheoryRDPLVE:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -298,7 +292,6 @@ class BaseTheoryRDPLVE:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
             if (oldn > self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value, oldn):

@@ -38,16 +38,6 @@ Module that defines theory parameters and their properties.
 import enum
 import numpy as np
 
-class ShiftType(enum.Enum):
-    """Type of shift during minimization
-    
-    Parameters can be:
-        - linear: linear shift
-        - log: logatithmic shift
-    """
-    linear=0
-    log=1
-
 class ParameterType(enum.Enum):
     """Types of parameters that can be used in a Theory
     
@@ -83,8 +73,8 @@ class Parameter(object):
     [description]
     """
     def __init__(self, name="", value=0, description="", type=ParameterType.real, 
-                 opt_type=OptType.opt, min_factor=1.0, min_shift_type=ShiftType.linear, 
-                 bracketed = False, min_value=-np.inf, max_value=np.inf, 
+                 opt_type=OptType.opt, 
+                 min_value=-np.inf, max_value=np.inf, 
                  display_flag=True, discrete_values=[]):
         """
         **Constructor**
@@ -95,9 +85,6 @@ class Parameter(object):
             - description {str} -- Meaning of parameter
             - type {enum} -- Type of parameter (real, integer, discrete_real, discrete_integer)
             - opt_type {enum} -- Is this parameter optimized at the next minimization (opt, nopt, const)?
-            - min_factor {real} -- Factor to scale this parameter during minimization
-            - min_shift_type {user} -- How do we shift this parameter during minimization
-            - bracketed {bool} -- Is the parameter bracketed?
             - min_value {real} -- Minimum allowed value for the parameter
             - max_value {real} -- Maximum allowed value
             - display_flag {bool} -- This parameter will be shown in the Theory table
@@ -126,9 +113,6 @@ class Parameter(object):
             pass # NOT IMPLEMENTED YET
         self.error=np.inf
         self.opt_type = opt_type
-        self.min_factor = min_factor
-        self.min_shift_type = min_shift_type
-        self.bracketed = bracketed
         self.min_value = min_value
         self.max_value= max_value
         self.display_flag = display_flag
@@ -147,9 +131,6 @@ class Parameter(object):
         self.type = par2.type
         self.value=par2.value
         self.opt_type = par2.opt_type
-        self.min_factor = par2.min_factor
-        self.min_shift_type = par2.min_shift_type
-        self.bracketed = par2.bracketed
         self.min_value = par2.min_value
         self.max_value= par2.max_value
         
@@ -177,5 +158,5 @@ class Parameter(object):
         """
         return "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%s,%s,%g,%g,%s)"%(
             self.name, self.value, self.description, self.type, 
-            self.opt_type, self.min_factor, self.min_shift_type, 
-            self.bracketed, self.min_value, self.max_value, self.display_flag)
+            self.opt_type, 
+            self.min_value, self.max_value, self.display_flag)

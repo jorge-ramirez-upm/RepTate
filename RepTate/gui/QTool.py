@@ -44,7 +44,7 @@ from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QToolBar
 from PyQt5.QtCore import Qt, QObject, QThread, QSize, pyqtSignal, pyqtSlot, QEvent
 from PyQt5.QtGui import QDoubleValidator, QIcon, QCursor
-from Parameter import OptType, ParameterType, ShiftType
+from Parameter import OptType, ParameterType
 from math import ceil, floor
 import ast
 PATH = dirname(abspath(__file__))

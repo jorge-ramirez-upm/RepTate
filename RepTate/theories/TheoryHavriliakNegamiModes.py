@@ -38,7 +38,7 @@ Module that defines theories related to Havriliak-Negami modes, in the frequency
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from DataTable import DataTable
-from Parameter import Parameter, ParameterType, ShiftType, OptType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
@@ -123,7 +123,6 @@ class BaseTheoryHavriliakNegamiModesFrequency:
             "Unrelaxed permittivity",
             ParameterType.real,
             opt_type=OptType.opt,
-            bracketed=True,
             min_value=0)
         self.parameters["alpha"] = Parameter(
             "alpha",
@@ -131,7 +130,6 @@ class BaseTheoryHavriliakNegamiModesFrequency:
             'Asymmetry parameter',
             ParameterType.real,
             opt_type=OptType.opt,
-            bracketed=True,
             min_value=0)
         self.parameters["gamma"] = Parameter(
             "gamma",
@@ -139,7 +137,6 @@ class BaseTheoryHavriliakNegamiModesFrequency:
             'Broadness parameter',
             ParameterType.real,
             opt_type=OptType.opt,
-            bracketed=True,
             min_value=0)
         self.parameters["logwmin"] = Parameter(
             "logwmin",

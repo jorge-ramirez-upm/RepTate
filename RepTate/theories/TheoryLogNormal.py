@@ -118,7 +118,6 @@ class BaseTheoryLogNormal:
             description='Standard deviation',
             type=ParameterType.real,
             opt_type=OptType.opt,
-            bracketed=True,
             min_value=0)
 
     def get_modes(self):

@@ -121,7 +121,6 @@ class BaseTheoryGEX:
             description='Exponent parameter',
             type=ParameterType.real,
             opt_type=OptType.opt,
-            bracketed=True,
             min_value=0)
         self.parameters['b'] = Parameter(
             name='b',
@@ -129,7 +128,6 @@ class BaseTheoryGEX:
             description='Exponent parameter',
             type=ParameterType.real,
             opt_type=OptType.opt,
-            bracketed=True,
             min_value=0)
 
     def get_modes(self):

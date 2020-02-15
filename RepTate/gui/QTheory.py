@@ -44,7 +44,7 @@ from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog, QApplication, QTextBrowser, QSplitter, QMenu
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
-from Parameter import OptType, ParameterType, ShiftType
+from Parameter import OptType, ParameterType
 from math import ceil, floor
 import Version
 import time
@@ -117,19 +117,6 @@ class EditThParametersDialog(QDialog):
                 # cb.setCurrentText('%s'.split(".")[-1] % p_attributes[attr_name])
                 s = '%s' % p_attributes[attr_name]
                 cb.setCurrentText(s.split(".")[-1])
-                a_new.append(cb)
-            elif attr_name == 'min_shift_type':
-                cb = QComboBox()
-                cb.addItem('linear')
-                cb.addItem('log')
-                s = '%s' % p_attributes[attr_name]
-                cb.setCurrentText(s.split(".")[-1])
-                a_new.append(cb)
-            elif attr_name == 'bracketed':
-                cb = QComboBox()
-                cb.addItem('True')
-                cb.addItem('False')
-                cb.setCurrentText('%s' % p_attributes[attr_name])
                 a_new.append(cb)
             elif attr_name == 'display_flag':
                 cb = QComboBox()
@@ -521,13 +508,6 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                         elif attr_name == 'opt_type':
                             val = attr_dict[attr_name].currentText()
                             setattr(p, attr_name, OptType[val])
-                        elif attr_name == 'min_shift_type':
-                            val = attr_dict[attr_name].currentText()
-                            setattr(p, attr_name, ShiftType[val])
-                        elif attr_name == 'bracketed':
-                            val = ast.literal_eval(
-                                attr_dict[attr_name].currentText())  # bool
-                            setattr(p, attr_name, val)
                         elif attr_name == 'display_flag':
                             val = ast.literal_eval(
                                 attr_dict[attr_name].currentText())  # bool

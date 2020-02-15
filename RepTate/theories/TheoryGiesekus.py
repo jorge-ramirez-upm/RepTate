@@ -195,7 +195,6 @@ class BaseTheoryGiesekus:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -204,7 +203,6 @@ class BaseTheoryGiesekus:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["alpha%02d" % i] = Parameter(
                 name="alpha%02d" % i,
@@ -212,7 +210,6 @@ class BaseTheoryGiesekus:
                 description="Dimensionless mobility factor of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.opt,
-                bracketed=True,
                 min_value=0,
                 max_value=1)
 
@@ -438,7 +435,6 @@ class BaseTheoryGiesekus:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -447,7 +443,6 @@ class BaseTheoryGiesekus:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["alpha%02d" % i] = Parameter(
                     name="alpha%02d" % i,
@@ -456,7 +451,6 @@ class BaseTheoryGiesekus:
                     type=ParameterType.real,
                     opt_type=OptType.opt,
                     display_flag=True,
-                    bracketed=True,
                     min_value=0,
                     max_value=1)
             if (oldn > self.parameters["nmodes"].value):
