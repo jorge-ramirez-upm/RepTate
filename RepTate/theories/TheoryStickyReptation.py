@@ -86,6 +86,7 @@ class BaseTheoryStickyReptation:
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryStickyReptation.thname
     citations = TheoryStickyReptation.citations
+    doi = TheoryStickyReptation.doi
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
         """
@@ -104,25 +105,33 @@ class BaseTheoryStickyReptation:
             value=10605.97,
             description='Entanglement modulus',
             type=ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=1,
+            max_value=1e8)
         self.parameters['tau_s'] = Parameter(
             name='tau_s',
             value=0.01435800,
             description='sticker time',
             type=ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=1e-5,
+            max_value=1e2)
         self.parameters['Zs'] = Parameter(
             name='Zs',
             value=8.045762,
             description='Number of stickers per chain',
             type=ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=0,
+            max_value=100)
         self.parameters['Ze'] = Parameter(
             name='Ze',
             value=10.49686,
             description='Number of entanglements',
             type=ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+            min_value=0,
+            max_value=100)
         self.parameters['alpha'] = Parameter(
             name='alpha',
             value=10,

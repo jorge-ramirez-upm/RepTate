@@ -25,7 +25,6 @@ RepTate makes extensive use of the following packages and libraries:
 .. include:: MainWindow.rst
 .. include:: DataSet.rst
 .. include:: View.rst
-.. include:: Plot.rst
 .. include:: Datainspection.rst
 .. include:: Theory.rst
 .. include:: Tools.rst
