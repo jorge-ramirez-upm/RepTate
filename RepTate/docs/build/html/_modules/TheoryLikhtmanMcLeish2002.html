@@ -145,7 +145,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryLikhtmanMcLeish2002</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryLikhtmanMcLeish2002</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -234,7 +234,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tau_e&quot;</span><span class="p">,</span> <span class="n">taue</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;Ge&quot;</span><span class="p">,</span> <span class="n">Ge</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002.LikhtmanMcLeish2002"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002.LikhtmanMcLeish2002">[docs]</a>    <span class="k">def</span> <span class="nf">LikhtmanMcLeish2002</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002.LikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002.LikhtmanMcLeish2002">[docs]</a>    <span class="k">def</span> <span class="nf">LikhtmanMcLeish2002</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -298,7 +298,7 @@
         <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">table</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">taue</span><span class="p">,</span>
                                <span class="n">Ge</span> <span class="o">*</span> <span class="n">table</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002.do_error"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002.do_error">[docs]</a>    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryLikhtmanMcLeish2002.do_error"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.BaseTheoryLikhtmanMcLeish2002.do_error">[docs]</a>    <span class="k">def</span> <span class="nf">do_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">do_error</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="n">taue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tau_e&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="n">Me</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Me&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -316,7 +316,7 @@
             <span class="n">tab_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%-18s</span><span class="s1">&#39;</span><span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%18.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">Z</span><span class="p">,</span>  <span class="s1">&#39;</span><span class="si">%18.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tauR</span><span class="p">,</span>  <span class="s1">&#39;</span><span class="si">%    18.4g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tauD</span> <span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="n">tab_data</span><span class="p">)</span></div></div>
                                
-<div class="viewcode-block" id="CLTheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.CLTheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">BaseTheoryLikhtmanMcLeish2002</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.CLTheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">BaseTheoryLikhtmanMcLeish2002</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -334,7 +334,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">BaseTheoryLikhtmanMcLeish2002</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryLikhtmanMcLeish2002</span><span class="p">(</span><span class="n">BaseTheoryLikhtmanMcLeish2002</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -372,7 +372,7 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linkMeGeaction_change</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">textEdited</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_txtrho_edited</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">linkMeGeaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.linkMeGeaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">linkMeGeaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s1">&#39;linkMeGe&#39;</span><span class="p">,</span> <span class="n">checked</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -388,7 +388,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.handle_txtrho_edited"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.handle_txtrho_edited">[docs]</a>    <span class="k">def</span> <span class="nf">handle_txtrho_edited</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.handle_txtrho_edited"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.handle_txtrho_edited">[docs]</a>    <span class="k">def</span> <span class="nf">handle_txtrho_edited</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_text</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
@@ -399,7 +399,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocalculate</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.set_extra_data"><a class="viewcode-back" href="../code.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.set_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryLikhtmanMcLeish2002.set_extra_data"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryLikhtmanMcLeish2002.GUITheoryLikhtmanMcLeish2002.set_extra_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_extra_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Restore the check state of button and text value&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">txtrho</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="n">checked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;linkMeGe&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>

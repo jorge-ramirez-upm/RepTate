@@ -28,6 +28,7 @@ RepTate makes extensive use of the following packages and libraries:
 .. include:: Datainspection.rst
 .. include:: Theory.rst
 .. include:: Tools.rst
+.. include:: Projects.rst
 
 .. rubric:: References
 

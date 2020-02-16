@@ -80,8 +80,10 @@
             
   <div class="section" id="inspecting-the-data">
 <h1>Inspecting the Data<a class="headerlink" href="#inspecting-the-data" title="Permalink to this headline">¶</a></h1>
+<p>When the user clicks the button “Inspect contents of data files” <a class="reference internal" href="../../_images/icons8-microscope.png"><img alt="inspection" class="align-bottom" src="../../_images/icons8-microscope.png" style="width: 15pt; height: 15pt;" /></a> (Ctrl+I) in the Dataset area, a new panel is shown on the left side of the application window. In this panel, some operations can be done on the data, like checking the contents, copy and pasting data, shifting the curves around by dragging them with the mouse or applying Tools to the data.</p>
 <div class="section" id="view-the-current-file-data">
 <h2>View the current file data<a class="headerlink" href="#view-the-current-file-data" title="Permalink to this headline">¶</a></h2>
+<p>When a file in the current Dataset is selected with the mouse, the corresponding plot is highlighted and the contents of the file are shown in the data inspection table (if the data inspection table is shown, see <code class="xref std std-numref docutils literal notranslate"><span class="pre">figdatainspaction</span></code>).</p>
 <div class="figure align-center" id="id1">
 <span id="figdatainspection"></span><a class="reference internal image-reference" href="../../_images/DataInpection.png"><img alt="../../_images/DataInpection.png" src="../../_images/DataInpection.png" style="width: 70%;" /></a>
 <p class="caption"><span class="caption-text">Inspecting the contents of the selected file.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
@@ -89,15 +91,16 @@
 </div>
 <div class="section" id="copy-paste-data">
 <h2>Copy/Paste data<a class="headerlink" href="#copy-paste-data" title="Permalink to this headline">¶</a></h2>
+<p>The data shown in the inspection data table can be copied as text (columns separated by tabs) by selecting the corresponding cells, columns or rows from the table and pressing the button “Copy” in the data inspaction area. The copied data can be pasted in another application like Excel or Matlab, or even to a different file by pressing the button “Paste” in the data inspection area.</p>
 </div>
 <div class="section" id="shift-the-data">
 <h2>Shift the data<a class="headerlink" href="#shift-the-data" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>shift vertically and/or horizontally.</p></li>
-<li><p>View the shift factors</p></li>
-<li><p>Save the shift factors</p></li>
-<li><p>Reset shift factors</p></li>
-</ul>
+<p>Sometimes it may be convenient to compare features of two different data files that are represented in the same plot. For example, one may be interested in comparing the different terminal regions of G’ data of samples of the same polymer with different molecular weight. RepTate allows the user to shift the data vertically and/or horizontally by pressing the buttons “Shift the selected curve vertically” <a class="reference internal" href="../../_images/icons8-vertical-timeline-slider.png"><img alt="shiftvertical" class="align-bottom" src="../../_images/icons8-vertical-timeline-slider.png" style="width: 15pt; height: 15pt;" /></a> and/or “Shift the selected curve horizontally” <a class="reference internal" href="../../_images/icons8-timeline-slider.png"><img alt="shifthorizontal" class="align-bottom" src="../../_images/icons8-timeline-slider.png" style="width: 15pt; height: 15pt;" /></a>, respectively, in the data inspection area. Once the user finishes shifting the curves, he/she can check, save and reset the values of the shift factors by clicking on the corresponding buttons in the data inspection area. The whole procedure is summarized in <a class="reference internal" href="general.html#figshiftfiles"><span class="std std-numref">Fig. 14</span></a>.</p>
+<div class="figure align-center" id="id2">
+<span id="figshiftfiles"></span><a class="reference internal image-reference" href="../../_images/shiftingfiles.gif"><img alt="../../_images/shiftingfiles.gif" src="../../_images/shiftingfiles.gif" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Shifting some curves horizontally and viewing the shift factors.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>When the axis with respect to which the shifting is being carried out is in logarithmic scale, the shift factor represents the decimal logarithm of the factor by which one should multiply the data in order to obtain the observed shift. When the axis is in linear scale, the shift factor is just the linear shift needed to obtain the observed shift.</p>
 </div>
 </div>
 

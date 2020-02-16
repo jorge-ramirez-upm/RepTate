@@ -103,7 +103,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
 <span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
-<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">ShiftType</span><span class="p">,</span> <span class="n">OptType</span>
+<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
 <span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QStyle</span>
@@ -152,7 +152,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryMaxwellModesFrequency</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryMaxwellModesFrequency</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;[summary] </span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -224,7 +224,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">artistmodes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_graphic_modes</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.set_param_value"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.set_param_value"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change other parameters when nmodes is changed, else call parent function&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nmodes&#39;</span><span class="p">:</span>
             <span class="n">nmodesold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -260,7 +260,7 @@
         
         <span class="k">return</span> <span class="n">message</span><span class="p">,</span> <span class="n">success</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.drag_mode"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.drag_mode">[docs]</a>    <span class="k">def</span> <span class="nf">drag_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.drag_mode"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.drag_mode">[docs]</a>    <span class="k">def</span> <span class="nf">drag_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -287,14 +287,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.update_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.update_modes">[docs]</a>    <span class="k">def</span> <span class="nf">update_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.update_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.update_modes">[docs]</a>    <span class="k">def</span> <span class="nf">update_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.setup_graphic_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.setup_graphic_modes">[docs]</a>    <span class="k">def</span> <span class="nf">setup_graphic_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.setup_graphic_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.setup_graphic_modes">[docs]</a>    <span class="k">def</span> <span class="nf">setup_graphic_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -320,7 +320,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drag_mode</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_theory_stuff</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.destructor"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called when the theory tab is closed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -328,7 +328,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.show_theory_extras"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.show_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.show_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.show_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called when the active theory is changed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -337,7 +337,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Qhide_theory_extras</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes_visible</span><span class="p">(</span><span class="n">show</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.graphicmodes_visible"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.graphicmodes_visible">[docs]</a>    <span class="k">def</span> <span class="nf">graphicmodes_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.graphicmodes_visible"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.graphicmodes_visible">[docs]</a>    <span class="k">def</span> <span class="nf">graphicmodes_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -351,7 +351,7 @@
         <span class="c1"># self.do_calculate(&quot;&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">update_plot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.get_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.get_modes">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.get_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.get_modes">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -368,7 +368,7 @@
             <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logG</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.set_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.set_modes">[docs]</a>    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.set_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.set_modes">[docs]</a>    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -379,7 +379,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;set_modes not allowed in this theory (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.MaxwellModesFrequency"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.MaxwellModesFrequency">[docs]</a>    <span class="k">def</span> <span class="nf">MaxwellModesFrequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.MaxwellModesFrequency"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.MaxwellModesFrequency">[docs]</a>    <span class="k">def</span> <span class="nf">MaxwellModesFrequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -408,7 +408,7 @@
             <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">wTsq</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">wTsq</span><span class="p">)</span>
             <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">wT</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">wTsq</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.plot_theory_stuff"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.plot_theory_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesFrequency.plot_theory_stuff"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesFrequency.plot_theory_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -440,7 +440,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">data_table_tmp</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryMaxwellModesFrequency"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.CLTheoryMaxwellModesFrequency">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryMaxwellModesFrequency</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesFrequency</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryMaxwellModesFrequency"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.CLTheoryMaxwellModesFrequency">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryMaxwellModesFrequency</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesFrequency</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -458,7 +458,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryMaxwellModesFrequency</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesFrequency</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryMaxwellModesFrequency</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesFrequency</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -499,14 +499,14 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_modes</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency.Qhide_theory_extras"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency.Qhide_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Uncheck the modeaction button. Called when curent theory is changed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modesaction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency.modesaction_change"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency.modesaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">modesaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency.modesaction_change"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency.modesaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">modesaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -516,7 +516,7 @@
         <span class="c1"># self.graphicmodes.set_visible(self.view_modes)</span>
         <span class="c1"># self.do_calculate(&quot;&quot;)</span>
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency.handle_spinboxValueChanged"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesFrequency.handle_spinboxValueChanged"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesFrequency.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -536,7 +536,7 @@
 <span class="c1">##################################################################################</span>
 
 
-<div class="viewcode-block" id="TheoryMaxwellModesTime"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.TheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">TheoryMaxwellModesTime</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoryMaxwellModesTime"><a class="viewcode-back" href="../manual/Applications/Gt/Theory/theory.html#TheoryMaxwellModes.TheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">TheoryMaxwellModesTime</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit a generalized Maxwell model to a time dependent relaxation function. </span>
 <span class="sd">    </span>
 <span class="sd">    * **Function**</span>
@@ -575,7 +575,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryMaxwellModesTime</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">BaseTheoryMaxwellModesTime</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -640,7 +640,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">artistmodes</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_graphic_modes</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.set_param_value"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.set_param_value"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change other parameters when nmodes is changed, else call parent function&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nmodes&#39;</span><span class="p">:</span>
             <span class="n">nmodesold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -674,7 +674,7 @@
         
         <span class="k">return</span> <span class="n">message</span><span class="p">,</span> <span class="n">success</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.drag_mode"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.drag_mode">[docs]</a>    <span class="k">def</span> <span class="nf">drag_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.drag_mode"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.drag_mode">[docs]</a>    <span class="k">def</span> <span class="nf">drag_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -691,14 +691,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.update_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.update_modes">[docs]</a>    <span class="k">def</span> <span class="nf">update_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.update_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.update_modes">[docs]</a>    <span class="k">def</span> <span class="nf">update_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.setup_graphic_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.setup_graphic_modes">[docs]</a>    <span class="k">def</span> <span class="nf">setup_graphic_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.setup_graphic_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.setup_graphic_modes">[docs]</a>    <span class="k">def</span> <span class="nf">setup_graphic_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -724,7 +724,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drag_mode</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_theory_stuff</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.destructor"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called when the theory tab is closed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -732,7 +732,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.show_theory_extras"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.show_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.show_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.show_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called when the active theory is changed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -741,7 +741,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Qhide_theory_extras</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graphicmodes_visible</span><span class="p">(</span><span class="n">show</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.graphicmodes_visible"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.graphicmodes_visible">[docs]</a>    <span class="k">def</span> <span class="nf">graphicmodes_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.graphicmodes_visible"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.graphicmodes_visible">[docs]</a>    <span class="k">def</span> <span class="nf">graphicmodes_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -755,7 +755,7 @@
         <span class="c1"># self.do_calculate(&quot;&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">update_plot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.get_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.get_modes">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.get_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.get_modes">[docs]</a>    <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -771,7 +771,7 @@
             <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logG</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.set_modes"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.set_modes">[docs]</a>    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.set_modes"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.set_modes">[docs]</a>    <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -782,7 +782,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;set_modes not allowed in this theory (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.MaxwellModesTime"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.MaxwellModesTime">[docs]</a>    <span class="k">def</span> <span class="nf">MaxwellModesTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.MaxwellModesTime"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.MaxwellModesTime">[docs]</a>    <span class="k">def</span> <span class="nf">MaxwellModesTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -815,7 +815,7 @@
             <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logG</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
             <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">expT_tau</span> <span class="o">*</span> <span class="n">gamma</span></div>
 
-<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.plot_theory_stuff"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.plot_theory_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTheoryMaxwellModesTime.plot_theory_stuff"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.BaseTheoryMaxwellModesTime.plot_theory_stuff">[docs]</a>    <span class="k">def</span> <span class="nf">plot_theory_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -847,7 +847,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">data_table_tmp</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span></div></div>
 
 
-<div class="viewcode-block" id="CLTheoryMaxwellModesTime"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.CLTheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryMaxwellModesTime</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesTime</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
+<div class="viewcode-block" id="CLTheoryMaxwellModesTime"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.CLTheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">CLTheoryMaxwellModesTime</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesTime</span><span class="p">,</span> <span class="n">Theory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -865,7 +865,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesTime"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryMaxwellModesTime</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesTime</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesTime"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime">[docs]</a><span class="k">class</span> <span class="nc">GUITheoryMaxwellModesTime</span><span class="p">(</span><span class="n">BaseTheoryMaxwellModesTime</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -906,14 +906,14 @@
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_modes</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesTime.Qhide_theory_extras"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesTime.Qhide_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime.Qhide_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">Qhide_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Uncheck the modeaction button. Called when curent theory is changed</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modesaction</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesTime.modesaction_change"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime.modesaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">modesaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesTime.modesaction_change"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime.modesaction_change">[docs]</a>    <span class="k">def</span> <span class="nf">modesaction_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -927,7 +927,7 @@
         <span class="c1">#     self.artistmodes.disconnect()</span>
         <span class="c1"># self.do_calculate(&quot;&quot;)</span>
 
-<div class="viewcode-block" id="GUITheoryMaxwellModesTime.handle_spinboxValueChanged"><a class="viewcode-back" href="../code.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="GUITheoryMaxwellModesTime.handle_spinboxValueChanged"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryMaxwellModes.GUITheoryMaxwellModesTime.handle_spinboxValueChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_spinboxValueChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handle a change of the parameter &#39;nmodes&#39;</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>

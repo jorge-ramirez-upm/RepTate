@@ -106,7 +106,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">patches</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
 
-<div class="viewcode-block" id="DragType"><a class="viewcode-back" href="../code.html#DraggableArtists.DragType">[docs]</a><span class="k">class</span> <span class="nc">DragType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="DragType"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DragType">[docs]</a><span class="k">class</span> <span class="nc">DragType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -117,7 +117,7 @@
     <span class="n">none</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="n">special</span> <span class="o">=</span> <span class="mi">5</span></div>
 
-<div class="viewcode-block" id="DraggableArtist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist">[docs]</a><span class="k">class</span> <span class="nc">DraggableArtist</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist">[docs]</a><span class="k">class</span> <span class="nc">DraggableArtist</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Abstract class for motions of a matplotlib artist</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -144,7 +144,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
-<div class="viewcode-block" id="DraggableArtist.connect"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist.connect"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -153,7 +153,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cidrelease</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_release_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_release</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cidmotion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_motion</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DraggableArtist.on_press"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -178,7 +178,7 @@
         <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
         <span class="c1">#canvas.blit(axes.bbox)</span>
 
-<div class="viewcode-block" id="DraggableArtist.on_motion"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist.on_motion"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -209,7 +209,7 @@
         <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="DraggableArtist.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -220,14 +220,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="DraggableArtist.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="DraggableArtist.on_release"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist.on_release"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -260,7 +260,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parent_theory</span><span class="o">.</span><span class="n">do_fit</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DraggableArtist.disconnect"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableArtist.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableArtist.disconnect"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableArtist.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;disconnect all the stored connection ids</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -273,7 +273,7 @@
 <span class="c1">###############################################################</span>
 
 
-<div class="viewcode-block" id="DraggableBinSeries"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableBinSeries">[docs]</a><span class="k">class</span> <span class="nc">DraggableBinSeries</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableBinSeries"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableBinSeries">[docs]</a><span class="k">class</span> <span class="nc">DraggableBinSeries</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -296,7 +296,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">logx</span> <span class="o">=</span> <span class="n">logx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logy</span> <span class="o">=</span> <span class="n">logy</span>
     
-<div class="viewcode-block" id="DraggableBinSeries.on_press"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableBinSeries.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableBinSeries.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableBinSeries.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -334,7 +334,7 @@
         <span class="c1"># redraw just the curve</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DraggableBinSeries.on_motion"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableBinSeries.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableBinSeries.on_motion"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableBinSeries.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -366,7 +366,7 @@
         <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span>
         <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableBinSeries.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableBinSeries.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableBinSeries.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableBinSeries.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -408,7 +408,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">newxdata</span><span class="p">,</span> <span class="n">newydata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DraggableBinSeries.on_release"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableBinSeries.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableBinSeries.on_release"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableBinSeries.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -454,7 +454,7 @@
 <span class="c1">################################################################        </span>
 
 
-<div class="viewcode-block" id="DraggableModesSeries"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableModesSeries">[docs]</a><span class="k">class</span> <span class="nc">DraggableModesSeries</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableModesSeries"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableModesSeries">[docs]</a><span class="k">class</span> <span class="nc">DraggableModesSeries</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -477,11 +477,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span> <span class="o">=</span> <span class="n">parent_application</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_logx_logy</span><span class="p">()</span>
     
-<div class="viewcode-block" id="DraggableModesSeries.update_logx_logy"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableModesSeries.update_logx_logy">[docs]</a>    <span class="k">def</span> <span class="nf">update_logx_logy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableModesSeries.update_logx_logy"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableModesSeries.update_logx_logy">[docs]</a>    <span class="k">def</span> <span class="nf">update_logx_logy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">log_x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">log_y</span></div>
 
-<div class="viewcode-block" id="DraggableModesSeries.on_press"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableModesSeries.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableModesSeries.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableModesSeries.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -517,7 +517,7 @@
         <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span></div>
         <span class="c1">#canvas.blit(axes.bbox)</span>
 
-<div class="viewcode-block" id="DraggableModesSeries.on_motion"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableModesSeries.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableModesSeries.on_motion"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableModesSeries.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -549,7 +549,7 @@
         <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span>
         <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableModesSeries.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableModesSeries.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableModesSeries.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableModesSeries.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -592,7 +592,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">newxdata</span><span class="p">,</span> <span class="n">newydata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DraggableModesSeries.on_release"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableModesSeries.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableModesSeries.on_release"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableModesSeries.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -647,7 +647,7 @@
 <span class="c1">###########################################################</span>
 <span class="c1">###########################################################</span>
 
-<div class="viewcode-block" id="DraggableSeries"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableSeries">[docs]</a><span class="k">class</span> <span class="nc">DraggableSeries</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableSeries"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableSeries">[docs]</a><span class="k">class</span> <span class="nc">DraggableSeries</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -676,14 +676,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="DraggableSeries.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableSeries.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableSeries.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableSeries.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span></div>
     
-<div class="viewcode-block" id="DraggableSeries.on_press"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableSeries.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableSeries.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableSeries.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -709,7 +709,7 @@
         <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span></div>
         <span class="c1">#canvas.blit(axes.bbox)</span>
 
-<div class="viewcode-block" id="DraggableSeries.on_motion"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableSeries.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableSeries.on_motion"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableSeries.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -751,7 +751,7 @@
         <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span>
         <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableSeries.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableSeries.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableSeries.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableSeries.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -770,7 +770,7 @@
             <span class="n">newy</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">newy</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DraggableSeries.on_release"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableSeries.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableSeries.on_release"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableSeries.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -802,14 +802,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="kc">None</span></div>
         <span class="c1"># self.artist.figure.canvas.draw()</span>
 
-<div class="viewcode-block" id="DraggableSeries.disconnect"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableSeries.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableSeries.disconnect"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableSeries.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;disconnect all the stored connection ids</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div></div>
 
-<div class="viewcode-block" id="DraggablePatch"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggablePatch">[docs]</a><span class="k">class</span> <span class="nc">DraggablePatch</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggablePatch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggablePatch">[docs]</a><span class="k">class</span> <span class="nc">DraggablePatch</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -828,14 +828,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DraggablePatch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DraggablePatch.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggablePatch.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggablePatch.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggablePatch.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">center</span></div>
 
-<div class="viewcode-block" id="DraggablePatch.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggablePatch.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggablePatch.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggablePatch.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -846,7 +846,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dy</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="DraggableRectangle"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableRectangle">[docs]</a><span class="k">class</span> <span class="nc">DraggableRectangle</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableRectangle"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableRectangle">[docs]</a><span class="k">class</span> <span class="nc">DraggableRectangle</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -865,14 +865,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DraggableRectangle</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DraggableRectangle.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableRectangle.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableRectangle.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableRectangle.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">xy</span></div>
 
-<div class="viewcode-block" id="DraggableRectangle.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableRectangle.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableRectangle.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableRectangle.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -884,7 +884,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_x</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">dx</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_y</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dy</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="DraggableVLine"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableVLine">[docs]</a><span class="k">class</span> <span class="nc">DraggableVLine</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableVLine"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVLine">[docs]</a><span class="k">class</span> <span class="nc">DraggableVLine</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -903,7 +903,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DraggableVLine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">parent_theory</span><span class="p">)</span>
     
-<div class="viewcode-block" id="DraggableVLine.on_press"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableVLine.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableVLine.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVLine.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -928,14 +928,14 @@
         <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
         <span class="c1">#canvas.blit(axes.bbox)</span>
 
-<div class="viewcode-block" id="DraggableVLine.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableVLine.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableVLine.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVLine.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableVLine.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableVLine.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableVLine.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVLine.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -947,7 +947,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dx</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span></div></div>
 
 
-<div class="viewcode-block" id="DraggableHLine"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableHLine">[docs]</a><span class="k">class</span> <span class="nc">DraggableHLine</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableHLine"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHLine">[docs]</a><span class="k">class</span> <span class="nc">DraggableHLine</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -966,7 +966,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DraggableHLine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">parent_theory</span><span class="p">)</span>
     
-<div class="viewcode-block" id="DraggableHLine.on_press"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableHLine.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableHLine.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHLine.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -991,14 +991,14 @@
         <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
         <span class="c1">#canvas.blit(axes.bbox)</span>
    
-<div class="viewcode-block" id="DraggableHLine.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableHLine.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableHLine.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHLine.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableHLine.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableHLine.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableHLine.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHLine.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -1009,7 +1009,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_data</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dy</span><span class="p">])</span></div></div>
 
-<div class="viewcode-block" id="DraggableVSpan"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableVSpan">[docs]</a><span class="k">class</span> <span class="nc">DraggableVSpan</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableVSpan"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVSpan">[docs]</a><span class="k">class</span> <span class="nc">DraggableVSpan</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -1028,14 +1028,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DraggableVSpan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DraggableVSpan.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableVSpan.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableVSpan.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVSpan.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">get_xy</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableVSpan.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableVSpan.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableVSpan.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableVSpan.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -1048,7 +1048,7 @@
         <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_xy</span><span class="p">([[</span><span class="n">xmin</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="n">xmin</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="n">xmax</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="n">xmax</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="n">xmin</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span></div></div>
 
-<div class="viewcode-block" id="DraggableHSpan"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableHSpan">[docs]</a><span class="k">class</span> <span class="nc">DraggableHSpan</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableHSpan"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHSpan">[docs]</a><span class="k">class</span> <span class="nc">DraggableHSpan</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -1067,14 +1067,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DraggableHSpan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DraggableHSpan.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableHSpan.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableHSpan.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHSpan.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">get_xy</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableHSpan.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableHSpan.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableHSpan.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableHSpan.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -1087,7 +1087,7 @@
         <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_xy</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">+</span><span class="n">dy</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">+</span><span class="n">dy</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">ymax</span><span class="o">+</span><span class="n">dy</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span> <span class="p">,</span><span class="n">ymin</span><span class="o">+</span><span class="n">dy</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">+</span><span class="n">dy</span><span class="p">]])</span></div></div>
 
-<div class="viewcode-block" id="DraggableNote"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableNote">[docs]</a><span class="k">class</span> <span class="nc">DraggableNote</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableNote"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote">[docs]</a><span class="k">class</span> <span class="nc">DraggableNote</span><span class="p">(</span><span class="n">DraggableArtist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">    </span>
 <span class="sd">    [description]</span>
@@ -1109,14 +1109,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cidpress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_press</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function2</span><span class="o">=</span><span class="n">function2</span>
 
-<div class="viewcode-block" id="DraggableNote.get_data"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableNote.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableNote.get_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DraggableNote.modify_artist"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableNote.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableNote.modify_artist"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.modify_artist">[docs]</a>    <span class="k">def</span> <span class="nf">modify_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -1127,7 +1127,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">set_position</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dy</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="DraggableNote.on_press"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableNote.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableNote.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -1146,7 +1146,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">contains</span><span class="p">:</span> <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">function2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span></div>
                     
-<div class="viewcode-block" id="DraggableNote.on_release"><a class="viewcode-back" href="../code.html#DraggableArtists.DraggableNote.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="DraggableNote.on_release"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DraggableArtists.DraggableNote.on_release">[docs]</a>    <span class="k">def</span> <span class="nf">on_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>

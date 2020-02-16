@@ -128,7 +128,7 @@
 <span class="kn">from</span> <span class="nn">ToolMaterialsDatabase</span> <span class="k">import</span> <span class="n">ToolMaterialsDatabase</span>
 <span class="kn">from</span> <span class="nn">mplcursors</span> <span class="k">import</span> <span class="n">cursor</span>
 
-<div class="viewcode-block" id="Application"><a class="viewcode-back" href="../code.html#Application.Application">[docs]</a><span class="k">class</span> <span class="nc">Application</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Application"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application">[docs]</a><span class="k">class</span> <span class="nc">Application</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Main abstract class that represents an application</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -207,7 +207,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datacursor_</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Application.update_datacursor_artists"><a class="viewcode-back" href="../code.html#Application.Application.update_datacursor_artists">[docs]</a>    <span class="k">def</span> <span class="nf">update_datacursor_artists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.update_datacursor_artists"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.update_datacursor_artists">[docs]</a>    <span class="k">def</span> <span class="nf">update_datacursor_artists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the datacursor instance </span>
 <span class="sd">        Called at the end of ds.do_plot() and when plot-tab is changed&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span> 
@@ -252,7 +252,7 @@
             <span class="n">sel</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_bbox_patch</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
             <span class="n">sel</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">arrow_patch</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.set_multiplot"><a class="viewcode-back" href="../code.html#Application.Application.set_multiplot">[docs]</a>    <span class="k">def</span> <span class="nf">set_multiplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nplots</span><span class="p">,</span> <span class="n">ncols</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.set_multiplot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_multiplot">[docs]</a>    <span class="k">def</span> <span class="nf">set_multiplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nplots</span><span class="p">,</span> <span class="n">ncols</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;defines the plot&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span> <span class="o">=</span> <span class="n">MultiView</span><span class="p">(</span><span class="n">PlotOrganizationType</span><span class="o">.</span><span class="n">OptimalRow</span><span class="p">,</span>
                                     <span class="n">nplots</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
@@ -262,18 +262,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">axarr</span>  <span class="c1">#</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">canvas</span></div>
 
-<div class="viewcode-block" id="Application.set_view_tools"><a class="viewcode-back" href="../code.html#Application.Application.set_view_tools">[docs]</a>    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.set_view_tools"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_view_tools">[docs]</a>    <span class="k">def</span> <span class="nf">set_view_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Redefined in Child application. Called when view is changed&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="Application.add_common_theories"><a class="viewcode-back" href="../code.html#Application.Application.add_common_theories">[docs]</a>    <span class="k">def</span> <span class="nf">add_common_theories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.add_common_theories"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.add_common_theories">[docs]</a>    <span class="k">def</span> <span class="nf">add_common_theories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">th</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">th</span></div>
                                                 
-<div class="viewcode-block" id="Application.refresh_plot"><a class="viewcode-back" href="../code.html#Application.Application.refresh_plot">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.refresh_plot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.refresh_plot">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">view_switch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_view</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.copy_chart"><a class="viewcode-back" href="../code.html#Application.Application.copy_chart">[docs]</a>    <span class="k">def</span> <span class="nf">copy_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.copy_chart"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.copy_chart">[docs]</a>    <span class="k">def</span> <span class="nf">copy_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Copy current chart to clipboard</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
@@ -281,7 +281,7 @@
         <span class="n">QApplication</span><span class="o">.</span><span class="n">clipboard</span><span class="p">()</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span><span class="n">QImage</span><span class="o">.</span><span class="n">fromData</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()))</span>
         <span class="n">buf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.clipboard_coordinates"><a class="viewcode-back" href="../code.html#Application.Application.clipboard_coordinates">[docs]</a>    <span class="k">def</span> <span class="nf">clipboard_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.clipboard_coordinates"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.clipboard_coordinates">[docs]</a>    <span class="k">def</span> <span class="nf">clipboard_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Copy data to clipboard in tab-separated format&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">artist</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
@@ -293,7 +293,7 @@
         <span class="n">array_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line_strings</span><span class="p">)</span>
         <span class="n">QApplication</span><span class="o">.</span><span class="n">clipboard</span><span class="p">()</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">array_string</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.handle_close_window"><a class="viewcode-back" href="../code.html#Application.Application.handle_close_window">[docs]</a>    <span class="k">def</span> <span class="nf">handle_close_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evt</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.handle_close_window"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.handle_close_window">[docs]</a>    <span class="k">def</span> <span class="nf">handle_close_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -308,7 +308,7 @@
         <span class="nb">print</span><span class="p">(</span>
             <span class="s2">&quot;Please, return to the RepTate prompt and delete the application&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.new"><a class="viewcode-back" href="../code.html#Application.Application.new">[docs]</a>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.new">[docs]</a>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create new empty dataset in the application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -333,7 +333,7 @@
         <span class="n">ds</span> <span class="o">=</span> <span class="n">DataSet</span><span class="p">(</span><span class="n">dsname</span><span class="p">,</span> <span class="n">dsdescription</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ds</span><span class="p">,</span> <span class="n">dsname</span></div>
 
-<div class="viewcode-block" id="Application.do_new"><a class="viewcode-back" href="../code.html#Application.Application.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new empty dataset in this application.</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -349,7 +349,7 @@
             <span class="n">ds</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.delete"><a class="viewcode-back" href="../code.html#Application.Application.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete a dataset from the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -370,7 +370,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data Set </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">ds_name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.remove_ds_ax_lines"><a class="viewcode-back" href="../code.html#Application.Application.remove_ds_ax_lines">[docs]</a>    <span class="k">def</span> <span class="nf">remove_ds_ax_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.remove_ds_ax_lines"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.remove_ds_ax_lines">[docs]</a>    <span class="k">def</span> <span class="nf">remove_ds_ax_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove all dataset file artists from ax including theory ones</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -392,7 +392,7 @@
                 <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Application.do_delete"><a class="viewcode-back" href="../code.html#Application.Application.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete a dataset from the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -402,7 +402,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_delete"><a class="viewcode-back" href="../code.html#Application.Application.complete_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete delete dataset command</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -423,7 +423,7 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataset_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="Application.list"><a class="viewcode-back" href="../code.html#Application.Application.list">[docs]</a>    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.list">[docs]</a>    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List the datasets in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -431,7 +431,7 @@
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Application.do_list"><a class="viewcode-back" href="../code.html#Application.Application.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List the datasets in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -441,7 +441,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.do_switch"><a class="viewcode-back" href="../code.html#Application.Application.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Switch the current dataset</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -456,7 +456,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_switch"><a class="viewcode-back" href="../code.html#Application.Application.complete_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete the switch dataset command</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -479,7 +479,7 @@
 
 <span class="c1"># FILE TYPE STUFF</span>
 
-<div class="viewcode-block" id="Application.filetype_available"><a class="viewcode-back" href="../code.html#Application.Application.filetype_available">[docs]</a>    <span class="k">def</span> <span class="nf">filetype_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.filetype_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.filetype_available">[docs]</a>    <span class="k">def</span> <span class="nf">filetype_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available file types in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -489,7 +489,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="s2">*.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ftype</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ftype</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
                                      <span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Application.do_filetype_available"><a class="viewcode-back" href="../code.html#Application.Application.do_filetype_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_filetype_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_filetype_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_filetype_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_filetype_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available file types in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -501,7 +501,7 @@
 
 <span class="c1"># VIEW STUFF</span>
 
-<div class="viewcode-block" id="Application.set_views"><a class="viewcode-back" href="../code.html#Application.Application.set_views">[docs]</a>    <span class="k">def</span> <span class="nf">set_views</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.set_views"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_views">[docs]</a>    <span class="k">def</span> <span class="nf">set_views</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set current view and assign availiable view</span>
 <span class="sd">        labels to viewComboBox if in GUI mode</span>
 <span class="sd">        </span>
@@ -520,7 +520,7 @@
             <span class="c1">#index 0 is the defaut selection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.view_available"><a class="viewcode-back" href="../code.html#Application.Application.view_available">[docs]</a>    <span class="k">def</span> <span class="nf">view_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.view_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.view_available">[docs]</a>    <span class="k">def</span> <span class="nf">view_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available views in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -531,7 +531,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">view</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Application.do_view_available"><a class="viewcode-back" href="../code.html#Application.Application.do_view_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_view_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_view_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_view_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_view_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available views in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -541,7 +541,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">view_available</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.view_switch"><a class="viewcode-back" href="../code.html#Application.Application.view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.view_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change to another view from open application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -564,7 +564,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_all_ds_plots</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span> <span class="o">=</span> <span class="n">temp</span></div>
 
-<div class="viewcode-block" id="Application.update_all_ds_plots"><a class="viewcode-back" href="../code.html#Application.Application.update_all_ds_plots">[docs]</a>    <span class="k">def</span> <span class="nf">update_all_ds_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.update_all_ds_plots"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.update_all_ds_plots">[docs]</a>    <span class="k">def</span> <span class="nf">update_all_ds_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -572,7 +572,7 @@
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.do_view_switch"><a class="viewcode-back" href="../code.html#Application.Application.do_view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_view_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change to another view from open application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -582,7 +582,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">view_switch</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_view_switch"><a class="viewcode-back" href="../code.html#Application.Application.complete_view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_view_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete switch view command</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -605,7 +605,7 @@
 
 <span class="c1"># THEORY STUFF</span>
 
-<div class="viewcode-block" id="Application.theory_available"><a class="viewcode-back" href="../code.html#Application.Application.theory_available">[docs]</a>    <span class="k">def</span> <span class="nf">theory_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.theory_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.theory_available">[docs]</a>    <span class="k">def</span> <span class="nf">theory_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available theories in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -613,7 +613,7 @@
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">thname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Application.do_theory_available"><a class="viewcode-back" href="../code.html#Application.Application.do_theory_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_theory_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_theory_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available theories in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -624,7 +624,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">theory_available</span><span class="p">()</span></div>
 
 <span class="c1"># TOOL STUFF</span>
-<div class="viewcode-block" id="Application.tool_available"><a class="viewcode-back" href="../code.html#Application.Application.tool_available">[docs]</a>    <span class="k">def</span> <span class="nf">tool_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.tool_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.tool_available">[docs]</a>    <span class="k">def</span> <span class="nf">tool_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available tools in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -634,7 +634,7 @@
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">toolname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Application.do_tool_available"><a class="viewcode-back" href="../code.html#Application.Application.do_tool_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_tool_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List available tools in the current application</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -644,7 +644,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tool_available</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.do_tool_add"><a class="viewcode-back" href="../code.html#Application.Application.do_tool_add">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_tool_add"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_add">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a new tool of the type specified to the list of tools&quot;&quot;&quot;</span>
         <span class="n">tooltypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availabletools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">extratooltypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -668,7 +668,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> does not exists&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_tool_add"><a class="viewcode-back" href="../code.html#Application.Application.complete_tool_add">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_tool_add"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_tool_add">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete new tool command&quot;&quot;&quot;</span>
         <span class="n">tool_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availabletools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
@@ -677,7 +677,7 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">tool_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="Application.do_tool_delete"><a class="viewcode-back" href="../code.html#Application.Application.do_tool_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_tool_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete a tool from the current application&quot;&quot;&quot;</span>
         <span class="n">listtools</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
@@ -687,7 +687,7 @@
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
             
-<div class="viewcode-block" id="Application.complete_tool_delete"><a class="viewcode-back" href="../code.html#Application.Application.complete_tool_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_tool_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_tool_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete delete tool command&quot;&quot;&quot;</span>
         <span class="n">listtools</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
@@ -696,7 +696,7 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">listtools</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
         
-<div class="viewcode-block" id="Application.do_tool_list"><a class="viewcode-back" href="../code.html#Application.Application.do_tool_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_tool_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List opened tools&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
@@ -704,7 +704,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.do_tool_switch"><a class="viewcode-back" href="../code.html#Application.Application.do_tool_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_tool_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change the active tool&quot;&quot;&quot;</span>
         <span class="n">listtools</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
@@ -713,12 +713,12 @@
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_tool_switch"><a class="viewcode-back" href="../code.html#Application.Application.complete_tool_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_tool_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_tool_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete the tool switch command&quot;&quot;&quot;</span>
         <span class="n">completions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_tool_delete</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="Application.do_tool_activate"><a class="viewcode-back" href="../code.html#Application.Application.do_tool_activate">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_tool_activate"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_activate">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="n">listtools</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">listtools</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -728,14 +728,14 @@
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_tool_activate"><a class="viewcode-back" href="../code.html#Application.Application.complete_tool_activate">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_tool_activate"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_tool_activate">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete the tool switch command&quot;&quot;&quot;</span>
         <span class="n">completions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_tool_delete</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
 <span class="c1"># LEGEND STUFF</span>
 
-<div class="viewcode-block" id="Application.legend"><a class="viewcode-back" href="../code.html#Application.Application.legend">[docs]</a>    <span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.legend"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.legend">[docs]</a>    <span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -744,7 +744,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_legend_properties</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.do_legend"><a class="viewcode-back" href="../code.html#Application.Application.do_legend">[docs]</a>    <span class="k">def</span> <span class="nf">do_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_legend"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_legend">[docs]</a>    <span class="k">def</span> <span class="nf">do_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -757,7 +757,7 @@
 
 <span class="c1"># OTHER STUFF</span>
 
-<div class="viewcode-block" id="Application.update_plot"><a class="viewcode-back" href="../code.html#Application.Application.update_plot">[docs]</a>    <span class="k">def</span> <span class="nf">update_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.update_plot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.update_plot">[docs]</a>    <span class="k">def</span> <span class="nf">update_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -768,7 +768,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">update_legend</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.set_axes_properties"><a class="viewcode-back" href="../code.html#Application.Application.set_axes_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_axes_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoscale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.set_axes_properties"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_axes_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_axes_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoscale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
@@ -841,7 +841,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">autoscale_view</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.set_legend_properties"><a class="viewcode-back" href="../code.html#Application.Application.set_legend_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_legend_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.set_legend_properties"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_legend_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_legend_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
