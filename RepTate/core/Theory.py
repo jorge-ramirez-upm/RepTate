@@ -89,6 +89,18 @@ class MinimizationMethod(enum.Enum):
     SHGO=4
     bruteforce=5
 
+class ErrorCalculationMethod(enum.Enum):
+    """Method to determine the error of a theory calculation.
+    
+    Options are:
+        - View1: Use current view number 1 in the application.
+        - RawData: Use the data table as defined by the application.
+        - AllViews: Use all active views.
+    """
+    View1 = 0
+    RawData = 1
+    AllViews = 2
+
 class EndComputationRequested(Exception):
     """Exception class to end computations"""
     pass
@@ -207,6 +219,7 @@ class Theory(CmdBase):
         self.is_yrange_visible = False
 
         self.setup_default_minimization_options()
+        self.setup_default_error_calculation_options()
 
         # Pre-create as many tables as files in the dataset
         for f in parent_dataset.files:
@@ -277,6 +290,10 @@ class Theory(CmdBase):
         self.SHGOinfty_constraints=True
         self.SHGOsampling_method='simplicial'
         self.BruteNs=20
+
+    def setup_default_error_calculation_options(self):
+        self.errormethod = ErrorCalculationMethod.View1
+        self.normalizebydata = False
 
     def destructor(self):
         pass
@@ -453,7 +470,10 @@ class Theory(CmdBase):
                     ~np.isinf(yexp)) * (~np.isinf(xth)) * (~np.isinf(yth))
             yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
             yth = np.extract(conditionx * conditiony * conditionnaninf, yth)
-            f_error = np.mean((yth - yexp)**2)
+            if self.normalizebydata:
+                f_error = np.mean(((yth - yexp)/yexp)**2)
+            else:
+                f_error = np.mean((yth - yexp)**2)
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt

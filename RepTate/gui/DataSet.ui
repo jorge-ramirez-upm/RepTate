@@ -258,6 +258,18 @@
     <string>Fitting Options</string>
    </property>
   </action>
+  <action name="actionError_Calc_Options">
+   <property name="icon">
+    <iconset resource="Theory.qrc">
+     <normaloff>:/Icon8/Images/new_icons/icons8-abacus-err.png</normaloff>:/Icon8/Images/new_icons/icons8-abacus-err.png</iconset>
+   </property>
+   <property name="text">
+    <string>Error Calculation Options</string>
+   </property>
+   <property name="toolTip">
+    <string>Error Calculation Options</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Theory.qrc"/>

@@ -39,7 +39,7 @@ Module that defines the GUI counterpart of the class Theory.
 import sys
 from PyQt5.uic import loadUiType
 from CmdBase import CmdBase, CalcMode
-from Theory import Theory, MinimizationMethod
+from Theory import Theory, MinimizationMethod, ErrorCalculationMethod
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog, QApplication, QTextBrowser, QSplitter, QMenu
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
@@ -52,6 +52,7 @@ import ast
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH, 'theorytab.ui'))
 from fittingoptions import Ui_Dialog
+import errorcalculationoptions
 
 # def trap_exc_during_debug(*args):
 #     # when app raises uncaught exception, print info
@@ -218,10 +219,16 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.thread_fit_busy = False
 
         # Setup Theory Parameters Dialog
-        self.dialog = QDialog()
-        self.dialog.ui = Ui_Dialog()
-        self.dialog.ui.setupUi(self.dialog)
+        self.fittingoptionsdialog = QDialog()
+        self.fittingoptionsdialog.ui = Ui_Dialog()
+        self.fittingoptionsdialog.ui.setupUi(self.fittingoptionsdialog)
         self.populate_default_minimization_options()
+
+        # Setup Error Calculation Options
+        self.errorcalculationdialog = QDialog()
+        self.errorcalculationdialog.ui = errorcalculationoptions.Ui_Dialog()
+        self.errorcalculationdialog.ui.setupUi(self.errorcalculationdialog)
+        self.populate_default_error_calculation_options()
 
         connection_id = self.thParamTable.itemDoubleClicked.connect(
             self.onTreeWidgetItemDoubleClicked)
@@ -232,82 +239,92 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         dvalidator = QDoubleValidator()
         ivalidator = QIntValidator()
         # LEAST-SQUARES LOCAL MIN
-        self.dialog.ui.LSftollineEdit.setValidator(dvalidator)
-        self.dialog.ui.LSxtollineEdit.setValidator(dvalidator)
-        self.dialog.ui.LSgtollineEdit.setValidator(dvalidator)
-        self.dialog.ui.LSf_scalelineEdit.setValidator(dvalidator)
-        self.dialog.ui.LSmax_nfevlineEdit.setValidator(ivalidator) 
-        self.dialog.ui.LSmethodcomboBox.setCurrentIndex(self.dialog.ui.LSmethodcomboBox.findText(self.LSmethod))
-        self.dialog.ui.LSjaccomboBox.setCurrentIndex(self.dialog.ui.LSjaccomboBox.findText(self.LSjac))
-        self.dialog.ui.LSftollineEdit.setText('%g'%self.LSftol)
-        self.dialog.ui.LSxtollineEdit.setText('%g'%self.LSxtol)
-        self.dialog.ui.LSgtollineEdit.setText('%g'%self.LSgtol)
-        self.dialog.ui.LSlosscomboBox.setCurrentIndex(self.dialog.ui.LSlosscomboBox.findText(self.LSloss))
-        self.dialog.ui.LSf_scalelineEdit.setText('%g'%self.LSf_scale)
-        self.dialog.ui.LSmax_nfevlineEdit.setText('100')
+        self.fittingoptionsdialog.ui.LSftollineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.LSxtollineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.LSgtollineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.LSf_scalelineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.LSmax_nfevlineEdit.setValidator(ivalidator) 
+        self.fittingoptionsdialog.ui.LSmethodcomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSmethodcomboBox.findText(self.LSmethod))
+        self.fittingoptionsdialog.ui.LSjaccomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSjaccomboBox.findText(self.LSjac))
+        self.fittingoptionsdialog.ui.LSftollineEdit.setText('%g'%self.LSftol)
+        self.fittingoptionsdialog.ui.LSxtollineEdit.setText('%g'%self.LSxtol)
+        self.fittingoptionsdialog.ui.LSgtollineEdit.setText('%g'%self.LSgtol)
+        self.fittingoptionsdialog.ui.LSlosscomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSlosscomboBox.findText(self.LSloss))
+        self.fittingoptionsdialog.ui.LSf_scalelineEdit.setText('%g'%self.LSf_scale)
+        self.fittingoptionsdialog.ui.LSmax_nfevlineEdit.setText('100')
         # BASIN HOPPING
-        self.dialog.ui.basinniterlineEdit.setValidator(ivalidator)
-        self.dialog.ui.basinTlineEdit.setValidator(dvalidator)
-        self.dialog.ui.basinstepsizelineEdit.setValidator(dvalidator)
-        self.dialog.ui.basinintervallineEdit.setValidator(ivalidator)
-        self.dialog.ui.basinniter_successlineEdit.setValidator(ivalidator)
-        self.dialog.ui.basinseedlineEdit.setValidator(ivalidator)
-        self.dialog.ui.basinniterlineEdit.setText('%d'%self.basinniter)
-        self.dialog.ui.basinTlineEdit.setText('%g'%self.basinT)
-        self.dialog.ui.basinstepsizelineEdit.setText('%g'%self.basinstepsize)
-        self.dialog.ui.basinintervallineEdit.setText('%d'%self.basininterval)
-        self.dialog.ui.basinniter_successlineEdit.setText('30')
-        self.dialog.ui.basinseedlineEdit.setText('4398495')
+        self.fittingoptionsdialog.ui.basinniterlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.basinTlineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.basinstepsizelineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.basinintervallineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.basinniter_successlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.basinseedlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.basinniterlineEdit.setText('%d'%self.basinniter)
+        self.fittingoptionsdialog.ui.basinTlineEdit.setText('%g'%self.basinT)
+        self.fittingoptionsdialog.ui.basinstepsizelineEdit.setText('%g'%self.basinstepsize)
+        self.fittingoptionsdialog.ui.basinintervallineEdit.setText('%d'%self.basininterval)
+        self.fittingoptionsdialog.ui.basinniter_successlineEdit.setText('30')
+        self.fittingoptionsdialog.ui.basinseedlineEdit.setText('4398495')
         # DUAL ANNEALING
-        self.dialog.ui.annealmaxiterlineEdit.setValidator(ivalidator)
-        self.dialog.ui.annealinitial_templineEdit.setValidator(dvalidator)
-        self.dialog.ui.annealrestart_temp_ratiolineEdit.setValidator(dvalidator)
-        self.dialog.ui.annealvisitlineEdit.setValidator(dvalidator)
-        self.dialog.ui.annealacceptlineEdit.setValidator(dvalidator)
-        self.dialog.ui.annealmaxfunlineEdit.setValidator(ivalidator)
-        self.dialog.ui.annealseedlineEdit.setValidator(ivalidator)
-        self.dialog.ui.annealmaxiterlineEdit.setText('%d'%self.annealmaxiter)
-        self.dialog.ui.annealinitial_templineEdit.setText('%g'%self.annealinitial_temp)
-        self.dialog.ui.annealrestart_temp_ratiolineEdit.setText('%g'%self.annealrestart_temp_ratio)
-        self.dialog.ui.annealvisitlineEdit.setText('%g'%self.annealvisit)
-        self.dialog.ui.annealacceptlineEdit.setText('%g'%self.annealaccept)
-        self.dialog.ui.annealmaxfunlineEdit.setText('%d'%self.annealmaxfun)
-        self.dialog.ui.annealseedlineEdit.setText('4389439')
+        self.fittingoptionsdialog.ui.annealmaxiterlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.annealinitial_templineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.annealvisitlineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.annealacceptlineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.annealmaxfunlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.annealseedlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.annealmaxiterlineEdit.setText('%d'%self.annealmaxiter)
+        self.fittingoptionsdialog.ui.annealinitial_templineEdit.setText('%g'%self.annealinitial_temp)
+        self.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.setText('%g'%self.annealrestart_temp_ratio)
+        self.fittingoptionsdialog.ui.annealvisitlineEdit.setText('%g'%self.annealvisit)
+        self.fittingoptionsdialog.ui.annealacceptlineEdit.setText('%g'%self.annealaccept)
+        self.fittingoptionsdialog.ui.annealmaxfunlineEdit.setText('%d'%self.annealmaxfun)
+        self.fittingoptionsdialog.ui.annealseedlineEdit.setText('4389439')
         # DIFFERENTIAL EVOLUTION
-        self.dialog.ui.diffevolmaxiterlineEdit.setValidator(ivalidator)
-        self.dialog.ui.diffevolpopsizelineEdit.setValidator(ivalidator)
-        self.dialog.ui.diffevoltollineEdit.setValidator(dvalidator)
-        self.dialog.ui.diffevolmutationAlineEdit.setValidator(dvalidator)
-        self.dialog.ui.diffevolmutationBlineEdit.setValidator(dvalidator)
-        self.dialog.ui.diffevolrecombinationlineEdit.setValidator(dvalidator)
-        self.dialog.ui.diffevolseedlineEdit.setValidator(ivalidator)
-        self.dialog.ui.diffevolatollineEdit.setValidator(dvalidator)
-        self.dialog.ui.diffevolstrategycomboBox.setCurrentIndex(self.dialog.ui.diffevolstrategycomboBox.findText(self.diffevolstrategy))
-        self.dialog.ui.diffevolmaxiterlineEdit.setText('%d'%self.diffevolmaxiter)
-        self.dialog.ui.diffevolpopsizelineEdit.setText('%d'%self.diffevolpopsize)
-        self.dialog.ui.diffevoltollineEdit.setText('%g'%self.diffevoltol)
-        self.dialog.ui.diffevolmutationAlineEdit.setText('%g'%self.diffevolmutation[0])
-        self.dialog.ui.diffevolmutationBlineEdit.setText('%g'%self.diffevolmutation[1])
-        self.dialog.ui.diffevolrecombinationlineEdit.setText('%g'%self.diffevolrecombination)
-        self.dialog.ui.diffevolseedlineEdit.setText('4389439')
-        self.dialog.ui.diffevolinitcomboBox.setCurrentIndex(self.dialog.ui.diffevolinitcomboBox.findText(self.diffevolinit))
-        self.dialog.ui.diffevolatollineEdit.setText('%g'%self.diffevolatol)
+        self.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.diffevolpopsizelineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.diffevoltollineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.diffevolmutationAlineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.diffevolmutationBlineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.diffevolseedlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.diffevolatollineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.diffevolstrategycomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.diffevolstrategycomboBox.findText(self.diffevolstrategy))
+        self.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.setText('%d'%self.diffevolmaxiter)
+        self.fittingoptionsdialog.ui.diffevolpopsizelineEdit.setText('%d'%self.diffevolpopsize)
+        self.fittingoptionsdialog.ui.diffevoltollineEdit.setText('%g'%self.diffevoltol)
+        self.fittingoptionsdialog.ui.diffevolmutationAlineEdit.setText('%g'%self.diffevolmutation[0])
+        self.fittingoptionsdialog.ui.diffevolmutationBlineEdit.setText('%g'%self.diffevolmutation[1])
+        self.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.setText('%g'%self.diffevolrecombination)
+        self.fittingoptionsdialog.ui.diffevolseedlineEdit.setText('4389439')
+        self.fittingoptionsdialog.ui.diffevolinitcomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.diffevolinitcomboBox.findText(self.diffevolinit))
+        self.fittingoptionsdialog.ui.diffevolatollineEdit.setText('%g'%self.diffevolatol)
         # SHGO
-        self.dialog.ui.SHGOnlineEdit.setValidator(ivalidator)
-        self.dialog.ui.SHGOiterslineEdit.setValidator(ivalidator)
-        self.dialog.ui.SHGOmaxfevlineEdit.setValidator(ivalidator)
-        self.dialog.ui.SHGOf_minlineEdit.setValidator(dvalidator)
-        self.dialog.ui.SHGOf_tollineEdit.setValidator(dvalidator)
-        self.dialog.ui.SHGOmaxiterlineEdit.setValidator(ivalidator)
-        self.dialog.ui.SHGOmaxevlineEdit.setValidator(ivalidator)
-        self.dialog.ui.SHGOmaxtimelineEdit.setValidator(dvalidator)
-        self.dialog.ui.SHGOminhgrdlineEdit.setValidator(ivalidator)
-        self.dialog.ui.SHGOnlineEdit.setText('%d'%self.SHGOn)
-        self.dialog.ui.SHGOiterslineEdit.setText('%d'%self.SHGOiters)
-        self.dialog.ui.SHGOf_tollineEdit.setText('%g'%self.SHGOf_tol)
+        self.fittingoptionsdialog.ui.SHGOnlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.SHGOiterslineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.SHGOmaxfevlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.SHGOf_minlineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.SHGOf_tollineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.SHGOmaxiterlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.SHGOmaxevlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.SHGOmaxtimelineEdit.setValidator(dvalidator)
+        self.fittingoptionsdialog.ui.SHGOminhgrdlineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.SHGOnlineEdit.setText('%d'%self.SHGOn)
+        self.fittingoptionsdialog.ui.SHGOiterslineEdit.setText('%d'%self.SHGOiters)
+        self.fittingoptionsdialog.ui.SHGOf_tollineEdit.setText('%g'%self.SHGOf_tol)
         # Brute Force
-        self.dialog.ui.BruteNslineEdit.setValidator(ivalidator)
-        self.dialog.ui.BruteNslineEdit.setText('%d'%self.BruteNs)
+        self.fittingoptionsdialog.ui.BruteNslineEdit.setValidator(ivalidator)
+        self.fittingoptionsdialog.ui.BruteNslineEdit.setText('%d'%self.BruteNs)
+
+    def populate_default_error_calculation_options(self):
+        # ERROR CALCULATION METHOD
+        if self.errormethod == ErrorCalculationMethod.View1:
+            self.errorcalculationdialog.ui.View1radioButton.setChecked(True)
+        elif self.errormethod == ErrorCalculationMethod.RawData:
+            self.errorcalculationdialog.ui.RawDataradioButton.setChecked(True)
+        elif self.errormethod == ErrorCalculationMethod.AllViews:
+            self.errorcalculationdialog.ui.AllViewsradioButton.setChecked(True)
+        self.errorcalculationdialog.ui.NormalizecheckBox.setChecked(self.normalizebydata)
 
     def thtextbox_context_menu(self):
         """Custom contextual menu for the theory textbox"""
@@ -486,7 +503,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked
-        Or edit all parameters dialog if parameter name is double clicked
+        Or edit all parameters fittingoptionsdialog if parameter name is double clicked
         
         [description]
         

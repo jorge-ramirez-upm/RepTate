@@ -44,7 +44,7 @@ from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, Q
 from DataSet import DataSet
 from DataTable import DataTable
 from QTheory import QTheory
-from Theory import MinimizationMethod
+from Theory import MinimizationMethod, ErrorCalculationMethod
 from DataSetWidget import DataSetWidget
 import numpy as np
 import threading
@@ -252,6 +252,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tbut0.setDefaultAction(self.actionMinimize_Error)
         menu0 = QMenu()
         menu0.addAction(self.actionFitting_Options)
+        menu0.addAction(self.actionError_Calc_Options)
         tbut0.setMenu(menu0)
         tb.addWidget(tbut0)
         #tb.addAction(self.actionMinimize_Error)
@@ -319,6 +320,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.toggle_horizontal_limits)
         connection_id = self.actionFitting_Options.triggered.connect(
             self.handle_fitting_options)
+        connection_id = self.actionError_Calc_Options.triggered.connect(
+            self.handle_error_calculation_options)
 
     def copy_parameters(self):
         """Copy the parameters of the currently active theory to the clipboard"""
@@ -464,116 +467,116 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         if not self.current_theory:
             return
         th = self.theories[self.current_theory]
-        th.dialog.ui.tabWidget.setCurrentIndex(th.mintype.value)
-        success = th.dialog.exec_() #this blocks the rest of the app as opposed to .show()
+        th.fittingoptionsdialog.ui.tabWidget.setCurrentIndex(th.mintype.value)
+        success = th.fittingoptionsdialog.exec_() #this blocks the rest of the app as opposed to .show()
 
         if not success:
             return
 
-        th.mintype=MinimizationMethod(th.dialog.ui.tabWidget.currentIndex())
+        th.mintype=MinimizationMethod(th.fittingoptionsdialog.ui.tabWidget.currentIndex())
         if th.mintype==MinimizationMethod.ls:
-            th.LSmethod=th.dialog.ui.LSmethodcomboBox.currentText()
-            if th.dialog.ui.LSftolcheckBox.isChecked():
-                th.LSftol=float(th.dialog.ui.LSftollineEdit.text())
+            th.LSmethod=th.fittingoptionsdialog.ui.LSmethodcomboBox.currentText()
+            if th.fittingoptionsdialog.ui.LSftolcheckBox.isChecked():
+                th.LSftol=float(th.fittingoptionsdialog.ui.LSftollineEdit.text())
             else:
                 th.LSftol=None
-            if th.dialog.ui.LSxtolcheckBox.isChecked():
-                th.LSxtol=float(th.dialog.ui.LSxtollineEdit.text())
+            if th.fittingoptionsdialog.ui.LSxtolcheckBox.isChecked():
+                th.LSxtol=float(th.fittingoptionsdialog.ui.LSxtollineEdit.text())
             else:
                 th.LSxtol=None
-            if th.dialog.ui.LSgtolcheckBox.isChecked():
-                th.LSgtol=float(th.dialog.ui.LSgtollineEdit.text())
+            if th.fittingoptionsdialog.ui.LSgtolcheckBox.isChecked():
+                th.LSgtol=float(th.fittingoptionsdialog.ui.LSgtollineEdit.text())
             else:
                 th.LSgtol=None
-            th.LSloss=th.dialog.ui.LSlosscomboBox.currentText()
-            th.LSf_scale=float(th.dialog.ui.LSf_scalelineEdit.text())
-            if th.dialog.ui.LSmax_nfevcheckBox.isChecked():
-                th.LSmax_nfev=int(th.dialog.ui.LSmax_nfevlineEdit.text())
+            th.LSloss=th.fittingoptionsdialog.ui.LSlosscomboBox.currentText()
+            th.LSf_scale=float(th.fittingoptionsdialog.ui.LSf_scalelineEdit.text())
+            if th.fittingoptionsdialog.ui.LSmax_nfevcheckBox.isChecked():
+                th.LSmax_nfev=int(th.fittingoptionsdialog.ui.LSmax_nfevlineEdit.text())
             else:
                 th.LSmax_nfev=None
-            if th.dialog.ui.LStr_solvercheckBox.isChecked():
-                th.LStr_solver=th.dialog.ui.LStr_solvercomboBox.currentText()
+            if th.fittingoptionsdialog.ui.LStr_solvercheckBox.isChecked():
+                th.LStr_solver=th.fittingoptionsdialog.ui.LStr_solvercomboBox.currentText()
             else:
                 th.LStr_solver=None
 
         elif th.mintype==MinimizationMethod.basinhopping:
-            th.basinniter= int(th.dialog.ui.basinniterlineEdit.text())
-            th.basinT= float(th.dialog.ui.basinTlineEdit.text())
-            th.basinstepsize= float(th.dialog.ui.basinstepsizelineEdit.text())
-            th.basininterval= int(th.dialog.ui.basinintervallineEdit.text())
-            if th.dialog.ui.basinniter_successcheckBox.isChecked():
-                th.basinniter_success=int(th.dialog.ui.basinniter_successlineEdit.text())
+            th.basinniter= int(th.fittingoptionsdialog.ui.basinniterlineEdit.text())
+            th.basinT= float(th.fittingoptionsdialog.ui.basinTlineEdit.text())
+            th.basinstepsize= float(th.fittingoptionsdialog.ui.basinstepsizelineEdit.text())
+            th.basininterval= int(th.fittingoptionsdialog.ui.basinintervallineEdit.text())
+            if th.fittingoptionsdialog.ui.basinniter_successcheckBox.isChecked():
+                th.basinniter_success=int(th.fittingoptionsdialog.ui.basinniter_successlineEdit.text())
             else:
                 th.basinniter_success=None
-            if th.dialog.ui.basinseedcheckBox.isChecked():
-                th.basinseed=int(th.dialog.ui.basinseedlineEdit.text())
+            if th.fittingoptionsdialog.ui.basinseedcheckBox.isChecked():
+                th.basinseed=int(th.fittingoptionsdialog.ui.basinseedlineEdit.text())
             else:
                 th.basinseed=None
 
         elif th.mintype==MinimizationMethod.dualannealing:
-            th.annealmaxiter=int(th.dialog.ui.annealmaxiterlineEdit.text())
-            th.annealinitial_temp=float(th.dialog.ui.annealinitial_templineEdit.text())
-            th.annealrestart_temp_ratio=float(th.dialog.ui.annealrestart_temp_ratiolineEdit.text())
-            th.annealvisit=float(th.dialog.ui.annealvisitlineEdit.text())
-            th.annealaccept=float(th.dialog.ui.annealacceptlineEdit.text())
-            th.annealmaxfun=int(th.dialog.ui.annealmaxfunlineEdit.text())
-            if th.dialog.ui.annealseedcheckBox.isChecked():
-                th.annealseed=int(th.dialog.ui.annealseedlineEdit.text())
+            th.annealmaxiter=int(th.fittingoptionsdialog.ui.annealmaxiterlineEdit.text())
+            th.annealinitial_temp=float(th.fittingoptionsdialog.ui.annealinitial_templineEdit.text())
+            th.annealrestart_temp_ratio=float(th.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.text())
+            th.annealvisit=float(th.fittingoptionsdialog.ui.annealvisitlineEdit.text())
+            th.annealaccept=float(th.fittingoptionsdialog.ui.annealacceptlineEdit.text())
+            th.annealmaxfun=int(th.fittingoptionsdialog.ui.annealmaxfunlineEdit.text())
+            if th.fittingoptionsdialog.ui.annealseedcheckBox.isChecked():
+                th.annealseed=int(th.fittingoptionsdialog.ui.annealseedlineEdit.text())
             else:
                 th.annealseed=None
-            th.annealno_local_search=th.dialog.ui.annealno_local_searchcheckBox.isChecked()
+            th.annealno_local_search=th.fittingoptionsdialog.ui.annealno_local_searchcheckBox.isChecked()
 
         elif th.mintype==MinimizationMethod.diffevol:
-            th.diffevolstrategy=th.dialog.ui.diffevolstrategycomboBox.currentText()
-            th.diffevolmaxiter=int(th.dialog.ui.diffevolmaxiterlineEdit.text())
-            th.diffevolpopsize=int(th.dialog.ui.diffevolpopsizelineEdit.text())
-            th.diffevoltol=float(th.dialog.ui.diffevoltollineEdit.text())
-            th.diffevolmutation=(float(th.dialog.ui.diffevolmutationAlineEdit.text()), 
-                                 float(th.dialog.ui.diffevolmutationBlineEdit.text()))
-            th.diffevolrecombination=float(th.dialog.ui.diffevolrecombinationlineEdit.text())                    
-            if th.dialog.ui.diffevolseedcheckBox.isChecked():
-                th.diffevolseed=int(th.dialog.ui.diffevolseedlineEdit.text())
+            th.diffevolstrategy=th.fittingoptionsdialog.ui.diffevolstrategycomboBox.currentText()
+            th.diffevolmaxiter=int(th.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.text())
+            th.diffevolpopsize=int(th.fittingoptionsdialog.ui.diffevolpopsizelineEdit.text())
+            th.diffevoltol=float(th.fittingoptionsdialog.ui.diffevoltollineEdit.text())
+            th.diffevolmutation=(float(th.fittingoptionsdialog.ui.diffevolmutationAlineEdit.text()), 
+                                 float(th.fittingoptionsdialog.ui.diffevolmutationBlineEdit.text()))
+            th.diffevolrecombination=float(th.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.text())                    
+            if th.fittingoptionsdialog.ui.diffevolseedcheckBox.isChecked():
+                th.diffevolseed=int(th.fittingoptionsdialog.ui.diffevolseedlineEdit.text())
             else:
                 th.diffevolseed=None
-            th.diffevolpolish=th.dialog.ui.diffevolpolishcheckBox.isChecked()
-            th.diffevolinit=th.dialog.ui.diffevolinitcomboBox.currentText()
-            th.diffevolatol=float(th.dialog.ui.diffevolatollineEdit.text())
+            th.diffevolpolish=th.fittingoptionsdialog.ui.diffevolpolishcheckBox.isChecked()
+            th.diffevolinit=th.fittingoptionsdialog.ui.diffevolinitcomboBox.currentText()
+            th.diffevolatol=float(th.fittingoptionsdialog.ui.diffevolatollineEdit.text())
 
         elif th.mintype==MinimizationMethod.SHGO:
-            th.SHGOn=int(th.dialog.ui.SHGOnlineEdit.text())
-            th.SHGOiters=int(th.dialog.ui.SHGOiterslineEdit.text())
-            if th.dialog.ui.SHGOmaxfevcheckBox.isChecked():
-                th.SHGOmaxfev=int(th.dialog.ui.SHGOmaxfevlineEdit.text())
+            th.SHGOn=int(th.fittingoptionsdialog.ui.SHGOnlineEdit.text())
+            th.SHGOiters=int(th.fittingoptionsdialog.ui.SHGOiterslineEdit.text())
+            if th.fittingoptionsdialog.ui.SHGOmaxfevcheckBox.isChecked():
+                th.SHGOmaxfev=int(th.fittingoptionsdialog.ui.SHGOmaxfevlineEdit.text())
             else:
                 th.SHGOmaxfev=None
-            if th.dialog.ui.SHGOf_mincheckBox.isChecked():
-                th.SHGOf_min=float(th.dialog.ui.SHGOf_minlineEdit.text())
+            if th.fittingoptionsdialog.ui.SHGOf_mincheckBox.isChecked():
+                th.SHGOf_min=float(th.fittingoptionsdialog.ui.SHGOf_minlineEdit.text())
             else:
                 th.SHGOf_min=None
-            th.SHGOf_tol=float(th.dialog.ui.SHGOf_tollineEdit.text())
-            if th.dialog.ui.SHGOmaxitercheckBox.isChecked():
-                th.SHGOmaxiter=int(th.dialog.ui.SHGOmaxiterlineEdit.text())
+            th.SHGOf_tol=float(th.fittingoptionsdialog.ui.SHGOf_tollineEdit.text())
+            if th.fittingoptionsdialog.ui.SHGOmaxitercheckBox.isChecked():
+                th.SHGOmaxiter=int(th.fittingoptionsdialog.ui.SHGOmaxiterlineEdit.text())
             else:
                 th.SHGOmaxiter=None
-            if th.dialog.ui.SHGOmaxevcheckBox.isChecked():
-                th.SHGOmaxev=int(th.dialog.ui.SHGOmaxevlineEdit.text())
+            if th.fittingoptionsdialog.ui.SHGOmaxevcheckBox.isChecked():
+                th.SHGOmaxev=int(th.fittingoptionsdialog.ui.SHGOmaxevlineEdit.text())
             else:
                 th.SHGOmaxev=None
-            if th.dialog.ui.SHGOmaxtimecheckBox.isChecked():
-                th.SHGOmaxtime=float(th.dialog.ui.SHGOmaxtimelineEdit.text())
+            if th.fittingoptionsdialog.ui.SHGOmaxtimecheckBox.isChecked():
+                th.SHGOmaxtime=float(th.fittingoptionsdialog.ui.SHGOmaxtimelineEdit.text())
             else:
                 th.SHGOmaxtime=None
-            if th.dialog.ui.SHGOminhgrdcheckBox.isChecked():
-                th.SHGOminhgrd=int(th.dialog.ui.SHGOminhgrdlineEdit.text())
+            if th.fittingoptionsdialog.ui.SHGOminhgrdcheckBox.isChecked():
+                th.SHGOminhgrd=int(th.fittingoptionsdialog.ui.SHGOminhgrdlineEdit.text())
             else:
                 th.SHGOminhgrd=None
-            th.SHGOminimize_every_iter=th.dialog.ui.SHGOminimize_every_itercheckBox.isChecked()
-            th.SHGOlocal_iter=th.dialog.ui.SHGOlocal_itercheckBox.isChecked()
-            th.SHGOinfty_constraints=th.dialog.ui.SHGOinfty_constraintscheckBox.isChecked()
-            th.SHGOsampling_method=th.dialog.ui.SHGOsampling_methodcomboBox.currentText()
+            th.SHGOminimize_every_iter=th.fittingoptionsdialog.ui.SHGOminimize_every_itercheckBox.isChecked()
+            th.SHGOlocal_iter=th.fittingoptionsdialog.ui.SHGOlocal_itercheckBox.isChecked()
+            th.SHGOinfty_constraints=th.fittingoptionsdialog.ui.SHGOinfty_constraintscheckBox.isChecked()
+            th.SHGOsampling_method=th.fittingoptionsdialog.ui.SHGOsampling_methodcomboBox.currentText()
 
         elif th.mintype==MinimizationMethod.bruteforce:
-            th.BruteNs=int(th.dialog.ui.BruteNslineEdit.text())
+            th.BruteNs=int(th.fittingoptionsdialog.ui.BruteNslineEdit.text())
 
         # if th.mintype==MinimizationMethod.trf:
         #     th.mintype=MinimizationMethod.basinhopping
@@ -583,6 +586,25 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         #     th.mintype=MinimizationMethod.differential_evolution
         # else:
         #     th.mintype=MinimizationMethod.trf
+
+    def handle_error_calculation_options(self):
+        if not self.current_theory:
+            return
+        th = self.theories[self.current_theory]
+        success = th.errorcalculationdialog.exec_() #this blocks the rest of the app as opposed to .show()
+
+        if not success:
+            return
+        
+        if th.errorcalculationdialog.ui.View1radioButton.isChecked():
+            th.errormethod = ErrorCalculationMethod.View1
+        elif th.errorcalculationdialog.ui.RawDataradioButton.isChecked():
+            th.errormethod = ErrorCalculationMethod.RawData
+        elif th.errorcalculationdialog.ui.AllViewsradioButton.isChecked():
+            th.errormethod = ErrorCalculationMethod.AllViews
+            
+        th.normalizebydata = th.errorcalculationdialog.ui.NormalizecheckBox.isChecked()
+
 
     def end_of_computation(self, th_name):
         """Action when theory has finished computations"""
