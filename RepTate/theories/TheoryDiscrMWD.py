@@ -260,10 +260,10 @@ class BaseTheoryDiscrMWD:
         self.graphic_bins.set_linestyle('')
         self.graphic_bins.set_visible(self.view_bins)
         self.graphic_bins.set_markerfacecolor('yellow')
-        self.graphic_bins.set_markeredgecolor('black')
+        self.graphic_bins.set_markeredgecolor('red')
         self.graphic_bins.set_markeredgewidth(3)
-        self.graphic_bins.set_markersize(11)
-        self.graphic_bins.set_alpha(0.5)
+        self.graphic_bins.set_markersize(20)
+        self.graphic_bins.set_alpha(0.75)
         self.artist_bins = DraggableBinSeries(
             self.graphic_bins, DragType.horizontal,
             self.parent_dataset.parent_application.current_view.log_x,

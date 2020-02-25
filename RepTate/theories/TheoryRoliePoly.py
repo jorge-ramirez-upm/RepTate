@@ -228,7 +228,7 @@ class BaseTheoryRoliePoly:
                 description="Rouse time of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.opt,
-                min_value=0)
+                min_value=1e-12)
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label='')
