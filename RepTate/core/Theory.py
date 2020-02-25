@@ -533,7 +533,10 @@ class Theory(CmdBase):
            returns the sum of the squares of the residuals
         """
         # NEED TO RECOVER THE VECTOR y THAT WE CONSTRUCTED DURING FUNCTION FIT
-        residuals = self.fittingy - self.func_fit(self.fittingx, *x)
+        if self.normalizebydata:
+            residuals = (self.fittingy - self.func_fit(self.fittingx, *x))/self.fittingy
+        else:
+            residuals = self.fittingy - self.func_fit(self.fittingx, *x)
         fres = sum(residuals**2)
         return fres
 
