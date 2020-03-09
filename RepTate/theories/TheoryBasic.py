@@ -39,7 +39,7 @@ import numpy as np
 from CmdBase import CmdBase, CmdMode
 from Theory import Theory
 from QTheory import QTheory
-from Parameter import Parameter, ParameterType, ShiftType, OptType
+from Parameter import Parameter, ParameterType, OptType
 from PyQt5.QtWidgets import QToolBar, QSpinBox
 from PyQt5.QtCore import QSize
 

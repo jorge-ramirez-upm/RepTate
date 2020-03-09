@@ -159,6 +159,14 @@ class BaseTheorySCCR:
             type=ParameterType.discrete_real,
             opt_type=OptType.const,
             discrete_values=[0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10])
+        self.parameters["Rs"] = Parameter(
+            name="Rs",
+            value=2.0,
+            description="Retraction rate parameter",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0.0,
+            max_value=4.0)
         self.parameters["N"] = Parameter(
             name="N",
             value=1,
@@ -348,6 +356,7 @@ class BaseTheorySCCR:
         Ge = self.parameters["Ge"].value
         Me = self.parameters["Me"].value
         self.cnu = self.parameters["c_nu"].value
+        self.Rs = self.parameters["Rs"].value
         try:
             Mw = float(f.file_parameters["Mw"])
         except KeyError:
@@ -393,7 +402,7 @@ class BaseTheorySCCR:
         is_shear = c_int(self.flow_mode == FlowMode.shear)
         sch.set_static_int(c_int(self.N), c_int(self.Z), c_int(self.SIZE), is_shear)
         # initialise gdot, prevt, dt, beta_rcr, and cnu in C code
-        sch.set_static_double(c_double(gdot), c_double(self.prevt), c_double(self.dt), c_double(self.beta_rcr), c_double(self.cnu))
+        sch.set_static_double(c_double(gdot), c_double(self.prevt), c_double(self.dt), c_double(self.beta_rcr), c_double(self.cnu), c_double(self.Rs))
 
         # Initialize the equilibrium function yeq    
         t = ft.data[:, 0]/self.taue

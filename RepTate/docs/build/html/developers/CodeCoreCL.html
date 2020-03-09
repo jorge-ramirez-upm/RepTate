@@ -2566,7 +2566,7 @@ sort Mw [,reverse]</p>
 
 <dl class="class">
 <dt id="Parameter.Parameter">
-<em class="property">class </em><code class="sig-prename descclassname">Parameter.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">value=0</em>, <em class="sig-param">description=''</em>, <em class="sig-param">type=&lt;ParameterType.real: 0&gt;</em>, <em class="sig-param">opt_type=&lt;OptType.opt: 1&gt;</em>, <em class="sig-param">min_factor=1.0</em>, <em class="sig-param">min_shift_type=&lt;ShiftType.linear: 0&gt;</em>, <em class="sig-param">bracketed=False</em>, <em class="sig-param">min_value=-inf</em>, <em class="sig-param">max_value=inf</em>, <em class="sig-param">display_flag=True</em>, <em class="sig-param">discrete_values=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Parameter.html#Parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Parameter.Parameter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">Parameter.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">value=0</em>, <em class="sig-param">description=''</em>, <em class="sig-param">type=&lt;ParameterType.real: 0&gt;</em>, <em class="sig-param">opt_type=&lt;OptType.opt: 1&gt;</em>, <em class="sig-param">min_value=-inf</em>, <em class="sig-param">max_value=inf</em>, <em class="sig-param">display_flag=True</em>, <em class="sig-param">discrete_values=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Parameter.html#Parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Parameter.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Abstract class to describe theory parameters</p>
 <p>[description]</p>
@@ -2632,30 +2632,6 @@ sort Mw [,reverse]</p>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="Parameter.ShiftType">
-<em class="property">class </em><code class="sig-prename descclassname">Parameter.</code><code class="sig-name descname">ShiftType</code><a class="reference internal" href="../_modules/Parameter.html#ShiftType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Parameter.ShiftType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Type of shift during minimization</p>
-<dl class="simple">
-<dt>Parameters can be:</dt><dd><ul class="simple">
-<li><p>linear: linear shift</p></li>
-<li><p>log: logatithmic shift</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="attribute">
-<dt id="Parameter.ShiftType.linear">
-<code class="sig-name descname">linear</code><em class="property"> = 0</em><a class="headerlink" href="#Parameter.ShiftType.linear" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Parameter.ShiftType.log">
-<code class="sig-name descname">log</code><em class="property"> = 1</em><a class="headerlink" href="#Parameter.ShiftType.log" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-Theory">
 <span id="theory"></span><h2>Theory<a class="headerlink" href="#module-Theory" title="Permalink to this headline">¶</a></h2>
@@ -2681,6 +2657,54 @@ sort Mw [,reverse]</p>
 <dl class="method">
 <dt id="Theory.MLStripper.handle_data">
 <code class="sig-name descname">handle_data</code><span class="sig-paren">(</span><em class="sig-param">d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#MLStripper.handle_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.MLStripper.handle_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Theory.MinimizationMethod">
+<em class="property">class </em><code class="sig-prename descclassname">Theory.</code><code class="sig-name descname">MinimizationMethod</code><a class="reference internal" href="../_modules/Theory.html#MinimizationMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.MinimizationMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Method used during minimization</p>
+<dl class="simple">
+<dt>Parameters can be:</dt><dd><ul class="simple">
+<li><p>ls: Non-linear Least Squares (default)</p></li>
+<li><p>basinhopping: Basin-hopping method</p></li>
+<li><p>dualannealing: Dual-Annealing method</p></li>
+<li><p>diffevol: Differential Evolution method</p></li>
+<li><p>SHGO: simplicial homology global optimization</p></li>
+<li><p>bruteforce: Find the minimum on a hypergrid</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Theory.MinimizationMethod.SHGO">
+<code class="sig-name descname">SHGO</code><em class="property"> = 4</em><a class="headerlink" href="#Theory.MinimizationMethod.SHGO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Theory.MinimizationMethod.basinhopping">
+<code class="sig-name descname">basinhopping</code><em class="property"> = 1</em><a class="headerlink" href="#Theory.MinimizationMethod.basinhopping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Theory.MinimizationMethod.bruteforce">
+<code class="sig-name descname">bruteforce</code><em class="property"> = 5</em><a class="headerlink" href="#Theory.MinimizationMethod.bruteforce" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Theory.MinimizationMethod.diffevol">
+<code class="sig-name descname">diffevol</code><em class="property"> = 3</em><a class="headerlink" href="#Theory.MinimizationMethod.diffevol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Theory.MinimizationMethod.dualannealing">
+<code class="sig-name descname">dualannealing</code><em class="property"> = 2</em><a class="headerlink" href="#Theory.MinimizationMethod.dualannealing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Theory.MinimizationMethod.ls">
+<code class="sig-name descname">ls</code><em class="property"> = 0</em><a class="headerlink" href="#Theory.MinimizationMethod.ls" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -3005,9 +3029,34 @@ With no arguments, show the current values</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Theory.Theory.fit_callback_basinhopping">
+<code class="sig-name descname">fit_callback_basinhopping</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">f</em>, <em class="sig-param">accepted</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.fit_callback_basinhopping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.fit_callback_basinhopping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.fit_callback_diffevol">
+<code class="sig-name descname">fit_callback_diffevol</code><span class="sig-paren">(</span><em class="sig-param">xk</em>, <em class="sig-param">convergence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.fit_callback_diffevol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.fit_callback_diffevol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.fit_callback_dualannealing">
+<code class="sig-name descname">fit_callback_dualannealing</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">f</em>, <em class="sig-param">context</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.fit_callback_dualannealing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.fit_callback_dualannealing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.fit_callback_shgo">
+<code class="sig-name descname">fit_callback_shgo</code><span class="sig-paren">(</span><em class="sig-param">xk</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.fit_callback_shgo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.fit_callback_shgo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.fit_check_bounds">
+<code class="sig-name descname">fit_check_bounds</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.fit_check_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.fit_check_bounds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Theory.Theory.func_fit">
 <code class="sig-name descname">func_fit</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">*param_in</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.func_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.func_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
+<dd><p>Calls the theory function and constructs the vector with the theory predictions</p>
 <p>[description]</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
@@ -3020,6 +3069,13 @@ With no arguments, show the current values</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Theory.Theory.func_fit_and_error">
+<code class="sig-name descname">func_fit_and_error</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.func_fit_and_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.func_fit_and_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls the theory function, constructs the vector with the theory predictions and 
+returns the sum of the squares of the residuals</p>
 </dd></dl>
 
 <dl class="method">
@@ -3050,7 +3106,7 @@ With no arguments, show the current values</p>
 <dl class="method">
 <dt id="Theory.Theory.get_non_extended_th_table">
 <code class="sig-name descname">get_non_extended_th_table</code><span class="sig-paren">(</span><em class="sig-param">f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.get_non_extended_th_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.get_non_extended_th_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>return a copy of the theory table associated with f, where the extra rows are delete</p>
+<dd><p>return a copy of the theory table associated with f, where the extra rows are deleted</p>
 </dd></dl>
 
 <dl class="method">
@@ -3155,6 +3211,11 @@ before execution (for example, variable substitution) do it here.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Theory.Theory.setup_default_minimization_options">
+<code class="sig-name descname">setup_default_minimization_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.setup_default_minimization_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.setup_default_minimization_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Theory.Theory.show_theory_extras">
 <code class="sig-name descname">show_theory_extras</code><span class="sig-paren">(</span><em class="sig-param">show</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.show_theory_extras"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.show_theory_extras" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3243,7 +3304,7 @@ the data graphically.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

@@ -169,6 +169,15 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
             self.annotation.remove()
             self.pushCancel.click()
 
+    def handle_pickFontColor(self):
+        """Call the color picker and save the selected legend face color in 
+        RGB format in the dataset legend info.
+        """
+        self.color = self.showColorDialog()
+        if self.color:
+            self.labelFontColor.setStyleSheet("background: %s"%self.color.name())
+
+
 class ViewShiftFactors(QDialog):
     def __init__(self, parent=None, fnames=None, factorsx=None, factorsy=None):
         super(ViewShiftFactors, self).__init__(parent)

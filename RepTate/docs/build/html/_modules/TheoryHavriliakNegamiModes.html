@@ -103,7 +103,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
 <span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
-<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">ShiftType</span><span class="p">,</span> <span class="n">OptType</span>
+<span class="kn">from</span> <span class="nn">Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">Theory</span>
 <span class="kn">from</span> <span class="nn">QTheory</span> <span class="k">import</span> <span class="n">QTheory</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QStyle</span>
@@ -188,7 +188,6 @@
             <span class="s2">&quot;Unrelaxed permittivity&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
-            <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;alpha&quot;</span><span class="p">,</span>
@@ -196,7 +195,6 @@
             <span class="s1">&#39;Asymmetry parameter&#39;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
-            <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;gamma&quot;</span><span class="p">,</span>
@@ -204,7 +202,6 @@
             <span class="s1">&#39;Broadness parameter&#39;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
-            <span class="n">bracketed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;logwmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;logwmin&quot;</span><span class="p">,</span>
@@ -559,7 +556,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

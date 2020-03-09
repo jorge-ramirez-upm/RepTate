@@ -62,7 +62,7 @@ Install Python 3
 
 To install Python 3, you can either install `Minconda <https://conda.io/miniconda.html>`_ (requires 300 MB of disk space)
 or install the full `Anaconda <https://www.anaconda.com/download/>`_ Python (requires 3 GB of disk space). Note that depending on your
-operating system, other methods, not covered here, are available. Another convenient distribution for Windows is `WinPython <https://winpython.github.io/>`.
+operating system, other methods, not covered here, are available. Another convenient distribution for Windows is `WinPython <https://winpython.github.io/>`_. WinPython can be installed locally in a folder and does not modify the Windows system in any way. 
 
 We recommend you to install the former, `Minconda <https://conda.io/miniconda.html>`_, that contains Python only (and a small number of useful packages) and to 
 install "manually" the extra packages that RepTate needs, as explained below.  

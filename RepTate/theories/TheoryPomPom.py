@@ -199,7 +199,6 @@ class BaseTheoryPomPom:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauB%02d" % i] = Parameter(
                 name="tauB%02d" % i,
@@ -208,7 +207,6 @@ class BaseTheoryPomPom:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["q%02d" % i] = Parameter(
                 name="q%02d" % i,
@@ -216,7 +214,6 @@ class BaseTheoryPomPom:
                 description="Number of dangling arms of mode %02d" % i,
                 type=ParameterType.integer,
                 opt_type=OptType.opt,
-                bracketed=True,
                 min_value=1,
                 max_value=100)
             self.parameters["ratio%02d" % i] = Parameter(
@@ -227,7 +224,6 @@ class BaseTheoryPomPom:
                 % i,
                 type=ParameterType.real,
                 opt_type=OptType.const,
-                bracketed=True,
                 min_value=1,
                 max_value=5)
 
@@ -444,7 +440,6 @@ class BaseTheoryPomPom:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauB%02d" % i] = Parameter(
                     name="tauB%02d" % i,
@@ -453,7 +448,6 @@ class BaseTheoryPomPom:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["q%02d" % i] = Parameter(
                     name="q%02d" % i,
@@ -461,7 +455,6 @@ class BaseTheoryPomPom:
                     description="Number of dangling arms of mode %02d" % i,
                     type=ParameterType.integer,
                     opt_type=OptType.opt,
-                    bracketed=True,
                     min_value=1,
                     max_value=100)
                 self.parameters["ratio%02d" % i] = Parameter(
@@ -472,7 +465,6 @@ class BaseTheoryPomPom:
                     % i,
                     type=ParameterType.real,
                     opt_type=OptType.const,
-                    bracketed=True,
                     min_value=1,
                     max_value=5)
             if (oldn > self.parameters["nmodes"].value):

@@ -305,3 +305,5 @@ texinfo_documents = [
 
 
 graphviz_dot='c:\\Miniconda3\\Library\\bin\\graphviz\\dot.exe'
+
+numfig = True

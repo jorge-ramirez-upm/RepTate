@@ -103,16 +103,6 @@
 <span class="kn">import</span> <span class="nn">enum</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<div class="viewcode-block" id="ShiftType"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Parameter.ShiftType">[docs]</a><span class="k">class</span> <span class="nc">ShiftType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Type of shift during minimization</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters can be:</span>
-<span class="sd">        - linear: linear shift</span>
-<span class="sd">        - log: logatithmic shift</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">linear</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">log</span><span class="o">=</span><span class="mi">1</span></div>
-
 <div class="viewcode-block" id="ParameterType"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Parameter.ParameterType">[docs]</a><span class="k">class</span> <span class="nc">ParameterType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Types of parameters that can be used in a Theory</span>
 <span class="sd">    </span>
@@ -148,8 +138,8 @@
 <span class="sd">    [description]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> 
-                 <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span> <span class="n">min_factor</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">min_shift_type</span><span class="o">=</span><span class="n">ShiftType</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> 
-                 <span class="n">bracketed</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> 
+                 <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span> 
+                 <span class="n">min_value</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> 
                  <span class="n">display_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">discrete_values</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
@@ -160,9 +150,6 @@
 <span class="sd">            - description {str} -- Meaning of parameter</span>
 <span class="sd">            - type {enum} -- Type of parameter (real, integer, discrete_real, discrete_integer)</span>
 <span class="sd">            - opt_type {enum} -- Is this parameter optimized at the next minimization (opt, nopt, const)?</span>
-<span class="sd">            - min_factor {real} -- Factor to scale this parameter during minimization</span>
-<span class="sd">            - min_shift_type {user} -- How do we shift this parameter during minimization</span>
-<span class="sd">            - bracketed {bool} -- Is the parameter bracketed?</span>
 <span class="sd">            - min_value {real} -- Minimum allowed value for the parameter</span>
 <span class="sd">            - max_value {real} -- Maximum allowed value</span>
 <span class="sd">            - display_flag {bool} -- This parameter will be shown in the Theory table</span>
@@ -191,9 +178,6 @@
             <span class="k">pass</span> <span class="c1"># NOT IMPLEMENTED YET</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">=</span> <span class="n">opt_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">min_factor</span> <span class="o">=</span> <span class="n">min_factor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">min_shift_type</span> <span class="o">=</span> <span class="n">min_shift_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bracketed</span> <span class="o">=</span> <span class="n">bracketed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span> <span class="o">=</span> <span class="n">min_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_value</span><span class="o">=</span> <span class="n">max_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display_flag</span> <span class="o">=</span> <span class="n">display_flag</span>
@@ -212,9 +196,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">par2</span><span class="o">.</span><span class="n">type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">par2</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">opt_type</span> <span class="o">=</span> <span class="n">par2</span><span class="o">.</span><span class="n">opt_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">min_factor</span> <span class="o">=</span> <span class="n">par2</span><span class="o">.</span><span class="n">min_factor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">min_shift_type</span> <span class="o">=</span> <span class="n">par2</span><span class="o">.</span><span class="n">min_shift_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bracketed</span> <span class="o">=</span> <span class="n">par2</span><span class="o">.</span><span class="n">bracketed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span> <span class="o">=</span> <span class="n">par2</span><span class="o">.</span><span class="n">min_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_value</span><span class="o">=</span> <span class="n">par2</span><span class="o">.</span><span class="n">max_value</span></div>
         
@@ -242,8 +223,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Parameter(</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">,</span><span class="si">%g</span><span class="s2">,</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%g</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%g</span><span class="s2">,</span><span class="si">%g</span><span class="s2">,</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> 
-            <span class="bp">self</span><span class="o">.</span><span class="n">opt_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_factor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_shift_type</span><span class="p">,</span> 
-            <span class="bp">self</span><span class="o">.</span><span class="n">bracketed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_flag</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opt_type</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_flag</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -266,7 +247,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

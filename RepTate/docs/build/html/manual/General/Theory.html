@@ -1,0 +1,199 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fitting a theory &#8212; RepTate 0.9.7 20200117 documentation</title>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fitting a theory</a><ul>
+<li><a class="reference internal" href="#opening-a-new-theory">Opening a new Theory</a></li>
+<li><a class="reference internal" href="#viewing-editing-parameter-values-and-options">Viewing/Editing Parameter values and options</a></li>
+<li><a class="reference internal" href="#calculating-the-theory">Calculating the theory</a></li>
+<li><a class="reference internal" href="#fitting-the-theory">Fitting the theory</a></li>
+<li><a class="reference internal" href="#how-the-fitting-is-done">How the fitting is done</a></li>
+<li><a class="reference internal" href="#setting-x-and-y-range-limits-to-the-fitting-graphically">Setting x and y-range limits to the fitting graphically</a></li>
+<li><a class="reference internal" href="#fitting-options">Fitting options</a></li>
+<li><a class="reference internal" href="#saving-theory-predictions">Saving theory predictions</a></li>
+<li><a class="reference internal" href="#copying-pasting-theory-parameters">Copying/Pasting theory parameters</a></li>
+<li><a class="reference internal" href="#showing-all-theories-applied-to-current-dataset">Showing all theories applied to current DataSet</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/manual/General/Theory.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fitting-a-theory">
+<h1>Fitting a theory<a class="headerlink" href="#fitting-a-theory" title="Permalink to this headline">¶</a></h1>
+<p>One of the most important features of RepTate is the ability to easily fit a theory to a set of experimental data files. The available theories in each RepTate application are described and discussed in the documentation corresponding to each application. Here, we give a short summary of the general ideas about how theories are handled in RepTate.</p>
+<p>It is important to note that, in RepTate, theories <em>belong</em> to Datasets, <em>i.e.</em> they are applied only to the data files in the Dataset under which the theory was created.</p>
+<div class="section" id="opening-a-new-theory">
+<h2>Opening a new Theory<a class="headerlink" href="#opening-a-new-theory" title="Permalink to this headline">¶</a></h2>
+<p>Below the Dataset table that contains the files, there is a toolbar for operating with theories. First, the user should select a theory from the list available in the drop-down menu. Once the right theory is selected, a new instance of the theory can be created by clicking on the “Create Selected Theory” button <a class="reference internal" href="../../_images/icons8-einstein.png"><img alt="newtheory" class="align-bottom" src="../../_images/icons8-einstein.png" style="width: 15pt; height: 15pt;" /></a> (Alt+N). New theories are shown as tabs below the theory toolbar. By default, theories are named after a combination of capital letters selected after the theory name + an index number. The name of any theory can be changed by double clicking on the corresponding tab.</p>
+</div>
+<div class="section" id="viewing-editing-parameter-values-and-options">
+<h2>Viewing/Editing Parameter values and options<a class="headerlink" href="#viewing-editing-parameter-values-and-options" title="Permalink to this headline">¶</a></h2>
+<p>When a new theory instance is created, a new tab opens in which two clearly separate areas can be seen (see <a class="reference internal" href="general.html#figtheoryarea"><span class="std std-numref">Fig. 15</span></a>):</p>
+<ul class="simple">
+<li><p>A table that lists the parameters of the theory, with their current value and, if the theory has been fitted to some experimental data, the error of the fitting.</p></li>
+<li><p>A text area with a light blue background that shows all the relevant information during the calculation and fitting of the theory, as well as any citation information that is relevant to the current theory.</p></li>
+</ul>
+<div class="figure align-center" id="id1">
+<span id="figtheoryarea"></span><a class="reference internal image-reference" href="../../_images/TheoryArea.png"><img alt="../../_images/TheoryArea.png" src="../../_images/TheoryArea.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-text">A theory with the parameters table and the log area (with cyan background).</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>Theory parameters can be shown in the table in three possible states:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Checked: the parameter value will be optimized during the fitting procedure.</dt><dd><ul>
+<li><p>Unchecked: the value of the parameter will not be optimized (it will remain constant during the next fitting procedure).</p></li>
+<li><p>Grayed out or partially checked: the parameter cannot be optimized. This is intended for parameters, like exponents of scaling factors, that take well known values. Typically, <em>grayed</em> parameters take their value from a set of prescribed discrete values.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>Theory parameters have properties, and some of these properties are very important during theory fitting. In order to check and edit the properties of parameters, the user can double-click on any parameter name. Then, a dialog is shown with a tablist, with a tab for each parameter of the theory and the current properties of each parameter (see <a class="reference internal" href="general.html#figparameterproperties"><span class="std std-numref">Fig. 16</span></a>). The most important properties of a parameter are:</p>
+<ul class="simple">
+<li><p><strong>name</strong>: the short name of the parameter. It is hardcoded into the theory and cannot be changed.</p></li>
+<li><p><strong>description</strong>: a short description of the parameter. It is hardcoded into the theory and cannot be changed.</p></li>
+<li><p><strong>type</strong>: the numerical type of the value of the parameter. It can be <em>real</em>, <em>integer</em>, <em>discrete_real</em> (its value is selected from a discrete list of real values), <em>discrete_integer</em> (discrete list of integer values) and <em>boolean</em>.</p></li>
+<li><p><strong>opt_type</strong>: indicates whether the parameter value will be optimized during the fitting procedure or not. Possible states are: <em>opt</em> (will be optimized), <em>nopt</em> (will not be optimized) and <em>const</em> (cannot be optimized).</p></li>
+<li><p><strong>min_value</strong>: minimum value that the parameter can adopt. If the parameter is not bounded, the minimum value is <em>-inf</em>.</p></li>
+<li><p><strong>max_value</strong>: maximum value that the parameter can adopt. If the parameter is not bounded, the maximum value is <em>inf</em>. The bounds should not be exceeded during minimization. If the user inputs manually a value that is outside the bounds, RepTate will issue a warning and set the parameter value to the bound that has been exceeded.</p></li>
+<li><p><strong>display_flag</strong>: whether the parameter will be shown in the parameter table or not.</p></li>
+<li><p><strong>discrete_values</strong>: comma-separated list of values that the parameter can adopt. Only relevant if the parameter type is either <em>discrete_real</em> or <em>discrete_integer</em>.</p></li>
+</ul>
+<div class="figure align-center" id="id2">
+<span id="figparameterproperties"></span><a class="reference internal image-reference" href="../../_images/ParameterProperties.png"><img alt="../../_images/ParameterProperties.png" src="../../_images/ParameterProperties.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-text">Dialog for viewing/editing parameter properties.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="calculating-the-theory">
+<h2>Calculating the theory<a class="headerlink" href="#calculating-the-theory" title="Permalink to this headline">¶</a></h2>
+<p>When the button “Calculate Theory” <a class="reference internal" href="../../_images/icons8-abacus.png"><img alt="calculatetheory" class="align-bottom" src="../../_images/icons8-abacus.png" style="width: 15pt; height: 15pt;" /></a> (Alt+C) is pressed, the theory is calculated using the current values of the theory parameters and for all the files in the current dataset. Since the theory may use some of the file parameters, the result of applyting the theory to each files will be different. By default, the theory is calculated exactly in the same <em>x</em> points as the corresponding data file. This can be changed by editing the file parameters and selecting “Extra Theory Range”.</p>
+<p>When the theory calculation is done, some interesting information is shown in the theory log area (see <a class="reference internal" href="general.html#figtheorycalclog"><span class="std std-numref">Fig. 17</span></a>). By default, the information displayed contains:</p>
+<ul class="simple">
+<li><p>A table with the list of files that theory has been applied to, with the error (calculated as the residual sum of squares, RSS) and the number of points of each file.</p></li>
+<li><p>The total error (the weighted sum of the RSS errors of all the files) and the total number of points.</p></li>
+<li><p>The Bayesian Information Criterion (BIC), defined as <span class="math notranslate nohighlight">\(BIC = n \log(RSS/n)+ p\log(n)\)</span>, where <em>n</em> is the number of data points and <em>p</em> is the number of free fitting parameters. In general, the model with the lowest BIC value should be preferred.</p></li>
+<li><p>Some additional information may be shown by some theories (for example, in <a class="reference internal" href="general.html#figtheorycalclog"><span class="std std-numref">Fig. 17</span></a>, the Likhtman-McLeish theory shows some tube related values for each file).</p></li>
+<li><p>The time it took to calculate the theory, in seconds.</p></li>
+<li><p>The relevant literature that the user should cite if he/she intends to use the results from the theory. The journal articles are shown as links that can be clicked in order to visit the publisher web.</p></li>
+</ul>
+<div class="figure align-center" id="id3">
+<span id="figtheorycalclog"></span><a class="reference internal image-reference" href="../../_images/TheoryCalcLog.png"><img alt="../../_images/TheoryCalcLog.png" src="../../_images/TheoryCalcLog.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-text">Example of the information displayed after a theory calculation is finished.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="fitting-the-theory">
+<h2>Fitting the theory<a class="headerlink" href="#fitting-the-theory" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="how-the-fitting-is-done">
+<h2>How the fitting is done<a class="headerlink" href="#how-the-fitting-is-done" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="setting-x-and-y-range-limits-to-the-fitting-graphically">
+<h2>Setting x and y-range limits to the fitting graphically<a class="headerlink" href="#setting-x-and-y-range-limits-to-the-fitting-graphically" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="fitting-options">
+<h2>Fitting options<a class="headerlink" href="#fitting-options" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="saving-theory-predictions">
+<h2>Saving theory predictions<a class="headerlink" href="#saving-theory-predictions" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="copying-pasting-theory-parameters">
+<h2>Copying/Pasting theory parameters<a class="headerlink" href="#copying-pasting-theory-parameters" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="showing-all-theories-applied-to-current-dataset">
+<h2>Showing all theories applied to current DataSet<a class="headerlink" href="#showing-all-theories-applied-to-current-dataset" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

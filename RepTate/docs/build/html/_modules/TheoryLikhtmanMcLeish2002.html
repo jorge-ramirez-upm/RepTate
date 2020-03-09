@@ -116,7 +116,7 @@
     <span class="sd">&quot;&quot;&quot;Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers</span>
 <span class="sd">        </span>
 <span class="sd">    * **Parameters**</span>
-<span class="sd">       - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`.</span>
+<span class="sd">       - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`).</span>
 <span class="sd">       - ``Ge`` : Entanglement modulus.</span>
 <span class="sd">       - ``Me`` : Entanglement molecular weight.</span>
 <span class="sd">       - ``c_nu`` : Constraint release parameter.</span>
@@ -174,24 +174,24 @@
             <span class="s2">&quot;Rouse time of one Entanglement&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
-            <span class="n">min_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">max_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+            <span class="n">min_value</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span>
+            <span class="n">max_value</span><span class="o">=</span><span class="mf">1e2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Ge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;Ge&quot;</span><span class="p">,</span>
             <span class="mf">1e6</span><span class="p">,</span>
             <span class="s2">&quot;Entanglement modulus&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
-            <span class="n">min_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">max_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+            <span class="n">min_value</span><span class="o">=</span><span class="mf">1e3</span><span class="p">,</span>
+            <span class="n">max_value</span><span class="o">=</span><span class="mf">1e7</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Me&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="s2">&quot;Me&quot;</span><span class="p">,</span>
             <span class="mi">5</span><span class="p">,</span>
             <span class="s2">&quot;Entanglement molecular weight&quot;</span><span class="p">,</span>
             <span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
             <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
-            <span class="n">min_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">max_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+            <span class="n">min_value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+            <span class="n">max_value</span><span class="o">=</span><span class="mf">50.0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;c_nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;c_nu&quot;</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
@@ -427,7 +427,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

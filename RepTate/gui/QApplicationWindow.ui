@@ -316,7 +316,7 @@
     <string>ShiftHorizontally</string>
    </property>
    <property name="toolTip">
-    <string>Shift selected curve horizontally</string>
+    <string>Shift the selected curve horizontally</string>
    </property>
   </action>
   <action name="actionNew_Empty_Dataset">

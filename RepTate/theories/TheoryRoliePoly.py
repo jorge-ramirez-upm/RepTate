@@ -213,7 +213,6 @@ class BaseTheoryRoliePoly:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -222,7 +221,6 @@ class BaseTheoryRoliePoly:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
@@ -230,8 +228,7 @@ class BaseTheoryRoliePoly:
                 description="Rouse time of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.opt,
-                bracketed=True,
-                min_value=0)
+                min_value=1e-12)
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label='')
@@ -561,7 +558,6 @@ class BaseTheoryRoliePoly:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -570,7 +566,6 @@ class BaseTheoryRoliePoly:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
@@ -579,7 +574,6 @@ class BaseTheoryRoliePoly:
                     type=ParameterType.real,
                     opt_type=OptType.opt,
                     display_flag=True,
-                    bracketed=True,
                     min_value=0)
             if (oldn > self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value, oldn):

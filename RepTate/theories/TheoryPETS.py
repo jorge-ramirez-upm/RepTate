@@ -137,7 +137,6 @@ class BaseTheoryPETS:
             description="Plateau Modulus",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-            bracketed=True,
             min_value=0)
         self.parameters["tauD"] = Parameter(
             name="tauD",
@@ -145,7 +144,6 @@ class BaseTheoryPETS:
             description="Orientation relaxation time",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-            bracketed=True,
             min_value=EPSILON)
         self.parameters["tauS"] = Parameter(
             name="tauS",
@@ -153,7 +151,6 @@ class BaseTheoryPETS:
             description="Stretch Relxation time",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-            bracketed=True,
             min_value=EPSILON)
         self.parameters["tau_as"] = Parameter(
             name="tau_as",
@@ -161,7 +158,6 @@ class BaseTheoryPETS:
             description="Typical time the sticker spends associated",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-            bracketed=True,
             min_value=EPSILON)
         self.parameters["tau_free"] = Parameter(
             name="tau_free",
@@ -169,7 +165,6 @@ class BaseTheoryPETS:
             description="Typical time the sticker spends free",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-            bracketed=True,
             min_value=EPSILON)
         self.parameters["lmax"] = Parameter(
             name="lmax",
@@ -199,7 +194,6 @@ class BaseTheoryPETS:
             description="Entanglement number",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=1)
         self.parameters["r_a"] = Parameter(
             name="r_a",
@@ -207,7 +201,6 @@ class BaseTheoryPETS:
             description="Ratio of sticker size to tube diameter",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=EPSILON)
 
         self.view_LVEenvelope = False

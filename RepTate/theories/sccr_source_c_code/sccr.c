@@ -40,14 +40,13 @@
 
 // local variables
 static double *yeq;
-static double gdot, prevt, dt, beta_rcr, cnu;
-static const double Rs = 2.0;
+static double gdot, prevt, dt, beta_rcr, cnu, Rs;
 static int Z, N, SIZE, shear_flow;
 static int yeq_allocated = 0;
 
 // functions exposed to Python
 void set_static_int(int N_, int Z_, int SIZE_, int shear_flow_);
-void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_);
+void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_, double Rs_);
 void set_yeq_static_in_C(double *yeq_in, int n);
 void sccr_dy(double *y, double *dy, double t);
 // local functions
@@ -64,12 +63,13 @@ void set_static_int(int N_, int Z_, int SIZE_, int shear_flow_){
     shear_flow = shear_flow_;
 }
 
-void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_){
+void set_static_double(double gdot_, double prevt_, double dt_, double beta_rcr_, double cnu_, double Rs_){
     gdot = gdot_;
     prevt = prevt_;
     dt = dt_;
     beta_rcr = beta_rcr_;
     cnu = cnu_;
+	Rs = Rs_;
 }
 
 void set_yeq_static_in_C(double *yeq_in, int n)

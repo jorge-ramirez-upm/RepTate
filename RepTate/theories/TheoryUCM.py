@@ -206,7 +206,6 @@ class BaseTheoryUCM:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -215,7 +214,6 @@ class BaseTheoryUCM:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
 
         self.MAX_MODES = 40
@@ -360,7 +358,6 @@ class BaseTheoryUCM:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -369,7 +366,6 @@ class BaseTheoryUCM:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
 
             if (oldn > self.parameters["nmodes"].value):
