@@ -118,7 +118,7 @@ class BaseTheoryStickyReptation:
             max_value=1e2)
         self.parameters['Zs'] = Parameter(
             name='Zs',
-            value=8.045762,
+            value=4.022881,
             description='Number of stickers per chain',
             type=ParameterType.real,
             opt_type=OptType.opt,
@@ -207,13 +207,14 @@ class BaseTheoryStickyReptation:
              see below.
 
           I. MODEL APPROXIMATION:
-          1: Most stickers/reversible crosslinks are bound.
-             This implies that after sticker dissociation a strand
-             of length 2*N/Zs can relax, with N the number of monomers
-             per chain. The Rouse time of this strand, which is not 
-             affected by the stickers, is tau0*(2*N/Zs)^2.
+          1: The reptation time and Rouse relaxation after sticker 
+             dissociation are approximate. After sticker dissociation 
+             a strand of length N/Zs relaxes (a factor of two, to 
+             represent a strand of twice that length relaxes) is 
+             ignored. The reptation time is taken tau_rep=tau_s Zs^2*Ze,
+             with the prefactor 3 ignored.
           2. The model assumes that the sticker dissociation time tau_s
-             is much larger than tau0*(2*N/Zs)^2. The shape of the sticker
+             is much larger than tau0*(N/Zs)^2. The shape of the sticker
              plateau in G' and G'' is therefore not affected by the 
              early-time Rouse relaxation, and is independent of tau0 and
              N: Including the high frequencies requires tau0 and N as
@@ -269,10 +270,10 @@ class BaseTheoryStickyReptation:
         #- - - - - - - - - - - - - - - - - - - - - - -
         # CALCULATE STICKY-ROUSE RELAXATION MODULUS
         GSR = 0               # initialise output
-        tau_srouse=(tau_s*(0.5*Zs)**2) # Sticky-Rouse time of the strand that relaxes after sticker dissociation. The factor 0.5 arises because the length of this strand is twice the length of a strand between stickers.
+        tau_srouse=(tau_s*(Zs)**2) # Sticky-Rouse time of the strand that relaxes after sticker dissociation. 
         tS = t/tau_srouse;   
         dsum=0.0
-        for q in range (1, int(0.5*Zs)+1):
+        for q in range (1, int(Zs)+1):
           if q<Ze:
             GSR += 0.2*np.exp(-tS*q**2)
             dsum+= 0.2
@@ -282,7 +283,7 @@ class BaseTheoryStickyReptation:
         
           # Normalise (verified using the asymptotic value of G(t) 
           #            for short times, t->0.)     
-        GSR *= 0.5*Zs/(dsum*Ze)
+        GSR *= Zs/(dsum*Ze)
 
         #- - - - - - - - - - - - - - - - - - - - - - -
         # CALCULATE DOUBLE-REPTATION RELAXATION MODULUS
