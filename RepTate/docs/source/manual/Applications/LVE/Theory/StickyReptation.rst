@@ -23,10 +23,11 @@ The relaxation modulus, :math:`G(t)`, is modeled as the sum of a Sticky-Rouse, :
 with 
 
 .. math::
-    G_\mathrm{SR}(t) = \dfrac{G_\mathrm{e}}{Z_\mathrm{e}} \sum_{q=1}^{Z_\mathrm{s}/2} \kappa \exp\left(\dfrac{q^2 t}{\tau_\mathrm{s} (Z_\mathrm{s}/2)^2}\right).
+    G_\mathrm{SR}(t) = \dfrac{G_\mathrm{e}}{Z_\mathrm{e}} \sum_{q=1}^{Z_\mathrm{s}} \kappa \exp\left(\dfrac{q^2 t}{\tau_\mathrm{s} (Z_\mathrm{s})^2}\right).
 
-This equation assumes that most stickers are bound, and after sticker dissociation a strand of length :math:`2N/Z_\mathrm{s}` can relax, with :math:`N` the number of monomers per chain and :math:`Z_\mathrm{s}` the number of stickers per chain. :math:`\tau_\mathrm{s}` is the dissociation time of a sticker.
-The truncation :math:`Z_\mathrm{s}/2` implies that we ignore high-frequency (non-sticky) Rouse relaxation of the subchains between stickers.
+This equation assumes that most stickers are bound, and after sticker dissociation a strand of length :math:`N/Z_\mathrm{s}` can relax, with :math:`N` the number of monomers per chain and :math:`Z_\mathrm{s}` the number of stickers per chain. :math:`\tau_\mathrm{s}` is the dissociation time of a sticker.
+(Note that this is approximate: after sticker dissociation a chain with a length twice :math:`N/Z_\mathrm{s}` or more relaxes,  see :cite:`SRlve-Leibler1991` and :cite:`SRlve-Rubinstein2001` )
+The truncation of the sum at :math:`Z_\mathrm{s}` implies that we ignore high-frequency (non-sticky) Rouse relaxation of the subchains between stickers.
 This is only valid if the sticker dissociation time is much larger than the Rouse time of those substrands.
 
 .. warning::
