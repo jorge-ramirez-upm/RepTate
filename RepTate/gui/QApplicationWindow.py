@@ -40,16 +40,17 @@ import io
 import re
 import traceback
 import math
+from numpy import *
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
-from PyQt5.QtGui import QIcon, QColor, QCursor, QStandardItem
+from PyQt5.QtGui import QIcon, QColor, QCursor, QStandardItem, QIntValidator, QDoubleValidator
 from PyQt5.uic import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFrame, QHBoxLayout, QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QFrame, QGroupBox, QFormLayout, QLineEdit, QHBoxLayout, QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QHeaderView, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QApplication, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QLabel, QTableWidget, QTableWidgetItem, QRadioButton
 from QDataSet import QDataSet
 from DataTable import DataTable
 from DataSetWidgetItem import DataSetWidgetItem
@@ -102,7 +103,89 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
     def handle_itemDoubleClicked(self, item, column):
         if (column>0 and column<4):
             self.parameterTreeWidget.editItem(item, column)
-            
+
+class AddFileFunction(QDialog):
+    def __init__(self, parent=None, filetype=None):
+        super(AddFileFunction, self).__init__(parent)
+        QDialog.__init__(self)
+        self.filetype = filetype
+        self.createParametersGroupBox(filetype)
+        self.createColumnsGroupBox(filetype)
+        self.createLabelGroupBox()
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.parametersGroupBox)
+        mainLayout.addWidget(self.columnsGroupBox)
+        mainLayout.addWidget(self.labelGroupBox)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok
+                                     | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("New File from Function")
+
+    def createParametersGroupBox(self, filetype):
+        """Create a form to set the new values of important file parameters"""
+        self.parametersGroupBox = QGroupBox(
+            "Parameters of \"%s\" file" % filetype.name)
+        layout = QFormLayout()
+        parameters = filetype.basic_file_parameters
+        self.param_dict = {}
+        self.p_new = []
+        for i, pname in enumerate(parameters):  #loop over the Parameters
+            self.p_new.append(QLineEdit())
+            self.p_new[i].setValidator(QDoubleValidator()) 
+            self.p_new[i].setText("0")
+            layout.addRow("%s:" % pname, self.p_new[i])
+            self.param_dict[pname] = self.p_new[i]
+        self.parametersGroupBox.setLayout(layout)
+
+    def createColumnsGroupBox(self, filetype):
+        """Create a form to set the new values the file columns"""
+        self.columnsGroupBox = QGroupBox(
+            "Columns of \"%s\" file" % filetype.name)
+        layout = QFormLayout()
+        cols = filetype.col_names
+        self.col_dict = {}
+        self.c_new = []
+        for i, cname in enumerate(cols):  #loop over the Parameters
+            self.c_new.append(QLineEdit())
+            self.c_new[i].setText("x")
+            layout.addRow("%s" % cname, self.c_new[i])
+            self.col_dict[cname] = self.c_new[i]
+        self.columnsGroupBox.setLayout(layout)
+
+    def createLabelGroupBox(self):
+        """Set the range and scale (linear or logarithmic) of the label x"""
+        self.labelGroupBox = QGroupBox(
+            "Range of label x")
+        layout = QFormLayout()
+        self.lab_dict = {}
+        self.l_new = []
+        self.l_new.append(QLineEdit())
+        self.l_new[0].setText("0")
+        self.l_new[0].setValidator(QDoubleValidator()) 
+        layout.addRow("xmin", self.l_new[0])
+        self.lab_dict["xmin"] = self.l_new[0]
+        self.l_new.append(QLineEdit())
+        self.l_new[1].setText("1000")
+        self.l_new[1].setValidator(QDoubleValidator()) 
+        layout.addRow("xmax", self.l_new[1])
+        self.lab_dict["xmax"] = self.l_new[1]
+        self.l_new.append(QLineEdit())
+        self.l_new[2].setText("100")
+        self.l_new[2].setValidator(QIntValidator()) 
+        layout.addRow("npoints", self.l_new[2])
+        self.lab_dict["npoints"] = self.l_new[2]
+        self.l_new.append(QRadioButton())
+        self.l_new[3].setText("Linear")
+        self.l_new.append(QRadioButton())
+        layout.addRow("", self.l_new[3])
+        self.l_new[3].setChecked(True)
+        self.l_new[4].setText("Logarithmic")
+        layout.addRow("", self.l_new[4])
+        self.labelGroupBox.setLayout(layout)
+
 
 class EditAnnotation(QDialog, Ui_EditAnnotation):
     def __init__(self, parent=None, annotation=None):
@@ -376,6 +459,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tbut.setDefaultAction(self.actionNew_Dataset_From_File)
         menu = QMenu()
         menu.addAction(self.actionAddDummyFiles)
+        menu.addAction(self.actionAdd_File_With_Function)
         menu.addAction(self.action_import_from_excel)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
@@ -441,6 +525,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
         connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
         connection_id = self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
+        connection_id = self.actionAdd_File_With_Function.triggered.connect(self.addFileFunction)
         connection_id = self.action_import_from_excel.triggered.connect(self.handle_action_import_from_excel)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
         connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
@@ -1739,6 +1824,44 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 if success:
                     self.addTableToCurrentDataSet(f, ftype.extension)
         
+    def addFileFunction(self):
+        "Add a File to the current DataSet using a mathematical expression"
+        if self.DataSettabWidget.count() == 0:
+                self.createNew_Empty_Dataset()
+        ds = self.DataSettabWidget.currentWidget()
+        ftype = self.filetypes[list(self.filetypes)[0]]
+        d = AddFileFunction(self, ftype)
+        if d.exec_():         
+            fparams = {}
+            for p in d.param_dict:
+                try:
+                    fparams[p] = float(d.param_dict[p].text())
+                except:
+                    fparams[p] = 0
+            xmin = float(d.lab_dict['xmin'].text())
+            xmax = float(d.lab_dict['xmax'].text())
+            npoints = int(d.lab_dict['npoints'].text())
+            logscale = d.l_new[4].isChecked()
+            if (logscale):
+                xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
+            else:
+                xrange = np.linspace(xmin, xmax, npoints)
+            f, success = ds.do_new_dummy_file(xrange=xrange, yval=0, fparams=fparams, file_type=ftype)
+
+            if success:
+                cols = ftype.col_names
+                self.safe_dict={}
+                safe_list = ['sin', 'cos', 'tan', 'arccos', 'arcsin', 'arctan', 'arctan2', 'deg2rad', 'rad2deg', 'sinh', 'cosh', 'tanh', 'arcsinh', 'arccosh', 'arctanh', 'around', 'round_', 'rint', 'floor', 'ceil','trunc', 'exp', 'log', 'log10', 'fabs', 'mod', 'e', 'pi', 'power', 'sqrt']
+                for k in safe_list:
+                    self.safe_dict[k] = globals().get(k, None)
+                self.safe_dict['x']=xrange
+                for i, cname in enumerate(cols):  #loop over the Parameters
+                    expr = d.c_new[i].text()
+                    x2 = eval(expr, {"__builtins__":None}, self.safe_dict)
+                    f.data_table.data[:,i] = x2
+
+                self.addTableToCurrentDataSet(f, ftype.extension)
+
     def new_tables_from_files(self, paths_to_open):
         """[summary]
         

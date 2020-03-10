@@ -565,6 +565,18 @@
     <string>Import data from Excel file</string>
    </property>
   </action>
+  <action name="actionAdd_File_With_Function">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-formula-fx-50.png</normaloff>:/Images/Images/new_icons/icons8-formula-fx-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Dummy File using Function</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a Dummy File using a mathematical expression</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>

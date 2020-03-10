@@ -167,6 +167,7 @@
         <file>Images/new_icons/icons8-view-ShiftFactors.png</file>
         <file>Images/new_icons/icons8-save-ShiftFactors.png</file>
         <file>Images/new_icons/icons8-microsoft-excel.png</file>
+		<file>Images/new_icons/icons8-formula-fx-50.png</file>
     </qresource>
     <qresource prefix="/Markers">
         <file>Images/Matplotlib_markers/marker_filled_thin_diamond.png</file>
