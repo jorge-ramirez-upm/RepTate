@@ -453,6 +453,18 @@
     <string>Time-Temperature Superposition Factors</string>
    </property>
   </action>
+  <action name="actionCheckRepTateVersion">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/Reptate_logo_100.png</normaloff>:/Icons/Images/Reptate_logo_100.png</iconset>
+   </property>
+   <property name="text">
+    <string>Check for new RepTate Version</string>
+   </property>
+   <property name="toolTip">
+    <string>Check Github for new versions of RepTate</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="MainWindow.qrc"/>

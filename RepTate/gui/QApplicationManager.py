@@ -130,6 +130,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         menu.addAction(self.actionAboutMatplotlib)
         menu.addAction(self.actionAboutNumpy)        
         menu.addAction(self.actionAboutScipy)
+        menu.addSeparator()
+        menu.addAction(self.actionCheckRepTateVersion)
         tbut.setMenu(menu)
         self.toolBarHelpAbout.addWidget(tbut)
         
@@ -198,6 +200,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionAboutMatplotlib.triggered.connect(self.handle_about_matplotlib)
         self.actionAboutNumpy.triggered.connect(self.handle_about_numpy)
         self.actionAboutScipy.triggered.connect(self.handle_about_scipy)
+        self.actionCheckRepTateVersion.triggered.connect(self.handle_check_RepTate_version)
 
 
         #self.add_save_load_buttons()
@@ -256,6 +259,19 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """Show scipy web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(('https://scipy.org/')))
         
+    def handle_check_RepTate_version(self):
+        """Query Github for the latest RepTate release"""
+        newversion, version_github, version_current = self.check_version()
+        if newversion:
+            ans = QMessageBox.question(self, 'New RepTate version found', 
+                "The version of RepTate on Github (%s) is more recent than the one you are running (%s).Do you want to check the new features?"%(version_github, version_current), 
+                QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+            if ans == QMessageBox.Yes:
+                QDesktopServices.openUrl(QUrl.fromUserInput(('https://github.com/jorge-ramirez-upm/RepTate/releases')))
+        else:
+            QMessageBox.information(self, 'You are running the latest version of RepTate', 
+                "The version of RepTate you are running (%s) is up to date with respect to the version on Github (%s)"%(version_current, version_github))
+
     def list_theories_Maxwell(self, th_exclude=None):
         """Redefinition for the GUI mode that lists the tab names.
         List the theories in the current RepTate instance that provide and need

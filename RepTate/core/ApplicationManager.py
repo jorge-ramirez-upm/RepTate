@@ -40,6 +40,8 @@ import sys
 #import logging.handlers
 import matplotlib.pyplot as plt
 import readline
+from urllib.request import urlopen
+import json
 
 from CmdBase import CmdBase, CmdMode
 from ApplicationTTS import ApplicationTTS
@@ -439,3 +441,23 @@ class ApplicationManager(CmdBase):
 
     do_EOF = do_quit
     do_up = do_quit
+
+    def check_version(self):
+        url='https://api.github.com/repos/jorge-ramirez-upm/RepTate/releases'
+        releasedata = (urlopen(url).read()).decode('UTF-8')
+        parsed_json = (json.loads(releasedata))
+        release_dict=parsed_json[0] # Get the latest release
+        tag=release_dict['tag_name']
+        version_github=tag.split('v')[1]
+        version_current=Version.VERSION
+        newversion=version_github>version_current
+        return newversion, version_github, version_current
+
+    def do_check_version(self, line):
+        newversion, version_github, version_current = self.check_version()
+        if CmdBase.mode != CmdMode.GUI:
+            print("Current Version: %s"%version_current)
+            print("Version on Github: %s"%version_github)
+            if newversion:
+                print("The version of RepTate on Github (%s) is more recent than the one you are running (%s)"%(version_github, version_current))
+
