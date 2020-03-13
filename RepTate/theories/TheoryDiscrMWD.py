@@ -247,9 +247,9 @@ class BaseTheoryDiscrMWD:
         self.Mw_bin.set_visible(False)
         # self.Mw_bin.set_markerfacecolor('yellow')
         self.Mw_bin.set_markeredgecolor('black')
-        self.Mw_bin.set_markeredgewidth(3)
-        self.Mw_bin.set_markersize(14)
-        self.Mw_bin.set_alpha(0.5)
+        self.Mw_bin.set_markeredgewidth(4)
+        self.Mw_bin.set_markersize(18)
+        self.Mw_bin.set_alpha(1)
 
         #setup the movable edge bins
         self.bins = np.logspace(self.parameters["logmmin"].value,
@@ -262,7 +262,7 @@ class BaseTheoryDiscrMWD:
         self.graphic_bins.set_markerfacecolor('yellow')
         self.graphic_bins.set_markeredgecolor('red')
         self.graphic_bins.set_markeredgewidth(3)
-        self.graphic_bins.set_markersize(20)
+        self.graphic_bins.set_markersize(18)
         self.graphic_bins.set_alpha(0.75)
         self.artist_bins = DraggableBinSeries(
             self.graphic_bins, DragType.horizontal,
