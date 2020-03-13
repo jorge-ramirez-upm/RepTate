@@ -206,7 +206,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 valx = ""
             try:
                 x.append(float(valx))
-            except ValueError:
+            except (ValueError, TypeError):
                 x.append(np.nan)
                 flag_nan = True
 
@@ -221,7 +221,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 valy = ""
             try:
                 y.append(float(valy))
-            except ValueError:
+            except (ValueError, TypeError):
                 y.append(np.nan)
                 flag_nan = True
             
@@ -237,7 +237,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                     valz = ""
                 try:
                     z.append(float(valz))
-                except ValueError:
+                except (ValueError, TypeError):
                     z.append(np.nan)
                     flag_nan = True
         res_dic = {"file": self.selected_file_label.text(), "sheet": sname, "x":x, "y":y, "z":z, "flag_nan": flag_nan, "col1": self.col1_cb.currentText(),"col2": self.col2_cb.currentText()}
