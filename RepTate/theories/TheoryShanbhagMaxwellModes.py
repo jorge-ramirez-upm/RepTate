@@ -36,6 +36,7 @@ Module that defines theories related to Maxwell modes, in the frequency and time
 based on the codes pyRespect-time (10.1002/mats.201900005) and pyRespect-frequency (10.3933/ApplRheol-23-24628)
 
 """
+import sys
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from DataTable import DataTable
@@ -136,7 +137,8 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
             False,
             "is there a residual plateau?",
             ParameterType.boolean,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+            display_flag=False)
         self.parameters["ns"] = Parameter(
             "ns",
             100,
@@ -156,6 +158,13 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
             type=ParameterType.discrete_integer,
             opt_type=OptType.const,
             discrete_values=[-1,0,1])
+        self.parameters["FreqEnd"] = Parameter(
+            name="FreqEnd",
+            value=1,
+            description="Treatment of Frequency Window ends (1, 2 or 3)",
+            type=ParameterType.discrete_integer,
+            opt_type=OptType.const,
+            discrete_values=[1,2,3])
         self.parameters["MaxNumModes"] = Parameter(
             "MaxNumModes",
             0,
@@ -212,6 +221,10 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.setup_graphic_modes()
 
         self.prediction_mode = PredictionMode.cont 
+
+        self.GstM = None
+        self.K = None
+        self.n = 0
 
     def setup_graphic_modes(self):
         """[summary]
@@ -610,6 +623,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         #
         for i in reversed(range(len(lam))):
             
+            self.Qprint(".", end='')
             lamb    = lam[i]
             
             if plateau:
@@ -847,7 +861,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         used only when magic = True"""
 
         iniGuess = [g[imode] + g[imode+1], 0.5*(tau[imode] + tau[imode+1])]
-        res = minimize(costFcn_magic, iniGuess, args=(g, tau, imode))
+        res = minimize(self.costFcn_magic, iniGuess, args=(g, tau, imode))
 
         newtau        = np.delete(tau, imode+1)
         newtau[imode] = res.x[1]
@@ -960,27 +974,30 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         tt.data[:, 0] = ft.data[:, 0]
 
         # CALCULATE THE CONTINUOUS SPECTRUM FIRST
+        self.Qprint("<b>CONTINUOUS SPECTRUM</b>")
         w = ft.data[:, 0]
         Gexp =  np.append(ft.data[:, 1], ft.data[:, 2])  # % Gp followed by Gpp (2n*1)
 
         n = ft.num_rows
+        self.n = n
         ns = self.parameters['ns'].value
         wmin = ft.data[0, 0]
         wmax = ft.data[n-1, 0]
 
     	# determine frequency window
-        #if FreqEnd == 1:
-        #    smin = np.exp(-np.pi/2)/wmax; smax = np.exp(np.pi/2)/wmin		
-        #elif FreqEnd == 2:
-        smin = 1./wmax; smax = 1./wmin				
-        #elif FreqEnd == 3:
-        #    smin = np.exp(+np.pi/2)/wmax; smax = np.exp(-np.pi/2)/wmin
+        if self.parameters['FreqEnd'].value == 1:
+            smin = np.exp(-np.pi/2)/wmax; smax = np.exp(np.pi/2)/wmin		
+        elif self.parameters['FreqEnd'].value == 2:
+            smin = 1./wmax; smax = 1./wmin				
+        elif self.parameters['FreqEnd'].value == 3:
+            smin = np.exp(+np.pi/2)/wmax; smax = np.exp(-np.pi/2)/wmin
 
         hs   = (smax/smin)**(1./(ns-1))
         s    = smin * hs**np.arange(ns)
 
         kernMat = self.getKernMat(s, w)
 
+        self.Qprint('Initial Set up...',end='')
         tic  = time.time()
         plateau = self.parameters["plateau"].value
         if plateau:
@@ -990,11 +1007,12 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
 
 
         te   = time.time() - tic
-        self.Qprint('Initial Set up...({0:.1f} s)'.format(te))
+        self.Qprint('({0:.1f} s)'.format(te))
         tic  = time.time()
 
         # Find Optimum Lambda with 'lcurve'
         lamC = self.parameters['lamC'].value
+        self.Qprint('Building the L-curve ...',end='')
         if lamC == 0:
             if plateau:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat, G0)
@@ -1002,11 +1020,12 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat)
 
         te = time.time() - tic
-        self.Qprint('Building the L-curve...({0:.1f} s)'.format(te))
+        self.Qprint('({0:.1f} s)'.format(te))
         tic = time.time()
         self.Qprint('lamC = {0:0.3e}'.format(lamC))
 
         # Get the best spectrum	
+        self.Qprint('Extracting CRS...',end='')
         if plateau:
             H, G0  = self.getH(lamC, Gexp, Hgs, kernMat, G0)
             self.Qprint('G0 = {0:0.3e} ...'.format(G0))
@@ -1014,7 +1033,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
             H  = self.getH(lamC, Gexp, Hgs, kernMat)
 
         te = time.time() - tic
-        self.Qprint('Extracting CRS...done ({0:.1f} s)'.format(te))
+        self.Qprint('done ({0:.1f} s)'.format(te))
 
 		# Save inferred H(s) and Gw
         if lamC != 0:
@@ -1028,12 +1047,14 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
             #np.savetxt('output/Gfit.dat', np.c_[w, K[:n], K[n:]], fmt='%e')
             if self.prediction_mode == PredictionMode.cont:
                 tt.data[:, 1] = self.K[:n]
+                tt.data[:, 2] = self.K[n:]
 
         # Spectrum
         self.scont = s
         self.Hcont = H
 
         # GET DISCRETE SPECTRUM
+        self.Qprint("<b>DISCRETE SPECTRUM</b>")
 
         # range of N scanned
         MaxNumModes=self.parameters['MaxNumModes'].value
@@ -1125,20 +1146,72 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.sdisc = tau
         self.Hdisc = g
 
+        S, W    = np.meshgrid(tau, w)
+        ws		= S*W
+        ws2     = ws**2
+        K = np.vstack((ws2/(1+ws2), ws/(1+ws2)))
+        self.GstM   	= np.dot(K, g)
+
+        if plateau:
+            self.GstM[:n] += G0
+
         # TODO: DECIDE IF WE PLOT THE CONTINUOUS OR DISCRETE FIT TO G*(omega)
         if self.prediction_mode == PredictionMode.disc:
-            S, W    = np.meshgrid(tau, w)
-            ws		= S*W
-            ws2     = ws**2
-            K = np.vstack((ws2/(1+ws2), ws/(1+ws2)))
-            self.GstM   	= np.dot(K, g)
-
-            if plateau:
-                self.GstM[:n] += G0
-
             tt.data[:, 1] = self.GstM[:n]
             tt.data[:, 2] = self.GstM[n:]
+            self.Qprint('<b>Fit from discrete spectrum</b>')
+        else:
+            self.Qprint('<b>Fit from continuous spectrum</b>')
 
+    def do_fit(self, line=''):
+        self.Qprint("Fitting not allowed in this theory")
+
+    def do_error(self, line):
+        total_error = 0
+        npoints = 0
+        view = self.parent_dataset.parent_application.current_view
+        tools = self.parent_dataset.parent_application.tools       
+        # table='''<table border="1" width="100%">'''
+        # table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
+        tab_data = [['%-18s' % 'File', '%-18s' % 'Error (RSS)', '%-18s' % '# Pts'],]
+        for f in self.theory_files():
+            if self.stop_theory_flag:
+                break
+            xexp, yexp, success = view.view_proc(f.data_table,
+                                                 f.file_parameters)
+            tmp_dt = self.get_non_extended_th_table(f)
+            xth, yth, success = view.view_proc(tmp_dt,
+                                               f.file_parameters)
+
+            yth2=np.copy(yexp)
+            for i in range(xexp.shape[1]):
+                fint = interp1d(xth[:,i],yth[:,i],'linear') # Get the theory at the same points as the data
+                yth2[:,i] = np.copy(fint(xexp[:,i]))
+            xth = np.copy(xexp)
+            yth = np.copy(yth2)
+
+            if (self.xrange.get_visible()):
+                conditionx = (xexp > self.xmin) * (xexp < self.xmax)
+            else:
+                conditionx = np.ones_like(xexp, dtype=np.bool)
+            if (self.yrange.get_visible()):
+                conditiony = (yexp > self.ymin) * (yexp < self.ymax)
+            else:
+                conditiony = np.ones_like(yexp, dtype=np.bool)
+            conditionnaninf = (~np.isnan(xexp)) * (~np.isnan(yexp)) * (
+                ~np.isnan(xth)) * (~np.isnan(yth)) * (~np.isinf(xexp)) * (
+                    ~np.isinf(yexp)) * (~np.isinf(xth)) * (~np.isinf(yth))
+            yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
+            yth = np.extract(conditionx * conditiony * conditionnaninf, yth)
+            f_error = np.mean((yth - yexp)**2)
+            npt = len(yth)
+            total_error += f_error * npt
+            npoints += npt
+            # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
+            tab_data.append(['%-18s'% f.file_name_short, '%-18.4g' % f_error, '%-18d' %npt])
+        # table+='''</table><br>'''
+        # self.Qprint(table)
+        self.Qprint(tab_data)
 
     def plot_theory_stuff(self):
         """[summary]
@@ -1157,12 +1230,13 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         data_table_tmp.data = np.zeros((ns, 3))
         data_table_tmp.data[:, 0] = np.reciprocal(self.scont)
         data_table_tmp.data[:, 1] = np.exp(self.Hcont)
+        data_table_tmp.data[:, 2] = np.exp(self.Hcont)
         try:
             x, y, success = view.view_proc(data_table_tmp, None)
         except TypeError as e:
             print(e)
             return
-        self.contspectrum.set_data(x, y)
+        self.contspectrum.set_data(x[:,0], y[:,0])
 
         data_table_tmp.num_columns = 3
         nmodes = len(self.sdisc)
@@ -1170,12 +1244,13 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         data_table_tmp.data = np.zeros((nmodes, 3))
         data_table_tmp.data[:, 0] = np.reciprocal(self.sdisc)
         data_table_tmp.data[:, 1] = self.Hdisc
+        data_table_tmp.data[:, 2] = self.Hdisc
         try:
             x, y, success = view.view_proc(data_table_tmp, None)
         except TypeError as e:
             print(e)
             return
-        self.discspectrum.set_data(x, y)
+        self.discspectrum.set_data(x[:,0], y[:,0])
 
 
 class CLTheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequency, Theory):
@@ -1235,18 +1310,24 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
 
         self.modesaction = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes/spectrum')
+        self.plateauaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-flat-tire-80.png'), 'is there a residual plateau?')
         self.save_modes_action = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
             "Save Modes")            
         self.save_spectrum_action = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-save_Ht.png'),
-            "Save Spectrum")            
+            "Save Spectrum")                      
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
+        self.plateauaction.setCheckable(True)
+        self.plateauaction.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.modesaction.triggered.connect(
             self.modesaction_change)
+        connection_id = self.plateauaction.triggered.connect(
+            self.plateauaction_change)
         connection_id = self.save_modes_action.triggered.connect(
             self.save_modes)
         connection_id = self.save_spectrum_action.triggered.connect(
@@ -1259,12 +1340,35 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
     def select_cont_pred(self):
         self.prediction_mode = PredictionMode.cont
         self.tbutpredmode.setDefaultAction(self.cont_pred_action)
-        # HERE WE SELECT THE CONT SPECTRUM
+
+        if self.n > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.data[:, 1] = self.K[:self.n]
+                    tt.data[:, 2] = self.K[self.n:]
+
+            self.Qprint('<b>Fit from continuous spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
 
     def select_disc_pred(self):
         self.prediction_mode = PredictionMode.disc
         self.tbutpredmode.setDefaultAction(self.disc_pred_action)
-        # HERE WE PLOT THE DISC SPECTRUM
+
+        if self.n > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.data[:, 1] = self.GstM[:self.n]
+                    tt.data[:, 2] = self.GstM[self.n:]
+
+            self.Qprint('<b>Fit from discrete spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
+
 
     def save_spectrum(self):
         """Save Spectrum to a text file"""
@@ -1311,6 +1415,9 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
         # self.view_modes = self.modesaction.isChecked()
         # self.graphicmodes.set_visible(self.view_modes)
         # self.do_calculate("")
+
+    def plateauaction_change(self, checked):
+        self.set_param_value("plateau", checked)
 
     def handle_spinboxValueChanged(self, value):
         """[summary]
@@ -1403,7 +1510,8 @@ class BaseTheoryShanbhagMaxwellModesTime:
             False,
             "is there a residual plateau?",
             ParameterType.boolean,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+            display_flag=False)
         self.parameters["ns"] = Parameter(
             "ns",
             100,
@@ -1423,6 +1531,13 @@ class BaseTheoryShanbhagMaxwellModesTime:
             type=ParameterType.discrete_integer,
             opt_type=OptType.const,
             discrete_values=[-1,0,1])
+        self.parameters["FreqEnd"] = Parameter(
+            name="FreqEnd",
+            value=1,
+            description="Treatment of Frequency Window ends (1, 2 or 3)",
+            type=ParameterType.discrete_integer,
+            opt_type=OptType.const,
+            discrete_values=[1,2,3])
         self.parameters["MaxNumModes"] = Parameter(
             "MaxNumModes",
             0,
@@ -1443,7 +1558,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
             opt_type=OptType.nopt)
         self.parameters["lamDensity"] = Parameter(
             "lamDensity",
-            3,
+            2,
             "lambda density per decade",
             ParameterType.integer,
             opt_type=OptType.nopt)
@@ -1479,6 +1594,10 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.setup_graphic_modes()
 
         self.prediction_mode = PredictionMode.cont 
+
+        self.GtM = None
+        self.K = None
+        self.tfit = None
 
     def setup_graphic_modes(self):
         """[summary]
@@ -1752,6 +1871,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         #
         for i in reversed(range(len(lam))):
             
+            self.Qprint(".", end='')
             lamb    = lam[i]
             
             if plateau:
@@ -2111,7 +2231,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         """
         
         iniGuess = [g[imode] + g[imode+1], 0.5*(tau[imode] + tau[imode+1])]
-        res      = minimize(costFcn_magic, iniGuess, args=(g, tau, imode))
+        res      = minimize(self.costFcn_magic, iniGuess, args=(g, tau, imode))
 
         newtau   = np.delete(tau, imode+1)
         newtau[imode] = res.x[1]
@@ -2137,7 +2257,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         tmin = min(tau1, tau2)/10.
         tmax = max(tau1, tau2)*10.
 
-        return quad(normKern_magic, tmin, tmax, args=(gn, taun, g1, tau1, g2, tau2))[0]
+        return quad(self.normKern_magic, tmin, tmax, args=(gn, taun, g1, tau1, g2, tau2))[0]
 
     def FineTuneSolution(self, tau, t, Gexp, isPlateau, estimateError=False):
         """Given a spacing of modes tau, tries to do NLLS to fine tune it further
@@ -2148,7 +2268,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         success = False
             
         try:
-            res  = least_squares(res_tG, tau, bounds=(0., np.inf),	args=(t, Gexp, isPlateau))
+            res  = least_squares(self.res_tG, tau, bounds=(0., np.inf),	args=(t, Gexp, isPlateau))
             tau  = res.x
             tau0 = tau.copy()
 
@@ -2160,7 +2280,9 @@ class BaseTheoryShanbhagMaxwellModesTime:
 
             success = True			
         except:	
-            pass
+            e = sys.exc_info()[0]
+            self.Qprint( "<p>Error: %s</p>" % e )            
+            #pass
 
         
         g, tau, _, _ = self.MaxwellModes(np.log(tau), t, Gexp, isPlateau)   # Get g_i, taui
@@ -2185,7 +2307,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         """
             Helper function for final optimization problem
         """
-        g, _, _ = nnLLS(texp, tau, Gexp, isPlateau)
+        g, _, _ = self.nnLLS(texp, tau, Gexp, isPlateau)
         Gmodel  = np.zeros(len(texp))
 
         for j in range(len(tau)):
@@ -2211,26 +2333,37 @@ class BaseTheoryShanbhagMaxwellModesTime:
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = ft.data[:, 0]
 
         # CALCULATE THE CONTINUOUS SPECTRUM FIRST
+        self.Qprint("<b>CONTINUOUS SPECTRUM</b>")
+
         t = ft.data[:, 0]
         Gexp =  ft.data[:, 1]
+        # Remove points with t<=0
+        filt=t>0
+        t=t[filt]
+        Gexp=Gexp[filt]
 
-        n = ft.num_rows
+        # Sanitize the input: remove repeated values and space data homogeneously
+        t, indices = np.unique(t, return_index = True)	
+        Gexp         = Gexp[indices]
+        f  =  interp1d(t, Gexp, fill_value="extrapolate")
+        t  =  np.logspace(np.log10(np.min(t)), np.log10(np.max(t)), max(len(t),100))		
+        Gexp =  f(t)
+        self.tfit = np.copy(t)
+
+        n = len(t)
         ns = self.parameters['ns'].value
-        tmin = ft.data[0, 0]
-        tmax = ft.data[n-1, 0]
+        tmin = t[0]
+        tmax = t[n-1]
 
         # determine frequency window
-        #if par['FreqEnd'] == 1:
-        #    smin = np.exp(-np.pi/2) * tmin; smax = np.exp(np.pi/2) * tmax		
-        #elif par['FreqEnd'] == 2:
-        smin = tmin; smax = tmax				
-        #elif par['FreqEnd'] == 3:
-        #    smin = np.exp(+np.pi/2) * tmin; smax = np.exp(-np.pi/2) * tmax		
+        if self.parameters['FreqEnd'].value == 1:
+            smin = np.exp(-np.pi/2) * tmin; smax = np.exp(np.pi/2) * tmax		
+        elif self.parameters['FreqEnd'].value == 2:
+            smin = tmin; smax = tmax				
+        elif self.parameters['FreqEnd'].value == 3:
+            smin = np.exp(+np.pi/2) * tmin; smax = np.exp(-np.pi/2) * tmax		
 
         hs   = (smax/smin)**(1./(ns-1))
         s    = smin * hs**np.arange(ns)
@@ -2239,17 +2372,19 @@ class BaseTheoryShanbhagMaxwellModesTime:
         tic     = time.time()
         plateau = self.parameters["plateau"].value
 
+        self.Qprint('Initial Set up...',end='')
         if plateau:
             Hgs, G0  = self.InitializeH(Gexp, s, kernMat, np.min(Gexp))
         else:
             Hgs      = self.InitializeH(Gexp, s, kernMat)
         
         te   = time.time() - tic
-        self.Qprint('Initial Set up...({0:.1f} s)'.format(te))
+        self.Qprint('({0:.1f} s)'.format(te))
         tic  = time.time()
 
         # Find Optimum Lambda with 'lcurve'
         lamC = self.parameters['lamC'].value
+        self.Qprint('Building the L-curve ...',end='')
         if lamC == 0:
             if plateau:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat, G0)
@@ -2257,11 +2392,12 @@ class BaseTheoryShanbhagMaxwellModesTime:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat)
 
         te = time.time() - tic
-        self.Qprint('Building the L-curve...({0:.1f} s)'.format(te))
+        self.Qprint('({0:.1f} s)'.format(te))
         tic = time.time()
         self.Qprint('lamC = {0:0.3e}'.format(lamC))
 
         # Get the best spectrum	
+        self.Qprint('Extracting CRS...',end='')
         if plateau:
             H, G0  = self.getH(lamC, Gexp, Hgs, kernMat, G0)
             self.Qprint('G0 = {0:0.3e} ...'.format(G0))
@@ -2269,7 +2405,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
             H  = self.getH(lamC, Gexp, Hgs, kernMat)
 
         te = time.time() - tic
-        self.Qprint('Extracting CRS...done ({0:.1f} s)'.format(te))
+        self.Qprint('done ({0:.1f} s)'.format(te))
 
 		# Save inferred H(s) and Gw
         if lamC != 0:
@@ -2282,6 +2418,9 @@ class BaseTheoryShanbhagMaxwellModesTime:
              
             #np.savetxt('output/Gfit.dat', np.c_[w, K[:n], K[n:]], fmt='%e')
             if self.prediction_mode == PredictionMode.cont:
+                tt.num_rows = len(t)
+                tt.data = np.zeros((tt.num_rows, tt.num_columns))
+                tt.data[:, 0] = t
                 tt.data[:, 1] = self.K
 
         # Spectrum
@@ -2289,13 +2428,14 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.Hcont = H
 
         # GET DISCRETE SPECTRUM
+        self.Qprint("<b>DISCRETE SPECTRUM</b>")
 
         # range of N scanned
         MaxNumModes=self.parameters['MaxNumModes'].value
 
         if(MaxNumModes == 0):
             Nmax  = min(np.floor(3.0 * np.log10(max(t)/min(t))),n/4); # maximum N
-            Nmin  = max(np.floor(0.5 * np.log10(max(t)/min(t))),3);   # minimum N
+            Nmin  = max(np.floor(0.5 * np.log10(max(t)/min(t))),2);   # minimum N
             Nv    = np.arange(Nmin, Nmax + 1).astype(int)
         else:
             Nv    = np.arange(MaxNumModes, MaxNumModes + 1).astype(int)
@@ -2372,7 +2512,9 @@ class BaseTheoryShanbhagMaxwellModesTime:
             tau     = self.mergeModes_magic(g, tau, imode)
 
             g, tau, dtau  = self.FineTuneSolution(tau, t, Gexp, plateau, estimateError=True)		
-                    
+
+            if len(tau)==1:
+                break        
             tauSpacing = tau[1:]/tau[:-1]
             itry      += 1
 
@@ -2381,21 +2523,28 @@ class BaseTheoryShanbhagMaxwellModesTime:
             g  = g[:-1]
 
         self.Qprint('Number of optimum nodes = {0:d}'.format(len(g)))
+        self.Qprint('log10(Condition number) of matrix equation: {0:.2f}'.format(np.log10(cKp)))
 
         # Spectrum
         self.sdisc = tau
         self.Hdisc = g
 
+        S, T    = np.meshgrid(tau, t)
+        K      = np.exp(-T/S)
+        self.GtM   	= np.dot(K, g)
+
+        if plateau:
+            self.GtM += G0
+
         # TODO: DECIDE IF WE PLOT THE CONTINUOUS OR DISCRETE FIT TO G*(omega)
         if self.prediction_mode == PredictionMode.disc:
-            S, T    = np.meshgrid(tau, t)
-            K      = np.exp(-T/S)
-            self.GtM   	= np.dot(K, g)
-
-            if plateau:
-                self.GtM += G0
-
+            self.Qprint('<b>Fit from discrete spectrum</b>')
+            tt.num_rows = len(t)
+            tt.data = np.zeros((tt.num_rows, tt.num_columns))
+            tt.data[:, 0] = t
             tt.data[:, 1] = self.GtM
+        else:
+            self.Qprint('<b>Fit from continuous spectrum</b>')
 
         try:
             gamma = float(f.file_parameters["gamma"])
@@ -2404,6 +2553,55 @@ class BaseTheoryShanbhagMaxwellModesTime:
         except:
             gamma = 1
 
+    def do_fit(self, line=''):
+        self.Qprint("Fitting not allowed in this theory")
+
+    def do_error(self, line):
+        total_error = 0
+        npoints = 0
+        view = self.parent_dataset.parent_application.current_view
+        tools = self.parent_dataset.parent_application.tools       
+        # table='''<table border="1" width="100%">'''
+        # table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
+        tab_data = [['%-18s' % 'File', '%-18s' % 'Error (RSS)', '%-18s' % '# Pts'],]
+        for f in self.theory_files():
+            if self.stop_theory_flag:
+                break
+            xexp, yexp, success = view.view_proc(f.data_table,
+                                                 f.file_parameters)
+            tmp_dt = self.get_non_extended_th_table(f)
+            xth, yth, success = view.view_proc(tmp_dt,
+                                               f.file_parameters)
+
+            yth2=np.copy(yexp)
+            for i in range(xexp.shape[1]):
+                fint = interp1d(xth[:,i],yth[:,i],'cubic') # Get the theory at the same points as the data
+                yth2[:,i] = np.copy(fint(xexp[:,i]))
+            xth = np.copy(xexp)
+            yth = np.copy(yth2)
+
+            if (self.xrange.get_visible()):
+                conditionx = (xexp > self.xmin) * (xexp < self.xmax)
+            else:
+                conditionx = np.ones_like(xexp, dtype=np.bool)
+            if (self.yrange.get_visible()):
+                conditiony = (yexp > self.ymin) * (yexp < self.ymax)
+            else:
+                conditiony = np.ones_like(yexp, dtype=np.bool)
+            conditionnaninf = (~np.isnan(xexp)) * (~np.isnan(yexp)) * (
+                ~np.isnan(xth)) * (~np.isnan(yth)) * (~np.isinf(xexp)) * (
+                    ~np.isinf(yexp)) * (~np.isinf(xth)) * (~np.isinf(yth))
+            yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
+            yth = np.extract(conditionx * conditiony * conditionnaninf, yth)
+            f_error = np.mean((yth - yexp)**2)
+            npt = len(yth)
+            total_error += f_error * npt
+            npoints += npt
+            # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
+            tab_data.append(['%-18s'% f.file_name_short, '%-18.4g' % f_error, '%-18d' %npt])
+        # table+='''</table><br>'''
+        # self.Qprint(table)
+        self.Qprint(tab_data)
 
     def plot_theory_stuff(self):
         """[summary]
@@ -2500,6 +2698,8 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
     
         self.modesaction = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+        self.plateauaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-flat-tire-80.png'), 'is there a residual plateau?')
         self.save_modes_action = tb.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
             "Save Modes")            
@@ -2508,10 +2708,14 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
             "Save Spectrum")            
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
+        self.plateauaction.setCheckable(True)
+        self.plateauaction.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.modesaction.triggered.connect(
             self.modesaction_change)
+        connection_id = self.plateauaction.triggered.connect(
+            self.plateauaction_change)
         connection_id = self.save_modes_action.triggered.connect(
             self.save_modes)
         connection_id = self.save_spectrum_action.triggered.connect(
@@ -2524,12 +2728,41 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
     def select_cont_pred(self):
         self.prediction_mode = PredictionMode.cont
         self.tbutpredmode.setDefaultAction(self.cont_pred_action)
-        # HERE WE SELECT THE CONT SPECTRUM
+
+        if len(self.tfit) > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.num_rows = len(self.tfit)
+                    tt.data = np.zeros((tt.num_rows, tt.num_columns))
+                    tt.data[:, 0] = self.tfit
+                    tt.data[:, 1] = self.K
+
+            self.Qprint('<b>Fit from continuous spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
 
     def select_disc_pred(self):
         self.prediction_mode = PredictionMode.disc
         self.tbutpredmode.setDefaultAction(self.disc_pred_action)
-        # HERE WE PLOT THE DISC SPECTRUM
+
+        if len(self.tfit) > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.num_rows = len(self.tfit)
+                    tt.data = np.zeros((tt.num_rows, tt.num_columns))
+                    tt.data[:, 0] = self.tfit
+                    tt.data[:, 1] = self.GtM
+
+            self.Qprint('<b>Fit from discrete spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
+
+    def plateauaction_change(self, checked):
+        self.set_param_value("plateau", checked)
 
     def save_spectrum(self):
         """Save Spectrum to a text file"""

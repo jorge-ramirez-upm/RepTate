@@ -271,17 +271,41 @@ class BaseApplicationGt:
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
-        f = interpolate.interp1d(
-            data_x,
-            data_y,
-            kind='cubic',
-            assume_sorted=True,
-            fill_value='extrapolate')
+        if len(data_x)<2:
+            f = interpolate.interp1d(
+                data_x,
+                data_y,
+                kind='zero',
+                assume_sorted=True,
+                fill_value='extrapolate')
+        elif len(data_x)<3:
+            f = interpolate.interp1d(
+                data_x,
+                data_y,
+                kind='linear',
+                assume_sorted=True,
+                fill_value='extrapolate')
+        elif len(data_x)<4:
+            f = interpolate.interp1d(
+                data_x,
+                data_y,
+                kind='quadratic',
+                assume_sorted=True,
+                fill_value='extrapolate')
+        else:
+            f = interpolate.interp1d(
+                data_x,
+                data_y,
+                kind='cubic',
+                assume_sorted=True,
+                fill_value='extrapolate')
         g0 = f(0)
         ind1 = np.argmax(data_x > 0)
         t1 = data_x[ind1]
         g1 = data_y[ind1]
         tinf = np.max(data_x)
+        if tinf<=0 or t1<=0:
+            return x, y, False
         wp = np.logspace(log10(1 / tinf), log10(1 / t1), n)
         x[:, 0] = wp[:]
         x[:, 1] = wp[:]
