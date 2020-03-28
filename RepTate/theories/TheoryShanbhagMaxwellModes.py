@@ -497,7 +497,6 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         lam  = 1e0
         
         if G0>0:
-            G0       = argv[0]
             Hlam, G0 = self.getH(lam, Gexp, H, kernMat, G0)		
             return Hlam, G0
         else:
@@ -969,20 +968,40 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = ft.data[:, 0]
 
         # CALCULATE THE CONTINUOUS SPECTRUM FIRST
         self.Qprint("<b>CONTINUOUS SPECTRUM</b>")
         w = ft.data[:, 0]
-        Gexp =  np.append(ft.data[:, 1], ft.data[:, 2])  # % Gp followed by Gpp (2n*1)
+        Gp = ft.data[:, 1]
+        Gpp = ft.data[:, 2]
 
-        n = ft.num_rows
+        # Remove points with w<=0
+        filt=w>0
+        w=w[filt]
+        Gp=Gp[filt]
+        Gpp=Gpp[filt]
+
+        # Sanitize the input: remove repeated values and space data homogeneously. Using linear interpolation
+        w, indices = np.unique(w, return_index = True)	
+        Gp         = Gp[indices]
+        Gpp        = Gpp[indices]
+        fp  =  interp1d(w, Gp, fill_value="extrapolate")
+        fpp =  interp1d(w, Gpp, fill_value="extrapolate")
+        w  =  np.logspace(np.log10(np.min(w)), np.log10(np.max(w)), max(len(w),200))
+        Gp =  fp(w)
+        Gpp = fpp(w)
+        Gexp = np.append(Gp, Gpp)
+
+        n = len(w)
         self.n = n
+        self.wfit = np.copy(w)
+        tt.num_rows = len(w)
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = w
+
         ns = self.parameters['ns'].value
-        wmin = ft.data[0, 0]
-        wmax = ft.data[n-1, 0]
+        wmin = w[0]
+        wmax = w[n-1]
 
     	# determine frequency window
         if self.parameters['FreqEnd'].value == 1:
@@ -1011,13 +1030,14 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         tic  = time.time()
 
         # Find Optimum Lambda with 'lcurve'
-        lamC = self.parameters['lamC'].value
         self.Qprint('Building the L-curve ...',end='')
-        if lamC == 0:
+        if self.parameters['lamC'].value == 0:
             if plateau:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat, G0)
             else:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat)
+        else:
+            lamC = self.parameters['lamC'].value
 
         te = time.time() - tic
         self.Qprint('({0:.1f} s)'.format(te))
@@ -1036,7 +1056,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.Qprint('done ({0:.1f} s)'.format(te))
 
 		# Save inferred H(s) and Gw
-        if lamC != 0:
+        if self.parameters['lamC'].value != 0:
             if plateau:
                 self.K   = self.kernel_prestore(H, kernMat, G0);	
                 #np.savetxt('output/H.dat', np.c_[s, H], fmt='%e', header='G0 = {0:0.3e}'.format(G0))
@@ -1044,10 +1064,32 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
                 self.K   = self.kernel_prestore(H, kernMat)
                 #np.savetxt('output/H.dat', np.c_[s, H], fmt='%e')
              
-            #np.savetxt('output/Gfit.dat', np.c_[w, K[:n], K[n:]], fmt='%e')
-            if self.prediction_mode == PredictionMode.cont:
-                tt.data[:, 1] = self.K[:n]
-                tt.data[:, 2] = self.K[n:]
+        else:
+            plam = np.exp(logP); plam = plam/np.sum(plam)			
+            Hm   = np.zeros(len(s))
+            Hm2  = np.zeros(len(s))
+            cnt  = 0
+            for i in range(len(lam)):	
+                #~ Hm   += plam[i]*Hlam[:,i]
+                #~ Hm2  += plam[i]*Hlam[:,i]**2
+                # count all spectra within a threshold
+                if plam[i] > 0.1:
+                    Hm   += Hlam[:,i]
+                    Hm2  += Hlam[:,i]**2
+                    cnt  += 1
+
+            Hm = Hm/cnt
+            dH = np.sqrt(Hm2/cnt - Hm**2)
+
+            if plateau:
+                self.K   = self.kernel_prestore(Hm, kernMat, G0);	
+            else:
+                self.K   = self.kernel_prestore(Hm, kernMat);	
+
+        #np.savetxt('output/Gfit.dat', np.c_[w, K[:n], K[n:]], fmt='%e')
+        if self.prediction_mode == PredictionMode.cont:
+            tt.data[:, 1] = self.K[:n]
+            tt.data[:, 2] = self.K[n:]
 
         # Spectrum
         self.scont = s
@@ -1108,6 +1150,8 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         z, hz                = self.GridDensity(np.log(s), wt, Nopt)             # Select "tau" Points
         g, tau, error, cKp = self.MaxwellModes(z, w, Gexp, plateau)   # Get g_i, taui
         succ, gf, tauf = self.FineTuneSolution(tau, w, Gexp, plateau)
+        if succ:
+            g   = gf.copy(); tau = tauf.copy()
 
         #
         # Check if modes are close enough to merge
