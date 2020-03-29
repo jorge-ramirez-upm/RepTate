@@ -76,7 +76,7 @@ class EditFileParametersDialog(QDialog):
         mainLayout.addWidget(tab_widget)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
-        self.setWindowTitle("Edit Paramters")
+        self.setWindowTitle("Edit Parameters")
 
     def createFormGroupBox(self, file):
         """Create a form to set the new values of the file parameters"""

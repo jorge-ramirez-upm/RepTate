@@ -286,3 +286,5 @@ dist
 /RepTate/*.spec
 /RepTate/core/*.bak
 /RepTate/theories/*.bak
+
+/RepTate/data/Crystal/CoccorulloMacromolecules2008/Synthetic

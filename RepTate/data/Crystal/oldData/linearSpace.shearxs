@@ -1,0 +1,8 @@
+T=100.0;Z1=10.0;Z2=20.0;gdot=0.1;taue=0.01;tstop=1.5;
+# Prediction of GO-polySTRAND Theory
+# GN0=1000.0; G_C=0.063; Gamma=1.0; Me=1.0; Ne=25.0; beta=1.0; delta=-0.5; epsilonB=-0.117; lmax=10.0; muS=0.85; nmodes=2; phi00=0.5; phi01=0.5; rhoK=2700000000.0; tau0=3.8e-10; tauD00=8.974045413914341; tauD01=104.49107922706746; tauR00=1.0; tauR01=4.0; tau_e=0.01; 
+# Date: 2019-12-02 14:08:46 - User: pmzrsg
+t	sigma_xy	Ndot	phi_X	N
+1	1		1	1.047197551196	1.0
+2	1		1	16.755160819145	2.0
+3	1		1	84.82300164692	3.0

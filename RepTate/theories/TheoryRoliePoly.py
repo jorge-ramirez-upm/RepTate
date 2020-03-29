@@ -53,6 +53,7 @@ from SpreadsheetWidget import SpreadsheetWidget
 import Version
 import time
 from Theory import EndComputationRequested
+from ApplicationLAOS import GUIApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -438,6 +439,66 @@ class BaseTheoryRoliePoly:
             (syy - 1.0) / tauD - aux1 * (syy + beta * (syy - 1.0))
         ]
 
+    def sigmadot_shearLAOS(self, sigma, t, p):
+        """Rolie-Poly differential equation under *shear* flow
+        with stretching and finite extensibility if selected
+        
+        [description]
+        
+        Arguments:
+            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
+            - t {float} -- time
+            - p {array} -- vector of the parameters, p = [lmax, tauD, tauR, beta, delta, g0, w]
+        """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        sxx, syy, sxy = sigma
+        lmax, tauD, tauR, beta, delta, g0, w = p
+        gammadot = g0*w*np.cos(w*t)
+
+        # Create the vector with the time derivative of sigma
+        trace_sigma = sxx + 2 * syy
+        l_sq = trace_sigma / 3.0  # stretch^2
+        if self.with_fene == FeneMode.with_fene:
+            fene = self.calculate_fene(l_sq, lmax)
+            aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR * fene
+        else:
+            aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR
+        aux2 = beta * (l_sq**delta)
+
+        return [
+            2 * gammadot * sxy - (sxx - 1.) / tauD - aux1 * (sxx + aux2 *
+                                                             (sxx - 1.)),
+            -1.0 * (syy - 1.) / tauD - aux1 * (syy + aux2 * (syy - 1.)),
+            gammadot * syy - sxy / tauD - aux1 * (sxy + aux2 * sxy)
+        ]
+
+    def sigmadot_shear_nostretchLAOS(self, sigma, t, p):
+        """Rolie-Poly differential equation under shear flow, without stretching
+        
+        [description]
+        
+        Arguments:
+            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
+            - t {float} -- time
+            - p {array} -- vector of the parameters, p = [lmax, tauD, tauR, beta, delta, g0, w]
+        """
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        sxx, syy, sxy = sigma
+        _, tauD, _, beta, _, g0, w = p
+        gammadot = g0*w*np.cos(w*t)
+
+        # Create the vector with the time derivative of sigma
+        return [
+            2.0 * gammadot * sxy -
+            (sxx - 1.0) / tauD - 2.0 / 3.0 * gammadot * sxy * (sxx + beta *
+                                                               (sxx - 1)),
+            -(syy - 1.0) / tauD - 2.0 / 3.0 * gammadot * sxy * (syy + beta *
+                                                                (syy - 1)),
+            gammadot * syy - sxy / tauD - 2.0 / 3.0 * gammadot * sxy *
+            (sxy + beta * sxy)
+        ]
     def calculate_fene(self, l_square, lmax):
         """calculate finite extensibility function value"""
         ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
@@ -532,6 +593,74 @@ class BaseTheoryRoliePoly:
                     1.0 - ilm2) / (3.0 - ilm2)  # fene array
                 tt.data[:, 1] *= fene_arr
 
+    def RoliePolyLAOS(self, f=None):
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+
+        #flow geometry and finite extensibility
+        sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
+        pde_nostretchLAOS = self.sigmadot_shear_nostretchLAOS
+        pde_stretchLAOS = self.sigmadot_shearLAOS
+
+        # ODE solver parameters
+        abserr = 1.0e-8
+        relerr = 1.0e-6
+        beta = self.parameters["beta"].value
+        delta = self.parameters["delta"].value
+        lmax = self.parameters["lmax"].value
+        g0 = float(f.file_parameters["gamma"])
+        w = float(f.file_parameters["omega"])
+        nmodes = self.parameters["nmodes"].value
+        nstretch = self.parameters["nstretch"].value
+        t = ft.data[:, 0]
+        tt.data[:, 1] = g0*np.sin(w*t)
+        t = np.concatenate([[0], t])
+        for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
+            tauD = self.parameters["tauD%02d" % i].value
+            tauR = self.parameters["tauR%02d" % i].value
+            p = [lmax, tauD, tauR, beta, delta, g0, w]
+            if i < nstretch:
+                try:
+                    sig = odeint(
+                        pde_stretchLAOS,
+                        sigma0,
+                        t,
+                        args=(p, ),
+                        atol=abserr,
+                        rtol=relerr)
+                except EndComputationRequested:
+                    break
+            else:
+                try:
+                    sig = odeint(
+                        pde_nostretchLAOS,
+                        sigma0,
+                        t,
+                        args=(p, ),
+                        atol=abserr,
+                        rtol=relerr)
+                except EndComputationRequested:
+                    break
+
+            sxx = np.delete(sig[:, 0], [0])
+            syy = np.delete(sig[:, 1], [0])
+            sxy = np.delete(sig[:, 2], [0])
+            tt.data[:, 2] += self.parameters["G%02d" % i].value * sxy
+
+            if self.with_fene == FeneMode.with_fene:
+                ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
+                l_sq_arr = (sxx + 2.0 * syy) / 3.0  # array lambda^2
+                l2_lm2_arr = l_sq_arr * ilm2  # array (lambda/lambda_max)^2
+                fene_arr = (3.0 - l2_lm2_arr) / (1.0 - l2_lm2_arr) * (
+                    1.0 - ilm2) / (3.0 - ilm2)  # fene array
+                tt.data[:, 2] *= fene_arr
+
     def set_param_value(self, name, value):
         """[summary]
         
@@ -622,20 +751,27 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
-        self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-shear.png'), "Shear Flow")
-        self.extensional_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
-            "Extensional Flow")
-        if self.flow_mode == FlowMode.shear:
-            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
+            self.tbutflow = QToolButton()
+            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu = QMenu()
+            self.shear_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-shear.png'), "Shear Flow")
+            self.extensional_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+                "Extensional Flow")
+            if self.flow_mode == FlowMode.shear:
+                self.tbutflow.setDefaultAction(self.shear_flow_action)
+            else:
+                self.tbutflow.setDefaultAction(self.extensional_flow_action)
+            self.tbutflow.setMenu(menu)
+            tb.addWidget(self.tbutflow)
+            connection_id = self.shear_flow_action.triggered.connect(
+                self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(
+                self.select_extensional_flow)
         else:
-            self.tbutflow.setDefaultAction(self.extensional_flow_action)
-        self.tbutflow.setMenu(menu)
-        tb.addWidget(self.tbutflow)
+            self.function = self.RoliePolyLAOS
 
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
@@ -683,10 +819,6 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(
-            self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(
             self.get_modes_reptate)
         connection_id = self.edit_modes_action.triggered.connect(
@@ -805,33 +937,34 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         
         [description]
         """
-        data_table_tmp = DataTable(self.axarr)
-        data_table_tmp.num_columns = 2
-        data_table_tmp.num_rows = 100
-        data_table_tmp.data = np.zeros((100, 2))
+        if not isinstance(self.parent_dataset.parent_application, GUIApplicationLAOS):
+            data_table_tmp = DataTable(self.axarr)
+            data_table_tmp.num_columns = 2
+            data_table_tmp.num_rows = 100
+            data_table_tmp.data = np.zeros((100, 2))
 
-        times = np.logspace(-2, 3, 100)
-        data_table_tmp.data[:, 0] = times
-        nmodes = self.parameters["nmodes"].value
-        data_table_tmp.data[:, 1] = 0
-        fparamaux = {}
-        fparamaux["gdot"] = 1e-8
-        for i in range(nmodes):
-            if self.stop_theory_flag:
-                break
-            G = self.parameters["G%02d" % i].value
-            tauD = self.parameters["tauD%02d" % i].value
-            data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauD * (
-                1 - np.exp(-times / tauD))
-        if self.flow_mode == FlowMode.uext:
-            data_table_tmp.data[:, 1] *= 3.0
-        view = self.parent_dataset.parent_application.current_view
-        try:
-            x, y, success = view.view_proc(data_table_tmp, fparamaux)
-        except TypeError as e:
-            print(e)
-            return
-        self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
+            times = np.logspace(-2, 3, 100)
+            data_table_tmp.data[:, 0] = times
+            nmodes = self.parameters["nmodes"].value
+            data_table_tmp.data[:, 1] = 0
+            fparamaux = {}
+            fparamaux["gdot"] = 1e-8
+            for i in range(nmodes):
+                if self.stop_theory_flag:
+                    break
+                G = self.parameters["G%02d" % i].value
+                tauD = self.parameters["tauD%02d" % i].value
+                data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauD * (
+                    1 - np.exp(-times / tauD))
+            if self.flow_mode == FlowMode.uext:
+                data_table_tmp.data[:, 1] *= 3.0
+            view = self.parent_dataset.parent_application.current_view
+            try:
+                x, y, success = view.view_proc(data_table_tmp, fparamaux)
+            except TypeError as e:
+                print(e)
+                return
+            self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
 
     def select_shear_flow(self):
         self.flow_mode = FlowMode.shear

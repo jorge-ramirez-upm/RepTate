@@ -21,6 +21,7 @@ copy gui\MainWindow_rc.py dist\RepTate
 copy gui\annotationedit.ui dist\RepTate
 copy gui\dummyfilesDialog.ui dist\RepTate
 copy gui\import_excel_dialog.ui dist\RepTate
+copy dist\RepTate\Qt5Core.dll dist\RepTate\PyQt5\Qt\bin\Qt5Core.dll 
 copy ..\Reptate_license.txt dist\RepTate
 copy ..\Reptate_license.rtf dist\RepTate
 

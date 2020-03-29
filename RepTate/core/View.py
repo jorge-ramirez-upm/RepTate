@@ -36,7 +36,20 @@ Module that defines the basic properties of a View, that will be used to represe
 the data graphically.
 
 """
+from enum import Enum
 
+class ViewMode(Enum):
+    """Defines how to show the experimental/theoretical data view
+    TO BE DONE...
+    
+    Parameters can be:
+        - symbol: Show symbols (default for experimental data -- files in the dataset)
+        - line: Show lines (default for theories)
+        - bar: Show bars 
+    """
+    symbol = 0
+    line = 1
+    bar = 2
 
 class View(object):
     """Abstract class to describe a view
@@ -59,7 +72,9 @@ class View(object):
                  inverse_view_proc=None,
                  index=0,
                  with_thline=True,
-                 filled=False):
+                 filled=False,
+                 viewmode_data=ViewMode.symbol,
+                 viewmode_theory=ViewMode.line):
         """
         **Constructor**
         
@@ -95,3 +110,5 @@ class View(object):
         self.snames = snames
         self.with_thline = with_thline
         self.filled = filled
+        self.viewmode_data=viewmode_data
+        self.viewmode_theory=viewmode_theory

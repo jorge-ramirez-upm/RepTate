@@ -14,5 +14,6 @@ All RepTate Theories
     ../Applications/Creep/Theory/theory
     ../Applications/SANS/Theory/theory
     ../Applications/React/Theory/theory
+    ../Applications/Crystal/Theory/theory
     basic_theories
     

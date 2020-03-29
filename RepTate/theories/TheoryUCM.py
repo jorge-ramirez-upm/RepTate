@@ -50,7 +50,7 @@ from Theory_rc import *
 from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
-
+from ApplicationLAOS import GUIApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -236,6 +236,7 @@ class BaseTheoryUCM:
         
         [description]
         """
+        pass
 
     def get_modes(self):
         """[summary]
@@ -334,6 +335,31 @@ class BaseTheoryUCM:
             elif self.flow_mode == FlowMode.uext:
                 tt.data[:, 1] += self.n1_uext(p, times)
 
+    def calculate_UCMLAOS(self, f=None):
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        times = ft.data[:, 0]
+
+        g0 = float(f.file_parameters["gamma"])
+        w = float(f.file_parameters["omega"])
+        tt.data[:, 0] = times
+        tt.data[:, 1] = g0*np.sin(w*times)
+
+        nmodes = self.parameters["nmodes"].value
+        for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
+            G = self.parameters["G%02d" % i].value
+            tauD = self.parameters["tauD%02d" % i].value
+            eta = G*tauD
+            tt.data[:, 2] += eta*g0*w*(
+                                tauD*w*np.sin(w*times)
+                                -np.exp(-times/tauD)
+                                +np.cos(w*times))/(1+w**2*tauD**2)
+
     def set_param_value(self, name, value):
         """[summary]
         
@@ -414,21 +440,29 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
-        self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
-            "Shear Flow")
-        self.extensional_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
-            "Extensional Flow")
-        if self.flow_mode == FlowMode.shear:
-            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
+            self.tbutflow = QToolButton()
+            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu = QMenu()
+            self.shear_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
+                "Shear Flow")
+            self.extensional_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+                "Extensional Flow")
+            if self.flow_mode == FlowMode.shear:
+                self.tbutflow.setDefaultAction(self.shear_flow_action)
+            else:
+                self.tbutflow.setDefaultAction(self.extensional_flow_action)
+            self.tbutflow.setMenu(menu)
+            tb.addWidget(self.tbutflow)
+
+            connection_id = self.shear_flow_action.triggered.connect(
+                self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(
+                self.select_extensional_flow)
         else:
-            self.tbutflow.setDefaultAction(self.extensional_flow_action)
-        self.tbutflow.setMenu(menu)
-        tb.addWidget(self.tbutflow)
+            self.function = self.calculate_UCMLAOS
 
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
@@ -451,10 +485,6 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(
-            self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(
             self.get_modes_reptate)
         connection_id = self.edit_modes_action.triggered.connect(

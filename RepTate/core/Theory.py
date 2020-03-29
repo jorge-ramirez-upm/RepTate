@@ -489,7 +489,7 @@ class Theory(CmdBase):
             if p.opt_type == OptType.opt:
                 free_p += 1
 
-        if npoints != 0:
+        if npoints != 0 and total_error > 0 :
             self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
