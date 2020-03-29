@@ -465,6 +465,18 @@
     <string>Check Github for new versions of RepTate</string>
    </property>
   </action>
+  <action name="actionCite_RepTate">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-hot-article-96.png</normaloff>:/Icons/Images/new_icons/icons8-hot-article-96.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cite RepTate</string>
+   </property>
+   <property name="toolTip">
+    <string>Cite the main RepTate papers</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="MainWindow.qrc"/>

@@ -2,6 +2,18 @@
 Version History
 ===============
 
+Release 1.0.0 - 20200330
+======================
+- NEW Crystal application for flow induced crystallization
+- NEW LAOS application for the analysis of large amplitude oscillatory shear data (based on MITlaos)
+- NEW Sticky Reptation theory in the LVE module
+- NEW ReSpect theory to extract the continuous and discrete relaxation spectra in the LVE and Gt Apps
+- NEW GO-polySTRAND theory for flow induced nucleation in the Crystal App
+- NEW Smooth-polySTRAND theory for flow induced nucleation in the Crystal App
+- NEW theories Rolie-Poly, UCM, Giesekus and Pom-Pom in the LAOS App
+- NEW Installation package for Windows with file associations
+- NEW Global and local optimization methods
+
 Release 0.9.7 - 20200117
 ========================
 - NEW right-click to save chart

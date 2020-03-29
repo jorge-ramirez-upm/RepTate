@@ -131,6 +131,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         menu.addAction(self.actionAboutNumpy)        
         menu.addAction(self.actionAboutScipy)
         menu.addSeparator()
+        menu.addAction(self.actionCite_RepTate)
         menu.addAction(self.actionCheckRepTateVersion)
         tbut.setMenu(menu)
         self.toolBarHelpAbout.addWidget(tbut)
@@ -206,6 +207,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionAboutMatplotlib.triggered.connect(self.handle_about_matplotlib)
         self.actionAboutNumpy.triggered.connect(self.handle_about_numpy)
         self.actionAboutScipy.triggered.connect(self.handle_about_scipy)
+        self.actionCite_RepTate.triggered.connect(self.handle_cite_RepTate)
         self.actionCheckRepTateVersion.triggered.connect(self.handle_check_RepTate_version)
 
 
@@ -265,6 +267,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """Show scipy web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(('https://scipy.org/')))
         
+    def handle_cite_RepTate(self):
+        """Visit the web site of the RepTatepaper"""
+        QDesktopServices.openUrl(QUrl.fromUserInput(('https://dx.doi.org/10.1122/8.0000002')))
+
     def handle_check_RepTate_version(self):
         """Query Github for the latest RepTate release"""
         newversion, version_github, version_current = self.check_version()
@@ -333,7 +339,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         [description]
         """
         #dlg = AboutWindow(self, self.version + ' ' + self.date)
-        dlg = AboutWindow(self, "%s %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid (2017-2020)<br>\u00A9 Victor Boudara, University of Leeds (2017-2020)</small>" %(Version.VERSION, Version.DATE))
+        dlg = AboutWindow(self, "%s %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=""https://dx.doi.org/10.1122/8.0000002"">Cite RepTate</a>" %(Version.VERSION, Version.DATE))
         dlg.show()
 
     def tab_changed(self, index):

@@ -103,10 +103,8 @@ class CmdBase(cmd.Cmd):
     def do_shell(self, line):
         """Run a shell command
         
-        [description]
-        
         Arguments:
-            - line {[type]} -- [description]
+            - line {str} -- Command to run
         """
         print("running shell command:", line)
         output = os.popen(line).read()
@@ -115,11 +113,9 @@ class CmdBase(cmd.Cmd):
 
     def do_cd(self, line):
         """Change folder
-        
-        [description]
-        
+                
         Arguments:
-            - line {[type]} -- [description]
+            - line {[str} -- Folder to change to (.. means upper folder)
         """
         if os.path.isdir(line):
             os.chdir(line)
@@ -198,12 +194,7 @@ class CmdBase(cmd.Cmd):
         return result
 
     def do_ls(self, line):
-        """List contents of current folder
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
+        """List contents of current folder.
         """
         dirs=os.listdir()
         for d in dirs:
@@ -212,44 +203,24 @@ class CmdBase(cmd.Cmd):
 
     def do_pwd(self, line):
         """Print the current folder
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
         """
         print(os.getcwd())
     do_cwd = do_pwd
 
     def emptyline(self):
-        """[summary]
-        
-        [description]
+        """Called when an empty line is introduced in the prompt.
         """
         pass
 
     def do_EOF(self, args):
         """Exit Console and Return to Parent or exit
-        
-        [description]
-        
-        Arguments:
-            - args {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
         """
         print("")
         return True
     do_up = do_EOF
     
     def do_quit(self, args):
-        """Exit from the application
-        
-        [description]
-        
-        Arguments:
-            - args {[type]} -- [description]
+        """Exit from the application.
         """
         if (CmdBase.mode==CmdMode.batch):
             print ("Exiting RepTate...")
@@ -266,11 +237,6 @@ class CmdBase(cmd.Cmd):
     def default(self, line):
         """Called on an input line when the command prefix is not recognized.
         In that case we execute the line as Python code.
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
         """
         try:
             exec(line) #in self._locals, self._globals
@@ -285,7 +251,7 @@ class CmdBase(cmd.Cmd):
            - console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
         
         Arguments:
-            - line {[type]} -- [description]
+            - [line] {str} -- cmdline, batch, GUI
         """
         if (line==""):
             print("Current console mode: %s"%CmdMode.modes.value[CmdBase.mode.value])

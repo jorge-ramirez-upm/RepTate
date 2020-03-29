@@ -135,12 +135,7 @@ class ApplicationManager(CmdBase):
         return L
 
     def do_available(self, line):
-        """List available applications
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
+        """List all the available applications in RepTate.
         """
         L = self.available()
         for app in L:
@@ -160,12 +155,10 @@ class ApplicationManager(CmdBase):
             print("Application \"%s\" not found" % name)
 
     def do_delete(self, name):
-        """Delete an open application
-        
-        [description]
-        
+        """Delete an open application. By hitting TAB, all the currently open applications are shown.
+                
         Arguments:
-            - name {[type]} -- [description]
+            - name {str} -- Application to delete
         """
         self.delete(name)
 
@@ -205,27 +198,17 @@ class ApplicationManager(CmdBase):
         return L
 
     def do_list(self, line):
-        """List open applications
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
+        """List all the currently open applications.
         """
         L = self.list()
         for app in L:
             print(app)
 
     def new(self, appname):
-        """Create new application
-        
-        [description]
+        """Create a new application and open it.
         
         Arguments:
-            - name {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
+            - name {str} -- Application to open (MWD, LVE, TTS, etc)
         """
         if (appname in self.available_applications):
             self.application_counter += 1
@@ -240,12 +223,10 @@ class ApplicationManager(CmdBase):
             return None
 
     def do_new(self, appname):
-        """Create new application
-        
-        [description]
+        """Create a new application and open it.
         
         Arguments:
-            - appname {[type]} -- [description]
+            - name {str} -- Application to open (MWD, LVE, TTS, etc)
         """
         newapp = self.new(appname)
         if (newapp != None):
@@ -279,12 +260,10 @@ class ApplicationManager(CmdBase):
         return completions
 
     def do_switch(self, name):
-        """Set focus to an open application
-        
-        [description]
-        
+        """Set focus to an open application. By hitting TAB, all the currently open applications are shown.
+                
         Arguments:
-            - name {[type]} -- [description]
+            - name {str} -- Name of the applicaton to switch the focus to.
         """
         if name in self.applications.keys():
             app = self.applications[name]
@@ -318,7 +297,7 @@ class ApplicationManager(CmdBase):
         copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj
         
         Arguments:
-            - line {[type]} -- [description]
+            - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory)
         """
         apps = line.split()
         if len(apps) < 2:
@@ -381,12 +360,7 @@ class ApplicationManager(CmdBase):
 
     def do_list_theories_Maxwell(self, line):
         """List the theories in the current RepTate instance that provide
-        Maxwell modes
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
+        Maxwell modes        
         """
         L, S = self.list_theories_Maxwell()
         print(list(L.keys()))
@@ -399,26 +373,31 @@ class ApplicationManager(CmdBase):
         
         [description]
         """
-        print('introduction')
-        print('a good place for a tutorial')
+        print('Visit the page:')
+        print('https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html')
 
     def do_about(self, line):
-        """Show about info
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
+        """Show about info. 
         """
-        pass
+        print("RepTate (Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment),")
+        print("was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds")
+        print("and the University of Reading, as part of the muPP2 project, funded by the EPSRC.")
+        print("")
+        print("This new version is a port (and enhancement) of the original RepTate code to python,")
+        print("using pyqt and matplotlib for the visuals, and numpy and scipy for numerical calculations.")
+        print("")
+        print("It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, jorge.ramirez@upm.es)")
+        print("and Victor Boudara (University of Leeds, v.a.boudara@leeds.ac.uk).")
+        print("")
+        print("The program and source code are released under the GPLv3 license.")
+        print("")
+        print("This project is dedicated to the memory of our great friend and collaborator Alexei.")
+        print("")
+        print("Project page: https://github.com/jorge-ramirez-upm/RepTate")
+        print("Documentation: http://reptate.readthedocs.io/")
 
     def do_info(self, line):
-        """Show info about the current RepTate session
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
+        """Show info about the current RepTate session.
         """
         print("##AVAILABLE APPLICATIONS:")
         self.do_available(line)
@@ -427,12 +406,8 @@ class ApplicationManager(CmdBase):
         self.do_list(line)
 
     def do_quit(self, args):
-        """Exit from the application
-        
-        [description]
-        
-        Arguments:
-            args {[type]} -- [description]
+        """Exit from the application.
+            args {[type]} -- ???
         """
         msg = 'Do you really want to exit RepTate?'
         shall = input("\n%s (y/N) " % msg).lower() == 'y'
@@ -456,10 +431,14 @@ class ApplicationManager(CmdBase):
         return newversion, version_github, version_current
 
     def do_check_version(self, line):
+        """Check if there is a new version of RepTate on Github.
+        """
         newversion, version_github, version_current = self.check_version()
         if CmdBase.mode != CmdMode.GUI:
             print("Current Version: %s"%version_current)
             print("Version on Github: %s"%version_github)
             if newversion:
                 print("The version of RepTate on Github (%s) is more recent than the one you are running (%s)"%(version_github, version_current))
+            else:
+                print("Your version is up to date.")
 

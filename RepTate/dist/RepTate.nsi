@@ -26,8 +26,8 @@ LangString DESC_RepTate ${LANG_ENGLISH} "Install RepTate software"
 LangString DESC_FileAssoc ${LANG_ENGLISH} "Associate common RepTate files (*.tts, *.osc, *.shear, etc) with the software"
 
 # Version must be with the format x.x.x.x
-!define VERSION "0.9.7.0"
-!define DATE "20200117"
+!define VERSION "1.0.0"
+!define DATE "20200330"
 Name "RepTate v${VERSION}"
 OutFile "RepTate Installer - v${VERSION} ${DATE}.exe"
 #Icon "RepTate\gui\Images\Reptate64.ico"
