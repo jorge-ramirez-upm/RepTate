@@ -17,3 +17,4 @@ Examples of use of RepTate using the Command Line interpreter and batch.
    ../Creep/Tutorial/tutorialCLCreep
    ../SANS/Tutorial/tutorialCLSANS
    ../React/Tutorial/tutorialCLReact
+   ../Crystal/Tutorial/tutorialCLCrystal

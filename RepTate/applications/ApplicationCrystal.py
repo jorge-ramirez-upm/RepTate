@@ -91,7 +91,7 @@ class BaseApplicationCrystal:
         #from TheoryPomPom import TheoryPomPom
         #from TheoryRolieDoublePoly import TheoryRolieDoublePoly
         from TheoryGoPolyStrand import TheoryGoPolyStrand
-        from TheorySimple import TheorySimple
+        from TheorySmoothPolyStrand import TheorySmoothPolyStrand
         #from TheoryBobNLVE import TheoryBobNLVE
         #from TheoryPETS import TheoryPETS
         #from TheorySCCR import TheorySCCR
@@ -114,7 +114,43 @@ class BaseApplicationCrystal:
             snames=["log(eta)"])
         self.views["Ndot(t) [log-log]"] = View(
             name="Ndot(t) [log-log]",
-            description="Nucleation rate",
+            description="Nucleation rate (log-log)",
+            x_label="t",
+            y_label="$\dot{N}$",
+            x_units="s",
+            y_units="s$^{-1}$m$^{-3}$",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewNdot,
+            n=1,
+            snames=["Ndot"])
+        self.views["N(t) [log-log]"] = View(
+            name="N(t) [log-log]",
+            description="Nucleation density (log-log)",
+            x_label="t",
+            y_label="N",
+            x_units="s",
+            y_units="m$^{-3}$",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewNt,
+            n=1,
+            snames=["N"])
+        self.views["phiX(t) [log-log]"] = View(
+            name="phiX(t) [log-log]",
+            description="Crystal fraction (log-log)",
+            x_label="t",
+            y_label="$\phi_X$",
+            x_units="s",
+            y_units="-",
+            log_x=True,
+            log_y=True,
+            view_proc=self.viewphiX,
+            n=1,
+            snames=["phiX"])
+        self.views["Ndot(t) [log-lin]"] = View(
+            name="Ndot(t) [log-lin]",
+            description="Nucleation rate (log-lin)",
             x_label="t",
             y_label="$\dot{N}$",
             x_units="s",
@@ -124,9 +160,9 @@ class BaseApplicationCrystal:
             view_proc=self.viewNdot,
             n=1,
             snames=["Ndot"])
-        self.views["N(t) [log-log]"] = View(
-            name="N(t) [log-log]",
-            description="Nucleation density",
+        self.views["N(t) [log-lin]"] = View(
+            name="N(t) [log-lin]",
+            description="Nucleation density (log-lin)",
             x_label="t",
             y_label="N",
             x_units="s",
@@ -136,9 +172,9 @@ class BaseApplicationCrystal:
             view_proc=self.viewNt,
             n=1,
             snames=["N"])
-        self.views["phiX(t) [log-log]"] = View(
-            name="phiX(t)",
-            description="Crystal fraction",
+        self.views["phiX(t) [log-lin]"] = View(
+            name="phiX(t) [log-lin]",
+            description="Crystal fraction (log-lin)",
             x_label="t",
             y_label="$\phi_X$",
             x_units="s",
@@ -146,42 +182,6 @@ class BaseApplicationCrystal:
             log_x=True,
             log_y=False,
             view_proc=self.viewphiX,
-            n=1,
-            snames=["phiX"])
-        self.views["Ndot(t) [lin-log]"] = View(
-            name="Ndot(t) [log-log]",
-            description="Nucleation rate",
-            x_label="t",
-            y_label="$\dot{N}$",
-            x_units="s",
-            y_units="s$^{-1}$m$^{-3}$",
-            log_x=True,
-            log_y=False,
-            view_proc=self.viewNdotLinLog,
-            n=1,
-            snames=["Ndot"])
-        self.views["N(t) [lin-log]"] = View(
-            name="N(t) [log-log]",
-            description="Nucleation density",
-            x_label="t",
-            y_label="N",
-            x_units="s",
-            y_units="m$^{-3}$",
-            log_x=True,
-            log_y=False,
-            view_proc=self.viewNtLinLog,
-            n=1,
-            snames=["N"])
-        self.views["phiX(t) [lin-log]"] = View(
-            name="phiX(t)",
-            description="Crystal fraction",
-            x_label="t",
-            y_label="$\phi_X$",
-            x_units="s",
-            y_units="-",
-            log_x=True,
-            log_y=False,
-            view_proc=self.viewphiXLinLog,
             n=1,
             snames=["phiX"])
         self.views["eta(t)"] = View(
@@ -244,9 +244,9 @@ class BaseApplicationCrystal:
             view_proc=self.viewSigmaTime,
             n=1,
             snames=["sigma"])
-        self.views["sigma(log(t))"] = View(
-            name="sigma(t)",
-            description="transient shear stress vs time",
+        self.views["sigma(t) [log-lin]"] = View(
+            name="sigma(t) [log-lin]",
+            description="transient shear stress vs time (log-lin)",
             x_label="t",
             y_label="$\sigma^+$",
             x_units="s",
@@ -271,7 +271,7 @@ class BaseApplicationCrystal:
             with_thline=False,
             filled=True)
         self.views["Steady Nucleation"] = View(
-            name="Flow Curve",
+            name="Steady Nucleation",
             description="Steady state nucleation rate vs flow rate",
             x_label="Flow rate",
             y_label="$\dot{N}$",
@@ -318,7 +318,7 @@ class BaseApplicationCrystal:
         #self.theories[TheoryPomPom.thname] = TheoryPomPom
         #self.theories[TheoryRolieDoublePoly.thname] = TheoryRolieDoublePoly
         self.theories[TheoryGoPolyStrand.thname] = TheoryGoPolyStrand
-        self.theories[TheorySimple.thname] = TheorySimple
+        self.theories[TheorySmoothPolyStrand.thname] = TheorySmoothPolyStrand
         #self.theories[TheoryBobNLVE.thname] = TheoryBobNLVE
         #self.theories[TheoryPETS.thname] = TheoryPETS
         #self.theories[TheorySCCR.thname] = TheorySCCR
@@ -360,29 +360,10 @@ class BaseApplicationCrystal:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 2])
-        return x, y, True
-    
-    def viewNdotLinLog(self, dt, file_parameters):
-        """Nucleation rate as a function of time on log axis :math:`\\dot{N}(t)` vs time :math:`t` (x-axis on log scale by default)
-        """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 2]
         return x, y, True
-
     
     def viewNt(self, dt, file_parameters):
-        """Nucleation density as a function of time on log axis :math:`N(t)` vs time :math:`t` (x-axis on log scale by default)
-        """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 4])
-        return x, y, True
-
-    def viewNtLinLog(self, dt, file_parameters):
         """Nucleation density as a function of time on log axis :math:`N(t)` vs time :math:`t` (x-axis on log scale by default)
         """
         x = np.zeros((dt.num_rows, 1))
@@ -397,18 +378,8 @@ class BaseApplicationCrystal:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 3])
-        return x, y, True
-    
-    def viewphiXLinLog(self, dt, file_parameters):
-        """Crystal fraction as a function of time on log axis :math:`\\phi_X(t)` vs time :math:`t` (x-axis on log scale by default)
-        """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 3]
         return x, y, True
-    
     
     def viewLogSigmaTime(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`
@@ -469,7 +440,7 @@ class BaseApplicationCrystal:
         return x, y, True
 
     def view_steadyNuc(self, dt, file_parameters):
-        """ :math:`\\N_dot(t_{\\to\\infty})` vs flow rate
+        """ :math:`\\dot{N}(t_{\\to\\infty})` vs flow rate
         """
 
         try:
