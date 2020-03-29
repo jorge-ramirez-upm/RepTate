@@ -40,7 +40,7 @@ import sys
 import numpy as np
 from CmdBase import CmdBase, CmdMode
 from DataTable import DataTable
-from Parameter import Parameter, ParameterType, ShiftType, OptType
+from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QComboBox, QSpinBox, QAction, QStyle, QMessageBox, QFileDialog

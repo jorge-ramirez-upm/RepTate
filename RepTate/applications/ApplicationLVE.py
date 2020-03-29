@@ -95,7 +95,7 @@ class BaseApplicationLVE:
         from TheoryBobLVE import TheoryBobLVE
         from TheoryRDPLVE import TheoryRDPLVE
         from TheoryStickyReptation import TheoryStickyReptation
-		from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesFrequency        
+        from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesFrequency        
         super().__init__(name, parent)
 
         # VIEWS
