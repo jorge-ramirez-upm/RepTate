@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: RepTate",
+            "name": "RepTate",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/RepTate.py",
@@ -13,25 +13,12 @@
             "args": ["-s","data/LAOS/GiesekusSimulation-omega01p00-gam05p000.laos"]
         },
         {
-            "name": "Python: Current File (Integrated Terminal)",
+            "name": "RepTateCL",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: Module",
-            "type": "python",
-            "request": "launch",
-            "module": "RepTate",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: Current File (External Terminal)",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "externalTerminal"
+            "program": "${workspaceFolder}/RepTateCL.py",
+            "console": "integratedTerminal",
+            "args": ["data/LAOS/GiesekusSimulation-omega01p00-gam05p000.laos"]
         }
     ]
 }

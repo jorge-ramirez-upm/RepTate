@@ -96,6 +96,7 @@ def start_RepTate(argv):
     parser = argparse.ArgumentParser(
         description='RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.',
         epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
+    parser.add_argument('-s', '--single', help='Run Reptate as a single thread application', action='store_true')
     parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
     parser.add_argument('-b', '--batch', help='Run in batch mode (no graphics)', action='store_true')
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
@@ -117,6 +118,7 @@ def start_RepTate(argv):
     app = ApplicationManager()
 
     # Handle files & open apps accordingly
+    CmdBase.calcmode = CalcMode.singlethread # avoid troubles when loading multiple apps/files/theories
     d = {app.extension: app.appname for app in  list(app.available_applications.values())}
     for k in dictfiles.keys():
         if (k in d.keys()):
@@ -131,6 +133,28 @@ def start_RepTate(argv):
             #app.applications[dsname].datasets[dsname].do_plot()
         else:
             print("File type %s cannot be opened"%k)
+    # set the calmode back
+    if args.single:
+        CmdBase.calcmode = CalcMode.singlethread
+    else:
+        CmdBase.calcmode = CalcMode.multithread
+
+    def my_excepthook(type, value, tb):
+        """Catch exceptions and print error message. Open email client to report bug to devlopers"""
+        tb_msg = ''
+        for e in traceback.format_tb(tb):
+            tb_msg += str(e)
+        tb_msg += "%s: %s\n" % (type.__name__, str(value))
+        print(tb_msg)
+        msg = 'Sorry, something went wrong:\n \"%s: %s\".\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?' % (type.__name__, str(value))
+        ans = QMessageBox.critical(ex, 'Critical Error', msg, QMessageBox.Yes | QMessageBox.No )
+        if ans == QMessageBox.Yes:
+            address = "reptate.rheology@gmail.com"
+            subject = "Something went wrong"
+            body = "%s\nIf you can, please describe below what you were doing with RepTate when the error happened (apps and theories or tools open if any) and send the message\nPlease, do NOT include confidential information\n%s\nError Traceback:\n %s" % ("-"*60, "-"*60 + "\n"*10 + "-"*60,  tb_msg)
+            QDesktopServices.openUrl(QUrl("mailto:?to=%s&subject=%s&body=%s" % (address, subject, body), QUrl.TolerantMode))
+            
+    sys.excepthook = my_excepthook
 
     sys.exit(app.cmdloop())
 
