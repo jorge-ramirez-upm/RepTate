@@ -101,7 +101,20 @@
 <span class="sd">the data graphically.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
 
+<div class="viewcode-block" id="ViewMode"><a class="viewcode-back" href="../developers/CodeCoreCL.html#View.ViewMode">[docs]</a><span class="k">class</span> <span class="nc">ViewMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Defines how to show the experimental/theoretical data view</span>
+<span class="sd">    TO BE DONE...</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters can be:</span>
+<span class="sd">        - symbol: Show symbols (default for experimental data -- files in the dataset)</span>
+<span class="sd">        - line: Show lines (default for theories)</span>
+<span class="sd">        - bar: Show bars </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">symbol</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="mi">2</span></div>
 
 <div class="viewcode-block" id="View"><a class="viewcode-back" href="../developers/CodeCoreCL.html#View.View">[docs]</a><span class="k">class</span> <span class="nc">View</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Abstract class to describe a view</span>
@@ -124,7 +137,9 @@
                  <span class="n">inverse_view_proc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">with_thline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">filled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">filled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">viewmode_data</span><span class="o">=</span><span class="n">ViewMode</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span>
+                 <span class="n">viewmode_theory</span><span class="o">=</span><span class="n">ViewMode</span><span class="o">.</span><span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
 <span class="sd">        </span>
@@ -159,7 +174,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">snames</span> <span class="o">=</span> <span class="n">snames</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">with_thline</span> <span class="o">=</span> <span class="n">with_thline</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="o">=</span> <span class="n">filled</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="o">=</span> <span class="n">filled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewmode_data</span><span class="o">=</span><span class="n">viewmode_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewmode_theory</span><span class="o">=</span><span class="n">viewmode_theory</span></div>
 </pre></div>
 
           </div>

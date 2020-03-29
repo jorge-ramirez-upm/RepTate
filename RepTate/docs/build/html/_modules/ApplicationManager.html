@@ -105,6 +105,8 @@
 <span class="c1">#import logging.handlers</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">readline</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="k">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
 <span class="kn">from</span> <span class="nn">ApplicationTTS</span> <span class="k">import</span> <span class="n">ApplicationTTS</span>
@@ -505,7 +507,27 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
 
     <span class="n">do_EOF</span> <span class="o">=</span> <span class="n">do_quit</span>
-    <span class="n">do_up</span> <span class="o">=</span> <span class="n">do_quit</span></div>
+    <span class="n">do_up</span> <span class="o">=</span> <span class="n">do_quit</span>
+
+<div class="viewcode-block" id="ApplicationManager.check_version"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.check_version">[docs]</a>    <span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://api.github.com/repos/jorge-ramirez-upm/RepTate/releases&#39;</span>
+        <span class="n">releasedata</span> <span class="o">=</span> <span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
+        <span class="n">parsed_json</span> <span class="o">=</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">releasedata</span><span class="p">))</span>
+        <span class="n">release_dict</span><span class="o">=</span><span class="n">parsed_json</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Get the latest release</span>
+        <span class="n">tag</span><span class="o">=</span><span class="n">release_dict</span><span class="p">[</span><span class="s1">&#39;tag_name&#39;</span><span class="p">]</span>
+        <span class="n">version_github</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">version_current</span><span class="o">=</span><span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span>
+        <span class="n">newversion</span><span class="o">=</span><span class="n">version_github</span><span class="o">&gt;</span><span class="n">version_current</span>
+        <span class="k">return</span> <span class="n">newversion</span><span class="p">,</span> <span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span></div>
+
+<div class="viewcode-block" id="ApplicationManager.do_check_version"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_check_version">[docs]</a>    <span class="k">def</span> <span class="nf">do_check_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="n">newversion</span><span class="p">,</span> <span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_version</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current Version: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">version_current</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Version on Github: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">version_github</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">newversion</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The version of RepTate on Github (</span><span class="si">%s</span><span class="s2">) is more recent than the one you are running (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span><span class="p">))</span></div></div>
+
 </pre></div>
 
           </div>

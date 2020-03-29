@@ -584,6 +584,11 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="ApplicationManager.ApplicationManager.check_version">
+<code class="sig-name descname">check_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.check_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="ApplicationManager.ApplicationManager.complete_delete">
 <code class="sig-name descname">complete_delete</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">line</em>, <em class="sig-param">begidx</em>, <em class="sig-param">endidx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.complete_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.complete_delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Complete delete application command</p>
@@ -697,6 +702,11 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="ApplicationManager.ApplicationManager.do_check_version">
+<code class="sig-name descname">do_check_version</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_check_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_copymodes">
@@ -2645,6 +2655,36 @@ sort Mw [,reverse]</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="Theory.ErrorCalculationMethod">
+<em class="property">class </em><code class="sig-prename descclassname">Theory.</code><code class="sig-name descname">ErrorCalculationMethod</code><a class="reference internal" href="../_modules/Theory.html#ErrorCalculationMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.ErrorCalculationMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Method to determine the error of a theory calculation.</p>
+<dl class="simple">
+<dt>Options are:</dt><dd><ul class="simple">
+<li><p>View1: Use current view number 1 in the application.</p></li>
+<li><p>RawData: Use the data table as defined by the application.</p></li>
+<li><p>AllViews: Use all active views.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Theory.ErrorCalculationMethod.AllViews">
+<code class="sig-name descname">AllViews</code><em class="property"> = 2</em><a class="headerlink" href="#Theory.ErrorCalculationMethod.AllViews" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Theory.ErrorCalculationMethod.RawData">
+<code class="sig-name descname">RawData</code><em class="property"> = 1</em><a class="headerlink" href="#Theory.ErrorCalculationMethod.RawData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Theory.ErrorCalculationMethod.View1">
+<code class="sig-name descname">View1</code><em class="property"> = 0</em><a class="headerlink" href="#Theory.ErrorCalculationMethod.View1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="Theory.MLStripper">
 <em class="property">class </em><code class="sig-prename descclassname">Theory.</code><code class="sig-name descname">MLStripper</code><a class="reference internal" href="../_modules/Theory.html#MLStripper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.MLStripper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">html.parser.HTMLParser</span></code></p>
@@ -3211,6 +3251,11 @@ before execution (for example, variable substitution) do it here.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Theory.Theory.setup_default_error_calculation_options">
+<code class="sig-name descname">setup_default_error_calculation_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.setup_default_error_calculation_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.setup_default_error_calculation_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Theory.Theory.setup_default_minimization_options">
 <code class="sig-name descname">setup_default_minimization_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Theory.html#Theory.setup_default_minimization_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Theory.Theory.setup_default_minimization_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3267,10 +3312,41 @@ before execution (for example, variable substitution) do it here.</p>
 the data graphically.</p>
 <dl class="class">
 <dt id="View.View">
-<em class="property">class </em><code class="sig-prename descclassname">View.</code><code class="sig-name descname">View</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">description=''</em>, <em class="sig-param">x_label=''</em>, <em class="sig-param">y_label=''</em>, <em class="sig-param">x_units=''</em>, <em class="sig-param">y_units=''</em>, <em class="sig-param">log_x=False</em>, <em class="sig-param">log_y=False</em>, <em class="sig-param">view_proc=None</em>, <em class="sig-param">n=1</em>, <em class="sig-param">snames=[]</em>, <em class="sig-param">inverse_view_proc=None</em>, <em class="sig-param">index=0</em>, <em class="sig-param">with_thline=True</em>, <em class="sig-param">filled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/View.html#View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#View.View" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">View.</code><code class="sig-name descname">View</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">description=''</em>, <em class="sig-param">x_label=''</em>, <em class="sig-param">y_label=''</em>, <em class="sig-param">x_units=''</em>, <em class="sig-param">y_units=''</em>, <em class="sig-param">log_x=False</em>, <em class="sig-param">log_y=False</em>, <em class="sig-param">view_proc=None</em>, <em class="sig-param">n=1</em>, <em class="sig-param">snames=[]</em>, <em class="sig-param">inverse_view_proc=None</em>, <em class="sig-param">index=0</em>, <em class="sig-param">with_thline=True</em>, <em class="sig-param">filled=False</em>, <em class="sig-param">viewmode_data=&lt;ViewMode.symbol: 0&gt;</em>, <em class="sig-param">viewmode_theory=&lt;ViewMode.line: 1&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/View.html#View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#View.View" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Abstract class to describe a view</p>
 <p>[description]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="View.ViewMode">
+<em class="property">class </em><code class="sig-prename descclassname">View.</code><code class="sig-name descname">ViewMode</code><a class="reference internal" href="../_modules/View.html#ViewMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#View.ViewMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Defines how to show the experimental/theoretical data view
+TO BE DONE…</p>
+<dl class="simple">
+<dt>Parameters can be:</dt><dd><ul class="simple">
+<li><p>symbol: Show symbols (default for experimental data – files in the dataset)</p></li>
+<li><p>line: Show lines (default for theories)</p></li>
+<li><p>bar: Show bars</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="View.ViewMode.bar">
+<code class="sig-name descname">bar</code><em class="property"> = 2</em><a class="headerlink" href="#View.ViewMode.bar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="View.ViewMode.line">
+<code class="sig-name descname">line</code><em class="property"> = 1</em><a class="headerlink" href="#View.ViewMode.line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="View.ViewMode.symbol">
+<code class="sig-name descname">symbol</code><em class="property"> = 0</em><a class="headerlink" href="#View.ViewMode.symbol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

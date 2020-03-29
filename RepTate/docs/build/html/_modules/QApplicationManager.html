@@ -168,7 +168,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionReact</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDielectric</span><span class="p">)</span>
         <span class="c1"># self.toolBarApps.addAction(self.actionDynamicStructureFactor)</span>
-        <span class="c1"># self.toolBarApps.addAction(self.actionLAOS)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLAOS</span><span class="p">)</span>
 
         <span class="c1">#help button</span>
         <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icons8-user-manual.png&#39;</span><span class="p">)</span>
@@ -195,6 +195,8 @@
         <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAboutMatplotlib</span><span class="p">)</span>
         <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAboutNumpy</span><span class="p">)</span>        
         <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAboutScipy</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCheckRepTateVersion</span><span class="p">)</span>
         <span class="n">tbut</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarHelpAbout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tbut</span><span class="p">)</span>
         
@@ -246,7 +248,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">actionSANS</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;SANS&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionReact</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;React&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionDielectric</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;Dielectric&#39;</span><span class="p">))</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionLAOS</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;LAOS&#39;</span><span class="p">))</span>
         <span class="c1"># self.actionLAOS.triggered.connect(lambda: self.handle_app_coming_soon(&#39;LAOS&#39;))</span>
         <span class="c1"># self.actionDynamicStructureFactor.triggered.connect(lambda: self.handle_app_coming_soon(&#39;DynamicStructureFactor&#39;))</span>
 
@@ -269,6 +271,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAboutMatplotlib</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_about_matplotlib</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAboutNumpy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_about_numpy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAboutScipy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_about_scipy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionCheckRepTateVersion</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_check_RepTate_version</span><span class="p">)</span>
 
 
         <span class="c1">#self.add_save_load_buttons()</span>
@@ -327,6 +330,19 @@
         <span class="sd">&quot;&quot;&quot;Show scipy web site&quot;&quot;&quot;</span>
         <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromUserInput</span><span class="p">((</span><span class="s1">&#39;https://scipy.org/&#39;</span><span class="p">)))</span></div>
         
+<div class="viewcode-block" id="QApplicationManager.handle_check_RepTate_version"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_check_RepTate_version">[docs]</a>    <span class="k">def</span> <span class="nf">handle_check_RepTate_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Query Github for the latest RepTate release&quot;&quot;&quot;</span>
+        <span class="n">newversion</span><span class="p">,</span> <span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_version</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">newversion</span><span class="p">:</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;New RepTate version found&#39;</span><span class="p">,</span> 
+                <span class="s2">&quot;The version of RepTate on Github (</span><span class="si">%s</span><span class="s2">) is more recent than the one you are running (</span><span class="si">%s</span><span class="s2">).Do you want to check the new features?&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span><span class="p">),</span> 
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="o">|</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
+                <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromUserInput</span><span class="p">((</span><span class="s1">&#39;https://github.com/jorge-ramirez-upm/RepTate/releases&#39;</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;You are running the latest version of RepTate&#39;</span><span class="p">,</span> 
+                <span class="s2">&quot;The version of RepTate you are running (</span><span class="si">%s</span><span class="s2">) is up to date with respect to the version on Github (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">version_current</span><span class="p">,</span> <span class="n">version_github</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="QApplicationManager.list_theories_Maxwell"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.list_theories_Maxwell">[docs]</a>    <span class="k">def</span> <span class="nf">list_theories_Maxwell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th_exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Redefinition for the GUI mode that lists the tab names.</span>
 <span class="sd">        List the theories in the current RepTate instance that provide and need</span>

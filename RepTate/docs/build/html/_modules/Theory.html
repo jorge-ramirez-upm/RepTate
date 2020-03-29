@@ -154,6 +154,18 @@
     <span class="n">SHGO</span><span class="o">=</span><span class="mi">4</span>
     <span class="n">bruteforce</span><span class="o">=</span><span class="mi">5</span></div>
 
+<div class="viewcode-block" id="ErrorCalculationMethod"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.ErrorCalculationMethod">[docs]</a><span class="k">class</span> <span class="nc">ErrorCalculationMethod</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Method to determine the error of a theory calculation.</span>
+<span class="sd">    </span>
+<span class="sd">    Options are:</span>
+<span class="sd">        - View1: Use current view number 1 in the application.</span>
+<span class="sd">        - RawData: Use the data table as defined by the application.</span>
+<span class="sd">        - AllViews: Use all active views.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">View1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">RawData</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">AllViews</span> <span class="o">=</span> <span class="mi">2</span></div>
+
 <div class="viewcode-block" id="EndComputationRequested"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.EndComputationRequested">[docs]</a><span class="k">class</span> <span class="nc">EndComputationRequested</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Exception class to end computations&quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
@@ -272,6 +284,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_yrange_visible</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_default_minimization_options</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_default_error_calculation_options</span><span class="p">()</span>
 
         <span class="c1"># Pre-create as many tables as files in the dataset</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">parent_dataset</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
@@ -342,6 +355,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">SHGOinfty_constraints</span><span class="o">=</span><span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SHGOsampling_method</span><span class="o">=</span><span class="s1">&#39;simplicial&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BruteNs</span><span class="o">=</span><span class="mi">20</span></div>
+
+<div class="viewcode-block" id="Theory.setup_default_error_calculation_options"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.setup_default_error_calculation_options">[docs]</a>    <span class="k">def</span> <span class="nf">setup_default_error_calculation_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errormethod</span> <span class="o">=</span> <span class="n">ErrorCalculationMethod</span><span class="o">.</span><span class="n">View1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalizebydata</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Theory.destructor"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Theory.Theory.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
@@ -518,7 +535,10 @@
                     <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">yexp</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">xth</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">yth</span><span class="p">))</span>
             <span class="n">yexp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">conditionx</span> <span class="o">*</span> <span class="n">conditiony</span> <span class="o">*</span> <span class="n">conditionnaninf</span><span class="p">,</span> <span class="n">yexp</span><span class="p">)</span>
             <span class="n">yth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">conditionx</span> <span class="o">*</span> <span class="n">conditiony</span> <span class="o">*</span> <span class="n">conditionnaninf</span><span class="p">,</span> <span class="n">yth</span><span class="p">)</span>
-            <span class="n">f_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">yth</span> <span class="o">-</span> <span class="n">yexp</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizebydata</span><span class="p">:</span>
+                <span class="n">f_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(((</span><span class="n">yth</span> <span class="o">-</span> <span class="n">yexp</span><span class="p">)</span><span class="o">/</span><span class="n">yexp</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">yth</span> <span class="o">-</span> <span class="n">yexp</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">npt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">yth</span><span class="p">)</span>
             <span class="n">total_error</span> <span class="o">+=</span> <span class="n">f_error</span> <span class="o">*</span> <span class="n">npt</span>
             <span class="n">npoints</span> <span class="o">+=</span> <span class="n">npt</span>
@@ -578,7 +598,10 @@
 <span class="sd">           returns the sum of the squares of the residuals</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># NEED TO RECOVER THE VECTOR y THAT WE CONSTRUCTED DURING FUNCTION FIT</span>
-        <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fittingy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fittingx</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizebydata</span><span class="p">:</span>
+            <span class="n">residuals</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fittingy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fittingx</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">fittingy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fittingy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fittingx</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span>
         <span class="n">fres</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">residuals</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fres</span></div>
 

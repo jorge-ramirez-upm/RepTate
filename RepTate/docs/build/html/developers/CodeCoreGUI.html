@@ -173,6 +173,12 @@ ApplicationManager.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QApplicationManager.QApplicationManager.handle_check_RepTate_version">
+<code class="sig-name descname">handle_check_RepTate_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_check_RepTate_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_check_RepTate_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query Github for the latest RepTate release</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_doubleClickTab">
 <code class="sig-name descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit Application name, tab only, the dictinary key remains unchanged</p>
@@ -329,6 +335,30 @@ It is the GUI counterpart of Application.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="QApplicationWindow.AddFileFunction">
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationWindow.</code><code class="sig-name descname">AddFileFunction</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">filetype=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddFileFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddFileFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
+<dl class="method">
+<dt id="QApplicationWindow.AddFileFunction.createColumnsGroupBox">
+<code class="sig-name descname">createColumnsGroupBox</code><span class="sig-paren">(</span><em class="sig-param">filetype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddFileFunction.createColumnsGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddFileFunction.createColumnsGroupBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a form to set the new values the file columns</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.AddFileFunction.createLabelGroupBox">
+<code class="sig-name descname">createLabelGroupBox</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddFileFunction.createLabelGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddFileFunction.createLabelGroupBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the range and scale (linear or logarithmic) of the label x</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.AddFileFunction.createParametersGroupBox">
+<code class="sig-name descname">createParametersGroupBox</code><span class="sig-paren">(</span><em class="sig-param">filetype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#AddFileFunction.createParametersGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.AddFileFunction.createParametersGroupBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a form to set the new values of important file parameters</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="QApplicationWindow.EditAnnotation">
 <em class="property">class </em><code class="sig-prename descclassname">QApplicationWindow.</code><code class="sig-name descname">EditAnnotation</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">annotation=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#EditAnnotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.EditAnnotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Dialog</span></code></p>
@@ -367,6 +397,12 @@ RGB format in the dataset legend info.</p>
 <dt id="QApplicationWindow.QApplicationWindow.addDummyFiles">
 <code class="sig-name descname">addDummyFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.addDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.addDummyFiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add dummy files to dataset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationWindow.QApplicationWindow.addFileFunction">
+<code class="sig-name descname">addFileFunction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.addFileFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.addFileFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a File to the current DataSet using a mathematical expression</p>
 </dd></dl>
 
 <dl class="method">
@@ -984,6 +1020,11 @@ with filled or empty markers, depending on the user’s choice</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QDataSet.QDataSet.handle_error_calculation_options">
+<code class="sig-name descname">handle_error_calculation_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_error_calculation_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_error_calculation_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="QDataSet.QDataSet.handle_fitting_options">
 <code class="sig-name descname">handle_fitting_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QDataSet.html#QDataSet.handle_fitting_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QDataSet.QDataSet.handle_fitting_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1308,7 +1349,7 @@ Two tabs can share the same name</p>
 <dt id="QTheory.QTheory.onTreeWidgetItemDoubleClicked">
 <code class="sig-name descname">onTreeWidgetItemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.onTreeWidgetItemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.onTreeWidgetItemDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start editing text when a table cell is double clicked
-Or edit all parameters dialog if parameter name is double clicked</p>
+Or edit all parameters fittingoptionsdialog if parameter name is double clicked</p>
 <p>[description]</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
@@ -1328,6 +1369,11 @@ Or edit all parameters dialog if parameter name is double clicked</p>
 <dl class="method">
 <dt id="QTheory.QTheory.paste_parameters">
 <code class="sig-name descname">paste_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.paste_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.paste_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QTheory.QTheory.populate_default_error_calculation_options">
+<code class="sig-name descname">populate_default_error_calculation_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QTheory.html#QTheory.populate_default_error_calculation_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QTheory.QTheory.populate_default_error_calculation_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

@@ -1343,6 +1343,11 @@ G(t) &amp; = &amp; \sum_{i=1}^{n_{modes}} G_i \exp (-t/\tau_i)
 </dd></dl>
 
 <dl class="method">
+<dt id="TheoryRoliePoly.BaseTheoryRoliePoly.RoliePolyLAOS">
+<code class="sig-name descname">RoliePolyLAOS</code><span class="sig-paren">(</span><em class="sig-param">f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#BaseTheoryRoliePoly.RoliePolyLAOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.BaseTheoryRoliePoly.RoliePolyLAOS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="TheoryRoliePoly.BaseTheoryRoliePoly.calculate_fene">
 <code class="sig-name descname">calculate_fene</code><span class="sig-paren">(</span><em class="sig-param">l_square</em>, <em class="sig-param">lmax</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#BaseTheoryRoliePoly.calculate_fene"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.BaseTheoryRoliePoly.calculate_fene" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate finite extensibility function value</p>
@@ -1466,6 +1471,22 @@ with stretching and finite extensibility if selected</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shearLAOS">
+<code class="sig-name descname">sigmadot_shearLAOS</code><span class="sig-paren">(</span><em class="sig-param">sigma</em>, <em class="sig-param">t</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#BaseTheoryRoliePoly.sigmadot_shearLAOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shearLAOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rolie-Poly differential equation under <em>shear</em> flow
+with stretching and finite extensibility if selected</p>
+<p>[description]</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>sigma {array} – vector of state variables, sigma = [sxx, syy, sxy]</p></li>
+<li><p>t {float} – time</p></li>
+<li><p>p {array} – vector of the parameters, p = [lmax, tauD, tauR, beta, delta, g0, w]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear_nostretch">
 <code class="sig-name descname">sigmadot_shear_nostretch</code><span class="sig-paren">(</span><em class="sig-param">sigma</em>, <em class="sig-param">t</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#BaseTheoryRoliePoly.sigmadot_shear_nostretch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear_nostretch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rolie-Poly differential equation under shear flow, without stretching</p>
@@ -1475,6 +1496,21 @@ with stretching and finite extensibility if selected</p>
 <li><p>sigma {array} – vector of state variables, sigma = [sxx, syy, sxy]</p></li>
 <li><p>t {float} – time</p></li>
 <li><p>p {array} – vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear_nostretchLAOS">
+<code class="sig-name descname">sigmadot_shear_nostretchLAOS</code><span class="sig-paren">(</span><em class="sig-param">sigma</em>, <em class="sig-param">t</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/TheoryRoliePoly.html#BaseTheoryRoliePoly.sigmadot_shear_nostretchLAOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear_nostretchLAOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rolie-Poly differential equation under shear flow, without stretching</p>
+<p>[description]</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>sigma {array} – vector of state variables, sigma = [sxx, syy, sxy]</p></li>
+<li><p>t {float} – time</p></li>
+<li><p>p {array} – vector of the parameters, p = [lmax, tauD, tauR, beta, delta, g0, w]</p></li>
 </ul>
 </dd>
 </dl>

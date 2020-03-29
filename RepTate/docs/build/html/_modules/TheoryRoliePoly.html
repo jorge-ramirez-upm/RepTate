@@ -118,6 +118,7 @@
 <span class="kn">import</span> <span class="nn">Version</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">EndComputationRequested</span>
+<span class="kn">from</span> <span class="nn">ApplicationLAOS</span> <span class="k">import</span> <span class="n">GUIApplicationLAOS</span>
 
 <div class="viewcode-block" id="FlowMode"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.FlowMode">[docs]</a><span class="k">class</span> <span class="nc">FlowMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Defines the flow geometry used</span>
@@ -293,7 +294,7 @@
                 <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Rouse time of mode </span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span>
                 <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
                 <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span>
-                <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">min_value</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">view_LVEenvelope</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">auxseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -503,6 +504,66 @@
             <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="n">aux1</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span>
         <span class="p">]</span></div>
 
+<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_shearLAOS"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shearLAOS">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_shearLAOS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rolie-Poly differential equation under *shear* flow</span>
+<span class="sd">        with stretching and finite extensibility if selected</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]</span>
+<span class="sd">            - t {float} -- time</span>
+<span class="sd">            - p {array} -- vector of the parameters, p = [lmax, tauD, tauR, beta, delta, g0, w]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
+        <span class="n">sxx</span><span class="p">,</span> <span class="n">syy</span><span class="p">,</span> <span class="n">sxy</span> <span class="o">=</span> <span class="n">sigma</span>
+        <span class="n">lmax</span><span class="p">,</span> <span class="n">tauD</span><span class="p">,</span> <span class="n">tauR</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">g0</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">gammadot</span> <span class="o">=</span> <span class="n">g0</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># Create the vector with the time derivative of sigma</span>
+        <span class="n">trace_sigma</span> <span class="o">=</span> <span class="n">sxx</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">syy</span>
+        <span class="n">l_sq</span> <span class="o">=</span> <span class="n">trace_sigma</span> <span class="o">/</span> <span class="mf">3.0</span>  <span class="c1"># stretch^2</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_fene</span> <span class="o">==</span> <span class="n">FeneMode</span><span class="o">.</span><span class="n">with_fene</span><span class="p">:</span>
+            <span class="n">fene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_fene</span><span class="p">(</span><span class="n">l_sq</span><span class="p">,</span> <span class="n">lmax</span><span class="p">)</span>
+            <span class="n">aux1</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">l_sq</span><span class="p">))</span> <span class="o">/</span> <span class="n">tauR</span> <span class="o">*</span> <span class="n">fene</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">aux1</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">l_sq</span><span class="p">))</span> <span class="o">/</span> <span class="n">tauR</span>
+        <span class="n">aux2</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">l_sq</span><span class="o">**</span><span class="n">delta</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">gammadot</span> <span class="o">*</span> <span class="n">sxy</span> <span class="o">-</span> <span class="p">(</span><span class="n">sxx</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="n">aux1</span> <span class="o">*</span> <span class="p">(</span><span class="n">sxx</span> <span class="o">+</span> <span class="n">aux2</span> <span class="o">*</span>
+                                                             <span class="p">(</span><span class="n">sxx</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)),</span>
+            <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="n">aux1</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">+</span> <span class="n">aux2</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)),</span>
+            <span class="n">gammadot</span> <span class="o">*</span> <span class="n">syy</span> <span class="o">-</span> <span class="n">sxy</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="n">aux1</span> <span class="o">*</span> <span class="p">(</span><span class="n">sxy</span> <span class="o">+</span> <span class="n">aux2</span> <span class="o">*</span> <span class="n">sxy</span><span class="p">)</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="BaseTheoryRoliePoly.sigmadot_shear_nostretchLAOS"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.sigmadot_shear_nostretchLAOS">[docs]</a>    <span class="k">def</span> <span class="nf">sigmadot_shear_nostretchLAOS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rolie-Poly differential equation under shear flow, without stretching</span>
+<span class="sd">        </span>
+<span class="sd">        [description]</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]</span>
+<span class="sd">            - t {float} -- time</span>
+<span class="sd">            - p {array} -- vector of the parameters, p = [lmax, tauD, tauR, beta, delta, g0, w]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EndComputationRequested</span>
+        <span class="n">sxx</span><span class="p">,</span> <span class="n">syy</span><span class="p">,</span> <span class="n">sxy</span> <span class="o">=</span> <span class="n">sigma</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">tauD</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">g0</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">gammadot</span> <span class="o">=</span> <span class="n">g0</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># Create the vector with the time derivative of sigma</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="mf">2.0</span> <span class="o">*</span> <span class="n">gammadot</span> <span class="o">*</span> <span class="n">sxy</span> <span class="o">-</span>
+            <span class="p">(</span><span class="n">sxx</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">gammadot</span> <span class="o">*</span> <span class="n">sxy</span> <span class="o">*</span> <span class="p">(</span><span class="n">sxx</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span>
+                                                               <span class="p">(</span><span class="n">sxx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="o">-</span><span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">gammadot</span> <span class="o">*</span> <span class="n">sxy</span> <span class="o">*</span> <span class="p">(</span><span class="n">syy</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span>
+                                                                <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">gammadot</span> <span class="o">*</span> <span class="n">syy</span> <span class="o">-</span> <span class="n">sxy</span> <span class="o">/</span> <span class="n">tauD</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">gammadot</span> <span class="o">*</span> <span class="n">sxy</span> <span class="o">*</span>
+            <span class="p">(</span><span class="n">sxy</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">sxy</span><span class="p">)</span>
+        <span class="p">]</span></div>
 <div class="viewcode-block" id="BaseTheoryRoliePoly.calculate_fene"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.calculate_fene">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_fene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l_square</span><span class="p">,</span> <span class="n">lmax</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;calculate finite extensibility function value&quot;&quot;&quot;</span>
         <span class="n">ilm2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">lmax</span> <span class="o">*</span> <span class="n">lmax</span><span class="p">)</span>  <span class="c1"># 1/lambda_max^2</span>
@@ -597,6 +658,74 @@
                     <span class="mf">1.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span>  <span class="c1"># fene array</span>
                 <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">fene_arr</span></div>
 
+<div class="viewcode-block" id="BaseTheoryRoliePoly.RoliePolyLAOS"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.RoliePolyLAOS">[docs]</a>    <span class="k">def</span> <span class="nf">RoliePolyLAOS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_rows</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1">#flow geometry and finite extensibility</span>
+        <span class="n">sigma0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>  <span class="c1"># sxx, syy, sxy</span>
+        <span class="n">pde_nostretchLAOS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmadot_shear_nostretchLAOS</span>
+        <span class="n">pde_stretchLAOS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmadot_shearLAOS</span>
+
+        <span class="c1"># ODE solver parameters</span>
+        <span class="n">abserr</span> <span class="o">=</span> <span class="mf">1.0e-8</span>
+        <span class="n">relerr</span> <span class="o">=</span> <span class="mf">1.0e-6</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">lmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">g0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="s2">&quot;omega&quot;</span><span class="p">])</span>
+        <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">nstretch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nstretch&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">g0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">tauD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">tauR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauR</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">lmax</span><span class="p">,</span> <span class="n">tauD</span><span class="p">,</span> <span class="n">tauR</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">g0</span><span class="p">,</span> <span class="n">w</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nstretch</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">sig</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
+                        <span class="n">pde_stretchLAOS</span><span class="p">,</span>
+                        <span class="n">sigma0</span><span class="p">,</span>
+                        <span class="n">t</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span>
+                        <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span>
+                        <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">EndComputationRequested</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">sig</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
+                        <span class="n">pde_nostretchLAOS</span><span class="p">,</span>
+                        <span class="n">sigma0</span><span class="p">,</span>
+                        <span class="n">t</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">),</span>
+                        <span class="n">atol</span><span class="o">=</span><span class="n">abserr</span><span class="p">,</span>
+                        <span class="n">rtol</span><span class="o">=</span><span class="n">relerr</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">EndComputationRequested</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="n">sxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sig</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">syy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sig</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">sxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sig</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">sxy</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_fene</span> <span class="o">==</span> <span class="n">FeneMode</span><span class="o">.</span><span class="n">with_fene</span><span class="p">:</span>
+                <span class="n">ilm2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">lmax</span> <span class="o">*</span> <span class="n">lmax</span><span class="p">)</span>  <span class="c1"># 1/lambda_max^2</span>
+                <span class="n">l_sq_arr</span> <span class="o">=</span> <span class="p">(</span><span class="n">sxx</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">syy</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span>  <span class="c1"># array lambda^2</span>
+                <span class="n">l2_lm2_arr</span> <span class="o">=</span> <span class="n">l_sq_arr</span> <span class="o">*</span> <span class="n">ilm2</span>  <span class="c1"># array (lambda/lambda_max)^2</span>
+                <span class="n">fene_arr</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">l2_lm2_arr</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">l2_lm2_arr</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="mf">1.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">ilm2</span><span class="p">)</span>  <span class="c1"># fene array</span>
+                <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*=</span> <span class="n">fene_arr</span></div>
+
 <div class="viewcode-block" id="BaseTheoryRoliePoly.set_param_value"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.BaseTheoryRoliePoly.set_param_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_param_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        </span>
@@ -687,20 +816,27 @@
         <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
         <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setPopupMode</span><span class="p">(</span><span class="n">QToolButton</span><span class="o">.</span><span class="n">MenuButtonPopup</span><span class="p">)</span>
-        <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shear_flow_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
-            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icon-shear.png&#39;</span><span class="p">),</span> <span class="s2">&quot;Shear Flow&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">extensional_flow_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
-            <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icon-uext.png&#39;</span><span class="p">),</span>
-            <span class="s2">&quot;Extensional Flow&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">==</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shear_flow_action</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="p">,</span> <span class="n">GUIApplicationLAOS</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setPopupMode</span><span class="p">(</span><span class="n">QToolButton</span><span class="o">.</span><span class="n">MenuButtonPopup</span><span class="p">)</span>
+            <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shear_flow_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
+                <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icon-shear.png&#39;</span><span class="p">),</span> <span class="s2">&quot;Shear Flow&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extensional_flow_action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span>
+                <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/icon-uext.png&#39;</span><span class="p">),</span>
+                <span class="s2">&quot;Extensional Flow&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">==</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shear_flow_action</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensional_flow_action</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+            <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="p">)</span>
+            <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_flow_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">select_shear_flow</span><span class="p">)</span>
+            <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extensional_flow_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">select_extensional_flow</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensional_flow_action</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
-        <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tbutflow</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RoliePolyLAOS</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">tbutmodes</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tbutmodes</span><span class="o">.</span><span class="n">setPopupMode</span><span class="p">(</span><span class="n">QToolButton</span><span class="o">.</span><span class="n">MenuButtonPopup</span><span class="p">)</span>
@@ -748,10 +884,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">thToolsLayout</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
 
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_flow_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">select_shear_flow</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extensional_flow_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">select_extensional_flow</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_modes_reptate</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit_modes_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
@@ -870,33 +1002,34 @@
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data_table_tmp</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">)</span>
-        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="mi">100</span>
-        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="p">,</span> <span class="n">GUIApplicationLAOS</span><span class="p">):</span>
+            <span class="n">data_table_tmp</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">)</span>
+            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="mi">100</span>
+            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
-        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">times</span>
-        <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">fparamaux</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">fparamaux</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-8</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
-                <span class="k">break</span>
-            <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-            <span class="n">tauD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">fparamaux</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">tauD</span> <span class="o">*</span> <span class="p">(</span>
-                <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">times</span> <span class="o">/</span> <span class="n">tauD</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">==</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">uext</span><span class="p">:</span>
-            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">3.0</span>
-        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">data_table_tmp</span><span class="p">,</span> <span class="n">fparamaux</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-            <span class="k">return</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span></div>
+            <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">times</span>
+            <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">fparamaux</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">fparamaux</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-8</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_theory_flag</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">tauD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">fparamaux</span><span class="p">[</span><span class="s2">&quot;gdot&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">tauD</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">times</span> <span class="o">/</span> <span class="n">tauD</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">==</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">uext</span><span class="p">:</span>
+                <span class="n">data_table_tmp</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">3.0</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">current_view</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">view_proc</span><span class="p">(</span><span class="n">data_table_tmp</span><span class="p">,</span> <span class="n">fparamaux</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LVEenvelopeseries</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="GUITheoryRoliePoly.select_shear_flow"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryRoliePoly.GUITheoryRoliePoly.select_shear_flow">[docs]</a>    <span class="k">def</span> <span class="nf">select_shear_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">=</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span>
