@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Core classes (Command Line) &#8212; RepTate 0.9.7 20200117 documentation</title>
+    <title>Core classes (Command Line) &#8212; RepTate 1.0.0 20200330 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="code.html" title="Navigate the source Code of RepTate"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
@@ -650,7 +650,7 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 
 <dl class="attribute">
 <dt id="ApplicationManager.ApplicationManager.date">
-<code class="sig-name descname">date</code><em class="property"> = '20200117'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.date" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">date</code><em class="property"> = '20200330'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.date" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -669,44 +669,27 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_EOF">
 <code class="sig-name descname">do_EOF</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_EOF" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exit from the application</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><p>args {[type]} – [description]</p>
-</dd>
-</dl>
+<dd><p>Exit from the application.
+args {[type]} – ???</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_about">
 <code class="sig-name descname">do_about</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_about" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show about info</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Show about info.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_available">
 <code class="sig-name descname">do_available</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_available" title="Permalink to this definition">¶</a></dt>
-<dd><p>List available applications</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>List all the available applications in RepTate.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_check_version">
 <code class="sig-name descname">do_check_version</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_check_version" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Check if there is a new version of RepTate on Github.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_copymodes">
@@ -716,7 +699,7 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
+<li><p>line {str} – Origin (App.Dataset.Theory) Destination (App.Dataset.Theory)</p></li>
 </ul>
 </dd>
 </dl>
@@ -725,11 +708,10 @@ copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj</p>
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_delete">
 <code class="sig-name descname">do_delete</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete an open application</p>
-<p>[description]</p>
+<dd><p>Delete an open application. By hitting TAB, all the currently open applications are shown.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>name {[type]} – [description]</p></li>
+<li><p>name {str} – Application to delete</p></li>
 </ul>
 </dd>
 </dl>
@@ -738,27 +720,13 @@ copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj</p>
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_info">
 <code class="sig-name descname">do_info</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show info about the current RepTate session</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Show info about the current RepTate session.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_list">
 <code class="sig-name descname">do_list</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>List open applications</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>List all the currently open applications.</p>
 </dd></dl>
 
 <dl class="method">
@@ -766,23 +734,15 @@ copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj</p>
 <code class="sig-name descname">do_list_theories_Maxwell</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_list_theories_Maxwell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_list_theories_Maxwell" title="Permalink to this definition">¶</a></dt>
 <dd><p>List the theories in the current RepTate instance that provide
 Maxwell modes</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_new">
 <code class="sig-name descname">do_new</code><span class="sig-paren">(</span><em class="sig-param">appname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_new" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create new application</p>
-<p>[description]</p>
+<dd><p>Create a new application and open it.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>appname {[type]} – [description]</p></li>
+<li><p>name {str} – Application to open (MWD, LVE, TTS, etc)</p></li>
 </ul>
 </dd>
 </dl>
@@ -791,22 +751,17 @@ Maxwell modes</p>
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_quit">
 <code class="sig-name descname">do_quit</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_quit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_quit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exit from the application</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><p>args {[type]} – [description]</p>
-</dd>
-</dl>
+<dd><p>Exit from the application.
+args {[type]} – ???</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_switch">
 <code class="sig-name descname">do_switch</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.do_switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_switch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set focus to an open application</p>
-<p>[description]</p>
+<dd><p>Set focus to an open application. By hitting TAB, all the currently open applications are shown.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>name {[type]} – [description]</p></li>
+<li><p>name {str} – Name of the applicaton to switch the focus to.</p></li>
 </ul>
 </dd>
 </dl>
@@ -815,12 +770,8 @@ Maxwell modes</p>
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.do_up">
 <code class="sig-name descname">do_up</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#ApplicationManager.ApplicationManager.do_up" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exit from the application</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><p>args {[type]} – [description]</p>
-</dd>
-</dl>
+<dd><p>Exit from the application.
+args {[type]} – ???</p>
 </dd></dl>
 
 <dl class="method">
@@ -832,7 +783,7 @@ Maxwell modes</p>
 
 <dl class="attribute">
 <dt id="ApplicationManager.ApplicationManager.intro">
-<code class="sig-name descname">intro</code><em class="property"> = 'RepTate Version 0.9.7 - 20200117 command processor\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">intro</code><em class="property"> = 'RepTate Version 1.0.0 - 20200330 command processor\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -865,15 +816,10 @@ Maxwell modes</p>
 <dl class="method">
 <dt id="ApplicationManager.ApplicationManager.new">
 <code class="sig-name descname">new</code><span class="sig-paren">(</span><em class="sig-param">appname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ApplicationManager.html#ApplicationManager.new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ApplicationManager.ApplicationManager.new" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create new application</p>
-<p>[description]</p>
+<dd><p>Create a new application and open it.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>name {[type]} – [description]</p></li>
-</ul>
-</dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>[type] – [description]</p></li>
+<li><p>name {str} – Application to open (MWD, LVE, TTS, etc)</p></li>
 </ul>
 </dd>
 </dl>
@@ -886,7 +832,7 @@ Maxwell modes</p>
 
 <dl class="attribute">
 <dt id="ApplicationManager.ApplicationManager.version">
-<code class="sig-name descname">version</code><em class="property"> = '0.9.7'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.version" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">version</code><em class="property"> = '1.0.0'</em><a class="headerlink" href="#ApplicationManager.ApplicationManager.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -955,40 +901,21 @@ Maxwell modes</p>
 <code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called on an input line when the command prefix is not recognized.
 In that case we execute the line as Python code.</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.do_EOF">
 <code class="sig-name descname">do_EOF</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.do_EOF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.do_EOF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exit Console and Return to Parent or exit</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>args {[type]} – [description]</p></li>
-</ul>
-</dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>[type] – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.do_cd">
 <code class="sig-name descname">do_cd</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.do_cd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.do_cd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change folder</p>
-<p>[description]</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
+<li><p>line {[str} – Folder to change to (.. means upper folder)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1007,7 +934,7 @@ In that case we execute the line as Python code.</p>
 </div></blockquote>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
+<li><p>[line] {str} – cmdline, batch, GUI</p></li>
 </ul>
 </dd>
 </dl>
@@ -1017,75 +944,39 @@ In that case we execute the line as Python code.</p>
 <dt id="CmdBase.CmdBase.do_cwd">
 <code class="sig-name descname">do_cwd</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="headerlink" href="#CmdBase.CmdBase.do_cwd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Print the current folder</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.do_dir">
 <code class="sig-name descname">do_dir</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="headerlink" href="#CmdBase.CmdBase.do_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>List contents of current folder</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>List contents of current folder.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.do_ls">
 <code class="sig-name descname">do_ls</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.do_ls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.do_ls" title="Permalink to this definition">¶</a></dt>
-<dd><p>List contents of current folder</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>List contents of current folder.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.do_pwd">
 <code class="sig-name descname">do_pwd</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.do_pwd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.do_pwd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Print the current folder</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.do_quit">
 <code class="sig-name descname">do_quit</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.do_quit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.do_quit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exit from the application</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>args {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Exit from the application.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.do_shell">
 <code class="sig-name descname">do_shell</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.do_shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.do_shell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run a shell command</p>
-<p>[description]</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[type]} – [description]</p></li>
+<li><p>line {str} – Command to run</p></li>
 </ul>
 </dd>
 </dl>
@@ -1095,24 +986,12 @@ In that case we execute the line as Python code.</p>
 <dt id="CmdBase.CmdBase.do_up">
 <code class="sig-name descname">do_up</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#CmdBase.CmdBase.do_up" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exit Console and Return to Parent or exit</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>args {[type]} – [description]</p></li>
-</ul>
-</dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>[type] – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="CmdBase.CmdBase.emptyline">
 <code class="sig-name descname">emptyline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CmdBase.html#CmdBase.emptyline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CmdBase.CmdBase.emptyline" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dd><p>Called when an empty line is introduced in the prompt.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -3373,7 +3252,7 @@ TO BE DONE…</p>
         <li class="right" >
           <a href="code.html" title="Navigate the source Code of RepTate"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>

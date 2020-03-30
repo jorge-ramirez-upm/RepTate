@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>CmdBase &#8212; RepTate 0.9.7 20200117 documentation</title>
+    <title>CmdBase &#8212; RepTate 1.0.0 20200330 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -168,10 +168,8 @@
 <div class="viewcode-block" id="CmdBase.do_shell"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_shell">[docs]</a>    <span class="k">def</span> <span class="nf">do_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run a shell command</span>
 <span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - line {str} -- Command to run</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;running shell command:&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -180,11 +178,9 @@
 
 <div class="viewcode-block" id="CmdBase.do_cd"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_cd">[docs]</a>    <span class="k">def</span> <span class="nf">do_cd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change folder</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
+<span class="sd">                </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - line {[str} -- Folder to change to (.. means upper folder)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -263,12 +259,7 @@
         <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="CmdBase.do_ls"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_ls">[docs]</a>    <span class="k">def</span> <span class="nf">do_ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List contents of current folder</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+        <span class="sd">&quot;&quot;&quot;List contents of current folder.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dirs</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
@@ -277,44 +268,24 @@
 
 <div class="viewcode-block" id="CmdBase.do_pwd"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_pwd">[docs]</a>    <span class="k">def</span> <span class="nf">do_pwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print the current folder</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span></div>
     <span class="n">do_cwd</span> <span class="o">=</span> <span class="n">do_pwd</span>
 
 <div class="viewcode-block" id="CmdBase.emptyline"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.emptyline">[docs]</a>    <span class="k">def</span> <span class="nf">emptyline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
+        <span class="sd">&quot;&quot;&quot;Called when an empty line is introduced in the prompt.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="CmdBase.do_EOF"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_EOF">[docs]</a>    <span class="k">def</span> <span class="nf">do_EOF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Exit Console and Return to Parent or exit</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - args {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
     <span class="n">do_up</span> <span class="o">=</span> <span class="n">do_EOF</span>
     
 <div class="viewcode-block" id="CmdBase.do_quit"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exit from the application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - args {[type]} -- [description]</span>
+        <span class="sd">&quot;&quot;&quot;Exit from the application.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="n">CmdMode</span><span class="o">.</span><span class="n">batch</span><span class="p">):</span>
             <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Exiting RepTate...&quot;</span><span class="p">)</span>
@@ -331,11 +302,6 @@
 <div class="viewcode-block" id="CmdBase.default"><a class="viewcode-back" href="../developers/CodeCoreCL.html#CmdBase.CmdBase.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on an input line when the command prefix is not recognized.</span>
 <span class="sd">        In that case we execute the line as Python code.</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">exec</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="c1">#in self._locals, self._globals</span>
@@ -350,7 +316,7 @@
 <span class="sd">           - console [cmdline, batch, GUI] --&gt; Set the console mode to [cmdline, batch, GUI]</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - [line] {str} -- cmdline, batch, GUI</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current console mode: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">CmdMode</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">value</span><span class="p">])</span>
@@ -381,7 +347,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

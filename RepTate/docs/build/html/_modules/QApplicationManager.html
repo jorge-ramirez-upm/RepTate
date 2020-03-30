@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>QApplicationManager &#8212; RepTate 0.9.7 20200117 documentation</title>
+    <title>QApplicationManager &#8212; RepTate 1.0.0 20200330 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -196,6 +196,7 @@
         <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAboutNumpy</span><span class="p">)</span>        
         <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionAboutScipy</span><span class="p">)</span>
         <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCite_RepTate</span><span class="p">)</span>
         <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCheckRepTateVersion</span><span class="p">)</span>
         <span class="n">tbut</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarHelpAbout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tbut</span><span class="p">)</span>
@@ -271,6 +272,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAboutMatplotlib</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_about_matplotlib</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAboutNumpy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_about_numpy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAboutScipy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_about_scipy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionCite_RepTate</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_cite_RepTate</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionCheckRepTateVersion</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_check_RepTate_version</span><span class="p">)</span>
 
 
@@ -330,6 +332,10 @@
         <span class="sd">&quot;&quot;&quot;Show scipy web site&quot;&quot;&quot;</span>
         <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromUserInput</span><span class="p">((</span><span class="s1">&#39;https://scipy.org/&#39;</span><span class="p">)))</span></div>
         
+<div class="viewcode-block" id="QApplicationManager.handle_cite_RepTate"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_cite_RepTate">[docs]</a>    <span class="k">def</span> <span class="nf">handle_cite_RepTate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Visit the web site of the RepTatepaper&quot;&quot;&quot;</span>
+        <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromUserInput</span><span class="p">((</span><span class="s1">&#39;https://dx.doi.org/10.1122/8.0000002&#39;</span><span class="p">)))</span></div>
+
 <div class="viewcode-block" id="QApplicationManager.handle_check_RepTate_version"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_check_RepTate_version">[docs]</a>    <span class="k">def</span> <span class="nf">handle_check_RepTate_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Query Github for the latest RepTate release&quot;&quot;&quot;</span>
         <span class="n">newversion</span><span class="p">,</span> <span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_version</span><span class="p">()</span>
@@ -398,7 +404,7 @@
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#dlg = AboutWindow(self, self.version + &#39; &#39; + self.date)</span>
-        <span class="n">dlg</span> <span class="o">=</span> <span class="n">AboutWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&lt;br&gt;&lt;small&gt;</span><span class="se">\u00A9</span><span class="s2"> Jorge Ramírez, Universidad Politécnica de Madrid (2017-2020)&lt;br&gt;</span><span class="se">\u00A9</span><span class="s2"> Victor Boudara, University of Leeds (2017-2020)&lt;/small&gt;&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="n">Version</span><span class="o">.</span><span class="n">DATE</span><span class="p">))</span>
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">AboutWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&lt;br&gt;&lt;small&gt;</span><span class="se">\u00A9</span><span class="s2"> Jorge Ramírez, Universidad Politécnica de Madrid&lt;br&gt;</span><span class="se">\u00A9</span><span class="s2"> Victor Boudara, University of Leeds&lt;/small&gt;&lt;br&gt;(2017-2020)&lt;br&gt;&lt;a href=&quot;&quot;https://dx.doi.org/10.1122/8.0000002&quot;&quot;&gt;Cite RepTate&lt;/a&gt;&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="n">Version</span><span class="o">.</span><span class="n">DATE</span><span class="p">))</span>
         <span class="n">dlg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="QApplicationManager.tab_changed"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.tab_changed">[docs]</a>    <span class="k">def</span> <span class="nf">tab_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
@@ -988,7 +994,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>ApplicationManager &#8212; RepTate 0.9.7 20200117 documentation</title>
+    <title>ApplicationManager &#8212; RepTate 1.0.0 20200330 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -200,12 +200,7 @@
         <span class="k">return</span> <span class="n">L</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available applications</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+        <span class="sd">&quot;&quot;&quot;List all the available applications in RepTate.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">L</span><span class="p">:</span>
@@ -225,12 +220,10 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Application </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete an open application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
+        <span class="sd">&quot;&quot;&quot;Delete an open application. By hitting TAB, all the currently open applications are shown.</span>
+<span class="sd">                </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
+<span class="sd">            - name {str} -- Application to delete</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
@@ -270,27 +263,17 @@
         <span class="k">return</span> <span class="n">L</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List open applications</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+        <span class="sd">&quot;&quot;&quot;List all the currently open applications.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">L</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">app</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.new">[docs]</a>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create new application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
+        <span class="sd">&quot;&quot;&quot;Create a new application and open it.</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
+<span class="sd">            - name {str} -- Application to open (MWD, LVE, TTS, etc)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">appname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">application_counter</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -305,12 +288,10 @@
             <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create new application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
+        <span class="sd">&quot;&quot;&quot;Create a new application and open it.</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - appname {[type]} -- [description]</span>
+<span class="sd">            - name {str} -- Application to open (MWD, LVE, TTS, etc)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newapp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">newapp</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
@@ -344,12 +325,10 @@
         <span class="k">return</span> <span class="n">completions</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set focus to an open application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
+        <span class="sd">&quot;&quot;&quot;Set focus to an open application. By hitting TAB, all the currently open applications are shown.</span>
+<span class="sd">                </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
+<span class="sd">            - name {str} -- Name of the applicaton to switch the focus to.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">app</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">applications</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -383,7 +362,7 @@
 <span class="sd">        copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">            - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">apps</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">apps</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -446,12 +425,7 @@
 
 <div class="viewcode-block" id="ApplicationManager.do_list_theories_Maxwell"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_list_theories_Maxwell">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_theories_Maxwell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List the theories in the current RepTate instance that provide</span>
-<span class="sd">        Maxwell modes</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+<span class="sd">        Maxwell modes        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">L</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_theories_Maxwell</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
@@ -464,26 +438,31 @@
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;introduction&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a good place for a tutorial&#39;</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Visit the page:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_about"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_about">[docs]</a>    <span class="k">def</span> <span class="nf">do_about</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Show about info</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+        <span class="sd">&quot;&quot;&quot;Show about info. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RepTate (Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment),&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;and the University of Reading, as part of the muPP2 project, funded by the EPSRC.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This new version is a port (and enhancement) of the original RepTate code to python,&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;using pyqt and matplotlib for the visuals, and numpy and scipy for numerical calculations.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, jorge.ramirez@upm.es)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;and Victor Boudara (University of Leeds, v.a.boudara@leeds.ac.uk).&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The program and source code are released under the GPLv3 license.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This project is dedicated to the memory of our great friend and collaborator Alexei.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Project page: https://github.com/jorge-ramirez-upm/RepTate&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Documentation: http://reptate.readthedocs.io/&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_info"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_info">[docs]</a>    <span class="k">def</span> <span class="nf">do_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Show info about the current RepTate session</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
+        <span class="sd">&quot;&quot;&quot;Show info about the current RepTate session.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##AVAILABLE APPLICATIONS:&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_available</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -492,12 +471,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">do_list</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_quit"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exit from the application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            args {[type]} -- [description]</span>
+        <span class="sd">&quot;&quot;&quot;Exit from the application.</span>
+<span class="sd">            args {[type]} -- ???</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Do you really want to exit RepTate?&#39;</span>
         <span class="n">shall</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">%s</span><span class="s2"> (y/N) &quot;</span> <span class="o">%</span> <span class="n">msg</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span>
@@ -521,12 +496,16 @@
         <span class="k">return</span> <span class="n">newversion</span><span class="p">,</span> <span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span></div>
 
 <div class="viewcode-block" id="ApplicationManager.do_check_version"><a class="viewcode-back" href="../developers/CodeCoreCL.html#ApplicationManager.ApplicationManager.do_check_version">[docs]</a>    <span class="k">def</span> <span class="nf">do_check_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if there is a new version of RepTate on Github.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newversion</span><span class="p">,</span> <span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_version</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current Version: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">version_current</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Version on Github: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">version_github</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">newversion</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The version of RepTate on Github (</span><span class="si">%s</span><span class="s2">) is more recent than the one you are running (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span><span class="p">))</span></div></div>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The version of RepTate on Github (</span><span class="si">%s</span><span class="s2">) is more recent than the one you are running (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">version_github</span><span class="p">,</span> <span class="n">version_current</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Your version is up to date.&quot;</span><span class="p">)</span></div></div>
 
 </pre></div>
 
@@ -544,7 +523,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 0.9.7 20200117 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

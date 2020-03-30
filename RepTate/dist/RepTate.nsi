@@ -26,7 +26,7 @@ LangString DESC_RepTate ${LANG_ENGLISH} "Install RepTate software"
 LangString DESC_FileAssoc ${LANG_ENGLISH} "Associate common RepTate files (*.tts, *.osc, *.shear, etc) with the software"
 
 # Version must be with the format x.x.x.x
-!define VERSION "1.0.0"
+!define VERSION "1.0.0.0"
 !define DATE "20200330"
 Name "RepTate v${VERSION}"
 OutFile "RepTate Installer - v${VERSION} ${DATE}.exe"
@@ -101,6 +101,7 @@ Section "File Associations" SectionFileAssociations
 	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".DLS" "RepTate.DLS" "$INSTDIR\gui\Images\Dielectric.ico"	
 	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".CREEP" "RepTate.CREEP" "$INSTDIR\gui\Images\Creep.ico"	
 	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".LAOS" "RepTate.LAOS" "$INSTDIR\gui\Images\LAOS.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".SHEARXS" "RepTate.SHEARXS" "$INSTDIR\gui\Images\Crystal.ico"	
 
 SectionEnd
 
@@ -130,6 +131,7 @@ Section "Uninstall"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".DLS" "RepTate.DLS"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".CREEP" "RepTate.CREEP"
 	!insertmacro AssocDeleteFileExtAndProgId HKLM ".LAOS" "RepTate.LAOS"
+	!insertmacro AssocDeleteFileExtAndProgId HKLM ".SHEARXS" "RepTate.SHEARXS"
 
 	!insertmacro MUI_STARTMENU_GETFOLDER "RepTate" $StartMenuFolder
 
