@@ -878,7 +878,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         
         [description]
         """
-        self.do_show_all()
+        self.do_show_all("")
         for i in range(self.DataSettreeWidget.topLevelItemCount()):
             file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
             if file_name in self.inactive_files:
