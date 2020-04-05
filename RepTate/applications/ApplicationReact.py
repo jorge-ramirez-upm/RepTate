@@ -427,8 +427,8 @@ class BaseApplicationReact:
 
         #set the current view
         self.set_views()
-        for _ in self.extra_view_names:
-            self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
+        # for _ in self.extra_view_names:
+        #     self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
 
     def change_view(self):
         """Redefinition to handle the x-range selection when P&S is selected"""
@@ -687,3 +687,5 @@ class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
         super().__init__(name, parent)
 
         #add the GUI-specific objects here:
+        for _ in self.extra_view_names:
+            self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
