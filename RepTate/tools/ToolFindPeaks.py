@@ -188,7 +188,7 @@ class BaseToolFindPeaks:
                 c = y[d]    # approximation of peak amplitude
                 a = np.sign(c) * (-1) * (np.sqrt(abs(c))/(x_data[-1]-x_data[0]))**2
                 p0 = (a, tau, c)
-                popt, pcov = curve_fit(func, x_data, y_data, p0)
+                popt, pcov = curve_fit(func, x_data, y_data, p0, maxfev=5000)
                 xp[i], yp[i] = popt[1:3]
                 # table+='''<tr><td>%.4e</td><td>%.4e</td></tr>'''%(xp[i],yp[i])
                 table.append(['%-10.4e' % xp[i], '%-10.4e' % yp[i]])
