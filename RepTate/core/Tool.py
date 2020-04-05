@@ -268,6 +268,10 @@ class Tool(CmdBase):
         if (self.citations != ""):
             self.Qprint("\nCITE: "+self.citations+"\n")
 
+    def do_plot(self, line):
+        """Update plot"""
+        self.parent_application.update_all_ds_plots()
+
     def set_param_value(self, name, value):
         """[summary]
         
