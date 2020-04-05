@@ -111,16 +111,16 @@ class CmdBase(cmd.Cmd):
         print(output)
         self.last_output = output
 
-    def do_cd(self, line):
-        """Change folder
-                
-        Arguments:
-            - line {[str} -- Folder to change to (.. means upper folder)
-        """
-        if os.path.isdir(line):
-            os.chdir(line)
-        else:
-            print("Folder %s does not exist"%line)
+    #def do_cd(self, line):
+    #    """Change folder
+    #            
+    #    Arguments:
+    #        - line {[str} -- Folder to change to (.. means upper folder)
+    #    """
+    #    if os.path.isdir(line):
+    #        os.chdir(line)
+    #    else:
+    #        print("Folder %s does not exist"%line)
 
     def __listdir(self, root):
         """List directory 'root' appending the path separator to subdirs.
@@ -266,3 +266,11 @@ class CmdBase(cmd.Cmd):
         if (self.mode==CmdMode.batch):
             self.prompt = ''
             
+    def cmdloop(self, intro=""):
+        #print(self.intro)
+        while True:
+            try:
+                super(CmdBase, self).cmdloop(intro="")
+                break
+            except KeyboardInterrupt:
+                print("^C")
