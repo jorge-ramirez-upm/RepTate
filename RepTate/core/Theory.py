@@ -1107,6 +1107,10 @@ class Theory(CmdBase):
         
         Arguments:
             - line {[xmin xmax]} -- Sets the limits of the span
+
+        Example:
+            - xrange -4 5
+            - xrange 0.35 3.44
         """
         if visible == None:
             visible = not self.xrange.get_visible()
@@ -1189,10 +1193,10 @@ class Theory(CmdBase):
         self.yminline.set_visible(ystate)
         self.ymaxline.set_visible(ystate)
 
-        self.parent_dataset.actionVertical_Limits.setChecked(xstate)
-        self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
-        self.parent_dataset.set_limit_icon()
-
+        if CmdBase.mode == CmdMode.GUI:
+            self.parent_dataset.actionVertical_Limits.setChecked(xstate)
+            self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
+            self.parent_dataset.set_limit_icon()
 
 # MODES STUFF
 
