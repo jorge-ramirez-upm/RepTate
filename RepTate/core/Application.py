@@ -62,7 +62,7 @@ from ToolEvaluate import ToolEvaluate
 from ToolInterpolate import ToolInterpolateExtrapolate
 from ToolMaterialsDatabase import ToolMaterialsDatabase
 from mplcursors import cursor
-
+from colorama import Fore
 class Application(CmdBase):
     """Main abstract class that represents an application
     
@@ -136,11 +136,367 @@ class Application(CmdBase):
         # self.canvas = self.multiplots.canvas
         self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
         self.ax_opts = self.ax_opt_defaults.copy()
+        
+        connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
+        connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
+        connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
+        connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
+        connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
+
+        # Variables used during matplotlib interaction
+        self.artists_clicked = []
+        self._pressed_button = None # To store active button during interaction
+        self._axes = None # To store x and y axes concerned by interaction
+        self._event = None  # To store reference event during interaction
+        self._was_zooming = False 
 
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
+            self.multiplots.setWindowFlags(self.multiplots.windowFlags() 
+                                           & ~Qt.WindowCloseButtonHint)
             self.multiplots.show()
         self.datacursor_ = None
+
+    def resizeplot(self, event=""):
+        """[summary]
+        
+        [description]
+        """
+        if not (self.ax_opts['label_size_auto'] or self.ax_opts['tick_label_size_auto']):
+            return
+        #large window settings
+        w_large = 900
+        h_large = 650
+        font_large = 16
+        #small window settings
+        w_small = 300
+        h_small = 400
+        font_small = 10
+        #interpolate for current window size
+        geometry = self.multiplots.frameGeometry()
+        width = geometry.width()
+        height = geometry.height()
+        scale_w = font_small + (width - w_small)*(font_large - font_small)/(w_large - w_small)
+        scale_h = font_small + (height - h_small)*(font_large - font_small)/(h_large - h_small)
+        font_size = min(scale_w, scale_h)
+        #resize plot fonts
+        for ax in self.axarr:
+            if self.ax_opts['label_size_auto']:
+                ax.xaxis.label.set_size(font_size)
+                ax.yaxis.label.set_size(font_size)
+            if self.ax_opts['tick_label_size_auto']:
+                ax.tick_params(which='major', labelsize=font_size)
+                ax.tick_params(which='minor', labelsize=font_size*.8)
+
+    def zoom_wheel(self, event):
+        base_scale = 1.1
+        if event.button == 'up':
+            # deal with zoom in
+            scale_factor = 1 / base_scale
+        elif event.button == 'down':
+            # deal with zoom out
+            scale_factor = base_scale
+        else:
+            # deal with something that should never happen
+            scale_factor = 1
+
+        # if event.step > 0:
+            # scale_factor = self.scale_factor
+        # else:
+            # scale_factor = 1. / self.scale_factor
+
+        # Go through all axes to enable zoom for multiple axes subplots
+        x_axes, y_axes = self._axes_to_update(event)
+
+        for ax in x_axes:
+            transform = ax.transData.inverted()
+            xdata, ydata = transform.transform_point((event.x, event.y))
+
+            xlim = ax.get_xlim()
+            xlim = self._zoom_range(xlim[0], xlim[1],
+                                    xdata, scale_factor,
+                                    ax.get_xscale())
+            ax.set_xlim(xlim)
+
+        for ax in y_axes:
+            ylim = ax.get_ylim()
+            ylim = self._zoom_range(ylim[0], ylim[1],
+                                    ydata, scale_factor,
+                                    ax.get_yscale())
+            ax.set_ylim(ylim)
+
+        if x_axes or y_axes:
+            self.figure.canvas.draw() 
+
+    def _axes_to_update(self, event):
+        """Returns two sets of Axes to update according to event.
+
+        Takes care of multiple axes and shared axes.
+
+        :param MouseEvent event: Matplotlib event to consider
+        :return: Axes for which to update xlimits and ylimits
+        :rtype: 2-tuple of set (xaxes, yaxes)
+
+        """
+        x_axes, y_axes = set(), set()
+
+        # Go through all axes to enable zoom for multiple axes subplots
+        for ax in self.figure.axes:
+            if ax.contains(event)[0]:
+                # For twin x axes, makes sure the zoom is applied once
+                shared_x_axes = set(ax.get_shared_x_axes().get_siblings(ax))
+                if x_axes.isdisjoint(shared_x_axes):
+                    x_axes.add(ax)
+
+                # For twin y axes, makes sure the zoom is applied once
+                shared_y_axes = set(ax.get_shared_y_axes().get_siblings(ax))
+                if y_axes.isdisjoint(shared_y_axes):
+                    y_axes.add(ax)
+
+        return x_axes, y_axes
+
+    def _zoom_range(self, begin, end, center, scale_factor, scale):
+        """Compute a 1D range zoomed around center.
+        :param float begin: The begin bound of the range.
+        :param float end: The end bound of the range.
+        :param float center: The center of the zoom (i.e., invariant point)
+        :param float scale_factor: The scale factor to apply.
+        :param str scale: The scale of the axis
+        :return: The zoomed range (min, max)
+        """
+        if begin < end:
+            min_, max_ = begin, end
+        else:
+            min_, max_ = end, begin
+
+        if scale == 'linear':
+            old_min, old_max = min_, max_
+        elif scale == 'log':
+            old_min = np.log10(min_ if min_ > 0. else np.nextafter(0, 1))
+            center = np.log10(
+                center if center > 0. else np.nextafter(0, 1))
+            old_max = np.log10(max_) if max_ > 0. else 0.
+        else:
+            logging.warning(
+                'Zoom on wheel not implemented for scale "%s"' % scale)
+            return begin, end
+
+        offset = (center - old_min) / (old_max - old_min)
+        range_ = (old_max - old_min) / scale_factor
+        new_min = center - offset * range_
+        new_max = center + (1. - offset) * range_
+
+        if scale == 'log':
+            try:
+                new_min, new_max = 10. ** float(new_min), 10. ** float(new_max)
+            except OverflowError:  # Limit case
+                new_min, new_max = min_, max_
+            if new_min <= 0. or new_max <= 0.:  # Limit case
+                new_min, new_max = min_, max_
+
+        if begin < end:
+            return new_min, new_max
+        else:
+            return new_max, new_min
+
+    def on_press(self, event):
+        if event.button == 2: # Pan
+            x_axes, y_axes = self._axes_to_update(event)
+            if x_axes or y_axes:
+                self._axes = x_axes, y_axes
+                self._pressed_button = event.button
+                self._pan(event)
+        elif event.button == 3: # Zoom
+            x_axes, y_axes = self._axes_to_update(event)
+            if x_axes or y_axes:
+                self._axes = x_axes, y_axes
+                self._pressed_button = event.button
+                self._zoom_area(event)
+
+    def on_motion(self, event):
+        if self._pressed_button == 2:  # pan
+            self._pan(event)
+        elif self._pressed_button == 3:  # zoom area
+            self._zoom_area(event)
+
+    def onrelease(self, event):
+        """Called when releasing mouse"""
+        if event.button == 3:  #if release a right click
+            self._zoom_area(event)
+            if not self._was_zooming and CmdBase.mode == CmdMode.GUI:
+                self.open_figure_popup_menu(event)
+            self.artists_clicked.clear()
+            self._was_zooming = False
+        elif event.button == 2:
+            self._pan(event)
+        self._pressed_button = None
+
+    def _pan(self, event):
+        if event.name == 'button_press_event':  # begin pan
+            self._event = event
+
+        elif event.name == 'button_release_event':  # end pan
+            self._event = None
+
+        elif event.name == 'motion_notify_event':  # pan
+            if self._event is None:
+                return
+
+            if event.x != self._event.x:
+                for ax in self._axes[0]:
+                    xlim = self._pan_update_limits(ax, 0, event, self._event)
+                    ax.set_xlim(xlim)
+
+            if event.y != self._event.y:
+                for ax in self._axes[1]:
+                    ylim = self._pan_update_limits(ax, 1, event, self._event)
+                    ax.set_ylim(ylim)
+
+            if event.x != self._event.x or event.y != self._event.y:
+                self.figure.canvas.draw()
+
+            self._event = event    
+
+    def _pan_update_limits(self, ax, axis_id, event, last_event):
+        """Compute limits with applied pan."""
+        assert axis_id in (0, 1)
+        if axis_id == 0:
+            lim = ax.get_xlim()
+            scale = ax.get_xscale()
+        else:
+            lim = ax.get_ylim()
+            scale = ax.get_yscale()
+
+        pixel_to_data = ax.transData.inverted()
+        data = pixel_to_data.transform_point((event.x, event.y))
+        last_data = pixel_to_data.transform_point((last_event.x, last_event.y))
+
+        if scale == 'linear':
+            delta = data[axis_id] - last_data[axis_id]
+            new_lim = lim[0] - delta, lim[1] - delta
+        elif scale == 'log':
+            try:
+                delta = math.log10(data[axis_id]) - \
+                    math.log10(last_data[axis_id])
+                new_lim = [pow(10., (math.log10(lim[0]) - delta)),
+                           pow(10., (math.log10(lim[1]) - delta))]
+            except (ValueError, OverflowError):
+                new_lim = lim  # Keep previous limits
+        else:
+            logging.warning('Pan not implemented for scale "%s"' % scale)
+            new_lim = lim
+        return new_lim
+
+    def _zoom_area(self, event):
+        if event.name == 'button_press_event':  # begin drag
+            self._event = event
+            self._patch = plt.Rectangle(
+                xy=(event.xdata, event.ydata), width=0, height=0,
+                fill=False, linewidth=1., linestyle=':', color='gray')
+            self._event.inaxes.add_patch(self._patch)
+
+            canvas = self._patch.figure.canvas
+            axes = self._patch.axes
+            self._patch.set_animated(True)
+            canvas.draw()
+            self.background = canvas.copy_from_bbox(self._patch.axes.bbox)
+            axes.draw_artist(self._patch)
+            canvas.update()
+
+        elif event.name == 'button_release_event':  # end drag
+            self.background = None
+            try:
+                self._patch.remove()
+                del self._patch
+            except AttributeError:
+                # self._patch do not exist
+                pass
+            if self._event == None:
+                self._was_zooming = False
+                return
+            if (abs(event.x - self._event.x) < 3 or
+                    abs(event.y - self._event.y) < 3):
+                self._was_zooming = False
+                return  # No zoom when points are too close
+
+            x_axes, y_axes = self._axes
+
+            for ax in x_axes:
+                pixel_to_data = ax.transData.inverted()
+                end_pt = pixel_to_data.transform_point((event.x, event.y))
+                begin_pt = pixel_to_data.transform_point(
+                    (self._event.x, self._event.y))
+
+                min_ = min(begin_pt[0], end_pt[0])
+                max_ = max(begin_pt[0], end_pt[0])
+                if (end_pt[0]>begin_pt[0]):
+                    if not ax.xaxis_inverted():
+                        ax.set_xlim(min_, max_)
+                    else:
+                        ax.set_xlim(max_, min_)
+                else:
+                    min_now, max_now = ax.get_xlim() 
+                    if ax.get_xscale() == 'log':
+                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                        if not ax.xaxis_inverted():
+                            ax.set_xlim(min_now/fac, max_now*fac)
+                        else:
+                            ax.set_xlim(max_now*fac, min_now/fac)
+                    else:
+                        dx = max_ - min_
+                        if not ax.xaxis_inverted():
+                            ax.set_xlim(min_now-dx, max_now+dx)
+                        else:
+                            ax.set_xlim(max_now+dx, min_now-dx)
+
+            for ax in y_axes:
+                pixel_to_data = ax.transData.inverted()
+                end_pt = pixel_to_data.transform_point((event.x, event.y))
+                begin_pt = pixel_to_data.transform_point(
+                    (self._event.x, self._event.y))
+
+                min_ = min(begin_pt[1], end_pt[1])
+                max_ = max(begin_pt[1], end_pt[1])
+                if (end_pt[1]<begin_pt[1]):
+                    if not ax.yaxis_inverted():
+                        ax.set_ylim(min_, max_)
+                    else:
+                        ax.set_ylim(max_, min_)
+                else:
+                    min_now, max_now = ax.get_ylim() 
+                    if ax.get_yscale() == 'log':
+                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                        if not ax.yaxis_inverted():
+                            ax.set_ylim(min_now/fac, max_now*fac)
+                        else:
+                            ax.set_ylim(max_now*fac, min_now/fac)
+                    else:
+                        dy = max_ - min_
+                        if not ax.yaxis_inverted():
+                            ax.set_ylim(min_now-dy, max_now+dy)
+                        else:
+                            ax.set_ylim(max_now+dy, min_now-dy)
+
+            self._event = None
+            self._was_zooming = True
+            self.figure.canvas.draw()
+
+
+        elif event.name == 'motion_notify_event':  # drag
+            if self._event is None:
+                return
+
+            if event.inaxes != self._event.inaxes:
+                return  # Ignore event outside plot
+
+            self._patch.set_width(event.xdata - self._event.xdata)
+            self._patch.set_height(event.ydata - self._event.ydata)
+
+            canvas = self._patch.figure.canvas
+            axes = self._patch.axes
+            canvas.restore_region(self.background)
+            axes.draw_artist(self._patch)
+            canvas.update()
 
     def update_datacursor_artists(self):
         """Update the datacursor instance 
@@ -186,6 +542,9 @@ class Application(CmdBase):
             sel.annotation.set(text="%.3g; %.3g"%(x,y), size=13)
             sel.annotation.get_bbox_patch().set(alpha=0.7)
             sel.annotation.arrow_patch.set(ec="red", alpha=0.5)
+
+    def delete_multiplot(self):
+        del self.multiplots
 
     def set_multiplot(self, nplots, ncols):
         """defines the plot"""
@@ -256,7 +615,7 @@ class Application(CmdBase):
         """
         self.num_datasets += 1
         if (line == ""):
-            dsname = "DataSet%02d" % self.num_datasets
+            dsname = "Set%d" % self.num_datasets
             dsdescription = ""
         else:
             items = line.split(',')
@@ -266,6 +625,10 @@ class Application(CmdBase):
             else:
                 dsdescription = ""
         ds = DataSet(dsname, dsdescription, self)
+        if (self.mode == CmdMode.batch):
+            ds.prompt = ''
+        else:
+            ds.prompt = self.prompt[:-2] + '/' + Fore.YELLOW + ds.name + '> '
         return ds, dsname
 
     def do_new(self, line):
@@ -278,10 +641,6 @@ class Application(CmdBase):
         """
         ds, dsname = self.new(line)
         self.datasets[dsname] = ds
-        if (self.mode == CmdMode.batch):
-            ds.prompt = ''
-        else:
-            ds.prompt = self.prompt[:-2] + '/' + ds.name + '> '
         ds.cmdloop()
 
     def delete(self, ds_name):
@@ -336,6 +695,7 @@ class Application(CmdBase):
             - name {[type]} -- [description]
         """
         self.delete(name)
+    do_del = do_delete
 
     def complete_delete(self, text, line, begidx, endidx):
         """Complete delete dataset command
@@ -357,6 +717,7 @@ class Application(CmdBase):
         else:
             completions = [f for f in dataset_names if f.startswith(text)]
         return completions
+    complete_del = complete_delete
 
     def list(self):
         """List the datasets in the current application
@@ -507,6 +868,10 @@ class Application(CmdBase):
         for ds in self.datasets.values():
             ds.do_plot()
 
+    def do_plot(self, name=""):
+        """Update and refresh all plots"""
+        self.update_all_ds_plots()
+
     def do_view_switch(self, name):
         """Change to another view from open application
         
@@ -585,21 +950,20 @@ class Application(CmdBase):
         extratooltypes = list(self.extratools.keys())
         if ((line in tooltypes) or (line in extratooltypes)):
             self.num_tools += 1
-            to_id = "%s%02d" % (line, self.num_tools)
+            to_id = "%s%d" % (line, self.num_tools)
             if (line in tooltypes):
                 to = self.availabletools[line](to_id, self)
             elif (line in extratooltypes):
                 to = self.extratools[line](to_id, self)
             self.tools.append(to)
             if self.mode == CmdMode.GUI:
-                pass
+                return to
             else:
                 if (self.mode == CmdMode.batch):
                     to.prompt = ''
                 else:
-                    to.prompt = self.prompt[:-2] + '/' + to.name + '> '
+                    to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
                 to.cmdloop()
-            return to
         else:
             print("Tool \"%s\" does not exists" % line)
 
@@ -643,7 +1007,7 @@ class Application(CmdBase):
         """Change the active tool"""
         listtools = [x.name for x in self.tools]
         try:
-            idx = listtools.index(name)
+            idx = listtools.index(line)
             self.tools[idx].cmdloop()
         except AttributeError as e:
             print("Tool\"%s\" not found" % line)
@@ -784,7 +1148,8 @@ class Application(CmdBase):
         # pass
         leg = self.axarr[0].legend(frameon=True, ncol=2)
         if (self.legend_visible):
-            leg.draggable()
+            leg.set_draggable(True)
+            pass
         else:
             try:
                 leg.remove()

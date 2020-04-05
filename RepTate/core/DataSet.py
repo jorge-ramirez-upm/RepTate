@@ -54,7 +54,7 @@ from collections import OrderedDict
 import numpy as np
 from scipy.integrate import simps
 import matplotlib.patheffects as pe
-
+from colorama import Fore
 class ColorMode(Enum):
     """[summary]
     
@@ -301,7 +301,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 pass
         self.do_plot()
 
-    def do_show_all(self):
+    def do_show_all(self, line):
         """[summary]
         
         [description]
@@ -316,7 +316,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         if self.current_theory:
             self.theories[self.current_theory].do_show()
 
-    def do_hide_all(self):
+    def do_hide_all(self, line):
         """[summary]
         
         [description]
@@ -564,8 +564,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             if fp in self.current_file.file_parameters:
                 self.files.sort(
                     key=lambda x: float(x.file_parameters[fp]), reverse=rev)
+                self.do_plot()
             elif fp == "File":
                 self.files.sort(key=lambda x: x.file_name_short, reverse=rev)
+                self.do_plot()
             else:
                 print("Parameter %s not found in files" % line)
 
@@ -608,10 +610,16 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             if (f.file_name_short == line):
                 if (self.current_file == f):
                     self.current_file = None
+                dt = f.data_table
+                for i in range(dt.MAX_NUM_SERIES):
+                        for nx in range(self.nplots):
+                            self.parent_application.axarr[nx].lines.remove(dt.series[nx][i]) 
                 self.files.remove(f)
                 done = True
+                self.do_plot()
         if (not done):
             print("File \"%s\" not found" % line)
+    do_del = do_delete
 
     def complete_delete(self, text, line, begidx, endidx):
         """[summary]
@@ -633,6 +641,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         else:
             completions = [f for f in f_names if f.startswith(text)]
         return completions
+    complete_del = complete_delete
 
     def do_list(self, line):
         """List the files in the current dataset
@@ -817,6 +826,8 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                 "TH_" + df.file_name_short)
             if CmdBase.mode == CmdMode.GUI:
                 return (True, newtables, f_ext[0])
+            else:
+                self.do_plot()
         else:
             message = "File type \"%s\" does not exists" % f_ext[0]
             if CmdBase.mode != CmdMode.GUI:
@@ -1034,7 +1045,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             self.num_theories += 1
             #th_id = "%s%02d"%(line,self.num_theories)
             # th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name
-            th_id = "%s%02d" % (line, self.num_theories)
+            #th_id = "%s%02d" % (line, self.num_theories)
+            th_id = ''.join(
+                c for c in line
+                if c.isupper())  #get the upper case letters of th_name
+            th_id = "%s%d" % (th_id, self.num_theories)  #append number
             th = self.parent_application.theories[line](
                 th_id, self, self.parent_application.axarr)
             self.theories[th.name] = th
@@ -1044,15 +1059,15 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     th.do_calculate('')
                 else:
                     th.Qprint("<font color=green><b>Press \"Calculate\"</b></font>")
+                return th
             else:
                 if (self.mode == CmdMode.batch):
                     th.prompt = ''
                 else:
-                    th.prompt = self.prompt[:-2] + '/' + th.name + '> '
+                    th.prompt = self.prompt[:-2] + '/' + Fore.MAGENTA + th_id + '> '
                 if calculate:
                     th.do_calculate('')
                 th.cmdloop()
-            return th
         else:
             print("Theory \"%s\" does not exists" % line)
 

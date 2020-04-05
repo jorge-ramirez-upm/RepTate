@@ -120,8 +120,9 @@ def start_RepTate(argv):
     # Handle files & open apps accordingly
     CmdBase.calcmode = CalcMode.singlethread # avoid troubles when loading multiple apps/files/theories
     d = {app.extension: app.appname for app in  list(app.available_applications.values())}
-    for k in dictfiles.keys():
+    for i, k in enumerate(dictfiles.keys()):
         if (k in d.keys()):
+            #app.do_new(d[k])
             app.new(d[k])
             appname="%s%d"%(d[k],app.application_counter)
             ds, dsname = app.applications[appname].new("")
@@ -131,6 +132,9 @@ def start_RepTate(argv):
                 ds.do_open(f)
             ds.do_plot()
             #app.applications[dsname].datasets[dsname].do_plot()
+            if i==len(dictfiles.keys())-1:
+                app.applications[appname].cmdqueue.append("switch %s"%dsname)
+                app.applications[appname].cmdloop()
         else:
             print("File type %s cannot be opened"%k)
     # set the calmode back

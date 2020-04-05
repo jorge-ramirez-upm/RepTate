@@ -60,8 +60,7 @@ from ApplicationLAOS import ApplicationLAOS
 #from ApplicationFRS_I import *
 import Version
 from collections import OrderedDict
-
-
+from colorama import Fore
 class ApplicationManager(CmdBase):
     """Main Reptate container of applications
 
@@ -69,7 +68,7 @@ class ApplicationManager(CmdBase):
 
     version = Version.VERSION
     date = Version.DATE
-    prompt = 'RepTate> '
+    prompt = Fore.GREEN + 'RepTate> '
     intro = 'RepTate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
         version, date)
 
@@ -150,6 +149,7 @@ class ApplicationManager(CmdBase):
             - name {[type]} -- [description]
         """
         if name in self.applications.keys():
+            self.applications[name].delete_multiplot()
             del self.applications[name]
         else:
             print("Application \"%s\" not found" % name)
@@ -161,6 +161,7 @@ class ApplicationManager(CmdBase):
             - name {str} -- Application to delete
         """
         self.delete(name)
+    do_del = do_delete
 
     def complete_delete(self, text, line, begidx, endidx):
         """Complete delete application command
@@ -182,6 +183,7 @@ class ApplicationManager(CmdBase):
         else:
             completions = [f for f in app_names if f.startswith(text)]
         return completions
+    complete_del = complete_delete
 
     def list(self):
         """List open applications
@@ -215,8 +217,10 @@ class ApplicationManager(CmdBase):
             newapp = self.available_applications[appname](
                 appname + str(self.application_counter), self)
             self.applications[newapp.name] = newapp
-            #if CmdBase.mode != CmdMode.GUI:
-            #    newapp.do_new("")
+            if (self.mode == CmdMode.batch):
+                newapp.prompt = ''
+            else:
+                newapp.prompt = self.prompt[:-2] + '/' + Fore.RED + newapp.name + '> '
             return newapp
         else:
             print("Application \"%s\" is not available" % appname)
@@ -226,16 +230,13 @@ class ApplicationManager(CmdBase):
         """Create a new application and open it.
         
         Arguments:
-            - name {str} -- Application to open (MWD, LVE, TTS, etc)
+            - name {str} -- Ap
+            plication to open (MWD, LVE, TTS, etc)
         """
         newapp = self.new(appname)
         if (newapp != None):
-            if (self.mode == CmdMode.batch):
-                newapp.prompt = ''
-            else:
-                newapp.prompt = self.prompt[:-2] + '/' + newapp.name + '> '
             if CmdBase.mode != CmdMode.GUI:
-                newapp.do_new("")
+                newapp.cmdqueue.append("new")
             newapp.cmdloop()
 
     def complete_new(self, text, line, begidx, endidx):
