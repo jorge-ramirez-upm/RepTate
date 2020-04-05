@@ -53,7 +53,7 @@ from SpreadsheetWidget import SpreadsheetWidget
 import Version
 import time
 from Theory import EndComputationRequested
-from ApplicationLAOS import GUIApplicationLAOS
+from ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -728,6 +728,8 @@ class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
+        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
+            self.function = self.RoliePolyLAOS
 
 
 class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):

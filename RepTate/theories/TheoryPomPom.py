@@ -52,7 +52,7 @@ from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
 from Theory import EndComputationRequested
-from ApplicationLAOS import GUIApplicationLAOS
+from ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
 import Version
 import time
 
@@ -568,6 +568,8 @@ class CLTheoryPomPom(BaseTheoryPomPom, Theory):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
+        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
+            self.function = self.calculate_PomPomLAOS
 
 
 class GUITheoryPomPom(BaseTheoryPomPom, QTheory):

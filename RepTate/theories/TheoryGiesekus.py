@@ -51,7 +51,7 @@ from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
 from Theory import EndComputationRequested
-from ApplicationLAOS import GUIApplicationLAOS
+from ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -504,7 +504,8 @@ class BaseTheoryGiesekus:
         """
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
-            self.spinbox.setMaximum(int(value))
+            if CmdBase.mode==CmdMode.GUI:
+                self.spinbox.setMaximum(int(value))
         message, success = super(BaseTheoryGiesekus, self).set_param_value(
             name, value)
         if not success:
@@ -560,6 +561,8 @@ class CLTheoryGiesekus(BaseTheoryGiesekus, Theory):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
+        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
+            self.function = self.calculate_giesekusLAOS
 
 
 class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):

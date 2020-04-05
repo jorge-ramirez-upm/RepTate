@@ -50,7 +50,7 @@ from Theory_rc import *
 from enum import Enum
 from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
-from ApplicationLAOS import GUIApplicationLAOS
+from ApplicationLAOS import CLApplicationLAOS, GUIApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used
@@ -417,7 +417,8 @@ class CLTheoryUCM(BaseTheoryUCM, Theory):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-
+        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
+            self.function = self.calculate_UCMLAOS
 
 class GUITheoryUCM(BaseTheoryUCM, QTheory):
     """[summary]
