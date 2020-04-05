@@ -45,6 +45,7 @@ from CmdBase import CmdBase, CmdMode
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QTabWidget, QWidget, QSizePolicy
 from PyQt5.QtCore import QSize, QMetaObject, Qt
 import matplotlib as mpl
+mpl.use("Qt5Agg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 import matplotlib.gridspec as gridspec
@@ -92,7 +93,10 @@ class MultiView(QWidget):
     DPI = 300
 
     def __init__(self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None):
-        QDialog.__init__(self)
+        #QDialog.__init__(self)
+        #super().__init__(self)
+        #QWidget.__init__()
+        super().__init__()
         self.parent_application = parent
         self.pot = pot
         self.nplots = nplots
