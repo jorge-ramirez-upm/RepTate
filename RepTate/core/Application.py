@@ -78,12 +78,7 @@ class Application(CmdBase):
                  ncols=2,
                  **kwargs):
         """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"ApplicationTemplate"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        **Constructor**"""
 
         super().__init__()
         self.name = name
@@ -158,10 +153,7 @@ class Application(CmdBase):
         self.datacursor_ = None
 
     def resizeplot(self, event=""):
-        """[summary]
-        
-        [description]
-        """
+        """Rescale plot graphics when the window is resized"""
         if not (self.ax_opts['label_size_auto'] or self.ax_opts['tick_label_size_auto']):
             return
         #large window settings
@@ -587,44 +579,30 @@ class Application(CmdBase):
         array_string = "\n".join(line_strings)
         QApplication.clipboard().setText(array_string)
 
-    def handle_close_window(self, evt):
-        """[summary]
+    # JR: I THINK THE FOLLOWING FUNCTION IS NOT NEEDED ANYMORE
+    # def handle_close_window(self, evt):
+    #     """[summary]
         
-        [description]
+    #     [description]
         
-        Arguments:
-            - evt {[type]} -- [description]
+    #     Arguments:
+    #         - evt {[type]} -- [description]
         
-        Returns:
-            [type] -- [description]
-        """
-        print("\nApplication window %s has been closed\n" % self.name)
-        print(
-            "Please, return to the RepTate prompt and delete the application")
+    #     Returns:
+    #         [type] -- [description]
+    #     """
+    #     print("\nApplication window %s has been closed\n" % self.name)
+    #     print(
+    #         "Please, return to the RepTate prompt and delete the application")
 
     def new(self, line):
-        """Create new empty dataset in the application
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create new empty dataset in the application"""
         self.num_datasets += 1
         if (line == ""):
             dsname = "Set%d" % self.num_datasets
-            dsdescription = ""
         else:
-            items = line.split(',')
-            dsname = items[0]
-            if (len(items) > 1):
-                dsdescription = items[1]
-            else:
-                dsdescription = ""
-        ds = DataSet(dsname, dsdescription, self)
+            dsname = line
+        ds = DataSet(dsname, self)
         if (self.mode == CmdMode.batch):
             ds.prompt = ''
         else:
@@ -632,25 +610,13 @@ class Application(CmdBase):
         return ds, dsname
 
     def do_new(self, line):
-        """Create a new empty dataset in this application.
-        
-        [description]
-        
-        Arguments:
-            line {str} -- [NAME [, DESCRIPTION]]
-        """
+        """Create a new empty dataset in this application."""
         ds, dsname = self.new(line)
         self.datasets[dsname] = ds
         ds.cmdloop()
 
     def delete(self, ds_name):
-        """Delete a dataset from the current application
-        
-        [description]
-        
-        Arguments:
-            - ds_name {[type]} -- [description]
-        """
+        """Delete a dataset from the current application"""
         if ds_name in self.datasets.keys():
             self.remove_ds_ax_lines(ds_name)
             for th in self.datasets[ds_name].theories.values():
@@ -665,13 +631,7 @@ class Application(CmdBase):
             print("Data Set \"%s\" not found" % ds_name)
 
     def remove_ds_ax_lines(self, ds_name):
-        """Remove all dataset file artists from ax including theory ones
-        
-        [description]
-        
-        Arguments:
-            - ds_name {[type]} -- [description]
-        """
+        """Remove all dataset file artists from ax including theory ones"""
         try:
             ds = self.datasets[ds_name]
         except KeyError:
@@ -687,30 +647,12 @@ class Application(CmdBase):
                     self.axarr[nx].lines.remove(file.data_table.series[nx][i])
 
     def do_delete(self, name):
-        """Delete a dataset from the current application
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-        """
+        """Delete a dataset from the current application"""
         self.delete(name)
     do_del = do_delete
 
     def complete_delete(self, text, line, begidx, endidx):
-        """Complete delete dataset command
-        
-        [description]
-        
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Complete delete dataset command"""
         dataset_names = list(self.datasets.keys())
         if not text:
             completions = dataset_names[:]
@@ -720,31 +662,20 @@ class Application(CmdBase):
     complete_del = complete_delete
 
     def list(self):
-        """List the datasets in the current application
-        
-        [description]
-        """
+        """List the datasets in the current application"""
         for ds in self.datasets.values():
-            print("%s:\t%s" % (ds.name, ds.description))
+            print(Fore.YELLOW + "%s"%ds.name + Fore.RESET)
 
     def do_list(self, line):
-        """List the datasets in the current application
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """List the datasets in the current application"""
         self.list()
 
+    def do_tree(self, line):
+        """List all the tools, datasets, files and theories in the current application"""
+        pass
+
     def do_switch(self, name):
-        """Switch the current dataset
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-        """
+        """Switch the current dataset"""
         done = False
         if name in self.datasets.keys():
             ds = self.datasets[name]
@@ -753,19 +684,7 @@ class Application(CmdBase):
             print("Dataset \"%s\" not found" % name)
 
     def complete_switch(self, text, line, begidx, endidx):
-        """Complete the switch dataset command
-        
-        [description]
-        
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Complete the switch dataset command"""
         ds_names = list(self.datasets.keys())
         if not text:
             completions = ds_names[:]
@@ -776,33 +695,19 @@ class Application(CmdBase):
 # FILE TYPE STUFF
 
     def filetype_available(self):
-        """List available file types in the current application
-        
-        [description]
-        """
+        """List available file types in the current application"""
         ftypes = list(self.filetypes.values())
         for ftype in ftypes:
-            print("%s:\t%s\t*.%s" % (ftype.name, ftype.description,
-                                     ftype.extension))
+            print("%s ("%ftype.name + Fore.CYAN + "*.%s"%ftype.extension + Fore.RESET + "): %s"%ftype.description)
 
     def do_filetype_available(self, line):
-        """List available file types in the current application
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """List available file types in the current application"""
         self.filetype_available()
 
 # VIEW STUFF
 
     def set_views(self):
-        """Set current view and assign availiable view
-        labels to viewComboBox if in GUI mode
-        
-        [description]
-        """
+        """Set current view and assign availiable view labels to viewComboBox if in GUI mode"""
         for i, view_name in enumerate(self.views):  #loop over the keys
             if i == 0:
                 #index 0 is the defaut view
@@ -817,10 +722,7 @@ class Application(CmdBase):
             self.viewComboBox.setCurrentIndex(0)
 
     def view_available(self):
-        """List available views in the current application
-        
-        [description]
-        """
+        """List available views in the current application"""
         for view in self.views.values():
             if (view == self.current_view):
                 print("*%s:\t%s" % (view.name, view.description))
@@ -828,23 +730,11 @@ class Application(CmdBase):
                 print("%s:\t%s" % (view.name, view.description))
 
     def do_view_available(self, line):
-        """List available views in the current application
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """List available views in the current application"""
         self.view_available()
 
     def view_switch(self, name):
-        """Change to another view from open application
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-        """
+        """Change to another view from open application"""
         if name in list(self.views.keys()):
             self.current_view = self.views[name]
             if self.current_viewtab == 0:
@@ -861,10 +751,7 @@ class Application(CmdBase):
         self.autoscale = temp
 
     def update_all_ds_plots(self):
-        """[summary]
-        
-        [description]
-        """
+        """Update all plots from all DataSets"""
         for ds in self.datasets.values():
             ds.do_plot()
 
@@ -873,29 +760,11 @@ class Application(CmdBase):
         self.update_all_ds_plots()
 
     def do_view_switch(self, name):
-        """Change to another view from open application
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-        """
+        """Change to another view from open application"""
         self.view_switch(name)
 
     def complete_view_switch(self, text, line, begidx, endidx):
-        """Complete switch view command
-        
-        [description]
-        
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Complete switch view command"""
         view_names = list(self.views.keys())
         if not text:
             completions = view_names[:]
@@ -906,42 +775,24 @@ class Application(CmdBase):
 # THEORY STUFF
 
     def theory_available(self):
-        """List available theories in the current application
-        
-        [description]
-        """
+        """List available theories in the current application"""
         for t in list(self.theories.values()):
-            print("%s:\t%s" % (t.thname, t.description))
+            print(Fore.MAGENTA + "%s:"%t.thname + (20-len(t.thname))*" " + Fore.RESET + "%s"%t.description)
 
     def do_theory_available(self, line):
-        """List available theories in the current application
-        
-        [description]
-        
-        Arguments:
-            line {[type]} -- [description]
-        """
+        """List available theories in the current application"""
         self.theory_available()
 
 # TOOL STUFF
     def tool_available(self):
-        """List available tools in the current application
-        
-        [description]
-        """
+        """List available tools in the current application"""
         for t in list(self.availabletools.values()):
             print("%s:\t%s" % (t.toolname, t.description))
         for t in list(self.extratools.values()):
             print("%s:\t%s" % (t.toolname, t.description))
 
     def do_tool_available(self, line):
-        """List available tools in the current application
-        
-        [description]
-        
-        Arguments:
-            line {[type]} -- [description]
-        """
+        """List available tools in the current application"""
         self.tool_available()
 
     def do_tool_add(self, line):
@@ -1035,32 +886,20 @@ class Application(CmdBase):
 # LEGEND STUFF
 
     def legend(self):
-        """[summary]
-        
-        [description]
-        """
+        """Show/Hide the legend"""
         self.legend_visible = not self.legend_visible
         self.set_legend_properties()
         self.canvas.draw()
 
     def do_legend(self, line):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """Show/Hide the legend"""
         self.legend()
 
 
 # OTHER STUFF
 
     def update_plot(self):
-        """[summary]
-        
-        [description]
-        """
+        """Update the plot in the current application"""
         self.set_axes_properties(self.autoscale)
         #self.set_legend_properties()
         if CmdBase.mode == CmdMode.GUI:
@@ -1068,10 +907,7 @@ class Application(CmdBase):
         self.canvas.draw()
 
     def set_axes_properties(self, autoscale=True):
-        """[summary]
-        
-        [description]
-        """
+        """Set axes properties"""
         for nx in range(self.nplots):
             view = self.multiviews[nx]
             ax = self.axarr[nx]
@@ -1141,10 +977,7 @@ class Application(CmdBase):
                 self.axarr[nx].set_aspect("auto")
 
     def set_legend_properties(self):
-        """[summary]
-        
-        [description]
-        """
+        """Set default legend properties"""
         # pass
         leg = self.axarr[0].legend(frameon=True, ncol=2)
         if (self.legend_visible):

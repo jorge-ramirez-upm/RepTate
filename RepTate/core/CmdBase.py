@@ -41,6 +41,8 @@ import cmd
 import readline
 import enum
 #from pint import UnitRegistry
+from colorama import Fore
+from numpy import *
 
 class CmdMode(enum.Enum):
     """[summary]
@@ -57,7 +59,7 @@ class CmdMode(enum.Enum):
         
         [description]
         """
-        return "cmdline: %d\nbatch: %d\nGUI: %d"%(self.modes.value[0], self.modes.value[1], self.modes.value[2])
+        return Fore.CYAN + "cmdline: " + Fore.RESET + "%s\n"%(self.modes.value[0]) + Fore.CYAN + "batch:   " + Fore.RESET + "%s\n"%self.modes.value[1] + Fore.CYAN + "GUI:     " + Fore.RESET + "%s"%self.modes.value[2]
 
 class CalcMode(enum.Enum):
     """[summary]
@@ -87,25 +89,36 @@ class CmdBase(cmd.Cmd):
     #ureg = UnitRegistry()
 
     def __init__ (self, parent=None):
-        """Constructor
-        
-        [description]
-        
-        Keyword Arguments:
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """Constructor"""
         super().__init__()
 
         delims = readline.get_completer_delims()
         delims = delims.replace(os.sep, '')
         readline.set_completer_delims(delims)
+
+        # list of safe methods for eval
+        self.safe_globals = ['arccos', 'arcsin', 'arctan', 'arctan2', 'ceil', 'cos', 
+                        'cosh', 'degrees', 'e', 'exp', 'fabs', 'floor', 
+                        'fmod', 'frexp', 'hypot', 'ldexp', 'log', 'log10', 
+                        'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 
+                        'tan', 'tanh'] 
+        self.safe_locals = ['self']
+            
+        # creating a dictionary of safe methods 
+        self.safe_dict = {}
+        for k in self.safe_globals:
+            self.safe_dict[k] = globals().get(k, None)
+        for k in self.safe_locals:
+            self.safe_dict[k] = locals().get(k, None)
+        self.safe_dict['print'] = print
+        self.safe_dict['list'] = list
+        self.safe_dict['type'] = type
         
     def do_shell(self, line):
         """Run a shell command
         
-        Arguments:
-            - line {str} -- Command to run
-        """
+Arguments:
+    - line {str} -- Command to run"""
         print("running shell command:", line)
         output = os.popen(line).read()
         print(output)
@@ -144,16 +157,7 @@ class CmdBase(cmd.Cmd):
 
 
     def __complete_path(self, path=None):
-        """Perform completion of filesystem path.
-        
-        [description]
-        
-        Keyword Arguments:
-            - path {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Perform completion of filesystem path."""
         if not path:
             return self.__listdir('.')
         
@@ -194,16 +198,14 @@ class CmdBase(cmd.Cmd):
         return result
 
     def do_ls(self, line):
-        """List contents of current folder.
-        """
+        """List contents of current folder."""
         dirs=os.listdir()
         for d in dirs:
             print("%s"%d)
     do_dir = do_ls
 
     def do_pwd(self, line):
-        """Print the current folder
-        """
+        """Print the current folder"""
         print(os.getcwd())
     do_cwd = do_pwd
 
@@ -213,15 +215,13 @@ class CmdBase(cmd.Cmd):
         pass
 
     def do_EOF(self, args):
-        """Exit Console and Return to Parent or exit
-        """
+        """Exit Console and Return to Parent or exit"""
         print("")
         return True
     do_up = do_EOF
     
     def do_quit(self, args):
-        """Exit from the application.
-        """
+        """Exit from the application."""
         if (CmdBase.mode==CmdMode.batch):
             print ("Exiting RepTate...")
             readline.write_history_file()
@@ -239,19 +239,44 @@ class CmdBase(cmd.Cmd):
         In that case we execute the line as Python code.
         """
         try:
-            exec(line) #in self._locals, self._globals
+            eval(line, {"__builtins__":None}, self.safe_dict) #in self._locals, self._globals
+        except NameError as e:
+            print("Command " + Fore.RED + "%s"%line + Fore.RESET + " not found")
+        except TypeError as e:
+            print("Command " + Fore.RED + "%s"%line + Fore.RESET + " not found")
         except Exception as e:
             print (e.__class__, ":", e)
+
+    def completedefault(self, text, line, begidx, endidx):
+        items=line.replace(',',' ').replace('(',' ').replace(')', ' ').replace('.', ' ').split()
+        lastitem=items[-1]
+        if len(items)>1:
+            onebeforelastitem=items[-2]
+        else:
+            onebeforelastitem=""
+        L=list(self.safe_dict.keys())
+        L2=list(vars(self))
+        if not lastitem:
+            completions = L
+        elif onebeforelastitem=='self':
+            completions = ['self.'+f for f in L2 if f.startswith(lastitem)]
+        elif lastitem=='self':
+            completions = L2
+        elif lastitem in L and len(items)==1:
+            completions=L
+        else:
+            completions = [f for f in L if f.startswith(lastitem)]
+        return completions
 
     def do_console(self, line):
         """Print/Set current & available Console modes
         
-           - console --> print current mode
-           - console available --> print available modes
-           - console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
+    - console --> print current mode
+    - console available --> print available modes
+    - console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
         
-        Arguments:
-            - [line] {str} -- cmdline, batch, GUI
+Arguments:
+    - [line] {str} -- available, cmdline, batch, GUI
         """
         if (line==""):
             print("Current console mode: %s"%CmdMode.modes.value[CmdBase.mode.value])
@@ -266,6 +291,14 @@ class CmdBase(cmd.Cmd):
         if (self.mode==CmdMode.batch):
             self.prompt = ''
             
+    def complete_console(self, text, line, begidx, endidx):
+        names = ["cmdline", "batch", "GUI", "available"]
+        if not text:
+            completions = names[:]
+        else:
+            completions = [f for f in names if f.startswith(text)]
+        return completions
+
     def cmdloop(self, intro=""):
         #print(self.intro)
         while True:
@@ -274,3 +307,4 @@ class CmdBase(cmd.Cmd):
                 break
             except KeyboardInterrupt:
                 print("^C")
+

@@ -74,13 +74,7 @@ class ApplicationManager(CmdBase):
 
     def __init__(self, parent=None):
         """
-        **Constructor**
-        
-        [description]
-        
-        Keyword Arguments:
-            - parent {[type]} -- [description] (default: {None})
-        """
+        **Constructor**"""
         super().__init__()
 
         # SETUP LOG
@@ -127,15 +121,14 @@ class ApplicationManager(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        L = [
-            "%s: %s" % (app.appname, app.description)
-            for app in list(self.available_applications.values())
-        ]
+        L = []
+        for app in list(self.available_applications.values()):
+            L.append(Fore.RED + "%s:"%app.appname + Fore.RESET + (12-len(app.appname))*" "
+                     + "%s"%app.description)
         return L
 
     def do_available(self, line):
-        """List all the available applications in RepTate.
-        """
+        """List all the available applications in RepTate."""
         L = self.available()
         for app in L:
             print(app)
@@ -158,8 +151,7 @@ class ApplicationManager(CmdBase):
         """Delete an open application. By hitting TAB, all the currently open applications are shown.
                 
         Arguments:
-            - name {str} -- Application to delete
-        """
+            - name {str} -- Application to delete"""
         self.delete(name)
     do_del = do_delete
 
@@ -193,25 +185,27 @@ class ApplicationManager(CmdBase):
         Returns:
             - [type] -- [description]
         """
-        L = [
-            "%s: %s" % (app.name, app.description)
-            for app in self.applications.values()
-        ]
+        L = []
+        for app in list(self.applications.values()):
+            L.append(Fore.RED + "%s:"%app.appname + Fore.RESET + (12-len(app.appname))*" "
+                     + "%s"%app.description)
         return L
 
     def do_list(self, line):
-        """List all the currently open applications.
-        """
+        """List all the currently open applications."""
         L = self.list()
         for app in L:
             print(app)
 
+    def do_tree(self, line):
+        """List all open applications, tools, datasets and theories"""
+        pass
+
     def new(self, appname):
         """Create a new application and open it.
         
-        Arguments:
-            - name {str} -- Application to open (MWD, LVE, TTS, etc)
-        """
+Arguments:
+    - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
         if (appname in self.available_applications):
             self.application_counter += 1
             newapp = self.available_applications[appname](
@@ -229,10 +223,8 @@ class ApplicationManager(CmdBase):
     def do_new(self, appname):
         """Create a new application and open it.
         
-        Arguments:
-            - name {str} -- Ap
-            plication to open (MWD, LVE, TTS, etc)
-        """
+Arguments:
+    - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
         newapp = self.new(appname)
         if (newapp != None):
             if CmdBase.mode != CmdMode.GUI:
@@ -263,9 +255,8 @@ class ApplicationManager(CmdBase):
     def do_switch(self, name):
         """Set focus to an open application. By hitting TAB, all the currently open applications are shown.
                 
-        Arguments:
-            - name {str} -- Name of the applicaton to switch the focus to.
-        """
+Arguments:
+    - name {str} -- Name of the applicaton to switch the focus to."""
         if name in self.applications.keys():
             app = self.applications[name]
             app.cmdloop()
@@ -292,14 +283,13 @@ class ApplicationManager(CmdBase):
 # MAXWELL MODES COPY
 
     def do_copymodes(self, line):
-        """Copy maxwell modes from one theory to another.
+        """Copy maxwell modes from one theory to another. Both theories may live inside different applications and/or datasets
+
+Usage:
+    copymodes App1.SetA.TheoryI App2.SetB.TheoryJ
         
-        Both theories may live inside different applications and/or datasets
-        copymodes App1.Dataseta.Theoryi App2.Datasetb.Theoryj
-        
-        Arguments:
-            - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory)
-        """
+Arguments:
+    - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory) """
         apps = line.split()
         if len(apps) < 2:
             print(
@@ -360,12 +350,17 @@ class ApplicationManager(CmdBase):
         return get_dict, set_dict
 
     def do_list_theories_Maxwell(self, line):
-        """List the theories in the current RepTate instance that provide
-        Maxwell modes        
-        """
+        """List the theories in the current RepTate instance that provide Maxwell modes"""
         L, S = self.list_theories_Maxwell()
-        print(list(L.keys()))
-
+        if len(L)>0:
+            print("The following open theories provide/require Maxwell Modes:")
+            for k in L.keys():
+                items = k.split('.')
+                print(Fore.RED + items[0] + Fore.RESET + "." + 
+                      Fore.YELLOW + items[1] + Fore.RESET + "." +
+                      Fore.MAGENTA + items[2])
+        else:
+            print("Currently there are no open theories that provide Maxwell modes.")
 
 # OTHER STUFF
 
@@ -378,28 +373,28 @@ class ApplicationManager(CmdBase):
         print('https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html')
 
     def do_about(self, line):
-        """Show about info. 
-        """
-        print("RepTate (Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment),")
-        print("was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds")
-        print("and the University of Reading, as part of the muPP2 project, funded by the EPSRC.")
+        """Show about info."""
+        print(Fore.GREEN + "RepTate " + Fore.RESET +
+              "(Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment), " +
+              "was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds " +
+              "and the University of Reading, as part of the muPP2 project, funded by the EPSRC.")
         print("")
-        print("This new version is a port (and enhancement) of the original RepTate code to python,")
-        print("using pyqt and matplotlib for the visuals, and numpy and scipy for numerical calculations.")
+        print("This new version is a port (and enhancement) of the original RepTate code to python," + 
+              " using pyqt and matplotlib for the visuals, and numpy and scipy for the numerical calculations.")
         print("")
-        print("It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, jorge.ramirez@upm.es)")
-        print("and Victor Boudara (University of Leeds, v.a.boudara@leeds.ac.uk).")
+        print("It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, " + Fore.CYAN 
+            + "jorge.ramirez@upm.es" + Fore.RESET + ") and Victor Boudara (University of Leeds, " 
+            + Fore.CYAN + "v.a.boudara@leeds.ac.uk" + Fore.RESET +").")
         print("")
         print("The program and source code are released under the GPLv3 license.")
         print("")
         print("This project is dedicated to the memory of our great friend and collaborator Alexei.")
         print("")
-        print("Project page: https://github.com/jorge-ramirez-upm/RepTate")
-        print("Documentation: http://reptate.readthedocs.io/")
+        print("Project page: " + Fore.CYAN + "https://github.com/jorge-ramirez-upm/RepTate")
+        print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
 
     def do_info(self, line):
-        """Show info about the current RepTate session.
-        """
+        """Show info about the current RepTate session."""
         print("##AVAILABLE APPLICATIONS:")
         self.do_available(line)
 
@@ -407,9 +402,7 @@ class ApplicationManager(CmdBase):
         self.do_list(line)
 
     def do_quit(self, args):
-        """Exit from the application.
-            args {[type]} -- ???
-        """
+        """Exit from the application."""
         msg = 'Do you really want to exit RepTate?'
         shall = input("\n%s (y/N) " % msg).lower() == 'y'
         if (shall):
@@ -432,12 +425,11 @@ class ApplicationManager(CmdBase):
         return newversion, version_github, version_current
 
     def do_check_version(self, line):
-        """Check if there is a new version of RepTate on Github.
-        """
+        """Check if there is a new version of RepTate on Github."""
         newversion, version_github, version_current = self.check_version()
         if CmdBase.mode != CmdMode.GUI:
-            print("Current Version: %s"%version_current)
-            print("Version on Github: %s"%version_github)
+            print("Current Version:   " + Fore.CYAN + "%s"%version_current + Fore.RESET)
+            print("Version on Github: " + Fore.CYAN + "%s"%version_github + Fore.RESET)
             if newversion:
                 print("The version of RepTate on Github (%s) is more recent than the one you are running (%s)"%(version_github, version_current))
             else:

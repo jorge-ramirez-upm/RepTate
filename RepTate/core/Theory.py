@@ -54,6 +54,7 @@ from PyQt5.QtWidgets import QMessageBox
 from collections import OrderedDict
 from math import log
 from ToolMaterialsDatabase import check_chemistry, get_all_parameters
+from colorama import Fore
 
 from html.parser import HTMLParser
 class MLStripper(HTMLParser):
@@ -88,6 +89,16 @@ class MinimizationMethod(enum.Enum):
     diffevol=3
     SHGO=4
     bruteforce=5
+    types=["ls", "basinhopping", "dualannealing", "diffevol", "SHGO", "bruteforce"]
+    descriptions=["Non-linear Least Squares", "Basin-hopping method", "Dual-Annealing", 
+                  "Differential Evolution", "Simplicial Homology Global Optimization", "Find the minimum on a hypergrid"]
+
+    def __str__(self):
+        stt=""
+        N=len(self.types.value)
+        for i, k in enumerate(self.types.value):
+            stt += Fore.RED + k + Fore.RESET + ": " + self.descriptions.value[i] + "\n"
+        return stt
 
 class ErrorCalculationMethod(enum.Enum):
     """Method to determine the error of a theory calculation.
@@ -106,10 +117,7 @@ class EndComputationRequested(Exception):
     pass
 
 class Theory(CmdBase):
-    """Abstract class to describe a theory
-    
-    [description]
-    """
+    """Abstract class to describe a theory"""
     thname = ""
     """ thname {str} -- Theory name """
     description = ""
@@ -304,14 +312,7 @@ class Theory(CmdBase):
         This function could be erased
         This method is called after the line has been input but before
         it has been interpreted. If you want to modifdy the input line
-        before execution (for example, variable substitution) do it here.
-        
-        Arguments:
-            - line {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        before execution (for example, variable substitution) do it here."""
         super(Theory, self).precmd(line)
         return line
 
@@ -433,15 +434,9 @@ class Theory(CmdBase):
     def do_error(self, line):
         """Report the error of the current theory
         
-        Report the error of the current theory on all the files, taking into account
-        the current selected xrange and yrange.
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-        File error is calculated as the mean square of the residual, averaged over all points in the file.
-        Total error is the mean square of the residual, averaged over all points in all files.
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
@@ -541,17 +536,7 @@ class Theory(CmdBase):
         return fres
 
     def func_fit(self, x, *param_in):
-        """Calls the theory function and constructs the vector with the theory predictions
-        
-        [description]
-        
-        Arguments:
-            - x {[type]} -- [description]
-            - \*param_in {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Calls the theory function and constructs the vector with the theory predictions"""
         # 1. Assign the current values of the parameters being optimized
         ind = 0
         k = list(self.parameters.keys())
@@ -597,13 +582,7 @@ class Theory(CmdBase):
         return y
 
     def do_fit(self, line):
-        """Minimize the error
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """Minimize the error"""
         # Do some initial checks on the status of datasets and theories
         if not self.tables:
             self.is_fitting = False
@@ -879,33 +858,38 @@ class Theory(CmdBase):
         self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
         self.do_cite("")
 
-    def do_print(self, line):
-        """Print the theory table associated with the given file name
+    def do_mintype(self, line):
+        """Shows or changes the minimization method"""
+        if (line==""):
+            print("Current minimization method:")
+            print(Fore.RED + "%s"%MinimizationMethod.types.value[self.mintype.value] + 
+                  Fore.RESET + "\t%s"%MinimizationMethod.descriptions.value[self.mintype.value])
+        elif (line=="available"):
+            m = MinimizationMethod(0)
+            print(m)
+        elif (line in dict(MinimizationMethod.__members__.items())):
+            self.mintype=MinimizationMethod[line]
+        else:
+            print ("Minimization method %s not valid"%line)
         
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+    def complete_mintype(self, text, line, begidx, endidx):
+        """Complete mintype command"""
+        types = MinimizationMethod.types.value + ["available"]
+        if not text:
+            completions = types[:]
+        else:
+            completions = [f for f in types if f.startswith(text)]
+        return completions
+
+    def do_file(self, line):
+        """Print the theory table associated with the given file name"""
         if line in self.tables:
             print(self.tables[line].data)
         else:
             print("Theory table for \"%s\" not found" % line)
 
-    def complete_print(self, text, line, begidx, endidx):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-        
-        Returns:
-            [type] -- [description]
-        """
+    def complete_file(self, text, line, begidx, endidx):
+        """Complete with file names"""
         file_names = list(self.tables.keys())
         if not text:
             completions = file_names[:]
@@ -917,11 +901,7 @@ class Theory(CmdBase):
         """View and switch the minimization state of the theory parameters
            parameters A B
         
-        Several parameters are allowed
-        With no arguments, show the current values
-        
-        Arguments:
-            line {[type]} -- [description]
+        Several parameters are allowed. With no arguments, show the current values
         """
         if (line == ""):
             plist = list(self.parameters.keys())
