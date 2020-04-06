@@ -234,7 +234,7 @@ class TXTColumnFile(object):
 class ExcelFile(object):
     """Parse and read contents from Excel file
     """
-    def __init__(self, name='ExcelFile', extension='xlsx', 
+    def __init__(self, name='Excel File', extension='xlsx', 
                  description='Generic Excel file', 
                  col_names=[], basic_file_parameters=[], col_units=[]):
 

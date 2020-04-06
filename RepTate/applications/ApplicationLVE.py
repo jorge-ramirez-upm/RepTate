@@ -308,7 +308,7 @@ class BaseApplicationLVE:
             "Small-angle oscillatory masurements from the Rheometer",
             ['w', 'G\'', 'G\'\''], ['Mw', 'T'], ['rad/s', 'Pa', 'Pa'])
         
-        self.filetypes['xlsx'] = ExcelFile("Excel File", "xlsx", "ExcelFIle",
+        self.filetypes['xlsx'] = ExcelFile("Excel files", "xlsx", "Excel File",
                                             ['w','G\'','G\'\''], [], ['rad/s', 'Pa', 'Pa'])
         
         # THEORIES

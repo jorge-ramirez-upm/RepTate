@@ -51,26 +51,12 @@ class ToolEvaluate(CmdBase):
     citations = ''
 
     def __new__(cls, name='', parent_app=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """**Constructor**"""
         return GUIToolEvaluate(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolEvaluate(name, parent_app)
 
 
 class BaseToolEvaluate:
-    """[summary]
-    
-    [description]
-    """
+    """Base Class for Evaluation of expressions"""
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolEvaluate.toolname
     citations = ToolEvaluate.citations

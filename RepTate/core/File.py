@@ -37,6 +37,7 @@ Module that defines a basic File, with headers, columns and data.
 """ 
 import os
 from DataTable import DataTable
+from colorama import Fore
 
 class File(object):
     """Basic class that describes elements of a DataSet
@@ -92,7 +93,7 @@ class File(object):
         
         [description]
         """
-        return '%s: %s' % (self.file_full_path, self.file_parameters)
+        return Fore.YELLOW + 'File: ' + Fore.RESET  + '%s\n'%self.file_name_short + Fore.CYAN  + 'Path: ' + Fore.RESET + '%s\n'%self.file_full_path + Fore.RED + 'Parameters: ' + Fore.RESET + '%s'%self.file_parameters
         
     def mincol(self, col):
         """Minimum value in data_table column col

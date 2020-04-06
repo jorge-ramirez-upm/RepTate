@@ -1745,7 +1745,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 fname += "_%s" % res_dic["col3"]
             except:
                 pass
-            f, success = ds.do_new_dummy_file(fname=fname+"_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], fparams=fparams, file_type=ftype)
+            f, success = ds.new_dummy_file(fname=fname+"_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], fparams=fparams, file_type=ftype)
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
             if res_dic["flag_nan"]:
@@ -1809,7 +1809,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 fparams = {}
                 for i, pname in enumerate(paramsnames):
                     fparams[pname] = c[i]
-                f, success = ds.do_new_dummy_file(xrange=xrange, yval=yval, fparams=fparams, file_type=ftype)
+                f, success = ds.new_dummy_file(xrange=xrange, yval=yval, fparams=fparams, file_type=ftype)
                 if success:
                     self.addTableToCurrentDataSet(f, ftype.extension)
         
@@ -1835,7 +1835,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
             else:
                 xrange = np.linspace(xmin, xmax, npoints)
-            f, success = ds.do_new_dummy_file(xrange=xrange, yval=0, fparams=fparams, file_type=ftype)
+            f, success = ds.new_dummy_file(xrange=xrange, yval=0, fparams=fparams, file_type=ftype)
 
             if success:
                 cols = ftype.col_names
