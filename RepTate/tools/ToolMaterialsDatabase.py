@@ -46,6 +46,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QStandardItem, QFont, QIcon, QColor, QDoubleValidator
 from pathlib import Path
 import polymer_data
+from colorama import Fore
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 materials_database = np.load(os.path.join(dir_path, 'materials_database.npy'), allow_pickle=True).item()
@@ -245,14 +246,15 @@ class BaseToolMaterialsDatabase:
         self.parameters['B2'] = Parameter(name='B2', description='WLF TTS parameter 2')
         self.parameters['logalpha'] = Parameter(name='logalpha', description='Log_10 of the thermal expansion coefficient at 0 °C')
         self.parameters['CTg'] = Parameter(name='CTg', description='Molecular weight dependence of Tg')
-        self.parameters['tau_e'] = Parameter(name='tau_e', description='Entanglement time')
-        self.parameters['Ge'] = Parameter(name='Ge', description='Entanglement modulus')
-        self.parameters['Me'] = Parameter(name='Me', description='Entanglement molecular weight')
+        self.parameters['tau_e'] = Parameter(name='tau_e', description='Entanglement time (s)')
+        self.parameters['Ge'] = Parameter(name='Ge', description='Entanglement modulus (Pa)')
+        self.parameters['Me'] = Parameter(name='Me', description='Entanglement molecular weight (kDa)')
         self.parameters['c_nu'] = Parameter(name='c_nu', description='Constraint release parameter')
-        self.parameters['rho0'] = Parameter(name='rho0', description='Density of the polymer melt (kg/m3) at 0 °C')
+        self.parameters['rho0'] = Parameter(name='rho0', description='Density of the polymer melt (g/cm3) at 0 °C')
         self.parameters['chem'] = Parameter(name='chem', description='Repeating unit', type=ParameterType.string)
-        self.parameters['Te'] = Parameter(name='Te', description='Temperature at which the tube parameters have been determined')
+        self.parameters['Te'] = Parameter(name='Te', description='Temperature at which the tube parameters have been determined (°C)')
         self.parameters['M0'] = Parameter(name='M0', description='Mass of Repeating unit (g/mol)')
+        self.parameters['MK'] = Parameter(name='MK', description='Molecular weight of Kuhn step (Da)')
         self.parameters['C_inf'] = Parameter(name='C_inf', description='Characteristic ratio')
 
     def destructor(self):
@@ -270,6 +272,66 @@ class BaseToolMaterialsDatabase:
         """
         return x, y
 
+    def do_calculate_stuff(self, line=""):
+        """Given the values of Mw (in kDa) and T (in °C), as well as a flag for isofrictional state and vertical shift, it returns some calculations for the current chemistry.
+Example:
+    calculate_stuff 35.4 240 1 1
+    
+    Mw=35.4 T=240 isofrictional=True verticalshift=True"""
+        items=line.split()
+        if len(items)==4:
+            Mw = float(items[0])
+            T = float(items[1])
+            iso = bool(items[2])
+            vert = bool(items[3])
+            B1 = self.parameters['B1'].value
+            B2 = self.parameters['B2'].value
+            logalpha = self.parameters['logalpha'].value
+            alpha = np.power(10.0, logalpha)
+            CTg = self.parameters['CTg'].value
+            tau_e = self.parameters['tau_e'].value
+            Ge = self.parameters['Ge'].value
+            Me = self.parameters['Me'].value
+            c_nu = self.parameters['c_nu'].value
+            rho0 = self.parameters['rho0'].value
+            Te = self.parameters['Te'].value
+
+            if iso:
+                B2 += CTg / Mw #- 68.7 * dx12
+                Trcorrected = T - CTg / Mw #+ 68.7 * dx12
+            else:
+                Trcorrected = T
+            
+            aT = np.power(10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te))
+            if vert:
+                bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
+            else:
+                bT = 1
+
+            self.Qprint('<hr><h3>WLF TTS Shift Factors</h3>')
+            # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
+            self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
+            self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
+
+            self.Qprint('<h3>Tube Theory parameters</h3>')
+            Ge /= bT
+            tau_e /= aT
+            self.Qprint("<b>tau_e</b> = %g" % tau_e)
+            self.Qprint("<b>Ge</b> = %g<br>" % Ge)
+
+            self.Qprint('<h3>Other Results</h3>')
+            CC1 = 1.69
+            CC2 = 4.17
+            CC3 = -1.55
+            Z = Mw / Me
+            tR = tau_e * Z*Z
+            tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
+            self.Qprint("<b>Z</b> = %g" % Z)
+            self.Qprint("<b>tau_R</b> = %g" % tR)
+            self.Qprint("<b>tau_D</b> = %g<br>" % tD)
+        else:
+            print("Wrong number of parameters.")
+            print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
 
 class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
     """[summary]
@@ -287,9 +349,31 @@ class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
             - ax {[type]} -- [description] (default: {None})
         """
         super().__init__(name, parent_app)
+        self.do_material("PI")
 
-    # This class usually stays empty
+    def do_database(self, line):
+        """Print information about the location of the Material database files"""
+        print(Fore.RED + "RepTate Material database: " + Fore.RESET + os.path.join(dir_path, 'materials_database.npy'))
+        print(Fore.RED + "User's material database:  " + Fore.RESET + file_user_database)
 
+    def do_material(self, line):
+        """Change/View the selected material"""
+        db=check_chemistry(line)
+        if line=="":
+            print("Current Material: " + Fore.RED + self.parameters['name'].value)
+        elif db<0:    
+            print("Material " + Fore.RED + line + Fore.RESET + " not found.")
+        else:
+            for k in materials_db[db][line].data.keys():
+                self.set_param_value(k, materials_db[db][line].data[k])
+
+    def complete_material(self, text, line, begidx, endidx):
+        chems = list(materials_db[0].keys()) + list(materials_db[1].keys())
+        if not text:
+            completions = chems[:]
+        else:
+            completions = [f for f in chems if f.startswith(text)]
+        return completions
 
 class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
     """[summary]
@@ -394,57 +478,6 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             self.set_param_value(k, materials_db[dbindex][selected_material_name].data[k])
         self.update_parameter_table()
 
-    def calculate_stuff(self):
-        Mw = float(self.editMw.text())
-        T = float(self.editT.text())
-        B1 = self.parameters['B1'].value
-        B2 = self.parameters['B2'].value
-        logalpha = self.parameters['logalpha'].value
-        alpha = np.power(10.0, logalpha)
-        CTg = self.parameters['CTg'].value
-        tau_e = self.parameters['tau_e'].value
-        Ge = self.parameters['Ge'].value
-        Me = self.parameters['Me'].value
-        c_nu = self.parameters['c_nu'].value
-        rho0 = self.parameters['rho0'].value
-        Te = self.parameters['Te'].value
-        iso = self.isofrictional.isChecked()
-        vert = self.verticalshift.isChecked()
-
-        if iso:
-            B2 += CTg / Mw #- 68.7 * dx12
-            Trcorrected = T - CTg / Mw #+ 68.7 * dx12
-        else:
-            Trcorrected = T
-        
-        aT = np.power(10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te))
-        if vert:
-            bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
-        else:
-            bT = 1
-
-        self.Qprint('<hr><h3>WLF TTS Shift Factors</h3>')
-        # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
-        self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
-        self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
-
-        self.Qprint('<h3>Tube Theory parameters</h3>')
-        Ge /= bT
-        tau_e /= aT
-        self.Qprint("<b>tau_e</b> = %g" % tau_e)
-        self.Qprint("<b>Ge</b> = %g<br>" % Ge)
-
-        self.Qprint('<h3>Other Results</h3>')
-        CC1 = 1.69
-        CC2 = 4.17
-        CC3 = -1.55
-        Z = Mw / Me
-        tR = tau_e * Z*Z
-        tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
-        self.Qprint("<b>Z</b> = %g" % Z)
-        self.Qprint("<b>tau_R</b> = %g" % tR)
-        self.Qprint("<b>tau_D</b> = %g<br>" % tD)
-
     def new_material(self):
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
         ok = False
@@ -543,3 +576,54 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         if ans == QMessageBox.Yes:
             self.cbmaterial.removeItem(self.cbmaterial.currentIndex()) 
             materials_user_database.pop(selected_material_name)
+
+    def calculate_stuff(self, line=""):
+        Mw = float(self.editMw.text())
+        T = float(self.editT.text())
+        B1 = self.parameters['B1'].value
+        B2 = self.parameters['B2'].value
+        logalpha = self.parameters['logalpha'].value
+        alpha = np.power(10.0, logalpha)
+        CTg = self.parameters['CTg'].value
+        tau_e = self.parameters['tau_e'].value
+        Ge = self.parameters['Ge'].value
+        Me = self.parameters['Me'].value
+        c_nu = self.parameters['c_nu'].value
+        rho0 = self.parameters['rho0'].value
+        Te = self.parameters['Te'].value
+        iso = self.isofrictional.isChecked()
+        vert = self.verticalshift.isChecked()
+
+        if iso:
+            B2 += CTg / Mw #- 68.7 * dx12
+            Trcorrected = T - CTg / Mw #+ 68.7 * dx12
+        else:
+            Trcorrected = T
+        
+        aT = np.power(10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te))
+        if vert:
+            bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
+        else:
+            bT = 1
+
+        self.Qprint('<hr><h3>WLF TTS Shift Factors</h3>')
+        # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
+        self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
+        self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
+
+        self.Qprint('<h3>Tube Theory parameters</h3>')
+        Ge /= bT
+        tau_e /= aT
+        self.Qprint("<b>tau_e</b> = %g" % tau_e)
+        self.Qprint("<b>Ge</b> = %g<br>" % Ge)
+
+        self.Qprint('<h3>Other Results</h3>')
+        CC1 = 1.69
+        CC2 = 4.17
+        CC3 = -1.55
+        Z = Mw / Me
+        tR = tau_e * Z*Z
+        tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
+        self.Qprint("<b>Z</b> = %g" % Z)
+        self.Qprint("<b>tau_R</b> = %g" % tR)
+        self.Qprint("<b>tau_D</b> = %g<br>" % tD)
