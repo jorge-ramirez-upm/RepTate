@@ -55,6 +55,7 @@ from collections import OrderedDict
 from math import log
 from ToolMaterialsDatabase import check_chemistry, get_all_parameters
 from colorama import Fore
+import logging
 
 from html.parser import HTMLParser
 class MLStripper(HTMLParser):
@@ -247,6 +248,16 @@ class Theory(CmdBase):
          # flag for requesting end of computations
         self.stop_theory_flag = False
 
+        # LOGGING STUFF
+        self.logger = logging.getLogger(self.parent_dataset.logger.name + '.' + self.name)
+        self.logger.debug('New ' + self.thname + ' Theory')
+        np.seterr(all="call")
+        np.seterrcall(self.write)
+
+    def write(self, type, flag):
+        """Write numpy error logs to the logger"""
+        self.logger.info('numpy: %s (flag %s)'%(type, flag))
+   
     def setup_default_minimization_options(self):
         # MINIMIZATION OPTIONS
         self.mintype=MinimizationMethod.ls
@@ -1237,24 +1248,12 @@ File error is calculated as the mean square of the residual, averaged over all p
         pass
 
     def do_cite(self, line):
-        """Print citation information
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """Print citation information"""
         if (self.citations != ""):
             self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
 
     def do_plot(self, line):
-        """Call the plot from the parent Dataset
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """Call the plot from the parent Dataset"""
         self.parent_dataset.do_plot(line)
         #self.plot_theory_stuff()
 

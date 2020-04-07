@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/RepTate.py",
             "console": "integratedTerminal",
-            "args": ["-s","data/LAOS/GiesekusSimulation-omega01p00-gam05p000.laos"]
+            "args": ["-s","-v", "data/LAOS/GiesekusSimulation-omega01p00-gam05p000.laos"]
         },
         {
             "name": "RepTateCL",

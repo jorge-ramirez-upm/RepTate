@@ -39,8 +39,7 @@ import os
 import sys
 import glob
 import argparse
-from logging import *
-basicConfig(level=INFO)
+import logging
 
 sys.path.append('core')
 sys.path.append('gui')
@@ -107,6 +106,11 @@ def start_RepTate(argv):
     if args.batch: 
         CmdBase.mode = CmdMode.batch
 
+    if args.verbose:
+        loglevel=logging.DEBUG
+    else:
+        loglevel=logging.INFO
+
     # Get files from command line
     dictfiles=get_argument_files(args.finlist)
 
@@ -115,7 +119,8 @@ def start_RepTate(argv):
         sys.exit()
     
     qapp = QApplication(sys.argv)
-    app = ApplicationManager()
+    
+    app = ApplicationManager(loglevel=loglevel)
 
     # Handle files & open apps accordingly
     CmdBase.calcmode = CalcMode.singlethread # avoid troubles when loading multiple apps/files/theories

@@ -42,6 +42,10 @@ import matplotlib.pyplot as plt
 import readline
 from urllib.request import urlopen
 import json
+import logging
+import logging.handlers
+from pathlib import Path
+import os
 
 from CmdBase import CmdBase, CmdMode
 from ApplicationTTS import ApplicationTTS
@@ -72,19 +76,10 @@ class ApplicationManager(CmdBase):
     intro = 'RepTate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
         version, date)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, loglevel=logging.INFO):
         """
         **Constructor**"""
         super().__init__()
-
-        # SETUP LOG
-        #self.reptatelogger = logging.getLogger('ReptateLogger')
-        #self.reptatelogger.setLevel(logging.DEBUG)  # INFO, WARNING
-        #logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-        #log_file_name = 'reptate.log'
-        #handler = logging.handlers.RotatingFileHandler(
-        #    log_file_name, maxBytes=20000, backupCount=2, mode='w')
-        #MainWindow.reptatelogger.addHandler(handler)
 
         # SETUP READLINE, COMMAND HISTORY FILE, ETC
         try:
@@ -110,6 +105,24 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationDielectric.appname] = ApplicationDielectric
         self.available_applications[ApplicationLAOS.appname] = ApplicationLAOS
 
+        # LOGGING STUFF
+        self.logger = logging.getLogger('RepTate')
+        self.logger.setLevel(loglevel)
+        home_path = str(Path.home())
+        logfile = os.path.join(home_path, 'RepTate.log')
+        fh = logging.handlers.RotatingFileHandler(logfile, maxBytes=20000, backupCount=2)
+        fh.setLevel(loglevel)
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.WARNING)
+        # create formatter and add it to the handlers
+        formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s: %(message)s',
+                                      "%Y%m%d %H%M%S")
+        fh.setFormatter(formatter)
+        ch.setFormatter(formatter)
+        # add the handlers to the logger
+        self.logger.addHandler(fh)
+        self.logger.addHandler(ch)
+        self.logger.debug('New ApplicationManager')
 
 # APPLICATION STUFF
 

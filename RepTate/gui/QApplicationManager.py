@@ -53,6 +53,7 @@ from collections import OrderedDict
 import numpy as np
 import time
 import Version
+import logging
 
 PATH = dirname(abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(join(PATH, 'ReptateMainWindow.ui'))
@@ -67,14 +68,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     #reptatelogger = logging.getLogger('ReptateLogger')
     #reptatelogger.setLevel(logging.DEBUG)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, loglevel=logging.INFO):
         """
         **Constructor**
 
         Keyword Arguments:
             - parent {[type]} -- [description] (default: {None})
         """
-        super().__init__()
+        super().__init__(loglevel=loglevel)
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         CmdBase.mode = CmdMode.GUI  #set GUI mode

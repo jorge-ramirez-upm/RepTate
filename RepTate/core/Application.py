@@ -63,6 +63,8 @@ from ToolInterpolate import ToolInterpolateExtrapolate
 from ToolMaterialsDatabase import ToolMaterialsDatabase
 from mplcursors import cursor
 from colorama import Fore
+import logging
+
 class Application(CmdBase):
     """Main abstract class that represents an application
     
@@ -83,7 +85,6 @@ class Application(CmdBase):
         super().__init__()
         self.name = name
         self.parent_manager = parent
-        #self.logger = logging.getLogger('ReptateLogger')
         self.views = OrderedDict()
         self.filetypes = OrderedDict() # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order
@@ -151,6 +152,10 @@ class Application(CmdBase):
                                            & ~Qt.WindowCloseButtonHint)
             self.multiplots.show()
         self.datacursor_ = None
+
+        # LOGGING STUFF
+        self.logger = logging.getLogger(self.parent_manager.logger.name + '.' + self.name)
+        self.logger.debug('New LVE app')
 
     def resizeplot(self, event=""):
         """Rescale plot graphics when the window is resized"""

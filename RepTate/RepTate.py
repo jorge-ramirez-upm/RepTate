@@ -40,10 +40,9 @@ import sys
 import glob
 import argparse
 import traceback
-from logging import *
 import numpy as np
-basicConfig(level=WARNING)
- 
+import logging
+
 # os.chdir(os.path.dirname(sys.argv[0])) # set cwd as *this* dir
 sys.path.append('core')
 sys.path.append('gui')
@@ -59,9 +58,6 @@ from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtCore import QUrl, Qt, QCoreApplication
 from SplashScreen import SplashScreen
 # from time import time, sleep
-
-np.seterr(divide = 'ignore')
-np.seterr(over = 'ignore')
 
 def get_argument_files(finlist):
     """
@@ -118,6 +114,11 @@ def start_RepTate(argv):
         print(QApplicationManager.intro)
         sys.exit()
 
+    if args.verbose:
+        loglevel=logging.DEBUG
+    else:
+        loglevel=logging.INFO
+
     QApplication.setStyle("Fusion") #comment that line for a native look
                                     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
@@ -135,7 +136,7 @@ def start_RepTate(argv):
     # splash.showMessage("Loading RepTate...\n")
     splash.show()
     
-    ex = QApplicationManager()
+    ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
     # splash.showMessage("Loading RepTate...")
 

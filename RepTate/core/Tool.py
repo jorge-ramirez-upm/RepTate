@@ -53,7 +53,7 @@ from collections import OrderedDict
 
 import Theory
 
-
+import logging
 class Tool(CmdBase):
     """Abstract class to describe a Tool
     """
@@ -88,6 +88,17 @@ class Tool(CmdBase):
 
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
+
+        # LOGGING STUFF
+        self.logger = logging.getLogger(self.parent_application.logger.name + '.' + self.name)
+        self.logger.debug('New ' + self.toolname + ' Tool')
+        np.seterr(all="call")
+        np.seterrcall(self.write)
+
+    def write(self, type, flag):
+        """Write numpy error logs to the logger"""
+        self.logger.info('numpy: %s (flag %s)'%(type, flag))
+
 
     def precmd(self, line):
         """Calculations before the Tool is calculated
@@ -125,19 +136,16 @@ class Tool(CmdBase):
         if (line == ""):
             plist = list(self.parameters.keys())
             plist.sort()
-            print("%9s   %10s (with * = is optimized)" % ("Parameter",
+            print("%9s   %10s" % ("Parameter",
                                                           "Value"))
             print("==================================")
             for p in plist:
-                if self.parameters[p].opt_type == OptType.opt:
-                    print("*%8s = %10.5g" % (self.parameters[p].name,
-                                             self.parameters[p].value))
-                elif self.parameters[p].opt_type == OptType.nopt:
-                    print("%8s = %10.5g" % (self.parameters[p].name,
-                                            self.parameters[p].value))
-                elif self.parameters[p].opt_type == OptType.const:
-                    print("%8s = %10.5g" % (self.parameters[p].name,
-                                            self.parameters[p].value))
+                if self.parameters[p].type == ParameterType.string:
+                    formatstring = "%10s"
+                else:
+                    formatstring = "%10.5g"
+                print("%8s = "%self.parameters[p].name  + 
+                      formatstring%self.parameters[p].value)
         else:
             for s in line.split():
                 if (s in self.parameters):

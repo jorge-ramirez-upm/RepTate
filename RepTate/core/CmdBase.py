@@ -43,6 +43,7 @@ import enum
 #from pint import UnitRegistry
 from colorama import Fore
 from numpy import *
+import logging
 
 class CmdMode(enum.Enum):
     """[summary]
@@ -113,6 +114,8 @@ class CmdBase(cmd.Cmd):
         self.safe_dict['print'] = print
         self.safe_dict['list'] = list
         self.safe_dict['type'] = type
+
+        self.logger=None
         
     def do_shell(self, line):
         """Run a shell command
@@ -266,6 +269,91 @@ Arguments:
             completions=L
         else:
             completions = [f for f in L if f.startswith(lastitem)]
+        return completions
+
+    def do_log(self, line):
+        """Info about the logger"""
+        if self.logger!=None:
+            nhandlers=len(logging.getLogger('RepTate').handlers)
+            logfilename=""
+            if nhandlers>0:
+                print(Fore.RED + "%15s %10s"%("Log Handler", "Level"))
+                print(26*"=" + Fore.RESET)
+            print("%15s %10s"%("Main", logging.getLevelName(logging.getLogger('RepTate').level)))
+            for i in range(nhandlers):
+                h=logging.getLogger('RepTate').handlers[i]
+                if isinstance(h, logging.handlers.RotatingFileHandler):
+                    print("%15s %10s"%("File", logging.getLevelName(h.level)))
+                    logfilename=h.baseFilename
+                elif isinstance(h, logging.StreamHandler):
+                    print("%15s %10s"%("Console", logging.getLevelName(h.level)))
+            print("")
+            print (Fore.RED+"Main Logger level:    " + Fore.RESET + "RepTate")
+            print (Fore.RED+"Current Logger level: " + Fore.RESET + "%s"%self.logger.name)
+            print (Fore.RED+"Log File: " + Fore.RESET + "%s"%logfilename)
+
+    def do_loglevel(self, line):
+        """Set log level"""
+        if self.logger!=None:
+            nhandlers=len(logging.getLogger('RepTate').handlers)
+            for i in range(nhandlers):
+                h=logging.getLogger('RepTate').handlers[i]
+                if isinstance(h, logging.handlers.RotatingFileHandler):
+                    fhandler=h
+                elif isinstance(h, logging.StreamHandler):
+                    chandler=h
+            items=line.split()
+            h=None
+            l=None
+            handlers=["Main", "File", "Console"]
+            levels=["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+            if len(items)<2:
+                print("Wrong number of parameters. Example of use: loglevel Console WARNING")
+            else:
+                if items[0]=="Main":
+                    h=logging.getLogger('RepTate')
+                elif items[0]=="File":
+                    h=fhandler
+                elif items[0]=="Console":
+                    h=chandler
+                else:
+                    print("Wrong Log Handler. Valid values are:")
+                    print(handlers)
+                if items[1] not in levels:
+                    print("Wrong Log level. Valid values are:")
+                    print(levels)
+                else:
+                    l = items[1]
+
+                # if items[1]=="NOTSET":
+                #     l = logging.NOTSET
+                # elif items[1]=="DEBUG":
+                #     l = logging.DEBUG
+                # elif items[1]=="INFO":
+                #     l = logging.INFO
+                # elif items[1]=="WARNING":
+                #     l = logging.WARNING
+                # elif items[1]=="ERROR":
+                #     l = logging.ERROR
+                # elif items[1]=="CRITICAL":
+                #     l = logging.CRITICAL
+                # else:
+                #     print("Wrong Log level. Valid values are:")
+                #     print(levels)
+                if h is not None and l is not None:
+                    h.setLevel(l)
+    
+    def complete_loglevel(self, text, line, begidx, endidx):
+        handlers=["Main", "File", "Console"]
+        levels=["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        items=line.split()
+        nitems=len(items)
+        if nitems<2:
+            completions = [f for f in handlers if f.startswith(text)]
+        elif nitems==2 and items[1] not in handlers:
+            completions = [f for f in handlers if f.startswith(text)]
+        else:
+            completions = [f for f in levels if f.startswith(text)]
         return completions
 
     def do_console(self, line):

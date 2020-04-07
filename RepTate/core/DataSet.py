@@ -55,6 +55,8 @@ import numpy as np
 from scipy.integrate import simps
 import matplotlib.patheffects as pe
 from colorama import Fore
+import logging
+
 class ColorMode(Enum):
     """Class to describe how to change colors in the current DataSet"""
     fixed = 0
@@ -204,6 +206,15 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         self.table_icon_list = [
         ]  #save the file's marker shape, fill and color there
         self.selected_file = None
+
+        # LOGGING STUFF
+        self.logger = logging.getLogger(self.parent_application.logger.name + '.' + self.name)
+        self.logger.debug('New DataSet')
+        np.seterrcall(self)
+
+    def write(self, msg):
+        """Write numpy error logs to the logger"""
+        self.logger.debug(msg)
 
 # DATASET STUFF ##########################################################################################################
 
