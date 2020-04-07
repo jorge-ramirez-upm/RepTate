@@ -134,7 +134,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
                 if (p.type == ParameterType.string):
                     item = QTreeWidgetItem(self.toolParamTable, [p.name, p.value])
                 else:
-                    item = QTreeWidgetItem(self.toolParamTable, [p.name, "%0.3g" % p.value])
+                    item = QTreeWidgetItem(self.toolParamTable, [p.name, "%0.4g" % p.value])
                 item.setToolTip(0, p.description)
 
                 item.setFlags(item.flags() | Qt.ItemIsEditable)
