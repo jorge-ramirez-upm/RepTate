@@ -50,7 +50,7 @@ sys.path.append('console')
 sys.path.append('applications')
 sys.path.append('theories')
 sys.path.append('tools')
-from CmdBase import CmdBase, CalcMode
+from CmdBase import CmdBase, CalcMode, CmdMode
 from QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication, QMessageBox
@@ -174,7 +174,12 @@ def start_RepTate(argv):
         for e in traceback.format_tb(tb):
             tb_msg += str(e)
         tb_msg += "%s: %s\n" % (type.__name__, str(value))
-        print(tb_msg)
+        #print(tb_msg) # JR: Not needed anymore
+        l=logging.getLogger('RepTate')
+        if CmdBase.mode == CmdMode.GUI:
+            l.error(tb_msg.replace('\n','<br>'))
+        else:
+            l.error(tb_msg)
         msg = 'Sorry, something went wrong:\n \"%s: %s\".\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?' % (type.__name__, str(value))
         ans = QMessageBox.critical(ex, 'Critical Error', msg, QMessageBox.Yes | QMessageBox.No )
         if ans == QMessageBox.Yes:

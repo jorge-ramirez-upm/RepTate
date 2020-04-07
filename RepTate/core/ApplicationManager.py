@@ -36,8 +36,6 @@ Module for the Main interface that contains all applications. Command line versi
 
 """
 import sys
-#import logging
-#import logging.handlers
 import matplotlib.pyplot as plt
 import readline
 from urllib.request import urlopen

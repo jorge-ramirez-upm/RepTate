@@ -18,7 +18,7 @@
     <normaloff>:/Icons/Images/Reptate64.ico</normaloff>:/Icons/Images/Reptate64.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -125,6 +125,45 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+  </widget>
+  <widget class="QDockWidget" name="LoggerdockWidget">
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Log &amp; Terminal</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="LoggerdockWidgetContents">
+    <layout class="QHBoxLayout" name="LoggerdochorizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+    </layout>
+   </widget>
   </widget>
   <action name="actionQuit">
    <property name="icon">
@@ -475,6 +514,120 @@
    </property>
    <property name="toolTip">
     <string>Cite the main RepTate papers</string>
+   </property>
+  </action>
+  <action name="actionShow_Logger">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-library.png</normaloff>:/Icons/Images/new_icons/icons8-library.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Logger</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Log Window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+L</string>
+   </property>
+  </action>
+  <action name="actionCrystal">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/Crystal.png</normaloff>:/Icons/Images/new_icons/Crystal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crystal</string>
+   </property>
+   <property name="toolTip">
+    <string>Flow Induced Crystallisation</string>
+   </property>
+  </action>
+  <action name="actionLogCritical">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-fires-80.png</normaloff>:/Icons/Images/new_icons/icons8-fires-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Critical</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to CRITICAL</string>
+   </property>
+  </action>
+  <action name="actionLogError">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-obstruction-lights-error-80.png</normaloff>:/Icons/Images/new_icons/icons8-obstruction-lights-error-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Error</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to ERROR</string>
+   </property>
+  </action>
+  <action name="actionLogWarning">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-brake-warning-96.png</normaloff>:/Icons/Images/new_icons/icons8-brake-warning-96.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Warning</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to WARNING</string>
+   </property>
+  </action>
+  <action name="actionLogDebug">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-bug-80.png</normaloff>:/Icons/Images/new_icons/icons8-bug-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Debug</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to DEBUG</string>
+   </property>
+  </action>
+  <action name="actionLogInfo">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-info-80.png</normaloff>:/Icons/Images/new_icons/icons8-info-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Info</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to INFO</string>
+   </property>
+  </action>
+  <action name="actionLogNotSet">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-galaxy-80.png</normaloff>:/Icons/Images/new_icons/icons8-galaxy-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Not Set</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to NOTSET</string>
+   </property>
+  </action>
+  <action name="actionCopyLogText">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-copy-96.png</normaloff>:/Icons/Images/new_icons/icons8-copy-96.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Log Text</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy Log Text to the Clipboard</string>
    </property>
   </action>
  </widget>

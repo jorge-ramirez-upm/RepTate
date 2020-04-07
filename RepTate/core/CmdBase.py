@@ -325,21 +325,6 @@ Arguments:
                 else:
                     l = items[1]
 
-                # if items[1]=="NOTSET":
-                #     l = logging.NOTSET
-                # elif items[1]=="DEBUG":
-                #     l = logging.DEBUG
-                # elif items[1]=="INFO":
-                #     l = logging.INFO
-                # elif items[1]=="WARNING":
-                #     l = logging.WARNING
-                # elif items[1]=="ERROR":
-                #     l = logging.ERROR
-                # elif items[1]=="CRITICAL":
-                #     l = logging.CRITICAL
-                # else:
-                #     print("Wrong Log level. Valid values are:")
-                #     print(levels)
                 if h is not None and l is not None:
                     h.setLevel(l)
     

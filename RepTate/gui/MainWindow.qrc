@@ -49,5 +49,12 @@
     <file>Images/new_icons/scipylogo.png</file>
     <file>Images/new_icons/Crystal.png</file>
     <file>Images/new_icons/icons8-hot-article-96.png</file>
+	<file>Images/new_icons/icons8-bug-80.png</file>
+	<file>Images/new_icons/icons8-brake-warning-96.png</file>
+	<file>Images/new_icons/icons8-info-80.png</file>
+	<file>Images/new_icons/icons8-obstruction-lights-error-80.png</file>
+	<file>Images/new_icons/icons8-fires-80.png</file>
+	<file>Images/new_icons/icons8-galaxy-80.png</file>
+	<file>Images/new_icons/icons8-copy-96.png</file>
   </qresource>
 </RCC>

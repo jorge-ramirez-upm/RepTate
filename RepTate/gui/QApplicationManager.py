@@ -40,9 +40,9 @@ ApplicationManager.
 import os
 from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
-from PyQt5.QtGui import QIcon, QDesktopServices
-from PyQt5.QtCore import QUrl, Qt
-from PyQt5.QtWidgets import QApplication, QInputDialog, QLineEdit, QMenu, QAction, QToolButton, QMessageBox, QFileDialog
+from PyQt5.QtGui import QIcon, QDesktopServices, QTextCursor
+from PyQt5.QtCore import QUrl, Qt, QSize
+from PyQt5.QtWidgets import QApplication, QHBoxLayout, QInputDialog, QLineEdit, QMenu, QAction, QToolBar, QToolButton, QMessageBox, QFileDialog, QPlainTextEdit, QTextBrowser
 
 from CmdBase import CmdBase, CmdMode, CalcMode
 from QApplicationWindow import QApplicationWindow
@@ -58,6 +58,25 @@ import logging
 PATH = dirname(abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(join(PATH, 'ReptateMainWindow.ui'))
 
+class QTextEditLogger(logging.Handler):
+    def __init__(self, parent):
+        super().__init__()
+        #self.widget = QPlainTextEdit(parent)
+        self.widget = QTextBrowser(parent)
+        self.widget.setReadOnly(True)
+        self.widget.setStyleSheet("background-color: rgb(255, 255, 222);")
+
+
+    def emit(self, record):
+        msg = self.format(record)
+        #self.widget.appendPlainText(msg)
+
+        self.widget.moveCursor(QTextCursor.End)
+        self.widget.insertHtml(msg+'<br>')
+        self.widget.verticalScrollBar().setValue(
+            self.widget.verticalScrollBar().maximum())
+        self.widget.moveCursor(QTextCursor.End)
+
 
 class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     """Main Reptate window and application manager
@@ -65,8 +84,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/index.html'
-    #reptatelogger = logging.getLogger('ReptateLogger')
-    #reptatelogger.setLevel(logging.DEBUG)
 
     def __init__(self, parent=None, loglevel=logging.INFO):
         """
@@ -98,6 +115,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.toolBarApps.addWidget(tbut)
         self.toolBarApps.addAction(self.actionLVE)
         self.toolBarApps.addAction(self.actionNLVE)
+        self.toolBarApps.addAction(self.actionCrystal)
         self.toolBarApps.addAction(self.actionGt)
         self.toolBarApps.addAction(self.actionCreep)
         self.toolBarApps.addAction(self.actionSANS)
@@ -122,6 +140,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.toolBarHelpAbout.insertWidget(self.actionAbout_Qt, tbut)
         self.toolBarHelpAbout.addWidget(tbut)
         self.toolBarHelpAbout.addSeparator()
+
+        self.toolBarHelpAbout.addAction(self.actionShow_Logger)
         
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
@@ -152,22 +172,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         # self.toolBarApps.insertAction(self.actionMWD, self.actionXY)
         # #connect button
         # self.actionXY.triggered.connect(lambda: self.handle_new_app('XY'))
-        icon = QIcon(':/Icons/Images/new_icons/Crystal.png')
-        tool_tip = 'Flow Induced Crystallisation'  # text that appear on hover
-        self.actionCrystal = QAction(icon, tool_tip, self)
-        #insert the new button before the "MWD" button
-        self.toolBarApps.insertAction(self.actionGt, self.actionCrystal)
 
         # App tabs behaviour
         self.ApplicationtabWidget.setMovable(True)
         self.ApplicationtabWidget.setTabsClosable(True)
         self.ApplicationtabWidget.setUsesScrollButtons(True)
-
-        # log file
-        #log_file_name = 'Qreptate.log'
-        #handler = logging.handlers.RotatingFileHandler(
-        #    log_file_name, maxBytes=20000, backupCount=2)
-        #self.reptatelogger.addHandler(handler)
 
         # Connect actions
         self.actionOpenProject.triggered.connect(self.launch_open_dialog)
@@ -191,7 +200,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
         self.ApplicationtabWidget.tabCloseRequested.connect(self.close_app_tab)
         self.ApplicationtabWidget.currentChanged.connect(self.tab_changed)
-        #self.Projecttree.itemSelectionChanged.connect(self.treeChanged)
 
         self.actionAbout_Qt.triggered.connect(QApplication.aboutQt)
         self.actionAbout.triggered.connect(self.show_about)
@@ -210,7 +218,59 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionAboutScipy.triggered.connect(self.handle_about_scipy)
         self.actionCite_RepTate.triggered.connect(self.handle_cite_RepTate)
         self.actionCheckRepTateVersion.triggered.connect(self.handle_check_RepTate_version)
+        
+        connection_id = self.LoggerdockWidget.visibilityChanged.connect(self.handle_loggerVisibilityChanged)
+        connection_id = self.actionShow_Logger.triggered.connect(self.showLogger)
 
+        tb = QToolBar()
+        tb.setIconSize(QSize(24,24))
+        tb.setOrientation(Qt.Vertical)
+
+        self.tbutlog = QToolButton()
+        self.tbutlog.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu()
+        menu.addAction(self.actionLogNotSet)
+        menu.addAction(self.actionLogDebug)
+        menu.addAction(self.actionLogInfo)
+        menu.addAction(self.actionLogWarning)
+        menu.addAction(self.actionLogError)
+        menu.addAction(self.actionLogCritical)
+        if loglevel==logging.NOTSET:
+            self.tbutlog.setDefaultAction(self.actionLogNotSet)
+        elif loglevel==logging.DEBUG:
+            self.tbutlog.setDefaultAction(self.actionLogDebug)
+        elif loglevel==logging.INFO:
+            self.tbutlog.setDefaultAction(self.actionLogInfo)
+        elif loglevel==logging.WARNING:
+            self.tbutlog.setDefaultAction(self.actionLogWarning)
+        elif loglevel==logging.ERROR:
+            self.tbutlog.setDefaultAction(self.actionLogError)
+        elif loglevel==logging.CRITICAL:
+            self.tbutlog.setDefaultAction(self.actionLogCritical)            
+        self.tbutlog.setMenu(menu)
+        tb.addWidget(self.tbutlog)
+
+        tb.addAction(self.actionCopyLogText)
+        self.LoggerdochorizontalLayout.addWidget(tb)
+        
+        self.logTextBox = QTextEditLogger(self)
+        formatter = logging.Formatter('<font color=blue>%(asctime)s</font> <b>%(name)s <font color=red>%(levelname)s</font></b>: %(message)s',
+                                "%Y%m%d %H%M%S")
+        self.logTextBox.setFormatter(formatter)
+        logging.getLogger('RepTate').addHandler(self.logTextBox)
+        logging.getLogger('RepTate').setLevel(loglevel)
+        import matplotlib
+        matplotlib._log.addHandler(self.logTextBox) 
+        self.logTextBox.setLevel(loglevel)
+        self.LoggerdochorizontalLayout.addWidget(self.logTextBox.widget)
+
+        connection_id = self.actionLogNotSet.triggered.connect(self.logNotSet)
+        connection_id = self.actionLogDebug.triggered.connect(self.logDebug)
+        connection_id = self.actionLogInfo.triggered.connect(self.logInfo)
+        connection_id = self.actionLogWarning.triggered.connect(self.logWarning)
+        connection_id = self.actionLogError.triggered.connect(self.logError)
+        connection_id = self.actionLogCritical.triggered.connect(self.logCritical)
+        connection_id = self.actionCopyLogText.triggered.connect(self.copyLogText)
 
         #self.add_save_load_buttons()
         self.REPTATE_PROJ_JSON = 'reptate_project.json' # json filename inside zip
@@ -222,6 +282,53 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         #self.text_edit.initInterpreter(locals())
         #self.verticalLayout.addWidget(self.text_edit)
 
+        # Hide Logger Window
+        self.LoggerdockWidget.hide()
+
+    def showLogger(self, checked):
+        """Handle show Log window"""
+        if checked:
+            self.LoggerdockWidget.show()
+        else:
+            self.LoggerdockWidget.hide()
+
+    def handle_loggerVisibilityChanged(self, visible):
+        """Handle the hide/show event of the logger window"""
+        self.actionShow_Logger.setChecked(visible)
+
+    def logNotSet(self):
+        logging.getLogger('RepTate').setLevel(logging.NOTSET)
+        self.logTextBox.setLevel(logging.NOTSET)
+        self.tbutlog.setDefaultAction(self.actionLogNotSet)
+
+    def logDebug(self):
+        logging.getLogger('RepTate').setLevel(logging.DEBUG)
+        self.logTextBox.setLevel(logging.DEBUG)
+        self.tbutlog.setDefaultAction(self.actionLogDebug)
+
+    def logInfo(self):
+        logging.getLogger('RepTate').setLevel(logging.INFO)
+        self.logTextBox.setLevel(logging.INFO)
+        self.tbutlog.setDefaultAction(self.actionLogInfo)
+
+    def logWarning(self):
+        logging.getLogger('RepTate').setLevel(logging.WARNING)
+        self.logTextBox.setLevel(logging.WARNING)
+        self.tbutlog.setDefaultAction(self.actionLogWarning)
+
+    def logError(self):
+        logging.getLogger('RepTate').setLevel(logging.ERROR)
+        self.logTextBox.setLevel(logging.ERROR)
+        self.tbutlog.setDefaultAction(self.actionLogError)
+
+    def logCritical(self):
+        logging.getLogger('RepTate').setLevel(logging.CRITICAL)
+        self.logTextBox.setLevel(logging.CRITICAL)
+        self.tbutlog.setDefaultAction(self.actionLogCritical)
+
+    def copyLogText(self):
+        self.logTextBox.widget.selectAll()
+        self.logTextBox.widget.copy()
 
     def handle_show_reptate_help(self):
         """Show RepTate documentation"""
