@@ -323,7 +323,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         Ui_AppWindow.__init__(self)
         
         self.setupUi(self)
-        #self.logger = logging.getLogger('ReptateLogger')
         self.name = name
         self.parent_application = parent
         self.tab_count = 0
@@ -1625,23 +1624,17 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # self.canvas.draw()
 
     def addTableToCurrentDataSet(self, dt, ext):
-        """Add file table to curent dataset tab
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - ext {[type]} -- [description]
-        """
+        """Add file table to curent dataset tab"""
         ds = self.DataSettabWidget.currentWidget()
         lnew = []
         for param in self.filetypes[ext].basic_file_parameters[:]:
             try:
                 s_param = dt.file_parameters[param]
             except KeyError as e:
-                header = "Missing Parameter"
+                # header = "Missing Parameter"
                 message = "Parameter %s not found in file '%s'."%(e, dt.file_name_short)
-                QMessageBox.warning(self, header, message)
+                # QMessageBox.warning(self, header, message)
+                self.logger.warning(message)
             else:
                 # parameter exists
                 try:
@@ -1895,8 +1888,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     e_list.append(param)
             if len(e_list)>0:
                 message = "Parameter(s) {%s} not found in file '%s'\n Value(s) set to 0"%(", ".join(e_list), dt.file_name_short)
-                header = "Missing Parameter"
-                QMessageBox.warning(self, header, message)
+                # header = "Missing Parameter"
+                # QMessageBox.warning(self, header, message)
+                self.logger.warning(message)
                 for e_param in e_list:
                     dt.file_parameters[e_param] = "0"
 

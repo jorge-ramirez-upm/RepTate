@@ -1,4 +1,4 @@
-omega=3.0;
+omega=3.0;gamma=1.0;
 #time	q	Torque
 #s	rad	N-m
 0	0.00000	0.00000
