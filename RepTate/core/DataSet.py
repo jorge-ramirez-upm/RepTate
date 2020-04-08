@@ -234,6 +234,35 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             for i, t in enumerate(ds.theories):
                 print("   %s: %s\t %s" % (t.name, t.thname, t.description))
 
+    def do_tree(self, line):
+        """List all the tools, datasets, files and theories in the current application"""
+        done=False
+        if line=="":
+            offset=0
+            prefix=""
+            done=True
+        else:
+            try:
+                offset=int(line)
+                if offset==1:
+                    prefix="|--"
+                    done=True
+                elif offset==2:
+                    prefix="|  |--"
+                    done=True
+                else:
+                    print("Wrong argument for the tree command.")
+            except ValueError:
+                print("Wrong argument for the tree command.")
+        if done:
+            for t in self.theories.values():
+                print(prefix + Fore.MAGENTA + "%s"%t.name + Fore.RESET)
+            for f in self.files:
+                print(prefix + "%s"%f.file_name_short)
+
+    def get_tree(self):
+        return list(self.theories.keys())
+
     def change_file_visibility(self, file_name_short, check_state=True):
         """Hide/Show file in the figure"""
         file_matching = []
@@ -492,10 +521,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                     label += pmt + '=' + str(
                                         file.file_parameters[pmt]) + ' '
                                 except KeyError as e:  #if parameter missing from data file
-                                    if CmdBase.mode != CmdMode.GUI:
-                                        print(
-                                            "Parameter %s not found in data file"
-                                            % (e))
+                                    self.logger.warning("Parameter %s not found in data file"%e)
+                                    # if CmdBase.mode != CmdMode.GUI:
+                                    #     print(
+                                    #         "Parameter %s not found in data file"
+                                    #         % (e))
                             #dt.series[nx][i].set_label(file.file_name_short)
                             dt.series[nx][i].set_label(label)
                         else:
@@ -590,7 +620,8 @@ Arguments:
                 self.files.sort(key=lambda x: x.file_name_short, reverse=rev)
                 self.do_plot()
             else:
-                print("Parameter %s not found in files" % line)
+                self.logger.warning("Parameter %s not found in files" % line)
+                # print("Parameter %s not found in files" % line)
 
     def complete_sort(self, text, line, begidx, endidx):
         """Complete with the list of file parameters of the current file in the current dataset"""
@@ -867,8 +898,9 @@ Arguments:
         #                    ]
         #return completions
 
-    def do_switch(self, line):
+    def do_active(self, line):
         """Change active file in the current dataset"""
+        done=False
         for f in self.files:
             if (f.file_name_short == line):
                 self.current_file = f
@@ -876,7 +908,7 @@ Arguments:
         if (not done):
             print("File \"%s\" not found" % line)
 
-    complete_switch = complete_delete
+    complete_active = complete_delete
 
     def do_currentfile(self, line):
         """Show the contents of the current file on the screen"""
@@ -996,7 +1028,7 @@ Arguments:
             completions = [f for f in theory_names if f.startswith(text)]
         return completions
 
-    def do_theory_switch(self, line):
+    def do_switch(self, line):
         """Change the active theory"""
         if line in self.theories.keys():
             th = self.theories[line]
@@ -1005,7 +1037,7 @@ Arguments:
         else:
             print("Theory \"%s\" not found" % line)
 
-    def complete_theory_switch(self, text, line, begidx, endidx):
+    def complete_switch(self, text, line, begidx, endidx):
         """Complete the theory switch command"""
         completions = self.complete_theory_delete(text, line, begidx, endidx)
         return completions

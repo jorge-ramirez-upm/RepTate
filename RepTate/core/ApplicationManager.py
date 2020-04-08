@@ -167,19 +167,7 @@ class ApplicationManager(CmdBase):
     do_del = do_delete
 
     def complete_delete(self, text, line, begidx, endidx):
-        """Complete delete application command
-        
-        [description]
-        
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Complete delete application command"""
         app_names = list(self.applications.keys())
         if not text:
             completions = app_names[:]
@@ -189,13 +177,7 @@ class ApplicationManager(CmdBase):
     complete_del = complete_delete
 
     def list(self):
-        """List open applications
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """List open applications"""
         L = []
         for app in list(self.applications.values()):
             L.append(Fore.RED + "%s:"%app.appname + Fore.RESET + (12-len(app.appname))*" "
@@ -209,8 +191,10 @@ class ApplicationManager(CmdBase):
             print(app)
 
     def do_tree(self, line):
-        """List all open applications, tools, datasets and theories"""
-        pass
+        """Show a tree structure of all open applications, tools, datasets and theories"""
+        for app in self.applications.keys():
+            print(Fore.RED + "%s"%self.applications[app].name + Fore.RESET)
+            self.applications[app].do_tree(str(1))
 
     def new(self, appname):
         """Create a new application and open it.
@@ -263,32 +247,40 @@ Arguments:
             completions = [f for f in app_names if f.startswith(text)]
         return completions
 
-    def do_switch(self, name):
-        """Set focus to an open application. By hitting TAB, all the currently open applications are shown.
-                
+    def do_switch(self, line):
+        """Set focus to an open application/set/theory/tool. 
+By hitting TAB, all the currently accessible elements are shown.
 Arguments:
-    - name {str} -- Name of the applicaton to switch the focus to."""
-        if name in self.applications.keys():
-            app = self.applications[name]
-            app.cmdloop()
+    - name {str} -- Name of the applicaton/set/theory/tool to switch the focus to."""
+        items=line.split('.')
+        if len(items)>1:
+            name=items[0]            
+            if name in self.applications.keys():
+                app = self.applications[name]
+                app.cmdqueue.append('switch '+'.'.join(items[1:]))
+                app.cmdloop()
+            else:
+                print("Application \"%s\" not found" % name)
         else:
-            print("Application \"%s\" not found" % name)
+            name=items[0]            
+            if name in self.applications.keys():
+                app = self.applications[name]
+                app.cmdloop()
+            else:
+                print("Application \"%s\" not found" % name)
 
     def complete_switch(self, text, line, begidx, endidx):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        completions = self.complete_delete(text, line, begidx, endidx)
+        """Complete switch command"""
+        applist = list(self.applications.keys())
+        setlist = []
+        for app in applist:
+            setnames = self.applications[app].get_tree()
+            setlist += [app + '.' + s for s in setnames]
+        switchlist = applist + setlist
+        if not text:
+            completions = switchlist[:]
+        else:
+            completions = [f for f in switchlist if f.startswith(text)]
         return completions
 
 # MAXWELL MODES COPY

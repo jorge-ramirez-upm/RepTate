@@ -677,25 +677,80 @@ class Application(CmdBase):
 
     def do_tree(self, line):
         """List all the tools, datasets, files and theories in the current application"""
-        pass
-
-    def do_switch(self, name):
-        """Switch the current dataset"""
-        done = False
-        if name in self.datasets.keys():
-            ds = self.datasets[name]
-            ds.cmdloop()
+        done=False
+        if line=="":
+            offset=0
+            prefix=""
+            done=True
         else:
-            print("Dataset \"%s\" not found" % name)
+            try:
+                offset=int(line)
+                if offset==1:
+                    prefix="|--"
+                    done=True
+                else:
+                    print("Wrong argument for the tree command.")
+            except ValueError:
+                print("Wrong argument for the tree command.")
+        if done:
+            for t in self.tools:
+                print(prefix + Fore.CYAN + t.name + Fore.RESET)
+            for ds in self.datasets.keys():
+                print(prefix + Fore.YELLOW + "%s"%self.datasets[ds].name + Fore.RESET)
+                self.datasets[ds].do_tree(str(offset+1))
+
+    def do_switch(self, line):
+        """Set focus to an open set/theory/tool. 
+By hitting TAB, all the currently accessible elements are shown.
+Arguments:
+    - name {str} -- Name of the set/theory/tool to switch the focus to."""
+        items=line.split('.')
+        listtools = [x.name for x in self.tools]
+        if len(items)>1:
+            name=items[0]            
+            if name in self.datasets.keys():
+                ds = self.datasets[name]
+                ds.cmdqueue.append('switch '+'.'.join(items[1:]))
+                ds.cmdloop()
+            else:
+                print("DataSet \"%s\" not found" % name)
+        else:
+            name=items[0]         
+            if name in self.datasets.keys():
+                ds = self.datasets[name]
+                ds.cmdloop()
+            elif name in listtools:
+                try:
+                    idx = listtools.index(line)
+                    self.tools[idx].cmdloop()
+                except AttributeError as e:
+                    print("Tool\"%s\" not found" % line)
+            else:
+                print("DataSet \"%s\" not found" % name)
 
     def complete_switch(self, text, line, begidx, endidx):
-        """Complete the switch dataset command"""
-        ds_names = list(self.datasets.keys())
+        """Complete switch command"""
+        setlist = list(self.datasets.keys())
+        thlist = []
+        for ds in setlist:
+            thnames = self.datasets[ds].get_tree()
+            thlist += [ds + '.' + t for t in thnames]
+        switchlist = setlist + thlist
         if not text:
-            completions = ds_names[:]
+            completions = switchlist[:]
         else:
-            completions = [f for f in ds_names if f.startswith(text)]
+            completions = [f for f in switchlist if f.startswith(text)]
         return completions
+
+    def get_tree(self):
+        ds_names = list(self.datasets.keys())
+        thlist = []
+        for ds in ds_names:
+            thnames = self.datasets[ds].get_tree()
+            thlist += [ds + '.' + t for t in thnames]
+        to_names = [t.name for t in self.tools]
+
+        return ds_names + thlist + to_names
 
 # FILE TYPE STUFF
 
@@ -792,15 +847,15 @@ class Application(CmdBase):
     def tool_available(self):
         """List available tools in the current application"""
         for t in list(self.availabletools.values()):
-            print("%s:\t%s" % (t.toolname, t.description))
+            print(Fore.CYAN + "%s"%t.toolname Fore.RESET +:\t%s"%t.description)
         for t in list(self.extratools.values()):
-            print("%s:\t%s" % (t.toolname, t.description))
+            print(Fore.CYAN + "%s"%t.toolname Fore.RESET +:\t%s"%t.description)
 
     def do_tool_available(self, line):
         """List available tools in the current application"""
         self.tool_available()
 
-    def do_tool_add(self, line):
+    def do_tool_new(self, line):
         """Add a new tool of the type specified to the list of tools"""
         tooltypes = list(self.availabletools.keys())
         extratooltypes = list(self.extratools.keys())
@@ -823,7 +878,7 @@ class Application(CmdBase):
         else:
             print("Tool \"%s\" does not exists" % line)
 
-    def complete_tool_add(self, text, line, begidx, endidx):
+    def complete_tool_new(self, text, line, begidx, endidx):
         """Complete new tool command"""
         tool_names = list(self.availabletools.keys()) + list(self.extratools.keys()) 
         if not text:
@@ -855,9 +910,9 @@ class Application(CmdBase):
         """List opened tools"""
         for t in self.tools:
             if t.active:
-                print(t.name + " *")
+                print(Fore.CYAN + t.name + Fore.RESET + " *")
             else:
-                print(t.name)
+                print(Fore.CYAN + t.name + Fore.RESET)
 
     def do_tool_switch(self, line):
         """Change the active tool"""
