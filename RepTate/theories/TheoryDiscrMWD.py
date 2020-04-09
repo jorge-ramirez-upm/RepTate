@@ -289,18 +289,12 @@ class BaseTheoryDiscrMWD:
             pass
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.graphic_bins_visible(False)
         self.ax.lines.remove(self.graphic_bins)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         self.graphic_bins_visible(show)

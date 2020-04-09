@@ -140,6 +140,9 @@ class ApplicationManager(CmdBase):
 
     def do_available(self, line):
         """List all the available applications in RepTate."""
+        print("AVAILABLE APPLICATIONS")
+        print("======================")
+        
         L = self.available()
         for app in L:
             print(app)
@@ -186,6 +189,9 @@ class ApplicationManager(CmdBase):
 
     def do_list(self, line):
         """List all the currently open applications."""
+        print("CURRENTLY RUNNING APPLICATIONS")
+        print("==============================")
+        
         L = self.list()
         for app in L:
             print(app)
@@ -285,7 +291,7 @@ Arguments:
 
 # MAXWELL MODES COPY
 
-    def do_copymodes(self, line):
+    def do_copy_modes(self, line):
         """Copy maxwell modes from one theory to another. Both theories may live inside different applications and/or datasets
 
 Usage:
@@ -316,13 +322,22 @@ Arguments:
                 "See 'list_theories_Maxwell' for a list of availiable theories"
             )
             return
+        if source==target:
+            print("Source and Target theories must be different")
+            return
 
         get_dict, set_dict = self.list_theories_Maxwell()
         dict_keys = list(
             get_dict.keys())  #get_dict and set_dict have the same keys
         if ((source in dict_keys) and (target in dict_keys)):
-            tau, G = get_dict[source]()
-            set_dict[target](tau, G)
+            tau, G, success = get_dict[source]()
+            if not success:
+                self.logger.warning("Could not get modes successfully")
+                return
+            success = set_dict[target](tau, G)
+            if not success:
+                self.logger.warning("Could not set modes successfully")
+                return
             print('Copied modes from %s to %s' % (source, target))
             return
         else:
@@ -331,15 +346,19 @@ Arguments:
                   "No copy has been made")
             return
 
+    def complete_copy_modes(self, text, line, begidx, endidx):
+        """Complete the command copy_modes"""
+        L, S = self.list_theories_Maxwell()
+        L = list(L.keys())
+        if not text:
+            completions = L[:]
+        else:
+            completions = [f for f in L if f.startswith(text)]
+        return completions
+
     def list_theories_Maxwell(self, th_exclude=None):
         """List the theories in the current RepTate instance that provide and need
-        Maxwell modes
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        Maxwell modes"""
         get_dict = {}
         set_dict = {}
         for app in self.applications.values():
@@ -352,7 +371,7 @@ Arguments:
                                                th.name)] = th.set_modes
         return get_dict, set_dict
 
-    def do_list_theories_Maxwell(self, line):
+    def do_list_theories_Maxwell(self, line=""):
         """List the theories in the current RepTate instance that provide Maxwell modes"""
         L, S = self.list_theories_Maxwell()
         if len(L)>0:
@@ -396,14 +415,6 @@ Arguments:
         print("Project page: " + Fore.CYAN + "https://github.com/jorge-ramirez-upm/RepTate")
         print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
 
-    def do_info(self, line):
-        """Show info about the current RepTate session."""
-        print("##AVAILABLE APPLICATIONS:")
-        self.do_available(line)
-
-        print("\n##OPEN APPLICATIONS")
-        self.do_list(line)
-
     def do_quit(self, args):
         """Exit from the application."""
         msg = 'Do you really want to exit RepTate?'
@@ -411,7 +422,8 @@ Arguments:
         if (shall):
             print("Exiting RepTate...")
             readline.write_history_file()
-            sys.exit()
+            #sys.exit()
+            return True
 
     do_EOF = do_quit
     do_up = do_quit

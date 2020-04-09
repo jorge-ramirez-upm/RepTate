@@ -526,9 +526,6 @@ class BaseTheoryWLFShift:
         else:
             print(msg)
 
-    def destructor(self):
-        pass
-
 
 class CLTheoryWLFShift(BaseTheoryWLFShift, Theory):
     """[summary]

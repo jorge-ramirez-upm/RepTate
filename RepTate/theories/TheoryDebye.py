@@ -239,9 +239,6 @@ class BaseTheoryDebye:
                         self.Qprint("%12s %8.4g %8.4g" %
                                     (f.file_name_short, Mw, np.sqrt(CRg * Mw)))
 
-    def destructor(self):
-        pass
-
 
 class CLTheoryDebye(BaseTheoryDebye, Theory):
     """[summary]

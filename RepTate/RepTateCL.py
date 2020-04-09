@@ -40,6 +40,7 @@ import sys
 import glob
 import argparse
 import logging
+import numpy as np
 
 sys.path.append('core')
 sys.path.append('gui')
@@ -118,28 +119,37 @@ def start_RepTate(argv):
         print(ApplicationManager.intro)
         sys.exit()
     
-    qapp = QApplication(sys.argv)
-    
+    qapp = QApplication(sys.argv)  # Needed, because some internal functions use Qt 
     app = ApplicationManager(loglevel=loglevel)
 
     # Handle files & open apps accordingly
     CmdBase.calcmode = CalcMode.singlethread # avoid troubles when loading multiple apps/files/theories
     d = {app.extension: app.appname for app in  list(app.available_applications.values())}
-    for i, k in enumerate(dictfiles.keys()):
-        if (k in d.keys()):
-            #app.do_new(d[k])
+    fileopen = False
+    for k in dictfiles.keys():
+        if k == 'rept':
+            ex.open_project(dictfiles[k][0])
+        elif np.any([k == key for key in d.keys()]):
             app.new(d[k])
             appname="%s%d"%(d[k],app.application_counter)
             ds, dsname = app.applications[appname].new("")
             app.applications[appname].datasets[dsname]=ds
             for f in dictfiles[k]:
-                #app.applications[appname].datasets[dsname].do_open(f)
                 ds.do_open(f)
+            fileopen = True
             ds.do_plot()
-            #app.applications[dsname].datasets[dsname].do_plot()
-            if i==len(dictfiles.keys())-1:
-                app.applications[appname].cmdqueue.append("switch %s"%dsname)
-                app.applications[appname].cmdloop()
+        elif np.any([k in key for key in d.keys()]): # works with spaces in extensions
+            for key in d.keys():
+                if k in key:
+                    app.new(d[key])
+                    appname="%s%d"%(d[key],app.application_counter)
+                    ds, dsname = app.applications[appname].new("")
+                    app.applications[appname].datasets[dsname]=ds
+                    for f in dictfiles[k]:
+                        ds.do_open(f)
+                    fileopen = True
+                    ds.do_plot()
+                    break
         else:
             print("File type %s cannot be opened"%k)
     # set the calmode back
@@ -154,18 +164,20 @@ def start_RepTate(argv):
         for e in traceback.format_tb(tb):
             tb_msg += str(e)
         tb_msg += "%s: %s\n" % (type.__name__, str(value))
-        print(tb_msg)
-        msg = 'Sorry, something went wrong:\n \"%s: %s\".\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?' % (type.__name__, str(value))
-        ans = QMessageBox.critical(ex, 'Critical Error', msg, QMessageBox.Yes | QMessageBox.No )
-        if ans == QMessageBox.Yes:
-            address = "reptate.rheology@gmail.com"
-            subject = "Something went wrong"
-            body = "%s\nIf you can, please describe below what you were doing with RepTate when the error happened (apps and theories or tools open if any) and send the message\nPlease, do NOT include confidential information\n%s\nError Traceback:\n %s" % ("-"*60, "-"*60 + "\n"*10 + "-"*60,  tb_msg)
-            QDesktopServices.openUrl(QUrl("mailto:?to=%s&subject=%s&body=%s" % (address, subject, body), QUrl.TolerantMode))
+        app.logger.critical(tb_msg)
+        msg = 'Sorry, something went wrong:\n \"%s: %s\".\nTry to save your work and quit RepTate.' % (type.__name__, str(value))
+        app.logger.critical(msg)
+        msg = 'Report bug to reptate.rheology@gmail.com: Describe the error, attach logfile and datafiles'
+        app.logger.critical(msg)
             
     sys.excepthook = my_excepthook
 
-    sys.exit(app.cmdloop())
+    if fileopen:
+        app.cmdqueue.append("switch %s.%s"%(appname,dsname))
+    try:
+        sys.exit(app.cmdloop())
+    except SystemExit:
+        pass
 
 if __name__ == '__main__':
     start_RepTate(sys.argv[1:])

@@ -105,17 +105,6 @@ class BaseToolBounds:
             description='Maximum y',
             type=ParameterType.real)
 
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, x, y, ax=None, color=None):
         """Bounds function that returns the square of the y, according to the view        
         """

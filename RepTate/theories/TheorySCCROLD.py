@@ -180,13 +180,6 @@ class BaseTheorySCCROLD:
             print("in SCCROLD init:", e)
             self.flow_mode = FlowMode.shear  #default mode: shear
 
-    def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
-        pass
-
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed
         

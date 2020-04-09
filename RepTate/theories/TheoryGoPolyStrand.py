@@ -718,10 +718,7 @@ class BaseTheoryGoPolyStrand:
             self.flow_mode = FlowMode.shear  #default mode: shear
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.show_theory_extras(False)
         self.ax.lines.remove(self.LVEenvelopeseries)
 
@@ -744,13 +741,7 @@ class BaseTheoryGoPolyStrand:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
@@ -758,7 +749,7 @@ class BaseTheoryGoPolyStrand:
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
             G[i] = GN0 * self.parameters["phi%02d" % i].value
-        return tau, G
+        return tau, G, True
 
     def set_modes_from_mwd(self, m, phi):
         """[summary]
@@ -788,14 +779,7 @@ class BaseTheoryGoPolyStrand:
         )
 
     def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - - tau {[type]} -- [description]
-            - - G {[type]} -- [description]
-        """
+        """Set the values of Maxwell Modes from another theory"""
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
         sum_G = G.sum()
@@ -804,6 +788,7 @@ class BaseTheoryGoPolyStrand:
             self.set_param_value("tauD%02d" % i, tau[i])
             self.set_param_value("phi%02d" % i, G[i] / sum_G)
         self.update_parameter_table()
+        return True
 
     def fZ(self, z):
         """CLF correction function Likthman-McLeish (2002)"""

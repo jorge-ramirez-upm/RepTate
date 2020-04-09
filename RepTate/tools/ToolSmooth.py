@@ -86,17 +86,6 @@ class BaseToolSmooth:
             description='Order of smoothing polynomial (must be smaller than window)',
             type=ParameterType.integer)
 
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, x, y, ax=None, color=None):
         """Smooth the x, y data
         """

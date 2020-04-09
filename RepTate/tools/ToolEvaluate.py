@@ -87,17 +87,6 @@ class BaseToolEvaluate:
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
             
-            
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, x, y, ax=None, color=None):
         """Evaluate function that returns the square of the y, according to the view        
         """

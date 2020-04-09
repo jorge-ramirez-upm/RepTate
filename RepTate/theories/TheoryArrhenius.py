@@ -110,36 +110,6 @@ class BaseTheoryArrhenius:
             type=ParameterType.real,
             opt_type=OptType.opt)
 
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, f=None):
         """Arrhenius function
         

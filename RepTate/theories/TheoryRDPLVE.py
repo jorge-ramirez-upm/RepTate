@@ -192,13 +192,7 @@ class BaseTheoryRDPLVE:
         self.extra_data['with_gcorr'] = self.with_gcorr == GcorrMode.with_gcorr
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
@@ -206,27 +200,7 @@ class BaseTheoryRDPLVE:
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
             G[i] = GN0 * self.parameters["phi%02d" % i].value
-        return tau, G
-
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
+        return tau, G, True
 
     def fZ(self, z):
         """CLF correction function Likthman-McLeish (2002)"""

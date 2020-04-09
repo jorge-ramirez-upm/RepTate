@@ -222,31 +222,8 @@ class BaseTheoryReactMix:
         self.calcexists = True
         return rch.bab_global.multi_nummwdbins - 1
 
-    def destructor(self):
-        """Return arms to pool"""
-        pass
-
     def do_error(self, line):
-        pass
-
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
+        """This theory does not calculate the error"""
         pass
 
     def set_extra_data(self, extra_data):

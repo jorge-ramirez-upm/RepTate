@@ -222,26 +222,6 @@ class BaseTheoryDieneCSTR:
         rch.set_flag_stop_all(ct.c_bool(True))
         super().request_stop_computations()
 
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def do_error(self, line):
         pass
 

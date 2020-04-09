@@ -93,15 +93,9 @@ class BaseToolTemplate:
             # type=ParameterType.real,
             # opt_type=OptType.const)
 
-
     def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
+        """If the tool needs to clear up memory in a very special way, fill up the contents of this function.
+If not, you can safely delete it."""
         pass
 
     def calculate(self, x, y, ax=None, color=None):

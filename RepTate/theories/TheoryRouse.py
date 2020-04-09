@@ -156,35 +156,6 @@ class BaseTheoryRouseTime:
         #     ParameterType.real,
         #     opt_type=OptType.const)
 
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
 
     def calculate(self, f=None):
         """RouseTime function that returns the square of y
@@ -376,48 +347,8 @@ class BaseTheoryRouseFrequency:
             opt_type=OptType.opt,
             min_value=0)
 
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
-    def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - G {[type]} -- [description]
-        """
-        pass
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, f=None):
-        """RouseFrequency function 
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """RouseFrequency function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns

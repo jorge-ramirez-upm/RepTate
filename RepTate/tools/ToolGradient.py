@@ -93,17 +93,6 @@ class BaseToolGradient:
             # type=ParameterType.real,
             # opt_type=OptType.const)
 
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, x, y, ax=None, color=None):
         try:
             y2 = np.gradient(y,x)

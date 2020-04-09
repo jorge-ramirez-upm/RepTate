@@ -96,17 +96,6 @@ class BaseToolIntegral:
             # type=ParameterType.real,
             # opt_type=OptType.const)
 
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, x, y, ax=None, color=None):
         """Integral function that returns the square of the y, according to the view"""
         xunique, indunique = np.unique(x, return_index=True)

@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/RepTate.py",
             "console": "integratedTerminal",
-            "args": ["-s","-v", "data/LAOS/GiesekusSimulation-omega01p00-gam05p000.laos"]
+            "args": ["-s","-v", "data/DOW/Non-Linear_Rheology/Start-up_Shear/M*shear"]
         },
         {
             "name": "RepTateCL",
@@ -18,7 +18,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/RepTateCL.py",
             "console": "integratedTerminal",
-            "args": ["data/PI_LINEAR/PI_225.9k_T-35.tts"]
+            "args": ["-v","data/PI_LINEAR/PI_225.9k_T-35.tts"]
         }
     ]
 }

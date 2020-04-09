@@ -120,13 +120,7 @@ class BaseToolFindPeaks:
         self.axarray.clear()
 
     def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
+        """This is called when the Tool tab is closed"""
         self.clean_graphic_stuff()
 
     def calculate(self, x, y, ax=None, color=None):

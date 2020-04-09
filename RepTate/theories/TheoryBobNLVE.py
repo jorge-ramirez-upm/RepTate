@@ -151,45 +151,10 @@ class BaseTheoryBobNLVE:
         self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
         self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
     def do_error(self, line=""):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """This theory does not calculate the error"""
         pass
 
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
 
     def calculate(self, f=None):
         """Create polymer configuration file and calculate distribution characteristics

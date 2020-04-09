@@ -99,6 +99,10 @@ class Tool(CmdBase):
         """Write numpy error logs to the logger"""
         self.logger.info('numpy: %s (flag %s)'%(type, flag))
 
+    def destructor(self):
+        """If the Tool needs to erase some memory in a special way, any 
+        child theory must rewrite this funcion"""
+        pass
 
     def precmd(self, line):
         """Calculations before the Tool is calculated
@@ -260,9 +264,11 @@ class Tool(CmdBase):
 # SPAN STUFF
 
     def do_activate(self, line):
+        """Enable/disable the Tool"""
         self.active = not self.active
 
     def do_applytotheory(self, line):
+        """Apply the tool to the theory data"""
         self.applytotheory = not self.applytotheory
 
     def do_cite(self, line):
@@ -274,7 +280,7 @@ class Tool(CmdBase):
             - line {[type]} -- [description]
         """
         if (self.citations != ""):
-            self.Qprint("\nCITE: "+self.citations+"\n")
+            self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
 
     def do_plot(self, line):
         """Update plot"""

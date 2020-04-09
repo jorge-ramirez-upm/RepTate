@@ -562,9 +562,6 @@ class BaseTheoryTTSShiftAutomatic:
         else:
             print(msg)
 
-    def destructor(self):
-        pass
-
 
 class CLTheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, Theory):
     """[summary]

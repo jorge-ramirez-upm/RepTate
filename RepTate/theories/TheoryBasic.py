@@ -159,9 +159,6 @@ class BaseTheoryPolynomial:
             for j in range(1, tt.num_columns):
                 tt.data[:, j] += a * tt.data[:, 0]**i
 
-    def destructor(self):
-        pass
-
 
 class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
     """[summary]
@@ -302,9 +299,6 @@ class BaseTheoryPowerLaw:
             tt.data[:, j] = self.parameters[
                 "a"].value * tt.data[:, 0]**self.parameters["b"].value
 
-    def destructor(self):
-        pass
-
 
 class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
     """[summary]
@@ -429,9 +423,6 @@ class BaseTheoryExponential:
         for j in range(1, tt.num_columns):
             tt.data[:, j] = self.parameters["a"].value * np.exp(
                 -tt.data[:, 0] / self.parameters["T"].value)
-
-    def destructor(self):
-        pass
 
 
 class CLTheoryExponential(BaseTheoryExponential, Theory):
@@ -567,9 +558,6 @@ class BaseTheoryTwoExponentials:
         for j in range(1, tt.num_columns):
             tt.data[:, j] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(
                 -tt.data[:, 0] / T2)
-
-    def destructor(self):
-        pass
 
 
 class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):

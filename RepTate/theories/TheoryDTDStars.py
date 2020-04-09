@@ -154,16 +154,6 @@ class BaseTheoryDTDStarsFreq:
         self.Z = 1
         self.w = 0
 
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, f=None):
         """DTDStarsFreq function that returns the square of y
         
@@ -350,16 +340,6 @@ class BaseTheoryDTDStarsTime:
         self.tau_e = self.parameters["tau_e"].value
         self.Me = self.parameters["Me"].value
         self.alpha = self.parameters["alpha"].value
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
 
     def calculate(self, f=None):
         """DTDStarsTime function that returns the square of y

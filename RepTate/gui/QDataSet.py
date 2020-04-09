@@ -997,7 +997,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.set_no_limits(
                 self.current_theory)  #remove the xy-range limits
         self.theory_actions_disabled(False)  #enable theory buttons
-        newth = self.do_theory_new(th_name, calculate)
+        newth = self.do_new(th_name, calculate)
 
         # add new theory tab
         if th_tab_id == "":

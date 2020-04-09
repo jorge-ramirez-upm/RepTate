@@ -225,10 +225,7 @@ class BaseTheoryRetardationModesTime:
         self.plot_theory_stuff()
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.graphicmodes)
 
@@ -256,31 +253,14 @@ class BaseTheoryRetardationModesTime:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
         tau = np.logspace(self.parameters["logtmin"].value,
                           self.parameters["logtmax"].value, nmodes)
         J = np.zeros(nmodes)
         for i in range(nmodes):
             J[i] = 1.0/np.power(10, self.parameters["logJ%02d" % i].value)
-        return tau, J
-
-    def set_modes(self, tau, J):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - J {[type]} -- [description]
-        """
-        print("set_modes not allowed in this theory (%s)" % self.name)
+        return tau, J, True
 
     def RetardationModesTime(self, f=None):
         """[summary]

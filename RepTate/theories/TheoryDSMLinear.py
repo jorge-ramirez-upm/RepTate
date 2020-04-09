@@ -71,12 +71,6 @@ class BaseTheoryDSMLinear:
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
 
-    def get_modes(self):
-        pass
-
-    def set_modes(self):
-        pass
-
     def tandelta(self, omega, data):
         """Calculate the interpolated tan(delta)"""
 

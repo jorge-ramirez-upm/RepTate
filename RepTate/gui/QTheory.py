@@ -594,7 +594,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 tauinds = (-tau).argsort()
                 tau = tau[tauinds]
                 G0 = G0[tauinds]
-                self.set_modes(tau, G0)
+                success = self.set_modes(tau, G0)
+                if not success: 
+                    self.logger.warning("Could not set modes successfully")
+                    return
                 self.update_parameter_table()
                 self.parent_dataset.handle_actionCalculate_Theory()
         else:
@@ -610,7 +613,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             return
             
         with open(fpath, 'w') as f:
-            times, G = self.get_modes()
+            times, G, success = self.get_modes()
+            if not success:
+                self.logger.warning("Could not get modes correctly")
+                return
 
             header = '# Maxwell modes\n'
             header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,

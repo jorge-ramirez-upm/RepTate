@@ -207,13 +207,6 @@ class BaseTheorySCCR:
             print("in SCCR init:", e)
             self.flow_mode = FlowMode.shear  #default mode: shear
 
-    def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
-        pass
-
     def do_fit(self, line):
         """Minimisation procedure disabled in this theory"""
         self.Qprint(

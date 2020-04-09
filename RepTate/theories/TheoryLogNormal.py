@@ -120,36 +120,6 @@ class BaseTheoryLogNormal:
             opt_type=OptType.opt,
             min_value=0)
 
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def LogNormal(self, f=None):
         """LogNormal function
         

@@ -257,10 +257,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.plot_theory_stuff()
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.contspectrum)
         self.ax.lines.remove(self.discspectrum)
@@ -285,28 +282,11 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = len(self.sdisc)
         tau = self.sdisc
         G = self.Hdisc
-        return tau, G
-
-    def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - G {[type]} -- [description]
-        """
-        print("set_modes not allowed in this theory (%s)" % self.name)
+        return tau, G, True
 
     def kernel_prestore(self, H, kernMat, *argv):
         """
@@ -1674,10 +1654,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.plot_theory_stuff()
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.contspectrum)
         self.ax.lines.remove(self.discspectrum)
@@ -1702,28 +1679,11 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = len(self.sdisc)
         tau = self.sdisc
         G = self.Hdisc
-        return tau, G
-
-    def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - G {[type]} -- [description]
-        """
-        print("set_modes not allowed in this theory (%s)" % self.name)
+        return tau, G, True
 
     def getKernMat(self, s, t):
         """furnish kerMat() which helps faster kernel evaluation

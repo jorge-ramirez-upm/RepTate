@@ -237,10 +237,7 @@ class BaseTheoryPETS:
             self.flow_mode = FlowMode.shear  #default mode: shear
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.extra_graphic_visible(False)
         self.ax.lines.remove(self.LVEenvelopeseries)
 
@@ -262,29 +259,12 @@ class BaseTheoryPETS:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         tau = np.zeros(1)
         G = np.zeros(1)
         tau[0] = self.parameters["tauD"].value
         G[0] = self.parameters["G"].value
-        return tau, G
-
-    def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - - tau {[type]} -- [description]
-            - - G {[type]} -- [description]
-        """
-        pass
+        return tau, G, True
 
     def sigmadot_shear(self, vec, t, p):
         """PETS differential equation under *shear* flow

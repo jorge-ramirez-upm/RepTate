@@ -94,17 +94,6 @@ class BaseToolInterpolateExtrapolate:
             type=ParameterType.real,
             opt_type=OptType.const)
 
-
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, x, y, ax=None, color=None):
         """InterpolateExtrapolate function that returns the square of the y, according to the view        
         """

@@ -380,27 +380,6 @@ class BaseTheoryTobitaBatch():
     def do_error(self, line):
         pass
 
-    def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
-
-    def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
-
 class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
     """[summary]
     

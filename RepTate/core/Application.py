@@ -62,7 +62,7 @@ from ToolEvaluate import ToolEvaluate
 from ToolInterpolate import ToolInterpolateExtrapolate
 from ToolMaterialsDatabase import ToolMaterialsDatabase
 from mplcursors import cursor
-from colorama import Fore
+from colorama import Fore, Style
 import logging
 
 class Application(CmdBase):
@@ -666,14 +666,18 @@ class Application(CmdBase):
         return completions
     complete_del = complete_delete
 
-    def list(self):
+    def do_list(self, line=""):
         """List the datasets in the current application"""
+        self.do_list_tools()
+        self.do_list_datasets()
+
+    def do_list_datasets(self, line=""):
+        """List the datasets in the current application"""
+        if len(self.datasets)>0:
+            print("DATASETS IN THE CURRENT APPLICATION")
+            print("===================================")
         for ds in self.datasets.values():
             print(Fore.YELLOW + "%s"%ds.name + Fore.RESET)
-
-    def do_list(self, line):
-        """List the datasets in the current application"""
-        self.list()
 
     def do_tree(self, line):
         """List all the tools, datasets, files and theories in the current application"""
@@ -754,15 +758,13 @@ Arguments:
 
 # FILE TYPE STUFF
 
-    def filetype_available(self):
+    def do_available_filetypes(self, line=""):
         """List available file types in the current application"""
+        print("AVAILABLE FILETYPES")
+        print("===================")
         ftypes = list(self.filetypes.values())
         for ftype in ftypes:
             print("%s ("%ftype.name + Fore.CYAN + "*.%s"%ftype.extension + Fore.RESET + "): %s"%ftype.description)
-
-    def do_filetype_available(self, line):
-        """List available file types in the current application"""
-        self.filetype_available()
 
 # VIEW STUFF
 
@@ -781,17 +783,24 @@ Arguments:
             #index 0 is the defaut selection
             self.viewComboBox.setCurrentIndex(0)
 
-    def view_available(self):
+    def do_available_views(self, line=""):
         """List available views in the current application"""
+        print("AVAILABLE VIEWS")
+        print("===============")
         for view in self.views.values():
             if (view == self.current_view):
-                print("*%s:\t%s" % (view.name, view.description))
+                c = Fore.RED + "*" + Fore.RESET
             else:
-                print("%s:\t%s" % (view.name, view.description))
+                c = " "
+            print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name + 
+                    Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
 
-    def do_view_available(self, line):
-        """List available views in the current application"""
-        self.view_available()
+    def do_available(self, line):
+        """Views and Tools available in the current application"""
+        self.do_available_tools()
+        self.do_available_filetypes()
+        self.do_available_views()
+        self.do_available_theories()
 
     def view_switch(self, name):
         """Change to another view from open application"""
@@ -819,12 +828,12 @@ Arguments:
         """Update and refresh all plots"""
         self.update_all_ds_plots()
 
-    def do_view_switch(self, name):
-        """Change to another view from open application"""
+    def do_view(self, name):
+        """Change the active view"""
         self.view_switch(name)
 
-    def complete_view_switch(self, text, line, begidx, endidx):
-        """Complete switch view command"""
+    def complete_view(self, text, line, begidx, endidx):
+        """Complete view command"""
         view_names = list(self.views.keys())
         if not text:
             completions = view_names[:]
@@ -834,26 +843,22 @@ Arguments:
 
 # THEORY STUFF
 
-    def theory_available(self):
+    def do_available_theories(self, line=""):
         """List available theories in the current application"""
+        print("AVAILABLE THEORIES")
+        print("==================")
         for t in list(self.theories.values()):
             print(Fore.MAGENTA + "%s:"%t.thname + (20-len(t.thname))*" " + Fore.RESET + "%s"%t.description)
 
-    def do_theory_available(self, line):
-        """List available theories in the current application"""
-        self.theory_available()
-
 # TOOL STUFF
-    def tool_available(self):
+    def do_available_tools(self, line=""):
         """List available tools in the current application"""
+        print("AVAILABLE TOOLS")
+        print("===============")
         for t in list(self.availabletools.values()):
-            print(Fore.CYAN + "%s"%t.toolname Fore.RESET +:\t%s"%t.description)
+            print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
         for t in list(self.extratools.values()):
-            print(Fore.CYAN + "%s"%t.toolname Fore.RESET +:\t%s"%t.description)
-
-    def do_tool_available(self, line):
-        """List available tools in the current application"""
-        self.tool_available()
+            print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
 
     def do_tool_new(self, line):
         """Add a new tool of the type specified to the list of tools"""
@@ -861,7 +866,10 @@ Arguments:
         extratooltypes = list(self.extratools.keys())
         if ((line in tooltypes) or (line in extratooltypes)):
             self.num_tools += 1
-            to_id = "%s%d" % (line, self.num_tools)
+            to_id = ''.join(
+                c for c in line
+                if c.isupper())  #get the upper case letters of th_name
+            to_id = "%s%d" % (to_id, self.num_tools)
             if (line in tooltypes):
                 to = self.availabletools[line](to_id, self)
             elif (line in extratooltypes):
@@ -906,13 +914,16 @@ Arguments:
             completions = [f for f in listtools if f.startswith(text)]
         return completions
         
-    def do_tool_list(self, line):
-        """List opened tools"""
+    def do_list_tools(self, line=""):
+        """List opened tools in the current application"""
+        if len(self.tools)>0:
+            print("OPEN TOOLS IN THIS APPLICATION")
+            print("==============================")
         for t in self.tools:
             if t.active:
-                print(Fore.CYAN + t.name + Fore.RESET + " *")
+                print("*" + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
             else:
-                print(Fore.CYAN + t.name + Fore.RESET)
+                print(" " + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
 
     def do_tool_switch(self, line):
         """Change the active tool"""
@@ -929,6 +940,7 @@ Arguments:
         return completions
 
     def do_tool_activate(self, name):
+        """Enable/Disable a given tool"""
         listtools = [x.name for x in self.tools]
         try:
             idx = listtools.index(name)

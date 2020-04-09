@@ -257,16 +257,6 @@ class BaseToolMaterialsDatabase:
         self.parameters['MK'] = Parameter(name='MK', description='Molecular weight of Kuhn step (Da)')
         self.parameters['C_inf'] = Parameter(name='C_inf', description='Characteristic ratio')
 
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def calculate(self, x, y, ax=None, color=None):
         """MaterialsDatabase function that returns the square of the y, according to the view        
         """

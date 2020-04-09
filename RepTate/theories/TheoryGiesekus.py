@@ -229,38 +229,18 @@ class BaseTheoryGiesekus:
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  #default mode: shear
 
-    def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
-        pass
-
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
             G[i] = self.parameters["G%02d" % i].value
-        return tau, G
+        return tau, G, True
 
     def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - - tau {[type]} -- [description]
-            - - G {[type]} -- [description]
-        """
+        """Set the values of Maxwell Modes from another theory"""
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
         self.set_param_value("nstretch", nmodes)
@@ -268,6 +248,7 @@ class BaseTheoryGiesekus:
         for i in range(nmodes):
             self.set_param_value("tauD%02d" % i, tau[i])
             self.set_param_value("G%02d" % i, G[i])
+        return True
 
     def n1_uext(self, p, times):
         """Upper Convected Maxwell model in uniaxial extension.
@@ -668,7 +649,10 @@ class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
         self.Qcopy_modes()
 
     def edit_modes_window(self):
-        times, G = self.get_modes()
+        times, G, sucess = self.get_modes()
+        if not success:
+            self.logger.warning("Could not get modes successfully")
+            return
         d = EditModesDialog(self, times, G, self.MAX_MODES)
         if d.exec_():
             nmodes = d.table.rowCount()

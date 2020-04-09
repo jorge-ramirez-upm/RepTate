@@ -100,33 +100,21 @@ class BaseTheoryTemplate:
             opt_type=OptType.const)
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        pass
+        """If the theory provides Maxwell modes, fill this up (see examples in TheoryMaxwellModes.
+If the theory does not provide modes, simply delete this function."""
+        tau = np.ones(1)
+        G = np.ones(1)
+        return tau, G, False
 
     def set_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
+        """If the theory provides Maxwell modes, fill this up (see examples in TheoryMaxwellModes.
+If the theory does not provide modes, simply delete this function."""
+        self.logger.info("set_modes not allowed in this theory (%s)" % elf.thname)
+        return False
 
     def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
+        """If the theory needs to clear up memory in a very special way, fill up the contents of this function.
+If not, you can safely delete it."""
         pass
 
     def calculate(self, f=None):

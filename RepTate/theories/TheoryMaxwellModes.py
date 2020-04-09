@@ -256,10 +256,7 @@ class BaseTheoryMaxwellModesFrequency:
         self.plot_theory_stuff()
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.graphicmodes)
 
@@ -287,13 +284,7 @@ class BaseTheoryMaxwellModesFrequency:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
         freq = np.logspace(self.parameters["logwmin"].value,
                            self.parameters["logwmax"].value, nmodes)
@@ -301,18 +292,7 @@ class BaseTheoryMaxwellModesFrequency:
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
-        return tau, G
-
-    def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - G {[type]} -- [description]
-        """
-        print("set_modes not allowed in this theory (%s)" % self.name)
+        return tau, G, True
 
     def MaxwellModesFrequency(self, f=None):
         """[summary]
@@ -660,10 +640,7 @@ class BaseTheoryMaxwellModesTime:
         self.plot_theory_stuff()
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.graphicmodes)
 
@@ -691,31 +668,14 @@ class BaseTheoryMaxwellModesTime:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
         tau = np.logspace(self.parameters["logtmin"].value,
                           self.parameters["logtmax"].value, nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
-        return tau, G
-
-    def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - G {[type]} -- [description]
-        """
-        print("set_modes not allowed in this theory (%s)" % self.name)
+        return tau, G, True
 
     def MaxwellModesTime(self, f=None):
         """[summary]

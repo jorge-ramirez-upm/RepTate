@@ -160,16 +160,6 @@ class BaseTheoryWLF:
 
         self.get_material_parameters()
 
-    def destructor(self):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-
-        """
-        pass
-
     def WLF(self, f=None):
         """WLF function         
         """

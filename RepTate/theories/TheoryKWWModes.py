@@ -232,10 +232,7 @@ class BaseTheoryKWWModesFrequency:
         self.plot_theory_stuff()
 
     def destructor(self):
-        """Called when the theory tab is closed
-        
-        [description]
-        """
+        """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         self.ax.lines.remove(self.graphicmodes)
 
@@ -263,13 +260,7 @@ class BaseTheoryKWWModesFrequency:
         self.parent_dataset.parent_application.update_plot()
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
         freq = np.logspace(self.parameters["logwmin"].value,
                            self.parameters["logwmax"].value, nmodes)
@@ -277,18 +268,7 @@ class BaseTheoryKWWModesFrequency:
         eps = np.zeros(nmodes)
         for i in range(nmodes):
             eps[i] = np.power(10, self.parameters["logDe%02d" % i].value)
-        return tau, eps
-
-    def set_modes(self, tau, eps):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - eps {[type]} -- [description]
-        """
-        print("set_modes not allowed in this theory (%s)" % self.name)
+        return tau, eps, True
 
     def KWWModesFrequency(self, f=None):
         """[summary]

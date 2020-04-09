@@ -315,6 +315,8 @@ class Theory(CmdBase):
         self.normalizebydata = False
 
     def destructor(self):
+        """If the theory needs to erase some memory in a special way, any 
+        child theory must rewrite this funcion"""
         pass
 
     def precmd(self, line):
@@ -1191,61 +1193,50 @@ File error is calculated as the mean square of the residual, averaged over all p
 
 # MODES STUFF
 
-    def copy_modes(self):
-        """[summary]
-        
-        [description]
-        """
+    def do_list_theories_Maxwell(self, line):
+        """List the theories in the current RepTate instance that provide Maxwell modes"""
+        apmng = self.parent_dataset.parent_application.parent_manager
+        apmng.do_list_theories_Maxwell()
+
+    def do_copy_modes(self, line):
+        """Copy Maxwell modes from another theory"""
         apmng = self.parent_dataset.parent_application.parent_manager
         L, S= apmng.list_theories_Maxwell(th_exclude=self)
-        print("Found %d theories that provide modes" % len(L))
-        kys = list(L.keys())
-        kys.sort()
-        for i, k in enumerate(kys):
-            print("%d: %s" % (i, k))
-        opt = int(
-            input("Select theory (number between 0 and %d> " % (len(L) - 1)))
-        if (opt < 0 or opt >= len(L)):
-            print("Invalid option!")
-        else:
-            tau, G0 = L[kys[opt]]()
+        if line in L.keys():
+            tau, G0, success = L[line]()
+            if not success: 
+                self.logger.warning("Could not get modes successfully")
             tauinds = (-tau).argsort()
             tau = tau[tauinds]
             G0 = G0[tauinds]
-            self.set_modes(tau, G0)
+            success = self.set_modes(tau, G0)
+            if not success:
+                self.logger.warning("Could not set modes successfully")
+        else:
+            print("Theory %s does not exist or does not provide modes"%line)
 
-    def do_copy_modes(self, line):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
-        self.copy_modes()
+    def complete_copy_modes(self, text, line, begidx, endidx):
+        """Complete the copy_modes command"""
+        apmng = self.parent_dataset.parent_application.parent_manager
+        L, S= apmng.list_theories_Maxwell(th_exclude=self)
+        L = list(L.keys())
+        if not text:
+            completions = L[:]
+        else:
+            completions = [f for f in L if f.startswith(text)]
+        return completions
 
     def get_modes(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Get Maxwell modes from this theory. This function must be rewritten from derived theories"""
         tau = np.ones(1)
         G = np.ones(1)
-        return tau, G
+        return tau, G, False
 
     def set_modes(self, tau, G):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - tau {[type]} -- [description]
-            - G {[type]} -- [description]
-        """
-        pass
+        """Set Maxwell modes in this theory. This function must be rewritten from derived theories
+that provide this functionality."""
+        self.logger.info("set_modes not allowed in this theory (%s)" % self.thname)
+        return False
 
     def do_cite(self, line):
         """Print citation information"""
@@ -1255,20 +1246,9 @@ File error is calculated as the mean square of the residual, averaged over all p
     def do_plot(self, line):
         """Call the plot from the parent Dataset"""
         self.parent_dataset.do_plot(line)
-        #self.plot_theory_stuff()
 
     def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-            - value {[type]} -- [description]
-
-        Returns:
-            - Success{bool} -- True if the operation was successful
-        """
+        """Set the value of a theory parameter"""
         p = self.parameters[name]
         try:
             if (p.type == ParameterType.real):
