@@ -975,13 +975,7 @@ File error is calculated as the mean square of the residual, averaged over all p
 # SAVE THEORY STUFF
 
     def do_save(self, line='', extra_txt=''):
-        """Save the results from all theory predictions to file
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        """Save the results from all theory predictions to file"""
         self.Qprint('Saving prediction(s) of ' + self.name + ' theory')
         counter = 0
         for f in self.parent_dataset.files:
@@ -1029,6 +1023,9 @@ File error is calculated as the mean square of the residual, averaged over all p
         else:
             print(msg)
 
+    def complete_save(self, text, line, begidx, endidx):
+        """Complete the save command"""
+        return self.complete_cd(text, line, begidx, endidx)
 # SPAN STUFF
 
     def change_xmin(self, dx, dy):

@@ -51,7 +51,7 @@ from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
 from time import time, sleep
 from CmdBase import CmdBase, CalcMode
-
+import logging
 
 def start_RepTate(argv):
     """
@@ -59,6 +59,7 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
+    loglevel=logging.DEBUG
     GUI = True
     QApplication.setStyle("Fusion") #comment that line for a native look
     #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
@@ -68,7 +69,7 @@ def start_RepTate(argv):
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     CmdBase.calcmode = CalcMode.singlethread
     
-    ex = QApplicationManager()
+    ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
     ex.show()
@@ -89,7 +90,11 @@ def start_RepTate(argv):
     ex.applications["MWD1"].datasets["Set1"].new_theory("LogNormal")
     ex.applications["MWD1"].datasets["Set1"].new_theory("GEX")
 
+    sys.exit(app.exec_())
+
     ex.handle_new_app('MWD')
+
+    # THE TEST FAILS FOR THE CODE BELOW... STRANGE!
     ex.applications["MWD2"].new_tables_from_files([
                                                    gt_dir + "Munstedt_PSIV.gpc",
                                                    ])

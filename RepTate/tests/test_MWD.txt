@@ -1,12 +1,13 @@
 new MWD
 open data/PS_Linear_Polydisperse/ps1_header.gpc
 plot
-theory_new Discretize MWD
+new Discretize MWD
 nbin=15
 up
-switch DataSet01
-theory_new LogNormal
+new LogNormal
 up
-switch DataSet01
-theory_new GEX
-exit()
+new GEX
+up
+up
+figure_save tests/output/MWD.png
+quit

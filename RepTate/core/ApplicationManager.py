@@ -70,7 +70,7 @@ class ApplicationManager(CmdBase):
 
     version = Version.VERSION
     date = Version.DATE
-    prompt = Fore.GREEN + 'RepTate> '
+    prompt = Fore.GREEN + 'RepTate> ' 
     intro = 'RepTate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
         version, date)
 
@@ -121,6 +121,8 @@ class ApplicationManager(CmdBase):
         self.logger.addHandler(fh)
         self.logger.addHandler(ch)
         self.logger.debug('New ApplicationManager')
+        if (self.mode == CmdMode.batch):
+            self.prompt += Fore.RESET
 
 # APPLICATION STUFF
 

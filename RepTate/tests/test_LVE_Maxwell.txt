@@ -1,9 +1,13 @@
 new LVE
 open data/PI_LINEAR/PI_483.1k_T-35.tts
 plot
-theory_new Maxwell Modes
+new Maxwell Modes
 xrange -8 -3
 nmodes=5
 fit
-save
-exit()
+save tests/output
+up
+up
+figure_save tests/output/Maxwell.png
+quit
+

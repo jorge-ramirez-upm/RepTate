@@ -19,6 +19,14 @@
             "program": "${workspaceFolder}/RepTateCL.py",
             "console": "integratedTerminal",
             "args": ["-v","data/PI_LINEAR/PI_225.9k_T-35.tts"]
+        },
+        {
+            "name": "Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/RepTate_Test_BoB_polyconf.py",
+            "console": "integratedTerminal",
+            "args": []
         }
     ]
 }

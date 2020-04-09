@@ -1,8 +1,10 @@
 new TTS
 open data/PI_LINEAR/osc/PI*osc
-plot
-theory_new WLF Shift
-T0=-35
+new WLF Shift
+Tr=-35
 fit
-save
+save tests/output
+up
+up
+figure_save tests/output/TTS.png
 quit

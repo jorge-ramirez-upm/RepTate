@@ -8,7 +8,10 @@ open data/PI_LINEAR/PI_483.1k_T-35.tts
 open data/PI_LINEAR/PI_634.5k_T-35.tts
 open data/PI_LINEAR/PI_1131k_T-35.tts
 plot
-theory_new Likhtman-McLeish
+new Likhtman-McLeish
 fit
-save
-exit()
+save tests/output
+up
+up
+figure_save tests/output/LM.png
+quit

@@ -1061,3 +1061,14 @@ Arguments:
             except AttributeError as e:
                 pass
                 #print("legend: %s"%e)
+
+    def do_figure_save(self, line=""):
+        """Save the figure to file. Argument = file name. The image format is determined from the file extension."""
+        if line=="":
+            plt.savefig("RepTateFigure.png")
+        else:
+            plt.savefig(line)
+
+    def complete_figure_save(self, text, line, begidx, endidx):
+        """Complete the figure_save command"""
+        return self.complete_cd(text, line, begidx, endidx)

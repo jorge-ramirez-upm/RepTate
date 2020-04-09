@@ -692,7 +692,7 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
         self.Qcopy_modes()
 
     def edit_modes_window(self):
-        times, G, sucess = self.get_modes()
+        times, G, success = self.get_modes()
         if not success: 
             self.logger.warning("Could not get modes successfully")
             return

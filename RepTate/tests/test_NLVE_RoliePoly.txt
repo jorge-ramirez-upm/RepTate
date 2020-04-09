@@ -1,16 +1,18 @@
 new LVE
 open data/DOW/Linear_Rheology_TTS/DOWLDPEL150R_160C.tts
-plot
-theory_new Maxwell Modes
+new Maxwell Modes
 nmodes=8
 fit
 up
 up
+up
 new NLVE
 open data/DOW/Non-Linear_Rheology/Start-up_Shear/My_dow150-160-*shear.shear
-theory_new Rolie-Poly
-copy_modes
-0
+new Rolie-Poly
+copy_modes LVE1.Set1.MM1
 calculate
-save
+save tests/output
+up
+up
+figure_save tests/output/RoliePoly.png
 quit
