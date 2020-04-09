@@ -824,6 +824,8 @@ Arguments:
     def do_reload_data(self, line=""):
         """Reload data files in the current DataSet"""
         for file in self.files:
+            if not file.active:
+                continue
             path = file.file_full_path
             ft = file.file_type
             if not os.path.isfile(path):
