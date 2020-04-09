@@ -63,16 +63,17 @@ class DataTable(object):
         self.series=[]
         self.extra_tables = {}
         
-        for nx in range(len(axarr)): #create series for each plot
-            series_nx = []
-            for i in range(self.MAX_NUM_SERIES): 
-                ss = axarr[nx].plot([], [], label='', picker=self.PICKRADIUS)
-                if i == 0:
-                    ss[0]._name = _name #define artist name
-                else:    
-                    ss[0]._name = _name + " #%d"%(i + 1) #define artist name
-                series_nx.append(ss[0])
-            self.series.append(series_nx)
+        if axarr != None:
+            for nx in range(len(axarr)): #create series for each plot
+                series_nx = []
+                for i in range(self.MAX_NUM_SERIES): 
+                    ss = axarr[nx].plot([], [], label='', picker=self.PICKRADIUS)
+                    if i == 0:
+                        ss[0]._name = _name #define artist name
+                    else:    
+                        ss[0]._name = _name + " #%d"%(i + 1) #define artist name
+                    series_nx.append(ss[0])
+                self.series.append(series_nx)
 
     def __str__(self):
         """[summary]

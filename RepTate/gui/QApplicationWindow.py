@@ -1402,67 +1402,65 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         #self.actionShiftVertically.setChecked(False)
         
     def handle_actionReload_Data(self):
-        """Reload the data files: remove and reopen the current files
-        
-        [description]
-        """
+        """Reload the data files in the current DataSet"""
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
             return
-        self.disconnect_curve_drag()
-        paths_to_reopen, th_to_reopen, success = self.clear_files_and_th_from_dataset(ds)
-        if success:
-            if paths_to_reopen:
-                self.new_tables_from_files(paths_to_reopen)
-            for th_name, tab_name in th_to_reopen:
-                ds.new_theory(th_name, tab_name)
-        else:
-            QMessageBox.warning(self, 'Reload Error', 'Error in locating some data files')
+        ds.do_reload_data()        
 
-    def clear_files_and_th_from_dataset(self, ds):
-        """Remove all files from dataset and widgetTree,
-        return a list with the full path of deleted files and opened theories
+    # def handle_actionReload_Data(self):
+    #     """Reload the data files: remove and reopen the current files
         
-        [description]
+    #     [description]
+    #     """
+    #     ds = self.DataSettabWidget.currentWidget()
+    #     if not ds:
+    #         return
+    #     self.disconnect_curve_drag()
+    #     paths_to_reopen, th_to_reopen, success = self.clear_files_and_th_from_dataset(ds)
+    #     if success:
+    #         if paths_to_reopen:
+    #             self.new_tables_from_files(paths_to_reopen)
+    #         for th_name, tab_name in th_to_reopen:
+    #             ds.new_theory(th_name, tab_name)
+    #     else:
+    #         QMessageBox.warning(self, 'Reload Error', 'Error in locating some data files')
+
+    # def clear_files_and_th_from_dataset(self, ds):
+    #     """Remove all files from dataset and widgetTree,
+    #     return a list with the full path of deleted files and opened theories"""
+    #     file_paths_cleaned = []
+    #     th_cleaned = []
+    #     #save file names
+    #     for f in ds.files:
+    #         fpath = f.file_full_path
+    #         print(fpath)
+    #         if not isfile(fpath):
+    #             return None, None, False
+    #         file_paths_cleaned.append(fpath)
+    #     #remove lines from figure
+    #     self.remove_ds_ax_lines(ds.name) 
+    #     ds.set_no_limits(ds.current_theory) 
+    #     #remove tables from ds
+    #     ntable = ds.DataSettreeWidget.topLevelItemCount()
+    #     for i in range(ntable):
+    #         ds.DataSettreeWidget.takeTopLevelItem(0)
+    #     #save theory tabs of ds
+    #     ntabs = ds.TheorytabWidget.count()
+    #     for i in range(ntabs):
+    #         th = ds.TheorytabWidget.widget(0)
+    #         try:
+    #             th.destructor()
+    #         except:
+    #             pass
+    #         thname = th.thname
+    #         thtabname = ds.TheorytabWidget.tabText(0)
+    #         th_cleaned.append((thname, thtabname))
+    #         ds.TheorytabWidget.removeTab(0)
         
-        Arguments:
-            - ds {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
-        file_paths_cleaned = []
-        th_cleaned = []
-        #save file names
-        for f in ds.files:
-            fpath = f.file_full_path
-            print(fpath)
-            if not isfile(fpath):
-                return None, None, False
-            file_paths_cleaned.append(fpath)
-        #remove lines from figure
-        self.remove_ds_ax_lines(ds.name) 
-        ds.set_no_limits(ds.current_theory) 
-        #remove tables from ds
-        ntable = ds.DataSettreeWidget.topLevelItemCount()
-        for i in range(ntable):
-            ds.DataSettreeWidget.takeTopLevelItem(0)
-        #save theory tabs of ds
-        ntabs = ds.TheorytabWidget.count()
-        for i in range(ntabs):
-            th = ds.TheorytabWidget.widget(0)
-            try:
-                th.destructor()
-            except:
-                pass
-            thname = th.thname
-            thtabname = ds.TheorytabWidget.tabText(0)
-            th_cleaned.append((thname, thtabname))
-            ds.TheorytabWidget.removeTab(0)
-        
-        ds.files.clear()
-        ds.theories.clear()
-        return file_paths_cleaned, th_cleaned, True
+    #     ds.files.clear()
+    #     ds.theories.clear()
+    #     return file_paths_cleaned, th_cleaned, True
 
     def handle_actionView_All_SetTheories(self, checked):
         ds = self.DataSettabWidget.currentWidget()

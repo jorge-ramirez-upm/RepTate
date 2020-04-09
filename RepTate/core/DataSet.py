@@ -821,15 +821,22 @@ Arguments:
                 return
             return (message, None, None)
 
-    # def reload_data(self):
-    #     paths_to_open = []
-    #     for file in self.files:
-    #         paths_to_open.append([file.file_full_path, file.file_type])
-    #     del self.files[:]
-
-    #     for i in len(paths_to_open):
-    #         path, ft = paths_to_open[i]
-    #         df = ft.read_file(path, self, self.parent_application.axarr[0])
+    def do_reload_data(self, line=""):
+        """Reload data files in the current DataSet"""
+        for file in self.files:
+            path = file.file_full_path
+            ft = file.file_type
+            if not os.path.isfile(path):
+                self.logger.warning("Could not open file %s: %s"%(file.file_name_short, path))
+                continue
+            df = ft.read_file(path, self, None)
+            file.header_lines = df.header_lines[:]
+            file.file_parameters.clear()
+            file.file_parameters.update(df.file_parameters)
+            file.data_table.data = np.array(df.data_table.data)
+            file.data_table.num_columns = df.data_table.num_columns
+            file.data_table.num_rows = df.data_table.num_rows
+        self.do_plot("")
 
     def __listdir(self, root):
         """List directory 'root' appending the path separator to subdirs."""
