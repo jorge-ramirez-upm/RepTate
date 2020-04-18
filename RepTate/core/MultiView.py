@@ -177,7 +177,7 @@ class MultiView(QWidget):
         self.axarr = []
         self.figure = plt.figure()
         for i in range(self.nplots):
-            self.axarr.append(self.figure.add_subplot(gs[i]))            
+            self.axarr.append(self.figure.add_subplot(gs[i]))
 
         self.set_bbox()
 
@@ -250,14 +250,17 @@ class MultiView(QWidget):
         for i in range(nplot_old, self.nplots):
             try:
                 plt.subplot(self.axarr[i])
-            except:
-                pass
+            except Exception as e:
+                self.parent_application.logger.warning("MATPLOTLIB exception")
+                self.parent_application.logger.exception(e)
         # remove axes from plt
         for i in range(self.nplots, nplot_old):
             try:
                 plt.delaxes(self.axarr[i])
-            except:
-                pass
+            except Exception as e:
+                self.parent_application.logger.warning("MATPLOTLIB exception")
+                self.parent_application.logger.exception(e)
+
         for ds in self.parent_application.datasets.values():
             ds.nplots = nplots
         self.parent_application.update_all_ds_plots()
@@ -294,8 +297,9 @@ class MultiView(QWidget):
                 self.axarr[i].set_visible(True)
                 try:
                     plt.subplot(self.axarr[i])
-                except:
-                    pass
+                except Exception as e:
+                    self.parent_application.logger.warning("MATPLOTLIB exception")
+                    self.parent_application.logger.exception(e)
 
         else: #single plot max-size
             tab_to_maxi = index - 1 # in 0 1 2
@@ -311,14 +315,16 @@ class MultiView(QWidget):
                     self.axarr[i].set_position(self.bboxmax)
                     try:
                         plt.subplot(self.axarr[i])
-                    except:
-                        pass
+                    except Exception as e:
+                        self.parent_application.logger.warning("MATPLOTLIB exception")
+                        self.parent_application.logger.exception(e)
                 else:
                     self.axarr[i].set_visible(False)
                     try:
                         plt.delaxes(self.axarr[i])
-                    except:
-                        pass
+                    except Exception as e:
+                        self.parent_application.logger.warning("MATPLOTLIB exception")
+                        self.parent_application.logger.exception(e)
         self.parent_application.update_datacursor_artists()
         self.canvas.draw()
         self.parent_application.set_view_tools(view_name)

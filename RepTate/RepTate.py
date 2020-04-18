@@ -136,6 +136,11 @@ def start_RepTate(argv):
     # splash.showMessage("Loading RepTate...\n")
     splash.show()
     
+    # set the calmode back
+    if args.single:
+        CmdBase.calcmode = CalcMode.singlethread
+    else:
+        CmdBase.calcmode = CalcMode.multithread
     ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
     # splash.showMessage("Loading RepTate...")

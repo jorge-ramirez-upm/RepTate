@@ -138,9 +138,15 @@ class BaseTheoryMaxwellModesFrequency:
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False,
-            min_value=1)
+            min_value=1,
+            max_value=self.MAX_MODES)
         # Interpolate modes from data
-        w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
+        if nmodes>1:
+            w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
+        else:
+            w = np.logspace(np.log10(wmin), np.log10(wmin), nmodes)
+            self.parameters["logwmax"].opt_type = OptType.const
+
         G = np.abs(
             np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
                       self.parent_dataset.files[0].data_table.data[:, 1]))
@@ -173,9 +179,18 @@ class BaseTheoryMaxwellModesFrequency:
 
             nmodesnew = int(value)
             message, success = super().set_param_value("nmodes", nmodesnew)
-            wnew = np.logspace(wminold, wmaxold, nmodesnew)
-
-            Gnew = np.interp(wnew, wold, Gold)
+            
+            if nmodesnew>1 and nmodesold==1:
+                if wminold>wmaxold:
+                    wminold, wmaxold = wmaxold, wminold
+                self.parameters["logwmax"].opt_type = OptType.opt
+            if nmodesnew>1:
+                wnew = np.logspace(wminold, wmaxold, nmodesnew)
+                Gnew = np.interp(wnew, wold, Gold)
+            else:
+                wnew = np.logspace(wminold, wminold, nmodesnew)
+                Gnew = np.array([Gold[0]])
+                self.parameters["logwmax"].opt_type = OptType.const
 
             for i in range(nmodesnew):
                 self.parameters["logG%02d" % i] = Parameter(
@@ -235,8 +250,12 @@ class BaseTheoryMaxwellModesFrequency:
         [description]
         """
         nmodes = self.parameters["nmodes"].value
-        w = np.logspace(self.parameters["logwmin"].value,
-                        self.parameters["logwmax"].value, nmodes)
+        if nmodes>1:
+            w = np.logspace(self.parameters["logwmin"].value,
+                            self.parameters["logwmax"].value, nmodes)
+        else:
+            w = np.logspace(self.parameters["logwmin"].value,
+                            self.parameters["logwmin"].value, nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
@@ -286,8 +305,12 @@ class BaseTheoryMaxwellModesFrequency:
     def get_modes(self):
         """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
+        if nmodes>1:
+            freq = np.logspace(self.parameters["logwmin"].value,
+                            self.parameters["logwmax"].value, nmodes)
+        else:
+            freq = np.logspace(self.parameters["logwmin"].value,
+                            self.parameters["logwmin"].value, nmodes)
         tau = 1.0 / freq
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -310,8 +333,13 @@ class BaseTheoryMaxwellModesFrequency:
         tt.data[:, 0] = ft.data[:, 0]
 
         nmodes = self.parameters["nmodes"].value
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
+        if nmodes>1:
+            freq = np.logspace(self.parameters["logwmin"].value,
+                               self.parameters["logwmax"].value, nmodes)
+        else:
+            freq = np.logspace(self.parameters["logwmin"].value,
+                               self.parameters["logwmin"].value, nmodes)
+
         tau = 1.0 / freq
 
         for i in range(nmodes):
@@ -335,8 +363,12 @@ class BaseTheoryMaxwellModesFrequency:
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 3))
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
+        if nmodes>1:
+            freq = np.logspace(self.parameters["logwmin"].value,
+                              self.parameters["logwmax"].value, nmodes)
+        else:
+            freq = np.logspace(self.parameters["logwmin"].value,
+                              self.parameters["logwmin"].value, nmodes)
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
             if self.stop_theory_flag:
@@ -538,7 +570,11 @@ class BaseTheoryMaxwellModesTime:
             opt_type=OptType.const,
             display_flag=False)
         # Interpolate modes from data
-        tau = np.logspace(np.log10(tmin), np.log10(tmax), nmodes)
+        if nmodes>1:
+            tau = np.logspace(np.log10(tmin), np.log10(tmax), nmodes)
+        else:
+            tau = np.logspace(np.log10(tmax), np.log10(tmax), nmodes)
+            self.parameters["logtmin"].opt_type = OptType.const
         G = np.abs(
             np.interp(tau, self.parent_dataset.files[0].data_table.data[:, 0],
                       self.parent_dataset.files[0].data_table.data[:, 1]))
@@ -569,9 +605,18 @@ class BaseTheoryMaxwellModesTime:
 
             nmodesnew = value
             message, success = super().set_param_value("nmodes", nmodesnew)
-            taunew = np.logspace(tminold, tmaxold, nmodesnew)
 
-            Gnew = np.interp(taunew, tauold, Gold)
+            if nmodesnew>1 and nmodesold==1:
+                if tauminold>taumaxold:
+                    tauminold, taumaxold = taumaxold, tauminold
+                self.parameters["logtmin"].opt_type = OptType.opt
+            if (nmodesnew > 1):
+                taunew = np.logspace(tminold, tmaxold, nmodesnew)
+                Gnew = np.interp(taunew, tauold, Gold)
+            else:
+                taunew = 10.0**np.array([tmaxold])
+                Gnew = np.array([Gold[-1]])
+                self.parameters["logtmin"].opt_type = OptType.const
 
             for i in range(nmodesnew):
                 self.parameters["logG%02d" % i] = Parameter(
@@ -619,8 +664,12 @@ class BaseTheoryMaxwellModesTime:
         [description]
         """
         nmodes = self.parameters["nmodes"].value
-        tau = np.logspace(self.parameters["logtmin"].value,
-                          self.parameters["logtmax"].value, nmodes)
+        if nmodes>1:
+            tau = np.logspace(self.parameters["logtmin"].value,
+                              self.parameters["logtmax"].value, nmodes)
+        else:
+            tau = np.logspace(self.parameters["logtmax"].value,
+                              self.parameters["logtmax"].value, nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
@@ -670,8 +719,12 @@ class BaseTheoryMaxwellModesTime:
     def get_modes(self):
         """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
-        tau = np.logspace(self.parameters["logtmin"].value,
-                          self.parameters["logtmax"].value, nmodes)
+        if nmodes>1:
+            tau = np.logspace(self.parameters["logtmin"].value,
+                              self.parameters["logtmax"].value, nmodes)
+        else:
+            tau = np.logspace(self.parameters["logtmax"].value,
+                              self.parameters["logtmax"].value, nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
@@ -700,8 +753,12 @@ class BaseTheoryMaxwellModesTime:
             gamma = 1
 
         nmodes = self.parameters["nmodes"].value
-        tau = np.logspace(self.parameters["logtmin"].value,
-                          self.parameters["logtmax"].value, nmodes)
+        if nmodes>1:
+            tau = np.logspace(self.parameters["logtmin"].value,
+                              self.parameters["logtmax"].value, nmodes)
+        else:
+            tau = np.logspace(self.parameters["logtmax"].value,
+                              self.parameters["logtmax"].value, nmodes)
 
         for i in range(nmodes):
             if self.stop_theory_flag:
@@ -722,8 +779,12 @@ class BaseTheoryMaxwellModesTime:
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 2))
-        tau = np.logspace(self.parameters["logtmin"].value,
-                          self.parameters["logtmax"].value, nmodes)
+        if nmodes>1:
+            tau = np.logspace(self.parameters["logtmin"].value,
+                            self.parameters["logtmax"].value, nmodes)
+        else:
+            tau = np.logspace(self.parameters["logtmax"].value,
+                            self.parameters["logtmax"].value, nmodes)
         data_table_tmp.data[:, 0] = tau
         for i in range(nmodes):
             if self.stop_theory_flag:

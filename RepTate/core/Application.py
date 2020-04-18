@@ -39,6 +39,7 @@ import io
 #import logging
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
+import math
 
 from CmdBase import CmdBase, CmdMode
 from Theory import Theory
@@ -983,30 +984,35 @@ Arguments:
         for nx in range(self.nplots):
             view = self.multiviews[nx]
             ax = self.axarr[nx]
-            if (view.log_x):
-                ax.set_xscale("log")
-                ##ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
-                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                # ax.xaxis.set_major_locator(locmaj)
-                # locmin = LogLocator(
-                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                # ax.xaxis.set_minor_locator(locmin)
-                # ax.xaxis.set_minor_formatter(NullFormatter())
-            else:
-                ax.set_xscale("linear")
-                ax.xaxis.set_minor_locator(AutoMinorLocator())
-            if (view.log_y):
-                ax.set_yscale("log")
-                ##ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
-                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                # ax.yaxis.set_major_locator(locmaj)
-                # locmin = LogLocator(
-                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                # ax.yaxis.set_minor_locator(locmin)
-                # ax.yaxis.set_minor_formatter(NullFormatter())
-            else:
-                ax.set_yscale("linear")
-                ax.yaxis.set_minor_locator(AutoMinorLocator())
+            try:
+                if (view.log_x):
+                    ax.set_xscale("log")
+                    ##ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
+                    # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+                    # ax.xaxis.set_major_locator(locmaj)
+                    # locmin = LogLocator(
+                        # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+                    # ax.xaxis.set_minor_locator(locmin)
+                    # ax.xaxis.set_minor_formatter(NullFormatter())
+                else:
+                    ax.set_xscale("linear")
+                    ax.xaxis.set_minor_locator(AutoMinorLocator())
+                if (view.log_y):
+                    ax.set_yscale("log")
+                    ##ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
+                    # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
+                    # ax.yaxis.set_major_locator(locmaj)
+                    # locmin = LogLocator(
+                        # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
+                    # ax.yaxis.set_minor_locator(locmin)
+                    # ax.yaxis.set_minor_formatter(NullFormatter())
+                else:
+                    ax.set_yscale("linear")
+                    ax.yaxis.set_minor_locator(AutoMinorLocator())
+            except Exception as e:
+                self.logger.warning("MATPLOTLIB exception")
+                self.logger.exception(e)
+
 
             ax.set_xlabel(view.x_label + ' [' + view.x_units + ']')
             ax.set_ylabel(view.y_label + ' [' + view.y_units + ']')

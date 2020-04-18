@@ -1885,7 +1885,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 except KeyError:
                     e_list.append(param)
             if len(e_list)>0:
-                message = "Parameter(s) {%s} not found in file '%s'\n Value(s) set to 0"%(", ".join(e_list), dt.file_name_short)
+                message = "Parameter(s) {%s} not found in file '%s'. Value(s) set to 0"%(", ".join(e_list), dt.file_name_short)
                 # header = "Missing Parameter"
                 # QMessageBox.warning(self, header, message)
                 self.logger.warning(message)

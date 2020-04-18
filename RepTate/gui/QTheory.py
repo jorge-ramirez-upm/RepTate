@@ -590,7 +590,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             d = GetModesDialog(self, G)
             if (d.exec_() and d.btngrp.checkedButton() != None):
                 item = d.btngrp.checkedButton().text()
-                tau, G0 = G[item]()
+                tau, G0, success = G[item]()
+                if not success: 
+                    self.logger.warning("Could not get modes successfully")
+                    return
                 tauinds = (-tau).argsort()
                 tau = tau[tauinds]
                 G0 = G0[tauinds]

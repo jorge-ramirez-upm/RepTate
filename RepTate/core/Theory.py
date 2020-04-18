@@ -1203,12 +1203,13 @@ File error is calculated as the mean square of the residual, averaged over all p
             tau, G0, success = L[line]()
             if not success: 
                 self.logger.warning("Could not get modes successfully")
-            tauinds = (-tau).argsort()
-            tau = tau[tauinds]
-            G0 = G0[tauinds]
-            success = self.set_modes(tau, G0)
-            if not success:
-                self.logger.warning("Could not set modes successfully")
+            else:
+                tauinds = (-tau).argsort()
+                tau = tau[tauinds]
+                G0 = G0[tauinds]
+                success = self.set_modes(tau, G0)
+                if not success:
+                    self.logger.warning("Could not set modes successfully")
         else:
             print("Theory %s does not exist or does not provide modes"%line)
 
