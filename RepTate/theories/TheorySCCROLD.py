@@ -53,16 +53,7 @@ from SpreadsheetWidget import SpreadsheetWidget
 import Version
 import time
 from Theory import EndComputationRequested
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
+from theory_helpers import FlowMode
 
 class TheorySCCROLD(CmdBase):
     """SCCROLD

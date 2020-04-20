@@ -39,13 +39,13 @@ import os
 import sys
 import cmd
 import readline
-import enum
+from enum import Enum
 #from pint import UnitRegistry
 from colorama import Fore
 from numpy import *
 import logging
 
-class CmdMode(enum.Enum):
+class CmdMode(Enum):
     """[summary]
     
     [description]
@@ -62,7 +62,7 @@ class CmdMode(enum.Enum):
         """
         return Fore.CYAN + "cmdline: " + Fore.RESET + "%s\n"%(self.modes.value[0]) + Fore.CYAN + "batch:   " + Fore.RESET + "%s\n"%self.modes.value[1] + Fore.CYAN + "GUI:     " + Fore.RESET + "%s"%self.modes.value[2]
 
-class CalcMode(enum.Enum):
+class CalcMode(Enum):
     """[summary]
 
     [decription]

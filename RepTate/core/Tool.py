@@ -36,7 +36,7 @@ Module that defines the basic structure and properties of a Tool.
 
 """
 import os
-import enum
+from enum import Enum
 import time
 import getpass
 import numpy as np

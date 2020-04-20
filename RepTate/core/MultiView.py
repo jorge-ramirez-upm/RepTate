@@ -36,7 +36,7 @@ Organise the mmultiple Matplotlib views
 
 """
 import sys
-import enum
+from enum import Enum
 import math
 import numpy as np
 import itertools
@@ -50,7 +50,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 import matplotlib.gridspec as gridspec
 
-class PlotOrganizationType(enum.Enum):
+class PlotOrganizationType(Enum):
     """[summary]
     
     For Vertical and Horizontal, the number of columns is discarded

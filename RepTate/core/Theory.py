@@ -36,7 +36,7 @@ Module that defines the basic structure and properties of a theory.
 
 """
 import os
-import enum
+from enum import Enum
 import time
 import getpass
 import numpy as np
@@ -72,7 +72,7 @@ class MLStripper(HTMLParser):
     def get_data(self):
         return ''.join(self.fed)
         
-class MinimizationMethod(enum.Enum):
+class MinimizationMethod(Enum):
     """Method used during minimization
     
     Parameters can be:
@@ -101,7 +101,7 @@ class MinimizationMethod(enum.Enum):
             stt += Fore.RED + k + Fore.RESET + ": " + self.descriptions.value[i] + "\n"
         return stt
 
-class ErrorCalculationMethod(enum.Enum):
+class ErrorCalculationMethod(Enum):
     """Method to determine the error of a theory calculation.
     
     Options are:

@@ -35,10 +35,10 @@
 Module that defines theory parameters and their properties.
 
 """ 
-import enum
+from enum import Enum
 import numpy as np
 
-class ParameterType(enum.Enum):
+class ParameterType(Enum):
     """Types of parameters that can be used in a Theory
     
     Parameters can be:
@@ -55,7 +55,7 @@ class ParameterType(enum.Enum):
     boolean = 4
     string = 5
 
-class OptType(enum.Enum):
+class OptType(Enum):
     """Store the optimization type that can be used in a Theory
     
     Parameters can be:
