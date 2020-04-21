@@ -13,7 +13,8 @@ RepTate documentation
 =====================
 
 RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory & Experiment)
-is a free and open source software package for viewing, exchanging and analysing experimental data. 
+is a free and open source software package for viewing, exchanging and analysing experimental data.
+It features a command-line interface and a graphical user interface.
 
 |img1| |img2|
 
@@ -31,19 +32,19 @@ Contents:
 
 More info:
 
-- http://blogs.upm.es/compsoftmatter/software/reptate/
+- Code repository: https://github.com/jorge-ramirez-upm/RepTate
 
-- https://github.com/jorge-ramirez-upm/RepTate
+- http://blogs.upm.es/compsoftmatter/software/reptate/
 
 Authors:
 
-- Jorge Ramirez (jorge.ramirez@upm.es)
-- Victor Boudara (victor.boudara@gmail.com)
+- Jorge Ramirez (jorge.ramirez AT upm.es)
+- Victor Boudara (victor.boudara AT gmail.com)
 
 Cite RepTate
 ============
 
-- Boudara Victor A. H., Daniel J. Read and Jorge Ramírez, "RepTate rheology software: Toolkit for the analysis of theories and experiments", Journal of Rheology 64, 709 (2020) https://doi.org/10.1122/8.0000002
+- Boudara Victor A. H., Daniel J. Read and Jorge Ramírez, "RepTate rheology software: Toolkit for the analysis of theories and experiments", Journal of Rheology 64, 709 (2020); https://doi.org/10.1122/8.0000002
    
 
 Indices and tables
