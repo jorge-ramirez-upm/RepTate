@@ -10,11 +10,11 @@ New implementation of RepTate in python:
 
 More info: 
 
-- Documentation at ReadTheDocs_.
-
-.. _ReadTheDocs: http://reptate.readthedocs.io/
+- Documentation: `http://reptate.readthedocs.io/ <http://reptate.readthedocs.io/>`_
 
 - The installation instructions are detailed `here <https://reptate.readthedocs.io/installation.html>`_.
+
+- Journal of Rheology article: `https://doi.org/10.1122/8.0000002 <https://doi.org/10.1122/8.0000002>`_
 
 .. image:: RepTate/docs/source/images/RepTate_LVE.png
     :width: 400pt
