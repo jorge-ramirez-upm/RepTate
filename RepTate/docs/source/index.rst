@@ -29,7 +29,7 @@ Contents:
    developers/developers
    version
 
-More info on:
+More info:
 
 - http://blogs.upm.es/compsoftmatter/software/reptate/
 
@@ -38,7 +38,12 @@ More info on:
 Authors:
 
 - Jorge Ramirez (jorge.ramirez@upm.es)
-- Victor Boudara (v.a.boudara@leeds.ac.uk)
+- Victor Boudara (victor.boudara@gmail.com)
+
+Cite RepTate
+============
+
+- Boudara Victor A. H., Daniel J. Read and Jorge Ramírez, "RepTate rheology software: Toolkit for the analysis of theories and experiments", Journal of Rheology 64, 709 (2020) https://doi.org/10.1122/8.0000002
    
 
 Indices and tables
