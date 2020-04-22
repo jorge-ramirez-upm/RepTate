@@ -19,6 +19,7 @@ It features a command-line interface and a graphical user interface.
 |img1| |img2|
 
 Contents:
+---------
 
 .. toctree::
    :maxdepth: 1
@@ -28,17 +29,18 @@ Contents:
    installation
    manual/manual
    developers/developers
+   contributors
    version
 
 More info:
+----------
 
 - Code repository: https://github.com/jorge-ramirez-upm/RepTate
 
-- http://blogs.upm.es/compsoftmatter/software/reptate/
-
 Authors:
+--------
 
-- Jorge Ramirez (jorge.ramirez AT upm.es)
+- Jorge Ramirez (jorge.ramirez AT upm.es, [personal page](http://blogs.upm.es/compsoftmatter))
 - Victor Boudara (victor.boudara AT gmail.com)
 
 Cite RepTate
