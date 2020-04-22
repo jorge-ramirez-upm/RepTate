@@ -52,6 +52,7 @@ from math import sqrt
 from SpreadsheetWidget import SpreadsheetWidget
 from ApplicationLAOS import CLApplicationLAOS, GUIApplicationLAOS
 from theory_helpers import FlowMode, EditModesDialog
+
 class TheoryUCM(CmdBase):
     """Multi-mode Upper Convected Maxwell model (see Chapter 1 of :cite:`NLVE-Larson1988`):
     
